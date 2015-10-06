@@ -75,7 +75,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
     let urlComp = NSURLComponents()
     var numOfRecord: Int?
-    
+    private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
     
     public static func getInstance() -> HouseDataRequester{
@@ -98,7 +98,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         types: [Int]?,
         start: Int,
         row: Int,
-        handler: ([HouseItem]) -> Void) {
+        handler: ([HouseItem], NSError?) -> Void) {
             
             var queryitems:[NSURLQueryItem] = []
             var mainQueryStr:String = "*:*"
@@ -147,14 +147,15 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             performSearch(urlComp, handler: handler)
     }
     
-    private func performSearch(urlComp: NSURLComponents, handler: ([HouseItem]) -> Void){
+    private func performSearch(urlComp: NSURLComponents, handler: ([HouseItem], NSError?) -> Void){
         var houseList = [HouseItem]()
         
         if let fullURL = urlComp.URL {
             
             print("fullURL: \(fullURL.absoluteString)")
-            
+
             let request = NSMutableURLRequest(URL: fullURL)
+            request.timeoutInterval = HouseDataRequester.requestTimeout
             
             request.HTTPMethod = "GET"
             
@@ -163,7 +164,14 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                     do {
                         
+                        if(error != nil){
+                            NSLog("HTTP request error = \(error)")
+                            handler(houseList, error)
+                            return
+                        }
+                        
                         if(data == nil) {
+                            NSLog("HTTP no data")
                             return
                         }
                         
@@ -183,18 +191,19 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                 let desc = (house["desc"]  as? String ?? "")
                                 let imgList = house["img"] as? [String]
                                 
-                                NSLog("houseItem: \(id), sizeof(\(sizeof(HouseItem)))")
+                                NSLog("houseItem: \(id)")
                                 
                                 houseList.append(HouseItem(id: id, title: title, price: price, desc: desc, imgList: imgList))
                             }
                             
-                            handler(houseList)
+                            handler(houseList, nil)
                         } else {
                             assert(false, "Solr response error:\n \(jsonResult)")
                         }
                         
                     }catch let error as NSError{
-                        NSLog("\(error)")
+                        handler(houseList, error)
+                        NSLog("JSON parsing error = \(error)")
                     }
             }
             

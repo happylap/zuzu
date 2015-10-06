@@ -65,17 +65,16 @@ public class PersistentTableDataSource {
     private var cachedData = [HouseItem]()
     
     //Saved Data
-    private let savablePageSize:Int
+    //private let savablePageSize:Int = 10
     private var savedPageCount:Int = 0
     private var savedPageData = Set<Int>()
     
     private var retriveRemoteData: ((dataSource: PersistentTableDataSource, pageNo:Int) -> Void)?
-    private var dataLoaded: ((dataSource: PersistentTableDataSource, pageNo:Int) -> Void)?
+    private var dataLoaded: ((dataSource: PersistentTableDataSource, pageNo:Int, error: NSError?) -> Void)?
     
     // Designated initializer
-    public init(cachablePageSize: Int = 5, savablePageSize: Int = 10) {
+    public init(cachablePageSize: Int = 5) {
         self.cachablePageSize = cachablePageSize
-        self.savablePageSize = savablePageSize
     }
     
     //** MARK: - APIs
@@ -98,7 +97,8 @@ public class PersistentTableDataSource {
     }
     
     func getItemSize() -> Int{
-        return lastPageNo * Const.PAGE_SIZE//cachedData.count + savedPageData.count * Const.PAGE_SIZE
+        //return lastPageNo * Const.PAGE_SIZE
+        return cachedData.count + savedPageData.count * Const.PAGE_SIZE
     }
     
     func getCurrentPageNo() -> Int{
@@ -160,8 +160,16 @@ public class PersistentTableDataSource {
         retriveRemoteData = handler
     }
     
-    func setDataLoadedHandler(handler: (dataSource: PersistentTableDataSource, pageNo:Int) -> Void) {
+    func setDataLoadedHandler(handler: (dataSource: PersistentTableDataSource, pageNo:Int, error: NSError?) -> Void) {
         dataLoaded = handler
+    }
+    
+    func clearSavedData() {
+        for page in savedPageData {
+            
+            pruneOldDataForPage(page)
+            
+        }
     }
     
     //** MARK: - Callback Functions
@@ -235,15 +243,18 @@ public class PersistentTableDataSource {
         
         requester.searchByCriteria(criteria!.keyword, price: criteria!.criteriaPrice,
             size: criteria!.criteriaSize, types: criteria!.criteriaTypes,
-            start: start, row: row) { (newHouseItems: [HouseItem]) -> Void in
+            start: start, row: row) { (newHouseItems: [HouseItem], error: NSError?) -> Void in
                 
                 self.appendDataForPage(pageNo, estimatedPageSize: requester.numOfRecord, data: newHouseItems)
                 
-                self.lastPageNo = pageNo
+                //increment page no only under some conditions
+                if(error == nil && newHouseItems.count > 0) {
+                    self.lastPageNo = pageNo
+                }
                 
                 print("currentPageNo: \(self.lastPageNo) \n")
                 
-                self.dataLoaded!(dataSource: self, pageNo: pageNo)
+                self.dataLoaded!(dataSource: self, pageNo: pageNo, error: error)
         }
         
     }
@@ -331,5 +342,6 @@ public class PersistentTableDataSource {
             savedPageData.remove(pageNo)
         }
     }
+    
     
 }

@@ -184,8 +184,8 @@
                                                 <mask key="constraints">
                                                     <exclude reference="l2q-hE-aLg"/>
                                                     <exclude reference="Pa3-I3-rBK"/>
-                                                    <exclude reference="m4b-s2-gGb"/>
                                                     <exclude reference="3kl-IG-9dq"/>
+                                                    <exclude reference="m4b-s2-gGb"/>
                                                     <exclude reference="odc-kC-0bc"/>
                                                     <exclude reference="4Up-WY-JBX"/>
                                                     <exclude reference="eNE-Ge-pDz"/>
@@ -354,8 +354,8 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="eAA-WU-Dav"/>
                                                     <exclude reference="2Ij-3d-Yga"/>
+                                                    <exclude reference="eAA-WU-Dav"/>
                                                     <exclude reference="lX0-84-3H0"/>
                                                 </mask>
                                             </variation>
@@ -431,8 +431,8 @@
                                             <nil key="highlightedColor"/>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="yAo-Ai-0Kv"/>
                                                     <exclude reference="rwR-KY-VJP"/>
+                                                    <exclude reference="yAo-Ai-0Kv"/>
                                                 </mask>
                                             </variation>
                                         </label>
@@ -468,8 +468,8 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="BX6-MW-Cg7"/>
-                                                    <exclude reference="usC-Qw-bF1"/>
                                                     <exclude reference="eCt-XY-KHd"/>
+                                                    <exclude reference="usC-Qw-bF1"/>
                                                 </mask>
                                             </variation>
                                         </label>

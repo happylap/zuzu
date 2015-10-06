@@ -5,7 +5,8 @@
 //  Created by Jung-Shuo Pai on 2015/9/23.
 //  Copyright © 2015年 Jung-Shuo Pai. All rights reserved.
 //
-
+import Alamofire
+import AlamofireImage
 import UIKit
 import Foundation
 
@@ -19,9 +20,15 @@ class SearchResultTableViewCell: UITableViewCell {
     
     @IBOutlet weak var housePrice: UILabel!
     
+    let placeholderImg = UIImage(named: "house_img")
+    
     weak var parentTableView: UITableView!
-
-    var indexPath: NSIndexPath!
+    
+    var indexPath: NSIndexPath! {
+        didSet {
+            NSLog("Cell reused for: \(indexPath.row)")
+        }
+    }
     
     var houseItem: HouseItem? {
         didSet {
@@ -29,11 +36,23 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    func updateUI() {
-        // reset any existing information
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        // Reset any existing information
         houseDesc?.text = nil
         houseTitle?.text = nil
-        houseImg?.image = nil
+        
+        // Cancel image loading operation
+        houseImg.af_cancelImageRequest()
+        houseImg.layer.removeAllAnimations()
+        houseImg.image = nil
+        
+        NSLog("Reset info for cell \(indexPath.row)")
+        
+    }
+    
+    func updateUI() {
         
         // load new information (if any)
         if let houseItem = self.houseItem
@@ -42,50 +61,23 @@ class SearchResultTableViewCell: UITableViewCell {
             
             houseDesc?.text = houseItem.desc
             housePrice?.text = String(houseItem.price)
-            houseImg?.image = UIImage(named: "house_img")
+            houseImg?.image = placeholderImg
             
             if let imageURLList = houseItem.imgList {
                 if let firstURL = NSURL(string: imageURLList[0]) {
                     
-                    let myIndexPath = self.indexPath
+                    let size = houseImg.frame.size
                     
-                    //NSLog("updateUI for: \(myIndexPath), \(self.parentTableView.cellForRowAtIndexPath(myIndexPath) as? SearchResultTableViewCell)")
-
-                    dispatch_async(
-                        dispatch_get_global_queue(NSQualityOfService.UserInitiated.rawValue, 0)) {
-                            
-                            if let imageData = NSData(contentsOfURL: firstURL) {
-                                //NSLog("\(myIndexPath.row) -> \(firstURL) Image Loaded")
-                                
-                                dispatch_async(dispatch_get_main_queue()) {
-
-                                    if let tableCell = self.parentTableView.cellForRowAtIndexPath(myIndexPath) as? SearchResultTableViewCell {
-                                        
-                                        //NSLog("Current TableCell Info \(tableCell.indexPath.row)")
-
-                                        //NSLog("\(myIndexPath.row) -> \(firstURL) Image Set")
-                                        
-                                        assert(tableCell.indexPath.row == myIndexPath.row,
-                                            "Image is already set by another thread")
-                                        
-                                        self.houseImg?.image = UIImage(data: imageData)
-                                        
-                                    } else {
-                                        NSLog("Row \(myIndexPath.row) is not visible")
-                                    }
-                                }
-                            }
+                    NSLog("> Start loading img for cell = \(indexPath.row)")
+                    
+                    houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2))
+                        { (request, response, result) -> Void in
+                            NSLog("Current Thread = %@",  NSThread.currentThread())
+                            NSLog("> End loading img for cell = \(self.indexPath.row), status = \(response?.statusCode)")
                     }
                 }
             }
         }
-    }
-    
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
     
 }

@@ -52,8 +52,12 @@ code_sign_if_enabled() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework 'Pods-Zuzu/Alamofire.framework'
+  install_framework 'Pods-Zuzu/AlamofireImage.framework'
   install_framework 'Pods-Zuzu/SwiftyJSON.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework 'Pods-Zuzu/Alamofire.framework'
+  install_framework 'Pods-Zuzu/AlamofireImage.framework'
   install_framework 'Pods-Zuzu/SwiftyJSON.framework'
 fi

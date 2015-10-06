@@ -28,7 +28,7 @@ enum ScrollDirection {
     case ScrollDirectionCrazy
 }
 
-class SearchResultTableViewController: UITableViewController, UIAdaptivePresentationControllerDelegate {
+class SearchResultTableViewController: UITableViewController, UIAdaptivePresentationControllerDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var loadingSpinner: UIActivityIndicatorView! {
         didSet{
@@ -50,7 +50,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     
     //private static let houseDataReq: HouseDataRequester = HouseDataRequester.getInstance()
     
-    private let dataSource: PersistentTableDataSource = PersistentTableDataSource(cachablePageSize: 3, savablePageSize: 10)
+    private let dataSource: PersistentTableDataSource = PersistentTableDataSource(cachablePageSize: 3)
     
     //    private func getHouseDataReq() ->  HouseDataRequester{
     //        return SearchResultTableViewController.houseDataReq
@@ -65,8 +65,24 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     var ignoreScroll = false
     
     
-    private func onDataLoaded(dataSource: PersistentTableDataSource, pageNo: Int) -> Void {
+    private func onDataLoaded(dataSource: PersistentTableDataSource, pageNo: Int, error: NSError?) -> Void {
         NSLog("onDataLoaded: %@", self)
+        
+        
+        if(error != nil) {
+            // Initialize Alert View
+
+            let alertView = UIAlertView(title: "無法查詢資料",
+                message: "無法讀取網路資料, 可能是您的網路連線不穩訂, 或者沒有開啟手機網路, 假如您確認手機網路沒有問題, 請您稍候再做嘗試",
+                delegate: self, cancelButtonTitle: "知道了")
+            
+            // Configure Alert View
+            alertView.tag = 1
+            
+            
+            // Show Alert View
+            alertView.show()
+        }
         
         self.stopSpinner()
         self.tableView.reloadData()
@@ -119,6 +135,14 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSLog("viewWillDisappear: %@", self)
+        //clear saved data
+        self.dataSource.clearSavedData()
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
