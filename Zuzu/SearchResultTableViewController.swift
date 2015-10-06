@@ -71,10 +71,12 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         
         if(error != nil) {
             // Initialize Alert View
-
-            let alertView = UIAlertView(title: "無法查詢資料",
-                message: "無法讀取網路資料, 可能是您的網路連線不穩訂, 或者沒有開啟手機網路, 假如您確認手機網路沒有問題, 請您稍候再做嘗試",
-                delegate: self, cancelButtonTitle: "知道了")
+            
+            let alertView = UIAlertView(
+                title: NSLocalizedString("unable_to_get_data.alert.title", comment: ""),
+                message: NSLocalizedString("unable_to_get_data.alert.msg", comment: ""),
+                delegate: self,
+                cancelButtonTitle: NSLocalizedString("unable_to_get_data.alert.button.ok", comment: ""))
             
             // Configure Alert View
             alertView.tag = 1

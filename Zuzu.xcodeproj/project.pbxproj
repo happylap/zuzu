@@ -15,6 +15,7 @@
 		2F31F50D1BBF7D2200054355 /* CollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50C1BBF7D2200054355 /* CollectionStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
 		2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
 		2F31F5131BC2BC4400054355 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5121BC2BC4400054355 /* .gitignore */; settings = {ASSET_TAGS = (); }; };
+		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
 		2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF51BAFE09100C68670 /* AppDelegate.swift */; };
 		2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */; };
 		2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F482DFB1BAFE09100C68670 /* Main.storyboard */; };
@@ -55,6 +56,9 @@
 		2F31F50C1BBF7D2200054355 /* CollectionStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CollectionStoryboard.storyboard; sourceTree = "<group>"; };
 		2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RadarStoryboard.storyboard; sourceTree = "<group>"; };
 		2F31F5121BC2BC4400054355 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		2F31F5271BC3C34600054355 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2F31F5291BC3C34A00054355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F482DF21BAFE09100C68670 /* Zuzu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zuzu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F482DF51BAFE09100C68670 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 		2F482DE91BAFE09100C68670 = {
 			isa = PBXGroup;
 			children = (
+				2F31F5281BC3C34600054355 /* Localizable.strings */,
 				2F31F5121BC2BC4400054355 /* .gitignore */,
 				2F482DF41BAFE09100C68670 /* Zuzu */,
 				2F482DF31BAFE09100C68670 /* Products */,
@@ -297,6 +302,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hant",
 			);
 			mainGroup = 2F482DE91BAFE09100C68670;
 			productRefGroup = 2F482DF31BAFE09100C68670 /* Products */;
@@ -320,6 +326,7 @@
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
+				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,
 				2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */,
 				2F31F50D1BBF7D2200054355 /* CollectionStoryboard.storyboard in Resources */,
 			);
@@ -439,6 +446,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		2F31F5281BC3C34600054355 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F31F5271BC3C34600054355 /* Base */,
+				2F31F5291BC3C34A00054355 /* en */,
+				2F31F52A1BC3DDF200054355 /* zh-Hant */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		2F482DFB1BAFE09100C68670 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
