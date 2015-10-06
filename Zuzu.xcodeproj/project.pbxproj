@@ -1,0 +1,666 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; settings = {ASSET_TAGS = (); }; };
+		2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */; settings = {ASSET_TAGS = (); }; };
+		2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F276B2E1BBE989E00A41306 /* DataPersistence.swift */; settings = {ASSET_TAGS = (); }; };
+		2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31F5081BBF7B6400054355 /* MainTabViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
+		2F31F50D1BBF7D2200054355 /* CollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50C1BBF7D2200054355 /* CollectionStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
+		2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
+		2F31F5131BC2BC4400054355 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5121BC2BC4400054355 /* .gitignore */; settings = {ASSET_TAGS = (); }; };
+		2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF51BAFE09100C68670 /* AppDelegate.swift */; };
+		2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */; };
+		2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F482DFB1BAFE09100C68670 /* Main.storyboard */; };
+		2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F482DFE1BAFE09100C68670 /* Assets.xcassets */; };
+		2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */; };
+		2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */; settings = {ASSET_TAGS = (); }; };
+		2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */; settings = {ASSET_TAGS = (); }; };
+		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; settings = {ASSET_TAGS = (); }; };
+		2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2F482E091BAFE09100C68670 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2F482DEA1BAFE09100C68670 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F482DF11BAFE09100C68670;
+			remoteInfo = Zuzu;
+		};
+		2F482E141BAFE09200C68670 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2F482DEA1BAFE09100C68670 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F482DF11BAFE09100C68670;
+			remoteInfo = Zuzu;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
+		2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentTableDataSource.swift; sourceTree = "<group>"; };
+		2F276B2E1BBE989E00A41306 /* DataPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPersistence.swift; sourceTree = "<group>"; };
+		2F31F5081BBF7B6400054355 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
+		2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchStoryboard.storyboard; sourceTree = "<group>"; };
+		2F31F50C1BBF7D2200054355 /* CollectionStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CollectionStoryboard.storyboard; sourceTree = "<group>"; };
+		2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RadarStoryboard.storyboard; sourceTree = "<group>"; };
+		2F31F5121BC2BC4400054355 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		2F482DF21BAFE09100C68670 /* Zuzu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zuzu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F482DF51BAFE09100C68670 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
+		2F482DFC1BAFE09100C68670 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2F482DFE1BAFE09100C68670 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2F482E011BAFE09100C68670 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2F482E031BAFE09100C68670 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2F482E081BAFE09100C68670 /* ZuzuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZuzuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F482E131BAFE09100C68670 /* ZuzuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZuzuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBoxTableViewController.swift; sourceTree = "<group>"; };
+		2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CriteriaConst.swift; sourceTree = "<group>"; };
+		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
+		2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
+		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB78CF8BDE07388F2FD17FDF /* Pods-Zuzu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.debug.xcconfig"; sourceTree = "<group>"; };
+		DEA624876AF8AA4C806320C6 /* Pods-Zuzu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.release.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2F482DEF1BAFE09100C68670 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F482E051BAFE09100C68670 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F482E101BAFE09100C68670 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2F276B351BBED50300A41306 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */,
+				2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */,
+				2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		2F276B361BBED52200A41306 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */,
+			);
+			name = Collection;
+			sourceTree = "<group>";
+		};
+		2F276B371BBED53500A41306 /* Radar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Radar;
+			sourceTree = "<group>";
+		};
+		2F482DE91BAFE09100C68670 = {
+			isa = PBXGroup;
+			children = (
+				2F31F5121BC2BC4400054355 /* .gitignore */,
+				2F482DF41BAFE09100C68670 /* Zuzu */,
+				2F482DF31BAFE09100C68670 /* Products */,
+				DB00FE594C2057E14D85850F /* Pods */,
+				797B8184BE32AA80123C1AB8 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		2F482DF31BAFE09100C68670 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2F482DF21BAFE09100C68670 /* Zuzu.app */,
+				2F482E081BAFE09100C68670 /* ZuzuTests.xctest */,
+				2F482E131BAFE09100C68670 /* ZuzuUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2F482DF41BAFE09100C68670 /* Zuzu */ = {
+			isa = PBXGroup;
+			children = (
+				2F276B371BBED53500A41306 /* Radar */,
+				2F276B361BBED52200A41306 /* Collection */,
+				2F276B351BBED50300A41306 /* Search */,
+				2F5854D01BB3CBA9007FF85B /* Utils */,
+				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
+				2F482DF51BAFE09100C68670 /* AppDelegate.swift */,
+				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
+				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
+				2F31F50C1BBF7D2200054355 /* CollectionStoryboard.storyboard */,
+				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
+				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
+				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
+				2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */,
+				2F482E031BAFE09100C68670 /* Info.plist */,
+			);
+			path = Zuzu;
+			sourceTree = "<group>";
+		};
+		2F5854CD1BB3A9B5007FF85B /* CustomControl */ = {
+			isa = PBXGroup;
+			children = (
+				2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */,
+			);
+			name = CustomControl;
+			sourceTree = "<group>";
+		};
+		2F5854D01BB3CBA9007FF85B /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
+				2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */,
+				2F05C6271BBA2FBB00100D5F /* StringUtils.swift */,
+				2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */,
+				2F276B2E1BBE989E00A41306 /* DataPersistence.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		797B8184BE32AA80123C1AB8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DB00FE594C2057E14D85850F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BB78CF8BDE07388F2FD17FDF /* Pods-Zuzu.debug.xcconfig */,
+				DEA624876AF8AA4C806320C6 /* Pods-Zuzu.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2F482DF11BAFE09100C68670 /* Zuzu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F482E1C1BAFE09200C68670 /* Build configuration list for PBXNativeTarget "Zuzu" */;
+			buildPhases = (
+				25784B17B55C76E99668AA3E /* Check Pods Manifest.lock */,
+				2F482DEE1BAFE09100C68670 /* Sources */,
+				2F482DEF1BAFE09100C68670 /* Frameworks */,
+				2F482DF01BAFE09100C68670 /* Resources */,
+				86DEE3DD88DF2D4C0C0F0AB6 /* Embed Pods Frameworks */,
+				D79F9DC567D1E59B35F91683 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Zuzu;
+			productName = Zuzu;
+			productReference = 2F482DF21BAFE09100C68670 /* Zuzu.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2F482E071BAFE09100C68670 /* ZuzuTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F482E1F1BAFE09200C68670 /* Build configuration list for PBXNativeTarget "ZuzuTests" */;
+			buildPhases = (
+				2F482E041BAFE09100C68670 /* Sources */,
+				2F482E051BAFE09100C68670 /* Frameworks */,
+				2F482E061BAFE09100C68670 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2F482E0A1BAFE09100C68670 /* PBXTargetDependency */,
+			);
+			name = ZuzuTests;
+			productName = ZuzuTests;
+			productReference = 2F482E081BAFE09100C68670 /* ZuzuTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2F482E121BAFE09100C68670 /* ZuzuUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2F482E221BAFE09200C68670 /* Build configuration list for PBXNativeTarget "ZuzuUITests" */;
+			buildPhases = (
+				2F482E0F1BAFE09100C68670 /* Sources */,
+				2F482E101BAFE09100C68670 /* Frameworks */,
+				2F482E111BAFE09100C68670 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2F482E151BAFE09200C68670 /* PBXTargetDependency */,
+			);
+			name = ZuzuUITests;
+			productName = ZuzuUITests;
+			productReference = 2F482E131BAFE09100C68670 /* ZuzuUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2F482DEA1BAFE09100C68670 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0700;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Jung-Shuo Pai";
+				TargetAttributes = {
+					2F482DF11BAFE09100C68670 = {
+						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = QUW3NPMSPB;
+					};
+					2F482E071BAFE09100C68670 = {
+						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = QUW3NPMSPB;
+						TestTargetID = 2F482DF11BAFE09100C68670;
+					};
+					2F482E121BAFE09100C68670 = {
+						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = QUW3NPMSPB;
+						TestTargetID = 2F482DF11BAFE09100C68670;
+					};
+				};
+			};
+			buildConfigurationList = 2F482DED1BAFE09100C68670 /* Build configuration list for PBXProject "Zuzu" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2F482DE91BAFE09100C68670;
+			productRefGroup = 2F482DF31BAFE09100C68670 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2F482DF11BAFE09100C68670 /* Zuzu */,
+				2F482E071BAFE09100C68670 /* ZuzuTests */,
+				2F482E121BAFE09100C68670 /* ZuzuUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2F482DF01BAFE09100C68670 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
+				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
+				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
+				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
+				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
+				2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */,
+				2F31F50D1BBF7D2200054355 /* CollectionStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F482E061BAFE09100C68670 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F482E111BAFE09100C68670 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		25784B17B55C76E99668AA3E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		86DEE3DD88DF2D4C0C0F0AB6 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D79F9DC567D1E59B35F91683 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2F482DEE1BAFE09100C68670 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
+				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
+				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
+				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
+				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
+				2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */,
+				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
+				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
+				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
+				2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */,
+				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
+				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F482E041BAFE09100C68670 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F482E0F1BAFE09100C68670 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2F482E0A1BAFE09100C68670 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F482DF11BAFE09100C68670 /* Zuzu */;
+			targetProxy = 2F482E091BAFE09100C68670 /* PBXContainerItemProxy */;
+		};
+		2F482E151BAFE09200C68670 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F482DF11BAFE09100C68670 /* Zuzu */;
+			targetProxy = 2F482E141BAFE09200C68670 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2F482DFB1BAFE09100C68670 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F482DFC1BAFE09100C68670 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F482E011BAFE09100C68670 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2F482E1A1BAFE09200C68670 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2F482E1B1BAFE09200C68670 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2F482E1D1BAFE09200C68670 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB78CF8BDE07388F2FD17FDF /* Pods-Zuzu.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Zuzu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		2F482E1E1BAFE09200C68670 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DEA624876AF8AA4C806320C6 /* Pods-Zuzu.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Zuzu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+		2F482E201BAFE09200C68670 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ZuzuTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.ZuzuTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Zuzu.app/Zuzu";
+			};
+			name = Debug;
+		};
+		2F482E211BAFE09200C68670 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ZuzuTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.ZuzuTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Zuzu.app/Zuzu";
+			};
+			name = Release;
+		};
+		2F482E231BAFE09200C68670 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ZuzuUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.ZuzuUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Zuzu;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		2F482E241BAFE09200C68670 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ZuzuUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.ZuzuUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Zuzu;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2F482DED1BAFE09100C68670 /* Build configuration list for PBXProject "Zuzu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F482E1A1BAFE09200C68670 /* Debug */,
+				2F482E1B1BAFE09200C68670 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2F482E1C1BAFE09200C68670 /* Build configuration list for PBXNativeTarget "Zuzu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F482E1D1BAFE09200C68670 /* Debug */,
+				2F482E1E1BAFE09200C68670 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2F482E1F1BAFE09200C68670 /* Build configuration list for PBXNativeTarget "ZuzuTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F482E201BAFE09200C68670 /* Debug */,
+				2F482E211BAFE09200C68670 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2F482E221BAFE09200C68670 /* Build configuration list for PBXNativeTarget "ZuzuUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F482E231BAFE09200C68670 /* Debug */,
+				2F482E241BAFE09200C68670 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2F482DEA1BAFE09100C68670 /* Project object */;
+}
