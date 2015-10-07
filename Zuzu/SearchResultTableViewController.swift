@@ -126,6 +126,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         //Configure cell height
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.allowsSelection = false
         
         self.dataSource.setDataLoadedHandler(onDataLoaded)
         self.dataSource.criteria = searchCriteria
@@ -167,10 +168,11 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("houseItemCell", forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        NSLog("tableView Cell: \(indexPath.row)")
+        NSLog("== Prepare tableView Cell: \(indexPath.row) ==")
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
+        
         cell.houseItem = dataSource.getItemForRow(indexPath.row)
         return cell
     }
@@ -328,15 +330,17 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             
             switch direction{
             case ScrollDirection.ScrollDirectionUp:
-                let nextPage = Int(ceil(Double(paths[paths.startIndex].row+1) / Double(PersistentTableDataSource.Const.PAGE_SIZE)))+1
-                //NSLog("========Check Preload \(nextPage)\n")
+                let row = paths[paths.startIndex].row
+                let nextPage = PersistentTableDataSource.convertFromRowToPageNo(row) + 1
+
                 if(dataSource.checkWithinStoreForPage(nextPage)) {
                     NSLog("========Preload \(nextPage)\n")
                     dataSource.loadDataForPage(nextPage)
                 }
             case ScrollDirection.ScrollDirectionDown:
-                let prevPage = Int(ceil(Double(paths[paths.endIndex-1].row+1) / Double(PersistentTableDataSource.Const.PAGE_SIZE)))-1
-                //NSLog("========Check Preload \(prevPage)\n \(paths[paths.endIndex-1].row)")
+                let row = paths[paths.endIndex-1].row
+                let prevPage = PersistentTableDataSource.convertFromRowToPageNo(row) - 1
+
                 if(dataSource.checkWithinStoreForPage(prevPage)) {
                     NSLog("========Preload \(prevPage)\n")
                     dataSource.loadDataForPage(prevPage)

@@ -8,6 +8,15 @@
 
 import Foundation
 
+/**
+The class is used to provide a data source combining both memory & storage cache
+
+It's developed in a rush, need to refactor to a more common module
+
+1) highly coupled with other modules
+2) It might block UI a little bit when loading data from storage 
+*/
+
 public class PersistentTableDataSource {
     
     struct Const {
@@ -78,6 +87,11 @@ public class PersistentTableDataSource {
     }
     
     //** MARK: - APIs
+    
+    static func convertFromRowToPageNo(row: Int) -> Int{
+        return Int(ceil(Double(row + 1) / Double(Const.PAGE_SIZE)))
+    }
+    
     //Load some pages for display
     func initData(){
         loadRemoteData(Const.START_PAGE)
@@ -89,10 +103,22 @@ public class PersistentTableDataSource {
     }
     
     func getItemForRow(row:Int) -> HouseItem{
-        let index = row - (cachedPageStart-1) * Const.PAGE_SIZE
+        
+        var cacheIdx = row - (cachedPageStart-1) * Const.PAGE_SIZE
+        
+        NSLog("getItemForRow: \(cacheIdx)")
         //index is negative if scroll back to persistent page
         
-        return cachedData[index] //index within memory cache
+        //Force to load more data from storage to cache
+        if(cacheIdx < cachedData.startIndex || cacheIdx > cachedData.endIndex - 1) {
+            let pageNo = PersistentTableDataSource.convertFromRowToPageNo(row)
+            loadPersistentDataSync(pageNo)
+            
+            //Update to current cache index
+            cacheIdx = row - (cachedPageStart-1) * Const.PAGE_SIZE
+        }
+        
+        return cachedData[cacheIdx] //index within memory cache
         
     }
     
@@ -207,7 +233,7 @@ public class PersistentTableDataSource {
             print("Current cachedData: \(cachedData.count) \n")
             
         } else {
-            assert(false, "Page\(pageNo) is already in cache")
+            NSLog("Page\(pageNo) is already in cache")
         }
         
         //Init cachedPageStart to loaded page
@@ -218,6 +244,13 @@ public class PersistentTableDataSource {
     
     
     //** MARK: - Data Loadrs
+    private func loadPersistentDataSync(pageNo:Int) {
+        
+        if let restoredItems = self.restorePersistentDataForPage(pageNo) {
+            self.appendDataForPage(pageNo, estimatedPageSize: nil, data: restoredItems)
+        }
+    }
+
     private func loadPersistentData(pageNo:Int) {
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
@@ -322,7 +355,7 @@ public class PersistentTableDataSource {
         
         let result = DataPersistence.loadDataFromDirectory(.DocumentDirectory, filename: fileName)
         
-        print("restorePersistentDataForPage: \(result.success) \n")
+        print("restorePersistentDataForPage: \(fileName), \(result.success) \n")
         if(result.success){
             savedPageData.remove(pageNo)
         }

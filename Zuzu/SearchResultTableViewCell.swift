@@ -26,7 +26,7 @@ class SearchResultTableViewCell: UITableViewCell {
     
     var indexPath: NSIndexPath! {
         didSet {
-            NSLog("Cell reused for: \(indexPath.row)")
+            NSLog("New Cell [\(indexPath.row)] Ready Ref = %c", unsafeAddressOf(self))
         }
     }
     
@@ -48,7 +48,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseImg.layer.removeAllAnimations()
         houseImg.image = nil
         
-        NSLog("Reset info for cell \(indexPath.row)")
+        NSLog("Old Cell [\(indexPath.row)] Reset Ref = %c", unsafeAddressOf(self))
         
     }
     
