@@ -24,11 +24,7 @@ class SearchResultTableViewCell: UITableViewCell {
     
     weak var parentTableView: UITableView!
     
-    var indexPath: NSIndexPath! {
-        didSet {
-            NSLog("New Cell [\(indexPath.row)] Ready Ref = %c", unsafeAddressOf(self))
-        }
-    }
+    var indexPath: NSIndexPath!
     
     var houseItem: HouseItem? {
         didSet {
@@ -48,7 +44,8 @@ class SearchResultTableViewCell: UITableViewCell {
         houseImg.layer.removeAllAnimations()
         houseImg.image = nil
         
-        NSLog("Old Cell [\(indexPath.row)] Reset Ref = %c", unsafeAddressOf(self))
+        NSLog("\n")
+        NSLog("- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
         
     }
     
@@ -68,12 +65,11 @@ class SearchResultTableViewCell: UITableViewCell {
                     
                     let size = houseImg.frame.size
                     
-                    NSLog("> Start loading img for cell = \(indexPath.row)")
+                    NSLog("    <Start> Loading Img for Row[\(indexPath.row)]")
                     
                     houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2))
                         { (request, response, result) -> Void in
-                            NSLog("Current Thread = %@",  NSThread.currentThread())
-                            NSLog("> End loading img for cell = \(self.indexPath.row), status = \(response?.statusCode)")
+                            NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                     }
                 }
             }

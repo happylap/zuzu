@@ -106,7 +106,7 @@ public class PersistentTableDataSource {
         
         var cacheIdx = row - (cachedPageStart-1) * Const.PAGE_SIZE
         
-        NSLog("getItemForRow: \(cacheIdx)")
+        //NSLog"getItemForRow: \(cacheIdx)")
         //index is negative if scroll back to persistent page
         
         //Force to load more data from storage to cache
@@ -221,7 +221,7 @@ public class PersistentTableDataSource {
                 self.moveBackwardCachedData(data)
             }
             cachedData.insertContentsOf(data, at: 0)
-            print("Current cachedData: \(cachedData.count) \n")
+            NSLog("appendDataForPage: #cachedData = \(cachedData.count) \n")
             
             //Next page
         } else if(pageNo > self.getCachedPageBound().max) {
@@ -230,7 +230,7 @@ public class PersistentTableDataSource {
                 self.moveForwardCachedData(data)
             }
             cachedData.appendContentsOf(data)
-            print("Current cachedData: \(cachedData.count) \n")
+            NSLog("appendDataForPage: #cachedData = \(cachedData.count) \n")
             
         } else {
             NSLog("Page\(pageNo) is already in cache")
@@ -254,7 +254,7 @@ public class PersistentTableDataSource {
     private func loadPersistentData(pageNo:Int) {
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-            //print("Run on thread:\(NSThread.currentThread())")
+            //NSLog("Run on thread:\(NSThread.currentThread())")
             
             if let restoredItems = self.restorePersistentDataForPage(pageNo) {
                 
@@ -285,7 +285,7 @@ public class PersistentTableDataSource {
                     self.lastPageNo = pageNo
                 }
                 
-                print("currentPageNo: \(self.lastPageNo) \n")
+                NSLog("loadRemoteData: page = \(self.lastPageNo) \n")
                 
                 self.dataLoaded!(dataSource: self, pageNo: pageNo, error: error)
         }
@@ -340,13 +340,11 @@ public class PersistentTableDataSource {
         
         let result = DataPersistence.saveData(data, directory: .DocumentDirectory, filename: fileName)
         
-        print("persistDataForPage: \(result.success) \n")
-        
         if(result.success){
             savedPageData.insert(pageNo)
         }
         
-        print("persistDataForPage: \(savedPageData)")
+        NSLog("persistDataForPage: File = \(fileName), Result = \(result.success), All = \(savedPageData)")
     }
     
     private func restorePersistentDataForPage(pageNo:Int) -> [HouseItem]?{
@@ -355,10 +353,11 @@ public class PersistentTableDataSource {
         
         let result = DataPersistence.loadDataFromDirectory(.DocumentDirectory, filename: fileName)
         
-        print("restorePersistentDataForPage: \(fileName), \(result.success) \n")
         if(result.success){
             savedPageData.remove(pageNo)
         }
+        
+        NSLog("restorePersistentDataForPage: File = \(fileName), Result = \(result.success)")
         
         return result.data as? [HouseItem]
     }
@@ -369,7 +368,7 @@ public class PersistentTableDataSource {
         
         let result = DataPersistence.deleteDataFromDirectory(.DocumentDirectory, filename: fileName)
         
-        print("pruneOldDataForPage: \(result.success) \n")
+        NSLog("pruneOldDataForPage: \(result.success) \n")
         
         if(result.success){
             savedPageData.remove(pageNo)

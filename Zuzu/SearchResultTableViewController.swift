@@ -66,8 +66,6 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     
     
     private func onDataLoaded(dataSource: PersistentTableDataSource, pageNo: Int, error: NSError?) -> Void {
-        NSLog("onDataLoaded: %@", self)
-        
         
         if(error != nil) {
             // Initialize Alert View
@@ -89,7 +87,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         self.stopSpinner()
         self.tableView.reloadData()
         
-        NSLog("Total Records in Table: \(self.dataSource.getItemSize())")
+        NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getItemSize())", self)
         
         self.debugTextStr = self.dataSource.debugStr
         
@@ -121,7 +119,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSLog("viewDidLoad: %@", self)
+        NSLog("%@ [[viewDidLoad]]", self)
         
         //Configure cell height
         tableView.estimatedRowHeight = tableView.rowHeight
@@ -141,7 +139,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        NSLog("viewWillDisappear: %@", self)
+        NSLog("%@ [[viewWillDisappear]]", self)
         //clear saved data
         self.dataSource.clearSavedData()
     }
@@ -159,7 +157,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NSLog("tableView Count: \(dataSource.getItemSize())")
+        NSLog("%@ tableView Count: \(dataSource.getItemSize())", self)
         
         return dataSource.getItemSize()
     }
@@ -168,7 +166,8 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("houseItemCell", forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        NSLog("== Prepare tableView Cell: \(indexPath.row) ==")
+        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
@@ -239,7 +238,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         let yOffsetForBottom:CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
         
         if (scrollView.contentOffset.y >= yOffsetForBottom){
-            NSLog("Bounced, Scrolled To Bottom")
+            NSLog("%@ Bounced, Scrolled To Bottom", self)
             
             let nextPage = self.dataSource.getCachedPageBound().max + 1
             
@@ -259,7 +258,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             //    }
             //}
         }else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
-            NSLog("Bounced, Scrolled To Top")
+            NSLog("%@ Bounced, Scrolled To Top", self)
             
             let previousPage = self.dataSource.getCachedPageBound().min - 1
             
@@ -302,7 +301,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         
         if(yOffsetForBottom >= 0) {
             if (scrollView.contentOffset.y >= yOffsetForBottom){
-                NSLog("Scrolled To Bottom")
+                NSLog("%@ Scrolled To Bottom", self)
                 startSpinner()
             } else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
                 //NSLog("Scrolled To Top")
@@ -334,7 +333,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
                 let nextPage = PersistentTableDataSource.convertFromRowToPageNo(row) + 1
 
                 if(dataSource.checkWithinStoreForPage(nextPage)) {
-                    NSLog("========Preload \(nextPage)\n")
+                    NSLog("== Preload Next Page[\(nextPage)] ==")
                     dataSource.loadDataForPage(nextPage)
                 }
             case ScrollDirection.ScrollDirectionDown:
@@ -342,7 +341,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
                 let prevPage = PersistentTableDataSource.convertFromRowToPageNo(row) - 1
 
                 if(dataSource.checkWithinStoreForPage(prevPage)) {
-                    NSLog("========Preload \(prevPage)\n")
+                    NSLog("== Preload Previous Page[\(prevPage)] ==")
                     dataSource.loadDataForPage(prevPage)
                 }
             default: break
