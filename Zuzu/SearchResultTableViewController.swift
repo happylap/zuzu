@@ -245,7 +245,12 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             if(dataSource.checkWithinCacheForPage(nextPage)){
                 self.stopSpinner()
             } else{
-                loadHouseListPage(nextPage)
+                
+                if(!dataSource.isDataLoadingInProgress()){
+                    loadHouseListPage(nextPage)
+                } else {
+                    NSLog("%@ Ignore Duplicate Page Request", self)
+                }
             }
             
             //if let estimatedTotalPage = dataSource.getEstimatedPageSize(){
@@ -265,7 +270,11 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             if(previousPage < 1 || dataSource.checkWithinCacheForPage(previousPage)){
                 self.stopSpinner()
             } else{
-                loadHouseListPage(previousPage)
+                if(!dataSource.isDataLoadingInProgress()){
+                    loadHouseListPage(previousPage)
+                } else {
+                    NSLog("%@ Ignore Duplicate Page Request", self)
+                }
             }
             
             //if(previousPage >= 1) {
@@ -290,6 +299,8 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             self.lastDirection = .ScrollDirectionUp
         }
         
+        // Try to preload the next page to be seen.
+        // This code is not reliable since the visible indexPaths will be skipped when the table is scrilled at a very fast speed 
         tryPreloadPersistentPage(self.lastDirection)
         
         self.lastContentOffset = scrollView.contentOffset.y;

@@ -65,6 +65,8 @@ public class PersistentTableDataSource {
     
     var criteria:SearchCriteria?
     
+    private var isLoadingData = false
+    
     //Paging Info
     var lastPageNo = 0
     
@@ -162,6 +164,10 @@ public class PersistentTableDataSource {
         return savedPageData.contains(pageNo)
     }
     
+    func isDataLoadingInProgress() -> Bool {
+        return self.isLoadingData
+    }
+    
     func isChacheFull() -> Bool {
         return getPageSizeFromItemSize(cachedData.count) >= cachablePageSize
     }
@@ -221,7 +227,7 @@ public class PersistentTableDataSource {
                 self.moveBackwardCachedData(data)
             }
             cachedData.insertContentsOf(data, at: 0)
-            NSLog("appendDataForPage: #cachedData = \(cachedData.count) \n")
+            NSLog("appendDataForPage: pageNo = \(pageNo), #cachedData = \(cachedData.count) \n")
             
             //Next page
         } else if(pageNo > self.getCachedPageBound().max) {
@@ -230,7 +236,7 @@ public class PersistentTableDataSource {
                 self.moveForwardCachedData(data)
             }
             cachedData.appendContentsOf(data)
-            NSLog("appendDataForPage: #cachedData = \(cachedData.count) \n")
+            NSLog("appendDataForPage: pageNo = \(pageNo), #cachedData = \(cachedData.count) \n")
             
         } else {
             NSLog("Page\(pageNo) is already in cache")
@@ -274,6 +280,10 @@ public class PersistentTableDataSource {
             return
         }
         
+        isLoadingData = true
+        
+        NSLog("loadRemoteData: pageNo = \(pageNo)")
+        
         requester.searchByCriteria(criteria!.keyword, price: criteria!.criteriaPrice,
             size: criteria!.criteriaSize, types: criteria!.criteriaTypes,
             start: start, row: row) { (newHouseItems: [HouseItem], error: NSError?) -> Void in
@@ -285,9 +295,9 @@ public class PersistentTableDataSource {
                     self.lastPageNo = pageNo
                 }
                 
-                NSLog("loadRemoteData: page = \(self.lastPageNo) \n")
-                
                 self.dataLoaded!(dataSource: self, pageNo: pageNo, error: error)
+                
+                self.isLoadingData = false
         }
         
     }
