@@ -79,7 +79,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         self.stopSpinner()
         self.tableView.reloadData()
         
-        NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getItemSize())", self)
+        NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getSize())", self)
         
         self.debugTextStr = self.dataSource.debugStr
     }
@@ -125,9 +125,9 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NSLog("%@ tableView Count: \(dataSource.getItemSize())", self)
+        NSLog("%@ tableView Count: \(dataSource.getSize())", self)
         
-        return dataSource.getItemSize()
+        return dataSource.getSize()
     }
     
     

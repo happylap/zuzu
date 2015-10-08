@@ -20,11 +20,9 @@ import Foundation
 import Foundation
 
 /**
-The class is used to provide a data source combining both memory & storage cache
+The class is developed in a rush, need to refactor to a more common module
 
-It's developed in a rush, need to refactor to a more common module
-
-1) highly coupled with other modules
+1) highly coupled with other modules, can not work as standalone library
 2) It might block UI a little bit when loading data from storage
 */
 
@@ -42,7 +40,7 @@ public class HouseItemTableDataSource {
             let pageInfo = "Total Result: \(HouseDataRequester.getInstance().numOfRecord)\n"
                 + "Items Per Page: \(Const.PAGE_SIZE)\n"
                 + "Last Page No: \(self.currentPage)\n"
-                + "Total Items in Table: \(self.getItemSize())\n"
+                + "Total Items in Table: \(self.getSize())\n"
             
             
             
@@ -94,6 +92,7 @@ public class HouseItemTableDataSource {
                 return 0
             }
         }
+        
     }
     
     //Cache Data
@@ -117,7 +116,7 @@ public class HouseItemTableDataSource {
         return cachedData[row] //index within memory cache
     }
     
-    func getItemSize() -> Int{
+    func getSize() -> Int{
         return cachedData.count
     }
     
