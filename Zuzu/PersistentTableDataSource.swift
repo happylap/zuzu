@@ -168,7 +168,7 @@ public class PersistentTableDataSource {
         return self.isLoadingData
     }
     
-    func isChacheFull() -> Bool {
+    func isCacheFull() -> Bool {
         return getPageSizeFromItemSize(cachedData.count) >= cachablePageSize
     }
     
@@ -223,7 +223,7 @@ public class PersistentTableDataSource {
         //Previous page
         if(pageNo < self.getCachedPageBound().min){
             
-            if(isChacheFull()) {
+            if(isCacheFull()) {
                 self.moveBackwardCachedData(data)
             }
             cachedData.insertContentsOf(data, at: 0)
@@ -232,7 +232,7 @@ public class PersistentTableDataSource {
             //Next page
         } else if(pageNo > self.getCachedPageBound().max) {
             
-            if(isChacheFull()) {
+            if(isCacheFull()) {
                 self.moveForwardCachedData(data)
             }
             cachedData.appendContentsOf(data)

@@ -47,16 +47,8 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     @IBOutlet weak var debugText: UITextField!
     
     var debugTextStr: String = ""
-    
-    //private static let houseDataReq: HouseDataRequester = HouseDataRequester.getInstance()
-    
-    private let dataSource: PersistentTableDataSource = PersistentTableDataSource(cachablePageSize: 3)
-    
-    //    private func getHouseDataReq() ->  HouseDataRequester{
-    //        return SearchResultTableViewController.houseDataReq
-    //    }
-    
-    //var currentPage = 1
+
+    private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
     
     var searchCriteria: SearchCriteria?
     
@@ -65,7 +57,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     var ignoreScroll = false
     
     
-    private func onDataLoaded(dataSource: PersistentTableDataSource, pageNo: Int, error: NSError?) -> Void {
+    private func onDataLoaded(dataSource: HouseItemTableDataSource, pageNo: Int, error: NSError?) -> Void {
         
         if(error != nil) {
             // Initialize Alert View
@@ -90,29 +82,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getItemSize())", self)
         
         self.debugTextStr = self.dataSource.debugStr
-        
-        //        var row = 0
-        //
-        //        if pageNo <= 1 {
-        //            row = 0
-        //        } else {
-        //            if (pageNo <= dataSource.cachablePageSize) {
-        //                row = getLastRowForPage(pageNo-1)-1
-        //            }  else {
-        //                let diff = pageNo - dataSource.cachablePageSize
-        //                row = getLastRowForPage(pageNo-1)-1 - diff * LazyTableDataSource.Const.PAGE_SIZE
-        //            }
-        //        }
-        // let indexPath = NSIndexPath(forRow: row, inSection: 0)
-        
-        //self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
     }
-    
-    //    private func getLastRowForPage(pageNo:Int) -> Int {
-    //
-    //        return pageNo * LazyTableDataSource.Const.PAGE_SIZE
-    //
-    //    }
     
     //** MARK: - Controller life cycle
     
@@ -140,8 +110,6 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         NSLog("%@ [[viewWillDisappear]]", self)
-        //clear saved data
-        self.dataSource.clearSavedData()
     }
 
     
@@ -176,42 +144,6 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         return cell
     }
     
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the specified item to be editable.
-    return true
-    }
-    */
-    
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-    if editingStyle == .Delete {
-    // Delete the row from the data source
-    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-    } else if editingStyle == .Insert {
-    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }
-    }
-    */
-    
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-    
-    }
-    */
-    
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the item to be re-orderable.
-    return true
-    }
-    */
-    
-    
     //** MARK: - Scroll View Delegate
     
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -220,18 +152,6 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         //NSLog("Content Height: \(scrollView.contentSize.height)")
         //NSLog("Content Y-offset: \(scrollView.contentOffset.y)")
         //NSLog("ScrollView Height: \(scrollView.frame.size.height)")
-        //
-        //        if(scrollView.contentSize.height < scrollView.frame.size.height){
-        //            if(self.lastDirection == .ScrollDirectionDown) {//next
-        //
-        //            }else if(self.lastDirection == .ScrollDirectionUp) {//previous
-        //                let previousPage = self.dataSource.getCachedPageBound().0 - 1
-        //                if(previousPage >= 1) {
-        //                    loadHouseListPage(previousPage)
-        //                }
-        //            }
-        //            return
-        //        }
         
         
         let yOffsetForTop:CGFloat = 0
@@ -240,48 +160,12 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         if (scrollView.contentOffset.y >= yOffsetForBottom){
             NSLog("%@ Bounced, Scrolled To Bottom", self)
             
-            let nextPage = self.dataSource.getCachedPageBound().max + 1
+            let nextPage = self.dataSource.currentPage + 1
             
-            if(dataSource.checkWithinCacheForPage(nextPage)){
-                self.stopSpinner()
-            } else{
-                
-                if(!dataSource.isDataLoadingInProgress()){
-                    loadHouseListPage(nextPage)
-                } else {
-                    NSLog("%@ Ignore Duplicate Page Request", self)
-                }
-            }
+            loadHouseListPage(nextPage)
             
-            //if let estimatedTotalPage = dataSource.getEstimatedPageSize(){
-            //    NSLog("estimatedTotalPage: \(estimatedTotalPage)")
-            //
-            //    if(nextPage <= Int(estimatedTotalPage)) {
-            //        loadHouseListPage(nextPage)
-            //    } else {
-            //        self.stopSpinner()
-            //    }
-            //}
         }else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
             NSLog("%@ Bounced, Scrolled To Top", self)
-            
-            let previousPage = self.dataSource.getCachedPageBound().min - 1
-            
-            if(previousPage < 1 || dataSource.checkWithinCacheForPage(previousPage)){
-                self.stopSpinner()
-            } else{
-                if(!dataSource.isDataLoadingInProgress()){
-                    loadHouseListPage(previousPage)
-                } else {
-                    NSLog("%@ Ignore Duplicate Page Request", self)
-                }
-            }
-            
-            //if(previousPage >= 1) {
-            //  loadHouseListPage(previousPage)
-            //} else {
-            //  self.stopSpinner()
-            //}
         }
     }
     
@@ -299,10 +183,6 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             self.lastDirection = .ScrollDirectionUp
         }
         
-        // Try to preload the next page to be seen.
-        // This code is not reliable since the visible indexPaths will be skipped when the table is scrilled at a very fast speed 
-        tryPreloadPersistentPage(self.lastDirection)
-        
         self.lastContentOffset = scrollView.contentOffset.y;
         
         
@@ -313,56 +193,30 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         if(yOffsetForBottom >= 0) {
             if (scrollView.contentOffset.y >= yOffsetForBottom){
                 NSLog("%@ Scrolled To Bottom", self)
-                startSpinner()
+                
+                let nextPage = self.dataSource.currentPage + 1
+                
+                if(nextPage <= dataSource.estimatedNumberOfPages){
+                    startSpinner()
+                    return
+                }
+                
             } else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
                 //NSLog("Scrolled To Top")
             }
         }
-        
-        //Check if need to load persistent data
-        //        if let paths = tableView.indexPathsForVisibleRows {
-        //            NSLog("Visible Cell\n")
-        //            for path in paths {
-        //                NSLog("Cell: \(path.row)")
-        //            }
-        //        }
     }
     
     //** MARK: - Util Functions
     
-    private func tryPreloadPersistentPage(direction:ScrollDirection) {
-        
-        if let paths = tableView.indexPathsForVisibleRows {
-            
-            if(paths.count <= 0) {
-                return
-            }
-            
-            switch direction{
-            case ScrollDirection.ScrollDirectionUp:
-                let row = paths[paths.startIndex].row
-                let nextPage = PersistentTableDataSource.convertFromRowToPageNo(row) + 1
-
-                if(dataSource.checkWithinStoreForPage(nextPage)) {
-                    NSLog("== Preload Next Page[\(nextPage)] ==")
-                    dataSource.loadDataForPage(nextPage)
-                }
-            case ScrollDirection.ScrollDirectionDown:
-                let row = paths[paths.endIndex-1].row
-                let prevPage = PersistentTableDataSource.convertFromRowToPageNo(row) - 1
-
-                if(dataSource.checkWithinStoreForPage(prevPage)) {
-                    NSLog("== Preload Previous Page[\(prevPage)] ==")
-                    dataSource.loadDataForPage(prevPage)
-                }
-            default: break
-                
-            }
-        }
-    }
-    
     private func loadHouseListPage(pageNo: Int) {
         
+        if(pageNo > dataSource.estimatedNumberOfPages){
+            NSLog("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedNumberOfPages)]")
+            return
+        }
+        
+        startSpinner()
         dataSource.loadDataForPage(pageNo)
         
     }
