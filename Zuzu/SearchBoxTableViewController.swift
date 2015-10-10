@@ -7,7 +7,7 @@
     //
     
     import UIKit
-
+    
     
     class ToggleButtonListenr: ToggleStateListenr {
         
@@ -31,7 +31,8 @@
         static let NOT_LIMITED_BUTTON_TAG = 99
     }
     
-    class SearchBoxTableViewController: UITableViewController, UISearchBarDelegate {
+    class SearchBoxTableViewController: UITableViewController, UISearchBarDelegate,
+    UIPickerViewDelegate, UIPickerViewDataSource {
         
         var selectAllButton:ToggleButton?
         
@@ -49,33 +50,20 @@
                         if let typeButton = view as? ToggleButton {
                             if(typeButton.tag !=
                                 UIControlTag.NOT_LIMITED_BUTTON_TAG){
-                                selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
+                                    selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
                             }
                             
-                            typeButton.addTarget(self, action: "buttonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+                            typeButton.addTarget(self, action: "onButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
                         }
                     }
                 }
             }
         }
-
         
-        func buttonClicked(sender: UIButton) {
-            if let toogleButton = sender as? ToggleButton {
-                toogleButton.toggleButtonState()
-                
-                //toggle off the select all button if any type is selected
-                if(toogleButton.tag != UIControlTag.NOT_LIMITED_BUTTON_TAG
-                    && toogleButton.getToggleState()==true) {
-                        selectAllButton?.setToggleState(false)
-                }
-            }
-        }
+        @IBOutlet weak var sizePicker: UIPickerView!
+        @IBOutlet weak var pricePicker: UIPickerView!
         
-        @IBOutlet weak var sizeMax: UITextField!
-        @IBOutlet weak var sizeMin: UITextField!
-        @IBOutlet weak var priceMax: UITextField!
-        @IBOutlet weak var priceMin: UITextField!
+        
         @IBOutlet weak var searchBar: UISearchBar! {
             didSet {
                 searchBar.delegate = self
@@ -87,7 +75,21 @@
             }
         }
         
-        //The button should not be private
+        // MARK: - UI Control Event Handler
+        
+        //The UI control event handler Should not be private
+        func onButtonClicked(sender: UIButton) {
+            if let toogleButton = sender as? ToggleButton {
+                toogleButton.toggleButtonState()
+                
+                //toggle off the select all button if any type is selected
+                if(toogleButton.tag != UIControlTag.NOT_LIMITED_BUTTON_TAG
+                    && toogleButton.getToggleState()==true) {
+                        selectAllButton?.setToggleState(false)
+                }
+            }
+        }
+        
         func onSearchButtonClicked(sender: UIButton) {
             NSLog("onSearchButtonClicked: %@", self)
             
@@ -121,6 +123,69 @@
             //searchButton.setBackgroundImage(buttonInsetsImg, forState: UIControlState.Normal)
         }
         
+        // MARK: - Picker Data Source
+        let sizeItems =
+        [
+            ["不限", "10", "20", "30", "40", "50"]
+            ,
+            ["不限", "10", "20", "30", "40", "50"]
+        ]
+        
+        let priceItems =
+        [
+            ["不限", "5000", "10000", "15000", "20000", "25000", "30000", "35000", "40000"]
+            ,
+            ["不限", "5000", "10000", "15000", "20000", "25000", "30000", "35000", "40000"]
+        ]
+        
+        private func configurePricePicker() {
+            sizePicker.dataSource = self
+            sizePicker.delegate = self
+            
+            pricePicker.dataSource = self
+            pricePicker.delegate = self
+        }
+        
+        func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+            
+            switch(pickerView) {
+            case sizePicker:
+                return sizeItems.count
+            case pricePicker:
+                return priceItems.count
+            default:
+                return 0
+            }
+            
+        }
+        
+        func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+            
+            switch(pickerView) {
+            case sizePicker:
+                return sizeItems[component][row]
+            case pricePicker:
+                return priceItems[component][row]
+            default:
+                return ""
+            }
+            
+            
+        }
+        
+        func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            
+            switch(pickerView) {
+            case sizePicker:
+                return sizeItems[component].count
+            case pricePicker:
+                return priceItems[component].count
+            default:
+                return 0
+            }
+        }
+        
+        // MARK: - Navigation
         override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             
             NSLog("prepareForSegue: %@", self)
@@ -132,16 +197,16 @@
                     if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
                         
                         var searchCriteria = SearchCriteria()
-                            
+                        
                         searchCriteria.keyword = searchBar.text
                         
-                        let priceMin = Int(self.priceMin.text!) ?? 0
-                        let priceMax = Int(self.priceMax.text!) ?? 0
+                        let priceMin = 0//Int(self.priceMin.text!) ?? 0
+                        let priceMax = 0//Int(self.priceMax.text!) ?? 0
                         
                         searchCriteria.criteriaPrice = (priceMin, priceMax)
                         
-                        let sizeMin = Int(self.sizeMin.text!) ?? 0
-                        let sizeMax = Int(self.sizeMax.text!) ?? 0
+                        let sizeMin = 0//Int(self.sizeMin.text!) ?? 0
+                        let sizeMax = 0//Int(self.sizeMax.text!) ?? 0
                         
                         searchCriteria.criteriaSize = (sizeMin, sizeMax)
                         
@@ -201,6 +266,10 @@
             //Configure cell height
             tableView.estimatedRowHeight = tableView.rowHeight
             tableView.rowHeight = UITableViewAutomaticDimension
+            tableView.delegate = self
+            
+            //Confugure Price Picker
+            self.configurePricePicker()
             
             // Uncomment the following line to preserve selection between presentations
             // self.clearsSelectionOnViewWillAppear = false
@@ -217,6 +286,67 @@
         override func viewDidDisappear(animated: Bool) {
             super.viewDidDisappear(animated)
             NSLog("viewDidDisappear: %@", self)
+        }
+        
+        // MARK: - Table Delegate
+        override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+            
+            var picker:UIPickerView?
+            
+            switch(indexPath.row) {
+            case 2:
+                picker = pricePicker
+                if(hiddenCells.contains(3)) {
+                    hiddenCells.remove(3)
+                } else {
+                    hiddenCells.insert(3)
+                }
+                
+            case 4:
+                picker = sizePicker
+                if(hiddenCells.contains(5)) {
+                    hiddenCells.remove(5)
+                } else {
+                    hiddenCells.insert(5)
+                }
+                
+            default: break
+            }
+            
+            if(picker != nil) {
+                tableView.deselectRowAtIndexPath(indexPath, animated: false)
+                
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
+            
+        }
+        
+        var hiddenCells:Set = [3, 5]
+        
+        override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+            
+            NSLog("heightForRowAtIndexPath\(indexPath)")
+            
+            if(hiddenCells.contains(indexPath.row)) {
+                return 0
+            } else {
+                if (indexPath.row == 3) {
+                    return pricePicker.intrinsicContentSize().height
+                }
+                if (indexPath.row == 5) {
+                    return sizePicker.intrinsicContentSize().height
+                }
+            }
+            
+            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            
+            /* Use Autolayout decided size
+            let cellView = self.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            
+            return cellView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+            */
+            
         }
         
         // MARK: - Table view data source
