@@ -130,11 +130,31 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
 
             if let priceRange = price {
-                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "price:[\(priceRange.0) TO \(priceRange.1)]"))
+                
+                var priceFrom = "\(priceRange.0)"
+                var priceTo = "\(priceRange.1)"
+                
+                if(priceRange.0 == CriteriaConst.Bound.LOWER_ANY) {
+                    priceFrom = "*"
+                } else if(priceRange.1 == CriteriaConst.Bound.UPPER_ANY) {
+                    priceTo = "*"
+                }
+                
+                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "price:[\(priceFrom) TO \(priceTo)]"))
             }
             
             if let sizeRange = size {
-                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "size:[\(sizeRange.0) TO \(sizeRange.1)]"))
+                
+                var sizeFrom = "\(sizeRange.0)"
+                var sizeTo = "\(sizeRange.1)"
+                
+                if(sizeRange.0 == CriteriaConst.Bound.LOWER_ANY) {
+                    sizeFrom = "*"
+                } else if(sizeRange.1 == CriteriaConst.Bound.UPPER_ANY) {
+                    sizeTo = "*"
+                }
+                
+                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "size:[\(sizeFrom) TO \(sizeTo)]"))
             }
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: "json"))

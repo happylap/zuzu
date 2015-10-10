@@ -27,4 +27,9 @@ struct CriteriaConst {
         static let ROOM_NO_TOILET = 4
         static let HOME_OFFICE = 8
     }
+    
+    struct Bound {
+        static let LOWER_ANY = -1
+        static let UPPER_ANY = -2
+    }
 }

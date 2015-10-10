@@ -60,6 +60,8 @@
             }
         }
         
+        @IBOutlet weak var sizeLabel: UILabel!
+        @IBOutlet weak var priceLabel: UILabel!
         @IBOutlet weak var sizePicker: UIPickerView!
         @IBOutlet weak var pricePicker: UIPickerView!
         
@@ -124,21 +126,22 @@
         }
         
         // MARK: - Picker Data Source
-        let sizeItems =
+        let sizeItems:[[(label:String, value:Int)]] =
         [
-            ["不限", "10", "20", "30", "40", "50"]
+            [("不限",CriteriaConst.Bound.LOWER_ANY), ("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
             ,
-            ["不限", "10", "20", "30", "40", "50"]
+            [("不限",CriteriaConst.Bound.UPPER_ANY), ("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
         ]
         
-        let priceItems =
+        let priceItems:[[(label:String, value:Int)]] =
         [
-            ["不限", "5000", "10000", "15000", "20000", "25000", "30000", "35000", "40000"]
+            [("不限",CriteriaConst.Bound.LOWER_ANY), ("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
             ,
-            ["不限", "5000", "10000", "15000", "20000", "25000", "30000", "35000", "40000"]
+            [("不限",CriteriaConst.Bound.UPPER_ANY), ("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
         ]
         
         private func configurePricePicker() {
+            
             sizePicker.dataSource = self
             sizePicker.delegate = self
             
@@ -156,21 +159,18 @@
             default:
                 return 0
             }
-            
         }
         
         func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
             
             switch(pickerView) {
             case sizePicker:
-                return sizeItems[component][row]
+                return sizeItems[component][row].label
             case pricePicker:
-                return priceItems[component][row]
+                return priceItems[component][row].label
             default:
                 return ""
             }
-            
-            
         }
         
         func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -182,6 +182,52 @@
                 return priceItems[component].count
             default:
                 return 0
+            }
+        }
+        
+        func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+            
+            switch(pickerView) {
+            case sizePicker:
+                var sizeFrom:(component:Int, row:Int)
+                var sizeTo:(component:Int, row:Int)
+                
+                if(component == sizeItems.startIndex) {
+                    sizeFrom = (component, row)
+                    sizeTo = ((sizeItems.endIndex - 1), sizePicker.selectedRowInComponent(sizeItems.endIndex - 1))
+                }else if(component == sizeItems.endIndex-1) {
+                    sizeFrom = (component: (sizeItems.startIndex), row: sizePicker.selectedRowInComponent(sizeItems.startIndex))
+                    sizeTo = (component: component, row: row)
+                }else {
+                    return
+                }
+                
+                sizeLabel.text =
+                    sizeItems[sizeFrom.component][sizeFrom.row].label +
+                    " - " +
+                    sizeItems[sizeTo.component][sizeTo.row].label
+                
+            case pricePicker:
+                
+                var priceFrom:(component: Int, row: Int)
+                var priceTo:(component: Int, row: Int)
+                
+                if(component == priceItems.startIndex) {
+                    priceFrom = (component, row)
+                    priceTo = (component: (priceItems.endIndex - 1), row: pricePicker.selectedRowInComponent(priceItems.endIndex - 1))
+                }else if(component == priceItems.endIndex-1) {
+                    priceFrom = ((priceItems.startIndex), pricePicker.selectedRowInComponent(priceItems.startIndex))
+                    priceTo = (component: component, row: row)
+                }else {
+                    return
+                }
+                
+                priceLabel.text =
+                    priceItems[priceFrom.component][priceFrom.row].label +
+                    " - " +
+                    priceItems[priceTo.component][priceTo.row].label
+                
+            default: break
             }
         }
         
@@ -200,16 +246,33 @@
                         
                         searchCriteria.keyword = searchBar.text
                         
-                        let priceMin = 0//Int(self.priceMin.text!) ?? 0
-                        let priceMax = 0//Int(self.priceMax.text!) ?? 0
+                        let priceMinRow =
+                        pricePicker.selectedRowInComponent(priceItems.startIndex)
+                        let priceMaxRow =
+                        pricePicker.selectedRowInComponent(priceItems.endIndex - 1)
                         
-                        searchCriteria.criteriaPrice = (priceMin, priceMax)
+                        let priceMin =
+                        priceItems[priceItems.startIndex][priceMinRow].value
+                        let priceMax =
+                        priceItems[priceItems.endIndex - 1][priceMaxRow].value
                         
-                        let sizeMin = 0//Int(self.sizeMin.text!) ?? 0
-                        let sizeMax = 0//Int(self.sizeMax.text!) ?? 0
+                        if(priceMin != CriteriaConst.Bound.LOWER_ANY ||  priceMax != CriteriaConst.Bound.UPPER_ANY) {
+                            searchCriteria.criteriaPrice = (priceMin, priceMax)
+                        }
                         
-                        searchCriteria.criteriaSize = (sizeMin, sizeMax)
+                        let sizeMinRow =
+                        sizePicker.selectedRowInComponent(sizeItems.startIndex)
+                        let sizeMaxRow =
+                        sizePicker.selectedRowInComponent(sizeItems.endIndex - 1)
                         
+                        let sizeMin =
+                        sizeItems[sizeItems.startIndex][sizeMinRow].value
+                        let sizeMax =
+                        sizeItems[sizeItems.endIndex - 1][sizeMaxRow].value
+                        
+                        if(sizeMin != CriteriaConst.Bound.LOWER_ANY ||  sizeMax != CriteriaConst.Bound.UPPER_ANY) {
+                            searchCriteria.criteriaSize = (sizeMin, sizeMax)
+                        }
                         
                         var typeList = [Int]()
                         
