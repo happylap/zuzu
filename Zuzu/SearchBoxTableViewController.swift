@@ -126,19 +126,33 @@
         }
         
         // MARK: - Picker Data Source
+        struct PickerConst {
+            static let anyLower:(label:String, value:Int) = ("不限",CriteriaConst.Bound.LOWER_ANY)
+            static let anyUpper:(label:String, value:Int) = ("不限",CriteriaConst.Bound.UPPER_ANY)
+            static let upperBoundStartZero = 0
+            
+            static let lowerComponentIndex = 0
+            static let upperComponentIndex = 1
+        }
+        
+        var sizeUpperRange:Range<Int>?
+        var priceUpperRange:Range<Int>?
+        
+        //Consider removing lable. We can genererate any kind of String when needed...
         let sizeItems:[[(label:String, value:Int)]] =
         [
-            [("不限",CriteriaConst.Bound.LOWER_ANY), ("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
+            [("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
             ,
-            [("不限",CriteriaConst.Bound.UPPER_ANY), ("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
+            [("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
         ]
         
         let priceItems:[[(label:String, value:Int)]] =
         [
-            [("不限",CriteriaConst.Bound.LOWER_ANY), ("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
+            [("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
             ,
-            [("不限",CriteriaConst.Bound.UPPER_ANY), ("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
+            [("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
         ]
+        
         
         private func configurePricePicker() {
             
@@ -163,72 +177,256 @@
         
         func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
             
-            switch(pickerView) {
-            case sizePicker:
-                return sizeItems[component][row].label
-            case pricePicker:
-                return priceItems[component][row].label
-            default:
+            if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
+                
+                return rowItem.label
+            } else {
                 return ""
             }
         }
         
         func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
             
+            var targetItems:[[(label:String, value:Int)]]
+            var targetUpperRange:Range<Int>?
+            
             switch(pickerView) {
             case sizePicker:
-                return sizeItems[component].count
+                targetItems = sizeItems
+                targetUpperRange = sizeUpperRange
+                
             case pricePicker:
-                return priceItems[component].count
+                targetItems = priceItems
+                targetUpperRange = priceUpperRange
             default:
                 return 0
             }
+            
+            let numOfItemsWithAnyValue = targetItems[component].count + 1
+            
+            if(component == targetItems.endIndex - 1) {
+                
+                if targetUpperRange == nil {
+                    return 1 //Only Any Value exisy
+                }
+                
+                return numOfItemsWithAnyValue - targetUpperRange!.startIndex
+            }
+            
+            return numOfItemsWithAnyValue
+        }
+        
+        private func getUpperBoundRangeForPicker(pickerView: UIPickerView, items: [[(label:String, value:Int)]]) -> Range<Int>?{
+            
+            let numOfComponents = pickerView.numberOfComponents
+            
+            assert(numOfComponents == 2, "Cannot process pickers with components more or less than two")
+            assert(numOfComponents == items.count, "The number of components do not match")
+            
+            if(numOfComponents == 2) {
+                let from = items.startIndex, to = items.endIndex - 1
+                
+                let selectedRowInlowerBound = pickerView.selectedRowInComponent(from)
+                
+                if let selectedLowerBound = getItemForPicker(pickerView, component: from, row: selectedRowInlowerBound) {
+                    
+                    ///Do not need to update Upper Bound values if there is not limit on Lower Bound
+                    if(selectedLowerBound.value == PickerConst.anyLower.value) {
+                        return (PickerConst.upperBoundStartZero...items[to].count - 1)
+                    }
+                    
+                    var hasLargerValue:Bool = false
+                    
+                    for (index, item) in items[to].enumerate() {
+                        if(item.value > selectedLowerBound.value) {
+                            hasLargerValue = true
+                            return (index...items[to].count - 1)
+                        }
+                    }
+                    
+                    if(!hasLargerValue) {
+                        return nil
+                    }
+                    
+                }
+            }
+            
+            return nil
+        }
+        
+        ///Consider encapsulating items with any value in a class...
+        private func getItemForPicker(pickerView: UIPickerView, component: Int, row: Int) ->  (label:String, value:Int)? {
+            
+            ///1st row is always "any value"
+            if(row == 0){
+                if(component == PickerConst.lowerComponentIndex) {
+                    return PickerConst.anyLower
+                }
+                if(component == PickerConst.upperComponentIndex) {
+                    return PickerConst.anyUpper
+                }
+            }
+            
+            var targetItems:[[(label:String, value:Int)]]
+            var targetUpperRange:Range<Int>?
+            
+            switch(pickerView) {
+            case sizePicker:
+                targetItems = sizeItems
+                targetUpperRange = sizeUpperRange
+            case pricePicker:
+                targetItems = priceItems
+                targetUpperRange = priceUpperRange
+            default:
+                assert(false,"Invalid picker view")
+                return nil
+            }
+            
+            let idxWithoutAnyValue = row - 1
+            
+            ///Upper values are limited to valus greater than the selected lower value
+            if(component == 1) {
+                if (targetUpperRange == nil) {
+                    assert(false,"There should be no item except for any value")
+                    return nil
+                }
+                return targetItems[component][idxWithoutAnyValue + targetUpperRange!.startIndex]
+            }
+            
+            return targetItems[component][idxWithoutAnyValue]
         }
         
         func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             
+            var targetItems:[[(label:String, value:Int)]]
+            var targetLabel:UILabel
+            
             switch(pickerView) {
             case sizePicker:
-                var sizeFrom:(component:Int, row:Int)
-                var sizeTo:(component:Int, row:Int)
-                
-                if(component == sizeItems.startIndex) {
-                    sizeFrom = (component, row)
-                    sizeTo = ((sizeItems.endIndex - 1), sizePicker.selectedRowInComponent(sizeItems.endIndex - 1))
-                }else if(component == sizeItems.endIndex-1) {
-                    sizeFrom = (component: (sizeItems.startIndex), row: sizePicker.selectedRowInComponent(sizeItems.startIndex))
-                    sizeTo = (component: component, row: row)
-                }else {
-                    return
-                }
-                
-                sizeLabel.text =
-                    sizeItems[sizeFrom.component][sizeFrom.row].label +
-                    " - " +
-                    sizeItems[sizeTo.component][sizeTo.row].label
-                
+                targetItems = sizeItems
+                targetLabel = sizeLabel
             case pricePicker:
+                targetItems = priceItems
+                targetLabel = priceLabel
+            default:
+                return
+            }
+            
+            var pickerFrom:(component:Int, row:Int) = (0,0)
+            var pickerTo:(component:Int, row:Int) = (0,0)
+            
+            if(component == PickerConst.lowerComponentIndex) {
+                let fromItemIdx = row
+                let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
                 
-                var priceFrom:(component: Int, row: Int)
-                var priceTo:(component: Int, row: Int)
+                pickerFrom = (component, fromItemIdx)
+                pickerTo = ((targetItems.endIndex - 1), toItemIdx)
                 
-                if(component == priceItems.startIndex) {
-                    priceFrom = (component, row)
-                    priceTo = (component: (priceItems.endIndex - 1), row: pricePicker.selectedRowInComponent(priceItems.endIndex - 1))
-                }else if(component == priceItems.endIndex-1) {
-                    priceFrom = ((priceItems.startIndex), pricePicker.selectedRowInComponent(priceItems.startIndex))
-                    priceTo = (component: component, row: row)
-                }else {
-                    return
+            }else if(component == PickerConst.upperComponentIndex) {
+                let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
+                let toItemIdx = row
+                
+                pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
+                pickerTo = (component: component, row: toItemIdx)
+                
+            }else {
+                assert(false, "Strange component index!")
+            }
+            
+            let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
+            let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
+            
+            if(fromTuple?.label == toTuple?.label) {
+                targetLabel.text = "\((fromTuple?.label)!)"
+            } else {
+                targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
+            }
+            
+            ///Try to refresh picker items
+            switch(pickerView) {
+            case sizePicker:
+                sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+            case pricePicker:
+                priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+            default:
+                return
+            }
+            
+            pickerView.reloadAllComponents()
+        }
+        
+        private func composeSearhCriteria() -> SearchCriteria {
+            
+            var searchCriteria = SearchCriteria()
+            
+            ///Keywords
+            searchCriteria.keyword = searchBar.text
+            
+            ///Price Range
+            let priceMinRow =
+            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            let priceMaxRow =
+            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            
+            if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
+                if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
+                    if(priceMin.value != CriteriaConst.Bound.LOWER_ANY || priceMax.value != CriteriaConst.Bound.UPPER_ANY) {
+                        searchCriteria.criteriaPrice = (priceMin.value, priceMax.value)
+                    }
+                }
+            }
+            
+            ///Size Range
+            let sizeMinRow =
+            sizePicker.selectedRowInComponent(sizeItems.startIndex)
+            let sizeMaxRow =
+            sizePicker.selectedRowInComponent(sizeItems.endIndex - 1)
+            
+            
+            if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
+                if let sizeMax = self.getItemForPicker(sizePicker, component: PickerConst.upperComponentIndex, row: sizeMaxRow){
+                    if(sizeMin.value != CriteriaConst.Bound.LOWER_ANY || sizeMax.value != CriteriaConst.Bound.UPPER_ANY) {
+                        searchCriteria.criteriaSize = (sizeMin.value, sizeMax.value)
+                    }
+                }
+            }
+            
+            ///House Types
+            var typeList = [Int]()
+            
+            if(selectAllButton!.getToggleState() == false) {
+                let views = typeButtonContainer.subviews
+                
+                //Other type buttons are controlled by "select all" button
+                for view in views {
+                    if let typeButton = view as? ToggleButton {
+                        if(typeButton.tag !=
+                            UIControlTag.NOT_LIMITED_BUTTON_TAG){
+                                if(typeButton.getToggleState()) {
+                                    switch typeButton.tag {
+                                    case 1:
+                                        typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
+                                    case 2:
+                                        typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
+                                    case 3:
+                                        typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
+                                    case 4:
+                                        typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
+                                    case 5:
+                                        typeList.append(CriteriaConst.PrimaryType.HOME_OFFICE)
+                                    default: break
+                                    }
+                                }
+                        }
+                    }
                 }
                 
-                priceLabel.text =
-                    priceItems[priceFrom.component][priceFrom.row].label +
-                    " - " +
-                    priceItems[priceTo.component][priceTo.row].label
-                
-            default: break
+                if(typeList.count > 0) {
+                    searchCriteria.criteriaTypes = typeList
+                }
             }
+            
+            return searchCriteria
         }
         
         // MARK: - Navigation
@@ -242,73 +440,8 @@
                     
                     if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
                         
-                        var searchCriteria = SearchCriteria()
-                        
-                        searchCriteria.keyword = searchBar.text
-                        
-                        let priceMinRow =
-                        pricePicker.selectedRowInComponent(priceItems.startIndex)
-                        let priceMaxRow =
-                        pricePicker.selectedRowInComponent(priceItems.endIndex - 1)
-                        
-                        let priceMin =
-                        priceItems[priceItems.startIndex][priceMinRow].value
-                        let priceMax =
-                        priceItems[priceItems.endIndex - 1][priceMaxRow].value
-                        
-                        if(priceMin != CriteriaConst.Bound.LOWER_ANY ||  priceMax != CriteriaConst.Bound.UPPER_ANY) {
-                            searchCriteria.criteriaPrice = (priceMin, priceMax)
-                        }
-                        
-                        let sizeMinRow =
-                        sizePicker.selectedRowInComponent(sizeItems.startIndex)
-                        let sizeMaxRow =
-                        sizePicker.selectedRowInComponent(sizeItems.endIndex - 1)
-                        
-                        let sizeMin =
-                        sizeItems[sizeItems.startIndex][sizeMinRow].value
-                        let sizeMax =
-                        sizeItems[sizeItems.endIndex - 1][sizeMaxRow].value
-                        
-                        if(sizeMin != CriteriaConst.Bound.LOWER_ANY ||  sizeMax != CriteriaConst.Bound.UPPER_ANY) {
-                            searchCriteria.criteriaSize = (sizeMin, sizeMax)
-                        }
-                        
-                        var typeList = [Int]()
-                        
-                        if(selectAllButton!.getToggleState() == false) {
-                            let views = typeButtonContainer.subviews
-                            
-                            //Other type buttons are controlled by "select all" button
-                            for view in views {
-                                if let typeButton = view as? ToggleButton {
-                                    if(typeButton.tag !=
-                                        UIControlTag.NOT_LIMITED_BUTTON_TAG){
-                                            if(typeButton.getToggleState()) {
-                                                switch typeButton.tag {
-                                                case 1:
-                                                    typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
-                                                case 2:
-                                                    typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
-                                                case 3:
-                                                    typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
-                                                case 4:
-                                                    typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
-                                                case 5:
-                                                    typeList.append(CriteriaConst.PrimaryType.HOME_OFFICE)
-                                                default: break
-                                                }
-                                            }
-                                    }
-                                }
-                            }
-                            
-                            if(typeList.count > 0) {
-                                searchCriteria.criteriaTypes = typeList
-                            }
-                        }
-                        
-                        srtvc.searchCriteria = searchCriteria
+                        ///Collect the search criteria set by the user
+                        srtvc.searchCriteria = composeSearhCriteria()
                     }
                 default: break
                 }
@@ -332,6 +465,8 @@
             tableView.delegate = self
             
             //Confugure Price Picker
+            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
+            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
             self.configurePricePicker()
             
             // Uncomment the following line to preserve selection between presentations
