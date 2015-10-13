@@ -27,12 +27,17 @@
         }
     }
     
+    struct ViewTransConst {
+        static let showSearchResult:String = "showSearchResult"
+        static let showAreaSelector:String = "showAreaSelector"
+    }
+    
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
     }
     
     class SearchBoxTableViewController: UITableViewController, UISearchBarDelegate,
-    UIPickerViewDelegate, UIPickerViewDataSource {
+    UIPickerViewDelegate, UIPickerViewDataSource, RegionTableViewControllerDelegate {
         
         var selectAllButton:ToggleButton?
         
@@ -96,7 +101,11 @@
             NSLog("onSearchButtonClicked: %@", self)
             
             //present the view modally (hide the tabbar)
-            performSegueWithIdentifier("showSearchResult", sender: nil)
+            performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
+        }
+        
+        func onRegionsSelected(regions: [(name: String, code: Int)]) {
+            ///Display result, and set to criteria
         }
         
         // MARK: - UISearchBarDelegate
@@ -429,6 +438,10 @@
             return searchCriteria
         }
         
+        func dismissCurrentView(sender: UIBarButtonItem) {
+            navigationController?.popToRootViewControllerAnimated(true)
+        }
+        
         // MARK: - Navigation
         override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             
@@ -436,13 +449,21 @@
             
             if let identifier = segue.identifier{
                 switch identifier{
-                case "showSearchResult":
-                    
+                case ViewTransConst.showSearchResult:
+                    NSLog("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
                         
                         ///Collect the search criteria set by the user
                         srtvc.searchCriteria = composeSearhCriteria()
                     }
+                case ViewTransConst.showAreaSelector:
+                    NSLog("showAreaSlector")
+                    
+                    ///So that we'll not see the pickerView expand when loading the area selector view
+                    self.tabBarController!.tabBar.hidden = true;
+                    
+                    navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
+                    
                 default: break
                 }
             }
@@ -487,12 +508,12 @@
         }
         
         // MARK: - Table Delegate
-        override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-            
+        
+        private func handlePicker(indexPath:NSIndexPath) {
             var picker:UIPickerView?
             
             switch(indexPath.row) {
-            case 2:
+            case 2: // Price Picker
                 picker = pricePicker
                 if(hiddenCells.contains(3)) {
                     hiddenCells.remove(3)
@@ -500,14 +521,13 @@
                     hiddenCells.insert(3)
                 }
                 
-            case 4:
+            case 4: // Size Picker
                 picker = sizePicker
                 if(hiddenCells.contains(5)) {
                     hiddenCells.remove(5)
                 } else {
                     hiddenCells.insert(5)
                 }
-                
             default: break
             }
             
@@ -516,6 +536,24 @@
                 
                 tableView.beginUpdates()
                 tableView.endUpdates()
+            }
+        }
+        
+        override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+            
+            switch(indexPath.row) {
+            case 2, 4: // Price, Size Picker
+                handlePicker(indexPath)
+                
+            case 0: //Area Picker
+                NSLog("isMainThread : \(NSThread.currentThread().isMainThread)")
+                dispatch_async(dispatch_get_main_queue(),{
+                    NSLog("isMainThread : \(NSThread.currentThread().isMainThread)")
+                    self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
+                })
+  
+                
+            default: break
             }
             
         }
