@@ -556,16 +556,18 @@
             case 2: // Price Picker
                 picker = pricePicker
                 if(hiddenCells.contains(3)) {
-                    hiddenCells.remove(3)
-                } else {
+                    hiddenCells.remove(3) //Show 3
+                    hiddenCells.insert(5) //Hide 5
+                } else { //Hide
                     hiddenCells.insert(3)
                 }
                 
             case 4: // Size Picker
                 picker = sizePicker
                 if(hiddenCells.contains(5)) {
-                    hiddenCells.remove(5)
-                } else {
+                    hiddenCells.remove(5) //Show 5
+                    hiddenCells.insert(3) //Hide 3
+                } else { //Hide
                     hiddenCells.insert(5)
                 }
             default: break

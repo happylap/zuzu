@@ -329,7 +329,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="F2v-MB-Dla">
-                                                    <rect key="frame" x="0.0" y="7" width="600" height="29"/>
+                                                    <rect key="frame" x="20" y="7" width="560" height="29"/>
                                                     <segments>
                                                         <segment title="常用搜尋"/>
                                                         <segment title="搜尋紀錄"/>
@@ -337,10 +337,20 @@
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="F2v-MB-Dla" firstAttribute="leading" secondItem="qZd-VB-W4l" secondAttribute="leadingMargin" constant="-8" id="7tl-lr-M7A"/>
+                                                <constraint firstItem="F2v-MB-Dla" firstAttribute="leading" secondItem="qZd-VB-W4l" secondAttribute="leadingMargin" constant="-8" id="KEh-rG-ofB"/>
                                                 <constraint firstItem="F2v-MB-Dla" firstAttribute="centerY" secondItem="qZd-VB-W4l" secondAttribute="centerY" id="KRa-eE-Y3X"/>
-                                                <constraint firstItem="F2v-MB-Dla" firstAttribute="leading" secondItem="qZd-VB-W4l" secondAttribute="leading" id="fDd-4S-woY"/>
-                                                <constraint firstAttribute="trailing" secondItem="F2v-MB-Dla" secondAttribute="trailing" id="yc6-mN-Spb"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="F2v-MB-Dla" secondAttribute="trailing" constant="-8" id="R6J-cp-LJC"/>
+                                                <constraint firstItem="F2v-MB-Dla" firstAttribute="leading" secondItem="qZd-VB-W4l" secondAttribute="leading" constant="20" symbolic="YES" id="fDd-4S-woY"/>
+                                                <constraint firstAttribute="trailing" secondItem="F2v-MB-Dla" secondAttribute="trailing" constant="20" symbolic="YES" id="yc6-mN-Spb"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="7tl-lr-M7A"/>
+                                                    <exclude reference="KEh-rG-ofB"/>
+                                                    <exclude reference="R6J-cp-LJC"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
