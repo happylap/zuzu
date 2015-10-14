@@ -13,7 +13,7 @@ protocol CitySelectionViewControllerDelegate {
     func onCitySelected(value: Int)
 }
 
-class CitySelectionViewController:UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var cityPicker: UIPickerView!
     
@@ -25,18 +25,6 @@ class CitySelectionViewController:UIViewController, UIPickerViewDelegate, UIPick
         cityPicker.dataSource = self
         cityPicker.delegate = self
     }
-    
-//    
-//    private func configureRegionTable() {
-//        
-//        //Configure cell height
-//        tableView.estimatedRowHeight = tableView.rowHeight
-//        tableView.rowHeight = UITableViewAutomaticDimension
-//        tableView.allowsSelection = false
-//        
-//        tableView.dataSource = self
-//        tableView.delegate = self
-//    }
     
     // MARK: - PickerView DataSource & Delegate
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
@@ -56,29 +44,6 @@ class CitySelectionViewController:UIViewController, UIPickerViewDelegate, UIPick
         
         delegate?.onCitySelected(selectedCity)
     }
-    
-    // MARK: - Table DataSource & Delegate
-    
-//    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return 1
-//    }
-//    
-//    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return regions.count
-//    }
-//    
-//    
-//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        
-//        let cell = tableView.dequeueReusableCellWithIdentifier("regionCell", forIndexPath: indexPath)
-//        
-//        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
-//        
-//        
-//        cell.textLabel?.text = regions[indexPath.row]
-//
-//        return cell
-//    }
     
     // MARK: - View Controller Life Cycel
     override func viewDidLoad() {
@@ -136,7 +101,6 @@ class CitySelectionViewController:UIViewController, UIPickerViewDelegate, UIPick
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     
@@ -149,4 +113,5 @@ class CitySelectionViewController:UIViewController, UIPickerViewDelegate, UIPick
     // Pass the selected object to the new view controller.
     }
     */
+
 }

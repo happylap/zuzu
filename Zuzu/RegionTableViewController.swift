@@ -9,25 +9,79 @@
 import UIKit
 import SwiftyJSON
 
-struct Region: Hashable {
+class Region: NSObject, NSCoding {
     var code:Int
     var name:String
     
-    var hashValue : Int {
-        get {
-            return code.hashValue
-        }
+    init(code:Int, name: String) {
+        self.code = code
+        self.name = name
+    }
+    
+    convenience required init?(coder decoder: NSCoder) {
+        let code = decoder.decodeIntegerForKey("code") as Int
+        let name = decoder.decodeObjectForKey("name") as? String ?? ""
+        
+        self.init(code: code, name: name)
+    }
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        return (object as? Region)?.code == code
+    }
+    
+//    override var hashValue : Int {
+//        get {
+//            return code.hashValue
+//        }
+//    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeInteger(code, forKey:"code")
+        aCoder.encodeObject(name, forKey:"name")
+    }
+    
+    override var description: String {
+        let string = "Region: code = \(code), name = \(name)"
+        return string
     }
 }
 
-func ==(lhs: Region, rhs: Region) -> Bool {
-    return  lhs.hashValue == rhs.hashValue
-}
+//func ==(lhs: Region, rhs: Region) -> Bool {
+//    return  lhs.hashValue == rhs.hashValue
+//}
 
-struct City {
+class City: NSObject, NSCoding {
     var code:Int
     var name:String
     var regions:[Region]
+    
+    init(code:Int, name: String, regions:[Region]) {
+        self.code = code
+        self.name = name
+        self.regions = regions
+    }
+    
+    convenience required init?(coder decoder: NSCoder) {
+        
+        let code = decoder.decodeIntegerForKey("code") as Int
+        let name = decoder.decodeObjectForKey("name") as? String ?? ""
+        let regions = decoder.decodeObjectForKey("regions") as? [Region] ?? [Region]()
+        
+        self.init(code: code, name: name, regions: regions)
+        
+        //self.
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeInteger(code, forKey:"code")
+        aCoder.encodeObject(name, forKey:"name")
+        aCoder.encodeObject(regions, forKey:"regions")
+    }
+    
+    override var description: String {
+        let string = "Region: code = \(code), name = \(name)"
+        return string
+    }
 }
 
 protocol RegionTableViewControllerDelegate {
@@ -68,6 +122,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         
         NSLog("viewDidLoad: %@", self)
         
+        ///Load all city regions from json
         if let path = NSBundle.mainBundle().pathForResource("areasInTaiwan", ofType: "json") {
             
             do {
@@ -107,6 +162,31 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
                 NSLog("Cannot load area json file %@", error)
                 
             }
+            
+            ///Load selected regions
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            let data = userDefaults.objectForKey("selectedRegion") as? NSData
+            
+            if(data != nil) {
+                if let selectedCities = NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [City] {
+                
+                for city in selectedCities {
+                    
+                    let selectedRegions = city.regions
+                    
+                    if(selectedRegions.isEmpty) {
+                        checkedRegions[city.code]?[0] = true
+                    } else {
+                        for region in selectedRegions {
+                            if let index = cityRegions[city.code]?.regions.indexOf(region) { ///Region needs to be Equatable
+                                checkedRegions[city.code]?[index] = true
+                            }
+                        }
+                    }
+                }
+                }
+                //self.checkedRegions
+            }
         }
     }
     
@@ -124,7 +204,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
                 ///Check selected regions
                 if let selectionStatus = checkedRegions[cityCode] {
                     
-                    var newCity = City(code: city.code, name: city.name, regions: [Region]())
+                    let newCity = City(code: city.code, name: city.name, regions: [Region]())
                     var allRegion:Bool = false
                     var selectedRegions:[Region] = [Region]()
                     
@@ -139,9 +219,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
                     }
                     
                     if(allRegion) {
-                        
                         result.append(newCity)
-                        
                     } else {
                         if(!selectedRegions.isEmpty) {
                             newCity.regions = selectedRegions
@@ -186,7 +264,9 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
                 } else { //Click on other region
                     if(checkedRegions[citySelected]![0]) {
                         checkedRegions[citySelected]![0] = false
-                        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+                        
+                        tableView.reloadData()
+                        //tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
                     }
                 }
             }
@@ -232,6 +312,10 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         }
         
         return cell
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        NSLog("prepareForSegue: %@", self)
     }
     
 }

@@ -22,7 +22,7 @@
 		2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F482DFE1BAFE09100C68670 /* Assets.xcassets */; };
 		2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */; };
 		2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		2F4F80911BCBB3C4003D23F4 /* CitySelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80901BCBB3C4003D23F4 /* CitySelectionViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */; settings = {ASSET_TAGS = (); }; };
 		2F4F80961BCCB5FB003D23F4 /* areasInTaiwan2.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F4F80951BCCB5FB003D23F4 /* areasInTaiwan2.json */; settings = {ASSET_TAGS = (); }; };
 		2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
@@ -75,7 +75,7 @@
 		2F482E081BAFE09100C68670 /* ZuzuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZuzuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F482E131BAFE09100C68670 /* ZuzuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZuzuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBoxTableViewController.swift; sourceTree = "<group>"; };
-		2F4F80901BCBB3C4003D23F4 /* CitySelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CitySelectionViewController.swift; sourceTree = "<group>"; };
+		2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityPickerViewController.swift; sourceTree = "<group>"; };
 		2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = areasInTaiwan.json; sourceTree = "<group>"; };
 		2F4F80951BCCB5FB003D23F4 /* areasInTaiwan2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = areasInTaiwan2.json; sourceTree = "<group>"; };
 		2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionTableViewController.swift; sourceTree = "<group>"; };
@@ -120,10 +120,10 @@
 		2F276B351BBED50300A41306 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */,
+				2FFCBF301BCE7F6C00400552 /* view */,
 				2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */,
 				2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */,
-				2F4F80901BCBB3C4003D23F4 /* CitySelectionViewController.swift */,
+				2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */,
 				2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */,
 				2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */,
 			);
@@ -209,6 +209,14 @@
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		2FFCBF301BCE7F6C00400552 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */,
+			);
+			name = view;
 			sourceTree = "<group>";
 		};
 		797B8184BE32AA80123C1AB8 /* Frameworks */ = {
@@ -433,7 +441,7 @@
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */,
-				2F4F80911BCBB3C4003D23F4 /* CitySelectionViewController.swift in Sources */,
+				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,
 				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,

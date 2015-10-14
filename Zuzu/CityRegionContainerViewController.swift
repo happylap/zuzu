@@ -20,10 +20,9 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
     }
     
     var isSelectionDone:Bool = false
-    var cityPicker:CitySelectionViewController?
+    var cityPicker:CityPickerViewController?
     var regionTable:RegionTableViewController?
-    var result: [City]?
-    
+
     var delegate: CityRegionContainerViewControllerDelegate?
     
     // MARK: - RegionTableViewControllerDelegate
@@ -66,7 +65,7 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
             switch identifier{
             case ViewTransConst.showCityPicker:
 
-                if let vc = segue.destinationViewController as? CitySelectionViewController {
+                if let vc = segue.destinationViewController as? CityPickerViewController {
                     cityPicker = vc
                 }
                 

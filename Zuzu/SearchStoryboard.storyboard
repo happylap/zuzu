@@ -378,7 +378,7 @@
         <!--City Picker-->
         <scene sceneID="k95-5H-13W">
             <objects>
-                <viewController title="City Picker" id="UUv-42-zi3" customClass="CitySelectionViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="City Picker" id="UUv-42-zi3" customClass="CityPickerViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pyM-Zf-oZg"/>
                         <viewControllerLayoutGuide type="bottom" id="zbO-Cm-iDj"/>
