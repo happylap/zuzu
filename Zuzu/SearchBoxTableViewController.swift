@@ -27,18 +27,19 @@
         }
     }
     
-    struct ViewTransConst {
-        static let showSearchResult:String = "showSearchResult"
-        static let showAreaSelector:String = "showAreaSelector"
-    }
-    
-    struct UIControlTag {
-        static let NOT_LIMITED_BUTTON_TAG = 99
-    }
-    
     class SearchBoxTableViewController: UITableViewController, UISearchBarDelegate,
-    UIPickerViewDelegate, UIPickerViewDataSource, RegionTableViewControllerDelegate {
+    UIPickerViewDelegate, UIPickerViewDataSource, CityRegionContainerViewControllerDelegate {
         
+        struct ViewTransConst {
+            static let showSearchResult:String = "showSearchResult"
+            static let showAreaSelector:String = "showAreaSelector"
+        }
+        
+        struct UIControlTag {
+            static let NOT_LIMITED_BUTTON_TAG = 99
+        }
+        
+        var regionSelectionResult: [City]?
         var selectAllButton:ToggleButton?
         
         @IBOutlet weak var typeButtonContainer: UIView! {
@@ -65,6 +66,7 @@
             }
         }
         
+        @IBOutlet weak var cityRegionLabel: UILabel!
         @IBOutlet weak var sizeLabel: UILabel!
         @IBOutlet weak var priceLabel: UILabel!
         @IBOutlet weak var sizePicker: UIPickerView!
@@ -104,8 +106,24 @@
             performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
         }
         
-        func onRegionsSelected(regions: [(name: String, code: Int)]) {
-            ///Display result, and set to criteria
+        // MARK: - CityRegionContainerViewControllerDelegate
+        func onRegionSelectionDone(result: [City]) {
+            
+            var labelStr:String = ""
+            
+            for (index, city) in result.enumerate() {
+                
+                if(index == result.startIndex) {
+                    
+                    labelStr = "\(city.name)"
+                } else if(index < 3) {
+                    
+                    labelStr = labelStr + "、\(city.name)"
+                }
+            }
+            
+            regionSelectionResult = result
+            cityRegionLabel.text = labelStr
         }
         
         // MARK: - UISearchBarDelegate
@@ -371,6 +389,9 @@
             ///Keywords
             searchCriteria.keyword = searchBar.text
             
+            ///Region
+            searchCriteria.region = regionSelectionResult
+            
             ///Price Range
             let priceMinRow =
             pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
@@ -458,6 +479,11 @@
                     }
                 case ViewTransConst.showAreaSelector:
                     NSLog("showAreaSlector")
+                    
+                    ///Setup delegat to receive result
+                    if let vc = segue.destinationViewController as? CityRegionContainerViewController {
+                        vc.delegate = self
+                    }
                     
                     ///So that we'll not see the pickerView expand when loading the area selector view
                     self.tabBarController!.tabBar.hidden = true;
@@ -551,7 +577,7 @@
                     NSLog("isMainThread : \(NSThread.currentThread().isMainThread)")
                     self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
                 })
-  
+                
                 
             default: break
             }

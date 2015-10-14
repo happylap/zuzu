@@ -14,6 +14,7 @@ struct Const {
 
 struct SearchCriteria {
     var keyword:String?
+    var region: [City]?
     var criteriaPrice:(Int, Int)?
     var criteriaSize:(Int, Int)?
     var criteriaTypes: [Int]?

@@ -8,30 +8,52 @@
 
 import UIKit
 
-class CityRegionContainerViewController: UIViewController {
-    
-    var cityPicker:CitySelectionViewController?
-    var regionTable:RegionTableViewController?
+protocol CityRegionContainerViewControllerDelegate {
+    func onRegionSelectionDone(result: [City])
+}
+
+class CityRegionContainerViewController: UIViewController, RegionTableViewControllerDelegate {
     
     struct ViewTransConst {
         static let showRegionTable:String = "showRegionTable"
         static let showCityPicker:String = "showCityPicker"
     }
     
+    var isSelectionDone:Bool = false
+    var cityPicker:CitySelectionViewController?
+    var regionTable:RegionTableViewController?
+    var result: [City]?
+    
+    var delegate: CityRegionContainerViewControllerDelegate?
+    
+    // MARK: - RegionTableViewControllerDelegate
+    func onRegionSelectionDone(result: [City]) {
+        if(isSelectionDone) {
+            delegate?.onRegionSelectionDone(result)
+        }
+    }
+    
     // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
+        
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
+        
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Actions
     @IBAction func onSelectionDone(sender: UIBarButtonItem) {
+        
+        NSLog("onSelectionDone")
+        
+        isSelectionDone = true
+        
         navigationController?.popToRootViewControllerAnimated(true)
     }
 
@@ -59,6 +81,8 @@ class CityRegionContainerViewController: UIViewController {
         
         if(cityPicker != nil && regionTable != nil) {
             cityPicker?.delegate = regionTable
+            
+            regionTable?.delegate = self
         }
     }
 

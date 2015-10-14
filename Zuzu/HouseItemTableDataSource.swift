@@ -156,7 +156,7 @@ public class HouseItemTableDataSource {
         
         NSLog("loadRemoteData: pageNo = \(pageNo)")
         
-        requester.searchByCriteria(criteria!.keyword, price: criteria!.criteriaPrice,
+        requester.searchByCriteria(criteria!.keyword,region: criteria?.region, price: criteria!.criteriaPrice,
             size: criteria!.criteriaSize, types: criteria!.criteriaTypes,
             start: start, row: row) { (newHouseItems: [HouseItem], error: NSError?) -> Void in
                 

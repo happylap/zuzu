@@ -46,11 +46,11 @@ class HouseItem:NSObject, NSCoding {
     
     required convenience init?(coder decoder: NSCoder) {
         
-            let id  = decoder.decodeObjectForKey("id") as? String
-            let title = decoder.decodeObjectForKey("title") as? String
-            let price = decoder.decodeIntegerForKey("price") as Int
-            let desc = decoder.decodeObjectForKey("desc") as? String
-            let imgList = decoder.decodeObjectForKey("imgList") as? [String]
+        let id  = decoder.decodeObjectForKey("id") as? String
+        let title = decoder.decodeObjectForKey("title") as? String
+        let price = decoder.decodeIntegerForKey("price") as Int
+        let desc = decoder.decodeObjectForKey("desc") as? String
+        let imgList = decoder.decodeObjectForKey("imgList") as? [String]
         
         self.init(
             id: id!,
@@ -93,6 +93,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     }
     
     func searchByCriteria(keyword: String?,
+        region: [City]?,
         price: (Int, Int)?,
         size: (Int, Int)?,
         types: [Int]?,
@@ -102,6 +103,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             
             var queryitems:[NSURLQueryItem] = []
             var mainQueryStr:String = "*:*"
+            var cityQueryStr:String?
+            var regionQueryStr:String?
             
             // Add query string
             if let keywordStr = keyword{
@@ -109,6 +112,55 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     let escapedStr = StringUtils.escapeForSolrString(keywordStr)
                     mainQueryStr = "title:\(escapedStr) OR desc:\(escapedStr)"
                 }
+            }
+            
+            // Region
+            var selectedRegion:[Region] = [Region]()
+            
+            if let selectedCity = region {
+                
+                for (cid, city) in selectedCity.enumerate() {
+                    
+                    let regions = city.regions
+                    
+                    if(cid == 0) {
+                        cityQueryStr = "  city:(\(city.code)"
+                    } else {
+                        cityQueryStr! += " OR \(city.code)"
+                    }
+                    
+                    selectedRegion.appendContentsOf(regions)
+                    
+                    if(cid == selectedCity.count - 1) {
+                        cityQueryStr? += " )"
+                    }
+                }
+                
+                for (rid, region) in selectedRegion.enumerate() {
+                    
+                    if(rid == 0) {
+                        regionQueryStr = " region:(\(region.code)"
+                    } else {
+                        regionQueryStr! += " OR \(region.code)"
+                    }
+                    if(rid == selectedRegion.count - 1) {
+                        regionQueryStr? += " )"
+                    }
+                }
+                
+                //mainQueryStr += " AND (\(cityQueryStr) OR \(regionQueryStr))"
+                
+                var result:String = ""
+                
+                if(cityQueryStr == nil) {
+                    result = "\(regionQueryStr!)"
+                } else if(regionQueryStr == nil) {
+                    result = "\(cityQueryStr!)"
+                } else {
+                    result = "\(cityQueryStr!) OR \(regionQueryStr!)"
+                }
+                
+                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: result))
             }
             
             if let typeList = types {
@@ -128,7 +180,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             }
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
-
+            
             if let priceRange = price {
                 
                 var priceFrom = "\(priceRange.0)"
@@ -173,7 +225,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         if let fullURL = urlComp.URL {
             
             print("fullURL: \(fullURL.absoluteString)")
-
+            
             let request = NSMutableURLRequest(URL: fullURL)
             request.timeoutInterval = HouseDataRequester.requestTimeout
             
@@ -203,7 +255,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                             let itemList = response["docs"] as! Array<Dictionary<String, AnyObject>>
                             
                             self.numOfRecord = response["numFound"] as? Int
-
+                            
                             for house in itemList {
                                 let id = house["id"]  as! String
                                 let title = house["title"] as! String
