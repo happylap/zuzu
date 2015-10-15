@@ -242,9 +242,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 request, queue: NSOperationQueue.mainQueue()){
                     (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                     do {
-                        
                         if(error != nil){
-                            NSLog("HTTP request error = \(error!.code), desc = \(error!.localizedDescription)")
+                            NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
                             handler(houseList, error)
                             return
                         }
