@@ -156,19 +156,16 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     }
                 }
                 
-                //mainQueryStr += " AND (\(cityQueryStr) OR \(regionQueryStr))"
+                var result = [String]()
                 
-                var result:String = ""
-                
-                if(cityQueryStr == nil) {
-                    result = "\(regionQueryStr!)"
-                } else if(regionQueryStr == nil) {
-                    result = "\(cityQueryStr!)"
-                } else {
-                    result = "\(cityQueryStr!) OR \(regionQueryStr!)"
+                if(cityQueryStr != nil) {
+                    result.append("\(cityQueryStr!)")
+                } else if(regionQueryStr != nil) {
+                    result.append("\(regionQueryStr!)")
                 }
                 
-                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: result))
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value:result.joinWithSeparator(" OR ")))
             }
             
             if let typeList = types {
@@ -200,7 +197,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     priceTo = "*"
                 }
                 
-                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.PRICE):[\(priceFrom) TO \(priceTo)]"))
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.PRICE):[\(priceFrom) TO \(priceTo)]"))
             }
             
             if let sizeRange = size {
@@ -214,7 +212,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     sizeTo = "*"
                 }
                 
-                queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
             }
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: "json"))
@@ -245,7 +244,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     do {
                         
                         if(error != nil){
-                            NSLog("HTTP request error = \(error)")
+                            NSLog("HTTP request error = \(error!.code), desc = \(error!.localizedDescription)")
                             handler(houseList, error)
                             return
                         }
