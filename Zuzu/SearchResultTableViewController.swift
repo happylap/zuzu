@@ -156,9 +156,10 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         
         
         let yOffsetForTop:CGFloat = 0
-        let yOffsetForBottom:CGFloat = scrollView.contentSize.height - scrollView.frame.size.height
+        let yOffsetForBottom:CGFloat = floor(scrollView.contentSize.height - scrollView.frame.size.height)
+        let currentContentOffset = floor(scrollView.contentOffset.y)
         
-        if (scrollView.contentOffset.y >= yOffsetForBottom){
+        if (currentContentOffset >= yOffsetForBottom){
             NSLog("%@ Bounced, Scrolled To Bottom", self)
             
             let nextPage = self.dataSource.currentPage + 1

@@ -160,7 +160,9 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 
                 if(cityQueryStr != nil) {
                     result.append("\(cityQueryStr!)")
-                } else if(regionQueryStr != nil) {
+                }
+                
+                if(regionQueryStr != nil) {
                     result.append("\(regionQueryStr!)")
                 }
                 
