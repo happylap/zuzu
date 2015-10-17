@@ -11,7 +11,7 @@ import Foundation
 struct SolrConst {
     struct Server {
         static let SCHEME = "http"
-        static let HOST = "ec2-52-74-129-59.ap-southeast-1.compute.amazonaws.com"
+        static let HOST = "ec2-52-76-69-228.ap-southeast-1.compute.amazonaws.com"
         static let PORT = 8983
         static let PATH = "/solr/rhc/select"
     }
