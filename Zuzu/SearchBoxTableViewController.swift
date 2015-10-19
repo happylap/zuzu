@@ -114,7 +114,144 @@
         
         let cityRegionDataStore : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
         
-        // MARK: - UI Control Event Handler
+        // MARK: - Private Utils
+        private func configureButton() {
+            
+            let color = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
+            
+            searchButton.layer.borderWidth = 2
+            searchButton.layer.borderColor = color.CGColor
+            searchButton.tintColor = color
+            searchButton.backgroundColor = color
+            
+            //let edgeInsets:UIEdgeInsets = UIEdgeInsets(top:4,left: 4,bottom: 4,right: 4)
+            
+            //let buttonImg = UIImage(named: "purple_button")!
+            
+            //let buttonInsetsImg:UIImage = buttonImg.imageWithAlignmentRectInsets(edgeInsets)
+            
+            //searchButton.setBackgroundImage(buttonInsetsImg, forState: UIControlState.Normal)
+        }
+        
+        private func configurePricePicker() {
+            
+            sizePicker.dataSource = self
+            sizePicker.delegate = self
+            
+            pricePicker.dataSource = self
+            pricePicker.delegate = self
+        }
+        
+        private func handlePicker(indexPath:NSIndexPath) {
+            var picker:UIPickerView?
+            
+            switch(indexPath.row) {
+            case 2: // Price Picker
+                picker = pricePicker
+                if(hiddenCells.contains(3)) {
+                    hiddenCells.remove(3) //Show 3
+                    hiddenCells.insert(5) //Hide 5
+                } else { //Hide
+                    hiddenCells.insert(3)
+                }
+                
+            case 4: // Size Picker
+                picker = sizePicker
+                if(hiddenCells.contains(5)) {
+                    hiddenCells.remove(5) //Show 5
+                    hiddenCells.insert(3) //Hide 3
+                } else { //Hide
+                    hiddenCells.insert(5)
+                }
+            default: break
+            }
+            
+            if(picker != nil) {
+                tableView.deselectRowAtIndexPath(indexPath, animated: false)
+                
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
+        }
+        
+        private func composeSearhCriteria() -> SearchCriteria {
+            
+            var searchCriteria = SearchCriteria()
+            
+            ///Keywords
+            searchCriteria.keyword = searchBar.text
+            
+            ///Region
+            searchCriteria.region = regionSelectionState
+            
+            ///Price Range
+            let priceMinRow =
+            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            let priceMaxRow =
+            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            
+            if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
+                if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
+                    if(priceMin.value != CriteriaConst.Bound.LOWER_ANY || priceMax.value != CriteriaConst.Bound.UPPER_ANY) {
+                        searchCriteria.criteriaPrice = (priceMin.value, priceMax.value)
+                    }
+                }
+            }
+            
+            ///Size Range
+            let sizeMinRow =
+            sizePicker.selectedRowInComponent(sizeItems.startIndex)
+            let sizeMaxRow =
+            sizePicker.selectedRowInComponent(sizeItems.endIndex - 1)
+            
+            
+            if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
+                if let sizeMax = self.getItemForPicker(sizePicker, component: PickerConst.upperComponentIndex, row: sizeMaxRow){
+                    if(sizeMin.value != CriteriaConst.Bound.LOWER_ANY || sizeMax.value != CriteriaConst.Bound.UPPER_ANY) {
+                        searchCriteria.criteriaSize = (sizeMin.value, sizeMax.value)
+                    }
+                }
+            }
+            
+            ///House Types
+            var typeList = [Int]()
+            
+            if(selectAllButton!.getToggleState() == false) {
+                let views = typeButtonContainer.subviews
+                
+                //Other type buttons are controlled by "select all" button
+                for view in views {
+                    if let typeButton = view as? ToggleButton {
+                        if(typeButton.tag !=
+                            UIControlTag.NOT_LIMITED_BUTTON_TAG){
+                                if(typeButton.getToggleState()) {
+                                    switch typeButton.tag {
+                                    case 1:
+                                        typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
+                                    case 2:
+                                        typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
+                                    case 3:
+                                        typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
+                                    case 4:
+                                        typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
+                                    case 5:
+                                        typeList.append(CriteriaConst.PrimaryType.HOME_OFFICE)
+                                    default: break
+                                    }
+                                }
+                        }
+                    }
+                }
+                
+                if(typeList.count > 0) {
+                    searchCriteria.criteriaTypes = typeList
+                }
+            }
+            
+            return searchCriteria
+        }
+        
+        // MARK: - UI Control Actions
         
         //The UI control event handler Should not be private
         func onButtonClicked(sender: UIButton) {
@@ -136,30 +273,15 @@
             performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
         }
         
+        func dismissCurrentView(sender: UIBarButtonItem) {
+            navigationController?.popToRootViewControllerAnimated(true)
+        }
+        
         // MARK: - UISearchBarDelegate
         
         func searchBarSearchButtonClicked(searchBar: UISearchBar) {
             NSLog("searchBarSearchButtonClicked: %@", self)
             searchBar.endEditing(true)
-        }
-        
-        // MARK: - UI Configuration
-        private func configureButton() {
-            
-            let color = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
-            
-            searchButton.layer.borderWidth = 2
-            searchButton.layer.borderColor = color.CGColor
-            searchButton.tintColor = color
-            searchButton.backgroundColor = color
-            
-            //let edgeInsets:UIEdgeInsets = UIEdgeInsets(top:4,left: 4,bottom: 4,right: 4)
-            
-            //let buttonImg = UIImage(named: "purple_button")!
-            
-            //let buttonInsetsImg:UIImage = buttonImg.imageWithAlignmentRectInsets(edgeInsets)
-            
-            //searchButton.setBackgroundImage(buttonInsetsImg, forState: UIControlState.Normal)
         }
         
         // MARK: - Picker Data Source
@@ -189,16 +311,6 @@
             ,
             [("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
         ]
-        
-        
-        private func configurePricePicker() {
-            
-            sizePicker.dataSource = self
-            sizePicker.delegate = self
-            
-            pricePicker.dataSource = self
-            pricePicker.delegate = self
-        }
         
         func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
             
@@ -392,190 +504,7 @@
             pickerView.reloadAllComponents()
         }
         
-        private func composeSearhCriteria() -> SearchCriteria {
-            
-            var searchCriteria = SearchCriteria()
-            
-            ///Keywords
-            searchCriteria.keyword = searchBar.text
-            
-            ///Region
-            searchCriteria.region = regionSelectionState
-            
-            ///Price Range
-            let priceMinRow =
-            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
-            let priceMaxRow =
-            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
-            
-            if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
-                if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
-                    if(priceMin.value != CriteriaConst.Bound.LOWER_ANY || priceMax.value != CriteriaConst.Bound.UPPER_ANY) {
-                        searchCriteria.criteriaPrice = (priceMin.value, priceMax.value)
-                    }
-                }
-            }
-            
-            ///Size Range
-            let sizeMinRow =
-            sizePicker.selectedRowInComponent(sizeItems.startIndex)
-            let sizeMaxRow =
-            sizePicker.selectedRowInComponent(sizeItems.endIndex - 1)
-            
-            
-            if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
-                if let sizeMax = self.getItemForPicker(sizePicker, component: PickerConst.upperComponentIndex, row: sizeMaxRow){
-                    if(sizeMin.value != CriteriaConst.Bound.LOWER_ANY || sizeMax.value != CriteriaConst.Bound.UPPER_ANY) {
-                        searchCriteria.criteriaSize = (sizeMin.value, sizeMax.value)
-                    }
-                }
-            }
-            
-            ///House Types
-            var typeList = [Int]()
-            
-            if(selectAllButton!.getToggleState() == false) {
-                let views = typeButtonContainer.subviews
-                
-                //Other type buttons are controlled by "select all" button
-                for view in views {
-                    if let typeButton = view as? ToggleButton {
-                        if(typeButton.tag !=
-                            UIControlTag.NOT_LIMITED_BUTTON_TAG){
-                                if(typeButton.getToggleState()) {
-                                    switch typeButton.tag {
-                                    case 1:
-                                        typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
-                                    case 2:
-                                        typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
-                                    case 3:
-                                        typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
-                                    case 4:
-                                        typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
-                                    case 5:
-                                        typeList.append(CriteriaConst.PrimaryType.HOME_OFFICE)
-                                    default: break
-                                    }
-                                }
-                        }
-                    }
-                }
-                
-                if(typeList.count > 0) {
-                    searchCriteria.criteriaTypes = typeList
-                }
-            }
-            
-            return searchCriteria
-        }
-        
-        func dismissCurrentView(sender: UIBarButtonItem) {
-            navigationController?.popToRootViewControllerAnimated(true)
-        }
-        
-        // MARK: - Navigation
-        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-            
-            NSLog("prepareForSegue: %@", self)
-            
-            if let identifier = segue.identifier{
-                switch identifier{
-                case ViewTransConst.showSearchResult:
-                    NSLog("showSearchResult")
-                    if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
-                        
-                        ///Collect the search criteria set by the user
-                        srtvc.searchCriteria = composeSearhCriteria()
-                    }
-                case ViewTransConst.showAreaSelector:
-                    NSLog("showAreaSlector")
-                    
-                    ///Setup delegat to receive result
-                    //                    if let vc = segue.destinationViewController as? CityRegionContainerViewController {
-                    //                        vc.delegate = self
-                    //                    }
-                    
-                    ///So that we'll not see the pickerView expand when loading the area selector view
-                    self.tabBarController!.tabBar.hidden = true;
-                    
-                    navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
-                    
-                default: break
-                }
-            }
-        }
-        
-        // MARK: - View Life Cycle
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            
-            NSLog("viewDidLoad: %@", self)
-            self.configureButton()
-            
-            //tableView.backgroundView = nil
-            tableView.backgroundColor = UIColor.whiteColor()
-            
-            
-            //Configure cell height
-            tableView.estimatedRowHeight = tableView.rowHeight
-            tableView.rowHeight = UITableViewAutomaticDimension
-            tableView.delegate = self
-            
-            //Confugure Price Picker
-            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
-            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
-            self.configurePricePicker()
-        }
-        
-        override func viewWillAppear(animated: Bool) {
-            super.viewWillAppear(animated)
-            
-            //Load selected areas
-            regionSelectionState = cityRegionDataStore.loadSelectedCityRegions()
-        }
-        override func viewDidAppear(animated: Bool) {
-            super.viewDidAppear(animated)
-            NSLog("viewDidAppear: %@", self)
-        }
-        
-        override func viewDidDisappear(animated: Bool) {
-            super.viewDidDisappear(animated)
-            NSLog("viewDidDisappear: %@", self)
-        }
-        
         // MARK: - Table Delegate
-        
-        private func handlePicker(indexPath:NSIndexPath) {
-            var picker:UIPickerView?
-            
-            switch(indexPath.row) {
-            case 2: // Price Picker
-                picker = pricePicker
-                if(hiddenCells.contains(3)) {
-                    hiddenCells.remove(3) //Show 3
-                    hiddenCells.insert(5) //Hide 5
-                } else { //Hide
-                    hiddenCells.insert(3)
-                }
-                
-            case 4: // Size Picker
-                picker = sizePicker
-                if(hiddenCells.contains(5)) {
-                    hiddenCells.remove(5) //Show 5
-                    hiddenCells.insert(3) //Hide 3
-                } else { //Hide
-                    hiddenCells.insert(5)
-                }
-            default: break
-            }
-            
-            if(picker != nil) {
-                tableView.deselectRowAtIndexPath(indexPath, animated: false)
-                
-                tableView.beginUpdates()
-                tableView.endUpdates()
-            }
-        }
         
         override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
             
@@ -621,6 +550,76 @@
             return cellView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
             */
             
+        }
+        
+        // MARK: - View Life Cycle
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            NSLog("viewDidLoad: %@", self)
+            self.configureButton()
+            
+            //tableView.backgroundView = nil
+            tableView.backgroundColor = UIColor.whiteColor()
+            
+            
+            //Configure cell height
+            tableView.estimatedRowHeight = tableView.rowHeight
+            tableView.rowHeight = UITableViewAutomaticDimension
+            tableView.delegate = self
+            
+            //Confugure Price Picker
+            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
+            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
+            self.configurePricePicker()
+        }
+        
+        override func viewWillAppear(animated: Bool) {
+            super.viewWillAppear(animated)
+            
+            //Load selected areas
+            regionSelectionState = cityRegionDataStore.loadSelectedCityRegions()
+        }
+        override func viewDidAppear(animated: Bool) {
+            super.viewDidAppear(animated)
+            NSLog("viewDidAppear: %@", self)
+        }
+        
+        override func viewDidDisappear(animated: Bool) {
+            super.viewDidDisappear(animated)
+            NSLog("viewDidDisappear: %@", self)
+        }
+        
+        // MARK: - Navigation
+        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+            
+            NSLog("prepareForSegue: %@", self)
+            
+            if let identifier = segue.identifier{
+                switch identifier{
+                case ViewTransConst.showSearchResult:
+                    NSLog("showSearchResult")
+                    if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
+                        
+                        ///Collect the search criteria set by the user
+                        srtvc.searchCriteria = composeSearhCriteria()
+                    }
+                case ViewTransConst.showAreaSelector:
+                    NSLog("showAreaSlector")
+                    
+                    ///Setup delegat to receive result
+                    //                    if let vc = segue.destinationViewController as? CityRegionContainerViewController {
+                    //                        vc.delegate = self
+                    //                    }
+                    
+                    ///So that we'll not see the pickerView expand when loading the area selector view
+                    self.tabBarController!.tabBar.hidden = true;
+                    
+                    navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
+                    
+                default: break
+                }
+            }
         }
         
     }

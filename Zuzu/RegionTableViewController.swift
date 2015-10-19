@@ -95,6 +95,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
     
+   // MARK: - Private Utils
     private func configureRegionTable() {
         
         //Configure cell height
@@ -137,7 +138,8 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         
         return result
     }
-    
+
+    // MARK: - UI Control Actions
     @IBAction func onSelectionCleared(sender: UIButton) {
         NSLog("onSelectionCleared")
         
@@ -161,28 +163,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         tableView.reloadData()
     }
     
-    // MARK: - View Controller Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.configureRegionTable()
-        
-        NSLog("viewDidLoad: %@", self)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        NSLog("viewWillDisappear: %@", self)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: - Table view delegate
+    // MARK: - Table View Delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
@@ -227,7 +208,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         
     }
     
-    // MARK: - Table view data source
+    // MARK: - Table View Data Source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return RegionTableViewController.numberOfSections
@@ -264,6 +245,27 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         }
         
         return cell
+    }
+    
+    // MARK: - View Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.configureRegionTable()
+        
+        NSLog("viewDidLoad: %@", self)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NSLog("viewWillDisappear: %@", self)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
 }

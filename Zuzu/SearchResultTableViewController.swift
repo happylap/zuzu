@@ -58,6 +58,19 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     var ignoreScroll = false
     
     
+    // MARK: - Private Utils
+    private func loadHouseListPage(pageNo: Int) {
+        
+        if(pageNo > dataSource.estimatedNumberOfPages){
+            NSLog("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedNumberOfPages)]")
+            return
+        }
+        
+        startSpinner()
+        dataSource.loadDataForPage(pageNo)
+        
+    }
+    
     private func onDataLoaded(dataSource: HouseItemTableDataSource, pageNo: Int, error: NSError?) -> Void {
         
         if(error != nil) {
@@ -85,7 +98,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         self.debugTextStr = self.dataSource.debugStr
     }
     
-    //** MARK: - Controller life cycle
+    //** MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,7 +132,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         // Dispose of any resources that can be recreated.
     }
     
-    //** MARK: - Table View Data Source
+    // MARK: - Table View Data Source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return Const.SECTION_NUM
@@ -145,7 +158,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         return cell
     }
     
-    //** MARK: - Scroll View Delegate
+    // MARK: - Scroll View Delegate
     
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
@@ -209,29 +222,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         }
     }
     
-    //** MARK: - Util Functions
-    
-    private func loadHouseListPage(pageNo: Int) {
-        
-        if(pageNo > dataSource.estimatedNumberOfPages){
-            NSLog("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedNumberOfPages)]")
-            return
-        }
-        
-        startSpinner()
-        dataSource.loadDataForPage(pageNo)
-        
-    }
-    
-    /*
     // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{

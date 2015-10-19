@@ -105,42 +105,7 @@ class CityRegionContainerViewController: UIViewController {
             regionSelectionState = dataSource.loadSelectedCityRegions()
         }
     }
-    
-    // MARK: - Notification Selector
-    func onRegionSelectionUpdated(notification:NSNotification) {
-        if let userInfo = notification.userInfo {
-            
-            if let cityStatus = userInfo["status"] as? City {
-                if let index = regionSelectionState?.indexOf(cityStatus) {
-                    regionSelectionState?.replaceRange(index...index, with: [cityStatus])//.removeAtIndex(index)
-                    //regionSelectionResult?.insert(cityStatus, atIndex: index)
-                } else {
-                    regionSelectionState?.append(cityStatus)
-                }
-            }
-            
-        }
-    }
-    
-    // MARK: - View Controller Lifecycle
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        NSLog("viewWillAppear: %@", self)
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NSLog("viewDidLoad: %@", self)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
     // MARK: - UI Control Actions
     @IBAction func onSelectionDone(sender: UIBarButtonItem) {
         
@@ -152,6 +117,46 @@ class CityRegionContainerViewController: UIViewController {
         }
         
         navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
+    // MARK: - Notification Selector
+    func onRegionSelectionUpdated(notification:NSNotification) {
+        if let userInfo = notification.userInfo {
+            
+            if let cityStatus = userInfo["status"] as? City {
+                if let index = regionSelectionState?.indexOf(cityStatus) {
+                    regionSelectionState?.replaceRange(index...index, with: [cityStatus])
+                } else {
+                    regionSelectionState?.append(cityStatus)
+                }
+            }
+            
+        }
+    }
+    
+    // MARK: - View Controller Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NSLog("viewDidLoad: %@", self)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSLog("viewWillAppear: %@", self)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSLog("viewWillDisappear: %@", self)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Navigation

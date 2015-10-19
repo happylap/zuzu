@@ -88,7 +88,7 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
         }
     }
     
-    // MARK: - View Controller Life Cycle
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -113,6 +113,13 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
         
         delegate?.onCitySelected(selectedCity)
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSLog("viewWillDisappear: %@", self)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
