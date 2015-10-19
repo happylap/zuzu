@@ -132,6 +132,16 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
         navigationController?.popToRootViewControllerAnimated(true)
     }
     
+    @IBAction func onSelectionCleared(sender: UIBarButtonItem) {
+        NSLog("onSelectionDone")
+        
+        for key in checkedRegions.keys {
+            for (var index:Int = 0; index < checkedRegions[key]?.count; index++ ) {
+                checkedRegions[key]![index] = false
+            }
+        }
+    }
+    
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

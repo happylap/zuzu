@@ -144,6 +144,22 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         return result
     }
     
+    @IBAction func onSelectionCleared(sender: UIButton) {
+        NSLog("onSelectionCleared")
+        
+        for key in checkedRegions.keys {
+            for (var index:Int = 0; index < checkedRegions[key]?.count; index++ ) {
+                checkedRegions[key]![index] = false
+            }
+            
+            /// Notify selection changed
+            let cityStatus = self.convertStatusToCity(key)!
+            NSNotificationCenter.defaultCenter().postNotificationName("regionSelectionChanged", object: self, userInfo: ["status" : cityStatus])
+        }
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - CitySelectionViewControllerDelegate
     func onCitySelected(value: Int) {
         citySelected = value
@@ -177,41 +193,6 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
                     result.append(city)
                 }
             }
-            
-            
-            ///Copy city data
-            //            if let city = cityRegions[cityCode] {
-            //
-            //                ///Check selected regions
-            //                if let selectionStatus = checkedRegions[cityCode] {
-            //
-            //                    let newCity = City(code: city.code, name: city.name, regions: [Region]())
-            //                    var allRegion:Bool = false
-            //                    var selectedRegions:[Region] = [Region]()
-            //
-            //                    for (index, status) in selectionStatus.enumerate() {
-            //                        if(status) {
-            //                            if(index == 0) { ///"All Region"
-            //                                allRegion = true
-            //                            } else{ ///Not "All Region" items
-            //                                selectedRegions.append(city.regions[index])
-            //                            }
-            //                        }
-            //                    }
-            //
-            //                    if(allRegion) {
-            //                        result.append(newCity)
-            //                    } else {
-            //                        if(!selectedRegions.isEmpty) {
-            //                            newCity.regions = selectedRegions
-            //                            result.append(newCity)
-            //                        }
-            //                    }
-            //
-            //                    allRegion = false
-            //                }
-            //
-            //            }
             
         }
         

@@ -42,22 +42,28 @@
         var regionSelectionResult: [City]? {
             didSet {
                 
+                cityRegionLabel.text = "不限"
+                
                 if(regionSelectionResult != nil) {
+                    
                     var labelStr:String = ""
                     
-                    for (index, city) in regionSelectionResult!.enumerate() {
+                    if(regionSelectionResult?.count > 0) {
                         
-                        if(index == regionSelectionResult!.startIndex) {
+                        for (index, city) in regionSelectionResult!.enumerate() {
                             
-                            labelStr = "\(city.name)"
-                            
-                        } else if(index < 3) {
-                            
-                            labelStr = labelStr + "、\(city.name)"
+                            if(index == regionSelectionResult!.startIndex) {
+                                
+                                labelStr = "\(city.name)"
+                                
+                            } else if(index < 3) {
+                                
+                                labelStr = labelStr + "、\(city.name)"
+                            }
                         }
+                        
+                        cityRegionLabel.text = labelStr
                     }
-                    
-                    cityRegionLabel.text = labelStr
                 }
             }
         }
