@@ -112,6 +112,8 @@ class SearchResultTableViewController: UITableViewController {
         
         self.dataSource.setDataLoadedHandler(onDataLoaded)
         self.dataSource.criteria = searchCriteria
+        
+        self.startSpinner()
         self.dataSource.initData()
         
         // Uncomment the following line to preserve selection between presentations
