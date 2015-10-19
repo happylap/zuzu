@@ -39,20 +39,20 @@
             static let NOT_LIMITED_BUTTON_TAG = 99
         }
         
-        var regionSelectionResult: [City]? {
+        var regionSelectionState: [City]? {
             didSet {
                 
                 cityRegionLabel.text = "不限"
                 
-                if(regionSelectionResult != nil) {
+                if(regionSelectionState != nil) {
                     
                     var labelStr:String = ""
                     
-                    if(regionSelectionResult?.count > 0) {
+                    if(regionSelectionState?.count > 0) {
                         
-                        for (index, city) in regionSelectionResult!.enumerate() {
+                        for (index, city) in regionSelectionState!.enumerate() {
                             
-                            if(index == regionSelectionResult!.startIndex) {
+                            if(index == regionSelectionState!.startIndex) {
                                 
                                 labelStr = "\(city.name)"
                                 
@@ -112,7 +112,7 @@
             }
         }
         
-        let cityRegionDataSource : CityRegionDataSource = UserDefaultsCityRegionDataSource.getInstance()
+        let cityRegionDataStore : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
         
         // MARK: - UI Control Event Handler
         
@@ -400,7 +400,7 @@
             searchCriteria.keyword = searchBar.text
             
             ///Region
-            searchCriteria.region = regionSelectionResult
+            searchCriteria.region = regionSelectionState
             
             ///Price Range
             let priceMinRow =
@@ -491,9 +491,9 @@
                     NSLog("showAreaSlector")
                     
                     ///Setup delegat to receive result
-                    if let vc = segue.destinationViewController as? CityRegionContainerViewController {
-                        //vc.delegate = self
-                    }
+                    //                    if let vc = segue.destinationViewController as? CityRegionContainerViewController {
+                    //                        vc.delegate = self
+                    //                    }
                     
                     ///So that we'll not see the pickerView expand when loading the area selector view
                     self.tabBarController!.tabBar.hidden = true;
@@ -531,7 +531,7 @@
             super.viewWillAppear(animated)
             
             //Load selected areas
-            regionSelectionResult = cityRegionDataSource.getSelectedCityRegions()
+            regionSelectionState = cityRegionDataStore.loadSelectedCityRegions()
         }
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)

@@ -8,33 +8,32 @@
 
 import Foundation
 
-protocol CityRegionDataSource: class {
-    func setSelectedCityRegions(cities: [City])
-    func getSelectedCityRegions() -> [City]?
+protocol CityRegionDataStore: class {
+    func saveSelectedCityRegions(cities: [City])
+    func loadSelectedCityRegions() -> [City]?
 }
 
-class UserDefaultsCityRegionDataSource: CityRegionDataSource {
+class UserDefaultsCityRegionDataStore: CityRegionDataStore {
     
-    static let instance = UserDefaultsCityRegionDataSource()
+    static let instance = UserDefaultsCityRegionDataStore()
     
     static let userDefaultsKey = "selectedRegion"
     
-    static func getInstance() -> UserDefaultsCityRegionDataSource {
-        return UserDefaultsCityRegionDataSource.instance
+    static func getInstance() -> UserDefaultsCityRegionDataStore {
+        return UserDefaultsCityRegionDataStore.instance
     }
     
-    func setSelectedCityRegions(cities: [City]) {
+    func saveSelectedCityRegions(cities: [City]) {
         //Save selection to user defaults
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let data = NSKeyedArchiver.archivedDataWithRootObject(cities)
-        userDefaults.setObject(data, forKey: UserDefaultsCityRegionDataSource.userDefaultsKey)
+        userDefaults.setObject(data, forKey: UserDefaultsCityRegionDataStore.userDefaultsKey)
     }
     
-    // MARK: - CityRegionDataSource
-    func getSelectedCityRegions() -> [City]? {
+    func loadSelectedCityRegions() -> [City]? {
         //Load selection from user defaults
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        let data = userDefaults.objectForKey(UserDefaultsCityRegionDataSource.userDefaultsKey) as? NSData
+        let data = userDefaults.objectForKey(UserDefaultsCityRegionDataStore.userDefaultsKey) as? NSData
         
         return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [City]
     }

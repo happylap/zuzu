@@ -438,11 +438,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="Mfg-H9-XNc">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0yN-TF-go9">
-                                    <rect key="frame" x="255" y="7" width="90" height="30"/>
+                                    <rect key="frame" x="255" y="-4" width="90" height="30"/>
                                     <state key="normal" title="清除所有選擇">
                                         <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
@@ -459,7 +459,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="regionCell" textLabel="EA0-Q2-cyL" style="IBUITableViewCellStyleDefault" id="hei-Kt-2pJ">
-                                <rect key="frame" x="0.0" y="72" width="600" height="50"/>
+                                <rect key="frame" x="0.0" y="50" width="600" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hei-Kt-2pJ" id="qgy-yK-MV2">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="49.5"/>

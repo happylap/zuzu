@@ -11,10 +11,9 @@ import SwiftyJSON
 
 
 
-class CityRegionContainerViewController: UIViewController, RegionTableViewControllerDelegate {
-    
-    let allRegion = Region(code: 0, name: "全區")
-    let dataSource : CityRegionDataSource = UserDefaultsCityRegionDataSource.getInstance()
+class CityRegionContainerViewController: UIViewController {
+
+    let dataSource : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
     
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
@@ -25,7 +24,7 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
         static let showCityPicker:String = "showCityPicker"
     }
     
-    var isSelectionDone:Bool = false
+    var regionSelectionState: [City]?
     
     weak var cityPicker:CityPickerViewController?
     weak var regionTable:RegionTableViewController?
@@ -49,7 +48,6 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
                 NSLog("Cities = %d", cities.count)
                 
                 for cityJsonObj in cities {
-                    //Do something you want
                     let name = cityJsonObj["name"].stringValue
                     let code = cityJsonObj["code"].intValue
                     let regions = cityJsonObj["region"].arrayValue
@@ -57,7 +55,7 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
                     ///Init Region Table data
                     var regionList:[Region] = [Region]()
                     
-                    regionList.append(allRegion)///All region
+                    regionList.append(RegionTableViewController.allRegion)///All region
                     
                     for region in regions {
                         if let regionDic = region.dictionary {
@@ -83,7 +81,7 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
             }
             
             ///Init selected regions
-            if let selectedCities = dataSource.getSelectedCityRegions() {
+            if let selectedCities = dataSource.loadSelectedCityRegions() {
                 for city in selectedCities {
                     
                     let selectedRegions = city.regions
@@ -102,18 +100,39 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
         }
     }
     
-    // MARK: - RegionTableViewControllerDelegate
-    func onRegionSelectionDone(result: [City]) {
-        //Save selection to user defaults only when the user presses "Done" button
-        if(isSelectionDone) {
-            dataSource.setSelectedCityRegions(result)
+    private func loadSelectedRegion() {
+        if(regionSelectionState == nil) {
+            regionSelectionState = dataSource.loadSelectedCityRegions()
+        }
+    }
+    
+    // MARK: - Notification Selector
+    func onRegionSelectionUpdated(notification:NSNotification) {
+        if let userInfo = notification.userInfo {
+            
+            if let cityStatus = userInfo["status"] as? City {
+                if let index = regionSelectionState?.indexOf(cityStatus) {
+                    regionSelectionState?.replaceRange(index...index, with: [cityStatus])//.removeAtIndex(index)
+                    //regionSelectionResult?.insert(cityStatus, atIndex: index)
+                } else {
+                    regionSelectionState?.append(cityStatus)
+                }
+            }
+            
         }
     }
     
     // MARK: - View Controller Lifecycle
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSLog("viewWillAppear: %@", self)
+    }
     override func viewDidLoad() {
-        
         super.viewDidLoad()
+        NSLog("viewDidLoad: %@", self)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -122,40 +141,37 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - Actions
+    // MARK: - UI Control Actions
     @IBAction func onSelectionDone(sender: UIBarButtonItem) {
         
         NSLog("onSelectionDone")
         
-        isSelectionDone = true
+        //Save selection to user defaults only when the user presses "Done" button
+        if(regionSelectionState != nil) {
+            dataSource.saveSelectedCityRegions(regionSelectionState!)
+        }
         
         navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
-    @IBAction func onSelectionCleared(sender: UIBarButtonItem) {
-        NSLog("onSelectionDone")
-        
-        for key in checkedRegions.keys {
-            for (var index:Int = 0; index < checkedRegions[key]?.count; index++ ) {
-                checkedRegions[key]![index] = false
-            }
-        }
     }
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        NSLog("prepareForSegue: %@", self)
-        
+        // Load previously stored data
         loadCityRegionData()
+        loadSelectedRegion()
         
         if let identifier = segue.identifier{
+            
+            NSLog("prepareForSegue: %@ %@",identifier, self)
+            
             switch identifier{
             case ViewTransConst.showCityPicker:
                 
                 if let vc = segue.destinationViewController as? CityPickerViewController {
                     cityPicker = vc
                     vc.cityRegions  = cityList
+                    vc.regionSelectionState = regionSelectionState
                 }
                 
             case ViewTransConst.showRegionTable:
@@ -171,8 +187,6 @@ class CityRegionContainerViewController: UIViewController, RegionTableViewContro
         
         if(cityPicker != nil && regionTable != nil) {
             cityPicker?.delegate = regionTable
-            
-            regionTable?.delegate = self
         }
     }
     

@@ -86,10 +86,6 @@ class City: NSObject, NSCoding {
     }
 }
 
-protocol RegionTableViewControllerDelegate {
-    func onRegionSelectionDone(result: [City])
-}
-
 class RegionTableViewController: UITableViewController, CitySelectionViewControllerDelegate {
     
     static let numberOfSections = 1
@@ -98,8 +94,6 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
     var citySelected:Int = 100 //Default value
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
-    
-    var delegate: RegionTableViewControllerDelegate?
     
     private func configureRegionTable() {
         
@@ -181,22 +175,6 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         super.viewWillDisappear(animated)
         
         NSLog("viewWillDisappear: %@", self)
-        
-        /// Send back selected city regions
-        var result: [City] = [City]()
-        
-        for cityCode in checkedRegions.keys {
-            
-            
-            if let city = self.convertStatusToCity(cityCode) {
-                if(city.regions.count > 0) {
-                    result.append(city)
-                }
-            }
-            
-        }
-        
-        delegate?.onRegionSelectionDone(result)
     }
     
     override func didReceiveMemoryWarning() {

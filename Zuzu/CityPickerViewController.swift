@@ -17,9 +17,7 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
     
     static let numberOfComponents = 1
     
-    let dataSource : CityRegionDataSource = UserDefaultsCityRegionDataSource.getInstance()
-    
-    var regionSelectionResult: [City]?
+    var regionSelectionState: [City]?
     
     @IBOutlet weak var cityPicker: UIPickerView!
     
@@ -30,7 +28,6 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
     private func configurePricePicker() {
         cityPicker.dataSource = self
         cityPicker.delegate = self
-        regionSelectionResult = dataSource.getSelectedCityRegions()
     }
     
     // MARK: - PickerView DataSource & Delegate
@@ -42,10 +39,10 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
         
         let city = cityRegions[row]
         
-        if(regionSelectionResult != nil) {
-            if let index = regionSelectionResult!.indexOf(city){
-                let selectedRegions = regionSelectionResult![index].regions
-                let numberOfSelection = regionSelectionResult![index].regions.count
+        if(regionSelectionState != nil) {
+            if let index = regionSelectionState!.indexOf(city){
+                let selectedRegions = regionSelectionState![index].regions
+                let numberOfSelection = regionSelectionState![index].regions.count
                 
                 if(numberOfSelection > 0) {
                     
@@ -78,11 +75,11 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
         if let userInfo = notification.userInfo {
             
             if let cityStatus = userInfo["status"] as? City {
-                if let index = regionSelectionResult?.indexOf(cityStatus) {
-                    regionSelectionResult?.removeAtIndex(index)
-                    regionSelectionResult?.insert(cityStatus, atIndex: index)
+                if let index = regionSelectionState?.indexOf(cityStatus) {
+                    regionSelectionState?.removeAtIndex(index)
+                    regionSelectionState?.insert(cityStatus, atIndex: index)
                 } else {
-                    regionSelectionResult?.append(cityStatus)
+                    regionSelectionState?.append(cityStatus)
                 }
                 
                 cityPicker.reloadAllComponents()
