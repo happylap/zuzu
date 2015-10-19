@@ -13,7 +13,7 @@ protocol CitySelectionViewControllerDelegate: class {
     func onCitySelected(value: Int)
 }
 
-class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class CityPickerViewController:UIViewController {
     
     static let numberOfComponents = 1
     
@@ -28,46 +28,6 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
     private func configurePricePicker() {
         cityPicker.dataSource = self
         cityPicker.delegate = self
-    }
-    
-    // MARK: - PickerView DataSource & Delegate
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return CityPickerViewController.numberOfComponents
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        let city = cityRegions[row]
-        
-        if(regionSelectionState != nil) {
-            if let index = regionSelectionState!.indexOf(city){
-                let selectedRegions = regionSelectionState![index].regions
-                let numberOfSelection = regionSelectionState![index].regions.count
-                
-                if(numberOfSelection > 0) {
-                    
-                    if(numberOfSelection == 1) {
-                        if(selectedRegions[0] == RegionTableViewController.allRegion) {
-                            return ("\(cityRegions[row].name) (全區)")
-                        }
-                    }
-
-                    return ("\(cityRegions[row].name) (\(numberOfSelection))")
-                }
-            }
-        }
-
-        return cityRegions[row].name
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return cityRegions.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedCity = cityRegions[row].code
-        
-        delegate?.onCitySelected(selectedCity)
     }
     
     // MARK: - Notification Selector
@@ -122,5 +82,53 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+}
+
+extension CityPickerViewController: UIPickerViewDataSource {
+    
+    // MARK: - PickerView DataSource
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return CityPickerViewController.numberOfComponents
+    }
+}
+
+extension CityPickerViewController: UIPickerViewDelegate {
+    
+    // MARK: - PickerView Delegate
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        let city = cityRegions[row]
+        
+        if(regionSelectionState != nil) {
+            if let index = regionSelectionState!.indexOf(city){
+                let selectedRegions = regionSelectionState![index].regions
+                let numberOfSelection = regionSelectionState![index].regions.count
+                
+                if(numberOfSelection > 0) {
+                    
+                    if(numberOfSelection == 1) {
+                        if(selectedRegions[0] == RegionTableViewController.allRegion) {
+                            return ("\(cityRegions[row].name) (全區)")
+                        }
+                    }
+                    
+                    return ("\(cityRegions[row].name) (\(numberOfSelection))")
+                }
+            }
+        }
+        
+        return cityRegions[row].name
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return cityRegions.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selectedCity = cityRegions[row].code
+        
+        delegate?.onCitySelected(selectedCity)
     }
 }

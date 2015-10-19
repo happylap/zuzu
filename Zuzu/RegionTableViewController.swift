@@ -86,7 +86,7 @@ class City: NSObject, NSCoding {
     }
 }
 
-class RegionTableViewController: UITableViewController, CitySelectionViewControllerDelegate {
+class RegionTableViewController: UITableViewController {
     
     static let numberOfSections = 1
     static let allRegion = Region(code: 0, name: "全區")
@@ -95,7 +95,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
     
-   // MARK: - Private Utils
+    // MARK: - Private Utils
     private func configureRegionTable() {
         
         //Configure cell height
@@ -138,7 +138,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         
         return result
     }
-
+    
     // MARK: - UI Control Actions
     @IBAction func onSelectionCleared(sender: UIButton) {
         NSLog("onSelectionCleared")
@@ -152,13 +152,6 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
             let cityStatus = self.convertStatusToCity(key)!
             NSNotificationCenter.defaultCenter().postNotificationName("regionSelectionChanged", object: self, userInfo: ["status" : cityStatus])
         }
-        
-        tableView.reloadData()
-    }
-    
-    // MARK: - CitySelectionViewControllerDelegate
-    func onCitySelected(value: Int) {
-        citySelected = value
         
         tableView.reloadData()
     }
@@ -187,7 +180,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
                     
                     //in order to update other cell's view
                     tableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: UITableViewRowAnimation.None)
-
+                    
                 } else { //Click on other region
                     
                     //Clear "All Region" selection
@@ -268,4 +261,14 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         // Dispose of any resources that can be recreated.
     }
     
+}
+
+extension RegionTableViewController: CitySelectionViewControllerDelegate {
+    
+    // MARK: - CitySelectionViewControllerDelegate
+    func onCitySelected(value: Int) {
+        citySelected = value
+        
+        tableView.reloadData()
+    }
 }

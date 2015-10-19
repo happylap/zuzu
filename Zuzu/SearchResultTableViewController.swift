@@ -29,7 +29,7 @@ enum ScrollDirection {
     case ScrollDirectionCrazy
 }
 
-class SearchResultTableViewController: UITableViewController, UIAdaptivePresentationControllerDelegate, UIAlertViewDelegate {
+class SearchResultTableViewController: UITableViewController {
     
     @IBOutlet weak var loadingSpinner: UIActivityIndicatorView! {
         didSet{
@@ -48,7 +48,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
     @IBOutlet weak var debugText: UITextField!
     
     var debugTextStr: String = ""
-
+    
     private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
     
     var searchCriteria: SearchCriteria?
@@ -125,7 +125,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         super.viewWillDisappear(animated)
         NSLog("%@ [[viewWillDisappear]]", self)
     }
-
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -149,7 +149,7 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
         let cell = tableView.dequeueReusableCellWithIdentifier("houseItemCell", forIndexPath: indexPath) as! SearchResultTableViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
-
+        
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
@@ -244,9 +244,21 @@ class SearchResultTableViewController: UITableViewController, UIAdaptivePresenta
             }
         }
     }
+}
+
+extension SearchResultTableViewController: UIAdaptivePresentationControllerDelegate {
     
     //Need to figure out the use of this...
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
     }
+    
+}
+
+extension SearchResultTableViewController: UIAlertViewDelegate {
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        NSLog("Alert Dialog Button [%d] Clicked", buttonIndex)
+    }
+    
 }
