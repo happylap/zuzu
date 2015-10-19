@@ -16,6 +16,7 @@
 		2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
 		2F31F5131BC2BC4400054355 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5121BC2BC4400054355 /* .gitignore */; settings = {ASSET_TAGS = (); }; };
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
+		2F3901E21BD4C69A00B806B8 /* CityRegionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegionDataSource.swift */; settings = {ASSET_TAGS = (); }; };
 		2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF51BAFE09100C68670 /* AppDelegate.swift */; };
 		2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */; };
 		2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F482DFB1BAFE09100C68670 /* Main.storyboard */; };
@@ -65,6 +66,7 @@
 		2F31F5271BC3C34600054355 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F31F5291BC3C34A00054355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		2F3901E11BD4C69A00B806B8 /* CityRegionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegionDataSource.swift; sourceTree = "<group>"; };
 		2F482DF21BAFE09100C68670 /* Zuzu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zuzu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F482DF51BAFE09100C68670 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */,
 				2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */,
 				2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */,
+				2F3901E11BD4C69A00B806B8 /* CityRegionDataSource.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */,
 				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
+				2F3901E21BD4C69A00B806B8 /* CityRegionDataSource.swift in Sources */,
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */,

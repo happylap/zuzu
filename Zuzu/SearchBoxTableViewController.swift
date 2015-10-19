@@ -28,7 +28,7 @@
     }
     
     class SearchBoxTableViewController: UITableViewController, UISearchBarDelegate,
-    UIPickerViewDelegate, UIPickerViewDataSource, CityRegionContainerViewControllerDelegate {
+    UIPickerViewDelegate, UIPickerViewDataSource {
         
         struct ViewTransConst {
             static let showSearchResult:String = "showSearchResult"
@@ -106,6 +106,8 @@
             }
         }
         
+        let cityRegionDataSource : CityRegionDataSource = UserDefaultsCityRegionDataSource.getInstance()
+        
         // MARK: - UI Control Event Handler
         
         //The UI control event handler Should not be private
@@ -126,16 +128,6 @@
             
             //present the view modally (hide the tabbar)
             performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
-        }
-        
-        // MARK: - CityRegionContainerViewControllerDelegate
-        func onRegionSelectionDone(result: [City]) {
-            
-            regionSelectionResult = result
-            
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            let data = NSKeyedArchiver.archivedDataWithRootObject(result)
-            userDefaults.setObject(data, forKey: "selectedRegion")
         }
         
         // MARK: - UISearchBarDelegate
@@ -494,7 +486,7 @@
                     
                     ///Setup delegat to receive result
                     if let vc = segue.destinationViewController as? CityRegionContainerViewController {
-                        vc.delegate = self
+                        //vc.delegate = self
                     }
                     
                     ///So that we'll not see the pickerView expand when loading the area selector view
@@ -527,16 +519,14 @@
             sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
             priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
             self.configurePricePicker()
-            
-            //Load selected areas
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            let data = userDefaults.objectForKey("selectedRegion") as? NSData
-            
-            if(data != nil) {
-                regionSelectionResult = NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [City]
-            }
         }
         
+        override func viewWillAppear(animated: Bool) {
+            super.viewWillAppear(animated)
+            
+            //Load selected areas
+            regionSelectionResult = cityRegionDataSource.getSelectedCityRegions()
+        }
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
             NSLog("viewDidAppear: %@", self)

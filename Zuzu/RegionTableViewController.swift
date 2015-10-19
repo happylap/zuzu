@@ -29,11 +29,11 @@ class Region: NSObject, NSCoding {
         return (object as? Region)?.code == code
     }
     
-//    override var hashValue : Int {
-//        get {
-//            return code.hashValue
-//        }
-//    }
+    //    override var hashValue : Int {
+    //        get {
+    //            return code.hashValue
+    //        }
+    //    }
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeInteger(code, forKey:"code")
@@ -68,8 +68,10 @@ class City: NSObject, NSCoding {
         let regions = decoder.decodeObjectForKey("regions") as? [Region] ?? [Region]()
         
         self.init(code: code, name: name, regions: regions)
-        
-        //self.
+    }
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        return (object as? City)?.code == code
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
@@ -89,31 +91,67 @@ protocol RegionTableViewControllerDelegate {
 }
 
 class RegionTableViewController: UITableViewController, CitySelectionViewControllerDelegate {
-
+    
+    static let numberOfSections = 1
+    static let allRegion = Region(code: 0, name: "全區")
+    
     var citySelected:Int = 100 //Default value
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
     
     var delegate: RegionTableViewControllerDelegate?
     
-    let allRegion = Region(code: 0, name: "全區")
-    
     private func configureRegionTable() {
         
         //Configure cell height
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.allowsSelection = false
-        
     }
     
+    private func convertStatusToCity(cityCode: Int) -> City? {
+        
+        /// Send back selected city regions
+        var result: City?
+        
+        if let city = cityRegions[cityCode] {
+            
+            result = City(code: city.code, name: city.name, regions: [Region]())
+            
+            ///Check selected regions
+            if let selectionStatus = checkedRegions[cityCode] {
+                
+                var selectedRegions:[Region] = [Region]()
+                
+                for (index, status) in selectionStatus.enumerate() {
+                    if(status) {
+                        if(index == 0) { ///"All Region"
+                            selectedRegions.append(RegionTableViewController.allRegion)
+                        } else{ ///Not "All Region" items
+                            selectedRegions.append(city.regions[index])
+                        }
+                    }
+                }
+                
+                if(!selectedRegions.isEmpty) {
+                    result!.regions = selectedRegions
+                }
+            }
+        } else {
+            
+            assert(false, "City Code is not correct")
+        }
+        
+        return result
+    }
+    
+    // MARK: - CitySelectionViewControllerDelegate
     func onCitySelected(value: Int) {
         citySelected = value
         
         tableView.reloadData()
     }
     
-    // MARK: - View Controller Life Cycel
+    // MARK: - View Controller Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,121 +159,65 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         self.configureRegionTable()
         
         NSLog("viewDidLoad: %@", self)
-        
-        ///Load all city regions from json
-        if let path = NSBundle.mainBundle().pathForResource("areasInTaiwan", ofType: "json") {
-            
-            do {
-                let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                let json = JSON(data: jsonData)
-                let cities = json["cities"].arrayValue
-                
-                NSLog("Cities = %d", cities.count)
-                
-                for cityJsonObj in cities {
-                    //Do something you want
-                    let name = cityJsonObj["name"].stringValue
-                    let code = cityJsonObj["code"].intValue
-                    let regions = cityJsonObj["region"].arrayValue
-
-                    ///Init Region Table data
-                    var regionList:[Region] = [Region]()
-                    
-                    regionList.append(allRegion)///All region
-                    
-                    for region in regions {
-                        if let regionDic = region.dictionary {
-                            for key in regionDic.keys {
-                                regionList.append(Region(code: regionDic[key]!.intValue, name: key))
-                            }
-                        }
-                    }
-                    
-                    ///Init selection status for each city
-                    checkedRegions[code] = [Bool](count:regionList.count, repeatedValue: false)
-                    
-                    cityRegions[code] = City(code: code, name: name, regions: regionList)
-                }
-                
-            } catch let error as NSError{
-                
-                NSLog("Cannot load area json file %@", error)
-                
-            }
-            
-            ///Load selected regions
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            let data = userDefaults.objectForKey("selectedRegion") as? NSData
-            
-            if(data != nil) {
-                if let selectedCities = NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [City] {
-                
-                for city in selectedCities {
-                    
-                    let selectedRegions = city.regions
-                    
-                    if(selectedRegions.isEmpty) {
-                        checkedRegions[city.code]?[0] = true
-                    } else {
-                        for region in selectedRegions {
-                            if let index = cityRegions[city.code]?.regions.indexOf(region) { ///Region needs to be Equatable
-                                checkedRegions[city.code]?[index] = true
-                            }
-                        }
-                    }
-                }
-                }
-                //self.checkedRegions
-            }
-        }
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
         NSLog("viewWillDisappear: %@", self)
+        
+        /// Send back selected city regions
         var result: [City] = [City]()
         
         for cityCode in checkedRegions.keys {
             
-            ///Copy city data
-            if let city = cityRegions[cityCode] {
-                
-                ///Check selected regions
-                if let selectionStatus = checkedRegions[cityCode] {
-                    
-                    let newCity = City(code: city.code, name: city.name, regions: [Region]())
-                    var allRegion:Bool = false
-                    var selectedRegions:[Region] = [Region]()
-                    
-                    for (index, status) in selectionStatus.enumerate() {
-                        if(status) {
-                            if(index == 0) { ///"All Reagion"
-                                allRegion = true
-                            } else{ ///Not "All Region" items
-                                selectedRegions.append(city.regions[index])
-                            }
-                        }
-                    }
-                    
-                    if(allRegion) {
-                        result.append(newCity)
-                    } else {
-                        if(!selectedRegions.isEmpty) {
-                            newCity.regions = selectedRegions
-                            result.append(newCity)
-                        }
-                    }
-                    
-                    allRegion = false
+            
+            if let city = self.convertStatusToCity(cityCode) {
+                if(city.regions.count > 0) {
+                    result.append(city)
                 }
-                
             }
+            
+            
+            ///Copy city data
+            //            if let city = cityRegions[cityCode] {
+            //
+            //                ///Check selected regions
+            //                if let selectionStatus = checkedRegions[cityCode] {
+            //
+            //                    let newCity = City(code: city.code, name: city.name, regions: [Region]())
+            //                    var allRegion:Bool = false
+            //                    var selectedRegions:[Region] = [Region]()
+            //
+            //                    for (index, status) in selectionStatus.enumerate() {
+            //                        if(status) {
+            //                            if(index == 0) { ///"All Region"
+            //                                allRegion = true
+            //                            } else{ ///Not "All Region" items
+            //                                selectedRegions.append(city.regions[index])
+            //                            }
+            //                        }
+            //                    }
+            //
+            //                    if(allRegion) {
+            //                        result.append(newCity)
+            //                    } else {
+            //                        if(!selectedRegions.isEmpty) {
+            //                            newCity.regions = selectedRegions
+            //                            result.append(newCity)
+            //                        }
+            //                    }
+            //
+            //                    allRegion = false
+            //                }
+            //
+            //            }
             
         }
         
         delegate?.onRegionSelectionDone(result)
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -247,30 +229,40 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         
         let row = indexPath.row
         
-        
         if let statusForCity = checkedRegions[citySelected]{
             if(statusForCity[row]) {
                 checkedRegions[citySelected]![row] = false
+                
             } else {
                 checkedRegions[citySelected]![row] = true
                 
                 if(row == 0){ //Click on "all region"
-                    for var index = row+1; index < checkedRegions[citySelected]?.count; ++index {
+                    
+                    //Clear other selection
+                    var indexPaths = [NSIndexPath]()
+                    for var index = row + 1; index < checkedRegions[citySelected]?.count; ++index {
                         checkedRegions[citySelected]![index] = false
+                        indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
                     }
                     
-                    tableView.reloadData() //in order to update other cell's view
-                    return
+                    //in order to update other cell's view
+                    tableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: UITableViewRowAnimation.None)
+
                 } else { //Click on other region
+                    
+                    //Clear "All Region" selection
                     if(checkedRegions[citySelected]![0]) {
                         checkedRegions[citySelected]![0] = false
-                        
-                        tableView.reloadData()
-                        //tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
                     }
+                    
+                    tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
                 }
             }
         }
+        
+        /// Notify selection changed
+        let cityStatus = self.convertStatusToCity(citySelected)!
+        NSNotificationCenter.defaultCenter().postNotificationName("regionSelectionChanged", object: self, userInfo: ["status" : cityStatus])
         
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
         
@@ -279,7 +271,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return RegionTableViewController.numberOfSections
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -295,6 +287,7 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         
         ///Reset for reuse
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.accessoryType = UITableViewCellAccessoryType.None
         
         if let statusForCity = checkedRegions[citySelected]{
@@ -312,10 +305,6 @@ class RegionTableViewController: UITableViewController, CitySelectionViewControl
         }
         
         return cell
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        NSLog("prepareForSegue: %@", self)
     }
     
 }

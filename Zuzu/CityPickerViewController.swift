@@ -9,80 +9,97 @@
 import UIKit
 import SwiftyJSON
 
-protocol CitySelectionViewControllerDelegate {
+protocol CitySelectionViewControllerDelegate: class {
     func onCitySelected(value: Int)
 }
 
 class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    static let numberOfComponents = 1
+    
+    let dataSource : CityRegionDataSource = UserDefaultsCityRegionDataSource.getInstance()
+    
+    var regionSelectionResult: [City]?
+    
     @IBOutlet weak var cityPicker: UIPickerView!
     
-    var delegate: CitySelectionViewControllerDelegate?
+    weak var delegate: CitySelectionViewControllerDelegate?
     
-    var cityItems = [[(label:String, value:Int)]]()
+    var cityRegions = [City]()//Array of Cities
     
     private func configurePricePicker() {
         cityPicker.dataSource = self
         cityPicker.delegate = self
+        regionSelectionResult = dataSource.getSelectedCityRegions()
     }
     
     // MARK: - PickerView DataSource & Delegate
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return cityItems.count
+        return CityPickerViewController.numberOfComponents
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return cityItems[component][row].label
+        
+        let city = cityRegions[row]
+        
+        if(regionSelectionResult != nil) {
+            if let index = regionSelectionResult!.indexOf(city){
+                let selectedRegions = regionSelectionResult![index].regions
+                let numberOfSelection = regionSelectionResult![index].regions.count
+                
+                if(numberOfSelection > 0) {
+                    
+                    if(numberOfSelection == 1) {
+                        if(selectedRegions[0] == RegionTableViewController.allRegion) {
+                            return ("\(cityRegions[row].name) (全區)")
+                        }
+                    }
+
+                    return ("\(cityRegions[row].name) (\(numberOfSelection))")
+                }
+            }
+        }
+
+        return cityRegions[row].name
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return cityItems[component].count
+        return cityRegions.count
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedCity = cityItems[component][row].value
+        let selectedCity = cityRegions[row].code
         
         delegate?.onCitySelected(selectedCity)
     }
     
-    // MARK: - View Controller Life Cycel
+    // MARK: - Notification Selector
+    func onRegionSelectionUpdated(notification:NSNotification) {
+        if let userInfo = notification.userInfo {
+            
+            if let cityStatus = userInfo["status"] as? City {
+                if let index = regionSelectionResult?.indexOf(cityStatus) {
+                    regionSelectionResult?.removeAtIndex(index)
+                    regionSelectionResult?.insert(cityStatus, atIndex: index)
+                } else {
+                    regionSelectionResult?.append(cityStatus)
+                }
+                
+                cityPicker.reloadAllComponents()
+            }
+            
+        }
+    }
+    
+    // MARK: - View Controller Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NSLog("viewDidLoad: %@", self)
         
-        if let path = NSBundle.mainBundle().pathForResource("areasInTaiwan", ofType: "json") {
-            
-            do {
-                let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                let json = JSON(data: jsonData)
-                
-                //NSLog("Cities = %@", jsonData)
-                
-                let cities = json["cities"].arrayValue
-                
-                NSLog("Cities = %d", cities.count)
-                
-                var allCities = [(label:String, value:Int)]()
-                
-                for cityJsonObj in cities {
-                    //Do something you want
-                    let name = cityJsonObj["name"].stringValue
-                    let code = cityJsonObj["code"].intValue
-                    allCities.append( (name, code) )
-                }
-                
-                cityItems.append(allCities)
-                
-            } catch let error as NSError{
-                
-                NSLog("Cannot load area json file %@", error)
-                
-            }
-        }
-        
         self.configurePricePicker()
-        //self.configureRegionTable()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -95,23 +112,11 @@ class CityPickerViewController:UIViewController, UIPickerViewDelegate, UIPickerV
         NSLog("viewDidAppear: %@", self)
         
         let row = cityPicker.selectedRowInComponent(0)
-        let selectedCity = cityItems[0][row].value
+        let selectedCity = cityRegions[row].code // cityItems[0][row].value
         
         delegate?.onCitySelected(selectedCity)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
-
 }
