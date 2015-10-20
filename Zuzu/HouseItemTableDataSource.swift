@@ -46,9 +46,9 @@ public class HouseItemTableDataSource {
             
             let criteriaInfo = "\n[Criteria]\n"
                 + "<Keyword>: \(self.criteria?.keyword)\n"
-                + "<Type>: \(self.criteria?.criteriaTypes)\n"
-                + "<Price>: \(self.criteria?.criteriaPrice)\n"
-                + "<Size>: \(self.criteria?.criteriaSize)\n"
+                + "<Type>: \(self.criteria?.types)\n"
+                + "<Price>: \(self.criteria?.price)\n"
+                + "<Size>: \(self.criteria?.size)\n"
             
             
             let host = HouseDataRequester.getInstance().urlComp.host ?? ""
@@ -156,8 +156,8 @@ public class HouseItemTableDataSource {
         
         NSLog("loadRemoteData: pageNo = \(pageNo)")
         
-        requester.searchByCriteria(criteria!.keyword,region: criteria?.region, price: criteria!.criteriaPrice,
-            size: criteria!.criteriaSize, types: criteria!.criteriaTypes,
+        requester.searchByCriteria(criteria!.keyword,region: criteria?.region, price: criteria!.price,
+            size: criteria!.size, types: criteria!.types,
             start: start, row: row) { (newHouseItems: [HouseItem], error: NSError?) -> Void in
                 
                 self.appendDataForPage(pageNo, data: newHouseItems)

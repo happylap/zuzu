@@ -12,8 +12,10 @@ import SwiftyJSON
 
 
 class CityRegionContainerViewController: UIViewController {
-
-    let dataSource : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
+    
+    var isDataPrepared = false
+    
+    let dataStore : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
     
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
@@ -24,7 +26,7 @@ class CityRegionContainerViewController: UIViewController {
         static let showCityPicker:String = "showCityPicker"
     }
     
-    var regionSelectionState: [City]?
+    var regionSelectionState: [City] = [City]()
     
     weak var cityPicker:CityPickerViewController?
     weak var regionTable:RegionTableViewController?
@@ -33,9 +35,7 @@ class CityRegionContainerViewController: UIViewController {
     
     private func loadCityRegionData() {
         
-        if(cityRegions.count > 0 && cityRegions.count == checkedRegions.count) {
-            return //Already loaded
-        }
+        cityRegions.removeAll()
         
         if let path = NSBundle.mainBundle().pathForResource("areasInTaiwan", ofType: "json") {
             
@@ -81,7 +81,7 @@ class CityRegionContainerViewController: UIViewController {
             }
             
             ///Init selected regions
-            if let selectedCities = dataSource.loadSelectedCityRegions() {
+            if let selectedCities = dataStore.loadSelectedCityRegions() {
                 for city in selectedCities {
                     
                     let selectedRegions = city.regions
@@ -101,8 +101,17 @@ class CityRegionContainerViewController: UIViewController {
     }
     
     private func loadSelectedRegion() {
-        if(regionSelectionState == nil) {
-            regionSelectionState = dataSource.loadSelectedCityRegions()
+        if let states = dataStore.loadSelectedCityRegions() {
+            regionSelectionState.appendContentsOf(states)
+        }
+    }
+    
+    private func prepareDataIfNeeded() {
+        if(!isDataPrepared) {
+            loadCityRegionData()
+            loadSelectedRegion()
+            
+            isDataPrepared = true
         }
     }
 
@@ -112,9 +121,8 @@ class CityRegionContainerViewController: UIViewController {
         NSLog("onSelectionDone")
         
         //Save selection to user defaults only when the user presses "Done" button
-        if(regionSelectionState != nil) {
-            dataSource.saveSelectedCityRegions(regionSelectionState!)
-        }
+        
+        dataStore.saveSelectedCityRegions(regionSelectionState)
         
         navigationController?.popToRootViewControllerAnimated(true)
     }
@@ -124,10 +132,10 @@ class CityRegionContainerViewController: UIViewController {
         if let userInfo = notification.userInfo {
             
             if let cityStatus = userInfo["status"] as? City {
-                if let index = regionSelectionState?.indexOf(cityStatus) {
-                    regionSelectionState?.replaceRange(index...index, with: [cityStatus])
+                if let index = regionSelectionState.indexOf(cityStatus) {
+                    regionSelectionState.replaceRange(index...index, with: [cityStatus])
                 } else {
-                    regionSelectionState?.append(cityStatus)
+                    regionSelectionState.append(cityStatus)
                 }
             }
             
@@ -163,8 +171,7 @@ class CityRegionContainerViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         // Load previously stored data
-        loadCityRegionData()
-        loadSelectedRegion()
+        prepareDataIfNeeded()
         
         if let identifier = segue.identifier{
             

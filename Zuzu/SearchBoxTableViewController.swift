@@ -39,6 +39,10 @@
             static let NOT_LIMITED_BUTTON_TAG = 99
         }
         
+        let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
+        
+        let cityRegionDataStore: CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
+        
         var regionSelectionState: [City]? {
             didSet {
                 
@@ -46,23 +50,22 @@
                 
                 if(regionSelectionState != nil) {
                     
-                    var labelStr:String = ""
+                    var labelStr:[String] = [String]()
                     
                     if(regionSelectionState?.count > 0) {
                         
-                        for (index, city) in regionSelectionState!.enumerate() {
+                        for city in regionSelectionState! {
+
+                            if(city.regions.count == 0) {
+                                continue
+                            }
                             
-                            if(index == regionSelectionState!.startIndex) {
-                                
-                                labelStr = "\(city.name)"
-                                
-                            } else if(index < 3) {
-                                
-                                labelStr = labelStr + "、\(city.name)"
+                            if(labelStr.count < 3) {
+                                labelStr.append("\(city.name) (\(city.regions.count))")
                             }
                         }
                         
-                        cityRegionLabel.text = labelStr
+                        cityRegionLabel.text = labelStr.joinWithSeparator("，")
                     }
                 }
             }
@@ -100,6 +103,7 @@
         @IBOutlet weak var sizePicker: UIPickerView!
         @IBOutlet weak var pricePicker: UIPickerView!
         
+        @IBOutlet weak var searchHistoryTable: UITableView!
         
         @IBOutlet weak var searchBar: UISearchBar! {
             didSet {
@@ -111,18 +115,54 @@
                 searchButton.addTarget(self, action: "onSearchButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
             }
         }
+
+        @IBOutlet weak var searchItemSegment: UISegmentedControl!
         
-        let cityRegionDataStore : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
+        var selectedSearchItemSegement:SearchType = .SavedSearch
+        
+        var searchHistoryTableDataSource: HistoryTableViewDataSource?
         
         // MARK: - Private Utils
+        private func loadSearchItemsForSegment(index: Int) {
+            if(index == 1) {
+                self.selectedSearchItemSegement = .HistoricalSearch
+                
+                if let history = searchItemsDataStore.loadSearchHistory() {
+                    let data = history.filter({ (history: SearchHistory) -> Bool in
+                        return history.type == .HistoricalSearch
+                    })
+                    
+                    searchHistoryTableDataSource?.searchData = data
+                } else {
+                    searchHistoryTableDataSource?.searchData = nil
+                }
+            } else if(index == 0) {
+                self.selectedSearchItemSegement = .SavedSearch
+                
+                if let history = searchItemsDataStore.loadSearchHistory() {
+                    let data = history.filter({ (history: SearchHistory) -> Bool in
+                        return history.type == .SavedSearch
+                    })
+                    
+                    searchHistoryTableDataSource?.searchData = data
+                } else {
+                    searchHistoryTableDataSource?.searchData = nil
+                }
+            } else {
+                assert(false, "Invalid Segment!")
+            }
+            
+            searchHistoryTable.reloadData()
+        }
+        
         private func configureButton() {
             
             let color = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
             
             searchButton.layer.borderWidth = 2
             searchButton.layer.borderColor = color.CGColor
-            searchButton.tintColor = color
-            searchButton.backgroundColor = color
+            //searchButton.tintColor = color
+            //searchButton.backgroundColor = color
             
             //let edgeInsets:UIEdgeInsets = UIEdgeInsets(top:4,left: 4,bottom: 4,right: 4)
             
@@ -140,6 +180,38 @@
             
             pricePicker.dataSource = self
             pricePicker.delegate = self
+        }
+        
+        private func configureSearchBoxTable() {
+            //tableView.backgroundView = nil
+            tableView.backgroundColor = UIColor.whiteColor()
+            
+            //Configure cell height
+            tableView.estimatedRowHeight = tableView.rowHeight
+            tableView.rowHeight = UITableViewAutomaticDimension
+            tableView.delegate = self
+        }
+        
+        private func configureSearchHistoryTable() {
+            searchHistoryTableDataSource = HistoryTableViewDataSource(viewController: self)
+            
+            searchHistoryTable.dataSource = searchHistoryTableDataSource
+            searchHistoryTable.delegate = searchHistoryTableDataSource
+        }
+        
+        
+        private func setRowVisible(row: Int, visible: Bool) {
+            if(visible) {
+                hiddenCells.remove(row)
+            } else {
+                if(!hiddenCells.contains(row)) {
+                    hiddenCells.insert(row)
+                }
+            }
+            
+            tableView.deselectRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0), animated: false)
+            tableView.beginUpdates()
+            tableView.endUpdates()
         }
         
         private func handlePicker(indexPath:NSIndexPath) {
@@ -176,7 +248,7 @@
         
         private func composeSearhCriteria() -> SearchCriteria {
             
-            var searchCriteria = SearchCriteria()
+            let searchCriteria = SearchCriteria()
             
             ///Keywords
             searchCriteria.keyword = searchBar.text
@@ -193,7 +265,7 @@
             if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
                 if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
                     if(priceMin.value != CriteriaConst.Bound.LOWER_ANY || priceMax.value != CriteriaConst.Bound.UPPER_ANY) {
-                        searchCriteria.criteriaPrice = (priceMin.value, priceMax.value)
+                        searchCriteria.price = (priceMin.value, priceMax.value)
                     }
                 }
             }
@@ -208,7 +280,7 @@
             if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
                 if let sizeMax = self.getItemForPicker(sizePicker, component: PickerConst.upperComponentIndex, row: sizeMaxRow){
                     if(sizeMin.value != CriteriaConst.Bound.LOWER_ANY || sizeMax.value != CriteriaConst.Bound.UPPER_ANY) {
-                        searchCriteria.criteriaSize = (sizeMin.value, sizeMax.value)
+                        searchCriteria.size = (sizeMin.value, sizeMax.value)
                     }
                 }
             }
@@ -244,7 +316,7 @@
                 }
                 
                 if(typeList.count > 0) {
-                    searchCriteria.criteriaTypes = typeList
+                    searchCriteria.types = typeList
                 }
             }
             
@@ -252,8 +324,13 @@
         }
         
         // MARK: - UI Control Actions
-        
+
         //The UI control event handler Should not be private
+        @IBAction func onSegmentClicked(sender: UISegmentedControl) {
+            
+            loadSearchItemsForSegment(sender.selectedSegmentIndex)
+        }
+
         func onButtonClicked(sender: UIButton) {
             if let toogleButton = sender as? ToggleButton {
                 toogleButton.toggleButtonState()
@@ -268,6 +345,12 @@
         
         func onSearchButtonClicked(sender: UIButton) {
             NSLog("onSearchButtonClicked: %@", self)
+            
+            //Hide size & price pickers
+            hiddenCells.insert(3)
+            hiddenCells.insert(5)
+            tableView.beginUpdates()
+            tableView.endUpdates()
             
             //present the view modally (hide the tabbar)
             performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
@@ -559,18 +642,17 @@
             NSLog("viewDidLoad: %@", self)
             self.configureButton()
             
-            //tableView.backgroundView = nil
-            tableView.backgroundColor = UIColor.whiteColor()
+            self.configureSearchHistoryTable()
             
+            self.configureSearchBoxTable()
             
-            //Configure cell height
-            tableView.estimatedRowHeight = tableView.rowHeight
-            tableView.rowHeight = UITableViewAutomaticDimension
-            tableView.delegate = self
+            //searchItemsDataStore.clearSearchItems()
+            //cityRegionDataStore.clearSelectedCityRegions()
             
             //Confugure Price Picker
             sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
             priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
+            
             self.configurePricePicker()
         }
         
@@ -579,6 +661,11 @@
             
             //Load selected areas
             regionSelectionState = cityRegionDataStore.loadSelectedCityRegions()
+            
+            print(regionSelectionState)
+            
+            //Load search item segment data
+            loadSearchItemsForSegment(searchItemSegment.selectedSegmentIndex)
         }
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
@@ -602,7 +689,22 @@
                     if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
                         
                         ///Collect the search criteria set by the user
-                        srtvc.searchCriteria = composeSearhCriteria()
+                        let criteria = composeSearhCriteria()
+                        
+                        srtvc.searchCriteria = criteria
+                        
+                        ///Save search history (How do we do optional binding with non-constant var?)
+                        var historyEntries = searchItemsDataStore.loadSearchHistory()
+                        
+                        if(historyEntries == nil) {
+                            historyEntries = [SearchHistory]()
+                        }
+                        
+                        historyEntries!.insert(SearchHistory(criteria: criteria, type: .HistoricalSearch), atIndex: historyEntries!.startIndex)
+                        
+                        searchItemsDataStore.saveSearchHistory(historyEntries!)
+                        //searchHistoryTable.reloadData()
+                        
                     }
                 case ViewTransConst.showAreaSelector:
                     NSLog("showAreaSlector")

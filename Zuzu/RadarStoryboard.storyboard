@@ -17,10 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radar" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad7-bb-HKa">
-                                <rect key="frame" x="198" y="244" width="204" height="111"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Zuzu Radar" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad7-bb-HKa">
+                                <rect key="frame" x="198" y="279" width="204" height="41.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="204" id="men-rx-PAT"/>
+                                    <constraint firstAttribute="width" constant="204" id="A8p-0Y-yK2"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="36"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -29,10 +29,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Ad7-bb-HKa" firstAttribute="top" secondItem="3MF-we-hIY" secondAttribute="bottom" constant="224" id="OVI-6p-bI9"/>
-                            <constraint firstItem="Ad7-bb-HKa" firstAttribute="centerX" secondItem="o5Q-oC-r21" secondAttribute="centerX" id="bPm-CH-5BP"/>
-                            <constraint firstItem="Ad7-bb-HKa" firstAttribute="centerY" secondItem="o5Q-oC-r21" secondAttribute="centerY" id="fGD-fH-Bbw"/>
+                            <constraint firstItem="Ad7-bb-HKa" firstAttribute="centerX" secondItem="o5Q-oC-r21" secondAttribute="centerX" id="2rT-f0-xww"/>
+                            <constraint firstItem="Ad7-bb-HKa" firstAttribute="top" secondItem="3MF-we-hIY" secondAttribute="bottom" constant="224" id="Sfm-ba-9jy"/>
+                            <constraint firstItem="Ad7-bb-HKa" firstAttribute="centerY" secondItem="o5Q-oC-r21" secondAttribute="centerY" id="Ujx-HU-T7D"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Sfm-ba-9jy"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="租屋雷達" image="first" id="7Iv-3p-dfX"/>
                 </viewController>

@@ -30,6 +30,8 @@
 		2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */; settings = {ASSET_TAGS = (); }; };
 		2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */; settings = {ASSET_TAGS = (); }; };
+		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; settings = {ASSET_TAGS = (); }; };
+		2F7B5F861BD62B950024E88A /* SearchHistoryDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchHistoryDataStore.swift */; settings = {ASSET_TAGS = (); }; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; settings = {ASSET_TAGS = (); }; };
 		2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
@@ -84,6 +86,8 @@
 		2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegionContainerViewController.swift; sourceTree = "<group>"; };
 		2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CriteriaConst.swift; sourceTree = "<group>"; };
+		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
+		2F7B5F851BD62B950024E88A /* SearchHistoryDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchHistoryDataStore.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -122,13 +126,14 @@
 		2F276B351BBED50300A41306 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				2F7B5F841BD62AF90024E88A /* dao */,
 				2FFCBF301BCE7F6C00400552 /* view */,
 				2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */,
 				2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */,
 				2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */,
 				2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */,
 				2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */,
-				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
+				2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -212,6 +217,15 @@
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		2F7B5F841BD62AF90024E88A /* dao */ = {
+			isa = PBXGroup;
+			children = (
+				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
+				2F7B5F851BD62B950024E88A /* SearchHistoryDataStore.swift */,
+			);
+			name = dao;
 			sourceTree = "<group>";
 		};
 		2FFCBF301BCE7F6C00400552 /* view */ = {
@@ -434,6 +448,8 @@
 			files = (
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
+				2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */,
+				2F7B5F861BD62B950024E88A /* SearchHistoryDataStore.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
