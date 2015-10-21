@@ -25,7 +25,6 @@
 		2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */; settings = {ASSET_TAGS = (); }; };
-		2F4F80961BCCB5FB003D23F4 /* areasInTaiwan2.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F4F80951BCCB5FB003D23F4 /* areasInTaiwan2.json */; settings = {ASSET_TAGS = (); }; };
 		2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */; settings = {ASSET_TAGS = (); }; };
@@ -36,6 +35,8 @@
 		2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; settings = {ASSET_TAGS = (); }; };
+		2FFD60AD1BD7B92900E1DA46 /* priceRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* priceRange.json */; settings = {ASSET_TAGS = (); }; };
+		2FFD60AF1BD7B93E00E1DA46 /* sizeRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */; settings = {ASSET_TAGS = (); }; };
 		DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -81,7 +82,6 @@
 		2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBoxTableViewController.swift; sourceTree = "<group>"; };
 		2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityPickerViewController.swift; sourceTree = "<group>"; };
 		2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = areasInTaiwan.json; sourceTree = "<group>"; };
-		2F4F80951BCCB5FB003D23F4 /* areasInTaiwan2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = areasInTaiwan2.json; sourceTree = "<group>"; };
 		2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionTableViewController.swift; sourceTree = "<group>"; };
 		2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegionContainerViewController.swift; sourceTree = "<group>"; };
 		2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
@@ -92,6 +92,8 @@
 		2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
+		2FFD60AC1BD7B92900E1DA46 /* priceRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = priceRange.json; sourceTree = "<group>"; };
+		2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sizeRange.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB78CF8BDE07388F2FD17FDF /* Pods-Zuzu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.debug.xcconfig"; sourceTree = "<group>"; };
 		DEA624876AF8AA4C806320C6 /* Pods-Zuzu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.release.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.release.xcconfig"; sourceTree = "<group>"; };
@@ -193,7 +195,8 @@
 				2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */,
 				2F482E031BAFE09100C68670 /* Info.plist */,
 				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
-				2F4F80951BCCB5FB003D23F4 /* areasInTaiwan2.json */,
+				2FFD60AC1BD7B92900E1DA46 /* priceRange.json */,
+				2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */,
 			);
 			path = Zuzu;
 			sourceTree = "<group>";
@@ -364,11 +367,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F4F80961BCCB5FB003D23F4 /* areasInTaiwan2.json in Resources */,
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
+				2FFD60AD1BD7B92900E1DA46 /* priceRange.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
+				2FFD60AF1BD7B93E00E1DA46 /* sizeRange.json in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
 				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,
