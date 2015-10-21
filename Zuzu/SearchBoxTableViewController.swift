@@ -118,36 +118,14 @@
 
         @IBOutlet weak var searchItemSegment: UISegmentedControl!
         
-        var selectedSearchItemSegement:SearchType = .SavedSearch
-        
         var searchItemTableDataSource: SearchItemTableViewDataSource?
         
         // MARK: - Private Utils
         private func loadSearchItemsForSegment(index: Int) {
             if(index == 1) {
-                self.selectedSearchItemSegement = .HistoricalSearch
-                
-                if let itemList = searchItemsDataStore.loadSearchItems() {
-                    let data = itemList.filter({ (item: SearchItem) -> Bool in
-                        return item.type == .HistoricalSearch
-                    })
-                    
-                    searchItemTableDataSource?.searchData = data
-                } else {
-                    searchItemTableDataSource?.searchData = nil
-                }
+                searchItemTableDataSource?.itemType = .HistoricalSearch
             } else if(index == 0) {
-                self.selectedSearchItemSegement = .SavedSearch
-                
-                if let itemList = searchItemsDataStore.loadSearchItems() {
-                    let data = itemList.filter({ (item: SearchItem) -> Bool in
-                        return item.type == .SavedSearch
-                    })
-                    
-                    searchItemTableDataSource?.searchData = data
-                } else {
-                    searchItemTableDataSource?.searchData = nil
-                }
+                searchItemTableDataSource?.itemType = .SavedSearch
             } else {
                 assert(false, "Invalid Segment!")
             }
@@ -336,8 +314,6 @@
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
             
             loadSearchItemsForSegment(sender.selectedSegmentIndex)
-            
-//            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 7, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
 
         func onButtonClicked(sender: UIButton) {

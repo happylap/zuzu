@@ -55,15 +55,15 @@ class SearchResultTableViewController: UITableViewController {
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
         
         if let criteria = self.searchCriteria {
-            var entries = searchItemsDataStore.loadSearchItems()
+            var items = searchItemsDataStore.loadSearchItems()
             
-            if(entries == nil) {
-                entries = [SearchItem]()
+            if(items == nil) {
+                items = [SearchItem]()
             }
             
-            entries!.insert(SearchItem(criteria: criteria, type: .SavedSearch), atIndex: entries!.startIndex)
+            items!.insert(SearchItem(criteria: criteria, type: .SavedSearch), atIndex: items!.startIndex)
             
-            searchItemsDataStore.saveSearchItems(entries!)
+            searchItemsDataStore.saveSearchItems(items!)
             
             onCurrentSearchSaved()
         }
