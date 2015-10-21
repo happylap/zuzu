@@ -43,6 +43,8 @@
         
         let cityRegionDataStore: CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
         
+        lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
+        
         var regionSelectionState: [City]? {
             didSet {
                 
@@ -115,6 +117,7 @@
         @IBOutlet weak var pricePicker: UIPickerView!
         
         @IBOutlet weak var searchItemTable: UITableView!
+        @IBOutlet weak var searchItemSegment: UISegmentedControl!
         
         @IBOutlet weak var searchBar: UISearchBar! {
             didSet {
@@ -126,10 +129,6 @@
                 searchButton.addTarget(self, action: "onSearchButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
             }
         }
-
-        @IBOutlet weak var searchItemSegment: UISegmentedControl!
-        
-        var searchItemTableDataSource: SearchItemTableViewDataSource?
         
         // MARK: - Private Utils
         
@@ -152,10 +151,10 @@
         private func loadSearchItemsForSegment(index: Int) {
             if(index == 1) {
                 
-                searchItemTableDataSource?.itemType = .HistoricalSearch
+                searchItemTableDataSource.itemType = .HistoricalSearch
             } else if(index == 0) {
                 
-                searchItemTableDataSource?.itemType = .SavedSearch
+                searchItemTableDataSource.itemType = .SavedSearch
             } else {
                 assert(false, "Invalid Segment!")
             }
@@ -205,9 +204,8 @@
             
             //Remove extra cells when the table height is smaller than the screen
             searchItemTable.tableFooterView = UIView(frame: CGRectZero)
-            
-            searchItemTableDataSource = SearchItemTableViewDataSource(tableViewController: self)
-            
+
+            //Set delegate & datasource
             searchItemTable.dataSource = searchItemTableDataSource
             searchItemTable.delegate = searchItemTableDataSource
         }
