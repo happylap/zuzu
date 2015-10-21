@@ -443,6 +443,9 @@
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
             
             loadSearchItemsForSegment(sender.selectedSegmentIndex)
+            
+            //Scroll to the bottom of the table to see the search item table fully
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 7, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
 
         func onButtonClicked(sender: UIButton) {
