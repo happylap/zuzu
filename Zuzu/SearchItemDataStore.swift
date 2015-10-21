@@ -84,13 +84,13 @@ class SearchCriteria: NSObject, NSCoding {
 
 class SearchItem: NSObject, NSCoding {
     
-    private let criteria:SearchCriteria
+    let criteria:SearchCriteria
     
     let type:SearchType
     
     var title:String {
         get{
-            var resultStr = "地區不限"
+            var resultStr = "不限地區"
             var titleStr = [String]()
             
             if let regions = criteria.region {
@@ -124,16 +124,16 @@ class SearchItem: NSObject, NSCoding {
                 
                 if(priceRange.0 == CriteriaConst.Bound.LOWER_ANY) {
                     
-                    titleStr.append("\(priceRange.1) 元 以下")
+                    titleStr.append("\(priceRange.1) 元以下")
                 } else if(priceRange.1 == CriteriaConst.Bound.UPPER_ANY) {
                     
-                    titleStr.append("\(priceRange.0) 元 以上")
+                    titleStr.append("\(priceRange.0) 元以上")
                 } else {
                     
                     titleStr.append("\(priceRange.0) - \(priceRange.1) 元")
                 }
             } else {
-                titleStr.append("租金不限")
+                titleStr.append("不限租金")
             }
             
             if let sizeRange = criteria.size {
@@ -143,16 +143,16 @@ class SearchItem: NSObject, NSCoding {
                 
                 if(sizeRange.0 == CriteriaConst.Bound.LOWER_ANY) {
                     
-                    titleStr.append("\(sizeRange.1) 元 以下")
+                    titleStr.append("\(sizeRange.1) 坪以下")
                 } else if(sizeRange.1 == CriteriaConst.Bound.UPPER_ANY) {
                     
-                    titleStr.append("\(sizeRange.0) 元 以上")
+                    titleStr.append("\(sizeRange.0) 坪以上")
                 } else {
                     
-                    titleStr.append("\(sizeRange.0) - \(sizeRange.1) 元")
+                    titleStr.append("\(sizeRange.0) - \(sizeRange.1) 坪")
                 }
             } else {
-                titleStr.append("坪數不限")
+                titleStr.append("不限坪數")
             }
             
             return titleStr.joinWithSeparator("，")

@@ -54,6 +54,7 @@
                     
                     if(regionSelectionState?.count > 0) {
                         
+                        var numOfCity = 0
                         for city in regionSelectionState! {
 
                             if(city.regions.count == 0) {
@@ -63,10 +64,20 @@
                             if(labelStr.count < 3) {
                                 labelStr.append("\(city.name) (\(city.regions.count))")
                             }
+                            numOfCity++
                         }
                         
-                        cityRegionLabel.text = labelStr.joinWithSeparator("，")
+                        cityRegionLabel.text = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
                     }
+                }
+            }
+        }
+        
+        var currentCriteria: SearchCriteria? {
+            
+            didSet{
+                if(currentCriteria != nil) {
+                    self.loadFromSearchCriteria(currentCriteria!)
                 }
             }
         }
@@ -121,16 +132,33 @@
         var searchItemTableDataSource: SearchItemTableViewDataSource?
         
         // MARK: - Private Utils
+        
+        private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
+            
+            var pickerStr:String = ""
+            
+            let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
+            let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
+            
+            if(fromTuple?.label == toTuple?.label) {
+                pickerStr = "\((fromTuple?.label)!)"
+            } else {
+                pickerStr = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
+            }
+            
+            return pickerStr
+        }
+        
         private func loadSearchItemsForSegment(index: Int) {
             if(index == 1) {
+                
                 searchItemTableDataSource?.itemType = .HistoricalSearch
             } else if(index == 0) {
+                
                 searchItemTableDataSource?.itemType = .SavedSearch
             } else {
                 assert(false, "Invalid Segment!")
             }
-            
-            searchItemTable.reloadData()
         }
         
         private func configureButton() {
@@ -178,7 +206,7 @@
             //Remove extra cells when the table height is smaller than the screen
             searchItemTable.tableFooterView = UIView(frame: CGRectZero)
             
-            searchItemTableDataSource = SearchItemTableViewDataSource(viewController: self)
+            searchItemTableDataSource = SearchItemTableViewDataSource(tableViewController: self)
             
             searchItemTable.dataSource = searchItemTableDataSource
             searchItemTable.delegate = searchItemTableDataSource
@@ -231,7 +259,110 @@
             }
         }
         
-        private func composeSearhCriteria() -> SearchCriteria {
+        private func loadFromSearchCriteria(criteria: SearchCriteria) {
+            
+            ///Keywords
+            searchBar.text = criteria.keyword
+            
+            ///Region
+            regionSelectionState = criteria.region
+            if(regionSelectionState != nil) {
+                cityRegionDataStore.saveSelectedCityRegions(regionSelectionState!)
+            } else{
+                cityRegionDataStore.saveSelectedCityRegions([City]())
+            }
+            
+            ///Price Range
+            var pickerPriceFrom:(component:Int, row:Int) = (0,0)
+            var pickerPriceTo:(component:Int, row:Int) = (0,0)
+            
+            if let priceRange = criteria.price {
+                
+                for (index, price) in priceItems[0].enumerate() {
+                    if(priceRange.0 == price.value) {
+                        
+                        pickerPriceFrom = (0, index + 1)
+                    }
+                }
+                
+                for (index, price) in priceItems[1].enumerate() {
+                    if(priceRange.1 == price.value) {
+                        
+                        pickerPriceTo = (1, index + 1)
+                    }
+                }
+            }
+            
+            pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
+            pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
+            
+            priceLabel.text =
+                pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
+            
+            
+            ///Size Range
+            var pickerSizeFrom:(component:Int, row:Int) = (0,0)
+            var pickerSizeTo:(component:Int, row:Int) = (0,0)
+            
+            if let sizeRange = criteria.size {
+                
+                for (index, size) in sizeItems[0].enumerate() {
+                    if(sizeRange.0 == size.value) {
+                        pickerSizeFrom = (0, index + 1)
+                    }
+                }
+                
+                for (index, size) in sizeItems[1].enumerate() {
+                    if(sizeRange.1 == size.value) {
+                        pickerSizeTo = (1, index + 1)
+                    }
+                }
+            }
+            
+            sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
+            sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
+            
+            sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
+            
+            ///House Types
+            if let houseTypes = criteria.types {
+                
+                var tag = UIControlTag.NOT_LIMITED_BUTTON_TAG
+                
+                for type in houseTypes {
+                    
+                    switch type {
+                    case CriteriaConst.PrimaryType.FULL_FLOOR:
+                        tag = 1
+                    case CriteriaConst.PrimaryType.SUITE_INDEPENDENT:
+                        tag = 2
+                    case CriteriaConst.PrimaryType.SUITE_COMMON_AREA:
+                        tag = 3
+                    case CriteriaConst.PrimaryType.ROOM_NO_TOILET:
+                        tag = 4
+                    case CriteriaConst.PrimaryType.HOME_OFFICE:
+                        tag = 5
+                        
+                    default: break
+                    }
+                    
+                    
+                    if let typeButton = typeButtonContainer.viewWithTag(tag) as? ToggleButton {
+                        typeButton.setToggleState(true)
+                    }
+                }
+                
+                if(tag != UIControlTag.NOT_LIMITED_BUTTON_TAG) {
+                    selectAllButton?.setToggleState(false)
+                }
+                
+            } else {
+                selectAllButton?.setToggleState(true)
+            }
+            
+        }
+        
+        private func toSearhCriteria() -> SearchCriteria {
             
             let searchCriteria = SearchCriteria()
             
@@ -243,9 +374,9 @@
             
             ///Price Range
             let priceMinRow =
-            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+                pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
             let priceMaxRow =
-            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+                pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
             
             if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
                 if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
@@ -559,6 +690,8 @@
                 targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
             }
             
+            targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
+            
             ///Try to refresh picker items
             switch(pickerView) {
             case sizePicker:
@@ -680,7 +813,7 @@
                     if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
                         
                         ///Collect the search criteria set by the user
-                        let criteria = composeSearhCriteria()
+                        let criteria = toSearhCriteria()
                         
                         srtvc.searchCriteria = criteria
                         
