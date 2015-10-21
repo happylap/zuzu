@@ -449,7 +449,9 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="租屋快搜" id="izc-kA-Us3"/>
+                    <navigationItem key="navigationItem" title="租屋快搜" id="izc-kA-Us3">
+                        <barButtonItem key="rightBarButtonItem" image="bell-outline" id="6YQ-kr-34O"/>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="1400"/>
@@ -863,6 +865,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="bell-outline" width="24" height="24"/>
         <image name="download_arrow_down_save_folder_file_document-512" width="36" height="36"/>
         <image name="first" width="30" height="30"/>
         <image name="house_img" width="188" height="136"/>
