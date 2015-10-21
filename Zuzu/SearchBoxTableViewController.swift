@@ -103,7 +103,7 @@
         @IBOutlet weak var sizePicker: UIPickerView!
         @IBOutlet weak var pricePicker: UIPickerView!
         
-        @IBOutlet weak var searchHistoryTable: UITableView!
+        @IBOutlet weak var searchItemTable: UITableView!
         
         @IBOutlet weak var searchBar: UISearchBar! {
             didSet {
@@ -120,39 +120,39 @@
         
         var selectedSearchItemSegement:SearchType = .SavedSearch
         
-        var searchHistoryTableDataSource: HistoryTableViewDataSource?
+        var searchItemTableDataSource: SearchItemTableViewDataSource?
         
         // MARK: - Private Utils
         private func loadSearchItemsForSegment(index: Int) {
             if(index == 1) {
                 self.selectedSearchItemSegement = .HistoricalSearch
                 
-                if let history = searchItemsDataStore.loadSearchHistory() {
-                    let data = history.filter({ (history: SearchHistory) -> Bool in
-                        return history.type == .HistoricalSearch
+                if let itemList = searchItemsDataStore.loadSearchItems() {
+                    let data = itemList.filter({ (item: SearchItem) -> Bool in
+                        return item.type == .HistoricalSearch
                     })
                     
-                    searchHistoryTableDataSource?.searchData = data
+                    searchItemTableDataSource?.searchData = data
                 } else {
-                    searchHistoryTableDataSource?.searchData = nil
+                    searchItemTableDataSource?.searchData = nil
                 }
             } else if(index == 0) {
                 self.selectedSearchItemSegement = .SavedSearch
                 
-                if let history = searchItemsDataStore.loadSearchHistory() {
-                    let data = history.filter({ (history: SearchHistory) -> Bool in
-                        return history.type == .SavedSearch
+                if let itemList = searchItemsDataStore.loadSearchItems() {
+                    let data = itemList.filter({ (item: SearchItem) -> Bool in
+                        return item.type == .SavedSearch
                     })
                     
-                    searchHistoryTableDataSource?.searchData = data
+                    searchItemTableDataSource?.searchData = data
                 } else {
-                    searchHistoryTableDataSource?.searchData = nil
+                    searchItemTableDataSource?.searchData = nil
                 }
             } else {
                 assert(false, "Invalid Segment!")
             }
             
-            searchHistoryTable.reloadData()
+            searchItemTable.reloadData()
         }
         
         private func configureButton() {
@@ -186,6 +186,9 @@
             //tableView.backgroundView = nil
             tableView.backgroundColor = UIColor.whiteColor()
             
+            //Remove extra cells when the table height is smaller than the screen
+            tableView.tableFooterView = UIView(frame: CGRectZero)
+            
             //Configure cell height
             tableView.estimatedRowHeight = tableView.rowHeight
             tableView.rowHeight = UITableViewAutomaticDimension
@@ -193,10 +196,14 @@
         }
         
         private func configureSearchHistoryTable() {
-            searchHistoryTableDataSource = HistoryTableViewDataSource(viewController: self)
             
-            searchHistoryTable.dataSource = searchHistoryTableDataSource
-            searchHistoryTable.delegate = searchHistoryTableDataSource
+            //Remove extra cells when the table height is smaller than the screen
+            searchItemTable.tableFooterView = UIView(frame: CGRectZero)
+            
+            searchItemTableDataSource = SearchItemTableViewDataSource(viewController: self)
+            
+            searchItemTable.dataSource = searchItemTableDataSource
+            searchItemTable.delegate = searchItemTableDataSource
         }
         
         
@@ -329,6 +336,8 @@
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
             
             loadSearchItemsForSegment(sender.selectedSegmentIndex)
+            
+//            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 7, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
 
         func onButtonClicked(sender: UIButton) {
@@ -623,6 +632,12 @@
                 if (indexPath.row == 5) {
                     return sizePicker.intrinsicContentSize().height
                 }
+//                if (indexPath.row == 7) {
+//                    self.searchItemTable.layoutIfNeeded()
+//                    let height = self.searchItemTable.contentSize.height
+//                    return height
+//                }
+
             }
             
             return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
@@ -694,16 +709,15 @@
                         srtvc.searchCriteria = criteria
                         
                         ///Save search history (How do we do optional binding with non-constant var?)
-                        var historyEntries = searchItemsDataStore.loadSearchHistory()
+                        var historyEntries = searchItemsDataStore.loadSearchItems()
                         
                         if(historyEntries == nil) {
-                            historyEntries = [SearchHistory]()
+                            historyEntries = [SearchItem]()
                         }
                         
-                        historyEntries!.insert(SearchHistory(criteria: criteria, type: .HistoricalSearch), atIndex: historyEntries!.startIndex)
+                        historyEntries!.insert(SearchItem(criteria: criteria, type: .HistoricalSearch), atIndex: historyEntries!.startIndex)
                         
-                        searchItemsDataStore.saveSearchHistory(historyEntries!)
-                        //searchHistoryTable.reloadData()
+                        searchItemsDataStore.saveSearchItems(historyEntries!)
                         
                     }
                 case ViewTransConst.showAreaSelector:

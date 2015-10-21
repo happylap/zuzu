@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-public class HistoryTableViewDataSource : NSObject, UITableViewDelegate, UITableViewDataSource {
+public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITableViewDataSource {
     
-    var searchData:[SearchHistory]?
+    var searchData:[SearchItem]?
     
-    private let cellID = "searchHistoryCell"
+    private let cellID = "searchItemCell"
     
     private let viewController : UIViewController?
     
@@ -41,6 +41,9 @@ public class HistoryTableViewDataSource : NSObject, UITableViewDelegate, UITable
                 cell.textLabel!.text = search.title
                 cell.detailTextLabel!.text = search.detail
                 
+//                if(indexPath.row == searchData.endIndex - 1) {
+//                    cell.separatorInset = UIEdgeInsetsMake(0, CGRectGetWidth(cell.bounds)/2.0, 0, CGRectGetWidth(cell.bounds)/2.0)
+//                }
                 return cell
             }
         } else {

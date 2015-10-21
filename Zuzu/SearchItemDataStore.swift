@@ -82,7 +82,7 @@ class SearchCriteria: NSObject, NSCoding {
     }
 }
 
-class SearchHistory: NSObject, NSCoding {
+class SearchItem: NSObject, NSCoding {
     
     private let criteria:SearchCriteria
     
@@ -90,6 +90,7 @@ class SearchHistory: NSObject, NSCoding {
     
     var title:String {
         get{
+            var resultStr = "地區不限"
             var titleStr = [String]()
             
             if let regions = criteria.region {
@@ -104,7 +105,11 @@ class SearchHistory: NSObject, NSCoding {
                 }
             }
             
-            return titleStr.joinWithSeparator("，")
+            if(titleStr.count > 0) {
+                resultStr = titleStr.joinWithSeparator("，")
+            }
+            
+            return resultStr
         }
     }
     
@@ -114,14 +119,38 @@ class SearchHistory: NSObject, NSCoding {
             
             if let priceRange = criteria.price {
                 
-                titleStr.append("\(priceRange.0) - \(priceRange.1) 元")
+                assert(priceRange.0 != CriteriaConst.Bound.LOWER_ANY || priceRange.1 != CriteriaConst.Bound.UPPER_ANY
+                    , "SearchCriteria.price should be set to nil if there is no limit on lower & upper bounds")
+                
+                if(priceRange.0 == CriteriaConst.Bound.LOWER_ANY) {
+                    
+                    titleStr.append("\(priceRange.1) 元 以下")
+                } else if(priceRange.1 == CriteriaConst.Bound.UPPER_ANY) {
+                    
+                    titleStr.append("\(priceRange.0) 元 以上")
+                } else {
+                    
+                    titleStr.append("\(priceRange.0) - \(priceRange.1) 元")
+                }
             } else {
                 titleStr.append("租金不限")
             }
             
             if let sizeRange = criteria.size {
                 
-                titleStr.append("\(sizeRange.0) - \(sizeRange.1) 坪")
+                assert(sizeRange.0 != CriteriaConst.Bound.LOWER_ANY || sizeRange.1 != CriteriaConst.Bound.UPPER_ANY
+                    , "SearchCriteria.size should be set to nil if there is no limit on lower & upper bounds")
+                
+                if(sizeRange.0 == CriteriaConst.Bound.LOWER_ANY) {
+                    
+                    titleStr.append("\(sizeRange.1) 元 以下")
+                } else if(sizeRange.1 == CriteriaConst.Bound.UPPER_ANY) {
+                    
+                    titleStr.append("\(sizeRange.0) 元 以上")
+                } else {
+                    
+                    titleStr.append("\(sizeRange.0) - \(sizeRange.1) 元")
+                }
             } else {
                 titleStr.append("坪數不限")
             }
@@ -154,8 +183,8 @@ class SearchHistory: NSObject, NSCoding {
 }
 
 protocol SearchHistoryDataStore: class {
-    func saveSearchHistory(historyEntries: [SearchHistory])
-    func loadSearchHistory() -> [SearchHistory]?
+    func saveSearchItems(entries: [SearchItem])
+    func loadSearchItems() -> [SearchItem]?
     func clearSearchItems()
 }
 
@@ -169,19 +198,19 @@ class UserDefaultsSearchHistoryDataStore: SearchHistoryDataStore {
         return UserDefaultsSearchHistoryDataStore.instance
     }
     
-    func saveSearchHistory(historyEntries: [SearchHistory]) {
+    func saveSearchItems(entries: [SearchItem]) {
         //Save selection to user defaults
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        let data = NSKeyedArchiver.archivedDataWithRootObject(historyEntries)
+        let data = NSKeyedArchiver.archivedDataWithRootObject(entries)
         userDefaults.setObject(data, forKey: UserDefaultsSearchHistoryDataStore.userDefaultsKey)
     }
     
-    func loadSearchHistory() -> [SearchHistory]? {
+    func loadSearchItems() -> [SearchItem]? {
         //Load selection from user defaults
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let data = userDefaults.objectForKey(UserDefaultsSearchHistoryDataStore.userDefaultsKey) as? NSData
         
-        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [SearchHistory]
+        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [SearchItem]
     }
     
     func clearSearchItems() {

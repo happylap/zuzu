@@ -41,6 +41,7 @@ class SearchResultTableViewController: UITableViewController {
     
     var debugTextStr: String = ""
     
+    private let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
     private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
     
     var searchCriteria: SearchCriteria?
@@ -50,7 +51,50 @@ class SearchResultTableViewController: UITableViewController {
     var ignoreScroll = false
     
     
+    
+    @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
+        
+        if let criteria = self.searchCriteria {
+            var entries = searchItemsDataStore.loadSearchItems()
+            
+            if(entries == nil) {
+                entries = [SearchItem]()
+            }
+            
+            entries!.insert(SearchItem(criteria: criteria, type: .SavedSearch), atIndex: entries!.startIndex)
+            
+            searchItemsDataStore.saveSearchItems(entries!)
+            
+            onCurrentSearchSaved()
+        }
+    }
+    
     // MARK: - Private Utils
+    
+    private func onCurrentSearchSaved() {
+            // Initialize Alert View
+            
+            let alertView = UIAlertView(
+                title: "儲存常用搜尋條件",
+                message: "當前的搜尋條件已經被儲存!",
+                delegate: self,
+                cancelButtonTitle: "知道了")
+            
+            // Configure Alert View
+            alertView.tag = 2
+            
+            
+            // Show Alert View
+            alertView.show()
+            
+            // Delay the dismissal by 5 seconds
+            let delay = 2.0 * Double(NSEC_PER_SEC)
+            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            dispatch_after(time, dispatch_get_main_queue(), {
+                alertView.dismissWithClickedButtonIndex(-1, animated: true)
+            })
+    }
+    
     private func loadHouseListPage(pageNo: Int) {
         
         if(pageNo > dataSource.estimatedNumberOfPages){

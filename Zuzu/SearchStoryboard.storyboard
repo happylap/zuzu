@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Search Box View-->
@@ -12,7 +13,7 @@
             <objects>
                 <tableViewController title="Search Box View" id="avK-Pq-NJf" customClass="SearchBoxTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="AKQ-Eg-pud">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="1200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="1400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -366,22 +367,23 @@
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="176" id="0BD-Xg-haV">
-                                        <rect key="frame" x="0.0" y="968" width="600" height="176"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="264" id="0BD-Xg-haV">
+                                        <rect key="frame" x="0.0" y="968" width="600" height="264"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0BD-Xg-haV" id="qZd-VB-W4l">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="175.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="263.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="88" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sUf-qp-BdK">
-                                                    <rect key="frame" x="0.0" y="8" width="600" height="159.5"/>
+                                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="88" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sUf-qp-BdK" userLabel="Search Item Table">
+                                                    <rect key="frame" x="0.0" y="8" width="600" height="247.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="240" id="672-Sm-szr"/>
                                                     </constraints>
                                                     <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                                    <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <prototypes>
-                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="searchHistoryCell" textLabel="wML-bt-AlE" detailTextLabel="axN-pl-MQz" style="IBUITableViewCellStyleSubtitle" id="7YB-9c-eH1">
+                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="searchItemCell" textLabel="wML-bt-AlE" detailTextLabel="axN-pl-MQz" style="IBUITableViewCellStyleSubtitle" id="7YB-9c-eH1" userLabel="searchItemCell">
                                                             <rect key="frame" x="0.0" y="28" width="600" height="88"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7YB-9c-eH1" id="gRJ-iy-CDx">
@@ -435,15 +437,15 @@
                     <navigationItem key="navigationItem" title="租屋快搜" id="izc-kA-Us3"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="1200"/>
+                    <size key="freeformSize" width="600" height="1400"/>
                     <connections>
                         <outlet property="cityRegionLabel" destination="FCR-lF-Oap" id="B8M-A6-p4O"/>
                         <outlet property="priceLabel" destination="JtX-7c-kdz" id="6LR-6F-Yln"/>
                         <outlet property="pricePicker" destination="x5j-6v-vLD" id="SE4-pj-mX3"/>
                         <outlet property="searchBar" destination="1hN-63-3Vs" id="BQk-5d-Yhw"/>
                         <outlet property="searchButton" destination="e8W-AW-LWF" id="aW6-l0-p5x"/>
-                        <outlet property="searchHistoryTable" destination="sUf-qp-BdK" id="k1p-yn-Z8K"/>
                         <outlet property="searchItemSegment" destination="F2v-MB-Dla" id="HST-PY-zxi"/>
+                        <outlet property="searchItemTable" destination="sUf-qp-BdK" id="MZe-Di-lMi"/>
                         <outlet property="sizeLabel" destination="6KZ-2n-pJM" id="cX1-6j-FL5"/>
                         <outlet property="sizePicker" destination="OI0-8I-IXm" id="e0w-Jb-Htf"/>
                         <outlet property="typeButtonContainer" destination="trL-oE-oca" id="omD-mA-kMC"/>
@@ -649,7 +651,7 @@
             <objects>
                 <tableViewController hidesBottomBarWhenPushed="YES" id="VUP-fO-SJw" customClass="SearchResultTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="260" sectionHeaderHeight="28" sectionFooterHeight="28" id="AVs-la-x6f">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="1200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="1400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="yrM-0D-fhP">
@@ -760,13 +762,22 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="NBD-dJ-SqW">
-                        <barButtonItem key="rightBarButtonItem" title="Debug" id="9Py-vk-BeN">
-                            <connections>
-                                <segue destination="Hnv-Hw-uin" kind="popoverPresentation" identifier="showDebugInfo" popoverAnchorBarButtonItem="9Py-vk-BeN" id="OUK-gX-ftg">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="download_arrow_down_save_folder_file_document-512" id="8EG-ML-NRj">
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="onSaveSearchButtonClicked:" destination="VUP-fO-SJw" id="UR9-eK-6DK"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Debug" id="9Py-vk-BeN">
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="Hnv-Hw-uin" kind="popoverPresentation" identifier="showDebugInfo" popoverAnchorBarButtonItem="9Py-vk-BeN" id="OUK-gX-ftg">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="q8K-GS-fYV"/>
@@ -774,7 +785,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1m-Cy-mQd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1725" y="417"/>
+            <point key="canvasLocation" x="1725" y="767"/>
         </scene>
         <!--Debug-->
         <scene sceneID="F5o-3h-u7z">
@@ -837,6 +848,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="download_arrow_down_save_folder_file_document-512" width="36" height="36"/>
         <image name="first" width="30" height="30"/>
         <image name="house_img" width="188" height="136"/>
     </resources>

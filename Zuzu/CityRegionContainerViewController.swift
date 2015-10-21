@@ -114,7 +114,7 @@ class CityRegionContainerViewController: UIViewController {
             isDataPrepared = true
         }
     }
-
+    
     // MARK: - UI Control Actions
     @IBAction func onSelectionDone(sender: UIBarButtonItem) {
         
@@ -132,10 +132,21 @@ class CityRegionContainerViewController: UIViewController {
         if let userInfo = notification.userInfo {
             
             if let cityStatus = userInfo["status"] as? City {
+                
+                ///If the region count is 0, it means we don't need this entry anymore
+                let markRemoved = cityStatus.regions.count <= 0
+                
                 if let index = regionSelectionState.indexOf(cityStatus) {
-                    regionSelectionState.replaceRange(index...index, with: [cityStatus])
+                    
+                    if(markRemoved) {
+                        regionSelectionState.removeAtIndex(index)
+                    } else {
+                        regionSelectionState.replaceRange(index...index, with: [cityStatus])
+                    }
                 } else {
-                    regionSelectionState.append(cityStatus)
+                    if(!markRemoved) {
+                        regionSelectionState.append(cityStatus)
+                    }
                 }
             }
             
