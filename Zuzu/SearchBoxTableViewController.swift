@@ -793,7 +793,9 @@
             loadSearchItemsForSegment(searchItemSegment.selectedSegmentIndex)
             
             //Scroll search item data to the top of the table
-            self.searchItemTable.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            if(searchItemTable.numberOfRowsInSection(0) > 0) {
+                self.searchItemTable.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            }
         }
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
