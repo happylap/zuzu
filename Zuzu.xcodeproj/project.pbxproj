@@ -16,6 +16,7 @@
 		2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */; };
 		2F31F5131BC2BC4400054355 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5121BC2BC4400054355 /* .gitignore */; };
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
+		2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F33E0451BD918E300A7D6CD /* Extensions.swift */; };
 		2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */; };
 		2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF51BAFE09100C68670 /* AppDelegate.swift */; };
 		2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */; };
@@ -71,6 +72,7 @@
 		2F31F5271BC3C34600054355 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F31F5291BC3C34A00054355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		2F33E0451BD918E300A7D6CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegionDataStore.swift; sourceTree = "<group>"; };
 		2F482DF21BAFE09100C68670 /* Zuzu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zuzu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F482DF51BAFE09100C68670 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */,
 				2F276B2E1BBE989E00A41306 /* DataPersistence.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
+				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
 				2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */,

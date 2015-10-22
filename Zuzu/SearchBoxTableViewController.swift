@@ -158,12 +158,10 @@
             // Show Alert View
             alertView.show()
             
-            // Delay the dismissal by 5 seconds
-            let delay = 2.0 * Double(NSEC_PER_SEC)
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-            dispatch_after(time, dispatch_get_main_queue(), {
+            // Delay the dismissal
+            self.runOnMainThreadAfter(2.0) {
                 alertView.dismissWithClickedButtonIndex(-1, animated: true)
-            })
+            }
         }
         
         private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
@@ -770,11 +768,8 @@
                 handlePicker(indexPath)
                 
             case 0: //Area Picker
-                NSLog("isMainThread : \(NSThread.currentThread().isMainThread)")
-                dispatch_async(dispatch_get_main_queue(),{
-                    NSLog("isMainThread : \(NSThread.currentThread().isMainThread)")
-                    self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
-                })
+                ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
+                self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
                 
                 
             default: break
