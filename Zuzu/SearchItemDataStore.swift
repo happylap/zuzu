@@ -92,16 +92,29 @@ class SearchItem: NSObject, NSCoding {
         get{
             var resultStr = "不限地區"
             var titleStr = [String]()
+            var regionStr = [String]()
             
-            if let regions = criteria.region {
+            if let cities = criteria.region {
                 
-                for city in regions {
+                if(cities.count == 1) {
                     
-                    if(city.regions.count == 0) {
-                        continue
+                    let city = cities[cities.startIndex]
+                    
+                    for region in city.regions {
+                        regionStr.append( "\(region.name)")
                     }
                     
-                    titleStr.append( "\(city.name) (\(city.regions.count))")
+                    resultStr = "\(city.name) (\(regionStr.prefix(3).joinWithSeparator("，")))"
+                    
+                } else {
+                    for city in cities {
+                        
+                        if(city.regions.count == 0) {
+                            continue
+                        }
+                        
+                        titleStr.append( "\(city.name) (\(city.regions.count))")
+                    }
                 }
             }
             
@@ -115,7 +128,31 @@ class SearchItem: NSObject, NSCoding {
     
     var detail:String {
         get{
+            var result = ""
             var titleStr = [String]()
+            var typeStr = [String]()
+            
+            if let usageType = criteria.types {
+                for type in usageType.sort() {
+                    switch type {
+                    case CriteriaConst.PrimaryType.FULL_FLOOR:
+                        typeStr.append("整層住家")
+                    case CriteriaConst.PrimaryType.HOME_OFFICE:
+                        typeStr.append("住辦")
+                    case CriteriaConst.PrimaryType.ROOM_NO_TOILET:
+                        typeStr.append("雅房")
+                    case CriteriaConst.PrimaryType.SUITE_COMMON_AREA:
+                        typeStr.append("分租套房")
+                    case CriteriaConst.PrimaryType.SUITE_INDEPENDENT:
+                        typeStr.append("獨立套房")
+                    default: break
+                    }
+                }
+                
+                result = typeStr.joinWithSeparator("/ ")
+            }
+            
+            result += "\n"
             
             if let priceRange = criteria.price {
                 
@@ -155,7 +192,7 @@ class SearchItem: NSObject, NSCoding {
                 titleStr.append("不限坪數")
             }
             
-            return titleStr.joinWithSeparator("，")
+            return result + titleStr.joinWithSeparator("，")
         }
     }
     

@@ -60,7 +60,7 @@
                         
                         var numOfCity = 0
                         for city in regionSelectionState! {
-
+                            
                             if(city.regions.count == 0) {
                                 continue
                             }
@@ -206,7 +206,7 @@
             
             //Remove extra cells when the table height is smaller than the screen
             searchItemTable.tableFooterView = UIView(frame: CGRectZero)
-
+            
             //Set delegate & datasource
             searchItemTable.dataSource = searchItemTableDataSource
             searchItemTable.delegate = searchItemTableDataSource
@@ -327,34 +327,38 @@
             ///House Types
             if let houseTypes = criteria.types {
                 
-                var tag = UIControlTag.NOT_LIMITED_BUTTON_TAG
-                
-                for type in houseTypes {
-                    
-                    switch type {
-                    case CriteriaConst.PrimaryType.FULL_FLOOR:
-                        tag = 1
-                    case CriteriaConst.PrimaryType.SUITE_INDEPENDENT:
-                        tag = 2
-                    case CriteriaConst.PrimaryType.SUITE_COMMON_AREA:
-                        tag = 3
-                    case CriteriaConst.PrimaryType.ROOM_NO_TOILET:
-                        tag = 4
-                    case CriteriaConst.PrimaryType.HOME_OFFICE:
-                        tag = 5
-                        
-                    default: break
-                    }
-                    
+                //Check each type button (each with a different tag as set in the Story Board)
+                for tag in (1...5) {
                     
                     if let typeButton = typeButtonContainer.viewWithTag(tag) as? ToggleButton {
-                        typeButton.setToggleState(true)
+                        
+                        var type:Int?
+                        
+                        switch tag {
+                            
+                        case 1:
+                            type = CriteriaConst.PrimaryType.FULL_FLOOR
+                        case 2:
+                            type = CriteriaConst.PrimaryType.SUITE_INDEPENDENT
+                        case 3:
+                            type = CriteriaConst.PrimaryType.SUITE_COMMON_AREA
+                        case 4:
+                            type = CriteriaConst.PrimaryType.ROOM_NO_TOILET
+                        case 5:
+                            type = CriteriaConst.PrimaryType.HOME_OFFICE
+                            
+                        default: break
+                        }
+                        
+                        if(houseTypes.contains(type!)) {
+                            typeButton.setToggleState(true)
+                        } else {
+                            typeButton.setToggleState(false)
+                        }
                     }
                 }
-                
-                if(tag != UIControlTag.NOT_LIMITED_BUTTON_TAG) {
-                    selectAllButton?.setToggleState(false)
-                }
+                //At lease one type is selected, so "Select All" button can be set to false
+                selectAllButton?.setToggleState(false)
                 
             } else {
                 selectAllButton?.setToggleState(true)
@@ -374,9 +378,9 @@
             
             ///Price Range
             let priceMinRow =
-                pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
             let priceMaxRow =
-                pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
             
             if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
                 if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
@@ -440,7 +444,7 @@
         }
         
         // MARK: - UI Control Actions
-
+        
         //The UI control event handler Should not be private
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
             
@@ -449,7 +453,7 @@
             //Scroll to the bottom of the table to see the search item table fully
             self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 7, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
-
+        
         func onButtonClicked(sender: UIButton) {
             if let toogleButton = sender as? ToggleButton {
                 toogleButton.toggleButtonState()
@@ -744,12 +748,12 @@
                 if (indexPath.row == 5) {
                     return sizePicker.intrinsicContentSize().height
                 }
-//                if (indexPath.row == 7) {
-//                    self.searchItemTable.layoutIfNeeded()
-//                    let height = self.searchItemTable.contentSize.height
-//                    return height
-//                }
-
+                //                if (indexPath.row == 7) {
+                //                    self.searchItemTable.layoutIfNeeded()
+                //                    let height = self.searchItemTable.contentSize.height
+                //                    return height
+                //                }
+                
             }
             
             return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
