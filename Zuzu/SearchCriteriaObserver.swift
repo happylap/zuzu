@@ -11,13 +11,15 @@ import Foundation
 class SearchCriteriaObserver:NSObject {
     
     //If the criteria is not changed for allowedIdleSeconds, the system will fetch the number of houses before the user actually presses the search button
-    let allowedIdleTime = 3.0
+    let allowedIdleTime = 2.5
     
     let viewController: SearchBoxTableViewController
     
     var currentCriteria: SearchCriteria = SearchCriteria()
     
     let houseReq = HouseDataRequester.getInstance()
+    
+    var startObserving = false
     
     var currentTimer:NSTimer?
     

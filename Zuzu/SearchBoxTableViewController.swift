@@ -144,6 +144,26 @@
         
         // MARK: - Private Utils
         
+        private func alertInvalidRegionSelection() {
+            // Initialize Alert View
+            
+            let alertView = UIAlertView(
+                title: "請選擇地區",
+                message: "請選擇地區以進行搜尋",
+                delegate: self,
+                cancelButtonTitle: "知道了")
+            
+            // Show Alert View
+            alertView.show()
+            
+            // Delay the dismissal by 5 seconds
+            let delay = 2.0 * Double(NSEC_PER_SEC)
+            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            dispatch_after(time, dispatch_get_main_queue(), {
+                alertView.dismissWithClickedButtonIndex(-1, animated: true)
+            })
+        }
+        
         private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
             
             var pickerStr:String = ""
@@ -486,6 +506,12 @@
             hiddenCells.insert(5)
             tableView.beginUpdates()
             tableView.endUpdates()
+            
+            //Validate field
+            if(self.regionSelectionState == nil || self.regionSelectionState?.count <= 0) {
+                alertInvalidRegionSelection()
+                return
+            }
             
             //present the view modally (hide the tabbar)
             performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
