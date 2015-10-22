@@ -122,10 +122,11 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             }
             
             // Region
+            var areaConditionStr: [String] = [String]()
+            
             if let selectedCity = area {
                 
-                var areaConditionStr: [String] = [String]()
-                
+                //Handle Cities first
                 let allCities = selectedCity.filter({ (city: City) -> Bool in
                     return city.regions.contains(Region.allRegions)
                 })
@@ -138,23 +139,33 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     areaConditionStr.append("\(SolrConst.Filed.CITY):(\(allCitiesStr))")
                 }
                 
-                
-                let allRegions = selectedCity.filter({ (city: City) -> Bool in
+                //Handle Regions
+                let cityWithRegions = selectedCity.filter({ (city: City) -> Bool in
                     return !city.regions.contains(Region.allRegions)
                 })
                 
+                var allRegions:[String] = [String]()
+                
+                for city in cityWithRegions {
+                    allRegions.appendContentsOf(
+                        city.regions.map({ (region) -> String in
+                            return "\(region.code)"
+                        })
+                    )
+                }
+                
                 if(allRegions.count > 0) {
-                    let allRegionsStr = allRegions.map({ (region) -> String in
-                        return "\(region.code)"
-                    }).joinWithSeparator(" OR ")
-                    
+                    let allRegionsStr = allRegions.joinWithSeparator(" OR ")
                     areaConditionStr.append("\(SolrConst.Filed.REGION):(\(allRegionsStr))")
                 }
                 
-                queryitems.append( NSURLQueryItem(
-                    name: SolrConst.Query.FILTER_QUERY,
-                    value:areaConditionStr.joinWithSeparator(" OR "))
-                )
+                //Compose whole area condition string
+                if (areaConditionStr.count > 0) {
+                    queryitems.append( NSURLQueryItem(
+                        name: SolrConst.Query.FILTER_QUERY,
+                        value:areaConditionStr.joinWithSeparator(" OR "))
+                    )
+                }
             }
             
             // Purpose Type
