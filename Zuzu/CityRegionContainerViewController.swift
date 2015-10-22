@@ -55,7 +55,7 @@ class CityRegionContainerViewController: UIViewController {
                     ///Init Region Table data
                     var regionList:[Region] = [Region]()
                     
-                    regionList.append(RegionTableViewController.allRegion)///All region
+                    regionList.append(Region.allRegions)///All region
                     
                     for region in regions {
                         if let regionDic = region.dictionary {

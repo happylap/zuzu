@@ -12,7 +12,6 @@ import SwiftyJSON
 class RegionTableViewController: UITableViewController {
     
     static let numberOfSections = 1
-    static let allRegion = Region(code: 0, name: "全區")
     
     var citySelected:Int = 100 //Default value
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
@@ -43,7 +42,7 @@ class RegionTableViewController: UITableViewController {
                 for (index, status) in selectionStatus.enumerate() {
                     if(status) {
                         if(index == 0) { ///"All Region"
-                            selectedRegions.append(RegionTableViewController.allRegion)
+                            selectedRegions.append(Region.allRegions)
                         } else{ ///Not "All Region" items
                             selectedRegions.append(city.regions[index])
                         }

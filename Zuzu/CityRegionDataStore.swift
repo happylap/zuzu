@@ -9,6 +9,7 @@
 import Foundation
 
 class Region: NSObject, NSCoding {
+    static let allRegions = Region(code: 0, name: "全區")
     var code:Int
     var name:String
     

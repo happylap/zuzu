@@ -102,7 +102,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     }
     
     func searchByCriteria(keyword: String?,
-        region: [City]?,
+        area: [City]?,
         price: (Int, Int)?,
         size: (Int, Int)?,
         types: [Int]?,
@@ -112,8 +112,6 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             
             var queryitems:[NSURLQueryItem] = []
             var mainQueryStr:String = "*:*"
-            var cityQueryStr:String?
-            var regionQueryStr:String?
             
             // Add query string
             if let keywordStr = keyword{
@@ -124,53 +122,42 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             }
             
             // Region
-            var selectedRegion:[Region] = [Region]()
-            
-            if let selectedCity = region {
+            if let selectedCity = area {
                 
-                for (cid, city) in selectedCity.enumerate() {
+                var areaConditionStr: [String] = [String]()
+                
+                let allCities = selectedCity.filter({ (city: City) -> Bool in
+                    return city.regions.contains(Region.allRegions)
+                })
+                
+                if(allCities.count > 0) {
+                    let allCitiesStr = allCities.map({ (city) -> String in
+                        return "\(city.code)"
+                    }).joinWithSeparator(" OR ")
                     
-                    let regions = city.regions
-                    
-                    if(cid == 0) {
-                        cityQueryStr = "  \(SolrConst.Filed.CITY):(\(city.code)"
-                    } else {
-                        cityQueryStr! += " OR \(city.code)"
-                    }
-                    
-                    selectedRegion.appendContentsOf(regions)
-                    
-                    if(cid == selectedCity.count - 1) {
-                        cityQueryStr? += " )"
-                    }
+                    areaConditionStr.append("\(SolrConst.Filed.CITY):(\(allCitiesStr))")
                 }
                 
-                for (rid, region) in selectedRegion.enumerate() {
+                
+                let allRegions = selectedCity.filter({ (city: City) -> Bool in
+                    return !city.regions.contains(Region.allRegions)
+                })
+                
+                if(allRegions.count > 0) {
+                    let allRegionsStr = allRegions.map({ (region) -> String in
+                        return "\(region.code)"
+                    }).joinWithSeparator(" OR ")
                     
-                    if(rid == 0) {
-                        regionQueryStr = " \(SolrConst.Filed.REGION):(\(region.code)"
-                    } else {
-                        regionQueryStr! += " OR \(region.code)"
-                    }
-                    if(rid == selectedRegion.count - 1) {
-                        regionQueryStr? += " )"
-                    }
+                    areaConditionStr.append("\(SolrConst.Filed.REGION):(\(allRegionsStr))")
                 }
                 
-                var result = [String]()
-                
-                if(cityQueryStr != nil) {
-                    result.append("\(cityQueryStr!)")
-                }
-                
-                if(regionQueryStr != nil) {
-                    result.append("\(regionQueryStr!)")
-                }
-                
-                queryitems.append(
-                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value:result.joinWithSeparator(" OR ")))
+                queryitems.append( NSURLQueryItem(
+                    name: SolrConst.Query.FILTER_QUERY,
+                    value:areaConditionStr.joinWithSeparator(" OR "))
+                )
             }
             
+            // Purpose Type
             if let typeList = types {
                 
                 for (index, type) in typeList.enumerate() {
@@ -189,6 +176,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
             
+            // Price
             if let priceRange = price {
                 
                 var priceFrom = "\(priceRange.0)"
@@ -204,6 +192,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.PRICE):[\(priceFrom) TO \(priceTo)]"))
             }
             
+            // Size
             if let sizeRange = size {
                 
                 var sizeFrom = "\(sizeRange.0)"
@@ -232,64 +221,64 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     private func performSearch(urlComp: NSURLComponents,
         handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void){
             
-        var houseList = [HouseItem]()
-        
-        if let fullURL = urlComp.URL {
+            var houseList = [HouseItem]()
             
-            print("fullURL: \(fullURL.absoluteString)")
-            
-            let request = NSMutableURLRequest(URL: fullURL)
-            request.timeoutInterval = HouseDataRequester.requestTimeout
-            
-            request.HTTPMethod = "GET"
-            
-            NSURLConnection.sendAsynchronousRequest(
-                request, queue: NSOperationQueue.mainQueue()){
-                    (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
-                    do {
-                        if(error != nil){
-                            NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
-                            handler(totalNum: 0, result: houseList, error: error)
-                            return
-                        }
-                        
-                        if(data == nil) {
-                            NSLog("HTTP no data")
-                            return
-                        }
-                        
-                        let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
-                        
-                        //NSLog("\(jsonResult)")
-                        
-                        if let response = jsonResult["response"] as? Dictionary<String, AnyObject> {
-                            let itemList = response["docs"] as! Array<Dictionary<String, AnyObject>>
-                            
-                            self.numOfRecord = response["numFound"] as? Int
-                            
-                            for house in itemList {
-                                let id = house["id"]  as! String
-                                let title = house["title"] as! String
-                                let price = house["price"] as? Int ?? 0
-                                let desc = (house["desc"]  as? String ?? "")
-                                let imgList = house["img"] as? [String]
-                                
-                                NSLog("houseItem: \(id)")
-                                
-                                houseList.append(HouseItem(id: id, title: title, price: price, desc: desc, imgList: imgList))
+            if let fullURL = urlComp.URL {
+                
+                print("fullURL: \(fullURL.absoluteString)")
+                
+                let request = NSMutableURLRequest(URL: fullURL)
+                request.timeoutInterval = HouseDataRequester.requestTimeout
+                
+                request.HTTPMethod = "GET"
+                
+                NSURLConnection.sendAsynchronousRequest(
+                    request, queue: NSOperationQueue.mainQueue()){
+                        (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
+                        do {
+                            if(error != nil){
+                                NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
+                                handler(totalNum: 0, result: houseList, error: error)
+                                return
                             }
                             
-                            handler(totalNum: self.numOfRecord, result: houseList, error: nil)
-                        } else {
-                            assert(false, "Solr response error:\n \(jsonResult)")
+                            if(data == nil) {
+                                NSLog("HTTP no data")
+                                return
+                            }
+                            
+                            let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
+                            
+                            //NSLog("\(jsonResult)")
+                            
+                            if let response = jsonResult["response"] as? Dictionary<String, AnyObject> {
+                                let itemList = response["docs"] as! Array<Dictionary<String, AnyObject>>
+                                
+                                self.numOfRecord = response["numFound"] as? Int
+                                
+                                for house in itemList {
+                                    let id = house["id"]  as! String
+                                    let title = house["title"] as! String
+                                    let price = house["price"] as? Int ?? 0
+                                    let desc = (house["desc"]  as? String ?? "")
+                                    let imgList = house["img"] as? [String]
+                                    
+                                    NSLog("houseItem: \(id)")
+                                    
+                                    houseList.append(HouseItem(id: id, title: title, price: price, desc: desc, imgList: imgList))
+                                }
+                                
+                                handler(totalNum: self.numOfRecord, result: houseList, error: nil)
+                            } else {
+                                assert(false, "Solr response error:\n \(jsonResult)")
+                            }
+                            
+                        }catch let error as NSError{
+                            handler(totalNum: 0, result: houseList, error: error)
+                            NSLog("JSON parsing error = \(error)")
                         }
-                        
-                    }catch let error as NSError{
-                        handler(totalNum: 0, result: houseList, error: error)
-                        NSLog("JSON parsing error = \(error)")
-                    }
+                }
+                
             }
-            
-        }
     }
 }

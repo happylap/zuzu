@@ -109,8 +109,8 @@ extension CityPickerViewController: UIPickerViewDelegate {
                 if(numberOfSelection > 0) {
                     
                     if(numberOfSelection == 1) {
-                        if(selectedRegions[0] == RegionTableViewController.allRegion) {
-                            return ("\(cityRegions[row].name) (全區)")
+                        if(selectedRegions[0] == Region.allRegions) {
+                            return ("\(cityRegions[row].name) (\(Region.allRegions.name))")
                         }
                     }
                     

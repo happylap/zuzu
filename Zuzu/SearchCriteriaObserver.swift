@@ -52,7 +52,7 @@ class SearchCriteriaObserver:NSObject {
     func fetchNumberOfItems() {
         NSLog("Start fetchNumberOfItems!")
         
-        houseReq.searchByCriteria(currentCriteria.keyword, region: currentCriteria.region, price: currentCriteria.price, size: currentCriteria.size, types: currentCriteria.types, start: 0, row: 0) { (totalNum, result, error) -> Void in
+        houseReq.searchByCriteria(currentCriteria.keyword, area: currentCriteria.region, price: currentCriteria.price, size: currentCriteria.size, types: currentCriteria.types, start: 0, row: 0) { (totalNum, result, error) -> Void in
             NSLog("End fetchNumberOfItems = \(totalNum)")
             
             if(totalNum != nil && totalNum != 0) {
