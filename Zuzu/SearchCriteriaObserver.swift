@@ -42,7 +42,8 @@ class SearchCriteriaObserver:NSObject {
         
         houseReq.searchByCriteria(currentCriteria.keyword, region: currentCriteria.region, price: currentCriteria.price, size: currentCriteria.size, types: currentCriteria.types, start: 0, row: 0) { (totalNum, result, error) -> Void in
             NSLog("End fetchNumberOfItems = \(totalNum)")
-            if(totalNum != nil) {
+            
+            if(totalNum != nil && totalNum != 0) {
                 self.viewController.fastItemCountLabel.text = "立即觀看 \(totalNum!) 筆出租物件"
             } else {
                 self.viewController.fastItemCountLabel.text = nil
