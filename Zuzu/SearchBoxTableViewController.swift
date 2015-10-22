@@ -73,10 +73,14 @@
                         }
                         
                         cityRegionLabel.text = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
+                        
+                        stateObserver.onCriteriaChanged(self.toSearhCriteria())
+                    } else {
+                        self.fastItemCountLabel.text = nil
                     }
                 }
                 
-                stateObserver.onCriteriaChanged(self.toSearhCriteria())
+                
             }
         }
         
