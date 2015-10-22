@@ -37,6 +37,9 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
     func handleLoadCriteria(alertAction: UIAlertAction!) -> Void {
         if let criteria = self.criteriaToLoad {
             self.tableViewController.currentCriteria = criteria
+            
+            //Scroll to the top of the table to see the search item table fully
+            tableViewController.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
     }
     
@@ -66,6 +69,7 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
             return 0
         }
         
+        NSLog("Current table number \(searchData!.count)")
         return searchData!.count
     }
     
