@@ -39,7 +39,9 @@
             static let NOT_LIMITED_BUTTON_TAG = 99
         }
         
-        let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
+        let searchItemService : SearchItemService = SearchItemService.getInstance()
+        
+        //let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
         
         let cityRegionDataStore: CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
         
@@ -727,7 +729,7 @@
             
         }
         
-        var hiddenCells:Set = [3, 5]
+        var hiddenCells:Set<Int> = [3, 5]
         
         override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
             
@@ -823,17 +825,21 @@
                         
                         srtvc.searchCriteria = criteria
                         
-                        ///Save search history (How do we do optional binding with non-constant var?)
-                        var historyEntries = searchItemsDataStore.loadSearchItems()
+                        ///Save search history (works like a ring buffer, delete the oldest record if maxItemSize is exceeded)
                         
-                        if(historyEntries == nil) {
-                            historyEntries = [SearchItem]()
+                        if let historicalItems =  searchItemService.getSearchItemsByType(.HistoricalSearch) {
+                            
+                            if(historicalItems.count >= SearchItemService.maxItemSize) {
+                                let deleteIndex = historicalItems.endIndex - 1
+                                searchItemService.deleteSearchItem(deleteIndex, itemType: .HistoricalSearch)
+                            }
+                            
+                            do{
+                                try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .HistoricalSearch))
+                            } catch {
+                                NSLog("Fail to save search history")
+                            }
                         }
-                        
-                        historyEntries!.insert(SearchItem(criteria: criteria, type: .HistoricalSearch), atIndex: historyEntries!.startIndex)
-                        
-                        searchItemsDataStore.saveSearchItems(historyEntries!)
-                        
                     }
                 case ViewTransConst.showAreaSelector:
                     NSLog("showAreaSlector")

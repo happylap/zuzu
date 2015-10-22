@@ -41,7 +41,7 @@ class SearchResultTableViewController: UITableViewController {
     
     var debugTextStr: String = ""
     
-    private let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
+    private let searchItemService : SearchItemService = SearchItemService.getInstance()
     private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
     
     var searchCriteria: SearchCriteria?
@@ -55,23 +55,23 @@ class SearchResultTableViewController: UITableViewController {
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
         
         if let criteria = self.searchCriteria {
-            var items = searchItemsDataStore.loadSearchItems()
             
-            if(items == nil) {
-                items = [SearchItem]()
+            do{
+                try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .SavedSearch))
+                
+                alertSavingCurrentSearchSuccess()
+                
+            } catch {
+                
+                alertSavingCurrentSearchFailure()
             }
             
-            items!.insert(SearchItem(criteria: criteria, type: .SavedSearch), atIndex: items!.startIndex)
-            
-            searchItemsDataStore.saveSearchItems(items!)
-            
-            onCurrentSearchSaved()
         }
     }
     
     // MARK: - Private Utils
     
-    private func onCurrentSearchSaved() {
+    private func alertSavingCurrentSearchSuccess() {
             // Initialize Alert View
             
             let alertView = UIAlertView(
@@ -93,6 +93,30 @@ class SearchResultTableViewController: UITableViewController {
             dispatch_after(time, dispatch_get_main_queue(), {
                 alertView.dismissWithClickedButtonIndex(-1, animated: true)
             })
+    }
+    
+    private func alertSavingCurrentSearchFailure() {
+        // Initialize Alert View
+        
+        let alertView = UIAlertView(
+            title: "常用搜尋條件已滿",
+            message: "常用搜尋條件儲存已達上限，請先刪除不需要的條件",
+            delegate: self,
+            cancelButtonTitle: "知道了")
+        
+        // Configure Alert View
+        alertView.tag = 2
+        
+        
+        // Show Alert View
+        alertView.show()
+        
+        // Delay the dismissal by 5 seconds
+        let delay = 2.0 * Double(NSEC_PER_SEC)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue(), {
+            alertView.dismissWithClickedButtonIndex(-1, animated: true)
+        })
     }
     
     private func loadHouseListPage(pageNo: Int) {
