@@ -86,6 +86,10 @@
             
             didSet{
                 if(currentCriteria != nil) {
+                    ///Reset the prefetch house number label
+                    self.fastItemCountLabel.text = nil
+                    
+                    ///Load the criteria to the Search Box UI
                     self.loadFromSearchCriteria(currentCriteria!)
                 }
             }
