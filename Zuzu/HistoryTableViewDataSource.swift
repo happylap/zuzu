@@ -15,8 +15,6 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
     
     let searchItemService : SearchItemService = SearchItemService.getInstance()
     
-    //let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
-    
     var itemType: SearchType = .SavedSearch {
         
         didSet {

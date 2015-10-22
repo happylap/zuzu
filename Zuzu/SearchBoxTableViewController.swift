@@ -44,8 +44,6 @@
         
         let searchItemService : SearchItemService = SearchItemService.getInstance()
         
-        //let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
-        
         let cityRegionDataStore: CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
         
         lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
