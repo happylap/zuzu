@@ -114,16 +114,14 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
                 "Impossible to be inside this deletion delegate function, if there is no search item")
             
             if(self.searchData != nil) {
-                
+
                 let success = searchItemService.deleteSearchItem(indexPath.row, itemType: self.itemType)
-                
+
                 if(success) {
                     ///Reload from storage
                     self.searchData = searchItemService.getSearchItemsByType(self.itemType)
-                    
-                    tableView.beginUpdates()
+
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                    tableView.endUpdates()
                 }
             }
         }
