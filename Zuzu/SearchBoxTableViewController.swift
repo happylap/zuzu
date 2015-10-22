@@ -847,6 +847,7 @@
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
             NSLog("viewDidAppear: %@", self)
+            self.stateObserver.start()
         }
         
         override func viewDidDisappear(animated: Bool) {
