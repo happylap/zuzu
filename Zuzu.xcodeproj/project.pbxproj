@@ -30,6 +30,7 @@
 		2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */; };
 		2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */; };
 		2F6155591BD888660024145E /* SearchItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6155581BD888660024145E /* SearchItemService.swift */; };
+		2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */; };
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
@@ -88,6 +89,7 @@
 		2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CriteriaConst.swift; sourceTree = "<group>"; };
 		2F6155581BD888660024145E /* SearchItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemService.swift; sourceTree = "<group>"; };
+		2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaObserver.swift; sourceTree = "<group>"; };
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */,
 				2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */,
 				2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */,
+				2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
 				2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */,
+				2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */,
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,

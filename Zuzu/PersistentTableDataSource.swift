@@ -286,7 +286,7 @@ public class PersistentTableDataSource {
         
         requester.searchByCriteria(criteria!.keyword, region:criteria?.region, price: criteria!.price,
             size: criteria!.size, types: criteria!.types,
-            start: start, row: row) { (newHouseItems: [HouseItem], error: NSError?) -> Void in
+            start: start, row: row) { (totalNum: Int?, newHouseItems: [HouseItem], error: NSError?) -> Void in
                 
                 self.appendDataForPage(pageNo, estimatedPageSize: requester.numOfRecord, data: newHouseItems)
                 

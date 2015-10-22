@@ -39,6 +39,9 @@
             static let NOT_LIMITED_BUTTON_TAG = 99
         }
         
+        // Trigger the fetching of total number of items that meet the current criteria
+        lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
+        
         let searchItemService : SearchItemService = SearchItemService.getInstance()
         
         //let searchItemsDataStore : SearchHistoryDataStore = UserDefaultsSearchHistoryDataStore.getInstance()
@@ -74,6 +77,8 @@
                         cityRegionLabel.text = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
                     }
                 }
+                
+                stateObserver.onCriteriaChanged(self.toSearhCriteria())
             }
         }
         
@@ -112,6 +117,7 @@
             }
         }
         
+        @IBOutlet weak var fastItemCountLabel: UILabel!
         @IBOutlet weak var cityRegionLabel: UILabel!
         @IBOutlet weak var sizeLabel: UILabel!
         @IBOutlet weak var priceLabel: UILabel!
@@ -463,6 +469,8 @@
                     && toogleButton.getToggleState()==true) {
                         selectAllButton?.setToggleState(false)
                 }
+                
+                stateObserver.onCriteriaChanged(self.toSearhCriteria())
             }
         }
         
@@ -710,6 +718,9 @@
             }
             
             pickerView.reloadAllComponents()
+            
+            
+            stateObserver.onCriteriaChanged(self.toSearhCriteria())
         }
         
         // MARK: - Table Delegate

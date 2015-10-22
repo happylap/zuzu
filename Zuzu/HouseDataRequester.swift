@@ -81,10 +81,11 @@ class HouseItem:NSObject, NSCoding {
 
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
-    let urlComp = NSURLComponents()
-    var numOfRecord: Int?
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
+    
+    let urlComp = NSURLComponents()
+    var numOfRecord: Int?
     
     public static func getInstance() -> HouseDataRequester{
         return instance
@@ -107,7 +108,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         types: [Int]?,
         start: Int,
         row: Int,
-        handler: ([HouseItem], NSError?) -> Void) {
+        handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void) {
             
             var queryitems:[NSURLQueryItem] = []
             var mainQueryStr:String = "*:*"
@@ -228,7 +229,9 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             performSearch(urlComp, handler: handler)
     }
     
-    private func performSearch(urlComp: NSURLComponents, handler: ([HouseItem], NSError?) -> Void){
+    private func performSearch(urlComp: NSURLComponents,
+        handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void){
+            
         var houseList = [HouseItem]()
         
         if let fullURL = urlComp.URL {
@@ -246,7 +249,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     do {
                         if(error != nil){
                             NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
-                            handler(houseList, error)
+                            handler(totalNum: 0, result: houseList, error: error)
                             return
                         }
                         
@@ -276,13 +279,13 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                 houseList.append(HouseItem(id: id, title: title, price: price, desc: desc, imgList: imgList))
                             }
                             
-                            handler(houseList, nil)
+                            handler(totalNum: self.numOfRecord, result: houseList, error: nil)
                         } else {
                             assert(false, "Solr response error:\n \(jsonResult)")
                         }
                         
                     }catch let error as NSError{
-                        handler(houseList, error)
+                        handler(totalNum: 0, result: houseList, error: error)
                         NSLog("JSON parsing error = \(error)")
                     }
             }

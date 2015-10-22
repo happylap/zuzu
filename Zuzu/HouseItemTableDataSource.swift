@@ -158,9 +158,9 @@ public class HouseItemTableDataSource {
         
         requester.searchByCriteria(criteria!.keyword,region: criteria?.region, price: criteria!.price,
             size: criteria!.size, types: criteria!.types,
-            start: start, row: row) { (newHouseItems: [HouseItem], error: NSError?) -> Void in
+            start: start, row: row) { (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void in
                 
-                self.appendDataForPage(pageNo, data: newHouseItems)
+                self.appendDataForPage(pageNo, data: result)
                 
                 //Callback to table
                 self.onDataLoaded!(dataSource: self, pageNo: pageNo, error: error)

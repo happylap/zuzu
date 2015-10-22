@@ -341,20 +341,28 @@
                                                         <action selector="onSegmentClicked:" destination="avK-Pq-NJf" eventType="valueChanged" id="dBc-xc-e17"/>
                                                     </connections>
                                                 </segmentedControl>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="立即觀看108筆出租物件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyz-ye-gDa">
-                                                    <rect key="frame" x="209" y="8" width="182" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyz-ye-gDa">
+                                                    <rect key="frame" x="0.0" y="8" width="600" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="182" id="SPd-Ys-Sy3"/>
+                                                        <constraint firstAttribute="width" constant="182" id="zxK-fX-OgZ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="SPd-Ys-Sy3"/>
+                                                            <exclude reference="zxK-fX-OgZ"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="F2v-MB-Dla" firstAttribute="leading" secondItem="3MW-xc-DJE" secondAttribute="leadingMargin" constant="10" id="4vt-Se-eYb"/>
                                                 <constraint firstItem="e8W-AW-LWF" firstAttribute="width" secondItem="3MW-xc-DJE" secondAttribute="width" multiplier="1:1.5" id="Gyu-7b-aSu"/>
+                                                <constraint firstItem="xyz-ye-gDa" firstAttribute="width" secondItem="3MW-xc-DJE" secondAttribute="width" id="box-0d-ITY"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="F2v-MB-Dla" secondAttribute="bottom" id="fiW-o3-hli"/>
                                                 <constraint firstItem="F2v-MB-Dla" firstAttribute="leading" secondItem="3MW-xc-DJE" secondAttribute="leadingMargin" constant="12" id="ger-a7-bsS"/>
                                                 <constraint firstItem="xyz-ye-gDa" firstAttribute="top" secondItem="3MW-xc-DJE" secondAttribute="topMargin" id="ilp-Sd-g3D"/>
@@ -457,6 +465,7 @@
                     <size key="freeformSize" width="600" height="1400"/>
                     <connections>
                         <outlet property="cityRegionLabel" destination="FCR-lF-Oap" id="B8M-A6-p4O"/>
+                        <outlet property="fastItemCountLabel" destination="xyz-ye-gDa" id="mUv-vQ-Zh8"/>
                         <outlet property="priceLabel" destination="JtX-7c-kdz" id="6LR-6F-Yln"/>
                         <outlet property="pricePicker" destination="x5j-6v-vLD" id="SE4-pj-mX3"/>
                         <outlet property="searchBar" destination="1hN-63-3Vs" id="BQk-5d-Yhw"/>
