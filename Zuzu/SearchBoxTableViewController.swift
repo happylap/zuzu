@@ -326,6 +326,9 @@
             pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
             pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
             
+            //Init Price Picker Upper Bound display range
+            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
+            
             priceLabel.text =
                 pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
             
@@ -351,6 +354,9 @@
             
             sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
             sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
+            
+            //Init Price Picker Upper Bound display range
+            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
             
             sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
             

@@ -37,6 +37,9 @@ class SearchCriteriaObserver:NSObject {
         if(!enabled) {
             return
         }
+        
+        NSLog("onCriteriaChanged")
+        
         currentCriteria = criteria
         
         ///Reset the timer for query remote item numbers
