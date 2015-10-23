@@ -7,6 +7,7 @@
     //
     
     import UIKit
+    import SwiftyJSON
     
     
     class ToggleButtonListenr: ToggleStateListenr {
@@ -27,8 +28,7 @@
         }
     }
     
-    class SearchBoxTableViewController: UITableViewController, UISearchBarDelegate,
-    UIPickerViewDelegate, UIPickerViewDataSource {
+    class SearchBoxTableViewController: UITableViewController {
         
         struct ViewTransConst {
             static let showSearchResult:String = "showSearchResult"
@@ -39,6 +39,21 @@
             static let NOT_LIMITED_BUTTON_TAG = 99
         }
         
+        // Price & Size Picker Vars
+        struct PickerConst {
+            static let anyLower:(label:String, value:Int) = ("不限",CriteriaConst.Bound.LOWER_ANY)
+            static let anyUpper:(label:String, value:Int) = ("不限",CriteriaConst.Bound.UPPER_ANY)
+            static let upperBoundStartZero = 0
+            
+            static let lowerComponentIndex = 0
+            static let upperComponentIndex = 1
+        }
+        
+        var sizeUpperRange:Range<Int>?
+        var priceUpperRange:Range<Int>?
+        let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("sizeRange")
+        let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("priceRange")
+
         // Trigger the fetching of total number of items that meet the current criteria
         lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
         
@@ -527,238 +542,6 @@
             navigationController?.popToRootViewControllerAnimated(true)
         }
         
-        // MARK: - UISearchBarDelegate
-        
-        func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-            NSLog("searchBarSearchButtonClicked: %@", self)
-            searchBar.endEditing(true)
-        }
-        
-        // MARK: - Picker Data Source
-        struct PickerConst {
-            static let anyLower:(label:String, value:Int) = ("不限",CriteriaConst.Bound.LOWER_ANY)
-            static let anyUpper:(label:String, value:Int) = ("不限",CriteriaConst.Bound.UPPER_ANY)
-            static let upperBoundStartZero = 0
-            
-            static let lowerComponentIndex = 0
-            static let upperComponentIndex = 1
-        }
-        
-        var sizeUpperRange:Range<Int>?
-        var priceUpperRange:Range<Int>?
-        
-        //Consider removing lable. We can genererate any kind of String when needed...
-        let sizeItems:[[(label:String, value:Int)]] =
-        [
-            [("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
-            ,
-            [("10",10), ("20",20), ("30",30), ("40",40), ("50",50)]
-        ]
-        
-        let priceItems:[[(label:String, value:Int)]] =
-        [
-            [("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
-            ,
-            [("5000",5000), ("10000",10000), ("15000",15000), ("20000",20000), ("25000",25000), ("30000",30000), ("35000",35000), ("40000",40000)]
-        ]
-        
-        func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-            
-            switch(pickerView) {
-            case sizePicker:
-                return sizeItems.count
-            case pricePicker:
-                return priceItems.count
-            default:
-                return 0
-            }
-        }
-        
-        func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-            
-            if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
-                
-                return rowItem.label
-            } else {
-                return ""
-            }
-        }
-        
-        func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            
-            var targetItems:[[(label:String, value:Int)]]
-            var targetUpperRange:Range<Int>?
-            
-            switch(pickerView) {
-            case sizePicker:
-                targetItems = sizeItems
-                targetUpperRange = sizeUpperRange
-                
-            case pricePicker:
-                targetItems = priceItems
-                targetUpperRange = priceUpperRange
-            default:
-                return 0
-            }
-            
-            let numOfItemsWithAnyValue = targetItems[component].count + 1
-            
-            if(component == targetItems.endIndex - 1) {
-                
-                if targetUpperRange == nil {
-                    return 1 //Only Any Value exisy
-                }
-                
-                return numOfItemsWithAnyValue - targetUpperRange!.startIndex
-            }
-            
-            return numOfItemsWithAnyValue
-        }
-        
-        private func getUpperBoundRangeForPicker(pickerView: UIPickerView, items: [[(label:String, value:Int)]]) -> Range<Int>?{
-            
-            let numOfComponents = pickerView.numberOfComponents
-            
-            assert(numOfComponents == 2, "Cannot process pickers with components more or less than two")
-            assert(numOfComponents == items.count, "The number of components do not match")
-            
-            if(numOfComponents == 2) {
-                let from = items.startIndex, to = items.endIndex - 1
-                
-                let selectedRowInlowerBound = pickerView.selectedRowInComponent(from)
-                
-                if let selectedLowerBound = getItemForPicker(pickerView, component: from, row: selectedRowInlowerBound) {
-                    
-                    ///Do not need to update Upper Bound values if there is not limit on Lower Bound
-                    if(selectedLowerBound.value == PickerConst.anyLower.value) {
-                        return (PickerConst.upperBoundStartZero...items[to].count - 1)
-                    }
-                    
-                    var hasLargerValue:Bool = false
-                    
-                    for (index, item) in items[to].enumerate() {
-                        if(item.value > selectedLowerBound.value) {
-                            hasLargerValue = true
-                            return (index...items[to].count - 1)
-                        }
-                    }
-                    
-                    if(!hasLargerValue) {
-                        return nil
-                    }
-                    
-                }
-            }
-            
-            return nil
-        }
-        
-        ///Consider encapsulating items with any value in a class...
-        private func getItemForPicker(pickerView: UIPickerView, component: Int, row: Int) ->  (label:String, value:Int)? {
-            
-            ///1st row is always "any value"
-            if(row == 0){
-                if(component == PickerConst.lowerComponentIndex) {
-                    return PickerConst.anyLower
-                }
-                if(component == PickerConst.upperComponentIndex) {
-                    return PickerConst.anyUpper
-                }
-            }
-            
-            var targetItems:[[(label:String, value:Int)]]
-            var targetUpperRange:Range<Int>?
-            
-            switch(pickerView) {
-            case sizePicker:
-                targetItems = sizeItems
-                targetUpperRange = sizeUpperRange
-            case pricePicker:
-                targetItems = priceItems
-                targetUpperRange = priceUpperRange
-            default:
-                assert(false,"Invalid picker view")
-                return nil
-            }
-            
-            let idxWithoutAnyValue = row - 1
-            
-            ///Upper values are limited to valus greater than the selected lower value
-            if(component == 1) {
-                if (targetUpperRange == nil) {
-                    assert(false,"There should be no item except for any value")
-                    return nil
-                }
-                return targetItems[component][idxWithoutAnyValue + targetUpperRange!.startIndex]
-            }
-            
-            return targetItems[component][idxWithoutAnyValue]
-        }
-        
-        func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            
-            var targetItems:[[(label:String, value:Int)]]
-            var targetLabel:UILabel
-            
-            switch(pickerView) {
-            case sizePicker:
-                targetItems = sizeItems
-                targetLabel = sizeLabel
-            case pricePicker:
-                targetItems = priceItems
-                targetLabel = priceLabel
-            default:
-                return
-            }
-            
-            var pickerFrom:(component:Int, row:Int) = (0,0)
-            var pickerTo:(component:Int, row:Int) = (0,0)
-            
-            if(component == PickerConst.lowerComponentIndex) {
-                let fromItemIdx = row
-                let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
-                
-                pickerFrom = (component, fromItemIdx)
-                pickerTo = ((targetItems.endIndex - 1), toItemIdx)
-                
-            }else if(component == PickerConst.upperComponentIndex) {
-                let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
-                let toItemIdx = row
-                
-                pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
-                pickerTo = (component: component, row: toItemIdx)
-                
-            }else {
-                assert(false, "Strange component index!")
-            }
-            
-            let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
-            let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
-            
-            if(fromTuple?.label == toTuple?.label) {
-                targetLabel.text = "\((fromTuple?.label)!)"
-            } else {
-                targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
-            }
-            
-            targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
-            
-            ///Try to refresh picker items
-            switch(pickerView) {
-            case sizePicker:
-                sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
-            case pricePicker:
-                priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
-            default:
-                return
-            }
-            
-            pickerView.reloadAllComponents()
-            
-            
-            stateObserver.onCriteriaChanged(self.toSearhCriteria())
-        }
-        
         // MARK: - Table Delegate
         
         override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -908,4 +691,248 @@
             }
         }
         
+    }
+    
+    
+    extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+        
+        // MARK: - Private Utils
+        
+        private static func loadPickerData(resourceName: String) ->  [[(label:String, value:Int)]]{
+            
+            var resultItems = Array(count: 2, repeatedValue: [(label: String, value: Int)]() )
+            
+            if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
+                
+                ///Load all city regions from json
+                do {
+                    let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                    let json = JSON(data: jsonData)
+                    let items = json[resourceName].arrayValue
+                    
+                    NSLog("\(resourceName) = %d", items.count)
+                    
+                    for itemJsonObj in items {
+                        let label = itemJsonObj["label"].stringValue
+                        let value = itemJsonObj["value"].intValue
+                        
+                        resultItems[0].append( (label: label, value: value) )
+                        resultItems[1].append( (label: label, value: value) )
+                    }
+                    
+                } catch let error as NSError{
+                    
+                    NSLog("Cannot load area json file %@", error)
+                    
+                }
+            }
+            
+            return resultItems
+        }
+        
+        private func getUpperBoundRangeForPicker(pickerView: UIPickerView, items: [[(label:String, value:Int)]]) -> Range<Int>?{
+            
+            let numOfComponents = pickerView.numberOfComponents
+            
+            assert(numOfComponents == 2, "Cannot process pickers with components more or less than two")
+            assert(numOfComponents == items.count, "The number of components do not match")
+            
+            if(numOfComponents == 2) {
+                let from = items.startIndex, to = items.endIndex - 1
+                
+                let selectedRowInlowerBound = pickerView.selectedRowInComponent(from)
+                
+                if let selectedLowerBound = getItemForPicker(pickerView, component: from, row: selectedRowInlowerBound) {
+                    
+                    ///Do not need to update Upper Bound values if there is not limit on Lower Bound
+                    if(selectedLowerBound.value == PickerConst.anyLower.value) {
+                        return (PickerConst.upperBoundStartZero...items[to].count - 1)
+                    }
+                    
+                    var hasLargerValue:Bool = false
+                    
+                    for (index, item) in items[to].enumerate() {
+                        if(item.value > selectedLowerBound.value) {
+                            hasLargerValue = true
+                            return (index...items[to].count - 1)
+                        }
+                    }
+                    
+                    if(!hasLargerValue) {
+                        return nil
+                    }
+                }
+            }
+            
+            return nil
+        }
+        
+        ///Consider encapsulating items with any value in a class...
+        private func getItemForPicker(pickerView: UIPickerView, component: Int, row: Int) ->  (label:String, value:Int)? {
+            
+            ///1st row is always "any value"
+            if(row == 0){
+                if(component == PickerConst.lowerComponentIndex) {
+                    return PickerConst.anyLower
+                }
+                if(component == PickerConst.upperComponentIndex) {
+                    return PickerConst.anyUpper
+                }
+            }
+            
+            var targetItems:[[(label:String, value:Int)]]
+            var targetUpperRange:Range<Int>?
+            
+            switch(pickerView) {
+            case sizePicker:
+                targetItems = sizeItems
+                targetUpperRange = sizeUpperRange
+            case pricePicker:
+                targetItems = priceItems
+                targetUpperRange = priceUpperRange
+            default:
+                assert(false,"Invalid picker view")
+                return nil
+            }
+            
+            let idxWithoutAnyValue = row - 1
+            
+            ///Upper values are limited to valus greater than the selected lower value
+            if(component == 1) {
+                if (targetUpperRange == nil) {
+                    assert(false,"There should be no item except for any value")
+                    return nil
+                }
+                return targetItems[component][idxWithoutAnyValue + targetUpperRange!.startIndex]
+            }
+            
+            return targetItems[component][idxWithoutAnyValue]
+        }
+        
+        // MARK: - Picker Data Source & Delegate
+        func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+            
+            switch(pickerView) {
+            case sizePicker:
+                return sizeItems.count
+            case pricePicker:
+                return priceItems.count
+            default:
+                return 0
+            }
+        }
+        
+        func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+            
+            if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
+                
+                return rowItem.label
+            } else {
+                return ""
+            }
+        }
+        
+        func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            
+            var targetItems:[[(label:String, value:Int)]]
+            var targetUpperRange:Range<Int>?
+            
+            switch(pickerView) {
+            case sizePicker:
+                targetItems = sizeItems
+                targetUpperRange = sizeUpperRange
+                
+            case pricePicker:
+                targetItems = priceItems
+                targetUpperRange = priceUpperRange
+            default:
+                return 0
+            }
+            
+            let numOfItemsWithAnyValue = targetItems[component].count + 1
+            
+            if(component == targetItems.endIndex - 1) {
+                
+                if targetUpperRange == nil {
+                    return 1 //Only Any Value exisy
+                }
+                
+                return numOfItemsWithAnyValue - targetUpperRange!.startIndex
+            }
+            
+            return numOfItemsWithAnyValue
+        }
+        
+        func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+            
+            var targetItems:[[(label:String, value:Int)]]
+            var targetLabel:UILabel
+            
+            switch(pickerView) {
+            case sizePicker:
+                targetItems = sizeItems
+                targetLabel = sizeLabel
+            case pricePicker:
+                targetItems = priceItems
+                targetLabel = priceLabel
+            default:
+                return
+            }
+            
+            var pickerFrom:(component:Int, row:Int) = (0,0)
+            var pickerTo:(component:Int, row:Int) = (0,0)
+            
+            if(component == PickerConst.lowerComponentIndex) {
+                let fromItemIdx = row
+                let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
+                
+                pickerFrom = (component, fromItemIdx)
+                pickerTo = ((targetItems.endIndex - 1), toItemIdx)
+                
+            }else if(component == PickerConst.upperComponentIndex) {
+                let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
+                let toItemIdx = row
+                
+                pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
+                pickerTo = (component: component, row: toItemIdx)
+                
+            }else {
+                assert(false, "Strange component index!")
+            }
+            
+            let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
+            let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
+            
+            if(fromTuple?.label == toTuple?.label) {
+                targetLabel.text = "\((fromTuple?.label)!)"
+            } else {
+                targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
+            }
+            
+            targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
+            
+            ///Try to refresh picker items
+            switch(pickerView) {
+            case sizePicker:
+                sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+            case pricePicker:
+                priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+            default:
+                return
+            }
+            
+            pickerView.reloadAllComponents()
+            
+            
+            stateObserver.onCriteriaChanged(self.toSearhCriteria())
+        }
+    }
+    
+    extension SearchBoxTableViewController: UISearchBarDelegate {
+        
+        // MARK: - UISearchBarDelegate
+        func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+            NSLog("searchBarSearchButtonClicked: %@", self)
+            searchBar.endEditing(true)
+        }
     }
