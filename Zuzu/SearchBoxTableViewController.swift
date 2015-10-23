@@ -323,14 +323,14 @@
             
             if let priceRange = criteria.price {
                 
-                for (index, price) in priceItems[0].enumerate() {
+                for (index, price) in priceItems[PickerConst.lowerComponentIndex].enumerate() {
                     if(priceRange.0 == price.value) {
                         
                         pickerPriceFrom = (0, index + 1)
                     }
                 }
                 
-                for (index, price) in priceItems[1].enumerate() {
+                for (index, price) in priceItems[PickerConst.upperComponentIndex].enumerate() {
                     if(priceRange.1 == price.value) {
                         
                         pickerPriceTo = (1, index + 1)
@@ -354,13 +354,13 @@
             
             if let sizeRange = criteria.size {
                 
-                for (index, size) in sizeItems[0].enumerate() {
+                for (index, size) in sizeItems[PickerConst.lowerComponentIndex].enumerate() {
                     if(sizeRange.0 == size.value) {
                         pickerSizeFrom = (0, index + 1)
                     }
                 }
                 
-                for (index, size) in sizeItems[1].enumerate() {
+                for (index, size) in sizeItems[PickerConst.upperComponentIndex].enumerate() {
                     if(sizeRange.1 == size.value) {
                         pickerSizeTo = (1, index + 1)
                     }
@@ -443,9 +443,9 @@
             
             ///Size Range
             let sizeMinRow =
-            sizePicker.selectedRowInComponent(sizeItems.startIndex)
+            sizePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
             let sizeMaxRow =
-            sizePicker.selectedRowInComponent(sizeItems.endIndex - 1)
+            sizePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
             
             
             if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
