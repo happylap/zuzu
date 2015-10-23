@@ -11,6 +11,7 @@ import SwiftyJSON
 
 class RegionTableViewController: UITableViewController {
     
+    static let maxNumOfCitiesAllowed = 3
     static let numberOfSections = 1
     
     var citySelected:Int = 100 //Default value
@@ -18,11 +19,62 @@ class RegionTableViewController: UITableViewController {
     var cityRegions = [Int : City]()//City dictionary by city code
     
     // MARK: - Private Utils
+    
     private func configureRegionTable() {
         
         //Configure cell height
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    private func validateCityRegionSelection(cityRegionStatus: [Int:[Bool]], selectedCity: Int) -> Bool {
+        
+        var count = 0
+        var isCityAlreadySelected = false
+        
+        for cityCode in cityRegionStatus.keys {
+            
+            if let status = cityRegionStatus[cityCode] {
+                let selectionCountInCity =  status.reduce(0, combine: { (count, itemStatus) -> Int in
+                    if(itemStatus) {
+                        return count + 1
+                    } else {
+                        return count
+                    }
+                })
+                
+                if(selectionCountInCity > 0) {
+                    count++
+                    
+                    isCityAlreadySelected = (cityCode == selectedCity)
+                }
+            }
+            
+        }
+        
+        //Allow the user to select a new region only if:
+        // The total number of cities selected is still under maxNumOfCitiesAllowed
+        // Or the region the user tries to select now belongs to the current selected cities
+        
+        return (count < RegionTableViewController.maxNumOfCitiesAllowed) || (isCityAlreadySelected)
+    }
+    
+    private func alertMaxRegionSelection() {
+        // Initialize Alert View
+        
+        let alertView = UIAlertView(
+            title: "區域選擇已滿",
+            message: "搜尋條件最多只可以涵蓋三個城市的區域",
+            delegate: self,
+            cancelButtonTitle: "知道了")
+        
+        // Show Alert View
+        alertView.show()
+        
+        // Delay the dismissal
+        self.runOnMainThreadAfter(2.0) {
+            alertView.dismissWithClickedButtonIndex(-1, animated: true)
+        }
     }
     
     private func convertStatusToCity(cityCode: Int) -> City? {
@@ -83,6 +135,12 @@ class RegionTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let row = indexPath.row
+        
+        if(!validateCityRegionSelection(checkedRegions, selectedCity: citySelected)) {
+            NSLog("Max City Number")
+            alertMaxRegionSelection()
+            return
+        }
         
         if let statusForCity = checkedRegions[citySelected]{
             if(statusForCity[row]) {
