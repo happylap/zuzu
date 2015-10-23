@@ -32,9 +32,25 @@ class SearchCriteriaObserver:NSObject {
         enabled = true
     }
     
+    private func validateCriteria(criteria: SearchCriteria) -> Bool {
+        
+        NSLog("validateCriteria")
+        
+        if(criteria.region == nil || criteria.region!.count <= 0) {
+            return false
+        }
+        
+        return true
+    }
+    
     func onCriteriaChanged(criteria: SearchCriteria) {
         
-        if(!enabled) {
+        
+        if(!enabled ) {
+            return
+        }
+        
+        if(!validateCriteria(criteria) ) {
             return
         }
         
