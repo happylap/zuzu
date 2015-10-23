@@ -113,7 +113,11 @@ class SearchItem: NSObject, NSCoding {
                             continue
                         }
                         
-                        titleStr.append( "\(city.name) (\(city.regions.count))")
+                        if(city.regions.contains(Region.allRegions)) {
+                            titleStr.append( "\(city.name) (\(Region.allRegions.name))")
+                        } else {
+                            titleStr.append( "\(city.name) (\(city.regions.count))")
+                        }
                     }
                 }
             }
