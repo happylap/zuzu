@@ -32,6 +32,39 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
+    let textLayer = CATextLayer()
+    let textBackground = CAGradientLayer()
+    
+    private func addTitleToImage(title: String) {
+
+        ///Gradient layer
+        let gradientColors = [UIColor.blackColor().colorWithAlphaComponent(0.7).CGColor, UIColor.clearColor().CGColor]
+        let gradientLocations = [0.0, 0.3]
+        textBackground.frame = houseImg.bounds
+        textBackground.colors = gradientColors
+        textBackground.locations = gradientLocations
+        
+        houseImg.layer.addSublayer(textBackground)
+        
+        ///Text Layer
+        let textMargin = CGFloat(8.0)
+        let newOrigin = CGPoint(x: houseImg.bounds.origin.x + textMargin, y: houseImg.bounds.origin.y + textMargin)
+        textLayer.frame = CGRect(origin: newOrigin,
+            size: CGSize(width: houseImg.bounds.width - 2 * textMargin, height: houseImg.bounds.height))
+        
+        textLayer.string = title
+        textLayer.fontSize = 24.0
+        let fontName: CFStringRef = UIFont.boldSystemFontOfSize(20).fontName//"Noteworthy-Light"
+        textLayer.font = CTFontCreateWithName(fontName, 24.0, nil)
+        //textLayer.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2).CGColor
+        textLayer.foregroundColor = UIColor.whiteColor().CGColor
+        textLayer.wrapped = false
+        textLayer.alignmentMode = kCAAlignmentLeft
+        textLayer.contentsScale = UIScreen.mainScreen().scale
+        
+        houseImg.layer.addSublayer(textLayer)
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -54,7 +87,7 @@ class SearchResultTableViewCell: UITableViewCell {
         // load new information (if any)
         if let houseItem = self.houseItem
         {
-            houseTitle?.text =  "\(indexPath.row) : \(houseItem.title)"
+            //houseTitle?.text =  "\(houseItem.title)"
             
             houseDesc?.text = houseItem.desc
             housePrice?.text = String(houseItem.price)
@@ -73,6 +106,8 @@ class SearchResultTableViewCell: UITableViewCell {
                     }
                 }
             }
+            
+            self.addTitleToImage("\(houseItem.title)")
         }
     }
     
