@@ -53,7 +53,7 @@
         var priceUpperRange:Range<Int>?
         let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("sizeRange")
         let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("priceRange")
-
+        
         // Trigger the fetching of total number of items that meet the current criteria
         lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
         
@@ -279,8 +279,11 @@
             case 2: // Price Picker
                 picker = pricePicker
                 if(hiddenCells.contains(3)) {
-                    hiddenCells.remove(3) //Show 3
                     hiddenCells.insert(5) //Hide 5
+                    hiddenCells.remove(3) //Show 3
+                    
+                    priceUpperRange = getUpperBoundRangeForPicker(picker!, items: priceItems)
+                    picker?.reloadComponent(PickerConst.upperComponentIndex)
                 } else { //Hide
                     hiddenCells.insert(3)
                 }
@@ -288,8 +291,11 @@
             case 4: // Size Picker
                 picker = sizePicker
                 if(hiddenCells.contains(5)) {
-                    hiddenCells.remove(5) //Show 5
                     hiddenCells.insert(3) //Hide 3
+                    hiddenCells.remove(5) //Show 5
+                    
+                    sizeUpperRange = getUpperBoundRangeForPicker(picker!, items: sizeItems)
+                    picker?.reloadComponent(PickerConst.upperComponentIndex)
                 } else { //Hide
                     hiddenCells.insert(5)
                 }
@@ -863,66 +869,90 @@
             return numOfItemsWithAnyValue
         }
         
+        private func updatePickerSelectionLabel(
+            pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int, targetItems: [[(label: String, value: Int)]]) {
+                
+                var targetLabel:UILabel
+                
+                switch(pickerView) {
+                case sizePicker:
+                    targetLabel = sizeLabel
+                case pricePicker:
+                    targetLabel = priceLabel
+                default:
+                    return
+                }
+                
+                var pickerFrom:(component:Int, row:Int) = (0,0)
+                var pickerTo:(component:Int, row:Int) = (0,0)
+                
+                if(component == PickerConst.lowerComponentIndex) {
+                    let fromItemIdx = row
+                    let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
+                    
+                    pickerFrom = (component, fromItemIdx)
+                    pickerTo = ((targetItems.endIndex - 1), toItemIdx)
+                    
+                }else if(component == PickerConst.upperComponentIndex) {
+                    let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
+                    let toItemIdx = row
+                    
+                    pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
+                    pickerTo = (component: component, row: toItemIdx)
+                    
+                }else {
+                    assert(false, "Strange component index!")
+                }
+                
+                let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
+                let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
+                
+                if(fromTuple?.label == toTuple?.label) {
+                    targetLabel.text = "\((fromTuple?.label)!)"
+                } else {
+                    targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
+                }
+                
+                targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
+        }
+        
         func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             
+            
             var targetItems:[[(label:String, value:Int)]]
-            var targetLabel:UILabel
             
             switch(pickerView) {
             case sizePicker:
                 targetItems = sizeItems
-                targetLabel = sizeLabel
             case pricePicker:
                 targetItems = priceItems
-                targetLabel = priceLabel
             default:
                 return
             }
             
-            var pickerFrom:(component:Int, row:Int) = (0,0)
-            var pickerTo:(component:Int, row:Int) = (0,0)
-            
+            ///Try to refresh upper picker component items if lower component selection is changed
             if(component == PickerConst.lowerComponentIndex) {
-                let fromItemIdx = row
-                let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
                 
-                pickerFrom = (component, fromItemIdx)
-                pickerTo = ((targetItems.endIndex - 1), toItemIdx)
+                switch(pickerView) {
+                case sizePicker:
+                    sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+
+                case pricePicker:
+                    priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+
+                default:
+                    return
+                }
                 
-            }else if(component == PickerConst.upperComponentIndex) {
-                let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
-                let toItemIdx = row
+                //Reload for new index
+                pickerView.reloadComponent(PickerConst.upperComponentIndex)
                 
-                pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
-                pickerTo = (component: component, row: toItemIdx)
-                
-            }else {
-                assert(false, "Strange component index!")
+                //Select the first item if the original selected item is not in range (Just a temp & consistent solution)
+                pickerView.selectRow(targetItems.startIndex, inComponent: PickerConst.upperComponentIndex, animated: false)
             }
             
-            let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
-            let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
-            
-            if(fromTuple?.label == toTuple?.label) {
-                targetLabel.text = "\((fromTuple?.label)!)"
-            } else {
-                targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
-            }
-            
-            targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
-            
-            ///Try to refresh picker items
-            switch(pickerView) {
-            case sizePicker:
-                sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
-            case pricePicker:
-                priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
-            default:
-                return
-            }
-            
-            pickerView.reloadAllComponents()
-            
+            //Update selection label
+            updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
             
             stateObserver.onCriteriaChanged(self.toSearhCriteria())
         }
