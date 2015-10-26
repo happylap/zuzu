@@ -29,9 +29,9 @@ class RegionTableViewController: UITableViewController {
     
     private func validateCityRegionSelection(cityRegionStatus: [Int:[Bool]], selectedCity: Int) -> Bool {
         
+        ///Count the number of cities selected (regions are not restricted)
         var count = 0
-        var isCityAlreadySelected = false
-        
+
         for cityCode in cityRegionStatus.keys {
             
             if let status = cityRegionStatus[cityCode] {
@@ -46,7 +46,10 @@ class RegionTableViewController: UITableViewController {
                 if(selectionCountInCity > 0) {
                     count++
                     
-                    isCityAlreadySelected = (cityCode == selectedCity)
+                    ///Selection within the city which already has selected regions is allowed
+                    if(cityCode == selectedCity) {
+                        return true
+                    }
                 }
             }
             
@@ -56,7 +59,7 @@ class RegionTableViewController: UITableViewController {
         // The total number of cities selected is still under maxNumOfCitiesAllowed
         // Or the region the user tries to select now belongs to the current selected cities
         
-        return (count < RegionTableViewController.maxNumOfCitiesAllowed) || (isCityAlreadySelected)
+        return (count < RegionTableViewController.maxNumOfCitiesAllowed)
     }
     
     private func alertMaxRegionSelection() {
