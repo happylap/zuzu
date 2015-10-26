@@ -233,7 +233,7 @@
 				2F276B371BBED53500A41306 /* Radar */,
 				2FBC054E1BDE6D860035652D /* Service */,
 				2F276B351BBED50300A41306 /* Search */,
-				2F5854D01BB3CBA9007FF85B /* Utils */,
+				2F5854D01BB3CBA9007FF85B /* Util */,
 				2FBC05541BDE6F600035652D /* View */,
 				2F482DF51BAFE09100C68670 /* AppDelegate.swift */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
@@ -257,7 +257,7 @@
 			name = CustomControl;
 			sourceTree = "<group>";
 		};
-		2F5854D01BB3CBA9007FF85B /* Utils */ = {
+		2F5854D01BB3CBA9007FF85B /* Util */ = {
 			isa = PBXGroup;
 			children = (
 				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
@@ -270,7 +270,7 @@
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
 			);
-			name = Utils;
+			name = Util;
 			sourceTree = "<group>";
 		};
 		2F6155571BD888320024145E /* service */ = {
