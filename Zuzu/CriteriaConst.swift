@@ -28,6 +28,18 @@ struct CriteriaConst {
         static let HOME_OFFICE = 8
     }
     
+//    "公寓": 1,
+//    "電梯大樓": 2,
+//    "透天厝": 3,
+//    "別墅": 4
+    
+    struct HouseType {
+        static let BUILDING_WITHOUT_ELEVATOR = 1
+        static let BUILDING_WITH_ELEVATOR = 2
+        static let INDEPENDENT_HOUSE = 3
+        static let INDEPENDENT_HOUSE_WITH_GARDEN = 4
+    }
+    
     struct Bound {
         static let LOWER_ANY = -1
         static let UPPER_ANY = -2

@@ -42,6 +42,8 @@ class HouseItem:NSObject, NSCoding {
         private var id: String?
         private var title: String?
         private var addr: String?
+        private var type: Int?
+        private var usage: Int?
         private var price: Int?
         private var size: Int?
         private var desc: String?
@@ -63,6 +65,16 @@ class HouseItem:NSObject, NSCoding {
         
         func addAddr(addr:String?) -> Builder {
             self.addr = addr
+            return self
+        }
+        
+        func addType(type:Int?) -> Builder {
+            self.type = type
+            return self
+        }
+        
+        func addUsage(usage:Int?) -> Builder {
+            self.usage = usage
             return self
         }
         
@@ -96,6 +108,8 @@ class HouseItem:NSObject, NSCoding {
     let id: String
     let title: String
     let addr: String
+    let type: Int
+    let usage: Int
     let price: Int
     let size: Int
     let desc: String?
@@ -108,6 +122,8 @@ class HouseItem:NSObject, NSCoding {
         self.id = builder.id ?? ""
         self.title = builder.title ?? ""
         self.addr = builder.addr ?? ""
+        self.type = builder.type ?? 0
+        self.usage = builder.usage ?? 0
         self.price = builder.price ?? 0
         self.size = builder.size ?? 0
         self.desc = builder.desc
@@ -121,6 +137,8 @@ class HouseItem:NSObject, NSCoding {
         let id  = decoder.decodeObjectForKey("id") as? String ?? ""
         let title = decoder.decodeObjectForKey("title") as? String ?? ""
         let addr = decoder.decodeObjectForKey("addr") as? String ?? ""
+        let type = decoder.decodeIntegerForKey("type") as Int
+        let usage = decoder.decodeIntegerForKey("usage") as Int
         let price = decoder.decodeIntegerForKey("price") as Int
         let size = decoder.decodeIntegerForKey("size") as Int
         let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
@@ -129,6 +147,8 @@ class HouseItem:NSObject, NSCoding {
         let builder: Builder = Builder(id: id)
             .addTitle(title)
             .addAddr(addr)
+            .addType(type)
+            .addUsage(usage)
             .addPrice(price)
             .addSize(size)
             .addDesc(desc)
@@ -141,6 +161,8 @@ class HouseItem:NSObject, NSCoding {
         aCoder.encodeObject(id, forKey:"id")
         aCoder.encodeObject(title, forKey:"title")
         aCoder.encodeObject(addr, forKey:"addr")
+        aCoder.encodeInteger(type, forKey:"type")
+        aCoder.encodeInteger(usage, forKey:"usage")
         aCoder.encodeInteger(price, forKey:"price")
         aCoder.encodeInteger(size, forKey:"size")
         aCoder.encodeObject(desc, forKey:"desc")
@@ -341,6 +363,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let id = house["id"]  as? String
                                     let title = house["title"] as? String
                                     let addr = house["addr"]  as? String
+                                    let type = house["house_type"] as? Int
+                                    let usage = house["purpose_type"] as? Int
                                     let price = house["price"] as? Int
                                     let size = house["size"] as? Int
                                     let desc = house["desc"]  as? String
@@ -351,6 +375,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let house:HouseItem = HouseItem.Builder(id: id)
                                         .addTitle(title)
                                         .addAddr(addr)
+                                        .addType(type)
+                                        .addUsage(usage)
                                         .addPrice(price)
                                         .addSize(size)
                                         .addDesc(desc)
