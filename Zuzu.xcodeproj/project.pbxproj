@@ -202,7 +202,6 @@
 		2F482DE91BAFE09100C68670 = {
 			isa = PBXGroup;
 			children = (
-				2F31F5281BC3C34600054355 /* Localizable.strings */,
 				2F31F5121BC2BC4400054355 /* .gitignore */,
 				2F482DF41BAFE09100C68670 /* Zuzu */,
 				2F482DF31BAFE09100C68670 /* Products */,
@@ -231,6 +230,7 @@
 				2FBC05501BDE6E290035652D /* Database */,
 				2FBC05521BDE6EEB0035652D /* Model */,
 				2F276B371BBED53500A41306 /* Radar */,
+				2FBC05561BDE769B0035652D /* Resource */,
 				2FBC054E1BDE6D860035652D /* Service */,
 				2F276B351BBED50300A41306 /* Search */,
 				2F5854D01BB3CBA9007FF85B /* Util */,
@@ -241,9 +241,6 @@
 				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
 				2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */,
 				2F482E031BAFE09100C68670 /* Info.plist */,
-				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
-				2FFD60AC1BD7B92900E1DA46 /* priceRange.json */,
-				2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */,
 				81287B051BDA19310008FAA3 /* Model.xcdatamodeld */,
 			);
 			path = Zuzu;
@@ -350,6 +347,17 @@
 				81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */,
 			);
 			name = Refresh;
+			sourceTree = "<group>";
+		};
+		2FBC05561BDE769B0035652D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				2F31F5281BC3C34600054355 /* Localizable.strings */,
+				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
+				2FFD60AC1BD7B92900E1DA46 /* priceRange.json */,
+				2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */,
+			);
+			name = Resource;
 			sourceTree = "<group>";
 		};
 		2FFCBF301BCE7F6C00400552 /* view */ = {
@@ -650,6 +658,7 @@
 				2F31F52A1BC3DDF200054355 /* zh-Hant */,
 			);
 			name = Localizable.strings;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		2F482DFB1BAFE09100C68670 /* Main.storyboard */ = {
