@@ -10,6 +10,11 @@ import UIKit
 
 class MyCollectionCell: UITableViewCell {
 
-    @IBOutlet weak var title: UILabel!
+    
 
+    @IBOutlet weak var containerView: UIView!
+    
+    @IBOutlet weak var title: UILabel!
+    
+    @IBOutlet weak var avatar: UIImageView!
 }

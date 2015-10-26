@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 import SwiftyJSON
 
 class MyCollectionTableViewController: UITableViewController {
@@ -35,15 +36,17 @@ class MyCollectionTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 120;
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
+        getDefaultData()
         
         self.tableView.addHeaderWithCallback{
-            
+            NSLog("addHeaderWithCallback")
             self.loadData(0, isPullRefresh: true)
         }
         
         self.tableView.addFooterWithCallback{
-            
+            NSLog("addFooterWithCallback")
             if(self.data.count>0) {
+                let  maxId = self.data.last!.valueForKey("postId") as! Int
                 self.loadData(11, isPullRefresh: false)
             }
         }
@@ -82,7 +85,13 @@ class MyCollectionTableViewController: UITableViewController {
         
         NSLog("title: \(title)")
         
-        //cell.title.text = item.valueForKey("title") as? String
+        cell.title.text = item.valueForKey("title") as? String
+        
+        
+//        cell.avatar.af_setImageWithURL(NSURL(string: item.valueForKey("img")[0] as! String)!, placeholderImage: nil)
+//        
+        cell.avatar.layer.cornerRadius = 5
+        cell.avatar.layer.masksToBounds = true
         
         return cell
     }
@@ -134,28 +143,22 @@ class MyCollectionTableViewController: UITableViewController {
                 
                 let items = result["response", "docs"].object as! [AnyObject]
                 
-                if(items.count==0){
+                if (items.count == 0) {
                     return
                 }
                 
-                if(isPullRefresh){
-                    
+                if (isPullRefresh) {
                     let dalHouse = HouseDal()
                     dalHouse.deleteAll()
-                    
                     dalHouse.addHouseList(items)
-                    
                     self.data.removeAll(keepCapacity: false)
                 }
                 
                 for it in items {
-                    
                     self.data.append(it);
                 }
                 
                 dispatch_async(dispatch_get_main_queue()) {
-                    
-                    
                     self.tableView.reloadData()
                 }
 
@@ -165,8 +168,8 @@ class MyCollectionTableViewController: UITableViewController {
     
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MyCollectionCell
-        //cell.containerView.backgroundColor = UIColor(red: 0.85, green: 0.85, blue:0.85, alpha: 0.9)
+        let cell = tableView.dequeueReusableCellWithIdentifier("myCollectionCell", forIndexPath: indexPath) as! MyCollectionCell
+        cell.containerView.backgroundColor = UIColor(red: 0.85, green: 0.85, blue:0.85, alpha: 0.9)
     }
     
     
@@ -175,7 +178,7 @@ class MyCollectionTableViewController: UITableViewController {
     private func configureCell(cell:MyCollectionCell,indexPath: NSIndexPath,isForOffscreenUse:Bool){
         
         let item: AnyObject = self.data[indexPath.row]
-        //cell.title.text = item.valueForKey("title") as? String
+        cell.title.text = item.valueForKey("title") as? String
         cell.selectionStyle = .None;
     }
     
