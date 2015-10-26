@@ -677,12 +677,12 @@
         <scene sceneID="nev-7L-pDc">
             <objects>
                 <tableViewController hidesBottomBarWhenPushed="YES" id="VUP-fO-SJw" customClass="SearchResultTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="400" sectionHeaderHeight="28" sectionFooterHeight="28" id="AVs-la-x6f">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="272" sectionHeaderHeight="28" sectionFooterHeight="28" id="AVs-la-x6f">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="1800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="yrM-0D-fhP">
-                            <rect key="frame" x="0.0" y="492" width="600" height="44"/>
+                            <rect key="frame" x="0.0" y="364" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Y95-Rm-Nya">
@@ -698,10 +698,10 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="houseItemCell" id="ebV-Uf-FkQ" customClass="SearchResultTableViewCell" customModule="Zuzu" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="400"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="272"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ebV-Uf-FkQ" id="4Pk-Ja-hHs">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="272"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="584" placeholderIntrinsicHeight="390" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="xz5-6L-0wF">
@@ -711,7 +711,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="749" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pm-RZ-5Y7">
-                                            <rect key="frame" x="465" y="363.5" width="64" height="20.5"/>
+                                            <rect key="frame" x="465" y="235.5" width="64" height="20.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="64" id="azI-Zd-oao"/>
                                             </constraints>
@@ -738,7 +738,7 @@
                                             </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjr-41-AKh">
-                                            <rect key="frame" x="536" y="363.5" width="48" height="20.5"/>
+                                            <rect key="frame" x="536" y="235.5" width="48" height="20.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="NTw-mi-MpO"/>
                                                 <constraint firstAttribute="width" constant="48" id="yp5-5P-uM0"/>
@@ -753,7 +753,7 @@
                                             </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeA-Wz-tNF" userLabel="House Addr">
-                                            <rect key="frame" x="16" y="322.5" width="195.5" height="21"/>
+                                            <rect key="frame" x="16" y="206" width="195.5" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="4hH-9U-dPG"/>
                                             </constraints>
@@ -762,7 +762,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wau-cI-JOX" userLabel="House Type">
-                                            <rect key="frame" x="16" y="363" width="142" height="21"/>
+                                            <rect key="frame" x="16" y="235" width="142" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="6ms-cL-ns3"/>
                                             </constraints>
@@ -771,7 +771,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hm1-7D-nDh" userLabel="House Size">
-                                            <rect key="frame" x="166" y="363" width="42" height="20.5"/>
+                                            <rect key="frame" x="166" y="235" width="42" height="20.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="42" id="Zj5-sl-4kK"/>
                                             </constraints>
@@ -803,6 +803,7 @@
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="xz5-6L-0wF" secondAttribute="bottom" priority="999" id="aS7-bk-8I6"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Yjr-41-AKh" secondAttribute="bottom" constant="8" id="beX-Td-WAN"/>
                                         <constraint firstItem="Yjr-41-AKh" firstAttribute="leading" secondItem="8Pm-RZ-5Y7" secondAttribute="trailing" constant="7" id="cmw-6G-0TJ"/>
+                                        <constraint firstItem="wau-cI-JOX" firstAttribute="top" secondItem="DeA-Wz-tNF" secondAttribute="bottom" constant="8" id="csF-hq-Nic"/>
                                         <constraint firstItem="xz5-6L-0wF" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="trailing" constant="-150" id="e28-PN-rqp"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="8Pm-RZ-5Y7" secondAttribute="bottom" id="e2g-DS-TWZ"/>
                                         <constraint firstAttribute="trailing" secondItem="7K5-Fa-QOk" secondAttribute="trailing" id="he4-CX-vZJ"/>
@@ -843,6 +844,7 @@
                                             <exclude reference="rcH-2b-aZA"/>
                                             <exclude reference="sKc-jl-dzd"/>
                                             <exclude reference="Q0f-b8-zZx"/>
+                                            <exclude reference="O1Y-p0-OyS"/>
                                             <exclude reference="e2g-DS-TWZ"/>
                                             <exclude reference="Bwu-P0-qtb"/>
                                             <exclude reference="Gs6-sL-gCf"/>
@@ -854,6 +856,7 @@
                                     <constraint firstAttribute="trailing" secondItem="xz5-6L-0wF" secondAttribute="trailing" id="4Rr-qh-OQQ"/>
                                     <constraint firstItem="xz5-6L-0wF" firstAttribute="leading" secondItem="ebV-Uf-FkQ" secondAttribute="leading" id="iwy-ko-7Q9"/>
                                 </constraints>
+                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="0.0" right="8"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="4Rr-qh-OQQ"/>
