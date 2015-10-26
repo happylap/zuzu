@@ -37,42 +37,134 @@ struct SolrConst {
 
 class HouseItem:NSObject, NSCoding {
     
+    class Builder: NSObject {
+        
+        private var id: String?
+        private var title: String?
+        private var addr: String?
+        private var type: Int?
+        private var usage: Int?
+        private var price: Int?
+        private var size: Int?
+        private var desc: String?
+        private var imgList: [String]?
+        
+        private func validateParams() -> Bool{
+            return (self.id != nil) && (self.title != nil)
+                && (self.price != nil) && (self.size != nil)
+        }
+        
+        init(id:String?) {
+            self.id = id
+        }
+        
+        func addTitle(title:String?) -> Builder {
+            self.title = title
+            return self
+        }
+        
+        func addAddr(addr:String?) -> Builder {
+            self.addr = addr
+            return self
+        }
+        
+        func addType(type:Int?) -> Builder {
+            self.type = type
+            return self
+        }
+        
+        func addUsage(usage:Int?) -> Builder {
+            self.usage = usage
+            return self
+        }
+        
+        func addPrice(price:Int?) -> Builder {
+            self.price = price
+            return self
+        }
+        
+        func addSize(size:Int?) -> Builder {
+            self.size = size
+            return self
+        }
+        
+        func addDesc(desc:String?) -> Builder {
+            self.desc = desc
+            return self
+        }
+        
+        func addImageList(imgList: [String]?) -> Builder {
+            self.imgList = imgList
+            return self
+        }
+        
+        func build() -> HouseItem {
+            assert(validateParams(), "Incorrect HouseItem building params")
+            return HouseItem(builder: self)
+        }
+    }
+    
+    /// House Item Members
     let id: String
-    var title: String
+    let title: String
+    let addr: String
+    let type: Int
+    let usage: Int
     let price: Int
-    let desc: String
+    let size: Int
+    let desc: String?
     let imgList: [String]?
     
-    required init(id: String, title: String, price: Int, desc: String, imgList: [String]?){
-        self.id = id
-        self.title = title
-        self.price = price
-        self.desc = desc
-        self.imgList = imgList
+    
+    private init(builder: Builder){
+        /// Assign default value for mandotary fields
+        /// cause we don't want the app exists because of some incorrect data in the backend
+        self.id = builder.id ?? ""
+        self.title = builder.title ?? ""
+        self.addr = builder.addr ?? ""
+        self.type = builder.type ?? 0
+        self.usage = builder.usage ?? 0
+        self.price = builder.price ?? 0
+        self.size = builder.size ?? 0
+        self.desc = builder.desc
+        self.imgList = builder.imgList
+        
         super.init()
     }
     
     required convenience init?(coder decoder: NSCoder) {
         
-        let id  = decoder.decodeObjectForKey("id") as? String
-        let title = decoder.decodeObjectForKey("title") as? String
+        let id  = decoder.decodeObjectForKey("id") as? String ?? ""
+        let title = decoder.decodeObjectForKey("title") as? String ?? ""
+        let addr = decoder.decodeObjectForKey("addr") as? String ?? ""
+        let type = decoder.decodeIntegerForKey("type") as Int
+        let usage = decoder.decodeIntegerForKey("usage") as Int
         let price = decoder.decodeIntegerForKey("price") as Int
-        let desc = decoder.decodeObjectForKey("desc") as? String
-        let imgList = decoder.decodeObjectForKey("imgList") as? [String]
+        let size = decoder.decodeIntegerForKey("size") as Int
+        let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
+        let imgList = decoder.decodeObjectForKey("imgList") as? [String] ?? [String]()
         
-        self.init(
-            id: id!,
-            title: title!,
-            price: price,
-            desc: desc!,
-            imgList: imgList
-        )
+        let builder: Builder = Builder(id: id)
+            .addTitle(title)
+            .addAddr(addr)
+            .addType(type)
+            .addUsage(usage)
+            .addPrice(price)
+            .addSize(size)
+            .addDesc(desc)
+            .addImageList(imgList)
+        
+        self.init(builder: builder)
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(id, forKey:"id")
         aCoder.encodeObject(title, forKey:"title")
+        aCoder.encodeObject(addr, forKey:"addr")
+        aCoder.encodeInteger(type, forKey:"type")
+        aCoder.encodeInteger(usage, forKey:"usage")
         aCoder.encodeInteger(price, forKey:"price")
+        aCoder.encodeInteger(size, forKey:"size")
         aCoder.encodeObject(desc, forKey:"desc")
         aCoder.encodeObject(imgList, forKey:"imgList")
     }
@@ -268,15 +360,30 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                 self.numOfRecord = response["numFound"] as? Int
                                 
                                 for house in itemList {
-                                    let id = house["id"]  as! String
-                                    let title = house["title"] as! String
-                                    let price = house["price"] as? Int ?? 0
-                                    let desc = (house["desc"]  as? String ?? "")
+                                    let id = house["id"]  as? String
+                                    let title = house["title"] as? String
+                                    let addr = house["addr"]  as? String
+                                    let type = house["house_type"] as? Int
+                                    let usage = house["purpose_type"] as? Int
+                                    let price = house["price"] as? Int
+                                    let size = house["size"] as? Int
+                                    let desc = house["desc"]  as? String
                                     let imgList = house["img"] as? [String]
                                     
                                     NSLog("houseItem: \(id)")
                                     
-                                    houseList.append(HouseItem(id: id, title: title, price: price, desc: desc, imgList: imgList))
+                                    let house:HouseItem = HouseItem.Builder(id: id)
+                                        .addTitle(title)
+                                        .addAddr(addr)
+                                        .addType(type)
+                                        .addUsage(usage)
+                                        .addPrice(price)
+                                        .addSize(size)
+                                        .addDesc(desc)
+                                        .addImageList(imgList)
+                                        .build()
+                                    
+                                    houseList.append(house)
                                 }
                                 
                                 handler(totalNum: self.numOfRecord, result: houseList, error: nil)

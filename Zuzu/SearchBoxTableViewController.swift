@@ -635,6 +635,9 @@
             if(searchItemTable.numberOfRowsInSection(0) > 0) {
                 self.searchItemTable.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
             }
+            
+            //Restore hidden tab bar before apeearing
+            self.tabBarController!.tabBar.hidden = false;
         }
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
