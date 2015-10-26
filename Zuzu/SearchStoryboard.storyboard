@@ -720,7 +720,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7K5-Fa-QOk">
-                                            <rect key="frame" x="16" y="16" width="584" height="24"/>
+                                            <rect key="frame" x="16" y="16" width="576" height="24"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="BX6-MW-Cg7"/>
                                                 <constraint firstAttribute="height" constant="21" id="eCt-XY-KHd"/>
@@ -806,7 +806,7 @@
                                         <constraint firstItem="wau-cI-JOX" firstAttribute="top" secondItem="DeA-Wz-tNF" secondAttribute="bottom" constant="8" id="csF-hq-Nic"/>
                                         <constraint firstItem="xz5-6L-0wF" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="trailing" constant="-150" id="e28-PN-rqp"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="8Pm-RZ-5Y7" secondAttribute="bottom" id="e2g-DS-TWZ"/>
-                                        <constraint firstAttribute="trailing" secondItem="7K5-Fa-QOk" secondAttribute="trailing" id="he4-CX-vZJ"/>
+                                        <constraint firstAttribute="trailing" secondItem="7K5-Fa-QOk" secondAttribute="trailing" constant="8" id="he4-CX-vZJ"/>
                                         <constraint firstItem="hm1-7D-nDh" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="trailing" constant="8" symbolic="YES" id="mdi-B7-3oj"/>
                                         <constraint firstItem="DeA-Wz-tNF" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="leading" id="mu0-aq-Hdo"/>
                                         <constraint firstItem="hm1-7D-nDh" firstAttribute="baseline" secondItem="wau-cI-JOX" secondAttribute="baseline" id="poa-19-8Fj"/>
