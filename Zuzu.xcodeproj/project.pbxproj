@@ -39,23 +39,23 @@
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FFD60AD1BD7B92900E1DA46 /* priceRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* priceRange.json */; };
 		2FFD60AF1BD7B93E00E1DA46 /* sizeRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */; };
-		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; settings = {ASSET_TAGS = (); }; };
-		81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA280A1BDA397B0038DD19 /* HouseDal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDal.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280B1BDA39800038DD19 /* HouseDetailController.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280D1BDA39880038DD19 /* CoreDataManager.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
-		81FA28131BDA39B10038DD19 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28111BDA39B10038DD19 /* Note.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28141BDA39B10038DD19 /* NoteDal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28121BDA39B10038DD19 /* NoteDal.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA281A1BDA39BB0038DD19 /* RefreshConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28161BDA39BB0038DD19 /* RefreshConst.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA281E1BDA39C20038DD19 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281D1BDA39C20038DD19 /* Router.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */; settings = {ASSET_TAGS = (); }; };
-		81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28231BDA3A0F0038DD19 /* MyCollectionCell.swift */; settings = {ASSET_TAGS = (); }; };
+		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
+		81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */; };
+		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; };
+		81FA280A1BDA397B0038DD19 /* HouseDal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDal.swift */; };
+		81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280B1BDA39800038DD19 /* HouseDetailController.swift */; };
+		81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280D1BDA39880038DD19 /* CoreDataManager.swift */; };
+		81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */; };
+		81FA28131BDA39B10038DD19 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28111BDA39B10038DD19 /* Note.swift */; };
+		81FA28141BDA39B10038DD19 /* NoteDal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28121BDA39B10038DD19 /* NoteDal.swift */; };
+		81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */; };
+		81FA281A1BDA39BB0038DD19 /* RefreshConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28161BDA39BB0038DD19 /* RefreshConst.swift */; };
+		81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */; };
+		81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */; };
+		81FA281E1BDA39C20038DD19 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281D1BDA39C20038DD19 /* Router.swift */; };
+		81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */; };
+		81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */; };
+		81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28231BDA3A0F0038DD19 /* MyCollectionCell.swift */; };
 		DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -167,7 +167,6 @@
 			isa = PBXGroup;
 			children = (
 				2F6155571BD888320024145E /* service */,
-				2F7B5F841BD62AF90024E88A /* dao */,
 				2FFCBF301BCE7F6C00400552 /* view */,
 				2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */,
 				2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */,
@@ -176,6 +175,7 @@
 				2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */,
 				2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */,
 				2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */,
+				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -183,19 +183,6 @@
 		2F276B361BBED52200A41306 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
-				81FA280D1BDA39880038DD19 /* CoreDataManager.swift */,
-				81FA28071BDA397B0038DD19 /* House.swift */,
-				81FA28081BDA397B0038DD19 /* HouseDal.swift */,
-				81FA280B1BDA39800038DD19 /* HouseDetailController.swift */,
-				81FA28111BDA39B10038DD19 /* Note.swift */,
-				81FA28121BDA39B10038DD19 /* NoteDal.swift */,
-				81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */,
-				81FA28161BDA39BB0038DD19 /* RefreshConst.swift */,
-				81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */,
-				81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */,
-				81FA281D1BDA39C20038DD19 /* Router.swift */,
-				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
-				81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */,
 				81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */,
 				2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */,
 				81FA28231BDA3A0F0038DD19 /* MyCollectionCell.swift */,
@@ -207,6 +194,7 @@
 		2F276B371BBED53500A41306 /* Radar */ = {
 			isa = PBXGroup;
 			children = (
+				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
 			);
 			name = Radar;
 			sourceTree = "<group>";
@@ -236,15 +224,19 @@
 		2F482DF41BAFE09100C68670 /* Zuzu */ = {
 			isa = PBXGroup;
 			children = (
-				2F276B371BBED53500A41306 /* Radar */,
+				2FBC054F1BDE6E0E0035652D /* Application */,
+				2FBC05531BDE6F0A0035652D /* Controller */,
 				2F276B361BBED52200A41306 /* Collection */,
+				2FBC05511BDE6E9C0035652D /* Dao */,
+				2FBC05501BDE6E290035652D /* Database */,
+				2FBC05521BDE6EEB0035652D /* Model */,
+				2F276B371BBED53500A41306 /* Radar */,
+				2FBC054E1BDE6D860035652D /* Service */,
 				2F276B351BBED50300A41306 /* Search */,
 				2F5854D01BB3CBA9007FF85B /* Utils */,
-				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
+				2FBC05541BDE6F600035652D /* View */,
 				2F482DF51BAFE09100C68670 /* AppDelegate.swift */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
-				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
-				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
 				2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */,
@@ -268,6 +260,8 @@
 		2F5854D01BB3CBA9007FF85B /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
+				2FBC05551BDE701F0035652D /* Refresh */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */,
 				2F05C6271BBA2FBB00100D5F /* StringUtils.swift */,
@@ -287,13 +281,75 @@
 			name = service;
 			sourceTree = "<group>";
 		};
-		2F7B5F841BD62AF90024E88A /* dao */ = {
+		2FBC054E1BDE6D860035652D /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				81FA281D1BDA39C20038DD19 /* Router.swift */,
+				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
+			);
+			name = Service;
+			sourceTree = "<group>";
+		};
+		2FBC054F1BDE6E0E0035652D /* Application */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		2FBC05501BDE6E290035652D /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				81FA280D1BDA39880038DD19 /* CoreDataManager.swift */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		2FBC05511BDE6E9C0035652D /* Dao */ = {
 			isa = PBXGroup;
 			children = (
 				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
 				2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */,
+				81FA28081BDA397B0038DD19 /* HouseDal.swift */,
+				81FA28121BDA39B10038DD19 /* NoteDal.swift */,
 			);
-			name = dao;
+			name = Dao;
+			sourceTree = "<group>";
+		};
+		2FBC05521BDE6EEB0035652D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				81FA28071BDA397B0038DD19 /* House.swift */,
+				81FA28111BDA39B10038DD19 /* Note.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		2FBC05531BDE6F0A0035652D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				81FA280B1BDA39800038DD19 /* HouseDetailController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		2FBC05541BDE6F600035652D /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		2FBC05551BDE701F0035652D /* Refresh */ = {
+			isa = PBXGroup;
+			children = (
+				81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */,
+				81FA28161BDA39BB0038DD19 /* RefreshConst.swift */,
+				81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */,
+				81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */,
+				81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */,
+			);
+			name = Refresh;
 			sourceTree = "<group>";
 		};
 		2FFCBF301BCE7F6C00400552 /* view */ = {
