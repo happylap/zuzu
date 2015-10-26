@@ -162,7 +162,7 @@ class SearchResultTableViewController: UITableViewController {
         NSLog("%@ [[viewDidLoad]]", self)
         
         //Configure cell height
-        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.estimatedRowHeight = 500//tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.allowsSelection = false
         
