@@ -659,7 +659,7 @@
                 switch identifier{
                 case ViewTransConst.showSearchResult:
                     NSLog("showSearchResult")
-                    if let srtvc = segue.destinationViewController as? SearchResultTableViewController {
+                    if let srtvc = segue.destinationViewController as? SearchResultViewController {
                         
                         ///Collect the search criteria set by the user
                         let criteria = toSearhCriteria()
