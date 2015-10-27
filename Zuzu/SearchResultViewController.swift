@@ -35,7 +35,6 @@ class SearchResultViewController: UIViewController {
     private var ignoreScroll = false
     
     private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
-    private var sortingSelectionState: [String:Bool] = [String:Bool]() //Field Name, Sorting Type
     
     var searchCriteria: SearchCriteria?
     
@@ -147,6 +146,22 @@ class SearchResultViewController: UIViewController {
         button.selected = true
     }
     
+    private func imageWithColor(color: UIColor) -> UIImage {
+        
+        let rect:CGRect = CGRectMake(0.0, 0.0, 1.0, 1.0)
+        UIGraphicsBeginImageContext(rect.size)
+        let context:CGContextRef? = UIGraphicsGetCurrentContext()
+        
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        
+        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
+        
+    }
+    
     // MARK: - Control Action Handlers
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
         
@@ -187,34 +202,34 @@ class SearchResultViewController: UIViewController {
         }
         
         if let sortingField = sortingField {
-        if(sender.selected) { ///Touchd when already selected
-            
-            if let status = self.sortingStatus[sortingField] {
+            if(sender.selected) { ///Touchd when already selected
                 
-                ///Reverse the previous sorting order
-                updateSortingField(sortingField,
-                    order: ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc))
+                if let status = self.sortingStatus[sortingField] {
+                    
+                    ///Reverse the previous sorting order
+                    updateSortingField(sortingField,
+                        order: ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc))
+                    
+                }
+                
+            } else { ///Switched from other sorting fields
+                
+                if let status = self.sortingStatus[sortingField] {
+                    
+                    ///Use the previous sorting order
+                    updateSortingField(sortingField, order: status)
+                    
+                } else {
+                    
+                    ///Use Default Ordering Asc
+                    updateSortingField(sortingField, order: HouseItemDocument.Sorting.sortAsc)
+                }
                 
             }
             
-        } else { ///Switched from other sorting fields
+            reloadDataWithNewCriteria(searchCriteria)
             
-            if let status = self.sortingStatus[sortingField] {
-                
-                ///Use the previous sorting order
-                updateSortingField(sortingField, order: status)
-                
-            } else {
-                
-                ///Use Default Ordering Asc
-                updateSortingField(sortingField, order: HouseItemDocument.Sorting.sortAsc)
-            }
-            
-        }
-        
-        reloadDataWithNewCriteria(searchCriteria)
-        
-        sortByField(sender)
+            sortByField(sender)
         }
     }
     
@@ -236,7 +251,10 @@ class SearchResultViewController: UIViewController {
         self.tableView.delegate = self
         
         //Configure Sorting Status
-        
+        let bgColorWhenSelected = UIColor(red: 0x00/255, green: 0xE3/255, blue: 0xE3/255, alpha: 0.6)
+        self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
         
         //Configure remote data source
         self.dataSource.setDataLoadedHandler(onDataLoaded)
