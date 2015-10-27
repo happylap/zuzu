@@ -43,12 +43,12 @@
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */; };
 		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; };
-		81FA280A1BDA397B0038DD19 /* HouseDal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDal.swift */; };
+		81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDao.swift */; };
 		81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280B1BDA39800038DD19 /* HouseDetailController.swift */; };
 		81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280D1BDA39880038DD19 /* CoreDataManager.swift */; };
 		81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */; };
 		81FA28131BDA39B10038DD19 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28111BDA39B10038DD19 /* Note.swift */; };
-		81FA28141BDA39B10038DD19 /* NoteDal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28121BDA39B10038DD19 /* NoteDal.swift */; };
+		81FA28141BDA39B10038DD19 /* NoteDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28121BDA39B10038DD19 /* NoteDao.swift */; };
 		81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */; };
 		81FA281A1BDA39BB0038DD19 /* RefreshConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28161BDA39BB0038DD19 /* RefreshConst.swift */; };
 		81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */; };
@@ -121,12 +121,12 @@
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionTableViewController.swift; sourceTree = "<group>"; };
 		81FA28071BDA397B0038DD19 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
-		81FA28081BDA397B0038DD19 /* HouseDal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDal.swift; sourceTree = "<group>"; };
+		81FA28081BDA397B0038DD19 /* HouseDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDao.swift; sourceTree = "<group>"; };
 		81FA280B1BDA39800038DD19 /* HouseDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailController.swift; sourceTree = "<group>"; };
 		81FA280D1BDA39880038DD19 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyCollectionStoryboard.storyboard; sourceTree = "<group>"; };
 		81FA28111BDA39B10038DD19 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
-		81FA28121BDA39B10038DD19 /* NoteDal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDal.swift; sourceTree = "<group>"; };
+		81FA28121BDA39B10038DD19 /* NoteDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDao.swift; sourceTree = "<group>"; };
 		81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshBaseView.swift; sourceTree = "<group>"; };
 		81FA28161BDA39BB0038DD19 /* RefreshConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshConst.swift; sourceTree = "<group>"; };
 		81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshFooterView.swift; sourceTree = "<group>"; };
@@ -310,8 +310,8 @@
 			children = (
 				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
 				2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */,
-				81FA28081BDA397B0038DD19 /* HouseDal.swift */,
-				81FA28121BDA39B10038DD19 /* NoteDal.swift */,
+				81FA28081BDA397B0038DD19 /* HouseDao.swift */,
+				81FA28121BDA39B10038DD19 /* NoteDao.swift */,
 			);
 			name = Dao;
 			sourceTree = "<group>";
@@ -587,7 +587,7 @@
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
 				2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */,
-				81FA28141BDA39B10038DD19 /* NoteDal.swift in Sources */,
+				81FA28141BDA39B10038DD19 /* NoteDao.swift in Sources */,
 				2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */,
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
@@ -599,7 +599,7 @@
 				81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */,
 				81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
-				81FA280A1BDA397B0038DD19 /* HouseDal.swift in Sources */,
+				81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */,
 				81FA28091BDA397B0038DD19 /* House.swift in Sources */,
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */,
