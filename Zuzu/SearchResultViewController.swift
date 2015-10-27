@@ -135,15 +135,44 @@ class SearchResultViewController: UIViewController {
         self.sortingStatus[field] = order
     }
     
-    private func sortByField(button: UIButton) {
+    private func sortByField(button: UIButton, sortingOrder: String) {
         
-        ///Disselect all
-        sortByPriceButton.selected = false
-        sortBySizeButton.selected = false
-        sortByPostTimeButton.selected = false
+        ///Switch from other sorting fields
+        if(!button.selected) {
+            ///Disselect all & Clear all sorting icon for Normal state
+            sortByPriceButton.selected = false
+            sortByPriceButton.setImage(nil,
+                forState: UIControlState.Normal)
+            
+            sortBySizeButton.selected = false
+            sortBySizeButton.setImage(nil,
+                forState: UIControlState.Normal)
+            
+            sortByPostTimeButton.selected = false
+            sortByPostTimeButton.setImage(nil,
+                forState: UIControlState.Normal)
+            
+            ///Select the one specified by hte user
+            button.selected = true
+        }
         
-        ///Select the one specified by hte user
-        button.selected = true
+        
+        ///Set image for selected state
+        if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
+            button.setImage(UIImage(named: "sort-ascending"),
+                forState: UIControlState.Selected)
+            button.setImage(UIImage(named: "sort-ascending"),
+                forState: UIControlState.Normal)
+
+        } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
+            button.setImage(UIImage(named: "sort-descending"),
+                forState: UIControlState.Selected)
+            button.setImage(UIImage(named: "sort-descending"),
+                forState: UIControlState.Normal)
+
+        } else {
+            assert(false, "Unknown Sorting order")
+        }
     }
     
     private func imageWithColor(color: UIColor) -> UIImage {
@@ -189,6 +218,7 @@ class SearchResultViewController: UIViewController {
     
     @IBAction func onSortingButtonTouched(sender: UIButton) {
         
+        var sortingOrder:String?
         var sortingField:String?
         
         switch sender {
@@ -207,8 +237,8 @@ class SearchResultViewController: UIViewController {
                 if let status = self.sortingStatus[sortingField] {
                     
                     ///Reverse the previous sorting order
-                    updateSortingField(sortingField,
-                        order: ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc))
+                    
+                    sortingOrder = ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc)
                     
                 }
                 
@@ -217,19 +247,24 @@ class SearchResultViewController: UIViewController {
                 if let status = self.sortingStatus[sortingField] {
                     
                     ///Use the previous sorting order
-                    updateSortingField(sortingField, order: status)
+                    sortingOrder = status
                     
                 } else {
                     
                     ///Use Default Ordering Asc
-                    updateSortingField(sortingField, order: HouseItemDocument.Sorting.sortAsc)
+                    sortingOrder = HouseItemDocument.Sorting.sortAsc
                 }
                 
             }
             
-            reloadDataWithNewCriteria(searchCriteria)
-            
-            sortByField(sender)
+            if let sortingOrder = sortingOrder {
+                
+                updateSortingField(sortingField, order: sortingOrder)
+                
+                reloadDataWithNewCriteria(searchCriteria)
+                
+                sortByField(sender, sortingOrder: sortingOrder)
+            }
         }
     }
     
