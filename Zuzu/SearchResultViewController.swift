@@ -189,7 +189,7 @@ class SearchResultViewController: UIViewController {
                 let view:[UIView] = debugVc.view.subviews
                 
                 if let textView = view[0] as? UITextView {
-                    //textView.text = self.debugTextStr
+                    textView.text = self.debugTextStr
                 }
                 
             default: break
