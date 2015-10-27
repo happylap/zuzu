@@ -284,8 +284,9 @@ public class PersistentTableDataSource {
         
         NSLog("loadRemoteData: pageNo = \(pageNo)")
         
-        requester.searchByCriteria(criteria!.keyword, area:criteria?.region, price: criteria!.price,
-            size: criteria!.size, types: criteria!.types,
+        requester.searchByCriteria(criteria!.keyword, area:criteria!.region,
+            price: criteria!.price, size: criteria!.size,
+            types: criteria!.types, sorting: criteria!.sorting,
             start: start, row: row) { (totalNum: Int?, newHouseItems: [HouseItem], error: NSError?) -> Void in
                 
                 self.appendDataForPage(pageNo, estimatedPageSize: requester.numOfRecord, data: newHouseItems)

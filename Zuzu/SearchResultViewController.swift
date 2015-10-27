@@ -9,7 +9,7 @@
 import UIKit
 
 class SearchResultViewController: UIViewController {
-
+    
     // MARK: - Member Fields
     @IBOutlet weak var loadingSpinner: UIActivityIndicatorView! {
         didSet{
@@ -17,7 +17,15 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var sortByPriceButton: UIButton!
+    
+    @IBOutlet weak var sortBySizeButton: UIButton!
+    
+    @IBOutlet weak var sortByPostTimeButton: UIButton!
+    
+    
     @IBOutlet weak var tableView: UITableView!
+    
     
     var debugTextStr: String = ""
     private let searchItemService : SearchItemService = SearchItemService.getInstance()
@@ -25,6 +33,9 @@ class SearchResultViewController: UIViewController {
     private var lastContentOffset:CGFloat = 0
     private var lastDirection: ScrollDirection = ScrollDirection.ScrollDirectionNone
     private var ignoreScroll = false
+    
+    private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
+    private var sortingSelectionState: [String:Bool] = [String:Bool]() //Field Name, Sorting Type
     
     var searchCriteria: SearchCriteria?
     
@@ -79,7 +90,7 @@ class SearchResultViewController: UIViewController {
     private func stopSpinner() {
         loadingSpinner.stopAnimating()
     }
-
+    
     private func loadHouseListPage(pageNo: Int) {
         
         if(pageNo > dataSource.estimatedNumberOfPages){
@@ -116,7 +127,24 @@ class SearchResultViewController: UIViewController {
         
         NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getSize())", self)
         
-        //self.debugTextStr = self.dataSource.debugStr
+        self.debugTextStr = self.dataSource.debugStr
+    }
+    
+    private func updateSortingField(field:String, order:String) {
+        NSLog("Sorting = %@ %@", field, order)
+        self.searchCriteria?.sorting = "\(field) \(order)"
+        self.sortingStatus[field] = order
+    }
+    
+    private func sortByField(button: UIButton) {
+        
+        ///Disselect all
+        sortByPriceButton.selected = false
+        sortBySizeButton.selected = false
+        sortByPostTimeButton.selected = false
+        
+        ///Select the one specified by hte user
+        button.selected = true
     }
     
     // MARK: - Control Action Handlers
@@ -137,12 +165,63 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
+        self.dataSource.criteria = criteria
+        self.startSpinner()
+        self.dataSource.initData()
+        self.tableView.reloadData()
+    }
+    
+    @IBAction func onSortingButtonTouched(sender: UIButton) {
+        
+        var sortingField:String?
+        
+        switch sender {
+        case sortByPriceButton:
+            sortingField = HouseItemDocument.price
+        case sortBySizeButton:
+            sortingField = HouseItemDocument.size
+        case sortByPostTimeButton:
+            sortingField = HouseItemDocument.postTime
+        default: break
+        }
+        
+        if let sortingField = sortingField {
+        if(sender.selected) { ///Touchd when already selected
+            
+            if let status = self.sortingStatus[sortingField] {
+                
+                ///Reverse the previous sorting order
+                updateSortingField(sortingField,
+                    order: ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc))
+                
+            }
+            
+        } else { ///Switched from other sorting fields
+            
+            if let status = self.sortingStatus[sortingField] {
+                
+                ///Use the previous sorting order
+                updateSortingField(sortingField, order: status)
+                
+            } else {
+                
+                ///Use Default Ordering Asc
+                updateSortingField(sortingField, order: HouseItemDocument.Sorting.sortAsc)
+            }
+            
+        }
+        
+        reloadDataWithNewCriteria(searchCriteria)
+        
+        sortByField(sender)
+        }
+    }
+    
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
         super.viewDidLoad()
         
         NSLog("%@ [[viewDidLoad]]", self)
@@ -155,6 +234,9 @@ class SearchResultViewController: UIViewController {
         //Configure table DataSource & Delegate
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        
+        //Configure Sorting Status
+        
         
         //Configure remote data source
         self.dataSource.setDataLoadedHandler(onDataLoaded)
@@ -173,7 +255,7 @@ class SearchResultViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -225,7 +307,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         cell.houseItem = dataSource.getItemForRow(indexPath.row)
         return cell
     }
-
+    
 }
 
 extension SearchResultViewController: UIScrollViewDelegate {
@@ -293,7 +375,7 @@ extension SearchResultViewController: UIScrollViewDelegate {
             }
         }
     }
-
+    
     
 }
 

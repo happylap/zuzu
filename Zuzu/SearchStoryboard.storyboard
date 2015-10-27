@@ -696,15 +696,22 @@
                                             <constraint firstAttribute="height" constant="100" id="4iN-B0-H2c"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="tintColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" title="租金">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="selected">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="4iN-B0-H2c"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="Igs-bG-LY6"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RkJ-yY-SbF">
                                         <rect key="frame" x="256" y="0.0" width="256" height="54"/>
@@ -713,15 +720,22 @@
                                             <constraint firstAttribute="height" constant="100" id="tJf-mm-jK1"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="tintColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" title="坪數">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="selected">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="tJf-mm-jK1"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="o1y-ba-SNn"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aif-ds-c0e">
                                         <rect key="frame" x="512" y="-1" width="256" height="56"/>
@@ -730,15 +744,22 @@
                                             <constraint firstAttribute="height" constant="100" id="2k5-bM-Gjb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="tintColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" title="刊登時間">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="selected">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="2k5-bM-Gjb"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="E4K-ze-Mja"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njk-V3-8Pl" userLabel="Filter Setting">
                                         <rect key="frame" x="776" y="-1" width="248" height="56"/>
@@ -799,15 +820,6 @@
                                                         <constraint firstAttribute="width" secondItem="xz5-6L-0wF" secondAttribute="height" multiplier="3:2" id="gKL-S6-krp"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="749" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pm-RZ-5Y7">
-                                                    <rect key="frame" x="889" y="235" width="64" height="20.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="64" id="azI-Zd-oao"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7K5-Fa-QOk">
                                                     <rect key="frame" x="16" y="16" width="1000" height="24"/>
                                                     <constraints>
@@ -826,7 +838,7 @@
                                                         </mask>
                                                     </variation>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjr-41-AKh">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjr-41-AKh">
                                                     <rect key="frame" x="960" y="235" width="48" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="NTw-mi-MpO"/>
@@ -842,31 +854,60 @@
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeA-Wz-tNF" userLabel="House Addr">
-                                                    <rect key="frame" x="16" y="206" width="195.5" height="21"/>
+                                                    <rect key="frame" x="16" y="206" width="1000" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="4hH-9U-dPG"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="4hH-9U-dPG"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wau-cI-JOX" userLabel="House Type">
-                                                    <rect key="frame" x="16" y="235" width="142" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wau-cI-JOX" userLabel="House Type">
+                                                    <rect key="frame" x="16" y="235" width="142" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="6ms-cL-ns3"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="6ms-cL-ns3"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hm1-7D-nDh" userLabel="House Size">
-                                                    <rect key="frame" x="166" y="235" width="42" height="20.5"/>
+                                                    <rect key="frame" x="166" y="235" width="38" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="42" id="Zj5-sl-4kK"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="Zj5-sl-4kK"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pm-RZ-5Y7">
+                                                    <rect key="frame" x="904" y="235" width="49" height="20.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="64" id="azI-Zd-oao"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="azI-Zd-oao"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <constraints>
@@ -883,9 +924,11 @@
                                                 <constraint firstItem="Yjr-41-AKh" firstAttribute="centerY" secondItem="8Pm-RZ-5Y7" secondAttribute="centerY" id="Gs6-sL-gCf"/>
                                                 <constraint firstItem="8Pm-RZ-5Y7" firstAttribute="baseline" secondItem="Yjr-41-AKh" secondAttribute="baseline" id="Hs9-Np-Ojz"/>
                                                 <constraint firstItem="xz5-6L-0wF" firstAttribute="top" secondItem="4Pk-Ja-hHs" secondAttribute="top" id="IJf-Ys-jIb"/>
+                                                <constraint firstItem="8Pm-RZ-5Y7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hm1-7D-nDh" secondAttribute="trailing" id="Iz1-si-hR0"/>
                                                 <constraint firstItem="xz5-6L-0wF" firstAttribute="centerX" secondItem="4Pk-Ja-hHs" secondAttribute="centerX" id="KLi-Nd-tSC"/>
                                                 <constraint firstItem="xz5-6L-0wF" firstAttribute="leading" secondItem="4Pk-Ja-hHs" secondAttribute="leadingMargin" id="MCh-Yp-7dN"/>
                                                 <constraint firstItem="wau-cI-JOX" firstAttribute="top" secondItem="xz5-6L-0wF" secondAttribute="bottom" constant="-13" id="MlV-ZA-Xbb"/>
+                                                <constraint firstItem="xz5-6L-0wF" firstAttribute="leading" secondItem="DeA-Wz-tNF" secondAttribute="trailing" constant="-203.5" id="NY0-KY-uol"/>
                                                 <constraint firstItem="8Pm-RZ-5Y7" firstAttribute="top" secondItem="DeA-Wz-tNF" secondAttribute="bottom" constant="20" id="O1Y-p0-OyS"/>
                                                 <constraint firstItem="hm1-7D-nDh" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="trailing" constant="8" id="Q0f-b8-zZx"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="xz5-6L-0wF" secondAttribute="trailing" id="Q7k-dY-y5t"/>
@@ -895,6 +938,8 @@
                                                 <constraint firstItem="wau-cI-JOX" firstAttribute="top" secondItem="DeA-Wz-tNF" secondAttribute="bottom" constant="8" id="csF-hq-Nic"/>
                                                 <constraint firstItem="xz5-6L-0wF" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="trailing" constant="-150" id="e28-PN-rqp"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="8Pm-RZ-5Y7" secondAttribute="bottom" id="e2g-DS-TWZ"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="DeA-Wz-tNF" secondAttribute="trailing" id="ecb-Mu-tEc"/>
+                                                <constraint firstItem="8Pm-RZ-5Y7" firstAttribute="leading" secondItem="hm1-7D-nDh" secondAttribute="trailing" id="f8c-v8-K5C"/>
                                                 <constraint firstAttribute="trailing" secondItem="7K5-Fa-QOk" secondAttribute="trailing" constant="8" id="he4-CX-vZJ"/>
                                                 <constraint firstItem="hm1-7D-nDh" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="trailing" constant="8" symbolic="YES" id="mdi-B7-3oj"/>
                                                 <constraint firstItem="DeA-Wz-tNF" firstAttribute="leading" secondItem="wau-cI-JOX" secondAttribute="leading" id="mu0-aq-Hdo"/>
@@ -918,6 +963,7 @@
                                                     <exclude reference="EiC-D4-Cd2"/>
                                                     <exclude reference="KLi-Nd-tSC"/>
                                                     <exclude reference="MCh-Yp-7dN"/>
+                                                    <exclude reference="NY0-KY-uol"/>
                                                     <exclude reference="Q7k-dY-y5t"/>
                                                     <exclude reference="e28-PN-rqp"/>
                                                     <exclude reference="rCX-Oo-aIT"/>
@@ -935,6 +981,7 @@
                                                     <exclude reference="Q0f-b8-zZx"/>
                                                     <exclude reference="O1Y-p0-OyS"/>
                                                     <exclude reference="e2g-DS-TWZ"/>
+                                                    <exclude reference="f8c-v8-K5C"/>
                                                     <exclude reference="Bwu-P0-qtb"/>
                                                     <exclude reference="Gs6-sL-gCf"/>
                                                     <exclude reference="zQh-EP-Pfm"/>
@@ -1014,6 +1061,9 @@
                     <size key="freeformSize" width="1024" height="600"/>
                     <connections>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
+                        <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>
+                        <outlet property="sortByPriceButton" destination="JTH-Sz-NIS" id="9Ko-U1-rVX"/>
+                        <outlet property="sortBySizeButton" destination="RkJ-yY-SbF" id="Zzj-xd-YKt"/>
                         <outlet property="tableView" destination="AVs-la-x6f" id="W6l-uj-pjW"/>
                     </connections>
                 </viewController>

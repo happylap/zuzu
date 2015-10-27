@@ -23,6 +23,7 @@ struct SolrConst {
         static let INDENT = "indent"
         static let START = "start"
         static let ROW = "rows"
+        static let SORTING = "sort"
     }
     
     struct Filed {
@@ -198,6 +199,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         price: (Int, Int)?,
         size: (Int, Int)?,
         types: [Int]?,
+        sorting: String?,
         start: Int,
         row: Int,
         handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void) {
@@ -309,6 +311,11 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 
                 queryitems.append(
                     NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
+            }
+            
+            //Sorting
+            if let sorting = sorting {
+                queryitems.append(NSURLQueryItem(name: SolrConst.Query.SORTING, value: sorting))
             }
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: "json"))

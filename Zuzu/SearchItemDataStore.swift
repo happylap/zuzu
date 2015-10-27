@@ -26,12 +26,25 @@ public enum SearchType:Int {
     case SavedSearch = 1
 }
 
+struct HouseItemDocument {
+    
+    struct Sorting {
+        static let sortAsc = "asc"
+        static let sortDesc = "desc"
+    }
+    
+    static let price:String = "price"
+    static let size:String = "size"
+    static let postTime:String = "post_time"
+}
+
 class SearchCriteria: NSObject, NSCoding {
     var keyword:String?
     var region: [City]?
     var price:(Int, Int)?
     var size:(Int, Int)?
     var types: [Int]?
+    var sorting:String?
     
     convenience required init?(coder decoder: NSCoder) {
         
