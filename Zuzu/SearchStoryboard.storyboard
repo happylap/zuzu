@@ -1012,19 +1012,18 @@
                                     <outlet property="delegate" destination="VUP-fO-SJw" id="yNp-Rq-uYz"/>
                                 </connections>
                             </tableView>
-                            <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView">
-                                <rect key="frame" x="0.0" y="428" width="1024" height="128"/>
+                            <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="409.5" width="1024" height="146.5"/>
                                 <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="7fs-gn-6YZ"/>
                             <constraint firstItem="Wba-eS-Vmr" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="AXG-es-OXN"/>
                             <constraint firstItem="Wba-eS-Vmr" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="DbY-8L-A7Q"/>
                             <constraint firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="KW5-Iq-4pg"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="aqf-sG-kqs"/>
-                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="height" secondItem="c7O-nv-MtJ" secondAttribute="width" multiplier="1:8" id="ev7-YK-dnc"/>
+                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="height" secondItem="c7O-nv-MtJ" secondAttribute="width" multiplier="1:7" id="ev7-YK-dnc"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="leading" secondItem="c7O-nv-MtJ" secondAttribute="leading" id="fE7-1Y-hmX"/>
                             <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="Wba-eS-Vmr" secondAttribute="bottom" id="g8Y-qf-jOi"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="top" secondItem="yxI-Jr-QgG" secondAttribute="bottom" id="gHV-ef-pgY"/>
@@ -1032,11 +1031,6 @@
                             <constraint firstItem="AVs-la-x6f" firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="woB-Tr-yKD"/>
                             <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="yzU-ZC-uYR"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="7fs-gn-6YZ"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="NBD-dJ-SqW">
                         <rightBarButtonItems>
