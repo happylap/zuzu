@@ -715,7 +715,7 @@
             
             if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
                 
-                ///Load all city regions from json
+                ///Load all picker data from json
                 do {
                     let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                     let json = JSON(data: jsonData)

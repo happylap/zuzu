@@ -2,23 +2,23 @@
     "smartFilters": [
                {
                "label": "養寵物",
-               "value": 10
-               },
-               {
-               "label": "限女生",
-               "value": 20
-               },
-               {
-               "label": "可短租",
-               "value": 30
-               },
-               {
-               "label": "要車位",
-               "value": 40
+               "filterKey": "allow_pet",
+               "filterValue": "true"
                },
                {
                "label": "有電梯",
-               "value": 50
+               "filterKey": "house_type",
+               "filterValue": "2"
+               },
+               {
+               "label": "要車位",
+               "filterKey": "parking_lot",
+               "filterValue": "true"
+               },
+               {
+               "label": "限女生",
+               "filterKey": "restr_sex",
+               "filterValue": "0"
                }
                ]
 }

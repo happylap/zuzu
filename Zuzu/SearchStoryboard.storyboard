@@ -1012,21 +1012,34 @@
                                     <outlet property="delegate" destination="VUP-fO-SJw" id="yNp-Rq-uYz"/>
                                 </connections>
                             </tableView>
-                            <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
                                 <rect key="frame" x="0.0" y="409.5" width="1024" height="146.5"/>
-                                <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
+                                <subviews>
+                                    <view alpha="0.90000000000000002" tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="146.5"/>
+                                        <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="leading" secondItem="6D9-oo-jIk" secondAttribute="leading" id="0ty-7H-Hw1"/>
+                                    <constraint firstAttribute="bottom" secondItem="Wba-eS-Vmr" secondAttribute="bottom" id="Cen-8l-QAd"/>
+                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="top" secondItem="6D9-oo-jIk" secondAttribute="top" id="hnX-9C-E4H"/>
+                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="centerY" secondItem="6D9-oo-jIk" secondAttribute="centerY" id="mHL-zg-1gX"/>
+                                    <constraint firstAttribute="trailing" secondItem="Wba-eS-Vmr" secondAttribute="trailing" id="md2-Es-7bT"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="AXG-es-OXN"/>
-                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="DbY-8L-A7Q"/>
+                            <constraint firstItem="6D9-oo-jIk" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="5f7-iu-gl4"/>
                             <constraint firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="KW5-Iq-4pg"/>
+                            <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="6D9-oo-jIk" secondAttribute="bottom" id="TTZ-hY-ESQ"/>
+                            <constraint firstItem="6D9-oo-jIk" firstAttribute="height" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:7" id="UTc-Ui-gCj"/>
+                            <constraint firstItem="6D9-oo-jIk" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="Uhf-uq-P2m"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="aqf-sG-kqs"/>
-                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="height" secondItem="c7O-nv-MtJ" secondAttribute="width" multiplier="1:7" id="ev7-YK-dnc"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="leading" secondItem="c7O-nv-MtJ" secondAttribute="leading" id="fE7-1Y-hmX"/>
-                            <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="Wba-eS-Vmr" secondAttribute="bottom" id="g8Y-qf-jOi"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="top" secondItem="yxI-Jr-QgG" secondAttribute="bottom" id="gHV-ef-pgY"/>
+                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="kHQ-m4-qph"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="top" secondItem="E2g-hk-g5r" secondAttribute="bottom" id="tj6-Vf-3b9"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="woB-Tr-yKD"/>
                             <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="yzU-ZC-uYR"/>
@@ -1054,6 +1067,7 @@
                     <size key="freeformSize" width="1024" height="600"/>
                     <connections>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
+                        <outlet property="smartFilterScrollView" destination="6D9-oo-jIk" id="MNX-Np-2pg"/>
                         <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>
                         <outlet property="sortByPriceButton" destination="JTH-Sz-NIS" id="9Ko-U1-rVX"/>
                         <outlet property="sortBySizeButton" destination="RkJ-yY-SbF" id="Zzj-xd-YKt"/>

@@ -9,32 +9,52 @@
 import UIKit
 import SwiftyJSON
 
+class Filter {
+    var key:String
+    var value:String
+    
+    init(key: String, value: String) {
+        self.key = key
+        self.value = value
+    }
+}
+
 class SmartFilterView: UIView {
     
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-    // Drawing code
-    }
-    */
-    
+    var filterButtons = [ToggleButton]()
+    var filtersByButton = [ToggleButton:Filter]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         self.setup()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
         self.setup()
     }
     
-    private static func loadFilterData(resourceName: String) ->  [(label:String, value:Int)]{
+    ///The correct place to layout subviews (with correct frame & bounds info)
+    override func layoutSubviews() {
+        NSLog("layoutSubviews")
+
+        let buttonSpace:CGFloat = 8.0
+        let buttonWidth:CGFloat = 80.0
+        let buttonHeight:CGFloat = 35.0
+        let xOffset:CGFloat = (self.frame.width - 4 * buttonWidth - 3 * buttonSpace) / 2
+        let yOffset:CGFloat = (self.frame.height - buttonHeight) / 2
         
-        var resultItems = [(label: String, value: Int)]()
+        for (index, button) in filterButtons.enumerate() {
+            let newXOffset = xOffset + CGFloat(index) * (buttonWidth + buttonSpace)
+            button.frame =
+                CGRectMake(newXOffset, yOffset,
+                    buttonWidth, buttonHeight) // X, Y, width, height
+        }
+    }
+    
+    private static func loadFilterData(resourceName: String) ->  [(label: String, filter: Filter)]{
+        
+        var resultItems = [(label: String, filter: Filter)]()
         
         if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
             
@@ -47,14 +67,15 @@ class SmartFilterView: UIView {
                 
                 for itemJsonObj in items {
                     let label = itemJsonObj["label"].stringValue
-                    let value = itemJsonObj["value"].intValue
+                    let key = itemJsonObj["filterKey"].stringValue
+                    let value = itemJsonObj["filterValue"].stringValue
                     
-                    resultItems.append( (label: label, value: value) )
+                    resultItems.append( (label: label, filter: Filter(key: key, value: value)) )
                 }
                 
             } catch let error as NSError{
                 
-                NSLog("Cannot load area json file %@", error)
+                NSLog("Cannot load json file %@", error)
                 
             }
         }
@@ -65,32 +86,17 @@ class SmartFilterView: UIView {
     private func setup() {
         //Load filters
         let filters = SmartFilterView.loadFilterData("smartFilters")
-        let xOffset:CGFloat = 8.0
-        let yOffset:CGFloat = 10.0
-        let buttonSpace:CGFloat = 8.0
-        let buttonWidth:CGFloat = 80.0
-        let buttonHeight:CGFloat = 35.0
         
-        for (index, filter) in filters.enumerate() {
-            let newXOffset = xOffset + CGFloat(index) * (buttonWidth + buttonSpace)
+        for filter in filters {
             let button : ToggleButton = ToggleButton()
             button.setTitle(filter.label, forState: .Normal)
-            button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            button.frame =
-                CGRectMake(newXOffset, yOffset,
-                    buttonWidth, buttonHeight) // X, Y, width, height
+            button.onColor = UIColor.whiteColor()
             
-            button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            filtersByButton[button] = filter.filter
+            filterButtons.append(button)
             
             self.addSubview(button)
         }
         
     }
-    
-    func onFilterButtonTouched(sender: UIButton) {
-        if let toogleButton = sender as? ToggleButton {
-            toogleButton.toggleButtonState()
-        }
-    }
-    
 }

@@ -15,8 +15,8 @@ protocol ToggleStateListenr {
 }
 
 class ToggleButton: UIButton {
-    private let onColor = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
-    private let offColor = UIColor(red: 0xE0/255, green: 0xE0/255, blue: 0xE0/255, alpha: 0.8)
+    var onColor = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
+    var offColor = UIColor(red: 0xE0/255, green: 0xE0/255, blue: 0xE0/255, alpha: 0.8)
     
     private var listeners: [ToggleStateListenr] = [ToggleStateListenr]()
     private var toggleState: Bool = false {
@@ -53,11 +53,14 @@ class ToggleButton: UIButton {
     private func toggleOn() {
         self.layer.borderColor = onColor.CGColor
         self.tintColor = onColor
+        self.setTitleColor(onColor, forState: .Normal)
     }
     
     private func toggleOff() {
         self.layer.borderColor = offColor.CGColor
         self.tintColor = offColor
+        self.setTitleColor(offColor, forState: .Normal)
+        self.setTitleColor(offColor, forState: .Selected)
     }
     
     func getToggleState() -> Bool {
