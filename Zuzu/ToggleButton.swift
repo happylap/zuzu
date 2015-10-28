@@ -15,6 +15,9 @@ protocol ToggleStateListenr {
 }
 
 class ToggleButton: UIButton {
+    var onColor = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
+    var offColor = UIColor(red: 0xE0/255, green: 0xE0/255, blue: 0xE0/255, alpha: 0.8)
+    
     private var listeners: [ToggleStateListenr] = [ToggleStateListenr]()
     private var toggleState: Bool = false {
         didSet {
@@ -33,23 +36,31 @@ class ToggleButton: UIButton {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.setup()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
+    private func setup() {
+        self.layer.cornerRadius = 16
+        self.layer.borderWidth = 2
         self.toggleOff()
     }
     
     private func toggleOn() {
-        let color = UIColor(red: 0x00/255, green: 0x72/255, blue: 0xE3/255, alpha: 1)
-        
-        self.layer.borderWidth = 2
-        self.layer.borderColor = color.CGColor
-        self.tintColor = color
+        self.layer.borderColor = onColor.CGColor
+        self.tintColor = onColor
+        self.setTitleColor(onColor, forState: .Normal)
     }
     
     private func toggleOff() {
-        let color = UIColor(red: 0xE0/255, green: 0xE0/255, blue: 0xE0/255, alpha: 0.8)
-        
-        self.layer.borderWidth = 2
-        self.layer.borderColor = color.CGColor
-        self.tintColor = color
+        self.layer.borderColor = offColor.CGColor
+        self.tintColor = offColor
+        self.setTitleColor(offColor, forState: .Normal)
+        self.setTitleColor(offColor, forState: .Selected)
     }
     
     func getToggleState() -> Bool {

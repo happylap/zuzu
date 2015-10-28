@@ -713,7 +713,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RkJ-yY-SbF">
-                                        <rect key="frame" x="292.5" y="0.0" width="292.5" height="54"/>
+                                        <rect key="frame" x="292" y="0.0" width="292.5" height="54"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="tJf-mm-jK1"/>
@@ -759,10 +759,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njk-V3-8Pl" userLabel="Filter Setting">
-                                        <rect key="frame" x="885.5" y="-1" width="138.5" height="56"/>
+                                        <rect key="frame" x="885" y="-1" width="138.5" height="56"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
-                                        <state key="normal" image="bell-outline"/>
+                                        <state key="normal" image="filter-outline"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1012,29 +1012,38 @@
                                     <outlet property="delegate" destination="VUP-fO-SJw" id="yNp-Rq-uYz"/>
                                 </connections>
                             </tableView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
+                                <rect key="frame" x="0.0" y="409.5" width="1024" height="146.5"/>
+                                <subviews>
+                                    <view alpha="0.90000000000000002" tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="146.5"/>
+                                        <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="leading" secondItem="6D9-oo-jIk" secondAttribute="leading" id="0ty-7H-Hw1"/>
+                                    <constraint firstAttribute="bottom" secondItem="Wba-eS-Vmr" secondAttribute="bottom" id="Cen-8l-QAd"/>
+                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="top" secondItem="6D9-oo-jIk" secondAttribute="top" id="hnX-9C-E4H"/>
+                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="centerY" secondItem="6D9-oo-jIk" secondAttribute="centerY" id="mHL-zg-1gX"/>
+                                    <constraint firstAttribute="trailing" secondItem="Wba-eS-Vmr" secondAttribute="trailing" id="md2-Es-7bT"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="AVs-la-x6f" firstAttribute="leading" secondItem="c7O-nv-MtJ" secondAttribute="leadingMargin" id="AYj-Qk-Nch"/>
-                            <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="EDv-lr-bft"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="AVs-la-x6f" secondAttribute="trailing" id="H0c-A9-cR3"/>
+                            <constraint firstItem="6D9-oo-jIk" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="5f7-iu-gl4"/>
                             <constraint firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="KW5-Iq-4pg"/>
-                            <constraint firstItem="AVs-la-x6f" firstAttribute="bottom" secondItem="hmg-sM-QSC" secondAttribute="top" id="TFt-jD-PHs"/>
+                            <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="6D9-oo-jIk" secondAttribute="bottom" id="TTZ-hY-ESQ"/>
+                            <constraint firstItem="6D9-oo-jIk" firstAttribute="height" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:7" id="UTc-Ui-gCj"/>
+                            <constraint firstItem="6D9-oo-jIk" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="Uhf-uq-P2m"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="aqf-sG-kqs"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="leading" secondItem="c7O-nv-MtJ" secondAttribute="leading" id="fE7-1Y-hmX"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="top" secondItem="yxI-Jr-QgG" secondAttribute="bottom" id="gHV-ef-pgY"/>
-                            <constraint firstItem="E2g-hk-g5r" firstAttribute="height" secondItem="c7O-nv-MtJ" secondAttribute="height" multiplier="1:14" id="rFZ-p2-Dtp"/>
+                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="kHQ-m4-qph"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="top" secondItem="E2g-hk-g5r" secondAttribute="bottom" id="tj6-Vf-3b9"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="woB-Tr-yKD"/>
+                            <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="yzU-ZC-uYR"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="rFZ-p2-Dtp"/>
-                                <exclude reference="AYj-Qk-Nch"/>
-                                <exclude reference="H0c-A9-cR3"/>
-                                <exclude reference="EDv-lr-bft"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="NBD-dJ-SqW">
                         <rightBarButtonItems>
@@ -1058,6 +1067,7 @@
                     <size key="freeformSize" width="1024" height="600"/>
                     <connections>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
+                        <outlet property="smartFilterScrollView" destination="6D9-oo-jIk" id="MNX-Np-2pg"/>
                         <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>
                         <outlet property="sortByPriceButton" destination="JTH-Sz-NIS" id="9Ko-U1-rVX"/>
                         <outlet property="sortBySizeButton" destination="RkJ-yY-SbF" id="Zzj-xd-YKt"/>
@@ -1091,11 +1101,11 @@
                         <viewControllerLayoutGuide type="bottom" id="WNA-Xe-W0c"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QBu-te-JPD">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="13R-Y2-8rF">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="592"/>
+                                <rect key="frame" x="0.0" y="0.0" width="400" height="192"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="63" id="9K7-Rt-kkC"/>
                                 </constraints>
@@ -1117,6 +1127,8 @@
                             <constraint firstAttribute="trailing" secondItem="13R-Y2-8rF" secondAttribute="trailing" id="rbx-vW-kqY"/>
                         </constraints>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="400" height="200"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRK-Gd-tS5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1145,6 +1157,7 @@
     <resources>
         <image name="bell-outline" width="24" height="24"/>
         <image name="download_arrow_down_save_folder_file_document-512" width="36" height="36"/>
+        <image name="filter-outline" width="24" height="24"/>
         <image name="first" width="30" height="30"/>
         <image name="house_img" width="188" height="136"/>
     </resources>

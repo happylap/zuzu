@@ -46,6 +46,9 @@ class SearchCriteria: NSObject, NSCoding {
     var types: [Int]?
     var sorting:String?
     
+    ///Additional Filters [Field:Value]
+    var filters: [String : String]?
+    
     convenience required init?(coder decoder: NSCoder) {
         
         self.init()

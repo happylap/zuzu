@@ -661,6 +661,8 @@
                     NSLog("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
                         
+                        self.tabBarController!.tabBar.hidden = true;
+                        
                         ///Collect the search criteria set by the user
                         let criteria = toSearhCriteria()
                         
@@ -713,7 +715,7 @@
             
             if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
                 
-                ///Load all city regions from json
+                ///Load all picker data from json
                 do {
                     let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                     let json = JSON(data: jsonData)

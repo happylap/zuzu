@@ -34,10 +34,11 @@
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
-		2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
+		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
+		2FDCA0D51BE0721800498FC0 /* smartFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* smartFilters.json */; };
 		2FFD60AD1BD7B92900E1DA46 /* priceRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* priceRange.json */; };
 		2FFD60AF1BD7B93E00E1DA46 /* sizeRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
@@ -111,10 +112,11 @@
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
-		2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
+		2FDCA0D41BE0721800498FC0 /* smartFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = smartFilters.json; sourceTree = "<group>"; };
 		2FFD60AC1BD7B92900E1DA46 /* priceRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = priceRange.json; sourceTree = "<group>"; };
 		2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sizeRange.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,7 +172,6 @@
 			children = (
 				2F6155571BD888320024145E /* service */,
 				2FFCBF301BCE7F6C00400552 /* view */,
-				2FA2D31E1BB13F03008C5B59 /* SearchResultTableViewController.swift */,
 				2FBC05571BDF15710035652D /* SearchResultViewController.swift */,
 				2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */,
 				2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */,
@@ -359,6 +360,7 @@
 				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
 				2FFD60AC1BD7B92900E1DA46 /* priceRange.json */,
 				2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */,
+				2FDCA0D41BE0721800498FC0 /* smartFilters.json */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -367,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */,
+				2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
+				2FDCA0D51BE0721800498FC0 /* smartFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
@@ -591,6 +595,7 @@
 				2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */,
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
+				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
@@ -612,7 +617,6 @@
 				81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */,
-				2FA2D31F1BB13F03008C5B59 /* SearchResultTableViewController.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				81FA28131BDA39B10038DD19 /* Note.swift in Sources */,
 				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,

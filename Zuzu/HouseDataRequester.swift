@@ -118,7 +118,7 @@ class HouseItem:NSObject, NSCoding {
     
     
     private init(builder: Builder){
-        /// Assign default value for mandotary fields
+        /// Assign default value for mandatory fields
         /// cause we don't want the app exists because of some incorrect data in the backend
         self.id = builder.id ?? ""
         self.title = builder.title ?? ""
@@ -194,15 +194,16 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         urlComp.path = SolrConst.Server.PATH
     }
     
-    func searchByCriteria(keyword: String?,
-        area: [City]?,
-        price: (Int, Int)?,
-        size: (Int, Int)?,
-        types: [Int]?,
-        sorting: String?,
-        start: Int,
-        row: Int,
+    func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int,
         handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void) {
+            
+            let keyword: String? = criteria.keyword
+            let area: [City]? = criteria.region
+            let price: (Int, Int)? = criteria.price
+            let size: (Int, Int)? = criteria.size
+            let types: [Int]? = criteria.types
+            let sorting: String? = criteria.sorting
+            let filters: [String:String]? = criteria.filters
             
             var queryitems:[NSURLQueryItem] = []
             var mainQueryStr:String = "*:*"
@@ -311,6 +312,14 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 
                 queryitems.append(
                     NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
+            }
+            
+            //Filters
+            if let filters = filters {
+                for (key, value) in filters {
+                    queryitems.append(
+                        NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(key):\(value)"))
+                }
             }
             
             //Sorting

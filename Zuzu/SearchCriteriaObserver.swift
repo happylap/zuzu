@@ -11,7 +11,7 @@ import Foundation
 class SearchCriteriaObserver:NSObject {
     
     //If the criteria is not changed for allowedIdleSeconds, the system will fetch the number of houses before the user actually presses the search button
-    private let allowedIdleTime = 2.5
+    private let allowedIdleTime = 2.0
     
     private let viewController: SearchBoxTableViewController
     
@@ -63,6 +63,7 @@ class SearchCriteriaObserver:NSObject {
         currentTimer?.invalidate()
         
         //Reset fast house count label
+        self.viewController.fastItemCountLabel.alpha = 0
         self.viewController.fastItemCountLabel.text = nil
         
         currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "fetchNumberOfItems", userInfo: nil, repeats: false)
@@ -71,15 +72,14 @@ class SearchCriteriaObserver:NSObject {
     func fetchNumberOfItems() {
         NSLog("Start fetchNumberOfItems!")
         
-        houseReq.searchByCriteria(currentCriteria.keyword, area: currentCriteria.region,
-            price: currentCriteria.price, size: currentCriteria.size,
-            types: currentCriteria.types, sorting: currentCriteria.sorting,
-            start: 0, row: 0) { (totalNum, result, error) -> Void in
+        houseReq.searchByCriteria(currentCriteria, start: 0, row: 0) { (totalNum, result, error) -> Void in
                 
             NSLog("End fetchNumberOfItems = \(totalNum)")
             
             if(totalNum != nil && totalNum != 0) {
                 self.viewController.fastItemCountLabel.text = "立即觀看 \(totalNum!) 筆出租物件"
+                self.viewController.fastItemCountLabel.fadeIn(0.5, delay: 0)
+                
             } else {
                 self.viewController.fastItemCountLabel.text = nil
             }

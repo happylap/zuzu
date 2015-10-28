@@ -8,6 +8,19 @@
 
 import UIKit
 
+struct Const {
+    static let SECTION_NUM:Int = 1
+}
+
+enum ScrollDirection {
+    case ScrollDirectionNone
+    case ScrollDirectionRight
+    case ScrollDirectionLeft
+    case ScrollDirectionUp
+    case ScrollDirectionDown
+    case ScrollDirectionCrazy
+}
+
 class SearchResultViewController: UIViewController {
     
     // MARK: - Member Fields
@@ -26,6 +39,7 @@ class SearchResultViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var smartFilterScrollView: UIScrollView!
     
     var debugTextStr: String = ""
     private let searchItemService : SearchItemService = SearchItemService.getInstance()
@@ -190,6 +204,23 @@ class SearchResultViewController: UIViewController {
         return image
         
     }
+
+    private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
+        self.dataSource.criteria = criteria
+        self.startSpinner()
+        self.dataSource.initData()
+        self.tableView.reloadData()
+    }
+    
+    private func configureFilterButtons() {
+    
+        if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
+            
+            for button in smartFilterView.filterButtons {
+                button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            }
+        }
+    }
     
     // MARK: - Control Action Handlers
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
@@ -209,11 +240,38 @@ class SearchResultViewController: UIViewController {
         }
     }
     
-    private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
-        self.dataSource.criteria = criteria
-        self.startSpinner()
-        self.dataSource.initData()
-        self.tableView.reloadData()
+    func onFilterButtonTouched(sender: UIButton) {
+        if let toogleButton = sender as? ToggleButton {
+            toogleButton.toggleButtonState()
+            
+            let isToggleOn = toogleButton.getToggleState()
+            
+            if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
+                
+                if let filter = smartFilterView.filtersByButton[toogleButton] {
+                    
+                    
+                    if(self.searchCriteria?.filters == nil) {
+                        //Add a new filter
+                        self.searchCriteria?.filters = [String:String]()
+                    }
+                    
+                    var filters:[String:String]! = self.searchCriteria?.filters
+                    //Update current filters
+                    if(isToggleOn) {
+                        filters[filter.key] = filter.value
+                    } else {
+                        filters.removeValueForKey(filter.key)
+                    }
+                    
+                    self.searchCriteria?.filters = filters
+                    
+                    reloadDataWithNewCriteria(self.searchCriteria)
+                    
+                    NSLog("Filter pressed: %@ , %@", filter.key, filter.value)
+                }
+            }
+        }
     }
     
     @IBAction func onSortingButtonTouched(sender: UIButton) {
@@ -295,6 +353,11 @@ class SearchResultViewController: UIViewController {
         self.dataSource.setDataLoadedHandler(onDataLoaded)
         self.dataSource.criteria = searchCriteria
         
+        //Configure
+        
+        self.configureFilterButtons()
+        
+        //Load the first page of data
         self.startSpinner()
         self.dataSource.initData()
     }
