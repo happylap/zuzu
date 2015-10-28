@@ -661,6 +661,8 @@
                     NSLog("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
                         
+                        self.tabBarController!.tabBar.hidden = true;
+                        
                         ///Collect the search criteria set by the user
                         let criteria = toSearhCriteria()
                         
