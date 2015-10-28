@@ -17,4 +17,5 @@ class MyCollectionCell: UITableViewCell {
     @IBOutlet weak var title: UILabel!
     
     @IBOutlet weak var avatar: UIImageView!
+    
 }

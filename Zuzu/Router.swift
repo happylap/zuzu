@@ -19,8 +19,8 @@ enum Router: URLRequestConvertible {
     //Restfull api
     case TopicComment(parameters:[String: AnyObject])
     case TopicCreate(parameters:[String: AnyObject])
-    case HouseList(maxId:Int,count:Int)
-    case HouseDetail(houseId:Int)
+    case HouseList()
+    case HouseDetail(houseId: String)
  
     var method: Alamofire.Method {
         switch self {
