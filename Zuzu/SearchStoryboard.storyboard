@@ -677,7 +677,7 @@
         <!--Search Result View Controller-->
         <scene sceneID="Brr-FQ-XTv">
             <objects>
-                <viewController id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Search Result View Controller" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yxI-Jr-QgG"/>
                         <viewControllerLayoutGuide type="bottom" id="hmg-sM-QSC"/>
@@ -1045,7 +1045,7 @@
                             <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="yzU-ZC-uYR"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="NBD-dJ-SqW">
+                    <navigationItem key="navigationItem" title="搜尋結果" id="NBD-dJ-SqW">
                         <rightBarButtonItems>
                             <barButtonItem image="download_arrow_down_save_folder_file_document-512" id="8EG-ML-NRj">
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
