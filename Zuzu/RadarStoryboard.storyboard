@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OaS-ny-kO8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <scenes>
-        <!--租屋雷達-->
+        <!--View Controller-->
         <scene sceneID="siC-n1-MI9">
             <objects>
                 <viewController id="OaS-ny-kO8" sceneMemberID="viewController">
@@ -39,9 +39,28 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="租屋雷達" image="first" id="7Iv-3p-dfX"/>
+                    <navigationItem key="navigationItem" id="SR1-Hu-UOf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yrf-4n-0Hw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="480" y="903"/>
+        </scene>
+        <!--租屋雷達-->
+        <scene sceneID="qM5-6S-MSc">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xcL-ff-LIC" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="租屋雷達" image="first" id="7Iv-3p-dfX"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="EOK-K2-3ns">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="OaS-ny-kO8" kind="relationship" relationship="rootViewController" id="69B-zg-e1h"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XvE-Ro-1Dg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-332" y="903"/>
         </scene>

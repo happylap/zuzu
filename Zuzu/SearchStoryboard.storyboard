@@ -1140,7 +1140,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ybg-AC-NMz" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="租屋快搜" image="first" id="Be4-CX-ExJ"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="LVf-gq-zQj">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="LVf-gq-zQj" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

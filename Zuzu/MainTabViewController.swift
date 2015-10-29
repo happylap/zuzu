@@ -17,6 +17,10 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!
       
+        if let navController = searchViewController as? UINavigationController {
+            //navController.navigation
+        }
+        
         let collectionStoryboard:UIStoryboard = UIStoryboard(name: "MyCollectionStoryboard", bundle: nil)
         let collectionViewController:UIViewController = collectionStoryboard.instantiateInitialViewController()!
         
