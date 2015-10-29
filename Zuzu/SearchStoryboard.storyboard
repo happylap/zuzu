@@ -476,7 +476,6 @@
                         <outlet property="sizeLabel" destination="6KZ-2n-pJM" id="cX1-6j-FL5"/>
                         <outlet property="sizePicker" destination="OI0-8I-IXm" id="e0w-Jb-Htf"/>
                         <outlet property="typeButtonContainer" destination="trL-oE-oca" id="omD-mA-kMC"/>
-                        <segue destination="VUP-fO-SJw" kind="show" identifier="showSearchResult2" id="82h-zc-3D7"/>
                         <segue destination="Tna-2J-h7R" kind="show" identifier="showAreaSelector" id="KJQ-EL-WXx"/>
                         <segue destination="ewd-BO-qUn" kind="show" identifier="showSearchResult" id="A6f-nH-4Ul"/>
                     </connections>
@@ -1007,10 +1006,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="VUP-fO-SJw" id="z1M-hA-SqP"/>
-                                    <outlet property="delegate" destination="VUP-fO-SJw" id="yNp-Rq-uYz"/>
-                                </connections>
                             </tableView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
                                 <rect key="frame" x="0.0" y="409.5" width="1024" height="146.5"/>
@@ -1077,20 +1072,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t8e-H4-Hw1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1725" y="471"/>
-        </scene>
-        <!--Search Result Table View Controller-->
-        <scene sceneID="nev-7L-pDc">
-            <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="VUP-fO-SJw" customClass="SearchResultTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="600"/>
-                    <connections>
-                        <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="q8K-GS-fYV"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="y1m-Cy-mQd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2551" y="-391"/>
         </scene>
         <!--Debug-->
         <scene sceneID="F5o-3h-u7z">
