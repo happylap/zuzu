@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--租屋雷達-->
         <scene sceneID="siC-n1-MI9">
             <objects>
                 <viewController id="OaS-ny-kO8" sceneMemberID="viewController">
@@ -39,7 +39,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="SR1-Hu-UOf"/>
+                    <navigationItem key="navigationItem" title="租屋雷達" id="SR1-Hu-UOf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yrf-4n-0Hw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -51,7 +51,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xcL-ff-LIC" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="租屋雷達" image="first" id="7Iv-3p-dfX"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="EOK-K2-3ns">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="EOK-K2-3ns" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
