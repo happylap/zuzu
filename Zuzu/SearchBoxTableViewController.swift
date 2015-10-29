@@ -676,13 +676,14 @@
                                 let deleteIndex = historicalItems.endIndex - 1
                                 searchItemService.deleteSearchItem(deleteIndex, itemType: .HistoricalSearch)
                             }
-                            
-                            do{
-                                try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .HistoricalSearch))
-                            } catch {
-                                NSLog("Fail to save search history")
-                            }
                         }
+                        
+                        do{
+                            try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .HistoricalSearch))
+                        } catch {
+                            NSLog("Fail to save search history")
+                        }
+                        
                     }
                 case ViewTransConst.showAreaSelector:
                     NSLog("showAreaSlector")
