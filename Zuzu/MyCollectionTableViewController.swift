@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class MyCollectionTableViewController: UITableViewController {
 
-    internal var houseList: Array<House> = []
+    var data: [AnyObject] = [AnyObject]()
     
     var loading:Bool = false
     
@@ -42,13 +42,7 @@ class MyCollectionTableViewController: UITableViewController {
             let json = closureResponse.2.value
             var result = JSON(json!)
             
-            NSLog("\(result)")
-            
-            let status = result["responseHeader", "status"].intValue
-            NSLog("status \(status)")
-            
-            let params = result["responseHeader", "params"]
-            NSLog("params \(params)")
+            //NSLog("\(result)")
             
             if result["responseHeader", "status"].intValue == 0 {
                 
@@ -61,16 +55,17 @@ class MyCollectionTableViewController: UITableViewController {
                     return
                 }
                 
+                NSLog("items count \(items.count)")
+                
                 var retrievedHouses = [Dictionary<String, AnyObject>]()
                 for it in items {
                     let house: Dictionary<String, AnyObject> = it as! Dictionary<String, AnyObject>
                     retrievedHouses.append(house)
-                    
-                    //daoHouse.deleteAll()
-                    HouseDao.sharedInstance.addHouseList(retrievedHouses)
                 }
                 
                 dispatch_async(dispatch_get_main_queue()) {
+                    HouseDao.sharedInstance.deleteAll()
+                    HouseDao.sharedInstance.addHouseList(retrievedHouses)
                     self.tableView.reloadData()
                 }
                 
@@ -94,8 +89,8 @@ class MyCollectionTableViewController: UITableViewController {
 //        
 //        self.tableView.addFooterWithCallback{
 //            NSLog("addFooterWithCallback")
-//            if(self.houseList.count>0) {
-//                //let  maxId = self.houseList.last!.valueForKey("postId") as! Int
+//            if(self.data.count>0) {
+//                //let  maxId = self.data.last!.valueForKey("postId") as! Int
 //                self.loadData(11, isPullRefresh: false)
 //            }
 //        }
@@ -105,13 +100,15 @@ class MyCollectionTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        houseList = HouseDao.sharedInstance.getHouseList()
-        self.title = String(format: "Upcoming houses (%i)", houseList.count)
+        if let result = HouseDao.sharedInstance.getHouseList() {
+            self.data = result
+            NSLog("data count: \(data.count)")
+            self.tableView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Table view data source
@@ -121,42 +118,27 @@ class MyCollectionTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return self.houseList.count
+        return self.data.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("myCollectionCell", forIndexPath: indexPath) as! MyCollectionCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
-        
-        let house: House! = self.houseList[indexPath.row]
-        
-        cell.title.text = house.title
-        
-//        cell.avatar.af_setImageWithURL(NSURL(string: item.valueForKey("img")[0] as! String)!, placeholderImage: nil)
-//        
-        cell.avatar.layer.cornerRadius = 5
-        cell.avatar.layer.masksToBounds = true
-        
+
+        cell.parentTableView = tableView
+        cell.indexPath = indexPath
+        cell.houseItem = self.data[indexPath.row]
+ 
         return cell
     }
     
-    
-    func loadData(maxId:Int,isPullRefresh:Bool){
-        
-        
-    }
-    
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.dequeueReusableCellWithIdentifier("myCollectionCell", forIndexPath: indexPath) as! MyCollectionCell
-        cell.containerView.backgroundColor = UIColor(red: 0.85, green: 0.85, blue:0.85, alpha: 0.9)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == self.houseList.count-1 {
+        if indexPath.row == self.data.count-1 {
             
             // self.tableView.footerBeginRefreshing()
             //  loadData(self.data[indexPath.row].valueForKey("postId") as! Int,isPullRefresh:false)
@@ -178,7 +160,7 @@ class MyCollectionTableViewController: UITableViewController {
                 let view = segue.destinationViewController as! HouseDetailController
                 let indexPath = self.tableView.indexPathForSelectedRow
                 
-                let house: AnyObject = self.houseList[indexPath!.row]
+                let house: AnyObject = self.data[indexPath!.row]
                 view.house = house
                 
                 
@@ -194,11 +176,11 @@ class MyCollectionTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            let daoHouse = HouseDao()
-            daoHouse.delete(houseList[indexPath.row])
-            houseList.removeAtIndex(indexPath.row)
+            let selectedItem: AnyObject = self.data[indexPath.row]
+            let id = selectedItem.valueForKey("id") as? String
+            HouseDao.sharedInstance.deleteById(id!)
+            data.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self.title = String(format: "Upcoming houses (%i)", houseList.count)
         }
     }
 

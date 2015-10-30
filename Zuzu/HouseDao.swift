@@ -37,8 +37,8 @@ class HouseDao: NSObject {
     // MARK: Create
     
     func addHouseList(items: [AnyObject]) {
-        for house in items {
-            self.addHouse(house, save: false)
+        for item in items {
+            self.addHouse(item, save: false)
         }
         
         CoreDataManager.shared.save()
@@ -65,61 +65,48 @@ class HouseDao: NSObject {
     
     // MARK: Read
     
-    func getHouseList() -> Array<House> {
-        var fetchedResults: Array<House> = Array<House>()
-        
+    func getHouseList() -> [AnyObject]? {
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         //let sort1 = NSSortDescriptor(key: "lastCommentTime", ascending: false)
         
-        fetchRequest.fetchLimit = 30
+        //fetchRequest.fetchLimit = 30
         //fetchRequest.sortDescriptors = [sort1]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         
         // Execute fetch request
-        do {
-            fetchedResults = try CoreDataManager.shared.executeFetchRequest(fetchRequest) as! [House]
-        } catch let fetchError as NSError {
-            print("getHoustList error: \(fetchError.localizedDescription)")
-            fetchedResults = Array<House>()
-        }
-        
-        return fetchedResults
+        return CoreDataManager.shared.executeFetchRequest(fetchRequest)
     }
     
-    func getHouseById(houseId: NSString) -> Array<House> {
-        var fetchedResults: Array<House> = Array<House>()
-        
+    func getHouseById(id: NSString) -> House? {
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         
         // Add a predicate to filter by houseId
-        let findByIdPredicate = NSPredicate(format: "id = %@", houseId)
+        let findByIdPredicate = NSPredicate(format: "id = %@", id)
         fetchRequest.predicate = findByIdPredicate
         
         // Execute fetch request
-        do {
-            fetchedResults = try CoreDataManager.shared.executeFetchRequest(fetchRequest) as! [House]
-        } catch let fetchError as NSError {
-            print("getHoustList error: \(fetchError.localizedDescription)")
-            fetchedResults = Array<House>()
-        }
+        let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest)
         
-        return fetchedResults
+        if fetchedResults?.count != 0 {
+            
+            if let fetchedHouse: House = fetchedResults![0] as? House {
+                return fetchedHouse
+            }
+        }
+        return nil
+        
     }
     
     // MARK: Delete
     
-    func deleteById(houseId: NSString) {
-        let retrievedItems = self.getHouseById(houseId)
-        
-        for item in retrievedItems {
-            self.delete(item)
+    func deleteById(id: NSString) {
+        if let house = self.getHouseById(id) {
+            NSLog("delete data id: \(house.id)")
+            CoreDataManager.shared.deleteEntity(house)
+            CoreDataManager.shared.save()
         }
-    }
-    
-    func deleteHouse(house: House) {
-        CoreDataManager.shared.delete(house)
     }
     
     func deleteAll() {
@@ -130,13 +117,34 @@ class HouseDao: NSObject {
         
         var data = JSON(obj)
         
-        let id = data["id"].string!
-        let title = data["title"].string!
+        let id = data["id"].stringValue
+        let title = data["title"].stringValue
+        let img = data["img"].arrayObject as? [String] ?? [String]()
+        let price = data["price"].intValue
+        let addr = data["addr"].stringValue
+        
+//        let id = house["id"]  as? String
+//        let title = house["title"] as? String
+//        let addr = house["addr"]  as? String
+//        let type = house["house_type"] as? Int
+//        let usage = house["purpose_type"] as? Int
+//        let price = house["price"] as? Int
+//        let size = house["size"] as? Int
+//        let desc = house["desc"]  as? String
+//        let imgList = house["img"] as? [String]
         
         house.id = id
         house.title = title
+        house.img = img
+        house.price = price
+        house.addr = addr
+//        
+//        house.img = [String]()
+////        
+//        for (_, subJson) in img.enumerate() {
+//            house.img?.append(subJson.stringValue)
+//        }
         
-        //  println(post)
         return house
     }
 }
