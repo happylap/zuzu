@@ -51,8 +51,8 @@
         
         var sizeUpperRange:Range<Int>?
         var priceUpperRange:Range<Int>?
-        let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("sizeRange")
-        let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("priceRange")
+        let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
+        let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
         
         // Trigger the fetching of total number of items that meet the current criteria
         lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
@@ -730,7 +730,7 @@
         
         // MARK: - Private Utils
         
-        private static func loadPickerData(resourceName: String) ->  [[(label:String, value:Int)]]{
+        private static func loadPickerData(resourceName: String, criteriaLabel: String) ->  [[(label:String, value:Int)]]{
             
             var resultItems = Array(count: 2, repeatedValue: [(label: String, value: Int)]() )
             
@@ -740,9 +740,9 @@
                 do {
                     let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                     let json = JSON(data: jsonData)
-                    let items = json[resourceName].arrayValue
+                    let items = json[criteriaLabel].arrayValue
                     
-                    NSLog("\(resourceName) = %d", items.count)
+                    NSLog("\(criteriaLabel) = %d", items.count)
                     
                     for itemJsonObj in items {
                         let label = itemJsonObj["label"].stringValue

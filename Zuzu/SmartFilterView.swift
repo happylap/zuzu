@@ -52,7 +52,7 @@ class SmartFilterView: UIView {
         }
     }
     
-    private static func loadFilterData(resourceName: String) ->  [(label: String, filter: Filter)]{
+    private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [(label: String, filter: Filter)]{
         
         var resultItems = [(label: String, filter: Filter)]()
         
@@ -61,9 +61,9 @@ class SmartFilterView: UIView {
             do {
                 let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 let json = JSON(data: jsonData)
-                let items = json[resourceName].arrayValue
+                let items = json[criteriaLabel].arrayValue
                 
-                NSLog("\(resourceName) = %d", items.count)
+                NSLog("\(criteriaLabel) = %d", items.count)
                 
                 for itemJsonObj in items {
                     let label = itemJsonObj["label"].stringValue
@@ -85,7 +85,7 @@ class SmartFilterView: UIView {
     
     private func setup() {
         //Load filters
-        let filters = SmartFilterView.loadFilterData("smartFilters")
+        let filters = SmartFilterView.loadFilterData("resultFilters", criteriaLabel: "smartFilters")
         
         for filter in filters {
             let button : ToggleButton = ToggleButton()
