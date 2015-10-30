@@ -1,0 +1,139 @@
+{
+    "smartFilters":
+    [
+     {
+     "label": "養寵物",
+     "filterKey": "allow_pet",
+     "filterValue": "true"
+     },
+     {
+     "label": "有電梯",
+     "filterKey": "house_type",
+     "filterValue": "2"
+     },
+     {
+     "label": "要車位",
+     "filterKey": "parking_lot",
+     "filterValue": "true"
+     },
+     {
+     "label": "限女生",
+     "filterKey": "restr_sex",
+     "filterValue": "0"
+     }
+     ],
+    
+    "advancedFilters":
+    [
+     {"group": "房屋條件",
+     "filters": [
+                 {
+                 "label": "型態",
+                 "type": 1,
+                 "filterKey": "house_type",
+                 "filterOptions": ["不限", "公寓", "電梯大樓", "透天", "別墅"]
+                 },
+                 {
+                 "label": "格局",
+                 "type": 1,
+                 "filterKey": "layout",
+                 "filterOptions": ["不限", "1房", "2房", "3房", "4房", "5房以上"]
+                 },
+                 {
+                 "label": "經辦人",
+                 "type": 1,
+                 "filterKey": "agent_type",
+                 "filterOptions": ["不限", "屋主", "房仲", "代理人"]
+                 },
+                 {
+                 "label": "附車位",
+                 "type": 0,
+                 "filterKey": "parking_lot",
+                 "filterKey": "true"
+                 },
+                 {
+                 "label": "不要地下室",
+                 "type": 0,
+                 "filterKey": "floor",
+                 "filterValue": "[ 0 TO *]"
+                 },
+                 {
+                 "label": "不要頂樓加蓋",
+                 "type": 0,
+                 "filterKey": "rooftop_addition",
+                 "filterValue": "false"
+                 }
+                 ]
+     },
+     
+     {"group": "承租條件",
+     "filters": [
+                 {
+                 "label": "房客身分",
+                 "type": 1,
+                 "filterKey": "restr_profile",
+                 "filterOptions": ["不限", "學生", "上班族", "家庭"]
+                 },
+                 {
+                 "label": "房客性別",
+                 "type": 1,
+                 "filterKey": "restr_sex",
+                 "filterOptions": ["不限", "男性", "女性"]
+                 },
+                 {
+                 "label": "最短租期",
+                 "type": 1,
+                 "filterKey": "shortest_lease",
+                 "filterOptions": ["不限", "3個月", "6個月", "1年"]
+                 },
+                 {
+                 "label": "可養寵物",
+                 "type": 0,
+                 "filterKey": "allow_pet",
+                 "filterValue": "true"
+                 },
+                 {
+                 "label": "可開伙",
+                 "type": 0,
+                 "filterKey": "allow_cooking",
+                 "filterValue": "true"
+                 }
+                 ]
+     },
+
+     {"group": "附屬設備",
+     "filters": [
+                 {
+                 "label": "附傢俱",
+                 "type": 1,
+                 "filterKey": "furniture",
+                 "filterOptions": ["不限", "床", "衣櫃", "沙發", "桌子", "椅子"]
+                 },
+                 {
+                 "label": "附設備",
+                 "type": 1,
+                 "filterKey": "facility",
+                 "filterOptions": ["不限", "洗衣機", "電視", "冷氣", "冰箱", "熱水器", "天然瓦斯", "第四台", "網路", "飲水機"]
+                 }
+                 ]
+     },
+     
+     {"group": "環境交通",
+     "filters": [
+                 {
+                 "label": "周邊機能",
+                 "type": 1,
+                 "filterKey": "surrounding",
+                 "filterOptions": ["不限", "便利商店", "傳統市場", "百貨公司", "公園綠地", "學校", "醫療機構", "夜市"]
+                 },
+                 {
+                 "label": "交通站點",
+                 "type": 1,
+                 "filterKey": "nearby_bus,nearby_train,nearby_mrt,nearby_thsr",
+                 "filterOptions": ["不限", "捷運", "公車", "火車", "高鐵"]
+                 }
+                 ]
+     }
+    ]
+    
+}

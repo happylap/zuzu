@@ -39,9 +39,8 @@
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
-		2FDCA0D51BE0721800498FC0 /* smartFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* smartFilters.json */; };
-		2FFD60AD1BD7B92900E1DA46 /* priceRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* priceRange.json */; };
-		2FFD60AF1BD7B93E00E1DA46 /* sizeRange.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */; };
+		2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* resultFilters.json */; };
+		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */; };
@@ -119,9 +118,8 @@
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
-		2FDCA0D41BE0721800498FC0 /* smartFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = smartFilters.json; sourceTree = "<group>"; };
-		2FFD60AC1BD7B92900E1DA46 /* priceRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = priceRange.json; sourceTree = "<group>"; };
-		2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sizeRange.json; sourceTree = "<group>"; };
+		2FDCA0D41BE0721800498FC0 /* resultFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = resultFilters.json; sourceTree = "<group>"; };
+		2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = searchCriteriaOptions.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
@@ -364,9 +362,8 @@
 			children = (
 				2F31F5281BC3C34600054355 /* Localizable.strings */,
 				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
-				2FFD60AC1BD7B92900E1DA46 /* priceRange.json */,
-				2FFD60AE1BD7B93E00E1DA46 /* sizeRange.json */,
-				2FDCA0D41BE0721800498FC0 /* smartFilters.json */,
+				2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */,
+				2FDCA0D41BE0721800498FC0 /* resultFilters.json */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -510,13 +507,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
-				2FDCA0D51BE0721800498FC0 /* smartFilters.json in Resources */,
+				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
-				2FFD60AD1BD7B92900E1DA46 /* priceRange.json in Resources */,
+				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
-				2FFD60AF1BD7B93E00E1DA46 /* sizeRange.json in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
 				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,

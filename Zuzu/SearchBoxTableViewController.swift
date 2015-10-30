@@ -51,8 +51,8 @@
         
         var sizeUpperRange:Range<Int>?
         var priceUpperRange:Range<Int>?
-        let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("sizeRange")
-        let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("priceRange")
+        let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
+        let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
         
         // Trigger the fetching of total number of items that meet the current criteria
         lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
@@ -232,6 +232,15 @@
             
             pricePicker.dataSource = self
             pricePicker.delegate = self
+        }
+        
+        private func configureGestureRecognizer() {
+            let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
+            /// Setting this property to false will enable forward the touch event
+            /// to the original UI after handled by UITapGestureRecognizer
+            tap.cancelsTouchesInView = false
+            tap.delegate = self
+            tableView.addGestureRecognizer(tap)
         }
         
         private func configureSearchBoxTable() {
@@ -502,6 +511,7 @@
         
         // MARK: - UI Control Actions
         
+        
         //The UI control event handler Should not be private
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
             
@@ -618,6 +628,14 @@
             priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
             
             self.configurePricePicker()
+            
+            //Configure Guesture
+            self.configureGestureRecognizer()
+        }
+        
+        func handleTap(sender:UITapGestureRecognizer) {
+            NSLog("handleTap")
+            searchBar.resignFirstResponder()
         }
         
         override func viewWillAppear(animated: Bool) {
@@ -663,6 +681,8 @@
                         
                         self.tabBarController!.tabBar.hidden = true;
                         
+                        navigationItem.backBarButtonItem = UIBarButtonItem(title: "重新搜尋", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
+                        
                         ///Collect the search criteria set by the user
                         let criteria = toSearhCriteria()
                         
@@ -676,13 +696,14 @@
                                 let deleteIndex = historicalItems.endIndex - 1
                                 searchItemService.deleteSearchItem(deleteIndex, itemType: .HistoricalSearch)
                             }
-                            
-                            do{
-                                try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .HistoricalSearch))
-                            } catch {
-                                NSLog("Fail to save search history")
-                            }
                         }
+                        
+                        do{
+                            try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .HistoricalSearch))
+                        } catch {
+                            NSLog("Fail to save search history")
+                        }
+                        
                     }
                 case ViewTransConst.showAreaSelector:
                     NSLog("showAreaSlector")
@@ -709,7 +730,7 @@
         
         // MARK: - Private Utils
         
-        private static func loadPickerData(resourceName: String) ->  [[(label:String, value:Int)]]{
+        private static func loadPickerData(resourceName: String, criteriaLabel: String) ->  [[(label:String, value:Int)]]{
             
             var resultItems = Array(count: 2, repeatedValue: [(label: String, value: Int)]() )
             
@@ -719,9 +740,9 @@
                 do {
                     let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                     let json = JSON(data: jsonData)
-                    let items = json[resourceName].arrayValue
+                    let items = json[criteriaLabel].arrayValue
                     
-                    NSLog("\(resourceName) = %d", items.count)
+                    NSLog("\(criteriaLabel) = %d", items.count)
                     
                     for itemJsonObj in items {
                         let label = itemJsonObj["label"].stringValue
@@ -941,10 +962,10 @@
                 switch(pickerView) {
                 case sizePicker:
                     sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
-
+                    
                 case pricePicker:
                     priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
-
+                    
                 default:
                     return
                 }
@@ -965,9 +986,39 @@
     
     extension SearchBoxTableViewController: UISearchBarDelegate {
         
+        override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+            if let touch = touches.first {
+                if (searchBar.isFirstResponder() && touch.view != searchBar) {
+                    searchBar.resignFirstResponder()
+                }
+            }
+            super.touchesBegan(touches, withEvent:event)
+        }
+        
         // MARK: - UISearchBarDelegate
         func searchBarSearchButtonClicked(searchBar: UISearchBar) {
             NSLog("searchBarSearchButtonClicked: %@", self)
-            searchBar.endEditing(true)
+            searchBar.resignFirstResponder()//.endEditing(true)
+        }
+        
+        func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+            NSLog("searchBarTextDidEndEditing: %@", self)
+            searchBar.resignFirstResponder()
+        }
+    }
+    
+    extension SearchBoxTableViewController: UIGestureRecognizerDelegate {
+        ///We do not need the following code now. it's a good way to decide when we don't want UIGestureRecognizer selector to be triggered
+        func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+            
+            //            if let view = touch.view {
+            //
+            //                NSLog("gestureRecognizer: %@", view)
+            //                if (view.isDescendantOfView(self.tableView)) {
+            //                    return false
+            //                }
+            //            }
+            
+            return true
         }
     }
