@@ -93,13 +93,19 @@ class SmartFilterView: UIView {
     }
     
     private func setup() {
+        self.backgroundColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+        
         //Load filters
         let filters = SmartFilterView.loadFilterData("resultFilters", criteriaLabel: "smartFilters")
         
         for filter in filters {
             let button : ToggleButton = ToggleButton()
             button.setTitle(filter.label, forState: .Normal)
+            button.titleLabel!.font =  UIFont.systemFontOfSize(14)
+            button.offBackgroundColor = UIColor(red: 0x01/255, green: 0xA7/255, blue: 0x9A/255, alpha: 0.65)
+             button.onBackgroundColor = UIColor(red: 0x16/255, green: 0xBF/255, blue: 0xB3/255, alpha: 1)
             button.onColor = UIColor.whiteColor()
+            button.setToggleState(false)
             
             filtersByButton[button] = filter.filter
             filterButtons.append(button)
