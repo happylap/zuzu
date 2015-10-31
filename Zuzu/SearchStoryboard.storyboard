@@ -814,9 +814,9 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="584" placeholderIntrinsicHeight="390" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="xz5-6L-0wF">
-                                                    <rect key="frame" x="8" y="0.0" width="1008" height="671.5"/>
+                                                    <rect key="frame" x="8" y="0.0" width="1008" height="605"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="xz5-6L-0wF" secondAttribute="height" multiplier="3:2" id="gKL-S6-krp"/>
+                                                        <constraint firstAttribute="width" secondItem="xz5-6L-0wF" secondAttribute="height" multiplier="5:3" id="gKL-S6-krp"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7K5-Fa-QOk">
