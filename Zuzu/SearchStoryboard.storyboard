@@ -1013,7 +1013,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
                                 <rect key="frame" x="0.0" y="409" width="1024" height="146.5"/>
                                 <subviews>
-                                    <view alpha="0.90000000000000002" tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
+                                    <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="1024" height="146.5"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>

@@ -38,9 +38,18 @@ class SmartFilterView: UIView {
     override func layoutSubviews() {
         NSLog("layoutSubviews")
 
-        let buttonSpace:CGFloat = 8.0
-        let buttonWidth:CGFloat = 80.0
+        var buttonSpace:CGFloat = 8.0
+        var buttonWidth:CGFloat = 80.0
         let buttonHeight:CGFloat = 35.0
+        
+        let widthNeeded = 4 * buttonWidth + 3 * buttonSpace
+        
+        if(self.frame.width < widthNeeded) {
+            let ratio =  self.frame.width / widthNeeded
+            buttonSpace *= ratio
+            buttonWidth *= ratio
+        }
+        
         let xOffset:CGFloat = (self.frame.width - 4 * buttonWidth - 3 * buttonSpace) / 2
         let yOffset:CGFloat = (self.frame.height - buttonHeight) / 2
         
