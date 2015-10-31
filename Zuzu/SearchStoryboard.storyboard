@@ -707,6 +707,9 @@
                                                 <exclude reference="4iN-B0-H2c"/>
                                             </mask>
                                         </variation>
+                                        <variation key="widthClass=compact">
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="Igs-bG-LY6"/>
                                         </connections>
@@ -729,6 +732,9 @@
                                             <mask key="constraints">
                                                 <exclude reference="tJf-mm-jK1"/>
                                             </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         </variation>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="o1y-ba-SNn"/>
@@ -753,6 +759,9 @@
                                                 <exclude reference="2k5-bM-Gjb"/>
                                             </mask>
                                         </variation>
+                                        <variation key="widthClass=compact">
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="E4K-ze-Mja"/>
                                         </connections>
@@ -770,12 +779,12 @@
                                 <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="JTH-Sz-NIS" secondAttribute="bottom" id="BYy-Y1-XWt"/>
-                                    <constraint firstItem="RkJ-yY-SbF" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:3.5" id="BuK-vL-iD5"/>
+                                    <constraint firstItem="RkJ-yY-SbF" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:4" id="BuK-vL-iD5"/>
                                     <constraint firstItem="RkJ-yY-SbF" firstAttribute="baseline" secondItem="JTH-Sz-NIS" secondAttribute="baseline" id="PlS-LY-2j8"/>
-                                    <constraint firstItem="JTH-Sz-NIS" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:3.5" id="T6o-zw-y4b"/>
+                                    <constraint firstItem="JTH-Sz-NIS" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:4" id="T6o-zw-y4b"/>
                                     <constraint firstItem="njk-V3-8Pl" firstAttribute="height" secondItem="Aif-ds-c0e" secondAttribute="height" id="UAA-rf-LEo"/>
                                     <constraint firstItem="JTH-Sz-NIS" firstAttribute="top" secondItem="E2g-hk-g5r" secondAttribute="top" id="URh-io-Lc0"/>
-                                    <constraint firstItem="Aif-ds-c0e" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:3.5" id="Vtr-Me-4of"/>
+                                    <constraint firstItem="Aif-ds-c0e" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:4" id="Vtr-Me-4of"/>
                                     <constraint firstItem="RkJ-yY-SbF" firstAttribute="leading" secondItem="JTH-Sz-NIS" secondAttribute="trailing" id="Zha-6O-NgA"/>
                                     <constraint firstItem="njk-V3-8Pl" firstAttribute="leading" secondItem="Aif-ds-c0e" secondAttribute="trailing" constant="8" symbolic="YES" id="hRu-ac-L8E"/>
                                     <constraint firstItem="Aif-ds-c0e" firstAttribute="baseline" secondItem="RkJ-yY-SbF" secondAttribute="baseline" id="iLo-G8-xCp"/>
@@ -836,6 +845,9 @@
                                                             <exclude reference="usC-Qw-bF1"/>
                                                         </mask>
                                                     </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjr-41-AKh">
                                                     <rect key="frame" x="960" y="235" width="48" height="20.5"/>
@@ -850,6 +862,9 @@
                                                         <mask key="constraints">
                                                             <exclude reference="NTw-mi-MpO"/>
                                                         </mask>
+                                                    </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeA-Wz-tNF" userLabel="House Addr">
@@ -879,6 +894,9 @@
                                                             <exclude reference="6ms-cL-ns3"/>
                                                         </mask>
                                                     </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hm1-7D-nDh" userLabel="House Size">
                                                     <rect key="frame" x="166" y="235" width="38" height="20.5"/>
@@ -893,6 +911,9 @@
                                                             <exclude reference="Zj5-sl-4kK"/>
                                                         </mask>
                                                     </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pm-RZ-5Y7">
                                                     <rect key="frame" x="904" y="235" width="49" height="20.5"/>
@@ -906,6 +927,9 @@
                                                         <mask key="constraints">
                                                             <exclude reference="azI-Zd-oao"/>
                                                         </mask>
+                                                    </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     </variation>
                                                 </label>
                                             </subviews>
@@ -1062,7 +1086,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="1024" height="600"/>
+                    <size key="freeformSize" width="1024" height="800"/>
                     <connections>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
                         <outlet property="smartFilterScrollView" destination="6D9-oo-jIk" id="MNX-Np-2pg"/>
@@ -1149,7 +1173,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yte-p9-aTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2990" y="-22"/>
+            <point key="canvasLocation" x="3478.5" y="-108"/>
         </scene>
         <!--Debug-->
         <scene sceneID="F5o-3h-u7z">
@@ -1191,7 +1215,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRK-Gd-tS5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2700" y="471"/>
+            <point key="canvasLocation" x="3036" y="619"/>
         </scene>
         <!--租屋快搜-->
         <scene sceneID="glm-kh-USI">
