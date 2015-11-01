@@ -118,32 +118,33 @@ class HouseDao: NSObject {
         var data = JSON(obj)
         
         let id = data["id"].stringValue
+        let link = data["link"].stringValue
+        let mobileLink = data["mobileLink"].stringValue
         let title = data["title"].stringValue
-        let img = data["img"].arrayObject as? [String] ?? [String]()
-        let price = data["price"].intValue
         let addr = data["addr"].stringValue
+        let city = data["city"].intValue
+        let usage = data["purpose_type"].intValue
+        let type = data["house_type"].intValue
+        let price = data["price"].intValue
         
-//        let id = house["id"]  as? String
-//        let title = house["title"] as? String
-//        let addr = house["addr"]  as? String
-//        let type = house["house_type"] as? Int
-//        let usage = house["purpose_type"] as? Int
-//        let price = house["price"] as? Int
-//        let size = house["size"] as? Int
-//        let desc = house["desc"]  as? String
-//        let imgList = house["img"] as? [String]
+        let size = data["size"].intValue
+        let desc = data["desc"].stringValue
+        
+        let img = data["img"].arrayObject as? [String] ?? [String]()
         
         house.id = id
+        house.link = link
+        house.mobileLink = mobileLink
         house.title = title
-        house.img = img
-        house.price = price
         house.addr = addr
-//        
-//        house.img = [String]()
-////        
-//        for (_, subJson) in img.enumerate() {
-//            house.img?.append(subJson.stringValue)
-//        }
+        house.city = city
+        house.usage = usage
+        house.type = type
+        house.price = price
+        
+        house.size = size
+        house.desc = desc
+        house.img = img
         
         return house
     }

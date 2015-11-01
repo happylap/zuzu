@@ -19,8 +19,8 @@ public class House: NSManagedObject {
     @NSManaged var title: String
     @NSManaged var addr: String
     @NSManaged var city: Int
-    @NSManaged var purposeType: Int
-    @NSManaged var houseType: Int
+    @NSManaged var usage: Int
+    @NSManaged var type: Int
     @NSManaged var price: Int
 
     /* Optional Fields */
