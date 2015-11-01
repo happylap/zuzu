@@ -13,7 +13,7 @@
         <scene sceneID="xf9-UI-zb3">
             <objects>
                 <tableViewController title="Search Box View" id="avK-Pq-NJf" customClass="SearchBoxTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="AKQ-Eg-pud">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="AKQ-Eg-pud">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="1400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -682,7 +682,7 @@
                         <viewControllerLayoutGuide type="bottom" id="hmg-sM-QSC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="c7O-nv-MtJ">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E2g-hk-g5r" userLabel="HeaderView">
@@ -707,6 +707,9 @@
                                                 <exclude reference="4iN-B0-H2c"/>
                                             </mask>
                                         </variation>
+                                        <variation key="widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="0.0" y="0.0" width="256" height="47"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="Igs-bG-LY6"/>
                                         </connections>
@@ -729,6 +732,9 @@
                                             <mask key="constraints">
                                                 <exclude reference="tJf-mm-jK1"/>
                                             </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="255.5" y="0.0" width="256" height="47"/>
                                         </variation>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="o1y-ba-SNn"/>
@@ -753,6 +759,9 @@
                                                 <exclude reference="2k5-bM-Gjb"/>
                                             </mask>
                                         </variation>
+                                        <variation key="widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="512" y="-10.5" width="256" height="68"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="ewd-BO-qUn" eventType="touchDown" id="E4K-ze-Mja"/>
                                         </connections>
@@ -762,6 +771,9 @@
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" image="filter-outline"/>
+                                        <variation key="widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="775.5" y="-10.5" width="248" height="68"/>
+                                        </variation>
                                         <connections>
                                             <segue destination="smZ-ZU-g2D" kind="show" id="vtt-sy-Nn1"/>
                                         </connections>
@@ -785,9 +797,12 @@
                                     <constraint firstAttribute="trailing" secondItem="njk-V3-8Pl" secondAttribute="trailing" id="xUF-VW-Usf"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="1024" height="47"/>
+                                </variation>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="272" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="AVs-la-x6f">
-                                <rect key="frame" x="0.0" y="118" width="1024" height="438"/>
+                                <rect key="frame" x="0.0" y="118" width="1024" height="638"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="yrM-0D-fhP" userLabel="hiddenSpinnerView">
@@ -814,9 +829,9 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="584" placeholderIntrinsicHeight="390" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="xz5-6L-0wF">
-                                                    <rect key="frame" x="8" y="0.0" width="1008" height="671.5"/>
+                                                    <rect key="frame" x="8" y="0.0" width="1008" height="605"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="xz5-6L-0wF" secondAttribute="height" multiplier="3:2" id="gKL-S6-krp"/>
+                                                        <constraint firstAttribute="width" secondItem="xz5-6L-0wF" secondAttribute="height" multiplier="5:3" id="gKL-S6-krp"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7K5-Fa-QOk">
@@ -836,6 +851,9 @@
                                                             <exclude reference="usC-Qw-bF1"/>
                                                         </mask>
                                                     </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjr-41-AKh">
                                                     <rect key="frame" x="960" y="235" width="48" height="20.5"/>
@@ -850,6 +868,9 @@
                                                         <mask key="constraints">
                                                             <exclude reference="NTw-mi-MpO"/>
                                                         </mask>
+                                                    </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeA-Wz-tNF" userLabel="House Addr">
@@ -879,6 +900,9 @@
                                                             <exclude reference="6ms-cL-ns3"/>
                                                         </mask>
                                                     </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hm1-7D-nDh" userLabel="House Size">
                                                     <rect key="frame" x="166" y="235" width="38" height="20.5"/>
@@ -893,6 +917,9 @@
                                                             <exclude reference="Zj5-sl-4kK"/>
                                                         </mask>
                                                     </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pm-RZ-5Y7">
                                                     <rect key="frame" x="904" y="235" width="49" height="20.5"/>
@@ -906,6 +933,9 @@
                                                         <mask key="constraints">
                                                             <exclude reference="azI-Zd-oao"/>
                                                         </mask>
+                                                    </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     </variation>
                                                 </label>
                                             </subviews>
@@ -1009,13 +1039,15 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="111" width="1024" height="645"/>
+                                </variation>
                             </tableView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
-                                <rect key="frame" x="0.0" y="409" width="1024" height="146.5"/>
+                                <rect key="frame" x="0.0" y="609" width="1024" height="146.5"/>
                                 <subviews>
-                                    <view alpha="0.90000000000000002" tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
+                                    <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="1024" height="146.5"/>
-                                        <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -1062,7 +1094,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="1024" height="600"/>
+                    <size key="freeformSize" width="1024" height="800"/>
                     <connections>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
                         <outlet property="smartFilterScrollView" destination="6D9-oo-jIk" id="MNX-Np-2pg"/>
@@ -1081,7 +1113,7 @@
             <objects>
                 <tableViewController id="smZ-ZU-g2D" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="cDX-mW-A5x">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -1149,7 +1181,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yte-p9-aTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2990" y="-22"/>
+            <point key="canvasLocation" x="3478.5" y="-108"/>
         </scene>
         <!--Debug-->
         <scene sceneID="F5o-3h-u7z">
@@ -1191,7 +1223,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRK-Gd-tS5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2700" y="471"/>
+            <point key="canvasLocation" x="3036" y="619"/>
         </scene>
         <!--租屋快搜-->
         <scene sceneID="glm-kh-USI">

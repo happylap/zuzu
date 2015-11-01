@@ -38,9 +38,18 @@ class SmartFilterView: UIView {
     override func layoutSubviews() {
         NSLog("layoutSubviews")
 
-        let buttonSpace:CGFloat = 8.0
-        let buttonWidth:CGFloat = 80.0
+        var buttonSpace:CGFloat = 8.0
+        var buttonWidth:CGFloat = 80.0
         let buttonHeight:CGFloat = 35.0
+        
+        let widthNeeded = 4 * buttonWidth + 3 * buttonSpace
+        
+        if(self.frame.width < widthNeeded) {
+            let ratio =  self.frame.width / widthNeeded
+            buttonSpace *= ratio
+            buttonWidth *= ratio
+        }
+        
         let xOffset:CGFloat = (self.frame.width - 4 * buttonWidth - 3 * buttonSpace) / 2
         let yOffset:CGFloat = (self.frame.height - buttonHeight) / 2
         
@@ -84,13 +93,19 @@ class SmartFilterView: UIView {
     }
     
     private func setup() {
+        self.backgroundColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+        
         //Load filters
         let filters = SmartFilterView.loadFilterData("resultFilters", criteriaLabel: "smartFilters")
         
         for filter in filters {
             let button : ToggleButton = ToggleButton()
             button.setTitle(filter.label, forState: .Normal)
+            button.titleLabel!.font =  UIFont.systemFontOfSize(14)
+            button.offBackgroundColor = UIColor(red: 0x01/255, green: 0xA7/255, blue: 0x9A/255, alpha: 0.65)
+             button.onBackgroundColor = UIColor(red: 0x16/255, green: 0xBF/255, blue: 0xB3/255, alpha: 1)
             button.onColor = UIColor.whiteColor()
+            button.setToggleState(false)
             
             filtersByButton[button] = filter.filter
             filterButtons.append(button)
