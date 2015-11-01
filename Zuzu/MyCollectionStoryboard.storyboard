@@ -11,67 +11,89 @@
             <objects>
                 <tableViewController id="q4V-JY-sRX" customClass="MyCollectionTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="272" sectionHeaderHeight="22" sectionFooterHeight="28" id="8D1-1n-oXT">
-                        <rect key="frame" x="0.0" y="0.0" width="624" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="eqk-MG-fiq">
-                            <rect key="frame" x="0.0" y="64" width="624" height="44"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="eqk-MG-fiq" userLabel="HeaderView">
+                            <rect key="frame" x="0.0" y="64" width="600" height="54"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEd-bG-2KD">
-                                    <rect key="frame" x="38" y="15" width="42" height="21"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qw8-QL-CDJ">
+                                    <rect key="frame" x="40" y="8" width="30" height="30"/>
                                     <animations/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                    <state key="normal" title="租金">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQH-aI-Vpw">
+                                    <rect key="frame" x="290" y="8" width="60" height="30"/>
+                                    <animations/>
+                                    <state key="normal" title="刊登時間">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5M1-P1-YXi">
+                                    <rect key="frame" x="570" y="8" width="30" height="30"/>
+                                    <animations/>
+                                    <state key="normal" title="坪數">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                </button>
                             </subviews>
                             <animations/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" red="0.12549019607843137" green="0.74509803921568629" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="bQH-aI-Vpw" firstAttribute="centerX" secondItem="eqk-MG-fiq" secondAttribute="centerX" id="0Sd-Lu-hfE"/>
+                                <constraint firstItem="5M1-P1-YXi" firstAttribute="top" secondItem="eqk-MG-fiq" secondAttribute="top" constant="8" id="I46-95-kN1"/>
+                                <constraint firstItem="Qw8-QL-CDJ" firstAttribute="top" secondItem="eqk-MG-fiq" secondAttribute="top" constant="8" id="LLG-vT-DNf"/>
+                                <constraint firstItem="Qw8-QL-CDJ" firstAttribute="leading" secondItem="eqk-MG-fiq" secondAttribute="leading" constant="40" id="iNX-as-js8"/>
+                                <constraint firstAttribute="trailing" secondItem="5M1-P1-YXi" secondAttribute="trailing" constant="40" id="jJf-uB-MEh"/>
+                                <constraint firstItem="bQH-aI-Vpw" firstAttribute="top" secondItem="eqk-MG-fiq" secondAttribute="top" constant="8" id="tbf-gG-LLX"/>
+                            </constraints>
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" restorationIdentifier="myCollectionCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="myCollectionCell" id="0BS-ag-V8M" customClass="MyCollectionCell" customModule="Zuzu" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="130" width="624" height="272"/>
+                                <rect key="frame" x="0.0" y="140" width="600" height="272"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0BS-ag-V8M" id="mS0-B9-SLw">
-                                    <rect key="frame" x="0.0" y="0.0" width="624" height="271"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="271"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y4a-tc-BBF" userLabel="Container View">
-                                            <rect key="frame" x="8" y="8" width="608" height="255"/>
+                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y4a-tc-BBF" userLabel="Container View">
+                                            <rect key="frame" x="8" y="8" width="624" height="255"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="evS-wr-ByO" userLabel="House Img">
-                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="255"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="evS-wr-ByO" userLabel="House Img">
+                                                    <rect key="frame" x="0.0" y="0.0" width="624" height="255"/>
                                                     <animations/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="608" id="UWa-lh-DSo"/>
-                                                    </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房，近捷運，生活機能超棒" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Ip-oH-8Pd" userLabel="House Title">
-                                                    <rect key="frame" x="37" y="15" width="538" height="29"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="內湖好房，近捷運，生活機能超棒" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Ip-oH-8Pd" userLabel="House Title">
+                                                    <rect key="frame" x="37" y="15" width="554" height="24"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bjS-kw-TWO" userLabel="House Addr">
-                                                    <rect key="frame" x="8" y="199" width="608" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bjS-kw-TWO" userLabel="House Addr">
+                                                    <rect key="frame" x="8" y="199" width="500" height="21"/>
                                                     <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="500" id="Z47-nZ-QX1"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SlO-SS-StY" userLabel="House Price">
-                                                    <rect key="frame" x="550" y="223" width="42" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="8000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SlO-SS-StY" userLabel="House Price">
+                                                    <rect key="frame" x="566" y="223" width="42" height="21"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="bell-outline" translatesAutoresizingMaskIntoConstraints="NO" id="XPz-Xs-3iX">
-                                                    <rect key="frame" x="576" y="18" width="24" height="24"/>
+                                                    <rect key="frame" x="568" y="18" width="48" height="48"/>
                                                     <animations/>
                                                 </imageView>
                                             </subviews>
@@ -80,23 +102,18 @@
                                             <constraints>
                                                 <constraint firstItem="evS-wr-ByO" firstAttribute="leading" secondItem="Y4a-tc-BBF" secondAttribute="leading" id="400-nU-xPd"/>
                                                 <constraint firstAttribute="trailing" secondItem="8Ip-oH-8Pd" secondAttribute="trailing" constant="33" id="54t-sf-Fda"/>
-                                                <constraint firstAttribute="bottom" secondItem="8Ip-oH-8Pd" secondAttribute="bottom" constant="211" id="5sb-0L-CRb"/>
                                                 <constraint firstAttribute="trailing" secondItem="evS-wr-ByO" secondAttribute="trailing" id="A7I-cG-E68"/>
+                                                <constraint firstAttribute="bottom" secondItem="bjS-kw-TWO" secondAttribute="bottom" constant="35" id="DGS-NK-8Jd"/>
                                                 <constraint firstItem="8Ip-oH-8Pd" firstAttribute="top" secondItem="Y4a-tc-BBF" secondAttribute="top" constant="15" id="EtF-yl-Nbw"/>
                                                 <constraint firstItem="XPz-Xs-3iX" firstAttribute="top" secondItem="Y4a-tc-BBF" secondAttribute="top" constant="18" id="QEH-eb-MFR"/>
                                                 <constraint firstAttribute="trailing" secondItem="XPz-Xs-3iX" secondAttribute="trailing" constant="8" id="Rln-8X-nSL"/>
                                                 <constraint firstAttribute="trailing" secondItem="SlO-SS-StY" secondAttribute="trailing" constant="16" id="UAA-CF-DB3"/>
                                                 <constraint firstAttribute="bottom" secondItem="SlO-SS-StY" secondAttribute="bottom" constant="11" id="Wft-e9-s3N"/>
-                                                <constraint firstItem="XPz-Xs-3iX" firstAttribute="leading" secondItem="8Ip-oH-8Pd" secondAttribute="trailing" constant="23" id="ddS-tv-qZX"/>
+                                                <constraint firstItem="bjS-kw-TWO" firstAttribute="leading" secondItem="Y4a-tc-BBF" secondAttribute="leadingMargin" id="Xjc-Ub-Bwt"/>
                                                 <constraint firstAttribute="bottom" secondItem="evS-wr-ByO" secondAttribute="bottom" id="eEL-cb-loU"/>
                                                 <constraint firstItem="evS-wr-ByO" firstAttribute="top" secondItem="Y4a-tc-BBF" secondAttribute="top" id="klw-pv-egX"/>
                                                 <constraint firstItem="8Ip-oH-8Pd" firstAttribute="leading" secondItem="Y4a-tc-BBF" secondAttribute="leading" constant="37" id="vby-W3-rHA"/>
                                             </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="ddS-tv-qZX"/>
-                                                </mask>
-                                            </variation>
                                         </view>
                                     </subviews>
                                     <animations/>
@@ -126,8 +143,6 @@
                         <barButtonItem key="backBarButtonItem" title="返回收藏" id="bgk-Oz-YbI"/>
                         <barButtonItem key="rightBarButtonItem" image="bell-outline" id="QSr-SC-xM9"/>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="624" height="600"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dXv-bo-owc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
