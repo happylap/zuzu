@@ -22,16 +22,16 @@ class MyCollectionTableViewController: UITableViewController {
         if tableView != nil {
             if let indexPath :NSIndexPath = self.tableView.indexPathForSelectedRow {
                 let item = self.data[indexPath.row]
-                NoteDao.sharedInstance.addNote(item, save: true)
+                //NoteDao.sharedInstance.addNote(item, save: true)
             }
             
         }
     }
     
     @IBAction func showAllNote(sender: AnyObject) {
-        if let items = NoteDao.sharedInstance.getNoteList() {
-            NSLog("NoteBook count: \(items.count)")
-        }
+//        if let items = NoteDao.sharedInstance.getNoteList() {
+//            NSLog("NoteBook count: \(items.count)")
+//        }
 
     }
     
