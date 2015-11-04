@@ -117,9 +117,16 @@ class HouseDao: NSObject {
         
         var data = JSON(obj)
         
+        print(data)
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"//this your string date format
+        dateFormatter.timeZone = NSTimeZone(name: "UTC")
+        
+        /* Mandatory Fields */
         let id = data["id"].stringValue
         let link = data["link"].stringValue
-        let mobileLink = data["mobileLink"].stringValue
+        let mobileLink = data["mobile_link"].stringValue
         let title = data["title"].stringValue
         let addr = data["addr"].stringValue
         let city = data["city"].intValue
@@ -127,10 +134,54 @@ class HouseDao: NSObject {
         let type = data["house_type"].intValue
         let price = data["price"].intValue
         
+        /* Optional Fields */
+        let region = data["region"].intValue
+        let community = data["community"].stringValue
         let size = data["size"].intValue
-        let desc = data["desc"].stringValue
+        let totalFloor = data["total_floor"].intValue
+        let floor = data["floor"].arrayObject as? [Int] ?? [Int]()
+        let numBedroom = data["num_bedroom"].intValue
+        let numTing = data["num_ting"].intValue
+        let numPatio = data["num_patio"].intValue
+        let orientation = data["orientation"].intValue
+        let wallMtl = data["wall_mtl"].stringValue
+        let parkingLot = data["parking_lot"].boolValue
+        let parkingType = data["parkingType"].intValue
+        let readyDate: NSDate? = dateFormatter.dateFromString(data["ready_date"].stringValue)
+        let shortestLease = data["shortest_lease"].intValue
         
+        /* Money Related */
+        let priceIncl = data["price_incl"].arrayObject as? [Int] ?? [Int]()
+        let otherExpense = data["other_expense"].arrayObject as? [Int] ?? [Int]()
+        let mgmtFee = data["mgmt_fee"].intValue
+        let hasMgmtFee = data["has_mgmt_fee"].boolValue
+        let deposit = data["deposit"].stringValue
+        
+        /* Limitations */
+        let allowPet = data["allow_pet"].boolValue
+        let allowCooking = data["allow_cooking"].boolValue
+        let restrProfile = data["restr_profile"].stringValue
+        let restrSex = data["restr_sex"].intValue
+        
+        /* Extra Benefits */
+        let furniture = data["furniture"].arrayObject as? [Int] ?? [Int]()
+        let facility = data["facility"].arrayObject as? [Int] ?? [Int]()
+        let surrounding = data["surrounding"].arrayObject as? [Int] ?? [Int]()
+        let nearbyBus = data["nearby_bus"].stringValue
+        let nearbyTrain = data["nearby_train"].stringValue
+        let nearbyMrt = data["nearby_mrt"].stringValue
+        let nearbyThsr = data["nearby_thsr"].stringValue
+        
+        /* Sales Agent Info */
+        let agent = data["agent"].stringValue
+        let agentType = data["agent_type"].intValue
+        let phone = data["phone"].arrayObject as? [String] ?? [String]()
+        
+        /* Extra Description */
+        let desc = data["desc"].stringValue
         let img = data["img"].arrayObject as? [String] ?? [String]()
+        let postTime: NSDate? = dateFormatter.dateFromString(data["post_time"].stringValue)
+        let coordinate = data["coordinate"].stringValue
         
         house.id = id
         house.link = link
@@ -142,9 +193,48 @@ class HouseDao: NSObject {
         house.type = type
         house.price = price
         
+        house.region = region
+        house.community = community
         house.size = size
+        house.totalFloor = totalFloor
+        house.floor = floor
+        house.numBedroom = numBedroom
+        house.numTing = numTing
+        house.numPatio = numPatio
+        house.orientation = orientation
+        house.wallMtl = wallMtl
+        house.parkingLot = parkingLot
+        house.parkingType = parkingType
+        house.readyDate = readyDate
+        house.shortestLease = shortestLease
+        
+        house.priceIncl = priceIncl
+        house.otherExpense = otherExpense
+        house.mgmtFee = mgmtFee
+        house.hasMgmtFee = hasMgmtFee
+        house.deposit = deposit
+        
+        house.allowPet = allowPet
+        house.allowCooking = allowCooking
+        house.restrProfile = restrProfile
+        house.restrSex = restrSex
+        
+        house.furniture = furniture
+        house.facility = facility
+        //house.surrounding = surrounding
+        house.nearbyBus = nearbyBus
+        house.nearbyTrain = nearbyTrain
+        house.nearbyMrt = nearbyMrt
+        house.nearbyThsr = nearbyThsr
+        
+        house.agent = agent
+        house.agentType = agentType
+        house.phone = phone
+        
         house.desc = desc
         house.img = img
+        house.postTime = postTime
+        house.coordinate = coordinate
         
         return house
     }
