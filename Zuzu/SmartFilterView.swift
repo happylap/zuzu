@@ -26,7 +26,7 @@ class FilterGroup {
     }
 }
 
-class Filter {
+class Filter: NSObject {
     let label:String
     let key:String
     let value:String
@@ -35,6 +35,11 @@ class Filter {
         self.label = label
         self.key = key
         self.value = value
+    }
+    
+    override var description: String {
+        let string = "Filter: label = \(label), key = \(key), value = \(value)"
+        return string
     }
 }
 

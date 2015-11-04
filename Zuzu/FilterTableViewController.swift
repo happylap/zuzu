@@ -9,6 +9,12 @@
 import UIKit
 import SwiftyJSON
 
+protocol FilterTableViewControllerDelegate {
+    
+    func onFiltersSelected(filters: [String: Filter])
+    
+}
+
 class FilterTableViewController: UITableViewController {
     
     struct ViewTransConst {
@@ -17,8 +23,10 @@ class FilterTableViewController: UITableViewController {
     
     //var selectedFilterGroup : FilterGroup?
     
+    var filterDelegate:FilterTableViewControllerDelegate?
+    
     var filterSelected = [String : String]()
-    var checkStatus = [String : Bool]()
+    var filterCheckStatus = [String : Bool]()
     var resultItems = [(group: String, filterGroups: [FilterGroup])]()
     
     // MARK: - Private Utils
@@ -108,7 +116,7 @@ class FilterTableViewController: UITableViewController {
         resultItems = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
         
         // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,12 +127,10 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return resultItems.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return resultItems[section].filterGroups.count
     }
     
@@ -135,14 +141,14 @@ class FilterTableViewController: UITableViewController {
         let label = filterGroup.label
         
         if(type == FilterType.TopLevel) {
-            if let status = checkStatus[label] {
+            if let status = filterCheckStatus[label] {
                 if(status) {
-                    checkStatus[label] = false
+                    filterCheckStatus[label] = false
                 } else {
-                    checkStatus[label] = true
+                    filterCheckStatus[label] = true
                 }
             } else {
-                checkStatus[label] = true
+                filterCheckStatus[label] = true
             }
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -163,12 +169,10 @@ class FilterTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID!, forIndexPath: indexPath) as! FilterTableViewCell
         
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-        
         if(type == FilterType.TopLevel) {
             cell.simpleFilterLabel.text = label
             
-            if let checked = checkStatus[label] {
+            if let checked = filterCheckStatus[label] {
                 
                 if(checked) {
                     cell.accessoryType = UITableViewCellAccessoryType.Checkmark
@@ -218,6 +222,8 @@ class FilterTableViewController: UITableViewController {
                     fotvc.filterOptions = filterGroup
                     
                     fotvc.title = filterGroup.label
+                    
+                    fotvc.filterOptionDelegate = self
                 }
                 
             default: break
@@ -225,4 +231,11 @@ class FilterTableViewController: UITableViewController {
         }
     }
 
+}
+
+extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
+    
+    func onFiltersSelected(filters: [Filter]) {
+        NSLog("onFiltersSelected: %@", filters)
+    }
 }
