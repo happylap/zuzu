@@ -1107,6 +1107,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <inset key="separatorInset" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="simpleFilterTableCell" id="04Z-NU-OU0" customClass="FilterTableViewCell" customModule="Zuzu" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="113.5" width="800" height="44"/>
@@ -1141,6 +1142,7 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
+                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                 <connections>
                                     <outlet property="simpleFilterLabel" destination="te8-Sy-hbp" id="UFK-Rf-mJY"/>
                                 </connections>
@@ -1190,6 +1192,7 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
+                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                 <connections>
                                     <outlet property="filterLabel" destination="asX-h3-9l9" id="U76-sg-Sya"/>
                                     <outlet property="filterSelection" destination="Al3-iZ-Zjz" id="fQp-z8-yHB"/>
@@ -1225,6 +1228,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="filterOptionsCell" textLabel="xbX-OH-qNv" style="IBUITableViewCellStyleDefault" id="j3y-fr-gJM">
                                 <rect key="frame" x="0.0" y="92" width="800" height="44"/>
@@ -1242,6 +1246,7 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
