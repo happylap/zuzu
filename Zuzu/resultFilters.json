@@ -3,21 +3,25 @@
     [
      {
      "label": "養寵物",
+     "type": 0,
      "filterKey": "allow_pet",
      "filterValue": "true"
      },
      {
      "label": "有電梯",
+     "type": 0,
      "filterKey": "house_type",
      "filterValue": "2"
      },
      {
      "label": "要車位",
+     "type": 0,
      "filterKey": "parking_lot",
      "filterValue": "true"
      },
      {
      "label": "限女生",
+     "type": 0,
      "filterKey": "restr_sex",
      "filterValue": "0"
      }
@@ -25,31 +29,95 @@
     
     "advancedFilters":
     [
-     {"group": "房屋條件",
-     "filters": [
-                 {
-                 "label": "型態",
-                 "type": 1,
-                 "filterKey": "house_type",
-                 "filterOptions": ["不限", "公寓", "電梯大樓", "透天", "別墅"]
-                 },
-                 {
-                 "label": "格局",
-                 "type": 1,
-                 "filterKey": "layout",
-                 "filterOptions": ["不限", "1房", "2房", "3房", "4房", "5房以上"]
-                 },
-                 {
-                 "label": "經辦人",
-                 "type": 1,
-                 "filterKey": "agent_type",
-                 "filterOptions": ["不限", "屋主", "房仲", "代理人"]
+     {
+     "group": "房屋條件",
+     "items": [
+               {
+               "label": "型態",
+               "type": 1,
+               "filterKey": "house_type",
+               "filters": [
+                                   {
+                                   "label":"不限",
+                                   "value":"[* to *]"
+                                   },
+                                   {
+                                   "label":"公寓",
+                                   "value":"1"
+                                   },
+                                   {
+                                   "label":"電梯大樓",
+                                   "value":"2"
+                                   },
+                                   {
+                                   "label":"透天厝",
+                                   "value":"3"
+                                   },
+                                   {
+                                   "label":"別墅",
+                                   "value":"4"
+                                   }
+                                   ]
+               },
+               {
+               "label": "格局",
+               "type": 1,
+               "filterKey": "num_bedroom",
+               "filters": [
+                             {
+                             "label":"不限",
+                             "value":"[* to *]"
+                             },
+                             {
+                             "label":"1房",
+                             "value":"1"
+                             },
+                             {
+                             "label":"2房",
+                             "value":"2"
+                             },
+                             {
+                             "label":"3房",
+                             "value":"3"
+                             },
+                             {
+                             "label":"4房",
+                             "value":"4"
+                             },
+                             {
+                             "label":"5房以上",
+                             "value":"5"
+                             }
+                             ]
+               },
+               {
+               "label": "經辦人",
+               "type": 1,
+               "filterKey": "agent_type",
+               "filters": [
+                           {
+                           "label":"不限",
+                           "value":"[* to *]"
+                           },
+                           {
+                           "label":"屋主",
+                           "value":"1"
+                           },
+                           {
+                           "label":"房仲",
+                           "value":"2"
+                           },
+                           {
+                           "label":"代理人",
+                           "value":"3"
+                           }
+                           ]
                  },
                  {
                  "label": "附車位",
                  "type": 0,
                  "filterKey": "parking_lot",
-                 "filterKey": "true"
+                 "filterValue": "true"
                  },
                  {
                  "label": "不要地下室",
@@ -66,25 +134,73 @@
                  ]
      },
      
-     {"group": "承租條件",
-     "filters": [
-                 {
-                 "label": "房客身分",
-                 "type": 1,
-                 "filterKey": "restr_profile",
-                 "filterOptions": ["不限", "學生", "上班族", "家庭"]
-                 },
-                 {
-                 "label": "房客性別",
-                 "type": 1,
-                 "filterKey": "restr_sex",
-                 "filterOptions": ["不限", "男性", "女性"]
-                 },
-                 {
-                 "label": "最短租期",
-                 "type": 1,
-                 "filterKey": "shortest_lease",
-                 "filterOptions": ["不限", "3個月", "6個月", "1年"]
+     {
+     "group": "承租條件",
+     "items": [
+               {
+               "label": "房客身分",
+               "type": 1,
+               "filterKey": "restr_profile",
+               "filters": [
+                           {
+                           "label": "不限",
+                           "filterValue": "[* to *]"
+                           },
+                           {
+                           "label": "學生",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "上班族",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "家庭",
+                           "filterValue": "*"
+                           }
+                           ]
+               },
+               {
+               "label": "房客性別",
+               "type": 1,
+               "filterKey": "restr_sex",
+               "filters": [
+                           {
+                           "label": "不限",
+                           "filterValue": "[* to *]"
+                           },
+                           {
+                           "label": "男性",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "女性",
+                           "filterValue": "*"
+                           }
+                           ]
+               },
+               {
+               "label": "最短租期",
+               "type": 1,
+               "filterKey": "shortest_lease",
+               "filters": [
+                           {
+                           "label": "不限",
+                           "filterValue": "[* to *]"
+                           },
+                           {
+                           "label": "3個月",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "6個月",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "1年",
+                           "filterValue": "*"
+                           }
+                           ]
                  },
                  {
                  "label": "可養寵物",
@@ -101,36 +217,160 @@
                  ]
      },
 
-     {"group": "附屬設備",
-     "filters": [
-                 {
-                 "label": "附傢俱",
-                 "type": 1,
-                 "filterKey": "furniture",
-                 "filterOptions": ["不限", "床", "衣櫃", "沙發", "桌子", "椅子"]
-                 },
-                 {
-                 "label": "附設備",
-                 "type": 1,
-                 "filterKey": "facility",
-                 "filterOptions": ["不限", "洗衣機", "電視", "冷氣", "冰箱", "熱水器", "天然瓦斯", "第四台", "網路", "飲水機"]
+     {
+     "group": "附屬設備",
+     "items": [
+               {
+               "label": "附傢俱",
+               "type": 1,
+               "filterKey": "furniture",
+               "filters": [
+                           {
+                           "label": "不限",
+                           "filterValue": "[* to *]"
+                           },
+                           {
+                           "label": "床",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "衣櫃",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "沙發",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "桌子",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "椅子",
+                           "filterValue": "*"
+                           }
+                           ]
+               },
+               
+               {
+               "label": "附設備",
+               "type": 1,
+               "filterKey": "facility",
+               "filters": [
+                           {
+                           "label": "不限",
+                           "filterValue": "[* to *]"
+                           },
+                           {
+                           "label": "洗衣機",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "電視",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "冷氣",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "冰箱",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "熱水器",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "天然瓦斯",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "第四台",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "網路",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "飲水機",
+                           "filterValue": "*"
+                           }
+                           
+                           ]
                  }
                  ]
      },
      
-     {"group": "環境交通",
-     "filters": [
-                 {
-                 "label": "周邊機能",
-                 "type": 1,
-                 "filterKey": "surrounding",
-                 "filterOptions": ["不限", "便利商店", "傳統市場", "百貨公司", "公園綠地", "學校", "醫療機構", "夜市"]
-                 },
-                 {
-                 "label": "交通站點",
-                 "type": 1,
-                 "filterKey": "nearby_bus,nearby_train,nearby_mrt,nearby_thsr",
-                 "filterOptions": ["不限", "捷運", "公車", "火車", "高鐵"]
+     {
+     "group": "環境交通",
+     "items": [
+               {
+               "label": "周邊機能",
+               "type": 1,
+               "filterKey": "surrounding",
+               "filters": [
+                           {
+                           "label": "不限",
+                           "filterValue": "[* to *]"
+                           },
+                           {
+                           "label": "便利商店",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "傳統市場",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "百貨公司",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "公園綠地",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "學校",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "醫療機構",
+                           "filterValue": "*"
+                           },
+                           {
+                           "label": "夜市",
+                           "filterValue": "*"
+                           }
+               
+               ]
+               },
+               {
+               "label": "交通站點",
+               "type": 1,
+               "filters": [
+                                {
+                                "label": "捷運",
+                                "filterKey": "nearby_bus",
+                                "filterValue": "*"
+                                },
+                                {
+                                "label": "公車",
+                                "filterKey": "nearby_train",
+                                "filterValue": "*"
+                                },
+                                {
+                                "label": "火車",
+                                "filterKey": "nearby_mrt",
+                                "filterValue": "*"
+                                },
+                                {
+                                "label": "高鐵",
+                                "filterKey": "nearby_thsr",
+                                "filterValue": "*"
+                                }
+                 ]
                  }
                  ]
      }

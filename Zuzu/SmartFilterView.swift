@@ -9,13 +9,37 @@
 import UIKit
 import SwiftyJSON
 
-class Filter {
-    var key:String
-    var value:String
-    
-    init(key: String, value: String) {
+enum FilterType: Int {
+    case TopLevel = 0
+    case MultiLevel = 1
+}
+
+class FilterGroup {
+    let type: FilterType
+    let label:String
+    let filters:[Filter]
+
+    init(label:String, type: FilterType, filters: [Filter]) {
+        self.label = label
+        self.filters = filters
+        self.type = type
+    }
+}
+
+class Filter: NSObject {
+    let label:String
+    let key:String
+    let value:String
+
+    init(label:String, key: String, value: String) {
+        self.label = label
         self.key = key
         self.value = value
+    }
+    
+    override var description: String {
+        let string = "Filter: label = \(label), key = \(key), value = \(value)"
+        return string
     }
 }
 
@@ -61,9 +85,9 @@ class SmartFilterView: UIView {
         }
     }
     
-    private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [(label: String, filter: Filter)]{
+    private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [Filter]{
         
-        var resultItems = [(label: String, filter: Filter)]()
+        var resultItems = [Filter]()
         
         if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
             
@@ -78,8 +102,10 @@ class SmartFilterView: UIView {
                     let label = itemJsonObj["label"].stringValue
                     let key = itemJsonObj["filterKey"].stringValue
                     let value = itemJsonObj["filterValue"].stringValue
+                    let type = itemJsonObj["type"].intValue
                     
-                    resultItems.append( (label: label, filter: Filter(key: key, value: value)) )
+                    let filter = Filter(label: label, key: key, value:value)
+                    resultItems.append( filter  )
                 }
                 
             } catch let error as NSError{
@@ -107,7 +133,7 @@ class SmartFilterView: UIView {
             button.onColor = UIColor.whiteColor()
             button.setToggleState(false)
             
-            filtersByButton[button] = filter.filter
+            filtersByButton[button] = filter
             filterButtons.append(button)
             
             self.addSubview(button)
