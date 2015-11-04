@@ -160,6 +160,7 @@ class MyCollectionCell: UITableViewCell {
             
             self.houseImg.image = placeholderImg
             
+            if item.valueForKey("img")?.count > 0 {
             if let imgUrl = item.valueForKey("img")?[0] as? String {
                 let size = self.houseImg.frame.size
                 
@@ -172,6 +173,7 @@ class MyCollectionCell: UITableViewCell {
                     //self.setNeedsLayout()
                     self.addImageOverlay()
                 }
+            }
             }
         }
     }

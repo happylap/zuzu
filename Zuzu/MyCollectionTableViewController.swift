@@ -17,6 +17,24 @@ class MyCollectionTableViewController: UITableViewController {
     
     var loading:Bool = false
     
+    @IBAction func notebook(sender: UIButton) {
+        print(sender)
+        if tableView != nil {
+            if let indexPath :NSIndexPath = self.tableView.indexPathForSelectedRow {
+                let item = self.data[indexPath.row]
+                NoteDao.sharedInstance.addNote(item, save: true)
+            }
+            
+        }
+    }
+    
+    @IBAction func showAllNote(sender: AnyObject) {
+        if let items = NoteDao.sharedInstance.getNoteList() {
+            NSLog("NoteBook count: \(items.count)")
+        }
+
+    }
+    
     private func loadRemoteData(){
         
         NSLog("%@ [[loadRemoteData]]", self)
