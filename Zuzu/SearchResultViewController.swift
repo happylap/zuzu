@@ -23,6 +23,11 @@ enum ScrollDirection {
 
 class SearchResultViewController: UIViewController {
     
+    struct ViewTransConst {
+        static let showDebugInfo:String = "showDebugInfo"
+        static let showAdvancedFilter:String = "showAdvancedFilter"
+    }
+    
     // MARK: - Member Fields
     @IBOutlet weak var loadingSpinner: UIActivityIndicatorView! {
         didSet{
@@ -376,8 +381,11 @@ class SearchResultViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
+            
+            NSLog("prepareForSegue: %@", identifier)
+            
             switch identifier{
-            case "showDebugInfo":
+            case ViewTransConst.showDebugInfo:
                 let debugVc = segue.destinationViewController as UIViewController
                 
                 if let pVc = debugVc.presentationController {
@@ -388,6 +396,13 @@ class SearchResultViewController: UIViewController {
                 
                 if let textView = view[0] as? UITextView {
                     textView.text = self.debugTextStr
+                }
+                
+            case ViewTransConst.showAdvancedFilter:
+                
+                if let ftvc = segue.destinationViewController as? FilterTableViewController {
+                    
+                    ftvc.filterDelegate = self
                 }
                 
             default: break
@@ -510,4 +525,27 @@ extension SearchResultViewController: UIAlertViewDelegate {
         NSLog("Alert Dialog Button [%d] Clicked", buttonIndex)
     }
     
+}
+
+extension SearchResultViewController: FilterTableViewControllerDelegate {
+    
+    func onFiltersSelected(filters: [String : String]) {
+        NSLog("onFiltersSelected: %@", filters)
+
+        if(self.searchCriteria?.filters == nil) {
+            //Add a new filter
+            self.searchCriteria?.filters = [String:String]()
+        }
+        
+        var prevFilters:[String:String]! = self.searchCriteria?.filters
+        //Update current filters
+        
+        for (key, value) in filters {
+            prevFilters[key] = value
+        }
+        
+        self.searchCriteria?.filters = prevFilters
+        
+        reloadDataWithNewCriteria(self.searchCriteria)
+    }
 }

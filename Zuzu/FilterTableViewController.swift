@@ -11,7 +11,7 @@ import SwiftyJSON
 
 protocol FilterTableViewControllerDelegate {
     
-    func onFiltersSelected(filters: [String: Filter])
+    func onFiltersSelected(filters: [String : String])
     
 }
 
@@ -21,13 +21,11 @@ class FilterTableViewController: UITableViewController {
         static let displayFilterOptions:String = "displayFilterOptions"
     }
     
-    //var selectedFilterGroup : FilterGroup?
-    
     var filterDelegate:FilterTableViewControllerDelegate?
     
-    var filterSelected = [String : String]()
-    var filterCheckStatus = [String : Bool]()
-    var resultItems = [(group: String, filterGroups: [FilterGroup])]()
+    var rowsSelected = [NSIndexPath]()
+    var filterGroupSelected = [FilterGroup]()
+    var filterItems = [(group: String, filterGroups: [FilterGroup])]()
     
     // MARK: - Private Utils
     private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [(group: String, filterGroups: [FilterGroup])]{
@@ -39,27 +37,30 @@ class FilterTableViewController: UITableViewController {
             do {
                 let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 let json = JSON(data: jsonData)
-                let items = json[criteriaLabel].arrayValue
+                let groupList = json[criteriaLabel].arrayValue
                 
-                NSLog("\(criteriaLabel) = %d", items.count)
+                NSLog("\(criteriaLabel) = %d", groupList.count)
                 
-                for itemJsonObj in items {
-                    let group = itemJsonObj["group"].stringValue
+                for groupJson in groupList {
+                    let group = groupJson["group"].stringValue
                     
-                    if let items = itemJsonObj["items"].array {
+                    if let itemList = groupJson["items"].array {
                         
-                        let allFilters = items.map({ (json) -> FilterGroup in
-                            let label = json["label"].stringValue
-                            let type = json["type"].intValue
-                            let commonKey = json["filterKey"].stringValue
+                        let allFilters = itemList.map({ (itemJson) -> FilterGroup in
+                            let label = itemJson["label"].stringValue
+                            let type = itemJson["displayType"].intValue
+                            let choiceType = ChoiceType(rawValue: itemJson["choiceType"].stringValue)
+                            let logicType = LogicType(rawValue: itemJson["logicType"].stringValue)
+                            let commonKey = itemJson["filterKey"].stringValue
                             
-                            
-                            if let filters = json["filters"].array {
+                            ///DetailView
+                            if let filters = itemJson["filters"].array {
                                 
-                                let filters = filters.map({ (json) -> Filter in
-                                    let label = json["label"].stringValue
-                                    let value = json["value"].stringValue
-                                    if let key = json["key"].string {
+                                let filters = filters.map({ (filterJson) -> Filter in
+                                    let label = filterJson["label"].stringValue
+                                    let value = filterJson["filterValue"].stringValue
+                                    
+                                    if let key = filterJson["filterKey"].string {
                                         return Filter(label: label, key: key, value: value)
                                     } else {
                                         return Filter(label: label, key: commonKey, value: value)
@@ -67,17 +68,21 @@ class FilterTableViewController: UITableViewController {
                                 })
                                 
                                 let filterGroup = FilterGroup(label: label,
-                                    type: FilterType(rawValue: type)!,
+                                    type: DisplayType(rawValue: type)!,
                                     filters: filters)
+                                
+                                filterGroup.logicType = logicType
+                                filterGroup.choiceType = choiceType
                                 
                                 return filterGroup
                                 
+                                ///SimpleView
                             } else {
-                               
-                                let value = json["filterValue"].stringValue
+                                
+                                let value = itemJson["filterValue"].stringValue
                                 
                                 let filterGroup = FilterGroup(label: label,
-                                    type: FilterType(rawValue: type)!,
+                                    type: DisplayType(rawValue: type)!,
                                     filters: [Filter(label: label, key: commonKey, value: value)])
                                 
                                 return filterGroup
@@ -105,6 +110,26 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Action Handlers
     @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
         
+        for indexPath in self.rowsSelected {
+            
+            let filterGroup = filterItems[indexPath.section].filterGroups[indexPath.row]
+            
+            self.filterGroupSelected.append(filterGroup)
+        }
+        
+        var result = [String:String]()
+        
+        ///Convert to key:value dictionary
+        for filterGroup in filterGroupSelected {
+            let filterDic = filterGroup.filterDic
+            
+            for (key, value) in filterDic {
+                result[key] = value
+            }
+        }
+        
+        self.filterDelegate?.onFiltersSelected(result)
+        
         navigationController?.popViewControllerAnimated(true)
         
     }
@@ -113,7 +138,7 @@ class FilterTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        resultItems = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
+        filterItems = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
         
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = false
@@ -127,28 +152,24 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return resultItems.count
+        return filterItems.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return resultItems[section].filterGroups.count
+        return filterItems[section].filterGroups.count
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let filterGroup = resultItems[indexPath.section].filterGroups[indexPath.row]
+        let filterGroup = filterItems[indexPath.section].filterGroups[indexPath.row]
         
         let type = filterGroup.type
-        let label = filterGroup.label
         
-        if(type == FilterType.TopLevel) {
-            if let status = filterCheckStatus[label] {
-                if(status) {
-                    filterCheckStatus[label] = false
-                } else {
-                    filterCheckStatus[label] = true
-                }
+        if(type == DisplayType.SimpleView) {
+            
+            if let index = rowsSelected.indexOf(indexPath) {
+                rowsSelected.removeAtIndex(index)
             } else {
-                filterCheckStatus[label] = true
+                rowsSelected.append(indexPath)
             }
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -156,12 +177,12 @@ class FilterTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let type = resultItems[indexPath.section].filterGroups[indexPath.row].type
-        let label = resultItems[indexPath.section].filterGroups[indexPath.row].label
+        let filterGroup = filterItems[indexPath.section].filterGroups[indexPath.row]
+        let type = filterGroup.type
+        let label = filterGroup.label
         let cellID: String?
         
-        if(type == FilterType.TopLevel) {
+        if(type == DisplayType.SimpleView) {
             cellID = "simpleFilterTableCell"
         } else {
             cellID = "filterTableCell"
@@ -169,20 +190,19 @@ class FilterTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellID!, forIndexPath: indexPath) as! FilterTableViewCell
         
-        if(type == FilterType.TopLevel) {
-            cell.simpleFilterLabel.text = label
+        if(type == DisplayType.SimpleView) {
             
-            if let checked = filterCheckStatus[label] {
-                
-                if(checked) {
-                    cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-                } else {
-                    cell.accessoryType = UITableViewCellAccessoryType.None
-                }
+            
+            if(rowsSelected.contains(indexPath)) {
+                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
             } else {
                 cell.accessoryType = UITableViewCellAccessoryType.None
             }
+            
+            cell.simpleFilterLabel.text = label
+            
         } else {
+            
             cell.filterLabel.text = label
         }
         
@@ -190,7 +210,7 @@ class FilterTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return resultItems[section].group
+        return filterItems[section].group
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -206,9 +226,10 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        NSLog("prepareForSegue: %@", self)
-        
         if let identifier = segue.identifier{
+            
+            NSLog("prepareForSegue: %@", identifier)
+            
             switch identifier{
             case ViewTransConst.displayFilterOptions:
                 NSLog(ViewTransConst.displayFilterOptions)
@@ -217,7 +238,7 @@ class FilterTableViewController: UITableViewController {
                     
                     let path = self.tableView.indexPathForSelectedRow!
                     
-                    let filterGroup = resultItems[path.section].filterGroups[path.row]
+                    let filterGroup = filterItems[path.section].filterGroups[path.row]
                     
                     fotvc.filterOptions = filterGroup
                     
@@ -230,12 +251,14 @@ class FilterTableViewController: UITableViewController {
             }
         }
     }
-
+    
 }
 
 extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
     
-    func onFiltersSelected(filters: [Filter]) {
-        NSLog("onFiltersSelected: %@", filters)
+    func onFiltersSelected(filterGroup: FilterGroup) {
+        NSLog("onFiltersSelected: %@", filterGroup.filters)
+        
+        filterGroupSelected.append(filterGroup)
     }
 }

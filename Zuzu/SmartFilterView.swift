@@ -9,17 +9,68 @@
 import UIKit
 import SwiftyJSON
 
-enum FilterType: Int {
-    case TopLevel = 0
-    case MultiLevel = 1
+enum DisplayType: Int {
+    case SimpleView = 0
+    case DetailView = 1
+}
+
+enum ChoiceType: String {
+    case SingleChoice = "single"
+    case MultiChoice = "multi"
+}
+
+enum LogicType: String {
+    case And = "AND"
+    case Or = "OR"
 }
 
 class FilterGroup {
-    let type: FilterType
+    let type: DisplayType
     let label:String
     let filters:[Filter]
-
-    init(label:String, type: FilterType, filters: [Filter]) {
+    var logicType: LogicType?
+    var choiceType: ChoiceType?
+    
+    var filterDic:[String:String] {
+        get{
+            var result = [String:String]()
+            var tempResult = [String:[String]]()
+            
+            ///SimpleView
+            if(type == .SimpleView) {
+                
+                if let filter = filters.first {
+                    result[filter.key] = filter.value
+                }
+            ///DetailView
+            } else {
+                for filter in filters {
+                    if var value = tempResult[filter.key] {
+                        
+                        value.append(filter.value)
+                        
+                        tempResult[filter.key] = value
+                        
+                    } else {
+                        
+                        tempResult[filter.key] = [filter.value]
+                    }
+                }
+            }
+            
+            ///Generate final result
+            for (key, valueList) in tempResult {
+                if let op = logicType?.rawValue {
+                    result[key] = "( \(valueList.joinWithSeparator(" \(op) ")) )"
+                    
+                }
+            }
+            
+            return result
+        }
+    }
+    
+    init(label:String, type: DisplayType, filters: [Filter]) {
         self.label = label
         self.filters = filters
         self.type = type
@@ -27,10 +78,12 @@ class FilterGroup {
 }
 
 class Filter: NSObject {
+    static let defaultKeyUnlimited = "unlimited"
+    
     let label:String
     let key:String
     let value:String
-
+    
     init(label:String, key: String, value: String) {
         self.label = label
         self.key = key
@@ -61,7 +114,7 @@ class SmartFilterView: UIView {
     ///The correct place to layout subviews (with correct frame & bounds info)
     override func layoutSubviews() {
         NSLog("layoutSubviews")
-
+        
         var buttonSpace:CGFloat = 8.0
         var buttonWidth:CGFloat = 80.0
         let buttonHeight:CGFloat = 35.0
@@ -129,7 +182,7 @@ class SmartFilterView: UIView {
             button.setTitle(filter.label, forState: .Normal)
             button.titleLabel!.font =  UIFont.systemFontOfSize(14)
             button.offBackgroundColor = UIColor(red: 0x01/255, green: 0xA7/255, blue: 0x9A/255, alpha: 0.65)
-             button.onBackgroundColor = UIColor(red: 0x16/255, green: 0xBF/255, blue: 0xB3/255, alpha: 1)
+            button.onBackgroundColor = UIColor(red: 0x16/255, green: 0xBF/255, blue: 0xB3/255, alpha: 1)
             button.onColor = UIColor.whiteColor()
             button.setToggleState(false)
             

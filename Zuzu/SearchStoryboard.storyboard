@@ -776,7 +776,7 @@
                                             <rect key="frame" x="775.5" y="-10.5" width="248" height="68"/>
                                         </variation>
                                         <connections>
-                                            <segue destination="smZ-ZU-g2D" kind="show" id="vtt-sy-Nn1"/>
+                                            <segue destination="smZ-ZU-g2D" kind="show" identifier="showAdvancedFilter" id="vtt-sy-Nn1"/>
                                         </connections>
                                     </button>
                                 </subviews>

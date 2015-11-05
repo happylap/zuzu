@@ -10,7 +10,7 @@ import UIKit
 
 protocol FilterOptionTableViewControllerDelegate {
     
-    func onFiltersSelected(filters: [Filter])
+    func onFiltersSelected(filterGroup: FilterGroup)
     
 }
 
@@ -18,8 +18,10 @@ class FilterOptionTableViewController: UITableViewController {
     
     var filterOptionDelegate: FilterOptionTableViewControllerDelegate?
     
+    var rowsSelected = [NSIndexPath]()
+    
     var filterSelected = [Filter]() //filter key
-    var filterCheckStatus = [String : Bool]()
+    
     var filterOptions : FilterGroup!
     
     override func viewDidLoad() {
@@ -33,7 +35,24 @@ class FilterOptionTableViewController: UITableViewController {
         super.willMoveToParentViewController(parent)
         
         if(parent == nil) {
-            self.filterOptionDelegate?.onFiltersSelected(filterSelected)
+            
+            for indexPath in self.rowsSelected {
+                
+                let filter = filterOptions.filters[indexPath.row]
+                
+                ///No need to add "unlimited" option
+                if(filter.key != Filter.defaultKeyUnlimited) {
+                    self.filterSelected.append(filter)
+                }
+            }
+            
+            ///Consider make a copy method
+            let filtergroup =
+            FilterGroup(label: filterOptions.label, type: filterOptions.type, filters: self.filterSelected)
+            filtergroup.logicType = filterOptions.logicType
+            filterOptions.choiceType = filterOptions.choiceType
+            
+            self.filterOptionDelegate?.onFiltersSelected(filtergroup)
         }
     }
     
@@ -53,34 +72,45 @@ class FilterOptionTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let currentfilter = filterOptions.filters[indexPath.row]
+        let allFilters = filterOptions.filters
+        let choiceType:ChoiceType! = filterOptions.choiceType
+        let unlimitIndex = allFilters.indexOf({ (filter) -> Bool in
+            return (filter.key == Filter.defaultKeyUnlimited)
+        })
         
-        let label = currentfilter.label
+        NSLog("didSelectRowAtIndexPath %@", indexPath)
         
-        if let status = filterCheckStatus[label] {
-            if(status) {
-                filterCheckStatus[label] = false
-                if let index = filterSelected.indexOf({ (filter) -> Bool in
-                    return (filter.key == currentfilter.key) && (filter.value == currentfilter.value)
-                }) {
-                    
-                    filterSelected.removeAtIndex(index)
-                }
+        if(choiceType == .SingleChoice) {
+            //Clear all selection before selecting other choices
+            rowsSelected.removeAll()
+            tableView.reloadData()
+            
+        } else {
+            if(unlimitIndex == indexPath.row) {
+                ///The user selects unlimited option
                 
+                rowsSelected.removeAll()
+                tableView.reloadData()
             } else {
-                filterCheckStatus[label] = true
+                ///The user selects other options
                 
-                let exists = filterSelected.contains({ (filter) -> Bool in
-                    return (filter.key == currentfilter.key) && (filter.value == currentfilter.value)
-                })
-                
-                if(!exists) {
-                    filterSelected.append(currentfilter)
+                if let unlimitIndex = unlimitIndex {
+                    let unlimitIndexPath = NSIndexPath(forRow: unlimitIndex, inSection: 0)
+                    
+                    if let index = rowsSelected.indexOf(unlimitIndexPath) {
+                        rowsSelected.removeAtIndex(index)
+                    }
+                    
+                    tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: unlimitIndex, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
                 }
             }
+        }
+        
+        ///Toggle Check /Unchecked state
+        if let index = rowsSelected.indexOf(indexPath) {
+            rowsSelected.removeAtIndex(index)
         } else {
-            filterCheckStatus[label] = true
-            filterSelected.append(currentfilter)
+            rowsSelected.append(indexPath)
         }
         
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -88,24 +118,19 @@ class FilterOptionTableViewController: UITableViewController {
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let filter = filterOptions.filters[indexPath.row]
-        let label = filter.label
+        let currentFilter = filterOptions.filters[indexPath.row]
         
         let cell = tableView.dequeueReusableCellWithIdentifier("filterOptionsCell", forIndexPath: indexPath)
         
         
-        if let checked = filterCheckStatus[label] {
-            
-            if(checked) {
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-            } else {
-                cell.accessoryType = UITableViewCellAccessoryType.None
-            }
+        
+        if rowsSelected.contains(indexPath) {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None
         }
         
-        cell.textLabel?.text = filterOptions.filters[indexPath.row].label
+        cell.textLabel?.text = currentFilter.label
         
         return cell
     }
