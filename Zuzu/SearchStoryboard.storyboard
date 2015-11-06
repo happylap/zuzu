@@ -1108,6 +1108,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <inset key="separatorInset" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="JBT-Ez-hRO">
+                            <rect key="frame" x="0.0" y="219.5" width="800" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czk-Se-eDg">
+                                    <rect key="frame" x="332" y="5.5" width="136" height="33"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <state key="normal" title="重設所有過濾條件"/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="czk-Se-eDg" firstAttribute="centerX" secondItem="JBT-Ez-hRO" secondAttribute="centerX" id="Xo0-p7-gnD"/>
+                                <constraint firstItem="czk-Se-eDg" firstAttribute="centerY" secondItem="JBT-Ez-hRO" secondAttribute="centerY" id="kNi-LH-dse"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="simpleFilterTableCell" id="04Z-NU-OU0" customClass="FilterTableViewCell" customModule="Zuzu" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="113.5" width="800" height="44"/>
@@ -1216,6 +1232,9 @@
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="800" height="800"/>
+                    <connections>
+                        <outlet property="resetAllButton" destination="czk-Se-eDg" id="mQ3-O9-dQm"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yte-p9-aTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -17,6 +17,14 @@ protocol FilterTableViewControllerDelegate {
 
 class FilterTableViewController: UITableViewController {
     
+    @IBOutlet weak var resetAllButton: UIButton! {
+        didSet {
+            resetAllButton.enabled = false
+            
+            resetAllButton.addTarget(self, action: "resetAllFilters:", forControlEvents: UIControlEvents.TouchUpInside)
+        }
+    }
+    
     let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
     
     struct ViewTransConst {
@@ -30,6 +38,20 @@ class FilterTableViewController: UITableViewController {
     var filterSections = [FilterSection]() ///The list of all filter options grouped by sections
     
     // MARK: - Private Utils
+    private func updateResetFilterButton() {
+        var filtersCount = 0
+        for filterIdSet in selectedFilters.values {
+            filtersCount += filterIdSet.count
+        }
+        
+        if(filtersCount > 0) {
+            resetAllButton.enabled = true
+        } else {
+            resetAllButton.enabled = false
+        }
+    }
+
+    
     private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [FilterSection]{
         
         var resultSections = [FilterSection]()
@@ -112,6 +134,16 @@ class FilterTableViewController: UITableViewController {
     }
     
     // MARK: - Action Handlers
+    
+    func resetAllFilters(sender: UIButton) {
+        NSLog("resetAllFilters")
+        
+        filterDataStore.clearFilterSetting()
+        selectedFilters.removeAll()
+        tableView.reloadData()
+        resetAllButton.enabled = false
+    }
+    
     @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
         
         var filterGroupResult = [FilterGroup]()
@@ -156,6 +188,8 @@ class FilterTableViewController: UITableViewController {
             }
         }
         
+        updateResetFilterButton()
+        
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = false
     }
@@ -177,7 +211,7 @@ class FilterTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let filterGroup = filterSections[indexPath.section].filterGroups[indexPath.row]
-        let filterSet = selectedFilters[filterGroup.id]
+        let filterIdSet = selectedFilters[filterGroup.id]
         
         let type = filterGroup.type
         
@@ -185,10 +219,10 @@ class FilterTableViewController: UITableViewController {
             
             if let currentFilter = filterGroup.filters.first {
                 
-                if (filterSet == nil) {
+                if (filterIdSet == nil) {
                     selectedFilters[filterGroup.id] = [currentFilter.identifier]
                 } else {
-                    if (filterSet!.contains(currentFilter.identifier)) {
+                    if (filterIdSet!.contains(currentFilter.identifier)) {
                         selectedFilters[filterGroup.id]?.remove(currentFilter.identifier)
                         NSLog("Remove: %@", currentFilter.identifier.key)
                     } else {
@@ -196,6 +230,8 @@ class FilterTableViewController: UITableViewController {
                         NSLog("Insert: %@", currentFilter.identifier.key)
                     }
                 }
+                
+                updateResetFilterButton()
             }
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -262,8 +298,10 @@ class FilterTableViewController: UITableViewController {
                 if(filterIdSetForGroup.count == 0) {
                     cell.filterSelection?.text = "不限"
                 } else {
-                    cell.filterSelection?.text = labelList.joinWithSeparator(",")
+                    cell.filterSelection?.text = labelList.joinWithSeparator(" ")
                 }
+            } else {
+                cell.filterSelection?.text = "不限"
             }
             
             cell.filterLabel.text = label
@@ -329,6 +367,8 @@ extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
         
         ///Update selection for a FilterGroup
         selectedFilters[groupId] = filterIdSet
+        
+        updateResetFilterButton()
         
         tableView.reloadData()
     }
