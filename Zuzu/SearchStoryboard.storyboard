@@ -1154,8 +1154,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="698" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="格局" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="asX-h3-9l9">
-                                            <rect key="frame" x="8" y="11.5" width="34" height="20.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="格局" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="asX-h3-9l9">
+                                            <rect key="frame" x="8" y="11" width="34" height="20.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="42" id="TQN-nK-OmN"/>
                                             </constraints>
@@ -1168,8 +1168,8 @@
                                                 </mask>
                                             </variation>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不限" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Al3-iZ-Zjz">
-                                            <rect key="frame" x="656" y="11.5" width="34" height="20.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不限" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Al3-iZ-Zjz">
+                                            <rect key="frame" x="50" y="11" width="640" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -1178,6 +1178,7 @@
                                     <constraints>
                                         <constraint firstItem="Al3-iZ-Zjz" firstAttribute="centerY" secondItem="asX-h3-9l9" secondAttribute="centerY" id="30j-Af-H7O"/>
                                         <constraint firstItem="asX-h3-9l9" firstAttribute="firstBaseline" secondItem="Al3-iZ-Zjz" secondAttribute="firstBaseline" id="566-xT-VRp"/>
+                                        <constraint firstItem="Al3-iZ-Zjz" firstAttribute="leading" secondItem="asX-h3-9l9" secondAttribute="trailing" constant="8" symbolic="YES" id="6kb-Ye-iOD"/>
                                         <constraint firstItem="asX-h3-9l9" firstAttribute="centerY" secondItem="wig-7U-ewV" secondAttribute="centerY" id="Ael-4a-rGs"/>
                                         <constraint firstItem="asX-h3-9l9" firstAttribute="top" secondItem="wig-7U-ewV" secondAttribute="topMargin" constant="3" id="H6Y-uH-WNH"/>
                                         <constraint firstItem="asX-h3-9l9" firstAttribute="baseline" secondItem="Al3-iZ-Zjz" secondAttribute="baseline" id="KGL-P6-yss"/>

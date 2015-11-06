@@ -250,8 +250,9 @@ class FilterTableViewController: UITableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             
             if let filterIdSetForGroup = filterIdSetForGroup {
-                var labelList = [String]()
                 
+                ///Get list of filter labels for a FilterGroup
+                var labelList = [String]()
                 for filterIdentifier in filterIdSetForGroup {
                     if let filterLabel = getFilterLabel(filterIdentifier) {
                         labelList.append(filterLabel)
