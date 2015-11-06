@@ -22,22 +22,10 @@ class FilterTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-
-//        // Reset any existing information
-//        houseTitle.text = nil
-//        houseAddr.text = nil
-//        houseTypeAndUsage.text = nil
-//        houseSize.text = nil
-//        housePrice.text = nil
-//        
-//        // Cancel image loading operation
-//        houseImg.af_cancelImageRequest()
-//        houseImg.layer.removeAllAnimations()
-//        houseImg.image = nil
-//        
-//        NSLog("\n")
-//        NSLog("- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
-//        
+        self.accessoryType = UITableViewCellAccessoryType.None
+        self.simpleFilterLabel?.text = nil
+        self.filterLabel?.text = nil
+        self.filterSelection?.text = nil
     }
     
 }

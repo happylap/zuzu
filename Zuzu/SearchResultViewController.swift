@@ -182,13 +182,13 @@ class SearchResultViewController: UIViewController {
                 forState: UIControlState.Selected)
             button.setImage(UIImage(named: "sort-ascending"),
                 forState: UIControlState.Normal)
-
+            
         } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
             button.setImage(UIImage(named: "sort-descending"),
                 forState: UIControlState.Selected)
             button.setImage(UIImage(named: "sort-descending"),
                 forState: UIControlState.Normal)
-
+            
         } else {
             assert(false, "Unknown Sorting order")
         }
@@ -209,7 +209,7 @@ class SearchResultViewController: UIViewController {
         return image
         
     }
-
+    
     private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
         self.dataSource.criteria = criteria
         self.startSpinner()
@@ -218,7 +218,7 @@ class SearchResultViewController: UIViewController {
     }
     
     private func configureFilterButtons() {
-    
+        
         if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
             
             for button in smartFilterView.filterButtons {
@@ -529,22 +529,38 @@ extension SearchResultViewController: UIAlertViewDelegate {
 
 extension SearchResultViewController: FilterTableViewControllerDelegate {
     
-    func onFiltersSelected(filters: [String : String]) {
+    func onFiltersSelected(filters: [FilterGroup]) {
         NSLog("onFiltersSelected: %@", filters)
+        
+        if let searchCriteria = self.searchCriteria {
+            
+            var allFiltersDic = [String:String]()
+            
+            for filterGroup in filters {
+                let filterPair = filterGroup.filterDic
+                
+                for (key, value) in filterPair {
+                    allFiltersDic[key] = value
+                }
+            }
+            
+            if(searchCriteria.filters == nil) {
+                searchCriteria.filters = [String:String]()
+            }
 
-        if(self.searchCriteria?.filters == nil) {
-            //Add a new filter
-            self.searchCriteria?.filters = [String:String]()
+            ///Add new filters
+            for (key, value) in allFiltersDic {
+                searchCriteria.filters![key] = value
+            }
+            
+            ///Remove filter not used
+            for key in searchCriteria.filters!.keys {
+                NSLog("-> Key %@", key)
+                if allFiltersDic[key] == nil {
+                    searchCriteria.filters?.removeValueForKey(key)
+                }
+            }
         }
-        
-        var prevFilters:[String:String]! = self.searchCriteria?.filters
-        //Update current filters
-        
-        for (key, value) in filters {
-            prevFilters[key] = value
-        }
-        
-        self.searchCriteria?.filters = prevFilters
         
         reloadDataWithNewCriteria(self.searchCriteria)
     }

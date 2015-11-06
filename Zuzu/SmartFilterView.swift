@@ -9,93 +9,6 @@
 import UIKit
 import SwiftyJSON
 
-enum DisplayType: Int {
-    case SimpleView = 0
-    case DetailView = 1
-}
-
-enum ChoiceType: String {
-    case SingleChoice = "single"
-    case MultiChoice = "multi"
-}
-
-enum LogicType: String {
-    case And = "AND"
-    case Or = "OR"
-}
-
-class FilterGroup {
-    let type: DisplayType
-    let label:String
-    let filters:[Filter]
-    var logicType: LogicType?
-    var choiceType: ChoiceType?
-    
-    var filterDic:[String:String] {
-        get{
-            var result = [String:String]()
-            var tempResult = [String:[String]]()
-            
-            ///SimpleView
-            if(type == .SimpleView) {
-                
-                if let filter = filters.first {
-                    result[filter.key] = filter.value
-                }
-            ///DetailView
-            } else {
-                for filter in filters {
-                    if var value = tempResult[filter.key] {
-                        
-                        value.append(filter.value)
-                        
-                        tempResult[filter.key] = value
-                        
-                    } else {
-                        
-                        tempResult[filter.key] = [filter.value]
-                    }
-                }
-            }
-            
-            ///Generate final result
-            for (key, valueList) in tempResult {
-                if let op = logicType?.rawValue {
-                    result[key] = "( \(valueList.joinWithSeparator(" \(op) ")) )"
-                    
-                }
-            }
-            
-            return result
-        }
-    }
-    
-    init(label:String, type: DisplayType, filters: [Filter]) {
-        self.label = label
-        self.filters = filters
-        self.type = type
-    }
-}
-
-class Filter: NSObject {
-    static let defaultKeyUnlimited = "unlimited"
-    
-    let label:String
-    let key:String
-    let value:String
-    
-    init(label:String, key: String, value: String) {
-        self.label = label
-        self.key = key
-        self.value = value
-    }
-    
-    override var description: String {
-        let string = "Filter: label = \(label), key = \(key), value = \(value)"
-        return string
-    }
-}
-
 class SmartFilterView: UIView {
     
     var filterButtons = [ToggleButton]()
@@ -155,8 +68,7 @@ class SmartFilterView: UIView {
                     let label = itemJsonObj["label"].stringValue
                     let key = itemJsonObj["filterKey"].stringValue
                     let value = itemJsonObj["filterValue"].stringValue
-                    let type = itemJsonObj["type"].intValue
-                    
+
                     let filter = Filter(label: label, key: key, value:value)
                     resultItems.append( filter  )
                 }

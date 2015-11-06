@@ -3,25 +3,21 @@
     [
      {
      "label": "養寵物",
-     "displayType": 0,
      "filterKey": "allow_pet",
      "filterValue": "true"
      },
      {
      "label": "有電梯",
-     "displayType": 0,
      "filterKey": "house_type",
      "filterValue": "2"
      },
      {
      "label": "要車位",
-     "displayType": 0,
      "filterKey": "parking_lot",
      "filterValue": "true"
      },
      {
      "label": "限女生",
-     "displayType": 0,
      "filterKey": "restr_sex",
      "filterValue": "0"
      }
@@ -30,15 +26,16 @@
     "advancedFilters":
     [
      {
-     "group": "房屋條件",
-     "items": [
+     "section": "房屋條件",
+     "groups": [
                {
-               "label": "型態",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "OR",
-               "filterKey": "house_type",
-               "filters": [
+                "id": "house_type",
+                "label": "型態",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "OR",
+                "filterKey": "house_type",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -62,11 +59,12 @@
                            ]
                },
                {
-               "label": "格局",
-               "displayType": 1,
-               "choiceType": "single",
-               "filterKey": "num_bedroom",
-               "filters": [
+                "id": "layout",
+                "label": "格局",
+                "displayType": 1,
+                "choiceType": "single",
+                "filterKey": "num_bedroom",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -94,12 +92,13 @@
                            ]
                },
                {
-               "label": "經辦人",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "OR",
-               "filterKey": "agent_type",
-               "filters": [
+                "id": "agent_type",
+                "label": "經辦人",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "OR",
+                "filterKey": "agent_type",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -119,36 +118,40 @@
                            ]
                },
                {
-               "label": "附車位",
-               "displayType": 0,
-               "filterKey": "parking_lot",
-               "filterValue": "true"
+                "id": "parking_lot",
+                "label": "附車位",
+                "displayType": 0,
+                "filterKey": "parking_lot",
+                "filterValue": "true"
                },
                {
-               "label": "不要地下室",
-               "displayType": 0,
-               "filterKey": "floor",
-               "filterValue": "[ 0 TO *]"
+                "id": "not_basement",
+                "label": "不要地下室",
+                "displayType": 0,
+                "filterKey": "floor",
+                "filterValue": "[ 0 TO *]"
                },
                {
-               "label": "不要頂樓加蓋",
-               "displayType": 0,
-               "filterKey": "rooftop_addition",
-               "filterValue": "false"
+                "id": "not_rooftop",
+                "label": "不要頂樓加蓋",
+                "displayType": 0,
+                "filterKey": "rooftop_addition",
+                "filterValue": "false"
                }
                ]
      },
      
      {
-     "group": "承租條件",
-     "items": [
+     "section": "承租條件",
+     "groups": [
                {
-               "label": "房客身分",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "OR",
-               "filterKey": "restr_profile",
-               "filters": [
+                "id": "user_profile",
+                "label": "房客身分",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "OR",
+                "filterKey": "restr_profile",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -168,11 +171,12 @@
                            ]
                },
                {
-               "label": "房客性別",
-               "displayType": 1,
-               "choiceType": "single",
-               "filterKey": "restr_sex",
-               "filters": [
+                "id": "user_sex",
+                "label": "房客性別",
+                "displayType": 1,
+                "choiceType": "single",
+                "filterKey": "restr_sex",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -188,11 +192,12 @@
                            ]
                },
                {
-               "label": "最短租期",
-               "displayType": 1,
-               "choiceType": "single",
-               "filterKey": "shortest_lease",
-               "filters": [
+                "id": "shortest_lease",
+                "label": "最短租期",
+                "displayType": 1,
+                "choiceType": "single",
+                "filterKey": "shortest_lease",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -216,32 +221,35 @@
                            ]
                },
                {
-               "label": "可養寵物",
-               "displayType": 0,
-               "type": 0,
-               "filterKey": "allow_pet",
-               "filterValue": "true"
+                "id": "allow_pet",
+                "label": "可養寵物",
+                "displayType": 0,
+                "type": 0,
+                "filterKey": "allow_pet",
+                "filterValue": "true"
                },
                {
-               "label": "可開伙",
-               "displayType": 0,
-               "type": 0,
-               "filterKey": "allow_cooking",
-               "filterValue": "true"
+                "id": "allow_cooking",
+                "label": "可開伙",
+                "displayType": 0,
+                "type": 0,
+                "filterKey": "allow_cooking",
+                "filterValue": "true"
                }
                ]
      },
 
      {
-     "group": "附屬設備",
-     "items": [
+     "section": "附屬設備",
+     "groups": [
                {
-               "label": "附傢俱",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "AND",
-               "filterKey": "furniture",
-               "filters": [
+                "id": "furniture",
+                "label": "附傢俱",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "AND",
+                "filterKey": "furniture",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -274,12 +282,13 @@
                },
                
                {
-               "label": "附設備",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "AND",
-               "filterKey": "facility",
-               "filters": [
+                "id": "facility",
+                "label": "附設備",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "AND",
+                "filterKey": "facility",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -327,15 +336,16 @@
      },
      
      {
-     "group": "環境交通",
-     "items": [
+     "section": "環境交通",
+     "groups": [
                {
-               "label": "周邊機能",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "AND",
-               "filterKey": "surrounding",
-               "filters": [
+                "id": "surrounding",
+                "label": "周邊機能",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "AND",
+                "filterKey": "surrounding",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"
@@ -376,11 +386,12 @@
                ]
                },
                {
-               "label": "交通站點",
-               "displayType": 1,
-               "choiceType": "multi",
-               "logicType" : "AND",
-               "filters": [
+                "id": "public_trans",
+                "label": "交通站點",
+                "displayType": 1,
+                "choiceType": "multi",
+                "logicType" : "AND",
+                "filters": [
                            {
                            "label": "不限",
                            "filterKey": "unlimited"

@@ -10,6 +10,7 @@
 		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; };
 		2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */; };
 		2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F276B2E1BBE989E00A41306 /* DataPersistence.swift */; };
+		2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */; };
 		2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31F5081BBF7B6400054355 /* MainTabViewController.swift */; };
 		2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */; };
 		2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */; };
@@ -87,6 +88,7 @@
 		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentTableDataSource.swift; sourceTree = "<group>"; };
 		2F276B2E1BBE989E00A41306 /* DataPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPersistence.swift; sourceTree = "<group>"; };
+		2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterSettingDataStore.swift; sourceTree = "<group>"; };
 		2F31F5081BBF7B6400054355 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
 		2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchStoryboard.storyboard; sourceTree = "<group>"; };
 		2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RadarStoryboard.storyboard; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 			children = (
 				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
 				2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */,
+				2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */,
 				81FA28081BDA397B0038DD19 /* HouseDao.swift */,
 				81FA28121BDA39B10038DD19 /* NoteDao.swift */,
 			);
@@ -638,6 +641,7 @@
 				81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
+				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
 				81FA28131BDA39B10038DD19 /* Note.swift in Sources */,
 				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,
 				81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */,
