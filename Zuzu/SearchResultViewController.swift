@@ -256,8 +256,28 @@ class SearchResultViewController: UIViewController {
     
     private func updateSlectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
         
-        for (groupId, filterIdSet) in newFilterIdSet {
-            self.selectedFilterIdSet[groupId] = filterIdSet
+        ///Remove filters not included in the newFilterIdSet
+        for groupId in self.selectedFilterIdSet.keys {
+            if (newFilterIdSet[groupId] == nil) {
+                self.selectedFilterIdSet.removeValueForKey(groupId)
+            }
+        }
+        
+        ///Update/Add filter value
+        for (groupId, valueSet) in newFilterIdSet {
+            selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
+        }
+        
+        ///Save all selected setting
+        self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
+    }
+    
+    
+    private func appendSlectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
+        
+        ///Update/Add filter value
+        for (groupId, valueSet) in newFilterIdSet {
+            selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
         }
         
         ///Save all selected setting
@@ -304,35 +324,14 @@ class SearchResultViewController: UIViewController {
                             filterIdSet.removeValueForKey(filterGroup.id)
                         }
                     }
-                    self.updateSlectedFilterIdSet(filterIdSet)
+                    self.appendSlectedFilterIdSet(filterIdSet)
                     
                     if let searchCriteria = self.searchCriteria {
                         
                         searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
                         
                     }
-                    
-                    //                    if(self.searchCriteria?.filters == nil) {
-                    //                        //Add a new filter
-                    //                        self.searchCriteria?.filters = [String:String]()
-                    //                    }
-                    //
-                    //                    var filters:[String:String]! = self.searchCriteria?.filters
-                    //                    //Update current filters
-                    //
-                    //                    for smartFilter in filterGroup.filters {
-                    //                        if(isToggleOn) {
-                    //                            filters[smartFilter.key] = smartFilter.value
-                    //                            NSLog("Smart Filter on: %@ , %@", smartFilter.key, smartFilter.value)
-                    //                        } else {
-                    //                            filters.removeValueForKey(smartFilter.key)
-                    //                            NSLog("Smart Filter off: %@ , %@", smartFilter.key, smartFilter.value)
-                    //                        }
-                    //                    }
-                    //
-                    //
-                    //                    self.searchCriteria?.filters = filters
-                    //
+
                     reloadDataWithNewCriteria(self.searchCriteria)
                 }
             }
@@ -631,37 +630,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
             searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
             
         }
-        
-        //        if let searchCriteria = self.searchCriteria {
-        //
-        //            var allFiltersDic = [String:String]()
-        //
-        //            for filterGroup in filters {
-        //                let filterPair = filterGroup.filterDic
-        //
-        //                for (key, value) in filterPair {
-        //                    allFiltersDic[key] = value
-        //                }
-        //            }
-        //
-        //            if(searchCriteria.filters == nil) {
-        //                searchCriteria.filters = [String:String]()
-        //            }
-        //
-        //            ///Add new filters
-        //            for (key, value) in allFiltersDic {
-        //                searchCriteria.filters![key] = value
-        //            }
-        //            
-        //            ///Remove filters not in use (not limited)
-        //            for key in searchCriteria.filters!.keys {
-        //                NSLog("-> Key %@", key)
-        //                if allFiltersDic[key] == nil {
-        //                    searchCriteria.filters?.removeValueForKey(key)
-        //                }
-        //            }
-        //        }
-        //        
+             
         reloadDataWithNewCriteria(self.searchCriteria)
     }
 }
