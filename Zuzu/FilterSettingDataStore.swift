@@ -89,27 +89,29 @@ class FilterGroup: NSObject, NSCopying {
     var filterDic:[String:String] {
         get{
             var result = [String:String]()
-            var tempResult = [String:[String]]()
             
-            ///SimpleView
-            if(type == .SimpleView) {
+            ///SimpleView or DetailView/SingleChoice
+            if(type == .SimpleView || choiceType == .SingleChoice) {
                 
                 if let filter = filters.first {
                     result[filter.key] = filter.value
                 }
-                ///DetailView
-            } else {
-                for filter in filters {
-                    if var value = tempResult[filter.key] {
-                        
-                        value.append(filter.value)
-                        
-                        tempResult[filter.key] = value
-                        
-                    } else {
-                        
-                        tempResult[filter.key] = [filter.value]
-                    }
+                return result
+                
+            }
+            
+            var tempResult = [String:[String]]()
+            ///DetailView/MultiChoice
+            for filter in filters {
+                if var value = tempResult[filter.key] {
+                    
+                    value.append(filter.value)
+                    
+                    tempResult[filter.key] = value
+                    
+                } else {
+                    
+                    tempResult[filter.key] = [filter.value]
                 }
             }
             
@@ -117,7 +119,6 @@ class FilterGroup: NSObject, NSCopying {
             for (key, valueList) in tempResult {
                 if let op = logicType?.rawValue {
                     result[key] = "( \(valueList.joinWithSeparator(" \(op) ")) )"
-                    
                 }
             }
             

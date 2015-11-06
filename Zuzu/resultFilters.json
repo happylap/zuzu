@@ -2,22 +2,30 @@
     "smartFilters":
     [
      {
+     "id": "allow_pet",
      "label": "養寵物",
+     "displayType": 0,
      "filterKey": "allow_pet",
      "filterValue": "true"
      },
      {
+     "id": "house_type",
      "label": "有電梯",
+     "displayType": 0,
      "filterKey": "house_type",
      "filterValue": "2"
      },
      {
+     "id": "parking_lot",
      "label": "要車位",
+     "displayType": 0,
      "filterKey": "parking_lot",
      "filterValue": "true"
      },
      {
+     "id": "user_sex",
      "label": "限女生",
+     "displayType": 0,
      "filterKey": "restr_sex",
      "filterValue": "0"
      }
@@ -224,7 +232,6 @@
                 "id": "allow_pet",
                 "label": "可養寵物",
                 "displayType": 0,
-                "type": 0,
                 "filterKey": "allow_pet",
                 "filterValue": "true"
                },
@@ -232,7 +239,6 @@
                 "id": "allow_cooking",
                 "label": "可開伙",
                 "displayType": 0,
-                "type": 0,
                 "filterKey": "allow_cooking",
                 "filterValue": "true"
                }
