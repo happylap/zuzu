@@ -153,7 +153,7 @@ class MyCollectionCell: UITableViewCell {
         
         // load new information (if any)
         if let item = self.houseItem {
-            
+            print(item)
             self.houseTitle.text = item.valueForKey("title") as? String
             self.housePrice.text = item.valueForKey("price") as? String
             self.houseAddr.text = item.valueForKey("addr") as? String
@@ -161,20 +161,22 @@ class MyCollectionCell: UITableViewCell {
             self.houseImg.image = placeholderImg
             
             if item.valueForKey("img")?.count > 0 {
-            if let imgUrl = item.valueForKey("img")?[0] as? String {
-                let size = self.houseImg.frame.size
+                if let imgUrl = item.valueForKey("img")?[0] as? String {
+                    let size = self.houseImg.frame.size
                 
-                self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
+                    self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                     
-                    NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
+                        NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                     
-                    //self.contentView.updateConstraintsIfNeeded()
-                    //self.contentView.setNeedsLayout()
-                    //self.setNeedsLayout()
-                    self.addImageOverlay()
+                        //self.contentView.updateConstraintsIfNeeded()
+                        //self.contentView.setNeedsLayout()
+                        //self.setNeedsLayout()
+                        self.addImageOverlay()
+                    }
                 }
             }
-            }
+            
+
         }
     }
 
