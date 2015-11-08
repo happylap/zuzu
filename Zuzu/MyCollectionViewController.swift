@@ -48,7 +48,9 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
 
     override func viewWillAppear(animated: Bool) {
         NSLog("%@ viewWillAppear", self)
-        self.loadData()
+        if (self.data.count == 0) {
+            self.loadData()
+        }
     }
 
     // MARK: - Table View Data Source
@@ -79,26 +81,26 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let callActionHandler = { (action: UIAlertAction!) -> Void in
-            let alertMessage = UIAlertController(title: "Service Unavailable", message: "Sorry, the call feature is not available yet. Please retry later.", preferredStyle: .Alert)
-            alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            self.presentViewController(alertMessage, animated: true, completion: nil)
-        }
-        
-        let optionMenu = UIAlertController(title: nil, message: "確認聯絡李先生 (代理人)", preferredStyle: .ActionSheet)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        optionMenu.addAction(cancelAction)
-        
-        let house = self.data[indexPath.row]
-        let phone = house.valueForKey("phone")?[0] as? String
-        let callAction = UIAlertAction(title: "手機: \(phone!)", style: .Default, handler: callActionHandler)
-        optionMenu.addAction(callAction)
-
-        self.presentViewController(optionMenu, animated: true, completion: nil)
-    }
+//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        
+//        let callActionHandler = { (action: UIAlertAction!) -> Void in
+//            let alertMessage = UIAlertController(title: "Service Unavailable", message: "Sorry, the call feature is not available yet. Please retry later.", preferredStyle: .Alert)
+//            alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//            self.presentViewController(alertMessage, animated: true, completion: nil)
+//        }
+//        
+//        let optionMenu = UIAlertController(title: nil, message: "確認聯絡李先生 (代理人)", preferredStyle: .ActionSheet)
+//        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+//        optionMenu.addAction(cancelAction)
+//        
+//        let house = self.data[indexPath.row]
+//        let phone = house.valueForKey("phone")?[0] as? String
+//        let callAction = UIAlertAction(title: "手機: \(phone!)", style: .Default, handler: callActionHandler)
+//        optionMenu.addAction(callAction)
+//
+//        self.presentViewController(optionMenu, animated: true, completion: nil)
+//    }
     
     // MARK: - Table edit mode
     
@@ -109,12 +111,38 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let selectedItem: AnyObject = self.data[indexPath.row]
-            let id = selectedItem.valueForKey("id") as? String
+            let id = selectedItem.valueForKey("houseId") as? String
             HouseDao.sharedInstance.deleteById(id!)
             data.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        NSLog("%@ prepareForSegue", self)
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
+        
+        print(segue)
+        print(sender)
+        
+        
+        if segue.identifier == "showMyCollectionDetail" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
+                
+                let destCtrl = segue.destinationViewController as! MyCollectionDetailViewController
+                let selectedItem: AnyObject = self.data[indexPath.row]
+                let houseId = selectedItem.valueForKey("houseId") as? String
+                destCtrl.houseId = houseId!
+            }
+        }
+    }
+
+    
 
     
     private func loadRemoteData(){

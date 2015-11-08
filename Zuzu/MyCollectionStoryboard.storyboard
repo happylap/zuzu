@@ -78,6 +78,7 @@
                                             <outlet property="houseImg" destination="O4t-bg-wg0" id="DU6-A7-TLh"/>
                                             <outlet property="housePrice" destination="0Zs-ap-2t6" id="zn7-N1-qii"/>
                                             <outlet property="houseTitle" destination="U7T-uV-fxT" id="R4c-UK-bjW"/>
+                                            <segue destination="JzZ-qj-NMa" kind="push" identifier="showMyCollectionDetail" id="sHS-vY-XUl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -98,6 +99,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q3l-lU-wOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="742" y="338"/>
+        </scene>
+        <!--My Collection Detail View Controller-->
+        <scene sceneID="9h6-j7-678">
+            <objects>
+                <viewController id="JzZ-qj-NMa" customClass="MyCollectionDetailViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LoP-rs-ms1"/>
+                        <viewControllerLayoutGuide type="bottom" id="d0N-6H-XmX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qfp-Yf-fJ0">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="houseImg" translatesAutoresizingMaskIntoConstraints="NO" id="qiI-z0-lqX">
+                                <rect key="frame" x="0.0" y="58" width="320" height="250"/>
+                                <animations/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="houseTitle" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7jK-3e-Ao0">
+                                <rect key="frame" x="0.0" y="316" width="309" height="21"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="houseAddr" text="Addr" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lUF-mw-r4F">
+                                <rect key="frame" x="0.0" y="350" width="309" height="21"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="housePrice" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IUf-hK-23G">
+                                <rect key="frame" x="0.0" y="387" width="309" height="21"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="g7z-I5-QMf"/>
+                    <connections>
+                        <outlet property="houseAddr" destination="lUF-mw-r4F" id="VAD-Z2-lX6"/>
+                        <outlet property="houseImg" destination="qiI-z0-lqX" id="dZe-36-6dl"/>
+                        <outlet property="housePrice" destination="IUf-hK-23G" id="dhf-1C-2Ej"/>
+                        <outlet property="houseTitle" destination="7jK-3e-Ao0" id="UY3-36-HLM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aij-xG-h68" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1205" y="339"/>
         </scene>
         <!--我的收藏-->
         <scene sceneID="NCv-ef-QSc">
