@@ -12,7 +12,7 @@ import SwiftyJSON
 class SmartFilterView: UIView {
     
     var filterButtons = [ToggleButton]()
-    var filtersByButton = [ToggleButton:Filter]()
+    var filtersByButton = [ToggleButton:FilterGroup]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,9 +51,9 @@ class SmartFilterView: UIView {
         }
     }
     
-    private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [Filter]{
+    private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [FilterGroup]{
         
-        var resultItems = [Filter]()
+        var resultItems = [FilterGroup]()
         
         if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
             
@@ -65,12 +65,17 @@ class SmartFilterView: UIView {
                 NSLog("\(criteriaLabel) = %d", items.count)
                 
                 for itemJsonObj in items {
+                    let groupId = itemJsonObj["id"].stringValue
+                    let type = itemJsonObj["type"].intValue
                     let label = itemJsonObj["label"].stringValue
                     let key = itemJsonObj["filterKey"].stringValue
                     let value = itemJsonObj["filterValue"].stringValue
+                    
+                    let filterGroup = FilterGroup(id: groupId, label: label,
+                        type: DisplayType(rawValue: type)!,
+                        filters: [Filter(label: label, key: key, value: value)])
 
-                    let filter = Filter(label: label, key: key, value:value)
-                    resultItems.append( filter  )
+                    resultItems.append(filterGroup)
                 }
                 
             } catch let error as NSError{

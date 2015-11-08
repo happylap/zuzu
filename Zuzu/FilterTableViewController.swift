@@ -11,11 +11,22 @@ import SwiftyJSON
 
 protocol FilterTableViewControllerDelegate {
     
-    func onFiltersSelected(filters: [FilterGroup])
+    func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>])
+    
+    func onFiltersReset()
     
 }
 
 class FilterTableViewController: UITableViewController {
+    
+    ///The list of all filter options grouped by sections
+    static var filterSections:[FilterSection] = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
+
+    var filterSections:[FilterSection] {
+        get {
+            return FilterTableViewController.filterSections
+        }
+    }
     
     @IBOutlet weak var resetAllButton: UIButton! {
         didSet {
@@ -25,22 +36,18 @@ class FilterTableViewController: UITableViewController {
         }
     }
     
-    let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
-    
     struct ViewTransConst {
         static let displayFilterOptions:String = "displayFilterOptions"
     }
     
     var filterDelegate:FilterTableViewControllerDelegate?
     
-    var selectedFilters = [String : Set<FilterIdentifier>]() ///GroupId : Filter Set
-    
-    var filterSections = [FilterSection]() ///The list of all filter options grouped by sections
+    var selectedFilterIdSet = [String : Set<FilterIdentifier>]() ///GroupId : Filter Set
     
     // MARK: - Private Utils
     private func updateResetFilterButton() {
         var filtersCount = 0
-        for filterIdSet in selectedFilters.values {
+        for filterIdSet in selectedFilterIdSet.values {
             filtersCount += filterIdSet.count
         }
         
@@ -51,6 +58,22 @@ class FilterTableViewController: UITableViewController {
         }
     }
 
+    private func getFilterLabel(filterIdentifier: FilterIdentifier) -> String? {
+        for section in self.filterSections {
+            for group in section.filterGroups {
+                
+                let result = group.filters.filter({ (filter) -> Bool in
+                    return filter.identifier == filterIdentifier
+                })
+                
+                if(!result.isEmpty) {
+                    return result.first?.label
+                }
+            }
+        }
+        
+        return nil
+    }
     
     private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [FilterSection]{
         
@@ -138,37 +161,16 @@ class FilterTableViewController: UITableViewController {
     func resetAllFilters(sender: UIButton) {
         NSLog("resetAllFilters")
         
-        filterDataStore.clearFilterSetting()
-        selectedFilters.removeAll()
+        self.filterDelegate?.onFiltersReset()
+        
+        selectedFilterIdSet.removeAll()
         tableView.reloadData()
         resetAllButton.enabled = false
     }
     
     @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
         
-        var filterGroupResult = [FilterGroup]()
-        
-        ///Save all selected setting
-        filterDataStore.saveAdvancedFilterSetting(self.selectedFilters)
-        
-        ///Walk through all items to generate the list of selected FilterGroup
-        for section in filterSections {
-            for group in section.filterGroups {
-                if let selectedFilterId = self.selectedFilters[group.id] {
-                    let groupCopy = group.copy() as! FilterGroup
-                    
-                    let selectedFilters = group.filters.filter({ (filter) -> Bool in
-                        selectedFilterId.contains(filter.identifier)
-                    })
-                    
-                    groupCopy.filters = selectedFilters
-                    
-                    filterGroupResult.append(groupCopy)
-                }
-            }
-        }
-        
-        self.filterDelegate?.onFiltersSelected(filterGroupResult)
+        self.filterDelegate?.onFiltersSelected(self.selectedFilterIdSet)
         
         navigationController?.popViewControllerAnimated(true)
         
@@ -177,16 +179,6 @@ class FilterTableViewController: UITableViewController {
     // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Load all filter items
-        filterSections = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
-        
-        // Load selected filters
-        if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {
-            for (key, value) in selectedFilterSetting {
-                self.selectedFilters[key] = value
-            }
-        }
         
         updateResetFilterButton()
         
@@ -202,16 +194,16 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return filterSections.count
+        return self.filterSections.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filterSections[section].filterGroups.count
+        return self.filterSections[section].filterGroups.count
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let filterGroup = filterSections[indexPath.section].filterGroups[indexPath.row]
-        let filterIdSet = selectedFilters[filterGroup.id]
+        let filterGroup = self.filterSections[indexPath.section].filterGroups[indexPath.row]
+        let filterIdSet = selectedFilterIdSet[filterGroup.id]
         
         let type = filterGroup.type
         
@@ -219,16 +211,16 @@ class FilterTableViewController: UITableViewController {
             
             if let currentFilter = filterGroup.filters.first {
                 
-                if (filterIdSet == nil) {
-                    selectedFilters[filterGroup.id] = [currentFilter.identifier]
-                } else {
-                    if (filterIdSet!.contains(currentFilter.identifier)) {
-                        selectedFilters[filterGroup.id]?.remove(currentFilter.identifier)
+                if let filterIdSet = filterIdSet {
+                    if (filterIdSet.contains(currentFilter.identifier)) {
+                        selectedFilterIdSet[filterGroup.id]?.remove(currentFilter.identifier)
                         NSLog("Remove: %@", currentFilter.identifier.key)
                     } else {
-                        selectedFilters[filterGroup.id]?.insert(currentFilter.identifier)
+                        selectedFilterIdSet[filterGroup.id]?.insert(currentFilter.identifier)
                         NSLog("Insert: %@", currentFilter.identifier.key)
                     }
+                } else {
+                    selectedFilterIdSet[filterGroup.id] = [currentFilter.identifier]
                 }
                 
                 updateResetFilterButton()
@@ -238,26 +230,9 @@ class FilterTableViewController: UITableViewController {
         }
     }
     
-    private func getFilterLabel(filterIdentifier: FilterIdentifier) -> String? {
-        for section in self.filterSections {
-            for group in section.filterGroups {
-                
-                let result = group.filters.filter({ (filter) -> Bool in
-                    return filter.identifier == filterIdentifier
-                })
-                
-                if(!result.isEmpty) {
-                    return result.first?.label
-                }
-            }
-        }
-        
-        return nil
-    }
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let filterGroup = filterSections[indexPath.section].filterGroups[indexPath.row]
-        let filterIdSetForGroup = selectedFilters[filterGroup.id]
+        let filterGroup = self.filterSections[indexPath.section].filterGroups[indexPath.row]
+        let filterIdSetForGroup = selectedFilterIdSet[filterGroup.id]
         
         let type = filterGroup.type
         let label = filterGroup.label
@@ -312,7 +287,7 @@ class FilterTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return filterSections[section].label
+        return self.filterSections[section].label
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -340,11 +315,11 @@ class FilterTableViewController: UITableViewController {
                     
                     let path = self.tableView.indexPathForSelectedRow!
                     
-                    let filterGroup = filterSections[path.section].filterGroups[path.row]
+                    let filterGroup = self.filterSections[path.section].filterGroups[path.row]
                     
                     fotvc.filterOptions = filterGroup
                     
-                    if let selectedFilterIds = self.selectedFilters[filterGroup.id]{
+                    if let selectedFilterIds = self.selectedFilterIdSet[filterGroup.id]{
                         fotvc.selectedFilterIds = selectedFilterIds
                     }
                     
@@ -366,7 +341,7 @@ extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
         NSLog("onFiltersSelected: %@", filterIdSet)
         
         ///Update selection for a FilterGroup
-        selectedFilters[groupId] = filterIdSet
+        selectedFilterIdSet[groupId] = filterIdSet
         
         updateResetFilterButton()
         

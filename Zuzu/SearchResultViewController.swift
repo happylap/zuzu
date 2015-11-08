@@ -46,6 +46,8 @@ class SearchResultViewController: UIViewController {
     
     @IBOutlet weak var smartFilterScrollView: UIScrollView!
     
+    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    
     var debugTextStr: String = ""
     private let searchItemService : SearchItemService = SearchItemService.getInstance()
     private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
@@ -54,6 +56,7 @@ class SearchResultViewController: UIViewController {
     private var ignoreScroll = false
     
     private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
+    private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
     
     var searchCriteria: SearchCriteria?
     
@@ -227,6 +230,60 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
+        
+        var filterGroupResult = [FilterGroup]()
+        
+        ///Walk through all items to generate the list of selected FilterGroup
+        for section in FilterTableViewController.filterSections {
+            for group in section.filterGroups {
+                if let selectedFilterId = selectedFilterIdSet[group.id] {
+                    let groupCopy = group.copy() as! FilterGroup
+                    
+                    let selectedFilters = group.filters.filter({ (filter) -> Bool in
+                        selectedFilterId.contains(filter.identifier)
+                    })
+                    
+                    groupCopy.filters = selectedFilters
+                    
+                    filterGroupResult.append(groupCopy)
+                }
+            }
+        }
+        
+        return filterGroupResult
+    }
+    
+    private func updateSlectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
+        
+        ///Remove filters not included in the newFilterIdSet
+        for groupId in self.selectedFilterIdSet.keys {
+            if (newFilterIdSet[groupId] == nil) {
+                self.selectedFilterIdSet.removeValueForKey(groupId)
+            }
+        }
+        
+        ///Update/Add filter value
+        for (groupId, valueSet) in newFilterIdSet {
+            selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
+        }
+        
+        ///Save all selected setting
+        self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
+    }
+    
+    
+    private func appendSlectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
+        
+        ///Update/Add filter value
+        for (groupId, valueSet) in newFilterIdSet {
+            selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
+        }
+        
+        ///Save all selected setting
+        self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
+    }
+    
     // MARK: - Control Action Handlers
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
         
@@ -253,27 +310,29 @@ class SearchResultViewController: UIViewController {
             
             if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
                 
-                if let filter = smartFilterView.filtersByButton[toogleButton] {
+                if let filterGroup = smartFilterView.filtersByButton[toogleButton] {
                     
+                    var filterIdSet = [String: Set<FilterIdentifier>]()
                     
-                    if(self.searchCriteria?.filters == nil) {
-                        //Add a new filter
-                        self.searchCriteria?.filters = [String:String]()
+                    for smartFilter in filterGroup.filters {
+                        if(isToggleOn) {
+                            ///Replaced with Smart Filter Setting
+                            filterIdSet[filterGroup.id] = [smartFilter.identifier]
+                            
+                        } else {
+                            ///Clear filters under this group
+                            filterIdSet.removeValueForKey(filterGroup.id)
+                        }
                     }
+                    self.appendSlectedFilterIdSet(filterIdSet)
                     
-                    var filters:[String:String]! = self.searchCriteria?.filters
-                    //Update current filters
-                    if(isToggleOn) {
-                        filters[filter.key] = filter.value
-                    } else {
-                        filters.removeValueForKey(filter.key)
+                    if let searchCriteria = self.searchCriteria {
+                        
+                        searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
+                        
                     }
-                    
-                    self.searchCriteria?.filters = filters
-                    
+
                     reloadDataWithNewCriteria(self.searchCriteria)
-                    
-                    NSLog("Filter pressed: %@ , %@", filter.key, filter.value)
                 }
             }
         }
@@ -402,6 +461,15 @@ class SearchResultViewController: UIViewController {
                 
                 if let ftvc = segue.destinationViewController as? FilterTableViewController {
                     
+                    // Load selected filters
+                    if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {
+                        for (key, value) in selectedFilterSetting {
+                            self.selectedFilterIdSet[key] = value
+                        }
+                        
+                        ftvc.selectedFilterIdSet = selectedFilterSetting
+                    }
+                    
                     ftvc.filterDelegate = self
                 }
                 
@@ -529,39 +597,40 @@ extension SearchResultViewController: UIAlertViewDelegate {
 
 extension SearchResultViewController: FilterTableViewControllerDelegate {
     
-    func onFiltersSelected(filters: [FilterGroup]) {
-        NSLog("onFiltersSelected: %@", filters)
+    private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
         
-        if let searchCriteria = self.searchCriteria {
+        let filterGroups = self.convertToFilterGroup(filteridSet)
+        
+        var allFiltersDic = [String:String]()
+        
+        for filterGroup in filterGroups {
+            let filterPair = filterGroup.filterDic
             
-            var allFiltersDic = [String:String]()
-            
-            for filterGroup in filters {
-                let filterPair = filterGroup.filterDic
-                
-                for (key, value) in filterPair {
-                    allFiltersDic[key] = value
-                }
-            }
-            
-            if(searchCriteria.filters == nil) {
-                searchCriteria.filters = [String:String]()
-            }
-
-            ///Add new filters
-            for (key, value) in allFiltersDic {
-                searchCriteria.filters![key] = value
-            }
-            
-            ///Remove filter not used
-            for key in searchCriteria.filters!.keys {
-                NSLog("-> Key %@", key)
-                if allFiltersDic[key] == nil {
-                    searchCriteria.filters?.removeValueForKey(key)
-                }
+            for (key, value) in filterPair {
+                allFiltersDic[key] = value
             }
         }
         
+        return allFiltersDic
+    }
+    
+    func onFiltersReset() {
+        self.filterDataStore.clearFilterSetting()
+    }
+    
+    func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        
+        NSLog("onFiltersSelected: %@", selectedFilterIdSet)
+        
+        
+        self.updateSlectedFilterIdSet(selectedFilterIdSet)
+        
+        if let searchCriteria = self.searchCriteria {
+            
+            searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
+            
+        }
+             
         reloadDataWithNewCriteria(self.searchCriteria)
     }
 }
