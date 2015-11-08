@@ -76,25 +76,49 @@ class HouseDao: NSObject {
         
         // Execute fetch request
         return CoreDataManager.shared.executeFetchRequest(fetchRequest)
+        
     }
     
-    func getHouseById(id: NSString) -> House? {
+    func getHouseById2(houseId: NSString) -> [House]? {
+        var fetchedResults:Array<House> = Array<House>()
+        
+        // Create request on Event entity
+        let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
+        
+        //Add a predicate to filter by eventId
+        let findByIdPredicate =
+        NSPredicate(format: "houseId = %@", houseId)
+        fetchRequest.predicate = findByIdPredicate
+        
+        //Execute Fetch request
+        do {
+            fetchedResults = try CoreDataManager.shared.managedObjectContext.executeFetchRequest(fetchRequest) as! [House]
+        } catch let fetchError as NSError {
+            print("retrieveById error: \(fetchError.localizedDescription)")
+            fetchedResults = Array<House>()
+        }
+        
+        return fetchedResults
+    }
+    
+    func getHouseById(id: NSString) -> AnyObject? {
+        NSLog("%@ getHouseById: \(id)", self)
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         
         // Add a predicate to filter by houseId
-        let findByIdPredicate = NSPredicate(format: "id = %@", id)
+        let findByIdPredicate = NSPredicate(format: "houseId == %@", id)
         fetchRequest.predicate = findByIdPredicate
         
         // Execute fetch request
         let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest)
         
-        if fetchedResults?.count != 0 {
-            
-            if let fetchedHouse: House = fetchedResults![0] as? House {
-                return fetchedHouse
-            }
+        print(fetchedResults)
+        
+        if let first = fetchedResults?.first {
+            return first
         }
+        
         return nil
         
     }
@@ -102,10 +126,13 @@ class HouseDao: NSObject {
     // MARK: Delete
     
     func deleteById(id: NSString) {
-        if let house = self.getHouseById(id) {
-            NSLog("delete data id: \(house.id)")
-            CoreDataManager.shared.deleteEntity(house)
-            CoreDataManager.shared.save()
+        NSLog("%@ deleteById: \(id)", self)
+        if let item = self.getHouseById(id) {
+            print(item)
+            if let obj: NSManagedObject = item as? NSManagedObject {
+                CoreDataManager.shared.deleteEntity(obj)
+                CoreDataManager.shared.save()
+            }
         }
     }
     
@@ -124,7 +151,7 @@ class HouseDao: NSObject {
         dateFormatter.timeZone = NSTimeZone(name: "UTC")
         
         /* Mandatory Fields */
-        let id = data["id"].stringValue
+        let houseId = data["id"].stringValue
         let link = data["link"].stringValue
         let mobileLink = data["mobile_link"].stringValue
         let title = data["title"].stringValue
@@ -183,7 +210,7 @@ class HouseDao: NSObject {
         let postTime: NSDate? = dateFormatter.dateFromString(data["post_time"].stringValue)
         let coordinate = data["coordinate"].stringValue
         
-        house.id = id
+        house.houseId = houseId
         house.link = link
         house.mobileLink = mobileLink
         house.title = title
