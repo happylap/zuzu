@@ -121,8 +121,11 @@ class RegionTableViewController: UITableViewController {
         NSLog("onSelectionCleared")
         
         for key in checkedRegions.keys {
-            for (var index:Int = 0; index < checkedRegions[key]?.count; index++ ) {
-                checkedRegions[key]![index] = false
+            
+            if let stateCount = checkedRegions[key]?.count {
+                for index in 0..<stateCount {
+                    checkedRegions[key]![index] = false
+                }
             }
             
             /// Notify selection changed
