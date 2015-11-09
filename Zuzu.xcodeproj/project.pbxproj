@@ -49,6 +49,7 @@
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
+		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
 		81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */; };
 		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; };
 		81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDao.swift */; };
@@ -135,6 +136,7 @@
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
+		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
 		81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionTableViewController.swift; sourceTree = "<group>"; };
 		81FA28071BDA397B0038DD19 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		81FA28081BDA397B0038DD19 /* HouseDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDao.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */,
 				2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */,
 				81FA28231BDA3A0F0038DD19 /* MyCollectionCell.swift */,
+				81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */,
 				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
 			);
 			name = Collection;
@@ -621,6 +624,7 @@
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
+				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
