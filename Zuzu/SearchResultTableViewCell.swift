@@ -18,6 +18,7 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var houseSize: UILabel!
     @IBOutlet weak var houseAddr: UILabel!
     @IBOutlet weak var housePrice: UILabel!
+    @IBOutlet weak var addToCollectionButton: UIImageView!
     
     let placeholderImg = UIImage(named: "house_img")
     

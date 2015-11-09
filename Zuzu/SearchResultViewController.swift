@@ -28,6 +28,7 @@ class SearchResultViewController: UIViewController {
     struct ViewTransConst {
         static let showDebugInfo:String = "showDebugInfo"
         static let showAdvancedFilter:String = "showAdvancedFilter"
+        static let displayHouseDetail:String = "displayHouseDetail"
     }
     
     // MARK: - Member Fields
@@ -91,6 +92,27 @@ class SearchResultViewController: UIViewController {
         let alertView = UIAlertView(
             title: "常用搜尋條件已滿",
             message: "常用搜尋條件儲存已達上限，請先刪除不需要的條件",
+            delegate: self,
+            cancelButtonTitle: "知道了")
+        
+        // Configure Alert View
+        alertView.tag = 2
+        
+        // Show Alert View
+        alertView.show()
+        
+        // Delay the dismissal
+        self.runOnMainThreadAfter(2.0) {
+            alertView.dismissWithClickedButtonIndex(-1, animated: true)
+        }
+    }
+
+    private func alertAddingToCollectionSuccess() {
+        // Initialize Alert View
+        
+        let alertView = UIAlertView(
+            title: "新增我的收藏",
+            message: "新增了一筆物件到我的收藏",
             delegate: self,
             cancelButtonTitle: "知道了")
         
@@ -392,6 +414,11 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    func onAddToCollectionTouched(sender: UIImage) {
+        
+        alertAddingToCollectionSuccess()
+        
+    }
     
     // MARK: - View Life Cycle
     
@@ -403,7 +430,6 @@ class SearchResultViewController: UIViewController {
         //Configure cell height
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.allowsSelection = false
         
         //Configure table DataSource & Delegate
         self.tableView.dataSource = self
@@ -507,7 +533,15 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         cell.indexPath = indexPath
         
         cell.houseItem = dataSource.getItemForRow(indexPath.row)
+        cell.addToCollectionButton.hidden = false
+        cell.addToCollectionButton.userInteractionEnabled = true
+        cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
+        
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
     }
     
 }
