@@ -250,8 +250,38 @@ class SearchResultViewController: UIViewController {
             
             for button in smartFilterView.filterButtons {
                 button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+                
+                ///Check selection state
+                if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
+                    
+                    button.setToggleState(getStateForSmartFilterButton(filterGroup))
+                    
+                }
             }
         }
+    }
+    
+    private func getStateForSmartFilterButton(filterGroup : FilterGroup) -> Bool {
+        
+        let selectedFilterId = self.selectedFilterIdSet[filterGroup.id]
+        
+        if(selectedFilterId == nil) {
+            return false
+        }
+        
+        if(selectedFilterId?.count != filterGroup.filters.count) {
+            return false
+        }
+        
+        var state = true
+        
+        for filterId in filterGroup.filters.map({ (filter) -> FilterIdentifier in
+            return filter.identifier
+        }) {
+            state = state && selectedFilterId!.contains(filterId)
+        }
+        
+        return state
     }
     
     private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
@@ -289,7 +319,7 @@ class SearchResultViewController: UIViewController {
         
         ///Update/Add filter value
         for (groupId, valueSet) in newFilterIdSet {
-            selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
+            self.selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
         }
         
         ///Save all selected setting
@@ -301,7 +331,7 @@ class SearchResultViewController: UIViewController {
         
         ///Update/Add filter value
         for (groupId, valueSet) in newFilterIdSet {
-            selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
+            self.selectedFilterIdSet.updateValue(valueSet, forKey: groupId)
         }
         
         ///Save all selected setting
@@ -435,6 +465,13 @@ class SearchResultViewController: UIViewController {
         
         NSLog("%@ [[viewDidLoad]]", self)
         
+        // Load Selected filters
+        if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {
+            for (key, value) in selectedFilterSetting {
+                self.selectedFilterIdSet[key] = value
+            }
+        }
+        
         //Configure cell height
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -455,12 +492,19 @@ class SearchResultViewController: UIViewController {
         self.dataSource.criteria = searchCriteria
         
         //Configure Filter Buttons
-        
         self.configureFilterButtons()
         
         //Load the first page of data
         self.startSpinner()
         self.dataSource.initData()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSLog("%@ [[viewWillAppear]]", self)
+        
+        //Configure Filter Buttons
+        configureFilterButtons()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -498,14 +542,7 @@ class SearchResultViewController: UIViewController {
                 
                 if let ftvc = segue.destinationViewController as? FilterTableViewController {
                     
-                    // Load selected filters
-                    if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {
-                        for (key, value) in selectedFilterSetting {
-                            self.selectedFilterIdSet[key] = value
-                        }
-                        
-                        ftvc.selectedFilterIdSet = selectedFilterSetting
-                    }
+                    ftvc.selectedFilterIdSet = self.selectedFilterIdSet
                     
                     ftvc.filterDelegate = self
                 }
