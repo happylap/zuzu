@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Configure Navigation Bar
         let bgColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
-        let font = UIFont.systemFontOfSize(25)
+        let font = UIFont.systemFontOfSize(21)
         
         UINavigationBar.appearance().titleTextAttributes =
             [NSForegroundColorAttributeName:UIColor.whiteColor(),

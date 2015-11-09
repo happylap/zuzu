@@ -107,7 +107,7 @@ class SearchResultTableViewCell: UITableViewCell {
         
         houseImg.layer.addSublayer(titleBackground)
         
-        let infoHeight = self.contentView.bounds.height / 3.5
+        let infoHeight = self.contentView.bounds.height / 3.71
         let newOrigin = CGPoint(x: houseImg.bounds.origin.x,
             y: houseImg.bounds.origin.y + houseImg.bounds.height - infoHeight)
         
