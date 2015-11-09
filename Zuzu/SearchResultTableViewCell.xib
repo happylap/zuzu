@@ -17,13 +17,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="584" placeholderIntrinsicHeight="390" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="Hbn-Ap-XJT">
-                        <rect key="frame" x="8" y="0.0" width="1008" height="605"/>
+                        <rect key="frame" x="7" y="0.0" width="1010" height="490.5"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="Hbn-Ap-XJT" secondAttribute="height" multiplier="5:3" id="lkX-DT-NQN"/>
+                            <constraint firstAttribute="width" secondItem="Hbn-Ap-XJT" secondAttribute="height" multiplier="20.6:10" id="lkX-DT-NQN"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFe-03-eKb">
-                        <rect key="frame" x="16" y="16" width="944" height="24"/>
+                        <rect key="frame" x="15" y="13" width="956" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="1Km-DR-qGJ"/>
                             <constraint firstAttribute="width" constant="42" id="EL6-lT-RnV"/>
@@ -40,11 +40,11 @@
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
-                        <rect key="frame" x="960" y="235.5" width="48" height="20.5"/>
+                        <rect key="frame" x="961" y="238" width="48" height="20.5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Edm-z3-ZwW"/>
                             <constraint firstAttribute="width" constant="48" id="FLK-bZ-amz"/>
@@ -58,11 +58,11 @@
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
-                        <rect key="frame" x="16" y="207" width="1000" height="20.5"/>
+                        <rect key="frame" x="15" y="209.5" width="1002" height="20.5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Hkh-YS-0jf"/>
                         </constraints>
@@ -74,9 +74,12 @@
                                 <exclude reference="Hkh-YS-0jf"/>
                             </mask>
                         </variation>
+                        <variation key="widthClass=compact">
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
-                        <rect key="frame" x="16" y="235.5" width="142" height="20.5"/>
+                        <rect key="frame" x="15" y="238" width="142" height="20.5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="um8-id-ng9"/>
                         </constraints>
@@ -89,11 +92,11 @@
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
-                        <rect key="frame" x="166" y="235.5" width="38" height="20.5"/>
+                        <rect key="frame" x="165" y="238" width="38" height="20.5"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="42" id="Q5z-nT-JY8"/>
                         </constraints>
@@ -106,11 +109,11 @@
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
-                        <rect key="frame" x="904" y="235.5" width="49" height="20.5"/>
+                        <rect key="frame" x="905" y="238" width="49" height="20.5"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="64" id="hjg-Yj-Y0i"/>
                         </constraints>
@@ -123,14 +126,14 @@
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_toolbar_n@1x" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
-                        <rect key="frame" x="968" y="8" width="40" height="40"/>
+                        <rect key="frame" x="979" y="5" width="30" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="40" id="bBi-LL-rPR"/>
-                            <constraint firstAttribute="width" constant="40" id="wDn-zW-w0n"/>
+                            <constraint firstAttribute="height" constant="30" id="bBi-LL-rPR"/>
+                            <constraint firstAttribute="width" constant="30" id="wDn-zW-w0n"/>
                         </constraints>
                     </imageView>
                 </subviews>
@@ -160,6 +163,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="Hbn-Ap-XJT" secondAttribute="trailing" id="seC-2l-Ms1"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="t5x-sW-gOn"/>
                 </constraints>
+                <edgeInsets key="layoutMargins" top="5" left="7" bottom="5" right="7"/>
                 <variation key="default">
                     <mask key="constraints">
                         <exclude reference="1Eb-fK-7uX"/>
