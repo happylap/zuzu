@@ -50,6 +50,7 @@
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
+		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
 		81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */; };
 		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; };
 		81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDao.swift */; };
@@ -137,6 +138,7 @@
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
+		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
 		81FA28041BDA39140038DD19 /* MyCollectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionTableViewController.swift; sourceTree = "<group>"; };
 		81FA28071BDA397B0038DD19 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		81FA28081BDA397B0038DD19 /* HouseDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDao.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 			children = (
 				2F31F5121BC2BC4400054355 /* .gitignore */,
 				2F482DF41BAFE09100C68670 /* Zuzu */,
+				81F05D631BF0E73600441A84 /* ZuzuTests */,
 				2F482DF31BAFE09100C68670 /* Products */,
 				DB00FE594C2057E14D85850F /* Pods */,
 				797B8184BE32AA80123C1AB8 /* Frameworks */,
@@ -404,6 +407,14 @@
 				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81F05D631BF0E73600441A84 /* ZuzuTests */ = {
+			isa = PBXGroup;
+			children = (
+				81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */,
+			);
+			name = ZuzuTests;
 			sourceTree = "<group>";
 		};
 		DB00FE594C2057E14D85850F /* Pods */ = {
@@ -665,6 +676,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -843,10 +855,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = ZuzuTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lap.ZuzuTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Zuzu.app/Zuzu";
 			};
 			name = Debug;
@@ -855,6 +869,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = ZuzuTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lap.ZuzuTests;
