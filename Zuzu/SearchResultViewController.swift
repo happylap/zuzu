@@ -23,6 +23,8 @@ enum ScrollDirection {
 
 class SearchResultViewController: UIViewController {
     
+    let cellIdentifier = "houseItemCell"
+    
     struct ViewTransConst {
         static let showDebugInfo:String = "showDebugInfo"
         static let showAdvancedFilter:String = "showAdvancedFilter"
@@ -406,6 +408,7 @@ class SearchResultViewController: UIViewController {
         //Configure table DataSource & Delegate
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
         
         //Configure Sorting Status
         let bgColorWhenSelected = UIColor(red: 0x00/255, green: 0xE3/255, blue: 0xE3/255, alpha: 0.6)
@@ -417,7 +420,7 @@ class SearchResultViewController: UIViewController {
         self.dataSource.setDataLoadedHandler(onDataLoaded)
         self.dataSource.criteria = searchCriteria
         
-        //Configure
+        //Configure Filter Buttons
         
         self.configureFilterButtons()
         
@@ -495,7 +498,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("houseItemCell", forIndexPath: indexPath) as! SearchResultTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         

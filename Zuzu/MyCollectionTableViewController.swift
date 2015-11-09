@@ -12,7 +12,9 @@ import AlamofireImage
 import SwiftyJSON
 
 class MyCollectionTableViewController: UITableViewController {
-
+    
+    let cellIdentifier = "houseItemCell"
+    
     var data: [AnyObject] = [AnyObject]()
     
     var loading:Bool = false
@@ -29,10 +31,10 @@ class MyCollectionTableViewController: UITableViewController {
     }
     
     @IBAction func showAllNote(sender: AnyObject) {
-//        if let items = NoteDao.sharedInstance.getNoteList() {
-//            NSLog("NoteBook count: \(items.count)")
-//        }
-
+        //        if let items = NoteDao.sharedInstance.getNoteList() {
+        //            NSLog("NoteBook count: \(items.count)")
+        //        }
+        
     }
     
     private func loadRemoteData(){
@@ -98,20 +100,23 @@ class MyCollectionTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 120;
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
+        ///Load house item cell
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+        
         loadRemoteData()
         
-//        self.tableView.addHeaderWithCallback{
-//            NSLog("addHeaderWithCallback")
-//            self.loadData(0, isPullRefresh: true)
-//        }
-//        
-//        self.tableView.addFooterWithCallback{
-//            NSLog("addFooterWithCallback")
-//            if(self.data.count>0) {
-//                //let  maxId = self.data.last!.valueForKey("postId") as! Int
-//                self.loadData(11, isPullRefresh: false)
-//            }
-//        }
+        //        self.tableView.addHeaderWithCallback{
+        //            NSLog("addHeaderWithCallback")
+        //            self.loadData(0, isPullRefresh: true)
+        //        }
+        //
+        //        self.tableView.addFooterWithCallback{
+        //            NSLog("addFooterWithCallback")
+        //            if(self.data.count>0) {
+        //                //let  maxId = self.data.last!.valueForKey("postId") as! Int
+        //                self.loadData(11, isPullRefresh: false)
+        //            }
+        //        }
         
         self.tableView.headerBeginRefreshing()
         
@@ -124,7 +129,7 @@ class MyCollectionTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -140,19 +145,19 @@ class MyCollectionTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("myCollectionCell", forIndexPath: indexPath) as! MyCollectionCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
-
+        
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        cell.houseItem = self.data[indexPath.row]
- 
+        cell.houseItemForCollection = self.data[indexPath.row]
+        
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.dequeueReusableCellWithIdentifier("myCollectionCell", forIndexPath: indexPath) as! MyCollectionCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -201,7 +206,7 @@ class MyCollectionTableViewController: UITableViewController {
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
-
+    
     
 }
 

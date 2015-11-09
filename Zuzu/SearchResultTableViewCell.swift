@@ -31,6 +31,13 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
+    
+    var houseItemForCollection: AnyObject? {
+        didSet {
+            updateUIForCollection()
+        }
+    }
+    
     let textLayer = CATextLayer()
     let titleBackground = CAGradientLayer()
     let infoBackground = CALayer()
@@ -168,7 +175,7 @@ class SearchResultTableViewCell: UITableViewCell {
                 }
             }
             
-            houseSize.text = String(houseItem.size) + "坪"
+            houseSize.text = String(format: "%d 坪", houseItem.size)
             housePrice.text = String(houseItem.price)
             houseImg.image = placeholderImg
             
@@ -183,15 +190,40 @@ class SearchResultTableViewCell: UITableViewCell {
                         { (request, response, result) -> Void in
                             NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                             
-                            //self.contentView.updateConstraintsIfNeeded()
-                            //self.contentView.setNeedsLayout()
-                            //self.setNeedsLayout()
                             self.addImageOverlay()
                     }
                 }
             }
             
             
+        }
+    }
+    
+    
+    
+    func updateUIForCollection() {
+        
+        // load new information (if any)
+        if let item = self.houseItemForCollection {
+            
+            self.houseTitle.text = item.valueForKey("title") as? String
+            self.housePrice.text = item.valueForKey("price") as? String
+            self.houseAddr.text = item.valueForKey("addr") as? String
+            
+            self.houseImg.image = placeholderImg
+            
+            if item.valueForKey("img")?.count > 0 {
+                if let imgUrl = item.valueForKey("img")?[0] as? String {
+                    let size = self.houseImg.frame.size
+                    
+                    self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
+                        
+                        NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
+
+                        self.addImageOverlay()
+                    }
+                }
+            }
         }
     }
     
