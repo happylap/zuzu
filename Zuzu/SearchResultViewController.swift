@@ -308,6 +308,14 @@ class SearchResultViewController: UIViewController {
         self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
     }
     
+    private func removeSlectedFilterIdSet(groupId : String) {
+        
+        selectedFilterIdSet.removeValueForKey(groupId)
+        
+        ///Save all selected setting
+        self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
+    }
+    
     // MARK: - Control Action Handlers
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
         
@@ -342,13 +350,13 @@ class SearchResultViewController: UIViewController {
                         if(isToggleOn) {
                             ///Replaced with Smart Filter Setting
                             filterIdSet[filterGroup.id] = [smartFilter.identifier]
-                            
+                            self.appendSlectedFilterIdSet(filterIdSet)
                         } else {
                             ///Clear filters under this group
-                            filterIdSet.removeValueForKey(filterGroup.id)
+                            removeSlectedFilterIdSet(filterGroup.id)
                         }
                     }
-                    self.appendSlectedFilterIdSet(filterIdSet)
+                    
                     
                     if let searchCriteria = self.searchCriteria {
                         

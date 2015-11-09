@@ -261,8 +261,8 @@
 				2FBC05541BDE6F600035652D /* View */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
-				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
 				2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */,
+				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
 				2F482E031BAFE09100C68670 /* Info.plist */,
 				81287B051BDA19310008FAA3 /* Model.xcdatamodeld */,
 			);
