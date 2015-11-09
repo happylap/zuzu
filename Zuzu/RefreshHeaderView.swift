@@ -11,7 +11,7 @@ import UIKit
 class RefreshHeaderView: RefreshBaseView {
     
     class func footer()->RefreshHeaderView {
-        let footer:RefreshHeaderView  = RefreshHeaderView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, CGFloat(RefreshViewHeight)))
+        let footer:RefreshHeaderView  = RefreshHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: CGFloat(RefreshViewHeight)))
         return footer
     }
     
@@ -59,13 +59,13 @@ class RefreshHeaderView: RefreshBaseView {
         let statusHeight:CGFloat = self.frame.size.height * 0.5
         let statusWidth:CGFloat = self.frame.size.width
         //狀態標籤
-        self.statusLabel.frame = CGRectMake(statusX, statusY, statusWidth, statusHeight)
+        self.statusLabel.frame = CGRect(x: statusX, y: statusY, width: statusWidth, height: statusHeight)
         //時間標籤
         let lastUpdateY:CGFloat = statusHeight
         let lastUpdateX:CGFloat = 0
         let lastUpdateHeight:CGFloat = statusHeight
         let lastUpdateWidth:CGFloat = statusWidth
-        self.lastUpdateTimeLabel.frame = CGRectMake(lastUpdateX, lastUpdateY, lastUpdateWidth, lastUpdateHeight)
+        self.lastUpdateTimeLabel.frame = CGRect(x: lastUpdateX, y: lastUpdateY, width: lastUpdateWidth, height: lastUpdateHeight)
     }
     
     override func willMoveToSuperview(newSuperview: UIView!) {

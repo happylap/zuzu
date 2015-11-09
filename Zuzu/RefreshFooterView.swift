@@ -11,8 +11,8 @@ import UIKit
 class RefreshFooterView: RefreshBaseView {
     
     class func footer() -> RefreshFooterView {
-        let footer:RefreshFooterView  = RefreshFooterView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width,
-            CGFloat(RefreshViewHeight)))
+        let footer:RefreshFooterView  = RefreshFooterView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width,
+            height: CGFloat(RefreshViewHeight)))
         
         return footer
     }

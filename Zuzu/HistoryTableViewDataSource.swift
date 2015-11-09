@@ -58,7 +58,7 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
         
         // Support display in iPad
         alert.popoverPresentationController?.sourceView = self.tableViewController.view
-        alert.popoverPresentationController?.sourceRect = CGRectMake(self.tableViewController.view.bounds.size.width / 2.0, self.tableViewController.view.bounds.size.height / 2.0, 1.0, 1.0)
+        alert.popoverPresentationController?.sourceRect = CGRect(x: self.tableViewController.view.bounds.size.width / 2.0, y: self.tableViewController.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         
         self.tableViewController.presentViewController(alert, animated: true, completion: nil)
     }

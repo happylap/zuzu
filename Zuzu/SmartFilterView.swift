@@ -45,9 +45,7 @@ class SmartFilterView: UIView {
         
         for (index, button) in filterButtons.enumerate() {
             let newXOffset = xOffset + CGFloat(index) * (buttonWidth + buttonSpace)
-            button.frame =
-                CGRectMake(newXOffset, yOffset,
-                    buttonWidth, buttonHeight) // X, Y, width, height
+            button.frame = CGRect(x: newXOffset, y: yOffset, width: buttonWidth, height: buttonHeight) // X, Y, width, height
         }
     }
     
