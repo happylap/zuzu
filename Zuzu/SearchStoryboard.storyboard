@@ -687,14 +687,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E2g-hk-g5r" userLabel="HeaderView">
-                                <rect key="frame" x="0.0" y="64" width="1024" height="54"/>
+                                <rect key="frame" x="0.0" y="64" width="1024" height="49"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTH-Sz-NIS">
-                                        <rect key="frame" x="0.0" y="0.0" width="292.5" height="54"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="292.5" height="49"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="4iN-B0-H2c"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="tintColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" title="租金">
@@ -716,11 +717,12 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RkJ-yY-SbF">
-                                        <rect key="frame" x="292" y="0.0" width="292.5" height="54"/>
+                                        <rect key="frame" x="292" y="0.0" width="292.5" height="49"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="tJf-mm-jK1"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="tintColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" title="坪數">
@@ -742,11 +744,12 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aif-ds-c0e">
-                                        <rect key="frame" x="585" y="-7" width="292.5" height="68"/>
+                                        <rect key="frame" x="585" y="0.0" width="292.5" height="49"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="2k5-bM-Gjb"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="tintColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                         <state key="normal" title="刊登時間">
@@ -768,10 +771,13 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njk-V3-8Pl" userLabel="Filter Setting">
-                                        <rect key="frame" x="885" y="-7" width="138.5" height="68"/>
+                                        <rect key="frame" x="987" y="9.5" width="30" height="30"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
-                                        <state key="normal" image="filter-outline"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="GSF-0c-DHR"/>
+                                            <constraint firstAttribute="width" secondItem="njk-V3-8Pl" secondAttribute="height" multiplier="1:1" id="Lmv-SO-cCl"/>
+                                        </constraints>
+                                        <state key="normal" image="filter_n@1x"/>
                                         <variation key="widthClass=compact" misplaced="YES">
                                             <rect key="frame" x="775.5" y="-10.5" width="248" height="68"/>
                                         </variation>
@@ -789,6 +795,7 @@
                                     <constraint firstItem="njk-V3-8Pl" firstAttribute="height" secondItem="Aif-ds-c0e" secondAttribute="height" id="UAA-rf-LEo"/>
                                     <constraint firstItem="JTH-Sz-NIS" firstAttribute="top" secondItem="E2g-hk-g5r" secondAttribute="top" id="URh-io-Lc0"/>
                                     <constraint firstItem="Aif-ds-c0e" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:3.5" id="Vtr-Me-4of"/>
+                                    <constraint firstAttribute="trailing" secondItem="njk-V3-8Pl" secondAttribute="trailing" constant="7" id="WWg-xR-x67"/>
                                     <constraint firstItem="RkJ-yY-SbF" firstAttribute="leading" secondItem="JTH-Sz-NIS" secondAttribute="trailing" id="Zha-6O-NgA"/>
                                     <constraint firstItem="njk-V3-8Pl" firstAttribute="leading" secondItem="Aif-ds-c0e" secondAttribute="trailing" constant="8" symbolic="YES" id="hRu-ac-L8E"/>
                                     <constraint firstItem="Aif-ds-c0e" firstAttribute="baseline" secondItem="RkJ-yY-SbF" secondAttribute="baseline" id="iLo-G8-xCp"/>
@@ -798,12 +805,19 @@
                                     <constraint firstAttribute="trailing" secondItem="njk-V3-8Pl" secondAttribute="trailing" id="xUF-VW-Usf"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="UAA-rf-LEo"/>
+                                        <exclude reference="hRu-ac-L8E"/>
+                                        <exclude reference="xUF-VW-Usf"/>
+                                    </mask>
+                                </variation>
                                 <variation key="widthClass=compact" misplaced="YES">
                                     <rect key="frame" x="0.0" y="64" width="1024" height="47"/>
                                 </variation>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="272" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="AVs-la-x6f">
-                                <rect key="frame" x="0.0" y="118" width="1024" height="638"/>
+                                <rect key="frame" x="0.0" y="113" width="1024" height="643"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="yrM-0D-fhP" userLabel="hiddenSpinnerView">
@@ -1154,7 +1168,7 @@
     <resources>
         <image name="bell-outline" width="48" height="48"/>
         <image name="bookmark-outline-plus" width="36" height="36"/>
-        <image name="filter-outline" width="36" height="36"/>
+        <image name="filter_n@1x" width="60" height="60"/>
         <image name="first" width="30" height="30"/>
     </resources>
 </document>
