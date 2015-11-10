@@ -18,6 +18,8 @@
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
 		2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F33E0451BD918E300A7D6CD /* Extensions.swift */; };
 		2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */; };
+		2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */; };
+		2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */; };
 		2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF51BAFE09100C68670 /* AppDelegate.swift */; };
 		2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */; };
 		2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F482DFB1BAFE09100C68670 /* Main.storyboard */; };
@@ -101,6 +103,8 @@
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F33E0451BD918E300A7D6CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegionDataStore.swift; sourceTree = "<group>"; };
+		2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailViewController.swift; sourceTree = "<group>"; };
+		2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailTitleViewCell.swift; sourceTree = "<group>"; };
 		2F482DF21BAFE09100C68670 /* Zuzu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zuzu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F482DF51BAFE09100C68670 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
@@ -188,17 +192,18 @@
 		2F276B351BBED50300A41306 /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				2F6155571BD888320024145E /* service */,
-				2FFCBF301BCE7F6C00400552 /* view */,
-				2FBC05571BDF15710035652D /* SearchResultViewController.swift */,
+				2F6155571BD888320024145E /* Service */,
+				2FFCBF301BCE7F6C00400552 /* View */,
 				2F482E271BB02FFE00C68670 /* SearchBoxTableViewController.swift */,
 				2F4F80901BCBB3C4003D23F4 /* CityPickerViewController.swift */,
 				2F4F80971BCCE25A003D23F4 /* RegionTableViewController.swift */,
 				2F4F80991BCCFD31003D23F4 /* CityRegionContainerViewController.swift */,
-				2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */,
-				2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */,
 				2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */,
 				2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */,
+				2FBC05571BDF15710035652D /* SearchResultViewController.swift */,
+				2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */,
+				2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */,
+				2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */,
 				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
 				2FDA072D1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib */,
 			);
@@ -297,12 +302,12 @@
 			name = Util;
 			sourceTree = "<group>";
 		};
-		2F6155571BD888320024145E /* service */ = {
+		2F6155571BD888320024145E /* Service */ = {
 			isa = PBXGroup;
 			children = (
 				2F6155581BD888660024145E /* SearchItemService.swift */,
 			);
-			name = service;
+			name = Service;
 			sourceTree = "<group>";
 		};
 		2FBC054E1BDE6D860035652D /* Service */ = {
@@ -392,13 +397,14 @@
 			name = Resource;
 			sourceTree = "<group>";
 		};
-		2FFCBF301BCE7F6C00400552 /* view */ = {
+		2FFCBF301BCE7F6C00400552 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */,
 				2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */,
+				2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */,
 			);
-			name = view;
+			name = View;
 			sourceTree = "<group>";
 		};
 		797B8184BE32AA80123C1AB8 /* Frameworks */ = {
@@ -636,6 +642,7 @@
 				81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
+				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
@@ -646,6 +653,7 @@
 				81FA28091BDA397B0038DD19 /* House.swift in Sources */,
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */,
+				2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */,
 				2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */,
 				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,

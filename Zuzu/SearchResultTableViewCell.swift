@@ -164,15 +164,15 @@ class SearchResultTableViewCell: UITableViewCell {
             houseTitle.text = houseItem.title
             houseAddr.text = houseItem.addr
             
-            if let typeStr = self.getTypeString(houseItem.type) {
-                if let usageStr = self.getUsageString(houseItem.usage) {
-                    houseTypeAndUsage.text = "\(typeStr)/\(usageStr)"
+            if let houseTypeStr = self.getTypeString(houseItem.houseType) {
+                if let purposeTypeStr = self.getUsageString(houseItem.purposeType) {
+                    houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
                 } else {
-                    houseTypeAndUsage.text = "\(typeStr)"
+                    houseTypeAndUsage.text = "\(houseTypeStr)"
                 }
             } else {
-                if let usageStr = self.getUsageString(houseItem.usage) {
-                    houseTypeAndUsage.text = "\(usageStr)"
+                if let purposeTypeStr = self.getUsageString(houseItem.purposeType) {
+                    houseTypeAndUsage.text = "\(purposeTypeStr)"
                 }
             }
             

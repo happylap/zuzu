@@ -12,15 +12,6 @@ struct Const {
     static let SECTION_NUM:Int = 1
 }
 
-enum ScrollDirection {
-    case ScrollDirectionNone
-    case ScrollDirectionRight
-    case ScrollDirectionLeft
-    case ScrollDirectionUp
-    case ScrollDirectionDown
-    case ScrollDirectionCrazy
-}
-
 class SearchResultViewController: UIViewController {
     
     let cellIdentifier = "houseItemCell"
@@ -29,6 +20,15 @@ class SearchResultViewController: UIViewController {
         static let showDebugInfo:String = "showDebugInfo"
         static let showAdvancedFilter:String = "showAdvancedFilter"
         static let displayHouseDetail:String = "displayHouseDetail"
+    }
+    
+    enum ScrollDirection {
+        case ScrollDirectionNone
+        case ScrollDirectionRight
+        case ScrollDirectionLeft
+        case ScrollDirectionUp
+        case ScrollDirectionDown
+        case ScrollDirectionCrazy
     }
     
     // MARK: - Member Fields
@@ -106,7 +106,7 @@ class SearchResultViewController: UIViewController {
             alertView.dismissWithClickedButtonIndex(-1, animated: true)
         }
     }
-
+    
     private func alertAddingToCollectionSuccess() {
         // Initialize Alert View
         
@@ -393,7 +393,7 @@ class SearchResultViewController: UIViewController {
                         searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
                         
                     }
-
+                    
                     reloadDataWithNewCriteria(self.searchCriteria)
                 }
             }
@@ -452,10 +452,28 @@ class SearchResultViewController: UIViewController {
         }
     }
     
-    func onAddToCollectionTouched(sender: UIImage) {
+    func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
         
-        alertAddingToCollectionSuccess()
-        
+        if let imgView = sender.view {
+            
+            if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
+                
+                let houseItem = self.dataSource.getItemForRow(cell.indexPath.row)
+                
+                HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+                    
+                    if let error = error {
+                        NSLog("Cannot get remote data %@", error.localizedDescription)
+                        return
+                    }
+                    
+                    if let result = result {
+                        HouseDao.sharedInstance.addHouse(result, save: true)
+                        self.alertAddingToCollectionSuccess()
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - View Life Cycle
@@ -712,7 +730,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
             searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
             
         }
-             
+        
         reloadDataWithNewCriteria(self.searchCriteria)
     }
 }
