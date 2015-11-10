@@ -13,7 +13,7 @@ import CoreData
 public class House: NSManagedObject {
     
     /* Mandatory Fields */
-    @NSManaged var houseId: String
+    @NSManaged var id: String
     @NSManaged var link: String         //
     @NSManaged var mobileLink: String
     @NSManaged var title: String

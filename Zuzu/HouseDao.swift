@@ -47,23 +47,40 @@ class HouseDao: NSObject {
     
     func addHouse(obj: AnyObject, save: Bool) {
         
-        let context=CoreDataManager.shared.managedObjectContext
         
-        let model = NSEntityDescription.entityForName(EntityTypes.House.rawValue, inManagedObjectContext: context)
-        
-        let house = House(entity: model!, insertIntoManagedObjectContext: context)
-        
-        if model != nil {
-            //var article = model as Article;
-            self.obj2ManagedObject(obj, house: house)
+        if let id = obj.valueForKey("id") as? String {
+            if self.isExist(id) {
+                return
+            }
             
-            if (save) {
-                CoreDataManager.shared.save()
+            NSLog("%@ addHouse", self)
+            
+            let context=CoreDataManager.shared.managedObjectContext
+            
+            let model = NSEntityDescription.entityForName(EntityTypes.House.rawValue, inManagedObjectContext: context)
+            
+            let house = House(entity: model!, insertIntoManagedObjectContext: context)
+            
+            if model != nil {
+                //var article = model as Article;
+                self.obj2ManagedObject(obj, house: house)
+                
+                if (save) {
+                    CoreDataManager.shared.save()
+                }
             }
         }
     }
     
     // MARK: Read
+    
+    func isExist(id: NSString) -> Bool {
+        let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
+        let findByIdPredicate = NSPredicate(format: "id = %@", id)
+        fetchRequest.predicate = findByIdPredicate
+        let count = CoreDataManager.shared.countForFetchRequest(fetchRequest)
+        return count > 0
+    }
     
     func getHouseList() -> [AnyObject]? {
         // Create request on House entity
@@ -76,29 +93,56 @@ class HouseDao: NSObject {
         
         // Execute fetch request
         return CoreDataManager.shared.executeFetchRequest(fetchRequest)
-        
     }
     
-    func getHouseById2(houseId: NSString) -> [House]? {
-        var fetchedResults:Array<House> = Array<House>()
+    func getHouseList2() -> [House]? {
+        NSLog("%@ getHouseList2", self)
         
-        // Create request on Event entity
+        var results: [House]?
+        
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
+        //let sort1 = NSSortDescriptor(key: "lastCommentTime", ascending: false)
         
-        //Add a predicate to filter by eventId
-        let findByIdPredicate =
-        NSPredicate(format: "houseId = %@", houseId)
-        fetchRequest.predicate = findByIdPredicate
+        //fetchRequest.fetchLimit = 30
+        //fetchRequest.sortDescriptors = [sort1]
+        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         
-        //Execute Fetch request
-        do {
-            fetchedResults = try CoreDataManager.shared.managedObjectContext.executeFetchRequest(fetchRequest) as! [House]
-        } catch let fetchError as NSError {
-            print("retrieveById error: \(fetchError.localizedDescription)")
-            fetchedResults = Array<House>()
+        CoreDataManager.shared.managedObjectContext.performBlockAndWait {
+            var fetchError:NSError?
+            
+            do {
+                results = try CoreDataManager.shared.managedObjectContext.executeFetchRequest(fetchRequest) as? [House]
+            } catch let error as NSError {
+                fetchError = error
+                results = nil
+            } catch {
+                fatalError()
+            }
+            if let error = fetchError {
+                print("Warning!! \(error.description)")
+            }
         }
+        return results
+    }
+    
+    func getHouseList3() -> [House]? {
+        NSLog("%@ getHouseList3", self)
         
-        return fetchedResults
+        var result: [House]? = [House]()
+        
+        let fetchedResult = self.getHouseList()
+        
+        if fetchedResult != nil {
+            for item in fetchedResult! {
+                let houseItem = House()
+                
+                houseItem.title = item.valueForKey("title") as? String ?? ""
+                houseItem.price = item.valueForKey("price") as? Int ?? 0
+                houseItem.addr = item.valueForKey("addr") as? String ?? ""
+                result?.append(houseItem)
+            }
+        }
+        return result
     }
     
     func getHouseById(id: NSString) -> AnyObject? {
@@ -107,20 +151,21 @@ class HouseDao: NSObject {
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         
         // Add a predicate to filter by houseId
-        let findByIdPredicate = NSPredicate(format: "houseId == %@", id)
+        let findByIdPredicate = NSPredicate(format: "id == %@", id)
         fetchRequest.predicate = findByIdPredicate
+        
+        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         
         // Execute fetch request
         let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest)
         
-        print(fetchedResults)
+        //print(fetchedResults)
         
         if let first = fetchedResults?.first {
             return first
         }
         
         return nil
-        
     }
     
     // MARK: Delete
@@ -144,14 +189,14 @@ class HouseDao: NSObject {
         
         var data = JSON(obj)
         
-        print(data)
+        //print(data)
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"//this your string date format
         dateFormatter.timeZone = NSTimeZone(name: "UTC")
         
         /* Mandatory Fields */
-        let houseId = data["id"].stringValue
+        let id = data["id"].stringValue
         let link = data["link"].stringValue
         let mobileLink = data["mobile_link"].stringValue
         let title = data["title"].stringValue
@@ -210,7 +255,7 @@ class HouseDao: NSObject {
         let postTime: NSDate? = dateFormatter.dateFromString(data["post_time"].stringValue)
         let coordinate = data["coordinate"].stringValue
         
-        house.houseId = houseId
+        house.id = id
         house.link = link
         house.mobileLink = mobileLink
         house.title = title

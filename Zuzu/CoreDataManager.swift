@@ -103,6 +103,18 @@ class CoreDataManager: NSObject {
     
     // #pragma mark - fetches
     
+    func countForFetchRequest(request:NSFetchRequest) -> Int {
+        var count: Int = 0
+        self.managedObjectContext.performBlockAndWait{
+            var fetchError:NSError?
+            count = self.managedObjectContext.countForFetchRequest(request, error: &fetchError)
+            if let error = fetchError {
+                print("Warning!! \(error.description)")
+            }
+        }
+        return count
+    }
+    
     func executeFetchRequest(request:NSFetchRequest)->Array<AnyObject>?{
         var results:Array<AnyObject>?
         self.managedObjectContext.performBlockAndWait{
