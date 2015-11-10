@@ -243,10 +243,16 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             if let keywordStr = keyword{
                 if(keywordStr.characters.count > 0) {
                     let escapedStr = StringUtils.escapeForSolrString(keywordStr)
-                    mainQueryStr = "title:\(escapedStr) \(SolrConst.Operator.OR) desc:\(escapedStr)"
+                    mainQueryStr =
+                        "title:\(escapedStr) \(SolrConst.Operator.OR) " +
+                        "desc:\(escapedStr) \(SolrConst.Operator.OR) " +
+                        "addr:\(escapedStr) \(SolrConst.Operator.OR) " +
+                        "community:\(escapedStr)"
                 }
             }
             
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
+
             // Region
             var areaConditionStr: [String] = [String]()
             
@@ -309,8 +315,6 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     value:"\(key):\(value)")
                 )
             }
-            
-            queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
             
             // Price
             if let priceRange = price {
