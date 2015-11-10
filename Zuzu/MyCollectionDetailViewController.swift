@@ -24,41 +24,43 @@ class MyCollectionDetailViewController: UIViewController {
     
     var houseId: String?
     
+    var houseItem: House?
+    
     override func viewDidLoad() {
         NSLog("%@ viewDidLoad", self)
         super.viewDidLoad()
-        updateUI()
+        
+        if houseItem != nil {
+            updateUI()
+        }
     }
     
     
     func updateUI() {
-        NSLog("%@ updateUI, id: \(self.houseId!)", self)
+        NSLog("%@ updateUI", self)
         
-        if let house = HouseDao.sharedInstance.getHouseById(self.houseId!) {
-            print("------")
-            print(house)
+        if let house: House = houseItem {
             
-            
-            print(house.valueForKey("title") as? String)
-            
-            
-            self.houseTitle.text = house.valueForKey("title") as? String
-            self.housePrice.text = house.valueForKey("price") as? String
-            self.houseAddr.text = house.valueForKey("addr") as? String
+//            self.houseTitle.text = house.valueForKey("title") as? String
+//            self.housePrice.text = house.valueForKey("price") as? String
+//            self.houseAddr.text = house.valueForKey("addr") as? String
+
+            self.houseTitle.text = house.title
+            self.housePrice.text = house.price.description
+            self.houseAddr.text = house.addr
             
             self.houseImg.image = placeholderImg
             
-            if house.valueForKey("img")?.count > 0 {
-                if let imgUrl = house.valueForKey("img")?[0] as? String {
+            
+            
+            if house.img?.count > 0 {
+                if let img = house.img?[0] {
                     let size = self.houseImg.frame.size
                     
-                    self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
+                    self.houseImg.af_setImageWithURL(NSURL(string: img)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                         
-                        NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
+                        //NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                         
-                        //self.contentView.updateConstraintsIfNeeded()
-                        //self.contentView.setNeedsLayout()
-                        //self.setNeedsLayout()
                     }
                 }
             }

@@ -8,12 +8,11 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
 import SwiftyJSON
 
 class MyCollectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    var data: [AnyObject] = []
+    
+    var houseList: [House] = []
     
     let cellIdentifier = "MyCollectionCell"
     
@@ -22,38 +21,37 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var sortByPostTimeButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
-    
-    let placeholderImg = UIImage(named: "house_img")
-    
     private func loadData() {
         NSLog("%@ loadData", self)
         if let result = HouseDao.sharedInstance.getHouseList() {
             NSLog("result count: \(result.count)")
-            print(result)
-            self.data = result
+            self.houseList = result
             self.tableView.reloadData()
+        }
+        
+        if let result2 = HouseDao.sharedInstance.getHouseIdList() {
+            NSLog("result2 count: \(result2.count)")
+            print(result2)
         }
     }
     
     override func viewDidLoad() {
         NSLog("%@ viewDidLoad", self)
         super.viewDidLoad()
-        self.loadRemoteData()
+        //self.loadRemoteData()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         NSLog("%@ viewWillAppear", self)
-        if (self.data.count == 0) {
-            self.loadData()
-        }
+        self.loadData()
     }
-
+    
     // MARK: - Table View Data Source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -61,8 +59,8 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NSLog("%@ tableView Count: \(data.count)", self)
-        return data.count
+        NSLog("%@ tableView Count: \(self.houseList.count)", self)
+        return self.houseList.count
     }
     
     
@@ -73,7 +71,7 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        cell.houseItem = self.data[indexPath.row]
+        cell.houseItem = self.houseList[indexPath.row]
         
         
         //cell.houseImg.layer.cornerRadius = cell.houseImg.frame.size.width / 2
@@ -82,26 +80,26 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        
-//        let callActionHandler = { (action: UIAlertAction!) -> Void in
-//            let alertMessage = UIAlertController(title: "Service Unavailable", message: "Sorry, the call feature is not available yet. Please retry later.", preferredStyle: .Alert)
-//            alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-//            self.presentViewController(alertMessage, animated: true, completion: nil)
-//        }
-//        
-//        let optionMenu = UIAlertController(title: nil, message: "確認聯絡李先生 (代理人)", preferredStyle: .ActionSheet)
-//        
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-//        optionMenu.addAction(cancelAction)
-//        
-//        let house = self.data[indexPath.row]
-//        let phone = house.valueForKey("phone")?[0] as? String
-//        let callAction = UIAlertAction(title: "手機: \(phone!)", style: .Default, handler: callActionHandler)
-//        optionMenu.addAction(callAction)
-//
-//        self.presentViewController(optionMenu, animated: true, completion: nil)
-//    }
+    //    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    //
+    //        let callActionHandler = { (action: UIAlertAction!) -> Void in
+    //            let alertMessage = UIAlertController(title: "Service Unavailable", message: "Sorry, the call feature is not available yet. Please retry later.", preferredStyle: .Alert)
+    //            alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+    //            self.presentViewController(alertMessage, animated: true, completion: nil)
+    //        }
+    //
+    //        let optionMenu = UIAlertController(title: nil, message: "確認聯絡李先生 (代理人)", preferredStyle: .ActionSheet)
+    //
+    //        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+    //        optionMenu.addAction(cancelAction)
+    //
+    //        let house = self.data[indexPath.row]
+    //        let phone = house.valueForKey("phone")?[0] as? String
+    //        let callAction = UIAlertAction(title: "手機: \(phone!)", style: .Default, handler: callActionHandler)
+    //        optionMenu.addAction(callAction)
+    //
+    //        self.presentViewController(optionMenu, animated: true, completion: nil)
+    //    }
     
     // MARK: - Table edit mode
     
@@ -111,10 +109,9 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            let selectedItem: AnyObject = self.data[indexPath.row]
-            let id = selectedItem.valueForKey("houseId") as? String
-            HouseDao.sharedInstance.deleteById(id!)
-            data.removeAtIndex(indexPath.row)
+            let houseItem: House = self.houseList[indexPath.row]
+            HouseDao.sharedInstance.deleteByObjectId(houseItem.objectID)
+            houseList.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
@@ -123,74 +120,19 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        NSLog("%@ prepareForSegue", self)
+        
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
         
-        print(segue)
-        print(sender)
-        
-        
-        if segue.identifier == "showMyCollectionDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
+        if let indexPath = self.tableView.indexPathForSelectedRow {
+            
+            if segue.identifier == "showMyCollectionDetail" {
+                
                 NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
                 
-                let destCtrl = segue.destinationViewController as! MyCollectionDetailViewController
-                if let selectedItem: AnyObject = self.data[indexPath.row] {
-                    if let houseId = selectedItem.valueForKey("id") as? String {
-                        destCtrl.indexPath = indexPath
-                        destCtrl.houseId = houseId
-                    }
-                }
-                
-            }
-        }
-    }
-
-    
-
-    
-    private func loadRemoteData(){
-        NSLog("%@ [[loadRemoteData]]", self)
-        
-        Alamofire.request(Router.HouseList()).responseJSON {
-            closureResponse in
-            
-            if closureResponse.2.isFailure {
-                let alert = UIAlertView(title: "網路異常", message: "請檢查網路設定", delegate: nil, cancelButtonTitle: "確定")
-                alert.show()
-                return
-            }
-            
-            
-            let json = closureResponse.2.value
-            var result = JSON(json!)
-            
-            //NSLog("\(result)")
-            
-            if result["responseHeader", "status"].intValue == 0 {
-                
-                let numOfRecord = result["response", "numFound"].intValue
-                NSLog("numOfRecord \(numOfRecord)")
-                
-                let items = result["response", "docs"].object as! [AnyObject]
-                
-                if (items.count == 0) {
-                    return
-                }
-                
-                NSLog("items count \(items.count)")
-                
-                var retrievedHouses = [Dictionary<String, AnyObject>]()
-                for it in items {
-                    let house: Dictionary<String, AnyObject> = it as! Dictionary<String, AnyObject>
-                    retrievedHouses.append(house)
-                }
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    HouseDao.sharedInstance.deleteAll()
-                    HouseDao.sharedInstance.addHouseList(retrievedHouses)
-                    self.tableView.reloadData()
+                let destController = segue.destinationViewController as! MyCollectionDetailViewController
+                if let houseItem: House = self.houseList[indexPath.row] {
+                    destController.houseItem = houseItem
                 }
                 
             }
