@@ -14,11 +14,13 @@ struct SolrConst {
         static let HOST = "ec2-52-76-69-228.ap-southeast-1.compute.amazonaws.com"
         static let PORT = 8983
         static let PATH = "/solr/rhc/select"
+        static let HTTP_METHOD = "GET"
     }
     
     struct Query {
         static let MAIN_QUERY = "q"
         static let FILTER_QUERY = "fq"
+        static let FILTER_LIST = "fl"
         static let WRITER_TYPE = "wt"
         static let INDENT = "indent"
         static let START = "start"
@@ -33,11 +35,15 @@ struct SolrConst {
     
     struct Filed {
         static let ID = "id"
-        static let CITY = "city"
-        static let REGION = "region"
-        static let TYPE = "purpose_type"
+        static let TITLE = "title"
+        static let ADDR = "addr"
+        static let PURPOSE_TYPE = "purpose_type"
+        static let HOUSE_TYPE = "house_type"
         static let PRICE = "price"
         static let SIZE = "size"
+        static let CITY = "city"
+        static let REGION = "region"
+        static let IMG_LIST = "img"
     }
     
     struct Format {
@@ -53,8 +59,8 @@ class HouseItem:NSObject, NSCoding {
         private var id: String?
         private var title: String?
         private var addr: String?
-        private var type: Int?
-        private var usage: Int?
+        private var houseType: Int?
+        private var purposeType: Int?
         private var price: Int?
         private var size: Int?
         private var desc: String?
@@ -79,13 +85,13 @@ class HouseItem:NSObject, NSCoding {
             return self
         }
         
-        func addType(type:Int?) -> Builder {
-            self.type = type
+        func addHouseType(type:Int?) -> Builder {
+            self.houseType = type
             return self
         }
         
-        func addUsage(usage:Int?) -> Builder {
-            self.usage = usage
+        func addPurposeType(usage:Int?) -> Builder {
+            self.purposeType = usage
             return self
         }
         
@@ -119,8 +125,8 @@ class HouseItem:NSObject, NSCoding {
     let id: String
     let title: String
     let addr: String
-    let type: Int
-    let usage: Int
+    let houseType: Int
+    let purposeType: Int
     let price: Int
     let size: Int
     let desc: String?
@@ -133,8 +139,8 @@ class HouseItem:NSObject, NSCoding {
         self.id = builder.id ?? ""
         self.title = builder.title ?? ""
         self.addr = builder.addr ?? ""
-        self.type = builder.type ?? 0
-        self.usage = builder.usage ?? 0
+        self.houseType = builder.houseType ?? 0
+        self.purposeType = builder.purposeType ?? 0
         self.price = builder.price ?? 0
         self.size = builder.size ?? 0
         self.desc = builder.desc
@@ -148,8 +154,8 @@ class HouseItem:NSObject, NSCoding {
         let id  = decoder.decodeObjectForKey("id") as? String ?? ""
         let title = decoder.decodeObjectForKey("title") as? String ?? ""
         let addr = decoder.decodeObjectForKey("addr") as? String ?? ""
-        let type = decoder.decodeIntegerForKey("type") as Int
-        let usage = decoder.decodeIntegerForKey("usage") as Int
+        let houseType = decoder.decodeIntegerForKey("houseType") as Int
+        let purposeType = decoder.decodeIntegerForKey("purposeType") as Int
         let price = decoder.decodeIntegerForKey("price") as Int
         let size = decoder.decodeIntegerForKey("size") as Int
         let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
@@ -158,8 +164,8 @@ class HouseItem:NSObject, NSCoding {
         let builder: Builder = Builder(id: id)
             .addTitle(title)
             .addAddr(addr)
-            .addType(type)
-            .addUsage(usage)
+            .addHouseType(houseType)
+            .addPurposeType(purposeType)
             .addPrice(price)
             .addSize(size)
             .addDesc(desc)
@@ -172,8 +178,8 @@ class HouseItem:NSObject, NSCoding {
         aCoder.encodeObject(id, forKey:"id")
         aCoder.encodeObject(title, forKey:"title")
         aCoder.encodeObject(addr, forKey:"addr")
-        aCoder.encodeInteger(type, forKey:"type")
-        aCoder.encodeInteger(usage, forKey:"usage")
+        aCoder.encodeInteger(houseType, forKey:"houseType")
+        aCoder.encodeInteger(purposeType, forKey:"purposeType")
         aCoder.encodeInteger(price, forKey:"price")
         aCoder.encodeInteger(size, forKey:"size")
         aCoder.encodeObject(desc, forKey:"desc")
@@ -183,6 +189,8 @@ class HouseItem:NSObject, NSCoding {
 }
 
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
+    
+    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE, SolrConst.Filed.IMG_LIST]
     
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
@@ -231,7 +239,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             var queryitems:[NSURLQueryItem] = []
             var mainQueryStr:String = "*:*"
             
-            // Add query string
+            // Main Query String (Keyword)
             if let keywordStr = keyword{
                 if(keywordStr.characters.count > 0) {
                     let escapedStr = StringUtils.escapeForSolrString(keywordStr)
@@ -289,18 +297,17 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             // Purpose Type
             if let typeList = types {
                 
-                for (index, type) in typeList.enumerate() {
-                    if(index == 0) {
-                        mainQueryStr += " \(SolrConst.Operator.AND) \(SolrConst.Filed.TYPE):( \(type)"
-                    } else {
-                        mainQueryStr += " \(SolrConst.Operator.OR) \(type)"
-                    }
-                    
-                    if(index == typeList.count - 1) {
-                        mainQueryStr += " )"
-                    }
-                }
+                let typeStrList = typeList.map({ (type) -> String in
+                    String(type)
+                })
                 
+                let key = SolrConst.Filed.PURPOSE_TYPE
+                let value = typeStrList.joinWithSeparator(" \(SolrConst.Operator.OR) ")
+                
+                queryitems.append( NSURLQueryItem(
+                    name: SolrConst.Query.FILTER_QUERY,
+                    value:"\(key):\(value)")
+                )
             }
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
@@ -337,7 +344,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
             }
             
-            //Filters
+            // Filters
             if let filters = filters {
                 for (key, value) in filters {
                     queryitems.append(
@@ -345,15 +352,18 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 }
             }
             
-            //Sorting
+            // Sorting
             if let sorting = sorting {
                 queryitems.append(NSURLQueryItem(name: SolrConst.Query.SORTING, value: sorting))
             }
             
+            // Field List
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: HouseDataRequester.fieldList.joinWithSeparator(",")))
+            
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.INDENT, value: "true"))
-            queryitems.append(NSURLQueryItem(name: SolrConst.Query.START, value: "\(start)"))
-            queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: "\(row)"))
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.START, value: String(start)))
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: String(row)))
             
             urlComp.queryItems = queryitems
             
@@ -372,7 +382,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 let request = NSMutableURLRequest(URL: fullURL)
                 request.timeoutInterval = HouseDataRequester.requestTimeout
                 
-                request.HTTPMethod = "GET"
+                request.HTTPMethod = SolrConst.Server.HTTP_METHOD
                 
                 NSURLConnection.sendAsynchronousRequest(
                     request, queue: NSOperationQueue.mainQueue()){
@@ -391,7 +401,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                             
                             let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
                             
-                            //NSLog("\(jsonResult)")
+                            NSLog("jsonResult: %@", jsonResult)
                             
                             if let response = jsonResult["response"] as? Dictionary<String, AnyObject> {
                                 let itemList = response["docs"] as! Array<Dictionary<String, AnyObject>>
@@ -402,11 +412,10 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let id = house["id"]  as? String
                                     let title = house["title"] as? String
                                     let addr = house["addr"]  as? String
-                                    let type = house["house_type"] as? Int
-                                    let usage = house["purpose_type"] as? Int
+                                    let houseType = house["house_type"] as? Int
+                                    let purpose = house["purpose_type"] as? Int
                                     let price = house["price"] as? Int
                                     let size = house["size"] as? Int
-                                    let desc = house["desc"]  as? String
                                     let imgList = house["img"] as? [String]
                                     
                                     NSLog("houseItem: \(id)")
@@ -414,11 +423,10 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let house:HouseItem = HouseItem.Builder(id: id)
                                         .addTitle(title)
                                         .addAddr(addr)
-                                        .addType(type)
-                                        .addUsage(usage)
+                                        .addHouseType(houseType)
+                                        .addPurposeType(purpose)
                                         .addPrice(price)
                                         .addSize(size)
-                                        .addDesc(desc)
                                         .addImageList(imgList)
                                         .build()
                                     
@@ -449,7 +457,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 let request = NSMutableURLRequest(URL: fullURL)
                 request.timeoutInterval = HouseDataRequester.requestTimeout
                 
-                request.HTTPMethod = "GET"
+                request.HTTPMethod = SolrConst.Server.HTTP_METHOD
                 
                 NSURLConnection.sendAsynchronousRequest(
                     request, queue: NSOperationQueue.mainQueue()){
