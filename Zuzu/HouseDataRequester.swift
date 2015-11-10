@@ -401,8 +401,6 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                             
                             let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
                             
-                            NSLog("jsonResult: %@", jsonResult)
-                            
                             if let response = jsonResult["response"] as? Dictionary<String, AnyObject> {
                                 let itemList = response["docs"] as! Array<Dictionary<String, AnyObject>>
                                 
