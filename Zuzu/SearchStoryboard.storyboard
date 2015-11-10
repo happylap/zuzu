@@ -905,10 +905,10 @@
             </objects>
             <point key="canvasLocation" x="1725" y="471"/>
         </scene>
-        <!--View Controller-->
+        <!--House Detail View Controller-->
         <scene sceneID="r06-4y-ETW">
             <objects>
-                <viewController id="RI5-UG-EkB" sceneMemberID="viewController">
+                <viewController id="RI5-UG-EkB" customClass="HouseDetailViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sr3-gP-XzE"/>
                         <viewControllerLayoutGuide type="bottom" id="z6L-pd-X4C"/>
@@ -916,12 +916,85 @@
                     <view key="view" contentMode="scaleToFill" id="fc8-tO-VZH">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="272" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RTx-PQ-fjy">
+                                <rect key="frame" x="0.0" y="64" width="1024" height="684"/>
+                                <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="RTx-PQ-fjy" secondAttribute="height" multiplier="15:8" id="6Ii-6K-qUs"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" rowHeight="272" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="92" width="1024" height="272"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NNe-KS-vPG" id="Ck8-WE-6z5">
+                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="271.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="houseDetailSampleImage" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
+                                                    <rect key="frame" x="8" y="7" width="1008" height="757"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="zKm-Lp-uz6" secondAttribute="height" multiplier="4:3" id="Lym-8Q-gYV"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="zKm-Lp-uz6" firstAttribute="centerX" secondItem="Ck8-WE-6z5" secondAttribute="centerX" id="Gh5-F7-M2s"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="zKm-Lp-uz6" secondAttribute="bottom" id="LQy-SD-fx9"/>
+                                                <constraint firstItem="zKm-Lp-uz6" firstAttribute="leading" secondItem="Ck8-WE-6z5" secondAttribute="leadingMargin" id="aEZ-6L-McE"/>
+                                                <constraint firstItem="zKm-Lp-uz6" firstAttribute="top" secondItem="Ck8-WE-6z5" secondAttribute="topMargin" id="iVD-Fl-ZGq"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="zKm-Lp-uz6" secondAttribute="bottom" id="kGX-9h-nWY"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="zKm-Lp-uz6" secondAttribute="trailing" id="p0H-km-sZt"/>
+                                                <constraint firstItem="zKm-Lp-uz6" firstAttribute="width" secondItem="Ck8-WE-6z5" secondAttribute="width" id="wyY-zy-slk"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="LQy-SD-fx9"/>
+                                                    <exclude reference="wyY-zy-slk"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <constraints>
+                                            <constraint firstItem="zKm-Lp-uz6" firstAttribute="width" secondItem="NNe-KS-vPG" secondAttribute="width" id="Ddk-4X-4az"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Ddk-4X-4az"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <outlet property="titleImage" destination="zKm-Lp-uz6" id="QGa-vF-tpJ"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6Ii-6K-qUs"/>
+                                    </mask>
+                                </variation>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="z6L-pd-X4C" firstAttribute="top" secondItem="RTx-PQ-fjy" secondAttribute="bottom" constant="8" symbolic="YES" id="1su-9d-cI1"/>
+                            <constraint firstItem="RTx-PQ-fjy" firstAttribute="centerX" secondItem="fc8-tO-VZH" secondAttribute="centerX" id="5qL-ae-DLi"/>
+                            <constraint firstItem="RTx-PQ-fjy" firstAttribute="height" secondItem="fc8-tO-VZH" secondAttribute="height" id="7of-4r-bNF"/>
+                            <constraint firstItem="RTx-PQ-fjy" firstAttribute="width" secondItem="fc8-tO-VZH" secondAttribute="width" id="Aww-bO-pxW"/>
+                            <constraint firstItem="RTx-PQ-fjy" firstAttribute="top" secondItem="sr3-gP-XzE" secondAttribute="bottom" id="Tif-yt-baT"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="7of-4r-bNF"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RrS-e7-IQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1698" y="1460"/>
+            <point key="canvasLocation" x="1725" y="1520"/>
         </scene>
         <!--過濾條件-->
         <scene sceneID="ZVW-p3-RGh">
@@ -1170,5 +1243,6 @@
         <image name="bookmark-outline-plus" width="36" height="36"/>
         <image name="filter_n@1x" width="60" height="60"/>
         <image name="first" width="30" height="30"/>
+        <image name="houseDetailSampleImage" width="600" height="450"/>
     </resources>
 </document>

@@ -12,15 +12,6 @@ struct Const {
     static let SECTION_NUM:Int = 1
 }
 
-enum ScrollDirection {
-    case ScrollDirectionNone
-    case ScrollDirectionRight
-    case ScrollDirectionLeft
-    case ScrollDirectionUp
-    case ScrollDirectionDown
-    case ScrollDirectionCrazy
-}
-
 class SearchResultViewController: UIViewController {
     
     let cellIdentifier = "houseItemCell"
@@ -29,6 +20,15 @@ class SearchResultViewController: UIViewController {
         static let showDebugInfo:String = "showDebugInfo"
         static let showAdvancedFilter:String = "showAdvancedFilter"
         static let displayHouseDetail:String = "displayHouseDetail"
+    }
+    
+    enum ScrollDirection {
+        case ScrollDirectionNone
+        case ScrollDirectionRight
+        case ScrollDirectionLeft
+        case ScrollDirectionUp
+        case ScrollDirectionDown
+        case ScrollDirectionCrazy
     }
     
     // MARK: - Member Fields
