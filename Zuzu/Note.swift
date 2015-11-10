@@ -7,3 +7,13 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(Note)
+public class Note: NSManagedObject {
+    
+    @NSManaged var id: String
+    
+    @NSManaged var desc: String?
+
+}
