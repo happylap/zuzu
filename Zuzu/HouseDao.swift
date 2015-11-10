@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import SwiftyJSON
+import Dollar
 
 extension Optional {
     
@@ -46,10 +47,8 @@ class HouseDao: NSObject {
     
     
     func addHouse(obj: AnyObject, save: Bool) {
-        
-        
-        if let id = obj.valueForKey("id") as? String {
-            if self.isExist(id) {
+        if let houseId = obj.valueForKey("id") as? String {
+            if self.isExist(houseId) {
                 return
             }
             
@@ -74,7 +73,7 @@ class HouseDao: NSObject {
     
     // MARK: Read
     
-    func isExist(id: NSString) -> Bool {
+    func isExist(id: String) -> Bool {
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         let findByIdPredicate = NSPredicate(format: "id = %@", id)
         fetchRequest.predicate = findByIdPredicate
@@ -82,70 +81,20 @@ class HouseDao: NSObject {
         return count > 0
     }
     
-    func getHouseList() -> [AnyObject]? {
-        // Create request on House entity
-        let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
-        //let sort1 = NSSortDescriptor(key: "lastCommentTime", ascending: false)
-        
-        //fetchRequest.fetchLimit = 30
-        //fetchRequest.sortDescriptors = [sort1]
-        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
-        
-        // Execute fetch request
-        return CoreDataManager.shared.executeFetchRequest(fetchRequest)
-    }
-    
-    func getHouseList2() -> [House]? {
-        NSLog("%@ getHouseList2", self)
-        
-        var results: [House]?
+    func getHouseList() -> [House]? {
+        NSLog("%@ getHouseList", self)
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         //let sort1 = NSSortDescriptor(key: "lastCommentTime", ascending: false)
         
         //fetchRequest.fetchLimit = 30
         //fetchRequest.sortDescriptors = [sort1]
-        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
+        //        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         
-        CoreDataManager.shared.managedObjectContext.performBlockAndWait {
-            var fetchError:NSError?
-            
-            do {
-                results = try CoreDataManager.shared.managedObjectContext.executeFetchRequest(fetchRequest) as? [House]
-            } catch let error as NSError {
-                fetchError = error
-                results = nil
-            } catch {
-                fatalError()
-            }
-            if let error = fetchError {
-                print("Warning!! \(error.description)")
-            }
-        }
-        return results
+        return CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [House]
     }
     
-    func getHouseList3() -> [House]? {
-        NSLog("%@ getHouseList3", self)
-        
-        var result: [House]? = [House]()
-        
-        let fetchedResult = self.getHouseList()
-        
-        if fetchedResult != nil {
-            for item in fetchedResult! {
-                let houseItem = House()
-                
-                houseItem.title = item.valueForKey("title") as? String ?? ""
-                houseItem.price = item.valueForKey("price") as? Int ?? 0
-                houseItem.addr = item.valueForKey("addr") as? String ?? ""
-                result?.append(houseItem)
-            }
-        }
-        return result
-    }
-    
-    func getHouseById(id: NSString) -> AnyObject? {
+    func getHouseById(id: String) -> House? {
         NSLog("%@ getHouseById: \(id)", self)
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
@@ -154,10 +103,8 @@ class HouseDao: NSObject {
         let findByIdPredicate = NSPredicate(format: "id == %@", id)
         fetchRequest.predicate = findByIdPredicate
         
-        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
-        
         // Execute fetch request
-        let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest)
+        let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [House]
         
         //print(fetchedResults)
         
@@ -168,16 +115,30 @@ class HouseDao: NSObject {
         return nil
     }
     
+    func getHouseIdList() -> [String]? {
+        var result: [String] = []
+        if let houseList = self.getHouseList() {
+            result = []
+            for house: House in houseList {
+                result.append(house.id)
+            }
+        }
+        return result
+    }
+    
     // MARK: Delete
     
-    func deleteById(id: NSString) {
+    func deleteByObjectId(objectId: NSManagedObjectID) {
+        NSLog("%@ deleteByObjectId: \(objectId)", self)
+        CoreDataManager.shared.delete(objectId)
+        CoreDataManager.shared.save()
+    }
+    
+    func deleteById(id: String) {
         NSLog("%@ deleteById: \(id)", self)
-        if let item = self.getHouseById(id) {
-            print(item)
-            if let obj: NSManagedObject = item as? NSManagedObject {
-                CoreDataManager.shared.deleteEntity(obj)
-                CoreDataManager.shared.save()
-            }
+        if let house = self.getHouseById(id) {
+            CoreDataManager.shared.deleteEntity(house)
+            CoreDataManager.shared.save()
         }
     }
     
