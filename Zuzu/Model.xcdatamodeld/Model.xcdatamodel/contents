@@ -48,7 +48,14 @@
         <attribute name="usage" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="wallMtl" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="Note" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="houseId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="House" positionX="-198" positionY="153" width="128" height="733"/>
+        <element name="House" positionX="-198" positionY="153" width="128" height="735"/>
+        <element name="Note" positionX="-198" positionY="306" width="128" height="105"/>
     </elements>
 </model>

@@ -12,8 +12,9 @@ import CoreData
 @objc(Note)
 public class Note: NSManagedObject {
     
+    /* Mandatory Fields */
     @NSManaged var id: String
-    
-    @NSManaged var desc: String?
-
+    @NSManaged var houseId: String
+    @NSManaged var desc: String
+    @NSManaged var createDate: NSDate
 }
