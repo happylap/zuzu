@@ -18,41 +18,38 @@ class MyCollectionDetailViewController: UIViewController {
     @IBOutlet weak var houseAddr: UILabel!
     @IBOutlet weak var housePrice: UILabel!
     
-    var houseItem: AnyObject?
-    
-    var houseList: [House]?
-    
     let placeholderImg = UIImage(named: "house_img")
-    
-    weak var parentTableView: UITableView!
     
     var indexPath: NSIndexPath!
     
-    var houseId: String? {
-        didSet {
-            if let result = HouseDao.sharedInstance.getHouseById2(self.houseId!) {
-                print(result)
-//                self.houseItem = result
-                houseList = result
-                updateUI()
-            }
-        }
+    var houseId: String?
+    
+    override func viewDidLoad() {
+        NSLog("%@ viewDidLoad", self)
+        super.viewDidLoad()
+        updateUI()
     }
     
     
     func updateUI() {
-        NSLog("%@ updateUI", self)
-        // load new information (if any)
-        if let item = self.houseList?[0] {
-            print(item)
-            self.houseTitle.text = item.valueForKey("title") as? String
-            self.housePrice.text = item.valueForKey("price") as? String
-            self.houseAddr.text = item.valueForKey("addr") as? String
+        NSLog("%@ updateUI, id: \(self.houseId!)", self)
+        
+        if let house = HouseDao.sharedInstance.getHouseById(self.houseId!) {
+            print("------")
+            print(house)
+            
+            
+            print(house.valueForKey("title") as? String)
+            
+            
+            self.houseTitle.text = house.valueForKey("title") as? String
+            self.housePrice.text = house.valueForKey("price") as? String
+            self.houseAddr.text = house.valueForKey("addr") as? String
             
             self.houseImg.image = placeholderImg
             
-            if item.valueForKey("img")?.count > 0 {
-                if let imgUrl = item.valueForKey("img")?[0] as? String {
+            if house.valueForKey("img")?.count > 0 {
+                if let imgUrl = house.valueForKey("img")?[0] as? String {
                     let size = self.houseImg.frame.size
                     
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
@@ -65,7 +62,7 @@ class MyCollectionDetailViewController: UIViewController {
                     }
                 }
             }
-            
+
             
         }
     }

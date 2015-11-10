@@ -11,7 +11,7 @@ import Alamofire
 import AlamofireImage
 
 class MyCollectionCell: UITableViewCell {
-
+    
     
     @IBOutlet weak var houseImg: UIImageView!
     @IBOutlet weak var houseTitle: UILabel!
@@ -153,21 +153,25 @@ class MyCollectionCell: UITableViewCell {
         
         // load new information (if any)
         if let item = self.houseItem {
-            print(item)
+            //print(item)
             self.houseTitle.text = item.valueForKey("title") as? String
             self.housePrice.text = item.valueForKey("price") as? String
             self.houseAddr.text = item.valueForKey("addr") as? String
+//            self.houseTitle.text = item.title
+//            self.housePrice.text = item.price.description
+//            self.houseAddr.text = item.addr
+            
             
             self.houseImg.image = placeholderImg
             
             if item.valueForKey("img")?.count > 0 {
                 if let imgUrl = item.valueForKey("img")?[0] as? String {
                     let size = self.houseImg.frame.size
-                
+                    
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
-                    
+                        
                         NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
-                    
+                        
                         //self.contentView.updateConstraintsIfNeeded()
                         //self.contentView.setNeedsLayout()
                         //self.setNeedsLayout()
@@ -176,8 +180,8 @@ class MyCollectionCell: UITableViewCell {
                 }
             }
             
-
+            
         }
     }
-
+    
 }

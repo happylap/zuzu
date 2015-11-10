@@ -29,6 +29,7 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
         NSLog("%@ loadData", self)
         if let result = HouseDao.sharedInstance.getHouseList() {
             NSLog("result count: \(result.count)")
+            print(result)
             self.data = result
             self.tableView.reloadData()
         }
@@ -135,9 +136,13 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
                 NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
                 
                 let destCtrl = segue.destinationViewController as! MyCollectionDetailViewController
-                let selectedItem: AnyObject = self.data[indexPath.row]
-                let houseId = selectedItem.valueForKey("houseId") as? String
-                destCtrl.houseId = houseId!
+                if let selectedItem: AnyObject = self.data[indexPath.row] {
+                    if let houseId = selectedItem.valueForKey("id") as? String {
+                        destCtrl.indexPath = indexPath
+                        destCtrl.houseId = houseId
+                    }
+                }
+                
             }
         }
     }
