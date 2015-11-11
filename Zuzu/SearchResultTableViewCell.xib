@@ -129,7 +129,7 @@
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_toolbar_n@1x" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
                         <rect key="frame" x="987" y="5" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="bBi-LL-rPR"/>
@@ -188,7 +188,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="heart_toolbar_n@1x" width="60" height="60"/>
+        <image name="Heart_n" width="60" height="60"/>
         <image name="house_img" width="188" height="136"/>
     </resources>
 </document>

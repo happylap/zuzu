@@ -99,7 +99,7 @@ class SearchResultTableViewCell: UITableViewCell {
     private func addImageOverlay() {
         
         ///Gradient layer
-        let gradientColors = [UIColor.grayColor().colorWithAlphaComponent(0.4).CGColor, UIColor.clearColor().CGColor]
+        let gradientColors = [UIColor.grayColor().colorWithAlphaComponent(0.3).CGColor, UIColor.clearColor().CGColor]
         let gradientLocations = [0.0, 0.25,1.0]
         titleBackground.frame = houseImg.bounds
         titleBackground.colors = gradientColors
@@ -146,6 +146,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTypeAndUsage.text = nil
         houseSize.text = nil
         housePrice.text = nil
+        addToCollectionButton.image = UIImage(named: "Heart_n")
         
         // Cancel image loading operation
         houseImg.af_cancelImageRequest()

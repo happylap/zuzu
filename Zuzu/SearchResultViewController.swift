@@ -63,6 +63,8 @@ class SearchResultViewController: UIViewController {
     
     var searchCriteria: SearchCriteria?
     
+    var collectionIdList:[String]?
+    
     // MARK: - Private Utils
     
     private func alertSavingCurrentSearchSuccess() {
@@ -458,7 +460,8 @@ class SearchResultViewController: UIViewController {
             
             if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                 
-                let houseItem = self.dataSource.getItemForRow(cell.indexPath.row)
+                let indexPath = cell.indexPath
+                let houseItem = self.dataSource.getItemForRow(indexPath.row)
                 
                 HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                     
@@ -468,8 +471,14 @@ class SearchResultViewController: UIViewController {
                     }
                     
                     if let result = result {
-                        HouseDao.sharedInstance.addHouse(result, save: true)
+                        let houseDao = HouseDao.sharedInstance
+                        houseDao.addHouse(result, save: true)
                         self.alertAddingToCollectionSuccess()
+                        
+                        // Reload collection list
+                        self.collectionIdList = houseDao.getHouseIdList()
+                        
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     }
                 }
             }
@@ -511,6 +520,9 @@ class SearchResultViewController: UIViewController {
         
         //Configure Filter Buttons
         self.configureFilterButtons()
+        
+        //Load list my collections
+        collectionIdList = HouseDao.sharedInstance.getHouseIdList()
         
         //Load the first page of data
         self.startSpinner()
@@ -595,7 +607,18 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         cell.parentTableView = tableView
         cell.indexPath = indexPath
         
-        cell.houseItem = dataSource.getItemForRow(indexPath.row)
+        let houseItem = dataSource.getItemForRow(indexPath.row)
+        
+        cell.houseItem = houseItem
+        
+        /// Enable add to collection button
+        if let collectionIdList = self.collectionIdList {
+            if(collectionIdList.contains(houseItem.id)) {
+                cell.addToCollectionButton.image = UIImage(named: "Heart_p")
+            }
+        }
+ 
+        
         cell.addToCollectionButton.hidden = false
         cell.addToCollectionButton.userInteractionEnabled = true
         cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
