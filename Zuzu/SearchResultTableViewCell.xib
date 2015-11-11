@@ -138,11 +138,9 @@
                     </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="KFe-03-eKb" secondAttribute="trailing" constant="8" id="1Eb-fK-7uX"/>
                     <constraint firstItem="Sa0-Cs-laH" firstAttribute="top" secondItem="11f-2y-aXb" secondAttribute="bottom" constant="7" id="3gf-8o-Nhq"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" id="3nc-Tv-eYE"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zzB-16-z6B" secondAttribute="trailing" constant="8" id="4fQ-0W-376"/>
-                    <constraint firstItem="ttQ-yW-U9H" firstAttribute="trailing" secondItem="zzB-16-z6B" secondAttribute="trailing" id="5MS-nj-sro"/>
                     <constraint firstItem="11f-2y-aXb" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="leading" id="5Od-sx-1I1"/>
                     <constraint firstAttribute="bottomMargin" secondItem="zzB-16-z6B" secondAttribute="bottom" constant="8" id="920-7o-Snd"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GD9-Jc-zPa" secondAttribute="trailing" id="Cc8-sH-bbT"/>
@@ -154,9 +152,7 @@
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="T5V-z7-wUS"/>
                     <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="7" id="fEz-oG-VR4"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sa0-Cs-laH" secondAttribute="bottom" constant="5" id="g4m-xp-pW3"/>
-                    <constraint firstItem="KFe-03-eKb" firstAttribute="trailing" secondItem="ttQ-yW-U9H" secondAttribute="trailing" id="iIf-iy-PWw"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="leading" secondItem="KFe-03-eKb" secondAttribute="trailing" constant="8" id="kEy-0S-Upg"/>
-                    <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="ttQ-yW-U9H" secondAttribute="bottom" constant="8" id="kIV-m9-hCS"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Hbn-Ap-XJT" secondAttribute="bottom" priority="999" id="lfV-Xz-rnx"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="baseline" secondItem="zzB-16-z6B" secondAttribute="baseline" id="omn-8y-ofX"/>
                     <constraint firstAttribute="trailingMargin" secondItem="11f-2y-aXb" secondAttribute="trailing" id="ozt-zU-aVW"/>
@@ -165,14 +161,6 @@
                     <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="t5x-sW-gOn"/>
                 </constraints>
                 <edgeInsets key="layoutMargins" top="5" left="7" bottom="5" right="7"/>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="1Eb-fK-7uX"/>
-                        <exclude reference="iIf-iy-PWw"/>
-                        <exclude reference="kIV-m9-hCS"/>
-                        <exclude reference="5MS-nj-sro"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>

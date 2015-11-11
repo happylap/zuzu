@@ -73,7 +73,6 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         
         cell.titleImage.image = UIImage(named: "houseDetailSampleImage")
-        cell.titleImage.image?.size
         
         return cell
     }
