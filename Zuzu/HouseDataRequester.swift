@@ -313,7 +313,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 
                 queryitems.append( NSURLQueryItem(
                     name: SolrConst.Query.FILTER_QUERY,
-                    value:"\(key):\(value)")
+                    value:"\(key):(\(value))")
                 )
             }
             

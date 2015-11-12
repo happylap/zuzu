@@ -39,6 +39,8 @@
 		2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */; };
 		2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */; };
 		2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */; };
+		2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */; };
+		2F94105F1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */; };
 		2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */; };
 		2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */; };
 		2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */; };
@@ -136,6 +138,8 @@
 		2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailContactBarView.swift; sourceTree = "<group>"; };
 		2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HouseDetailContactBarView.xib; sourceTree = "<group>"; };
 		2F9410591BF482B600BA12B5 /* Zuzu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Zuzu-Bridging-Header.h"; sourceTree = "<group>"; };
+		2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingSpinnerOverlay.swift; sourceTree = "<group>"; };
 		2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailAddressCell.swift; sourceTree = "<group>"; };
 		2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableHeaderCell.swift; sourceTree = "<group>"; };
 		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
@@ -219,6 +223,7 @@
 				2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */,
 				2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */,
 				2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */,
+				2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */,
 				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
 				2FDA072D1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib */,
 			);
@@ -314,6 +319,7 @@
 				2F276B2E1BBE989E00A41306 /* DataPersistence.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
+				2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -686,9 +692,11 @@
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
 				2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */,
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
+				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
 				2F6155591BD888660024145E /* SearchItemService.swift in Sources */,
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
 				2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */,
+				2F94105F1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift in Sources */,
 				81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */,
@@ -862,6 +870,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -881,6 +890,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
