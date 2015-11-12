@@ -37,7 +37,7 @@ public class HouseItemTableDataSource {
     var debugStr: String {
         
         get {
-            let pageInfo = "Total Result: \(HouseDataRequester.getInstance().numOfRecord)\n"
+            let pageInfo = "Total Result: \(estimatedNumberOfPages)\n"
                 + "Items Per Page: \(Const.PAGE_SIZE)\n"
                 + "Last Page No: \(self.currentPage)\n"
                 + "Total Items in Table: \(self.getSize())\n"
@@ -49,6 +49,8 @@ public class HouseItemTableDataSource {
                 + "<Type>: \(self.criteria?.types)\n"
                 + "<Price>: \(self.criteria?.price)\n"
                 + "<Size>: \(self.criteria?.size)\n"
+//                + "<City>: \(self.criteria?)\n"
+//                + "<Region>: \(self.criteria?.size)\n"
             
             
             let host = HouseDataRequester.getInstance().urlComp.host ?? ""
@@ -83,17 +85,7 @@ public class HouseItemTableDataSource {
     }
     
     //Total Number of items
-    var estimatedNumberOfPages:Int {
-        
-        get {
-            if let numOfItems = HouseDataRequester.getInstance().numOfRecord {
-                return calculateNumOfPages(numOfItems)
-            } else {
-                return 0
-            }
-        }
-        
-    }
+    var estimatedNumberOfPages:Int = 0
     
     //Cache Data
     private var cachedData = [HouseItem]()
@@ -159,6 +151,8 @@ public class HouseItemTableDataSource {
         NSLog("loadRemoteData: pageNo = \(pageNo)")
         
         requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, error) -> Void in
+            
+            self.estimatedNumberOfPages = totalNum
             
             if let result = result {
                 self.appendDataForPage(pageNo, data: result)

@@ -76,8 +76,8 @@ class SearchCriteriaObserver:NSObject {
                 
             NSLog("End fetchNumberOfItems = \(totalNum)")
             
-            if(totalNum != nil && totalNum != 0) {
-                self.viewController.fastItemCountLabel.text = "立即觀看 \(totalNum!) 筆出租物件"
+            if(totalNum != 0) {
+                self.viewController.fastItemCountLabel.text = "立即觀看 \(totalNum) 筆出租物件"
                 self.viewController.fastItemCountLabel.fadeIn(0.5, delay: 0)
                 
             } else {
