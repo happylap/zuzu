@@ -9,13 +9,13 @@
 import Foundation
 
 /**
-The class is used to provide a data source combining both memory & storage cache
-
-It's developed in a rush, need to refactor to a more common module
-
-1) highly coupled with other modules
-2) It might block UI a little bit when loading data from storage 
-*/
+ The class is used to provide a data source combining both memory & storage cache
+ 
+ It's developed in a rush, need to refactor to a more common module
+ 
+ 1) highly coupled with other modules
+ 2) It might block UI a little bit when loading data from storage
+ */
 
 public class PersistentTableDataSource {
     
@@ -256,7 +256,7 @@ public class PersistentTableDataSource {
             self.appendDataForPage(pageNo, estimatedPageSize: nil, data: restoredItems)
         }
     }
-
+    
     private func loadPersistentData(pageNo:Int) {
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
@@ -287,16 +287,16 @@ public class PersistentTableDataSource {
         requester.searchByCriteria(criteria!, start: start, row: row) {
             (totalNum: Int?, newHouseItems: [HouseItem]?, error: NSError?) -> Void in
             
-                self.appendDataForPage(pageNo, estimatedPageSize: requester.numOfRecord, data: newHouseItems)
-                
-                //increment page no only under some conditions
-                if(error == nil && newHouseItems.count > 0) {
+            if let newHouseItems = newHouseItems {
+                if(newHouseItems.count > 0) {
+                    self.appendDataForPage(pageNo, estimatedPageSize: requester.numOfRecord, data: newHouseItems)
                     self.lastPageNo = pageNo
                 }
-                
-                self.dataLoaded!(dataSource: self, pageNo: pageNo, error: error)
-                
-                self.isLoadingData = false
+            }
+            
+            self.dataLoaded!(dataSource: self, pageNo: pageNo, error: error)
+            
+            self.isLoadingData = false
         }
         
     }
