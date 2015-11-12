@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 struct SolrConst {
     struct Server {
@@ -226,7 +227,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     }
     
     func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int,
-        handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void) {
+        handler: (totalNum: Int?, result: [HouseItem]?, error: NSError?) -> Void) {
             
             let keyword: String? = criteria.keyword
             let area: [City]? = criteria.region
@@ -247,12 +248,12 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                         "title:\(escapedStr) \(SolrConst.Operator.OR) " +
                         "desc:\(escapedStr) \(SolrConst.Operator.OR) " +
                         "addr:\(escapedStr) \(SolrConst.Operator.OR) " +
-                        "community:\(escapedStr)"
+                    "community:\(escapedStr)"
                 }
             }
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: mainQueryStr))
-
+            
             // Region
             var areaConditionStr: [String] = [String]()
             
@@ -375,7 +376,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     }
     
     private func performSearch(urlComp: NSURLComponents,
-        handler: (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void){
+        handler: (totalNum: Int?, result: [HouseItem]?, error: NSError?) -> Void){
             
             var houseList = [HouseItem]()
             
@@ -391,34 +392,38 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 NSURLConnection.sendAsynchronousRequest(
                     request, queue: NSOperationQueue.mainQueue()){
                         (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
-                        do {
-                            if(error != nil){
-                                NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
-                                handler(totalNum: 0, result: houseList, error: error)
-                                return
-                            }
+                        
+                        if(error != nil){
+                            NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
+                            handler(totalNum: 0, result: nil, error: error)
+                            return
+                        }
+                        
+                        if(data == nil) {
+                            NSLog("HTTP no data")
+                            handler(totalNum: 0, result: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
+                            return
+                        }
+                        
+                        let jsonResult = JSON(data!)
+                        
+                        if let response = jsonResult["response"].dictionary {
                             
-                            if(data == nil) {
-                                NSLog("HTTP no data")
-                                return
-                            }
+                            self.numOfRecord = response["numFound"]?.intValue
                             
-                            let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
-                            
-                            if let response = jsonResult["response"] as? Dictionary<String, AnyObject> {
-                                let itemList = response["docs"] as! Array<Dictionary<String, AnyObject>>
-                                
-                                self.numOfRecord = response["numFound"] as? Int
+                            if let itemList = response["docs"]?.arrayValue {
                                 
                                 for house in itemList {
-                                    let id = house["id"]  as? String
-                                    let title = house["title"] as? String
-                                    let addr = house["addr"]  as? String
-                                    let houseType = house["house_type"] as? Int
-                                    let purpose = house["purpose_type"] as? Int
-                                    let price = house["price"] as? Int
-                                    let size = house["size"] as? Int
-                                    let imgList = house["img"] as? [String]
+                                    let id = house["id"].string
+                                    let title = house["title"].string
+                                    let addr = house["addr"].string
+                                    let houseType = house["house_type"].int
+                                    let purpose = house["purpose_type"].int
+                                    let price = house["price"].int
+                                    let size = house["size"].int
+                                    let imgList = house["img"].array?.map({ (jsonObj) -> String in
+                                        return jsonObj.stringValue
+                                    })
                                     
                                     NSLog("houseItem: \(id)")
                                     
@@ -438,11 +443,11 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                 handler(totalNum: self.numOfRecord, result: houseList, error: nil)
                             } else {
                                 assert(false, "Solr response error:\n \(jsonResult)")
+                                handler(totalNum: 0, result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
                             }
-                            
-                        }catch let error as NSError{
-                            handler(totalNum: 0, result: houseList, error: error)
-                            NSLog("JSON parsing error = \(error)")
+                        } else {
+                            assert(false, "Solr response error:\n \(jsonResult)")
+                            handler(totalNum: 0, result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
                         }
                 }
                 
@@ -451,50 +456,51 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
     
     private func performSearch(urlComp: NSURLComponents, handler: (result: AnyObject?, error: NSError?) -> Void){
+        
+        if let fullURL = urlComp.URL {
             
-            if let fullURL = urlComp.URL {
-                
-                print("fullURL: \(fullURL.absoluteString)")
-                
-                let request = NSMutableURLRequest(URL: fullURL)
-                request.timeoutInterval = HouseDataRequester.requestTimeout
-                
-                request.HTTPMethod = SolrConst.Server.HTTP_METHOD
-                
-                NSURLConnection.sendAsynchronousRequest(
-                    request, queue: NSOperationQueue.mainQueue()){
-                        (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
-                        do {
-                            if(error != nil){
-                                NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
-                                handler(result: nil, error: error)
-                                return
-                            }
-                            
-                            if(data == nil) {
-                                NSLog("HTTP no data")
-                                return
-                            }
-                            
-                            let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! Dictionary<String, AnyObject>
-                            
-                            if let response = jsonResult["response"] as? [String: AnyObject] {
-                                let itemList = response["docs"] as! [Dictionary<String, AnyObject>]
-                                
-                                self.numOfRecord = response["numFound"] as? Int
-                                
-                                
-                                handler(result: itemList.first, error: nil)
-                            } else {
-                                assert(false, "Solr response error:\n \(jsonResult)")
-                            }
-                            
-                        }catch let error as NSError{
-                            handler(result: nil, error: error)
-                            NSLog("JSON parsing error = \(error)")
+            print("fullURL: \(fullURL.absoluteString)")
+            
+            let request = NSMutableURLRequest(URL: fullURL)
+            request.timeoutInterval = HouseDataRequester.requestTimeout
+            
+            request.HTTPMethod = SolrConst.Server.HTTP_METHOD
+            
+            NSURLConnection.sendAsynchronousRequest(
+                request, queue: NSOperationQueue.mainQueue()){
+                    (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
+                    
+                    if(error != nil){
+                        NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
+                        handler(result: nil, error: error)
+                        return
+                    }
+                    
+                    if(data == nil) {
+                        NSLog("HTTP no data")
+                        handler(result: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
+                        return
+                    }
+                    
+                    let jsonResult = JSON(data!)
+                    
+                    if let response = jsonResult["response"].dictionary {
+                        
+                        self.numOfRecord = response["numFound"]?.intValue
+                        
+                        if let itemList = response["docs"]?.arrayObject {
+                            handler(result: itemList.first, error: nil)
+                        } else {
+                            assert(false, "Solr response error:\n \(jsonResult)")
+                            handler(result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
                         }
-                }
-                
+                    } else {
+                        assert(false, "Solr response error:\n \(jsonResult)")
+                        handler(result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
+                    }
+                    
             }
+            
+        }
     }
 }

@@ -20,11 +20,11 @@ import Foundation
 import Foundation
 
 /**
-The class is developed in a rush, need to refactor to a more common module
-
-1) highly coupled with other modules, can not work as standalone library
-2) It might block UI a little bit when loading data from storage
-*/
+ The class is developed in a rush, need to refactor to a more common module
+ 
+ 1) highly coupled with other modules, can not work as standalone library
+ 2) It might block UI a little bit when loading data from storage
+ */
 
 public class HouseItemTableDataSource {
     
@@ -84,10 +84,10 @@ public class HouseItemTableDataSource {
     
     //Total Number of items
     var estimatedNumberOfPages:Int {
-     
+        
         get {
             if let numOfItems = HouseDataRequester.getInstance().numOfRecord {
-            return calculateNumOfPages(numOfItems)
+                return calculateNumOfPages(numOfItems)
             } else {
                 return 0
             }
@@ -158,15 +158,16 @@ public class HouseItemTableDataSource {
         
         NSLog("loadRemoteData: pageNo = \(pageNo)")
         
-        requester.searchByCriteria(criteria!, start: start, row: row) {
-            (totalNum: Int?, result: [HouseItem], error: NSError?) -> Void in
+        requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, error) -> Void in
             
+            if let result = result {
                 self.appendDataForPage(pageNo, data: result)
-                
-                //Callback to table
-                self.onDataLoaded!(dataSource: self, pageNo: pageNo, error: error)
-                
-                self.isLoadingData = false
+            }
+            
+            //Callback to table
+            self.onDataLoaded!(dataSource: self, pageNo: pageNo, error: error)
+            
+            self.isLoadingData = false
         }
         
     }
