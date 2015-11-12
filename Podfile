@@ -9,6 +9,7 @@ pod 'SwiftyJSON', '~> 2.3'
 pod 'Alamofire', '~> 2.0'
 pod 'AlamofireImage', '~> 1.0'
 pod 'Dollar', '~>4.0'
+pod 'GoogleMaps'
 end
 
 target 'ZuzuTests' do

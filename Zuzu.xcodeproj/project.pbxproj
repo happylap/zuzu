@@ -135,6 +135,7 @@
 		2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailBasicInfoCell.swift; sourceTree = "<group>"; };
 		2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailContactBarView.swift; sourceTree = "<group>"; };
 		2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HouseDetailContactBarView.xib; sourceTree = "<group>"; };
+		2F9410591BF482B600BA12B5 /* Zuzu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Zuzu-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailAddressCell.swift; sourceTree = "<group>"; };
 		2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableHeaderCell.swift; sourceTree = "<group>"; };
 		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
@@ -287,6 +288,7 @@
 				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
 				2F482E031BAFE09100C68670 /* Info.plist */,
 				81287B051BDA19310008FAA3 /* Model.xcdatamodeld */,
+				2F9410591BF482B600BA12B5 /* Zuzu-Bridging-Header.h */,
 			);
 			path = Zuzu;
 			sourceTree = "<group>";
@@ -866,6 +868,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -884,6 +887,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
 			};
 			name = Release;
 		};
