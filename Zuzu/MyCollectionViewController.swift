@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class MyCollectionViewController {
+class MyCollectionViewController: UIViewController {
     
     var houseList: [House] = []
     
@@ -33,12 +33,9 @@ class MyCollectionViewController {
     private func loadHouseListPage(pageNo: Int) {
         
     }
-    
-}
 
-class MyCollectionViewController: UIViewController {
     
-    let cellIdentifier = "MyCollectionCell"
+    let cellIdentifier = "houseItemCell"
     
     @IBOutlet weak var sortByPriceButton: UIButton!
     @IBOutlet weak var sortBySizeButton: UIButton!
@@ -48,19 +45,29 @@ class MyCollectionViewController: UIViewController {
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
-        NSLog("%@ viewDidLoad", self)
         super.viewDidLoad()
+        NSLog("%@ viewDidLoad", self)
+        
+        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
+    
+        // Load the first page of data
+        self.loadData()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSLog("%@ viewWillAppear", self)
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        NSLog("%@ viewWillAppear", self)
-        self.loadData()
-    }
-    
     
     
     // MARK: - Navigation
@@ -98,16 +105,20 @@ extension MyCollectionViewController: UITableViewDataSource, UITableViewDelegate
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier, forIndexPath: indexPath) as! MyCollectionCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        cell.houseItem = self.houseList[indexPath.row]
+        
+        cell.houseItemForCollection = self.houseList[indexPath.row]
+//        cell.houseItem = self.houseList[indexPath.row]
         
         return cell
     }
+    
+
     
     //    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     //
