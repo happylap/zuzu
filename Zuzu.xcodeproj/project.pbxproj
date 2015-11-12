@@ -36,6 +36,12 @@
 		2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */; };
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
+		2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */; };
+		2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */; };
+		2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */; };
+		2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */; };
+		2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */; };
+		2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
@@ -126,6 +132,12 @@
 		2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaObserver.swift; sourceTree = "<group>"; };
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
+		2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailBasicInfoCell.swift; sourceTree = "<group>"; };
+		2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailContactBarView.swift; sourceTree = "<group>"; };
+		2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HouseDetailContactBarView.xib; sourceTree = "<group>"; };
+		2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailAddressCell.swift; sourceTree = "<group>"; };
+		2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableHeaderCell.swift; sourceTree = "<group>"; };
+		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
@@ -406,6 +418,12 @@
 				2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */,
 				2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */,
 				2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */,
+				2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */,
+				2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */,
+				2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */,
+				2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */,
+				2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */,
+				2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -556,6 +574,7 @@
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2FDA072F1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
+				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
 				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,
@@ -633,6 +652,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,
+				2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */,
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
 				2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */,
@@ -647,6 +667,7 @@
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
+				2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
@@ -670,12 +691,15 @@
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */,
 				81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */,
+				2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */,
+				2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
 				81FA28131BDA39B10038DD19 /* Note.swift in Sources */,
 				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,
 				81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */,
+				2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */,
 				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,

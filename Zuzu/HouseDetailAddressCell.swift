@@ -1,5 +1,5 @@
 //
-//  HouseDetailTitleViewCell.swift
+//  HouseDetailAddressCell.swift
 //  Zuzu
 //
 //Copyright © LAP Inc. All rights reserved
@@ -7,9 +7,10 @@
 
 import UIKit
 
-class HouseDetailTitleViewCell: UITableViewCell {
+class HouseDetailAddressCell: UITableViewCell {
 
-    @IBOutlet weak var titleImage: UIImageView!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var mapIcon: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

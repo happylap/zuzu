@@ -917,40 +917,58 @@
                         <rect key="frame" x="0.0" y="0.0" width="650" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="272" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RTx-PQ-fjy">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RTx-PQ-fjy">
                                 <rect key="frame" x="0.0" y="64" width="650" height="692"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="RTx-PQ-fjy" secondAttribute="height" multiplier="15:8" id="6Ii-6K-qUs"/>
-                                </constraints>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" rowHeight="272" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="650" height="272"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NNe-KS-vPG" id="Ck8-WE-6z5">
-                                            <rect key="frame" x="0.0" y="0.0" width="650" height="271.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="houseDetailSampleImage" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="650" height="487.5"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="houseDetailSampleImage" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
+                                                    <rect key="frame" x="0.0" y="0.0" width="650" height="368.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="zKm-Lp-uz6" secondAttribute="height" multiplier="4:3" id="Lym-8Q-gYV"/>
+                                                        <constraint firstAttribute="width" secondItem="zKm-Lp-uz6" secondAttribute="height" multiplier="750:425" id="Lym-8Q-gYV"/>
                                                     </constraints>
                                                     <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="超豪華辦公室等你來租" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjz-Vf-7cD">
+                                                    <rect key="frame" x="0.0" y="0.0" width="650" height="20.5"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="0Iv-5z-AqZ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="0Iv-5z-AqZ"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
                                             </subviews>
+                                            <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="zKm-Lp-uz6" secondAttribute="bottom" priority="900" id="7I1-OS-pEw"/>
                                                 <constraint firstItem="zKm-Lp-uz6" firstAttribute="width" secondItem="Ck8-WE-6z5" secondAttribute="width" id="c7a-Hg-64I"/>
                                                 <constraint firstItem="zKm-Lp-uz6" firstAttribute="leading" secondItem="Ck8-WE-6z5" secondAttribute="leadingMargin" id="hBW-r2-2mB"/>
                                                 <constraint firstItem="zKm-Lp-uz6" firstAttribute="top" secondItem="Ck8-WE-6z5" secondAttribute="topMargin" id="iVD-Fl-ZGq"/>
+                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="top" secondItem="zKm-Lp-uz6" secondAttribute="top" id="jen-GI-S4D"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="zKm-Lp-uz6" secondAttribute="trailing" id="mVM-Lz-hgR"/>
+                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="leading" secondItem="zKm-Lp-uz6" secondAttribute="leading" id="pIC-yL-KQd"/>
+                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="width" secondItem="Ck8-WE-6z5" secondAttribute="width" id="re9-Ia-Ih1"/>
                                             </constraints>
                                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                         </tableViewCellContentView>
                                         <constraints>
                                             <constraint firstItem="zKm-Lp-uz6" firstAttribute="width" secondItem="NNe-KS-vPG" secondAttribute="width" id="Ddk-4X-4az"/>
                                         </constraints>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="Ddk-4X-4az"/>
@@ -960,27 +978,178 @@
                                             <outlet property="titleImage" destination="zKm-Lp-uz6" id="QGa-vF-tpJ"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightDetailCell" rowHeight="44" id="YtO-1w-zYw" customClass="HouseDetailBasicInfoCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="650" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YtO-1w-zYw" id="5qm-sc-lWa">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16000 元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4D-1D-Qb8">
+                                                    <rect key="frame" x="20" y="12" width="325" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13坪" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgt-HK-naS">
+                                                    <rect key="frame" x="310" y="12" width="325" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="vgt-HK-naS" firstAttribute="leading" secondItem="r4D-1D-Qb8" secondAttribute="trailing" constant="8" symbolic="YES" id="0u8-M6-ezf"/>
+                                                <constraint firstAttribute="width" secondItem="r4D-1D-Qb8" secondAttribute="width" multiplier="2:1" id="8Ua-OM-MVc"/>
+                                                <constraint firstItem="vgt-HK-naS" firstAttribute="centerY" secondItem="r4D-1D-Qb8" secondAttribute="centerY" id="CPg-SB-hET"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="vgt-HK-naS" secondAttribute="trailing" constant="15" id="MKS-6Y-A5Q"/>
+                                                <constraint firstAttribute="width" secondItem="vgt-HK-naS" secondAttribute="width" multiplier="2:1" id="UTX-MV-Cbj"/>
+                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="centerY" secondItem="5qm-sc-lWa" secondAttribute="centerY" id="dIt-Gi-CsK"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="r4D-1D-Qb8" secondAttribute="trailing" constant="58" id="lcb-sM-TCQ"/>
+                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="leading" secondItem="5qm-sc-lWa" secondAttribute="leading" constant="20" symbolic="YES" id="mQo-b9-psD"/>
+                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="top" secondItem="5qm-sc-lWa" secondAttribute="topMargin" constant="11" id="tWP-fp-nRK"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="lcb-sM-TCQ"/>
+                                                    <exclude reference="tWP-fp-nRK"/>
+                                                    <exclude reference="0u8-M6-ezf"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
+                                            <outlet property="leftInfoText" destination="r4D-1D-Qb8" id="W40-z4-mxE"/>
+                                            <outlet property="rightInfoText" destination="vgt-HK-naS" id="2sg-ol-ax2"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addressCell" rowHeight="44" id="KRN-bB-aZY" customClass="HouseDetailAddressCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="116" width="650" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KRN-bB-aZY" id="K7j-yJ-GZE">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市內湖區" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6H-Ov-ehB">
+                                                    <rect key="frame" x="20" y="11" width="577" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pJk-U6-FWF">
+                                                    <rect key="frame" x="605" y="7" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="pJk-U6-FWF" secondAttribute="height" multiplier="1:1" id="MpA-L6-2JC"/>
+                                                        <constraint firstAttribute="width" constant="30" id="eQs-Hg-KY8"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Button" image="location"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="y6H-Ov-ehB" firstAttribute="centerY" secondItem="K7j-yJ-GZE" secondAttribute="centerY" id="488-n2-8su"/>
+                                                <constraint firstItem="pJk-U6-FWF" firstAttribute="centerY" secondItem="y6H-Ov-ehB" secondAttribute="centerY" id="EKg-fn-Bgt"/>
+                                                <constraint firstItem="y6H-Ov-ehB" firstAttribute="leading" secondItem="K7j-yJ-GZE" secondAttribute="leading" constant="20" symbolic="YES" id="L4B-AS-PAj"/>
+                                                <constraint firstItem="pJk-U6-FWF" firstAttribute="leading" secondItem="y6H-Ov-ehB" secondAttribute="trailing" constant="8" symbolic="YES" id="Skp-Du-4VK"/>
+                                                <constraint firstAttribute="trailing" secondItem="pJk-U6-FWF" secondAttribute="trailing" constant="15" id="dlZ-GR-d7Q"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
+                                            <outlet property="addressLabel" destination="y6H-Ov-ehB" id="XrY-u1-UsU"/>
+                                            <outlet property="mapIcon" destination="pJk-U6-FWF" id="MZ3-zT-GUa"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableHeaderCell" rowHeight="44" id="Dbo-7a-fKS" customClass="HouseDetailExpandableHeaderCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="160" width="650" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dbo-7a-fKS" id="V9N-G1-Fvz">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="生活機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3x4-yg-9HK">
+                                                    <rect key="frame" x="20" y="11" width="577" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6AN-f2-ae4">
+                                                    <rect key="frame" x="605" y="7" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="6AN-f2-ae4" secondAttribute="height" multiplier="1:1" id="2Iy-Lj-K8Q"/>
+                                                        <constraint firstAttribute="width" constant="30" id="pO7-sJ-YbQ"/>
+                                                    </constraints>
+                                                    <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
+                                                    <state key="normal" title="Button" image="arrow_down02_n"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="3x4-yg-9HK" firstAttribute="top" secondItem="V9N-G1-Fvz" secondAttribute="topMargin" constant="11" id="D82-ac-5CT"/>
+                                                <constraint firstItem="3x4-yg-9HK" firstAttribute="leading" secondItem="V9N-G1-Fvz" secondAttribute="leading" constant="20" symbolic="YES" id="FHt-Ee-RLa"/>
+                                                <constraint firstItem="6AN-f2-ae4" firstAttribute="leading" secondItem="3x4-yg-9HK" secondAttribute="trailing" priority="750" constant="8" symbolic="YES" id="YuL-bR-oyt"/>
+                                                <constraint firstItem="6AN-f2-ae4" firstAttribute="baseline" secondItem="3x4-yg-9HK" secondAttribute="baseline" id="Z2I-TK-24Y"/>
+                                                <constraint firstItem="3x4-yg-9HK" firstAttribute="centerY" secondItem="V9N-G1-Fvz" secondAttribute="centerY" id="hjf-7e-sbb"/>
+                                                <constraint firstItem="6AN-f2-ae4" firstAttribute="centerY" secondItem="3x4-yg-9HK" secondAttribute="centerY" id="rLw-am-BoJ"/>
+                                                <constraint firstAttribute="trailing" secondItem="6AN-f2-ae4" secondAttribute="trailing" constant="15" id="unB-jh-GNX"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="D82-ac-5CT"/>
+                                                    <exclude reference="Z2I-TK-24Y"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentCell" rowHeight="44" id="94S-Ko-yrz" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="204" width="650" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="94S-Ko-yrz" id="hMY-Ey-K1Q">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內容說明" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vil-gD-7zS">
+                                                    <rect key="frame" x="20" y="13" width="60" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="11" id="0r3-bd-7jY"/>
+                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="centerY" secondItem="hMY-Ey-K1Q" secondAttribute="centerY" id="GNZ-wp-EcI"/>
+                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="leading" secondItem="hMY-Ey-K1Q" secondAttribute="leading" constant="20" symbolic="YES" id="PsI-iv-APw"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="0r3-bd-7jY"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                    </tableViewCell>
                                 </prototypes>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="6Ii-6K-qUs"/>
-                                    </mask>
-                                </variation>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05l-B1-oJ7" userLabel="Contact Bar View" customClass="HouseDetailContactBarView" customModule="Zuzu" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="670" width="650" height="85.5"/>
+                                <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="z6L-pd-X4C" firstAttribute="top" secondItem="RTx-PQ-fjy" secondAttribute="bottom" id="1su-9d-cI1"/>
                             <constraint firstItem="RTx-PQ-fjy" firstAttribute="centerX" secondItem="fc8-tO-VZH" secondAttribute="centerX" id="5qL-ae-DLi"/>
-                            <constraint firstItem="RTx-PQ-fjy" firstAttribute="height" secondItem="fc8-tO-VZH" secondAttribute="height" id="7of-4r-bNF"/>
                             <constraint firstItem="RTx-PQ-fjy" firstAttribute="width" secondItem="fc8-tO-VZH" secondAttribute="width" id="Aww-bO-pxW"/>
+                            <constraint firstItem="05l-B1-oJ7" firstAttribute="width" secondItem="fc8-tO-VZH" secondAttribute="width" id="JAD-jq-eUZ"/>
                             <constraint firstItem="RTx-PQ-fjy" firstAttribute="top" secondItem="sr3-gP-XzE" secondAttribute="bottom" id="Tif-yt-baT"/>
+                            <constraint firstItem="05l-B1-oJ7" firstAttribute="centerX" secondItem="fc8-tO-VZH" secondAttribute="centerX" id="ebd-HI-lVR"/>
+                            <constraint firstAttribute="width" secondItem="05l-B1-oJ7" secondAttribute="height" multiplier="1500:197" id="gFT-sk-ktN"/>
+                            <constraint firstItem="z6L-pd-X4C" firstAttribute="top" secondItem="05l-B1-oJ7" secondAttribute="bottom" id="gPC-ew-FYB"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="7of-4r-bNF"/>
-                            </mask>
-                        </variation>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="650" height="800"/>
@@ -1235,10 +1404,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow_down02_n" width="30" height="30"/>
         <image name="bell-outline" width="48" height="48"/>
         <image name="bookmark-outline-plus" width="36" height="36"/>
         <image name="filter_n@1x" width="60" height="60"/>
         <image name="first" width="30" height="30"/>
         <image name="houseDetailSampleImage" width="600" height="450"/>
+        <image name="location" width="60" height="60"/>
     </resources>
 </document>

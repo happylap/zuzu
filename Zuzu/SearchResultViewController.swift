@@ -556,6 +556,7 @@ class SearchResultViewController: UIViewController {
             
             switch identifier{
             case ViewTransConst.showDebugInfo:
+                
                 let debugVc = segue.destinationViewController as UIViewController
                 
                 if let pVc = debugVc.presentationController {
@@ -577,15 +578,25 @@ class SearchResultViewController: UIViewController {
                     ftvc.filterDelegate = self
                 }
                 
+            case ViewTransConst.displayHouseDetail:
+                
+                if let hdvc = segue.destinationViewController as? HouseDetailViewController {
+                    if let row = tableView.indexPathForSelectedRow?.row {
+                        
+                        let houseItem = dataSource.getItemForRow(row)
+                        
+                        hdvc.houseItem = houseItem
+                    }
+                }
+                
             default: break
             }
         }
     }
 }
 
-extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
-    
     // MARK: - Table View Data Source
+extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return Const.SECTION_NUM
@@ -632,9 +643,8 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     
 }
 
-extension SearchResultViewController: UIScrollViewDelegate {
-    
     // MARK: - Scroll View Delegate
+extension SearchResultViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
@@ -701,6 +711,8 @@ extension SearchResultViewController: UIScrollViewDelegate {
     
 }
 
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
 extension SearchResultViewController: UIAdaptivePresentationControllerDelegate {
     
     //Need to figure out the use of this...
@@ -710,6 +722,7 @@ extension SearchResultViewController: UIAdaptivePresentationControllerDelegate {
     
 }
 
+    // MARK: - UIAlertViewDelegate
 extension SearchResultViewController: UIAlertViewDelegate {
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
@@ -718,6 +731,7 @@ extension SearchResultViewController: UIAlertViewDelegate {
     
 }
 
+    // MARK: - FilterTableViewControllerDelegate
 extension SearchResultViewController: FilterTableViewControllerDelegate {
     
     private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
