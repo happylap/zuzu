@@ -7,7 +7,7 @@
 
 import UIKit
 
-@IBDesignable class HouseDetailContactBarView: UIView {
+class HouseDetailContactBarView: UIView {
 
     @IBOutlet weak var contactName: UILabel!
     

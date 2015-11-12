@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    let googleMapsApiKey = "AIzaSyBJHQ7gyRGv4K4WHfXWHQwjVb0lf3ziB0w"
+    
     var window: UIWindow?
-
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        
+    
+    private func commonSetup() {
+        GMSServices.provideAPIKey(googleMapsApiKey)
+    }
+    
+    private func customUISetup() {
         // Configure TabBar
         UITabBar.appearance().tintColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
         
@@ -28,6 +33,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSFontAttributeName : font]
         UINavigationBar.appearance().barTintColor = bgColor
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+    }
+    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        // Override point for customization after application launch.
+        
+        commonSetup()
+        
+        customUISetup()
         
         return true
     }

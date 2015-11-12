@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class HouseDetailViewController: UIViewController {
     
-    var houseItem:HouseItem? {
-        didSet {
-            fetchHouseDetail(houseItem!)
-        }
+    struct ViewTransConst {
+        static let displayHouseOnMap:String = "displayHouseOnMap"
     }
+    
+    var houseItem:HouseItem?
     
     var houseItemDetail: AnyObject?
     
@@ -43,16 +44,20 @@ class HouseDetailViewController: UIViewController {
     var tableRows:[Int: CellInfo]!
     
     private func fetchHouseDetail(houseItem: HouseItem) {
+        
+        LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+        
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+            
+            LoadingSpinnerOverlay.shared.hideOverlayView()
+            
             if let error = error {
                 NSLog("Cannot get remote data %@", error.localizedDescription)
                 return
             }
             
             if let result = result {
-                if let item = result.array?.first {
-                    self.houseItemDetail = item
-                }
+                self.houseItemDetail = result
             }
         }
     }
@@ -70,22 +75,33 @@ class HouseDetailViewController: UIViewController {
         tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
+    //    func onMapButtonTouched(sender: UITapGestureRecognizer) {
+    //        self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+    //    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        ///Get remote data
+        if let houseItem = self.houseItem {
+            fetchHouseDetail(houseItem)
+        }
+        
         tableRows = [
-            0:CellInfo(cellIdentifier: .HouseDetailTitleCell,cellHeight: 213, handler: { (cell) -> () in
+            0:CellInfo(cellIdentifier: .HouseDetailTitleCell,cellHeight: 213, handler: { (cell : UITableViewCell) -> () in
                 if let cell = cell as? HouseDetailTitleViewCell {
+                    
+                    cell.houseTitleLabel.text = self.houseItem?.title
                     
                     let placeholderImg = UIImage(named: "house_img")
                     
                     if let imgString = self.houseItem?.imgList?.first,
-                    let imgUrl = NSURL(string: imgString){
-
-                        cell.titleImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
-                            NSLog("Img loading done, status = \(response)")
-                        }
-                        
+                        let imgUrl = NSURL(string: imgString){
+                            
+                            cell.titleImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
+                                NSLog("Img loading done, status = \(response)")
+                            }
+                            
                     }
                 }
             }),
@@ -100,8 +116,8 @@ class HouseDetailViewController: UIViewController {
             2:CellInfo(cellIdentifier: .RightDetailCell, cellHeight: 44, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailBasicInfoCell {
                     if let houseItem = self.houseItem {
-                    cell.leftInfoText.text = "西門鋼骨"
-                    cell.rightInfoText.text = "\(houseItem.houseType) / \(houseItem.purposeType)"
+                        cell.leftInfoText.text = "西門鋼骨"
+                        cell.rightInfoText.text = "\(houseItem.houseType) / \(houseItem.purposeType)"
                     }
                 }
             }),
@@ -114,7 +130,8 @@ class HouseDetailViewController: UIViewController {
             4:CellInfo(cellIdentifier: .AddressCell, cellHeight: 44, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailAddressCell {
                     if let houseItem = self.houseItem {
-                    cell.addressLabel.text = houseItem.addr
+                        cell.addressLabel.text = houseItem.addr
+                        //                        cell.mapIcon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onMapButtonTouched:")))
                     }
                 }
             }),
@@ -139,15 +156,52 @@ class HouseDetailViewController: UIViewController {
     }
     
     
-    /*
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier{
+            
+            NSLog("prepareForSegue: %@", identifier)
+            
+            switch identifier{
+                
+            case ViewTransConst.displayHouseOnMap:
+                
+                if let mvc = segue.destinationViewController as? MapViewController {
+                    if let houseItemDetail = self.houseItemDetail {
+                        let coordinateStr = houseItemDetail.valueForKey("coordinate") as? String
+                        
+                        let coordinateArray = coordinateStr?.componentsSeparatedByString(", ").map({ (element) -> CLLocationDegrees in
+                            let coordinateElement = element.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                            
+                            if let elementNumber = Double(coordinateElement) {
+                                return elementNumber
+                            } else {
+                                return -1
+                            }
+                        })
+                        
+                        NSLog("Coordinate: %@", coordinateArray!)
+                        
+                        if let coordinate = coordinateArray {
+                            
+                            if(coordinate.count == 2) {
+                                if(coordinate[0] > 0 && coordinate[1]>0) {
+                                    mvc.coordinate = (coordinate[0], coordinate[1])
+                                }
+                                
+                            }
+                        }
+                        
+                        mvc.houseTitle = self.houseItem?.title
+                    }
+                }
+                
+            default: break
+            }
+        }
     }
-    */
     
 }
 
@@ -175,13 +229,13 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             cellInfo.handler(cell)
             
-            if let cell = cell as? HouseDetailTitleViewCell {
-                cellInfo.cellHeight = cell.titleImage.frame.height
-                
-                NSLog("Cell Size: %f, %f", cell.titleImage.frame.size.width, cell.titleImage.frame.size.height)
-            }
+            //            if let cell = cell as? HouseDetailTitleViewCell {
+            //                cellInfo.cellHeight = cell.titleImage.frame.height
+            //
+            //                NSLog("Cell Size: %f, %f", cell.titleImage.frame.size.width, cell.titleImage.frame.size.height)
+            //            }
             
-            tableRows[indexPath.row] = cellInfo
+            //           tableRows[indexPath.row] = cellInfo
             
             NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
             
@@ -191,5 +245,16 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         assert(false)
         
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if var cellInfo = tableRows[indexPath.row] {
+            
+            if (cellInfo.cellIdentifier == .AddressCell) {
+                self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+            }
+        }
+    }
+    
     
 }
