@@ -405,7 +405,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                             return
                         }
                         
-                        let jsonResult = JSON(data!)
+                        let jsonResult = JSON(data: data!)
                         
                         if let response = jsonResult["response"].dictionary {
                             
@@ -482,7 +482,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                         return
                     }
                     
-                    let jsonResult = JSON(data!)
+                    let jsonResult = JSON(data: data!)
                     
                     if let response = jsonResult["response"].dictionary {
                         
