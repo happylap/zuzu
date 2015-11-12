@@ -7,19 +7,14 @@
 //
 
 import UIKit
-import Alamofire
 import SwiftyJSON
 
-class MyCollectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MyCollectionViewController {
     
     var houseList: [House] = []
     
-    let cellIdentifier = "MyCollectionCell"
-    
-    @IBOutlet weak var sortByPriceButton: UIButton!
-    @IBOutlet weak var sortBySizeButton: UIButton!
-    @IBOutlet weak var sortByPostTimeButton: UIButton!
-    @IBOutlet weak var tableView: UITableView!
+    var sortingField: String?
+    var sortingOrder: String?
     
     private func loadData() {
         NSLog("%@ loadData", self)
@@ -35,22 +30,60 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
+    private func loadHouseListPage(pageNo: Int) {
+        
+    }
+    
+}
+
+class MyCollectionViewController: UIViewController {
+    
+    let cellIdentifier = "MyCollectionCell"
+    
+    @IBOutlet weak var sortByPriceButton: UIButton!
+    @IBOutlet weak var sortBySizeButton: UIButton!
+    @IBOutlet weak var sortByPostTimeButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: - View Life Cycle
+    
     override func viewDidLoad() {
         NSLog("%@ viewDidLoad", self)
         super.viewDidLoad()
-        //self.loadRemoteData()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewWillAppear(animated: Bool) {
         NSLog("%@ viewWillAppear", self)
         self.loadData()
     }
+    
+    
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let indexPath = self.tableView.indexPathForSelectedRow {
+            
+            if segue.identifier == "showMyCollectionDetail" {
+                
+                NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
+                
+                let destController = segue.destinationViewController as! MyCollectionDetailViewController
+                if let houseItem: House = self.houseList[indexPath.row] {
+                    destController.houseItem = houseItem
+                }
+                
+            }
+        }
+    }
+}
+
+extension MyCollectionViewController: UITableViewDataSource, UITableViewDelegate {
     
     // MARK: - Table View Data Source
     
@@ -72,10 +105,6 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
         cell.parentTableView = tableView
         cell.indexPath = indexPath
         cell.houseItem = self.houseList[indexPath.row]
-        
-        
-        //cell.houseImg.layer.cornerRadius = cell.houseImg.frame.size.width / 2
-        //cell.houseImg?.clipsToBounds = true
         
         return cell
     }
@@ -101,7 +130,8 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
     //        self.presentViewController(optionMenu, animated: true, completion: nil)
     //    }
     
-    // MARK: - Table edit mode
+    
+    // MARK: - Table Edit Mode
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
@@ -115,28 +145,19 @@ class MyCollectionViewController: UIViewController, UITableViewDataSource, UITab
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-        
-        if let indexPath = self.tableView.indexPathForSelectedRow {
-            
-            if segue.identifier == "showMyCollectionDetail" {
-                
-                NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
-                
-                let destController = segue.destinationViewController as! MyCollectionDetailViewController
-                if let houseItem: House = self.houseList[indexPath.row] {
-                    destController.houseItem = houseItem
-                }
-                
-            }
-        }
-    }
 }
 
+
+extension MyCollectionViewController: UIScrollViewDelegate {
+
+    // MARK: - Scroll View Delegate
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+    }
+    
+}
