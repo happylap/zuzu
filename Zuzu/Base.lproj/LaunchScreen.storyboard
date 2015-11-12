@@ -15,11 +15,11 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_8812" translatesAutoresizingMaskIntoConstraints="NO" id="5b3-iA-D8l">
-                                <rect key="frame" x="0.0" y="-233.5" width="600" height="1067"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchingImage" translatesAutoresizingMaskIntoConstraints="NO" id="5b3-iA-D8l">
+                                <rect key="frame" x="0.0" y="-1001" width="375" height="2668"/>
                                 <color key="backgroundColor" red="0.13725490196078433" green="0.80000000000000004" blue="0.72549019607843135" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="5b3-iA-D8l" secondAttribute="height" multiplier="576:1024" id="gqW-dQ-9hl"/>
@@ -27,6 +27,7 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="gqW-dQ-9hl"/>
                                         <exclude reference="ha8-DN-J6m"/>
                                     </mask>
                                 </variation>
@@ -48,6 +49,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -55,6 +57,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="IMG_8812" width="576" height="1024"/>
+        <image name="launchingImage" width="1500" height="2668"/>
     </resources>
 </document>

@@ -677,7 +677,7 @@
         <!--Search Result View Controller-->
         <scene sceneID="Brr-FQ-XTv">
             <objects>
-                <viewController title="Search Result View Controller" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Search Result View Controller" automaticallyAdjustsScrollViewInsets="NO" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yxI-Jr-QgG"/>
                         <viewControllerLayoutGuide type="bottom" id="hmg-sM-QSC"/>
