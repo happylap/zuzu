@@ -1155,6 +1155,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="650" height="800"/>
                     <connections>
+                        <outlet property="contactBarView" destination="05l-B1-oJ7" id="ceY-82-SRg"/>
                         <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
                         <segue destination="H6B-iW-L9e" kind="show" identifier="displayHouseOnMap" id="zee-Sd-WXc"/>
                         <segue destination="xp8-9U-QeU" kind="show" identifier="displayHouseSource" id="MfC-so-Q4m"/>
@@ -1216,7 +1217,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SX9-Iv-RCt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2458" y="2256"/>
+            <point key="canvasLocation" x="2476" y="2544"/>
         </scene>
         <!--過濾條件-->
         <scene sceneID="ZVW-p3-RGh">

@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftyJSON
+import MessageUI
 
 class HouseDetailViewController: UIViewController {
     
@@ -15,11 +16,13 @@ class HouseDetailViewController: UIViewController {
         static let displayHouseSource:String = "displayHouseSource"
     }
     
+    @IBOutlet weak var contactBarView: HouseDetailContactBarView!
+    @IBOutlet weak var tableView: UITableView!
+    
     var houseItem:HouseItem?
     
+    ///The full house detail in AnyObject
     var houseItemDetail: AnyObject?
-    
-    @IBOutlet weak var tableView: UITableView!
     
     struct Const {
         static let SECTION_NUM:Int = 1
@@ -59,71 +62,15 @@ class HouseDetailViewController: UIViewController {
             
             if let result = result {
                 self.houseItemDetail = result
+                
+                
+                ///Configure Views On Data Loaded
+                self.configureViewsOnDataLoaded()
             }
         }
     }
     
-    private func configureTableView() {
-        //Configure cell height
-        tableView.estimatedRowHeight = 213//tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
-        //Configure table DataSource & Delegate
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        //Remove extra cells when the table height is smaller than the screen
-        tableView.tableFooterView = UIView(frame: CGRectZero)
-    }
-    
-    private func configureNavigationBarItems() {
-        
-        ///Prepare custom UIButton for UIBarButtonItem
-        let gotoSourceButton: UIButton = UIButton(type: UIButtonType.Custom)
-        gotoSourceButton.setImage(UIImage(named: "web_n"), forState: UIControlState.Normal)
-        gotoSourceButton.addTarget(self, action: "gotoSourceButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-        gotoSourceButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        
-        let shareButton: UIButton = UIButton(type: UIButtonType.Custom)
-        shareButton.setImage(UIImage(named: "share_n"), forState: UIControlState.Normal)
-        shareButton.addTarget(self, action: "shareButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-        shareButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        
-        let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
-        collectButton.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
-        collectButton.addTarget(self, action: "collectButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-        collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        
-        /// From right to left
-        self.navigationItem.setRightBarButtonItems(
-            [
-                UIBarButtonItem(customView: collectButton),
-                UIBarButtonItem(customView: shareButton),
-                UIBarButtonItem(customView: gotoSourceButton)
-            ],
-            animated: false)
-    }
-    
-    func gotoSourceButtonTouched(sender: UIButton) {
-        
-        self.performSegueWithIdentifier("displayHouseSource", sender: self)
-        
-    }
-    
-    //    func onMapButtonTouched(sender: UITapGestureRecognizer) {
-    //        self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
-    //    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        ///Configure navigation bar items
-        configureNavigationBarItems()
-        
-        ///Get remote data
-        if let houseItem = self.houseItem {
-            fetchHouseDetail(houseItem)
-        }
+    private func setupTableCells() {
         
         tableRows = [
             0:CellInfo(cellIdentifier: .HouseDetailTitleCell,cellHeight: 213, handler: { (cell : UITableViewCell) -> () in
@@ -183,6 +130,204 @@ class HouseDetailViewController: UIViewController {
                 }
             })
         ]
+    }
+    
+    private func alertMailAppNotReady() {
+        // Initialize Alert View
+        
+        let alertView = UIAlertView(
+            title: "找不到預設的郵件應用",
+            message: "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成",
+            delegate: self,
+            cancelButtonTitle: "知道了")
+        
+        // Show Alert View
+        alertView.show()
+    }
+    
+    private func configureViewsOnDataLoaded() {
+        
+        ///Configure Contact Bar View
+        self.configureContactBarView()
+    }
+    
+    private func configureTableView() {
+        
+        //Configure cell height
+        tableView.estimatedRowHeight = 213//tableView.rowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        //Configure table DataSource & Delegate
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        //Remove extra cells when the table height is smaller than the screen
+        tableView.tableFooterView = UIView(frame: CGRectZero)
+    }
+    
+    private func configureNavigationBarItems() {
+        
+        ///Prepare custom UIButton for UIBarButtonItem
+        let gotoSourceButton: UIButton = UIButton(type: UIButtonType.Custom)
+        gotoSourceButton.setImage(UIImage(named: "web_n"), forState: UIControlState.Normal)
+        gotoSourceButton.addTarget(self, action: "gotoSourceButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        gotoSourceButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        
+        let shareButton: UIButton = UIButton(type: UIButtonType.Custom)
+        shareButton.setImage(UIImage(named: "share_n"), forState: UIControlState.Normal)
+        shareButton.addTarget(self, action: "shareButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        shareButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        
+        let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
+        collectButton.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+        collectButton.addTarget(self, action: "collectButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        
+        /// From right to left
+        self.navigationItem.setRightBarButtonItems(
+            [
+                UIBarButtonItem(customView: collectButton),
+                UIBarButtonItem(customView: shareButton),
+                UIBarButtonItem(customView: gotoSourceButton)
+            ],
+            animated: false)
+    }
+    
+    private func initContactBarView() {
+        contactBarView.contactName.text = "———"
+        
+        contactBarView.contactByMailButton.hidden = true
+        
+        contactBarView.contactByPhoneButton.hidden = true
+    }
+    
+    private func configureContactBarView() {
+        if let houseDetail = self.houseItemDetail {
+            contactBarView.contactName.text = houseDetail.valueForKey("agent") as? String ?? "———"
+            
+            contactBarView.contactByMailButton
+                .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+            contactBarView.contactByMailButton.hidden = false
+            
+            if let _ = houseDetail.valueForKey("phone") as? [String] {
+                contactBarView.contactByPhoneButton
+                    .addTarget(self, action: "contactByPhoneButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                contactBarView.contactByPhoneButton.hidden = false
+            }
+        }
+    }
+    
+    ///Action Handlers
+    
+    func contactByMailButtonTouched(sender: UIButton) {
+        
+        /* Another way to allow sending mail by lauching default mail App
+        * Our app will be suspended, and the user woulden't have a way to return to our App
+        if let url = NSURL(string: "mailto:jon.doe@mail.com") {
+        UIApplication.sharedApplication().openURL(url)
+        }
+        */
+        
+        let emailTitle = "租屋物件詢問: " + (self.houseItem?.title ?? self.houseItem?.addr ?? "")
+        
+        var messageBody = "房東您好! 我豬豬快租查詢到您在網路上刊登的租屋物件！\n\n"
+        
+        if let houseItemDetail = self.houseItemDetail {
+            if let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String {
+                messageBody += "租屋物件網址: \(sourceLink) \n\n"
+            }
+        }
+        messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n" +
+        "再麻煩您回覆方便的時間！\n"
+        
+        let toRecipents = ["pikapai@gmail.com"]
+        
+        if MFMailComposeViewController.canSendMail() {
+            if let mc: MFMailComposeViewController = MFMailComposeViewController() {
+                ///Change Bar Item Color
+                mc.navigationBar.tintColor = UIColor.whiteColor()
+                
+                mc.mailComposeDelegate = self
+                mc.setSubject(emailTitle)
+                mc.setMessageBody(messageBody, isHTML: false)
+                mc.setToRecipients(toRecipents)
+                self.presentViewController(mc, animated: true, completion: nil)
+                //self.navigationController?.pushViewController(mc, animated: true)
+                
+            }
+        } else {
+            alertMailAppNotReady()
+        }
+        
+    }
+    
+    func contactByPhoneButtonTouched(sender: UIButton) {
+        if let houseDetail = self.houseItemDetail {
+            
+            var message = "確認聯絡"
+            if let contactName = houseDetail.valueForKey("agent") as? String {
+                
+                let toIndex: String.Index = contactName.startIndex
+                    .advancedBy(9, limit: contactName.endIndex)
+                
+                message += contactName.substringToIndex(toIndex)
+            }
+            
+            if let agentType = houseDetail.valueForKey("agent_type") as? Int {
+                message += "(\(agentType))"
+            }
+            
+            let optionMenu = UIAlertController(title: nil, message: message , preferredStyle: .ActionSheet)
+            
+            
+            if let phoneNumbers = houseDetail.valueForKey("phone") as? [String] {
+                
+                ///Add only first 3 numbers
+                for phoneNumber in phoneNumbers.prefix(3) {
+                    let numberAction = UIAlertAction(title: String(phoneNumber), style: .Default, handler: {
+                        (alert: UIAlertAction!) -> Void in
+                        
+                    })
+                    
+                    optionMenu.addAction(numberAction)
+                }
+            }
+            
+            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+            })
+            
+            optionMenu.addAction(cancelAction)
+            
+            self.presentViewController(optionMenu, animated: true, completion: nil)
+        }
+    }
+    
+    func gotoSourceButtonTouched(sender: UIButton) {
+        
+        self.performSegueWithIdentifier("displayHouseSource", sender: self)
+        
+    }
+    
+    //    func onMapButtonTouched(sender: UITapGestureRecognizer) {
+    //        self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+    //    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        ///Init Contact Bar View
+        initContactBarView()
+        
+        ///Configure navigation bar items
+        configureNavigationBarItems()
+        
+        ///Get remote data
+        if let houseItem = self.houseItem {
+            fetchHouseDetail(houseItem)
+        }
+        
+        setupTableCells()
         
         configureTableView()
         
@@ -249,6 +394,25 @@ class HouseDetailViewController: UIViewController {
     
 }
 
+extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
+    
+    func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError?) {
+        switch result {
+        case MFMailComposeResultCancelled:
+            print("Mail cancelled")
+        case MFMailComposeResultSaved:
+            print("Mail saved")
+        case MFMailComposeResultSent:
+            print("Mail sent")
+        case MFMailComposeResultFailed:
+            print("Mail sent failure: %@", error?.localizedDescription)
+        default:
+            break
+        }
+        //self.navigationController?.popViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+}
 
 extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate {
     

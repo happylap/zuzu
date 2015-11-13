@@ -26,7 +26,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="連絡人姓名" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2YX-jY-G9b">
-                    <rect key="frame" x="53" y="24.5" width="85" height="20.5"/>
+                    <rect key="frame" x="53" y="24.5" width="236" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -63,6 +63,7 @@
                 <constraint firstItem="zt5-h6-ISa" firstAttribute="leading" secondItem="PHz-ua-JMV" secondAttribute="leading" constant="15" id="Sgs-yb-VcH"/>
                 <constraint firstItem="6yl-dO-wBg" firstAttribute="leading" secondItem="tsm-Ar-y2Y" secondAttribute="trailing" constant="8" id="Vgr-qg-hvR"/>
                 <constraint firstItem="tsm-Ar-y2Y" firstAttribute="centerY" secondItem="6yl-dO-wBg" secondAttribute="centerY" id="gc9-kp-squ"/>
+                <constraint firstItem="tsm-Ar-y2Y" firstAttribute="leading" secondItem="2YX-jY-G9b" secondAttribute="trailing" constant="8" symbolic="YES" id="lOL-aN-YxS"/>
                 <constraint firstItem="2YX-jY-G9b" firstAttribute="centerY" secondItem="zt5-h6-ISa" secondAttribute="centerY" id="w5F-7u-KtL"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
