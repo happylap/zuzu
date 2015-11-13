@@ -693,7 +693,7 @@
                     NSLog("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
                         
-                        self.tabBarController!.tabBar.hidden = true;
+                        self.tabBarController!.tabBar.hidden = true
                         
                         navigationItem.backBarButtonItem = UIBarButtonItem(title: "重新搜尋", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
                         

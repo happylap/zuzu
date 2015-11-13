@@ -533,6 +533,9 @@ class SearchResultViewController: UIViewController {
         super.viewWillAppear(animated)
         NSLog("%@ [[viewWillAppear]]", self)
         
+        ///Hide tab bar
+        self.tabBarController!.tabBar.hidden = true
+        
         //Configure Filter Buttons
         configureFilterButtons()
     }

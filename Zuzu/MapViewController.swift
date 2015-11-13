@@ -15,7 +15,7 @@ class MapViewController: UIViewController {
     
     private let locationManager = CLLocationManager()
     
-    @IBOutlet weak var closeMapButton: UIButton!
+    //@IBOutlet weak var closeMapButton: UIButton!
     @IBOutlet weak var mapView: GMSMapView!
     
     func onCloseMapButtonTouched(sender: UIButton) {
@@ -26,7 +26,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        closeMapButton.addTarget(self, action: "onCloseMapButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        //closeMapButton.addTarget(self, action: "onCloseMapButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
         
         let status = CLLocationManager.locationServicesEnabled()
         let authStatus = CLLocationManager.authorizationStatus()

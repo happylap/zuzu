@@ -30,7 +30,7 @@ public class PersistentTableDataSource {
         get {
             
             
-            let pageInfo = "Total Result: \(HouseDataRequester.getInstance().numOfRecord)\n"
+            let pageInfo = "Total Result: \(estimatedPageSize)\n"
                 + "Items Per Page: \(Const.PAGE_SIZE)\n"
                 + "Last Page No: \(self.lastPageNo)\n"
                 + "Total Items in Table: \(self.getItemSize())\n"
@@ -67,6 +67,7 @@ public class PersistentTableDataSource {
     
     private var isLoadingData = false
     
+    var estimatedPageSize = 0
     //Paging Info
     var lastPageNo = 0
     
@@ -97,11 +98,6 @@ public class PersistentTableDataSource {
     //Load some pages for display
     func initData(){
         loadRemoteData(Const.START_PAGE)
-    }
-    
-    func getEstimatedPageSize() -> Int?{
-        let requester = HouseDataRequester.getInstance()
-        return requester.numOfRecord
     }
     
     func getItemForRow(row:Int) -> HouseItem{
@@ -285,11 +281,13 @@ public class PersistentTableDataSource {
         NSLog("loadRemoteData: pageNo = \(pageNo)")
         
         requester.searchByCriteria(criteria!, start: start, row: row) {
-            (totalNum: Int?, newHouseItems: [HouseItem]?, error: NSError?) -> Void in
+            (totalNum: Int, newHouseItems: [HouseItem]?, error: NSError?) -> Void in
+            
+            self.estimatedPageSize = totalNum
             
             if let newHouseItems = newHouseItems {
                 if(newHouseItems.count > 0) {
-                    self.appendDataForPage(pageNo, estimatedPageSize: requester.numOfRecord, data: newHouseItems)
+                    self.appendDataForPage(pageNo, estimatedPageSize: totalNum, data: newHouseItems)
                     self.lastPageNo = pageNo
                 }
             }

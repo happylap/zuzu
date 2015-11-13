@@ -10,6 +10,7 @@ pod 'Alamofire', '~> 2.0'
 pod 'AlamofireImage', '~> 1.0'
 pod 'Dollar', '~>4.0'
 pod 'GoogleMaps'
+pod 'MWPhotoBrowser'
 end
 
 target 'ZuzuTests' do

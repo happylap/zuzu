@@ -677,7 +677,7 @@
         <!--Search Result View Controller-->
         <scene sceneID="Brr-FQ-XTv">
             <objects>
-                <viewController title="Search Result View Controller" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Search Result View Controller" automaticallyAdjustsScrollViewInsets="NO" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yxI-Jr-QgG"/>
                         <viewControllerLayoutGuide type="bottom" id="hmg-sM-QSC"/>
@@ -922,11 +922,11 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="650" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" rowHeight="213" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="650" height="213"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NNe-KS-vPG" id="Ck8-WE-6z5">
-                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="212.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="houseDetailSampleImage" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
@@ -980,7 +980,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightDetailCell" rowHeight="44" id="YtO-1w-zYw" customClass="HouseDetailBasicInfoCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="241" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YtO-1w-zYw" id="5qm-sc-lWa">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1026,7 +1026,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addressCell" rowHeight="44" id="KRN-bB-aZY" customClass="HouseDetailAddressCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="116" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="285" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KRN-bB-aZY" id="K7j-yJ-GZE">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1063,7 +1063,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableHeaderCell" rowHeight="44" id="Dbo-7a-fKS" customClass="HouseDetailExpandableHeaderCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="160" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="329" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dbo-7a-fKS" id="V9N-G1-Fvz">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1105,7 +1105,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentCell" rowHeight="44" id="94S-Ko-yrz" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="204" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="373" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="94S-Ko-yrz" id="hMY-Ey-K1Q">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1155,8 +1155,10 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="650" height="800"/>
                     <connections>
+                        <outlet property="contactBarView" destination="05l-B1-oJ7" id="ceY-82-SRg"/>
                         <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
                         <segue destination="H6B-iW-L9e" kind="show" identifier="displayHouseOnMap" id="zee-Sd-WXc"/>
+                        <segue destination="xp8-9U-QeU" kind="show" identifier="displayHouseSource" id="MfC-so-Q4m"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RrS-e7-IQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1179,41 +1181,43 @@
                                 <rect key="frame" x="0.0" y="64" width="650" height="692"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HC6-xJ-Zi9">
-                                <rect key="frame" x="15" y="72" width="30" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="10r-TQ-Cif"/>
-                                    <constraint firstAttribute="width" constant="30" id="ZZG-tW-ens"/>
-                                </constraints>
-                                <state key="normal" image="back arrow_n"/>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="bottom" secondItem="Gwr-WJ-4Sj" secondAttribute="top" id="BHm-k8-2wu"/>
-                            <constraint firstItem="HC6-xJ-Zi9" firstAttribute="leading" secondItem="hDY-U9-dVB" secondAttribute="leading" constant="15" id="He5-4m-Xpn"/>
-                            <constraint firstItem="Gwr-WJ-4Sj" firstAttribute="top" secondItem="HC6-xJ-Zi9" secondAttribute="bottom" constant="570" id="NcF-uH-CYc"/>
-                            <constraint firstItem="HC6-xJ-Zi9" firstAttribute="top" secondItem="hDY-U9-dVB" secondAttribute="top" constant="15" id="ORZ-bw-qZK"/>
-                            <constraint firstItem="HC6-xJ-Zi9" firstAttribute="top" secondItem="J6q-x0-p0k" secondAttribute="bottom" constant="8" symbolic="YES" id="Sdh-9O-o25"/>
                             <constraint firstAttribute="trailing" secondItem="7jF-KR-mPn" secondAttribute="trailing" id="UDJ-1g-l3k"/>
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="leading" secondItem="hDY-U9-dVB" secondAttribute="leading" id="ZhD-5Y-s2s"/>
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="top" secondItem="J6q-x0-p0k" secondAttribute="bottom" id="fRI-W3-9nc"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="ORZ-bw-qZK"/>
-                                <exclude reference="NcF-uH-CYc"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="closeMapButton" destination="HC6-xJ-Zi9" id="5Ed-yh-NxR"/>
                         <outlet property="mapView" destination="7jF-KR-mPn" id="HHV-FG-RYe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mKA-j6-Knx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2476" y="1473"/>
+        </scene>
+        <!--Browser View Controller-->
+        <scene sceneID="KPq-L4-VJt">
+            <objects>
+                <viewController id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
+                        <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7VH-bK-Guc">
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="800"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="7VH-bK-Guc" id="Rs7-Hl-Tlk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SX9-Iv-RCt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2476" y="2544"/>
         </scene>
         <!--過濾條件-->
         <scene sceneID="ZVW-p3-RGh">
@@ -1459,7 +1463,6 @@
     </scenes>
     <resources>
         <image name="arrow_down02_n" width="30" height="30"/>
-        <image name="back arrow_n" width="60" height="60"/>
         <image name="bell-outline" width="48" height="48"/>
         <image name="bookmark-outline-plus" width="36" height="36"/>
         <image name="filter_n@1x" width="60" height="60"/>

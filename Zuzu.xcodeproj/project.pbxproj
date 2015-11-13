@@ -41,6 +41,8 @@
 		2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */; };
 		2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */; };
 		2F94105F1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */; };
+		2F9791BC1BF576C40056B721 /* filedValueMappings.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F9791BB1BF576C40056B721 /* filedValueMappings.json */; };
+		2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9791BF1BF59C4D0056B721 /* BrowserViewController.swift */; };
 		2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */; };
 		2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */; };
 		2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */; };
@@ -140,6 +142,8 @@
 		2F9410591BF482B600BA12B5 /* Zuzu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Zuzu-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingSpinnerOverlay.swift; sourceTree = "<group>"; };
+		2F9791BB1BF576C40056B721 /* filedValueMappings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = filedValueMappings.json; sourceTree = "<group>"; };
+		2F9791BF1BF59C4D0056B721 /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailAddressCell.swift; sourceTree = "<group>"; };
 		2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableHeaderCell.swift; sourceTree = "<group>"; };
 		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
@@ -226,6 +230,7 @@
 				2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */,
 				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
 				2FDA072D1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib */,
+				2F9791BF1BF59C4D0056B721 /* BrowserViewController.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -416,6 +421,7 @@
 				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
 				2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */,
 				2FDCA0D41BE0721800498FC0 /* resultFilters.json */,
+				2F9791BB1BF576C40056B721 /* filedValueMappings.json */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -585,6 +591,7 @@
 				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
+				2F9791BC1BF576C40056B721 /* filedValueMappings.json in Resources */,
 				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,
 				2F482DFD1BAFE09100C68670 /* Main.storyboard in Resources */,
 			);
@@ -675,6 +682,7 @@
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
+				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
 				2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,

@@ -197,7 +197,6 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     private static let instance = HouseDataRequester()
     
     let urlComp = NSURLComponents()
-    var numOfRecord: Int?
     
     public static func getInstance() -> HouseDataRequester{
         return instance
@@ -227,7 +226,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     }
     
     func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int,
-        handler: (totalNum: Int?, result: [HouseItem]?, error: NSError?) -> Void) {
+        handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
             
             let keyword: String? = criteria.keyword
             let area: [City]? = criteria.region
@@ -376,7 +375,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     }
     
     private func performSearch(urlComp: NSURLComponents,
-        handler: (totalNum: Int?, result: [HouseItem]?, error: NSError?) -> Void){
+        handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void){
             
             var houseList = [HouseItem]()
             
@@ -409,7 +408,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                         
                         if let response = jsonResult["response"].dictionary {
                             
-                            self.numOfRecord = response["numFound"]?.intValue
+                            let numOfRecord = response["numFound"]?.intValue ?? 0
                             
                             if let itemList = response["docs"]?.arrayValue {
                                 
@@ -440,7 +439,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     houseList.append(house)
                                 }
                                 
-                                handler(totalNum: self.numOfRecord, result: houseList, error: nil)
+                                handler(totalNum: numOfRecord, result: houseList, error: nil)
                             } else {
                                 assert(false, "Solr response error:\n \(jsonResult)")
                                 handler(totalNum: 0, result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
@@ -485,8 +484,6 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     let jsonResult = JSON(data: data!)
                     
                     if let response = jsonResult["response"].dictionary {
-                        
-                        self.numOfRecord = response["numFound"]?.intValue
                         
                         if let itemList = response["docs"]?.arrayObject {
                             handler(result: itemList.first, error: nil)
