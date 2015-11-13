@@ -290,6 +290,10 @@ class HouseDetailViewController: UIViewController {
                     let numberAction = UIAlertAction(title: String(phoneNumber), style: .Default, handler: {
                         (alert: UIAlertAction!) -> Void in
                         
+                        if let phoneStr = alert.title, let url = NSURL(string: "tel://\(phoneStr)") {
+                            UIApplication.sharedApplication().openURL(url)
+                        }
+                        
                     })
                     
                     optionMenu.addAction(numberAction)
@@ -341,6 +345,12 @@ class HouseDetailViewController: UIViewController {
         
         ///Hide tab bar
         self.tabBarController!.tabBar.hidden = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        LoadingSpinnerOverlay.shared.hideOverlayView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -469,7 +479,14 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         if var cellInfo = tableRows[indexPath.row] {
             
             if (cellInfo.cellIdentifier == .AddressCell) {
-                self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+                
+                LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+                
+                ///It takes time to load the map, leave some time to display loading spinner makes the flow look smoother
+                self.runOnMainThreadAfter(0.1){
+                    self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+                }
+                
             }
             
             if (cellInfo.cellIdentifier == .HouseDetailTitleCell) {
@@ -477,7 +494,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 let browser = MWPhotoBrowser(delegate: self)
                 
                 browser.displayActionButton = true // Show action button to allow sharing, copying, etc (defaults to YES)
-                browser.displayNavArrows = false // Whether to display left and right nav arrows on toolbar (defaults to NO)
+                browser.displayNavArrows = true // Whether to display left and right nav arrows on toolbar (defaults to NO)
                 browser.displaySelectionButtons = false // Whether selection buttons are shown on each image (defaults to NO)
                 browser.zoomPhotosToFill = true // Images that almost fill the screen will be initially zoomed to fill (defaults to YES)
                 browser.alwaysShowControls = false // Allows to control whether the bars and controls are always visible or whether they fade away to show the photo full (defaults to NO)
@@ -485,7 +502,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 browser.startOnGrid = false // Whether to start on the grid of thumbnails instead of the first photo (defaults to NO)
                 browser.autoPlayOnAppear = false; // Auto-play first video
                 
-                browser.setCurrentPhotoIndex(1)
+                browser.setCurrentPhotoIndex(0)
                 
                 self.navigationController?.pushViewController(browser, animated: true)
             }
