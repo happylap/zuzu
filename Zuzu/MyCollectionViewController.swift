@@ -8,32 +8,94 @@
 
 import UIKit
 import SwiftyJSON
+import CoreData
 
-class MyCollectionViewController: UIViewController {
+class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate {
+    
+    let cellReuseIdentifier = "houseItemCell"
     
     var houseList: [House] = []
     
+    var fetchedResultsController: NSFetchedResultsController!
+    
+    var sortingStatus = [String: Bool]()  // SortingField Name, Ascending
     
     private func loadData() {
         NSLog("%@ loadData", self)
-        if let result = HouseDao.sharedInstance.getHouseList() {
-            NSLog("result count: \(result.count)")
-            self.houseList = result
-            self.tableView.reloadData()
+        
+        let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
+        
+        if !sortingStatus.isEmpty {
+            for (sortingField, _ascending) in sortingStatus {
+                print("\(sortingField): \(_ascending)")
+                fetchRequest.sortDescriptors = [NSSortDescriptor(key: sortingField, ascending: _ascending)]
+            }
+        }
+        else {
+            let defaultSorting = NSSortDescriptor(key: "title", ascending: true)
+            fetchRequest.sortDescriptors = [defaultSorting]
         }
         
-        if let result2 = HouseDao.sharedInstance.getHouseIdList() {
-            NSLog("result2 count: \(result2.count)")
-            print(result2)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        fetchedResultsController.delegate = self
+        
+        // execute fetch request
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
         }
+        
+        self.tableView.reloadData()
     }
     
     private func loadHouseListPage(pageNo: Int) {
         
     }
 
+    private func sortByField(button: UIButton, sortingOrder: String) {
+        
+        ///Switch from other sorting fields
+        if(!button.selected) {
+            ///Disselect all & Clear all sorting icon for Normal state
+            sortByPriceButton.selected = false
+            sortByPriceButton.setImage(nil,
+                forState: UIControlState.Normal)
+            
+            sortBySizeButton.selected = false
+            sortBySizeButton.setImage(nil,
+                forState: UIControlState.Normal)
+            
+            sortByPostTimeButton.selected = false
+            sortByPostTimeButton.setImage(nil,
+                forState: UIControlState.Normal)
+            
+            ///Select the one specified by hte user
+            button.selected = true
+        }
+        
+        
+        ///Set image for selected state
+        if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
+            button.setImage(UIImage(named: "sort-ascending"),
+                forState: UIControlState.Selected)
+            button.setImage(UIImage(named: "sort-ascending"),
+                forState: UIControlState.Normal)
+            
+        } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
+            button.setImage(UIImage(named: "sort-descending"),
+                forState: UIControlState.Selected)
+            button.setImage(UIImage(named: "sort-descending"),
+                forState: UIControlState.Normal)
+            
+        } else {
+            assert(false, "Unknown Sorting order")
+        }
+    }
     
-    let cellIdentifier = "houseItemCell"
+    
     
     @IBOutlet weak var sortByPriceButton: UIButton!
     @IBOutlet weak var sortBySizeButton: UIButton!
@@ -54,11 +116,29 @@ class MyCollectionViewController: UIViewController {
         case sortBySizeButton:
             sortingField = HouseItemDocument.size
         case sortByPostTimeButton:
-            sortingField = HouseItemDocument.postTime
+            sortingField = "postTime"
         default: break
         }
         
+        if let fieldName = sortingField {
+            if self.sortingStatus.keys.contains(fieldName) {
+                self.sortingStatus[fieldName] = (self.sortingStatus[fieldName] == true ? false : true)
+            }
+            else {
+                self.sortingStatus = [fieldName: true]
+            }
+            
+            sortingOrder = (self.sortingStatus[fieldName] == true ? HouseItemDocument.Sorting.sortAsc : HouseItemDocument.Sorting.sortDesc)
+        }
+        
+        
         NSLog("%@ onSortingButtonTouched: \(sortingField)", self)
+        
+        self.loadData()
+        
+        if let sortingOrder = sortingOrder {
+            self.sortByField(sender, sortingOrder: sortingOrder)
+        }
     }
     
     // MARK: - View Life Cycle
@@ -70,9 +150,7 @@ class MyCollectionViewController: UIViewController {
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
     
         // Load the first page of data
         self.loadData()
@@ -109,38 +187,35 @@ class MyCollectionViewController: UIViewController {
     }
     
     
-    
-}
-
-extension MyCollectionViewController: UITableViewDataSource, UITableViewDelegate {
-    
     // MARK: - Table View Data Source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return Const.SECTION_NUM
+        //return fetchedResultsController.sections!.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         NSLog("%@ tableView Count: \(self.houseList.count)", self)
-        return self.houseList.count
+        //return self.houseList.count
+        let sectionInfo = fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
+        return sectionInfo.numberOfObjects
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(self.cellReuseIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        
-        cell.houseItemForCollection = self.houseList[indexPath.row]
-//        cell.houseItem = self.houseList[indexPath.row]
+        cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath)
         
         return cell
     }
     
-
+    
     
     //    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     //
@@ -172,25 +247,39 @@ extension MyCollectionViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            let houseItem: House = self.houseList[indexPath.row]
-            HouseDao.sharedInstance.deleteByObjectId(houseItem.objectID)
-            houseList.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+                HouseDao.sharedInstance.deleteByObjectId(houseItem.objectID)
+            }
         }
     }
-}
-
-
-extension MyCollectionViewController: UIScrollViewDelegate {
-
-    // MARK: - Scroll View Delegate
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         
+        NSLog("%@ didChangeObject: \(type.rawValue)", self)
+        
+        switch type {
+        case .Insert:
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Delete:
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Update:
+            let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! SearchResultTableViewCell
+            cell.parentTableView = self.tableView
+            cell.indexPath = indexPath
+            cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!)
+        case .Move:
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        }
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.endUpdates()
     }
     
 }
+
