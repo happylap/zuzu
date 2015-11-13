@@ -8,6 +8,7 @@
 import UIKit
 import SwiftyJSON
 import MessageUI
+import MWPhotoBrowser
 
 class HouseDetailViewController: UIViewController {
     
@@ -18,6 +19,8 @@ class HouseDetailViewController: UIViewController {
     
     @IBOutlet weak var contactBarView: HouseDetailContactBarView!
     @IBOutlet weak var tableView: UITableView!
+    
+    var photos = [MWPhoto]()
     
     var houseItem:HouseItem?
     
@@ -333,6 +336,13 @@ class HouseDetailViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        ///Hide tab bar
+        self.tabBarController!.tabBar.hidden = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -461,8 +471,56 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             if (cellInfo.cellIdentifier == .AddressCell) {
                 self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
             }
+            
+            if (cellInfo.cellIdentifier == .HouseDetailTitleCell) {
+                
+                let browser = MWPhotoBrowser(delegate: self)
+                
+                browser.displayActionButton = true // Show action button to allow sharing, copying, etc (defaults to YES)
+                browser.displayNavArrows = false // Whether to display left and right nav arrows on toolbar (defaults to NO)
+                browser.displaySelectionButtons = false // Whether selection buttons are shown on each image (defaults to NO)
+                browser.zoomPhotosToFill = true // Images that almost fill the screen will be initially zoomed to fill (defaults to YES)
+                browser.alwaysShowControls = false // Allows to control whether the bars and controls are always visible or whether they fade away to show the photo full (defaults to NO)
+                browser.enableGrid = true; // Whether to allow the viewing of all the photo thumbnails on a grid (defaults to YES)
+                browser.startOnGrid = false // Whether to start on the grid of thumbnails instead of the first photo (defaults to NO)
+                browser.autoPlayOnAppear = false; // Auto-play first video
+                
+                browser.setCurrentPhotoIndex(1)
+                
+                self.navigationController?.pushViewController(browser, animated: true)
+            }
         }
     }
     
     
+}
+
+
+extension HouseDetailViewController: MWPhotoBrowserDelegate {
+    func numberOfPhotosInPhotoBrowser(photoBrowser: MWPhotoBrowser!) -> UInt {
+        
+        if let houseItem = self.houseItem, let imgList = houseItem.imgList {
+            return UInt(imgList.count)
+        } else {
+            return 0
+        }
+    }
+    
+    
+    func photoBrowser(photoBrowser: MWPhotoBrowser!, photoAtIndex index: UInt) -> MWPhotoProtocol! {
+        
+        let photoIndex: Int = Int(index)
+        
+        if let houseItem = self.houseItem, let imgList = houseItem.imgList {
+            
+            if (photoIndex < imgList.endIndex) {
+                return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
+            } else {
+                return nil
+            }
+            
+        } else {
+            return nil
+        }
+    }
 }

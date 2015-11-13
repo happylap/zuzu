@@ -922,11 +922,11 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="650" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="houseDetailTitleCell" rowHeight="213" id="NNe-KS-vPG" customClass="HouseDetailTitleViewCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="650" height="213"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NNe-KS-vPG" id="Ck8-WE-6z5">
-                                            <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="212.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="houseDetailSampleImage" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
@@ -980,7 +980,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightDetailCell" rowHeight="44" id="YtO-1w-zYw" customClass="HouseDetailBasicInfoCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="241" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YtO-1w-zYw" id="5qm-sc-lWa">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1026,7 +1026,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addressCell" rowHeight="44" id="KRN-bB-aZY" customClass="HouseDetailAddressCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="116" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="285" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KRN-bB-aZY" id="K7j-yJ-GZE">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1063,7 +1063,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableHeaderCell" rowHeight="44" id="Dbo-7a-fKS" customClass="HouseDetailExpandableHeaderCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="160" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="329" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dbo-7a-fKS" id="V9N-G1-Fvz">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
@@ -1105,7 +1105,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentCell" rowHeight="44" id="94S-Ko-yrz" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="204" width="650" height="44"/>
+                                        <rect key="frame" x="0.0" y="373" width="650" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="94S-Ko-yrz" id="hMY-Ey-K1Q">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="43.5"/>
