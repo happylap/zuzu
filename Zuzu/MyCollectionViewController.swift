@@ -13,8 +13,6 @@ class MyCollectionViewController: UIViewController {
     
     var houseList: [House] = []
     
-    var sortingField: String?
-    var sortingOrder: String?
     
     private func loadData() {
         NSLog("%@ loadData", self)
@@ -41,6 +39,27 @@ class MyCollectionViewController: UIViewController {
     @IBOutlet weak var sortBySizeButton: UIButton!
     @IBOutlet weak var sortByPostTimeButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: - Control Action Handlers
+    
+    @IBAction func onSortingButtonTouched(sender: UIButton) {
+        NSLog("%@ onSortingButtonTouched", self)
+        
+        var sortingField: String?
+        var sortingOrder: String?
+        
+        switch sender {
+        case sortByPriceButton:
+            sortingField = HouseItemDocument.price
+        case sortBySizeButton:
+            sortingField = HouseItemDocument.size
+        case sortByPostTimeButton:
+            sortingField = HouseItemDocument.postTime
+        default: break
+        }
+        
+        NSLog("%@ onSortingButtonTouched: \(sortingField)", self)
+    }
     
     // MARK: - View Life Cycle
     
@@ -88,6 +107,9 @@ class MyCollectionViewController: UIViewController {
             }
         }
     }
+    
+    
+    
 }
 
 extension MyCollectionViewController: UITableViewDataSource, UITableViewDelegate {

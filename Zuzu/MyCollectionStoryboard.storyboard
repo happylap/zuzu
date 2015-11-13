@@ -28,6 +28,9 @@
                                         <state key="normal" title="租金">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="gNq-Yz-Ljp"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ma9-FJ-x4v" userLabel="Sort By Size Button">
                                         <rect key="frame" x="292" y="0.0" width="293" height="49"/>
@@ -36,6 +39,9 @@
                                         <state key="normal" title="坪數">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="9HF-0V-M9n"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK7-Cq-xWf" userLabel="Sort By Post Time Button">
                                         <rect key="frame" x="585" y="0.0" width="293" height="49"/>
@@ -44,6 +50,9 @@
                                         <state key="normal" title="刊登時間">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="1Zt-bJ-3KA"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <animations/>
@@ -87,6 +96,9 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="1024" height="800"/>
                     <connections>
+                        <outlet property="sortByPostTimeButton" destination="pK7-Cq-xWf" id="FO9-de-4Te"/>
+                        <outlet property="sortByPriceButton" destination="SKl-Yc-iBw" id="5Uf-8q-Xdg"/>
+                        <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
                         <outlet property="tableView" destination="Bbm-3e-fwq" id="qjJ-rk-Dpf"/>
                     </connections>
                 </viewController>
