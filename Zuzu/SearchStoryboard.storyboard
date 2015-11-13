@@ -1157,6 +1157,7 @@
                     <connections>
                         <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
                         <segue destination="H6B-iW-L9e" kind="show" identifier="displayHouseOnMap" id="zee-Sd-WXc"/>
+                        <segue destination="xp8-9U-QeU" kind="show" identifier="displayHouseSource" id="MfC-so-Q4m"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RrS-e7-IQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1179,41 +1180,43 @@
                                 <rect key="frame" x="0.0" y="64" width="650" height="692"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HC6-xJ-Zi9">
-                                <rect key="frame" x="15" y="72" width="30" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="10r-TQ-Cif"/>
-                                    <constraint firstAttribute="width" constant="30" id="ZZG-tW-ens"/>
-                                </constraints>
-                                <state key="normal" image="back arrow_n"/>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="bottom" secondItem="Gwr-WJ-4Sj" secondAttribute="top" id="BHm-k8-2wu"/>
-                            <constraint firstItem="HC6-xJ-Zi9" firstAttribute="leading" secondItem="hDY-U9-dVB" secondAttribute="leading" constant="15" id="He5-4m-Xpn"/>
-                            <constraint firstItem="Gwr-WJ-4Sj" firstAttribute="top" secondItem="HC6-xJ-Zi9" secondAttribute="bottom" constant="570" id="NcF-uH-CYc"/>
-                            <constraint firstItem="HC6-xJ-Zi9" firstAttribute="top" secondItem="hDY-U9-dVB" secondAttribute="top" constant="15" id="ORZ-bw-qZK"/>
-                            <constraint firstItem="HC6-xJ-Zi9" firstAttribute="top" secondItem="J6q-x0-p0k" secondAttribute="bottom" constant="8" symbolic="YES" id="Sdh-9O-o25"/>
                             <constraint firstAttribute="trailing" secondItem="7jF-KR-mPn" secondAttribute="trailing" id="UDJ-1g-l3k"/>
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="leading" secondItem="hDY-U9-dVB" secondAttribute="leading" id="ZhD-5Y-s2s"/>
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="top" secondItem="J6q-x0-p0k" secondAttribute="bottom" id="fRI-W3-9nc"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="ORZ-bw-qZK"/>
-                                <exclude reference="NcF-uH-CYc"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="closeMapButton" destination="HC6-xJ-Zi9" id="5Ed-yh-NxR"/>
                         <outlet property="mapView" destination="7jF-KR-mPn" id="HHV-FG-RYe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mKA-j6-Knx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2476" y="1473"/>
+        </scene>
+        <!--Browser View Controller-->
+        <scene sceneID="KPq-L4-VJt">
+            <objects>
+                <viewController id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
+                        <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7VH-bK-Guc">
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="800"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="7VH-bK-Guc" id="Rs7-Hl-Tlk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SX9-Iv-RCt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2458" y="2256"/>
         </scene>
         <!--過濾條件-->
         <scene sceneID="ZVW-p3-RGh">
@@ -1459,7 +1462,6 @@
     </scenes>
     <resources>
         <image name="arrow_down02_n" width="30" height="30"/>
-        <image name="back arrow_n" width="60" height="60"/>
         <image name="bell-outline" width="48" height="48"/>
         <image name="bookmark-outline-plus" width="36" height="36"/>
         <image name="filter_n@1x" width="60" height="60"/>

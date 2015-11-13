@@ -7,6 +7,6 @@
 */
 "unable_to_get_data.alert.title" = "Unable to get remote data";
 
-"unable_to_get_data.alert.msg" = "We are unable to get data for you! You might be in an area with unstable Internet connections, or the wireless connectivity on your phone has been switched off. If you are sure the wireless connectivity on your phone is all right, then please try again later";
+"unable_to_get_data.alert.msg" = "We are unable to get data for you! You might be in an area with unstable Internet connections, or the wireless connectivity on your phone has been switched off.";
 
-"unable_to_get_data.alert.button.ok" = "Got it";
+"unable_to_get_data.alert.button.ok" = "OK";

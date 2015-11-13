@@ -7,6 +7,6 @@
 */
 "unable_to_get_data.alert.title" = "無法查詢網路資料";
 
-"unable_to_get_data.alert.msg" = "目前無法為您讀取網路資料！可能是您所處區域的網路連線不穩定，或是手機無線網路被關閉了。假如您確認手機無線網路運作正常，請您稍候再做嘗試";
+"unable_to_get_data.alert.msg" = "目前無法為您讀取網路資料！可能是您所處區域的網路連線不穩定，或是手機無線網路被關閉了。";
 
 "unable_to_get_data.alert.button.ok" = "知道了";

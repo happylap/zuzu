@@ -177,6 +177,6 @@
     </objects>
     <resources>
         <image name="Heart_n" width="60" height="60"/>
-        <image name="house_img" width="188" height="136"/>
+        <image name="house_img" width="1440" height="700"/>
     </resources>
 </document>

@@ -12,6 +12,7 @@ class HouseDetailViewController: UIViewController {
     
     struct ViewTransConst {
         static let displayHouseOnMap:String = "displayHouseOnMap"
+        static let displayHouseSource:String = "displayHouseSource"
     }
     
     var houseItem:HouseItem?
@@ -75,12 +76,49 @@ class HouseDetailViewController: UIViewController {
         tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
+    private func configureNavigationBarItems() {
+        
+        ///Prepare custom UIButton for UIBarButtonItem
+        let gotoSourceButton: UIButton = UIButton(type: UIButtonType.Custom)
+        gotoSourceButton.setImage(UIImage(named: "web_n"), forState: UIControlState.Normal)
+        gotoSourceButton.addTarget(self, action: "gotoSourceButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        gotoSourceButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        
+        let shareButton: UIButton = UIButton(type: UIButtonType.Custom)
+        shareButton.setImage(UIImage(named: "share_n"), forState: UIControlState.Normal)
+        shareButton.addTarget(self, action: "shareButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        shareButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        
+        let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
+        collectButton.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+        collectButton.addTarget(self, action: "collectButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        
+        /// From right to left
+        self.navigationItem.setRightBarButtonItems(
+            [
+                UIBarButtonItem(customView: collectButton),
+                UIBarButtonItem(customView: shareButton),
+                UIBarButtonItem(customView: gotoSourceButton)
+            ],
+            animated: false)
+    }
+    
+    func gotoSourceButtonTouched(sender: UIButton) {
+        
+        self.performSegueWithIdentifier("displayHouseSource", sender: self)
+        
+    }
+    
     //    func onMapButtonTouched(sender: UITapGestureRecognizer) {
     //        self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
     //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        ///Configure navigation bar items
+        configureNavigationBarItems()
         
         ///Get remote data
         if let houseItem = self.houseItem {
@@ -172,7 +210,7 @@ class HouseDetailViewController: UIViewController {
                     if let houseItemDetail = self.houseItemDetail {
                         let coordinateStr = houseItemDetail.valueForKey("coordinate") as? String
                         
-                        let coordinateArray = coordinateStr?.componentsSeparatedByString(", ").map({ (element) -> CLLocationDegrees in
+                        let coordinateArray = coordinateStr?.componentsSeparatedByString(",").map({ (element) -> CLLocationDegrees in
                             let coordinateElement = element.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                             
                             if let elementNumber = Double(coordinateElement) {
@@ -198,6 +236,12 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
                 
+            case ViewTransConst.displayHouseSource:
+                if let bvc = segue.destinationViewController as? BrowserViewController {
+                    if let houseItemDetail = self.houseItemDetail {
+                        bvc.sourceLink = houseItemDetail.valueForKey("mobile_link") as? String
+                    }
+                }
             default: break
             }
         }
