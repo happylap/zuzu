@@ -95,6 +95,13 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
     }
     
+    func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
+        NSLog("%@ onShowNoteEditorTouched", self)
+        if let imgView = sender.view {
+        
+        }
+    }
+    
     
     
     @IBOutlet weak var sortByPriceButton: UIButton!
@@ -210,7 +217,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath)
+        cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath) as! House
+        
+        /// Enable add to collection button
+        cell.addToCollectionButton.userInteractionEnabled = true
+        cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onShowNoteEditorTouched:")))
         
         return cell
     }
@@ -270,7 +281,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! SearchResultTableViewCell
             cell.parentTableView = self.tableView
             cell.indexPath = indexPath
-            cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!)
+            cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? House
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
             self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)

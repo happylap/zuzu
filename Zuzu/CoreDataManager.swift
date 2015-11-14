@@ -278,3 +278,12 @@ class CoreDataManager: NSObject {
     
     
 }
+
+
+extension CoreDataManager {
+    
+    func get(identifier: NSManagedObjectID) -> AnyObject? {
+        return self.managedObjectContext.objectRegisteredForID(identifier)
+    }
+    
+}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
@@ -13,17 +13,19 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MsK-AZ-Dfo" id="QwY-Xe-T1B">
-                <rect key="frame" x="0.0" y="0.0" width="1024" height="271.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="1024" height="271"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="584" placeholderIntrinsicHeight="390" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="Hbn-Ap-XJT">
-                        <rect key="frame" x="7" y="0.0" width="1010" height="489.5"/>
+                        <rect key="frame" x="7" y="0.0" width="1010" height="490"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="Hbn-Ap-XJT" secondAttribute="height" multiplier="1440:698" id="lkX-DT-NQN"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFe-03-eKb">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="SearchResultTableViewCell_houseTitle" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFe-03-eKb">
                         <rect key="frame" x="15" y="13" width="964" height="24"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="1Km-DR-qGJ"/>
                             <constraint firstAttribute="width" constant="42" id="EL6-lT-RnV"/>
@@ -43,8 +45,9 @@
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
-                        <rect key="frame" x="961" y="238" width="48" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" misplaced="YES" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
+                        <rect key="frame" x="961" y="238" width="48" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Edm-z3-ZwW"/>
                             <constraint firstAttribute="width" constant="48" id="FLK-bZ-amz"/>
@@ -61,8 +64,9 @@
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
-                        <rect key="frame" x="15" y="213.5" width="1002" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
+                        <rect key="frame" x="15" y="214" width="1002" height="20"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Hkh-YS-0jf"/>
                         </constraints>
@@ -78,8 +82,9 @@
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
-                        <rect key="frame" x="15" y="241" width="142" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" misplaced="YES" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
+                        <rect key="frame" x="15" y="241" width="142" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="um8-id-ng9"/>
                         </constraints>
@@ -95,8 +100,9 @@
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
-                        <rect key="frame" x="165" y="241" width="38" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
+                        <rect key="frame" x="165" y="241" width="38" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="42" id="Q5z-nT-JY8"/>
                         </constraints>
@@ -112,8 +118,9 @@
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
-                        <rect key="frame" x="905" y="238" width="49" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
+                        <rect key="frame" x="905" y="238" width="49" height="21"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="64" id="hjg-Yj-Y0i"/>
                         </constraints>
@@ -131,47 +138,82 @@
                     </label>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
                         <rect key="frame" x="987" y="5" width="30" height="30"/>
+                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="bBi-LL-rPR"/>
                             <constraint firstAttribute="width" constant="30" id="wDn-zW-w0n"/>
                         </constraints>
                     </imageView>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="hPJ-o1-WHC" userLabel="Prefixed Button">
+                        <rect key="frame" x="15" y="13" width="30" height="30"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="07F-hH-ZRb"/>
+                            <constraint firstAttribute="height" constant="30" id="VQh-bW-E02"/>
+                        </constraints>
+                    </imageView>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Btt-ya-h7f" userLabel="Contacted View">
+                        <rect key="frame" x="7" y="40" width="80" height="20"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="已聯繫" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oyu-la-r6T">
+                                <rect key="frame" x="20" y="0.0" width="51" height="21"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" red="1" green="0.62625147469999998" blue="0.94683356910000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="gDU-qS-oyc"/>
+                            <constraint firstAttribute="height" constant="20" id="gyR-eA-Shd"/>
+                        </constraints>
+                    </view>
                 </subviews>
+                <animations/>
                 <constraints>
                     <constraint firstItem="Sa0-Cs-laH" firstAttribute="top" secondItem="11f-2y-aXb" secondAttribute="bottom" constant="7" id="3gf-8o-Nhq"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" id="3nc-Tv-eYE"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zzB-16-z6B" secondAttribute="trailing" constant="8" id="4fQ-0W-376"/>
                     <constraint firstItem="11f-2y-aXb" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="leading" id="5Od-sx-1I1"/>
                     <constraint firstAttribute="bottomMargin" secondItem="zzB-16-z6B" secondAttribute="bottom" constant="8" id="920-7o-Snd"/>
+                    <constraint firstItem="KFe-03-eKb" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="95t-2C-vcI"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GD9-Jc-zPa" secondAttribute="trailing" id="Cc8-sH-bbT"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="trailing" constant="8" symbolic="YES" id="EY4-hO-fbE"/>
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="top" id="FUD-wu-VhK"/>
-                    <constraint firstItem="KFe-03-eKb" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="FZi-4r-Kc0"/>
                     <constraint firstAttribute="trailingMargin" secondItem="ttQ-yW-U9H" secondAttribute="trailing" id="GLw-Oj-pH8"/>
                     <constraint firstItem="Sa0-Cs-laH" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="NX7-9T-wfc"/>
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="T5V-z7-wUS"/>
                     <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="7" id="fEz-oG-VR4"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sa0-Cs-laH" secondAttribute="bottom" constant="5" id="g4m-xp-pW3"/>
+                    <constraint firstItem="hPJ-o1-WHC" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="j6G-Uq-3bU"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="leading" secondItem="KFe-03-eKb" secondAttribute="trailing" constant="8" id="kEy-0S-Upg"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Hbn-Ap-XJT" secondAttribute="bottom" priority="999" id="lfV-Xz-rnx"/>
+                    <constraint firstItem="Btt-ya-h7f" firstAttribute="leading" secondItem="Hbn-Ap-XJT" secondAttribute="leading" id="mW3-Vm-y8H"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="baseline" secondItem="zzB-16-z6B" secondAttribute="baseline" id="omn-8y-ofX"/>
                     <constraint firstAttribute="trailingMargin" secondItem="11f-2y-aXb" secondAttribute="trailing" id="ozt-zU-aVW"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="baseline" secondItem="Sa0-Cs-laH" secondAttribute="baseline" id="qDp-tf-RuV"/>
+                    <constraint firstItem="Btt-ya-h7f" firstAttribute="top" secondItem="KFe-03-eKb" secondAttribute="bottom" constant="3" id="qEr-A9-Ydh"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Hbn-Ap-XJT" secondAttribute="trailing" id="seC-2l-Ms1"/>
+                    <constraint firstItem="hPJ-o1-WHC" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="svp-fv-6uQ"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="t5x-sW-gOn"/>
                 </constraints>
                 <edgeInsets key="layoutMargins" top="5" left="7" bottom="5" right="7"/>
             </tableViewCellContentView>
+            <animations/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
             <connections>
                 <outlet property="addToCollectionButton" destination="ttQ-yW-U9H" id="xCJ-km-OGR"/>
+                <outlet property="contactedView" destination="Btt-ya-h7f" id="qNw-sY-s1N"/>
                 <outlet property="houseAddr" destination="11f-2y-aXb" id="ctA-hZ-UQH"/>
                 <outlet property="houseImg" destination="Hbn-Ap-XJT" id="BwR-sB-AG3"/>
                 <outlet property="housePrice" destination="Kgs-Ox-hob" id="DXn-o0-6KX"/>
                 <outlet property="houseSize" destination="GD9-Jc-zPa" id="7Qw-L3-R4x"/>
                 <outlet property="houseTitle" destination="KFe-03-eKb" id="IoH-ai-Z6l"/>
                 <outlet property="houseTypeAndUsage" destination="Sa0-Cs-laH" id="MmL-ba-y1k"/>
+                <outlet property="prefixedButton" destination="hPJ-o1-WHC" id="27q-w4-Bud"/>
             </connections>
         </tableViewCell>
     </objects>

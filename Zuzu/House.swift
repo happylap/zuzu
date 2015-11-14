@@ -72,4 +72,6 @@ public class House: NSManagedObject {
     @NSManaged var postTime: NSDate?
     @NSManaged var coordinate: String?
     
+    /* */
+    @NSManaged var contacted: Bool
 }

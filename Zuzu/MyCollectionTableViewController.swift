@@ -151,7 +151,7 @@ class MyCollectionTableViewController: UITableViewController {
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        cell.houseItemForCollection = self.data[indexPath.row]
+        cell.houseItemForCollection = self.data[indexPath.row] as? House
         
         return cell
     }

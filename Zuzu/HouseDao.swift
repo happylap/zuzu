@@ -126,6 +126,19 @@ class HouseDao: NSObject {
         return result
     }
     
+    // MARK: Update
+    
+    func updateByObjectId(objectId: NSManagedObjectID, dataToUpdate: [String: AnyObject]) {
+        if let house = CoreDataManager.shared.get(objectId) {
+            for (key, value) in dataToUpdate {
+                if let _ = house.valueForKey(key) {
+                    house.setValue(value, forKey: key)
+                }
+            }
+            CoreDataManager.shared.save()
+        }
+    }
+    
     // MARK: Delete
     
     func deleteByObjectId(objectId: NSManagedObjectID) {
@@ -268,6 +281,8 @@ class HouseDao: NSObject {
         house.img = img
         house.postTime = postTime
         house.coordinate = coordinate
+        
+        house.contacted = false
         
         return house
     }

@@ -19,6 +19,8 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var houseAddr: UILabel!
     @IBOutlet weak var housePrice: UILabel!
     @IBOutlet weak var addToCollectionButton: UIImageView!
+    @IBOutlet weak var prefixedButton: UIImageView!
+    @IBOutlet weak var contactedView: UIView!
     
     let placeholderImg = UIImage(named: "house_img")
     
@@ -33,7 +35,7 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     
-    var houseItemForCollection: AnyObject? {
+    var houseItemForCollection: House? {
         didSet {
             updateUIForCollection()
         }
@@ -147,6 +149,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseSize.text = nil
         housePrice.text = nil
         addToCollectionButton.image = UIImage(named: "Heart_n")
+        prefixedButton.image = UIImage(named: "Heart_n")
         
         // Cancel image loading operation
         houseImg.af_cancelImageRequest()
@@ -196,8 +199,6 @@ class SearchResultTableViewCell: UITableViewCell {
                     }
                 }
             }
-            
-            
         }
     }
     
@@ -206,16 +207,39 @@ class SearchResultTableViewCell: UITableViewCell {
     func updateUIForCollection() {
         
         // load new information (if any)
-        if let item = self.houseItemForCollection {
+        if let house = self.houseItemForCollection {
             
-            self.houseTitle.text = item.valueForKey("title") as? String
-            self.housePrice.text = item.valueForKey("price") as? String
-            self.houseAddr.text = item.valueForKey("addr") as? String
+            for constraintWithItem: NSLayoutConstraint in self.contentView.constraints {
+                if constraintWithItem.firstItem.restorationIdentifier == "SearchResultTableViewCell_houseTitle" {
+                    if constraintWithItem.firstAttribute == .Leading {
+                        self.contentView.removeConstraint(constraintWithItem)
+                        self.contentView.addConstraint(NSLayoutConstraint(item: self.houseTitle, attribute: .Leading, relatedBy: .Equal, toItem: self.prefixedButton, attribute: .Trailing , multiplier: 1.0, constant: 4.0))
+                    }
+                }
+            }
+            
+            if house.contacted == true {
+                prefixedButton.image = UIImage(named: "Heart_p")
+            } else {
+                prefixedButton.image = UIImage(named: "Heart_n")
+            }
+            self.prefixedButton.hidden = false
+            self.prefixedButton.userInteractionEnabled = true
+            self.prefixedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onContactTouched:")))
+            
+            self.contactedView.hidden = !(house.contacted)
+            
+            self.addToCollectionButton.image = UIImage(named: "bookmark-outline-plus")
+            self.addToCollectionButton.hidden = false
+            
+            self.houseTitle.text = house.title
+            self.housePrice.text = house.price.description
+            self.houseAddr.text = house.addr
             
             self.houseImg.image = placeholderImg
             
-            if item.valueForKey("img")?.count > 0 {
-                if let imgUrl = item.valueForKey("img")?[0] as? String {
+            if house.img?.count > 0 {
+                if let imgUrl = house.img?[0] {
                     let size = self.houseImg.frame.size
                     
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
@@ -225,6 +249,17 @@ class SearchResultTableViewCell: UITableViewCell {
                         self.addImageOverlay()
                     }
                 }
+            }
+        }
+    }
+    
+    func onContactTouched(sender: UITapGestureRecognizer) {
+        NSLog("%@ onCalledTouched", self)
+        if let house: House = houseItemForCollection {
+            if house.contacted == false {
+                HouseDao.sharedInstance.updateByObjectId(house.objectID, dataToUpdate: ["contacted": true])
+            } else {
+                HouseDao.sharedInstance.updateByObjectId(house.objectID, dataToUpdate: ["contacted": false])
             }
         }
     }
