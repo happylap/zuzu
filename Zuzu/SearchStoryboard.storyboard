@@ -749,7 +749,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RkJ-yY-SbF">
-                                        <rect key="frame" x="292" y="40" width="292.5" height="29"/>
+                                        <rect key="frame" x="292" y="0.0" width="292.5" height="109"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="tJf-mm-jK1"/>
@@ -775,7 +775,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aif-ds-c0e">
-                                        <rect key="frame" x="585" y="40" width="292.5" height="29"/>
+                                        <rect key="frame" x="585" y="0.0" width="292.5" height="109"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="2k5-bM-Gjb"/>
@@ -828,11 +828,13 @@
                                     <constraint firstAttribute="trailing" secondItem="njk-V3-8Pl" secondAttribute="trailing" constant="7" id="WWg-xR-x67"/>
                                     <constraint firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="height" multiplier="1500:160" id="ZRC-Ho-Opb"/>
                                     <constraint firstItem="RkJ-yY-SbF" firstAttribute="leading" secondItem="JTH-Sz-NIS" secondAttribute="trailing" id="Zha-6O-NgA"/>
+                                    <constraint firstItem="RkJ-yY-SbF" firstAttribute="height" secondItem="JTH-Sz-NIS" secondAttribute="height" id="aVH-7n-yfD"/>
                                     <constraint firstItem="njk-V3-8Pl" firstAttribute="leading" secondItem="Aif-ds-c0e" secondAttribute="trailing" constant="8" symbolic="YES" id="hRu-ac-L8E"/>
                                     <constraint firstItem="Aif-ds-c0e" firstAttribute="baseline" secondItem="RkJ-yY-SbF" secondAttribute="baseline" id="iLo-G8-xCp"/>
                                     <constraint firstItem="njk-V3-8Pl" firstAttribute="centerY" secondItem="Aif-ds-c0e" secondAttribute="centerY" id="ixv-cs-NXK"/>
                                     <constraint firstItem="Aif-ds-c0e" firstAttribute="leading" secondItem="RkJ-yY-SbF" secondAttribute="trailing" id="jiU-2x-kGF"/>
                                     <constraint firstItem="JTH-Sz-NIS" firstAttribute="leading" secondItem="E2g-hk-g5r" secondAttribute="leading" id="ohc-fE-mKh"/>
+                                    <constraint firstItem="Aif-ds-c0e" firstAttribute="height" secondItem="JTH-Sz-NIS" secondAttribute="height" id="tTp-JH-D7n"/>
                                     <constraint firstAttribute="trailing" secondItem="njk-V3-8Pl" secondAttribute="trailing" id="xUF-VW-Usf"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
@@ -966,7 +968,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="212.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="houseDetailSampleImage" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-Lp-uz6">
                                                     <rect key="frame" x="0.0" y="0.0" width="650" height="368.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="zKm-Lp-uz6" secondAttribute="height" multiplier="750:425" id="Lym-8Q-gYV"/>
@@ -1504,7 +1506,7 @@
         <image name="bookmark-outline-plus" width="36" height="36"/>
         <image name="filter_n@1x" width="60" height="60"/>
         <image name="first" width="30" height="30"/>
-        <image name="houseDetailSampleImage" width="600" height="450"/>
+        <image name="house_img" width="1440" height="700"/>
         <image name="location" width="60" height="60"/>
         <image name="search item_01" width="120" height="120"/>
         <image name="search item_02" width="120" height="120"/>
