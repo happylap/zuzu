@@ -233,7 +233,7 @@ class HouseDetailViewController: UIViewController {
         
         let emailTitle = "租屋物件詢問: " + (self.houseItem?.title ?? self.houseItem?.addr ?? "")
         
-        var messageBody = "房東您好! 我豬豬快租查詢到您在網路上刊登的租屋物件！\n\n"
+        var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
         
         if let houseItemDetail = self.houseItemDetail {
             if let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String {

@@ -30,7 +30,7 @@ class SmartFilterView: UIView {
         
         var buttonSpace:CGFloat = 8.0
         var buttonWidth:CGFloat = 80.0
-        let buttonHeight:CGFloat = 35.0
+        let buttonHeight:CGFloat = buttonWidth * 115/320
         
         let widthNeeded = 4 * buttonWidth + 3 * buttonSpace
         
@@ -95,8 +95,11 @@ class SmartFilterView: UIView {
         for filter in filters {
             let button : ToggleButton = ToggleButton()
             button.setTitle(filter.label, forState: .Normal)
-            button.titleLabel!.font =  UIFont.systemFontOfSize(14)
-            button.offBackgroundColor = UIColor(red: 0x01/255, green: 0xA7/255, blue: 0x9A/255, alpha: 0.65)
+            button.titleLabel!.font =  UIFont.systemFontOfSize(12)
+            button.offBackgroundColor = UIColor.clearColor()
+            //UIColor(red: 0x01/255, green: 0xA7/255, blue: 0x9A/255, alpha: 0.65)
+            button.offColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
+            
             button.onBackgroundColor = UIColor(red: 0x16/255, green: 0xBF/255, blue: 0xB3/255, alpha: 1)
             button.onColor = UIColor.whiteColor()
             button.setToggleState(false)
