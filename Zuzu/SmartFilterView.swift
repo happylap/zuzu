@@ -32,7 +32,7 @@ class SmartFilterView: UIView {
         var buttonWidth:CGFloat = 80.0
         let buttonHeight:CGFloat = buttonWidth * 115/320
         
-        let widthNeeded = 4 * buttonWidth + 3 * buttonSpace
+        let widthNeeded = 4 * buttonWidth + 5 * buttonSpace //including leading & trailing to the superview
         
         if(self.frame.width < widthNeeded) {
             let ratio =  self.frame.width / widthNeeded
