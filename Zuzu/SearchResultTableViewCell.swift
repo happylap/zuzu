@@ -109,7 +109,7 @@ class SearchResultTableViewCell: UITableViewCell {
         
         houseImg.layer.addSublayer(titleBackground)
         
-        let infoHeight = self.contentView.bounds.height / 3.71
+        let infoHeight = self.contentView.bounds.width * (200/1441)
         let newOrigin = CGPoint(x: houseImg.bounds.origin.x,
             y: houseImg.bounds.origin.y + houseImg.bounds.height - infoHeight)
         
@@ -194,11 +194,11 @@ class SearchResultTableViewCell: UITableViewCell {
                     houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2))
                         { (request, response, result) -> Void in
                             NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
-                            
-                            self.addImageOverlay()
+                            NSLog("    <URL> %@", firstURL)
                     }
                 }
             }
+            self.addImageOverlay()
         }
     }
     
@@ -245,11 +245,11 @@ class SearchResultTableViewCell: UITableViewCell {
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                         
                         NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
-
-                        self.addImageOverlay()
                     }
                 }
             }
+            
+            self.addImageOverlay()
         }
     }
     
