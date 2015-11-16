@@ -8,6 +8,7 @@
 import UIKit
 
 class HouseDetailExpandableContentCell: UITableViewCell {
+    @IBOutlet weak var contentLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

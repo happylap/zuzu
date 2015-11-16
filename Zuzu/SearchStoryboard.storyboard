@@ -1025,13 +1025,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16000 元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4D-1D-Qb8">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- 元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4D-1D-Qb8">
                                                     <rect key="frame" x="20" y="17" width="325" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13坪" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgt-HK-naS">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- 坪" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgt-HK-naS">
                                                     <rect key="frame" x="310" y="17" width="325" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1071,7 +1071,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市內湖區" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6H-Ov-ehB">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- 市 - 區" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6H-Ov-ehB">
                                                     <rect key="frame" x="20" y="17" width="577" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1142,6 +1142,9 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
+                                            <outlet property="headerLabel" destination="3x4-yg-9HK" id="HPg-IN-5aa"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentCell" rowHeight="55" id="94S-Ko-yrz" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="406" width="650" height="55"/>
@@ -1150,8 +1153,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內容說明" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vil-gD-7zS">
-                                                    <rect key="frame" x="20" y="18.5" width="60" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內容說明" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vil-gD-7zS">
+                                                    <rect key="frame" x="20" y="8" width="622" height="38.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -1159,17 +1162,34 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="11" id="0r3-bd-7jY"/>
+                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="8" id="ApU-rD-1zm"/>
                                                 <constraint firstItem="Vil-gD-7zS" firstAttribute="centerY" secondItem="hMY-Ey-K1Q" secondAttribute="centerY" id="GNZ-wp-EcI"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Vil-gD-7zS" secondAttribute="bottom" priority="750" constant="8" id="GqU-RS-2MG"/>
                                                 <constraint firstItem="Vil-gD-7zS" firstAttribute="leading" secondItem="hMY-Ey-K1Q" secondAttribute="leading" constant="20" symbolic="YES" id="PsI-iv-APw"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Vil-gD-7zS" secondAttribute="trailing" constant="8" id="pIb-Sc-7z1"/>
                                             </constraints>
                                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="0r3-bd-7jY"/>
+                                                    <exclude reference="GNZ-wp-EcI"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
+                                            <outlet property="contentLabel" destination="Vil-gD-7zS" id="ZiE-J0-2YL"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emptyCell" rowHeight="55" id="Hi0-Ka-Or9" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="461" width="650" height="55"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hi0-Ka-Or9" id="xEQ-gC-obA">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
