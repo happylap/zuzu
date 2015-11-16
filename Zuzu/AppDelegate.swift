@@ -22,10 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func customUISetup() {
         // Configure TabBar
-        UITabBar.appearance().tintColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+        UITabBar.appearance().tintColor = UIColor.colorWithRGB(0x1CD4C6)
         
         // Configure Navigation Bar
-        let bgColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+        let bgColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
         let font = UIFont.boldSystemFontOfSize(21)
         
         UINavigationBar.appearance().titleTextAttributes =

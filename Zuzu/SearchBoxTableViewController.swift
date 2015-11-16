@@ -211,13 +211,13 @@
             
             searchButton.layer.borderWidth = 2
             searchButton.layer.borderColor =
-                UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1).CGColor
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
             searchButton.tintColor =
-                UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             searchButton
-                .setTitleColor(UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1), forState: UIControlState.Normal)
+                .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
             searchButton
-                .setTitleColor(UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1), forState: UIControlState.Selected)
+                .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
             
             //searchButton.tintColor = color
             //searchButton.backgroundColor = color
@@ -265,7 +265,7 @@
         private func configureSearchHistoryTable() {
             
             //Segments UI config
-            searchItemSegment.tintColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+            searchItemSegment.tintColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             searchItemSegment.setTitleTextAttributes(
                 [NSForegroundColorAttributeName : UIColor.blackColor(),
                     NSFontAttributeName: UIFont.systemFontOfSize(16)],

@@ -15,9 +15,10 @@ protocol ToggleStateListenr {
 }
 
 class ToggleButton: UIButton {
-    var onColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+    var onColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
     var onBackgroundColor = UIColor.whiteColor()
-    var offColor = UIColor(red: 0xE0/255, green: 0xE0/255, blue: 0xE0/255, alpha: 0.8)
+    
+    var offColor = UIColor.colorWithRGB(0xE0E0E0, alpha: 0.8)
     var offBackgroundColor = UIColor.whiteColor()
     
     private var listeners: [ToggleStateListenr] = [ToggleStateListenr]()

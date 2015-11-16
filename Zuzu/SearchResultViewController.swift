@@ -509,7 +509,7 @@ class SearchResultViewController: UIViewController {
         self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
         
         //Configure Sorting Status
-        let bgColorWhenSelected = UIColor(red: 0x00/255, green: 0xE3/255, blue: 0xE3/255, alpha: 0.6)
+        let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
         self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
         self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
         self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)

@@ -46,3 +46,22 @@ extension UIView {
             }, completion: completion)
     }
 }
+
+
+extension UIColor {
+    /**
+     Construct a UIColor using an HTML/CSS RGB formatted value and an alpha value
+     
+     :param: rgbValue RGB value
+     :param: alpha color alpha value
+     
+     :returns: an UIColor instance that represent the required color
+     */
+    class func colorWithRGB(rgbValue : UInt, alpha : CGFloat = 1.0) -> UIColor {
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16) / 255
+        let green = CGFloat((rgbValue & 0xFF00) >> 8) / 255
+        let blue = CGFloat(rgbValue & 0xFF) / 255
+        
+        return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+    }
+}

@@ -28,7 +28,7 @@ class HouseDetailContactBarView: UIView {
     }
     
     private func setup() {
-        self.backgroundColor = UIColor(red: 0x1C/255, green: 0xD4/255, blue: 0xC6/255, alpha: 1)
+        self.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
         
         view = loadViewFromNib()
         view.frame = bounds
