@@ -240,8 +240,8 @@ class SearchResultTableViewCell: UITableViewCell {
             self.houseAddr.text = house.addr
             self.houseSize.text = "\(house.size) 坪"
             
-            let houseTypeStr = self.getTypeString(house.type) ?? ""
-            let purposeTypeStr = self.getUsageString(house.usage) ?? ""
+            let houseTypeStr = self.getTypeString(Int(house.type)) ?? ""
+            let purposeTypeStr = self.getUsageString(Int(house.usage)) ?? ""
             self.houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
             
             self.houseImg.image = placeholderImg
