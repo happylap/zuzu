@@ -975,20 +975,22 @@
                                                     </constraints>
                                                     <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="超豪華辦公室等你來租" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjz-Vf-7cD">
-                                                    <rect key="frame" x="0.0" y="0.0" width="650" height="20.5"/>
-                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="超豪華辦公室等你來租" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjz-Vf-7cD" customClass="MarqueeLabel">
+                                                    <rect key="frame" x="0.0" y="0.0" width="650" height="65"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="0Iv-5z-AqZ"/>
+                                                        <constraint firstAttribute="width" secondItem="jjz-Vf-7cD" secondAttribute="height" multiplier="100:10" id="kuv-Qe-rLR"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="default">
-                                                        <mask key="constraints">
-                                                            <exclude reference="0Iv-5z-AqZ"/>
-                                                        </mask>
-                                                    </variation>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="holdScrolling" value="NO"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="tapToScroll" value="NO"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="labelize" value="NO"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="animationDelay">
+                                                            <real key="value" value="0.0"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

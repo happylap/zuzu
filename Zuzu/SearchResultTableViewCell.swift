@@ -41,7 +41,7 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    let textLayer = CATextLayer()
+    //let textLayer = CATextLayer()
     let titleBackground = CAGradientLayer()
     let infoBackground = CALayer()
     
@@ -98,14 +98,17 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    private func addImageOverlay() {
+    internal func addImageOverlay() {
         
         ///Gradient layer
-        let gradientColors = [UIColor.grayColor().colorWithAlphaComponent(0.3).CGColor, UIColor.clearColor().CGColor]
-        let gradientLocations = [0.0, 0.25,1.0]
-        titleBackground.frame = houseImg.bounds
+        let gradientColors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
+        //let gradientLocations = [0.0, 0.8, 0.9, 1.0]
+        
+        let layerRect = CGRect(x: houseImg.bounds.origin.x, y: houseImg.bounds.origin.y, width: houseImg.bounds.width, height: houseImg.bounds.width * 188/1441)
+        
+        titleBackground.frame = layerRect
         titleBackground.colors = gradientColors
-        titleBackground.locations = gradientLocations
+        //titleBackground.locations = gradientLocations
         
         houseImg.layer.addSublayer(titleBackground)
         

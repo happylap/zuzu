@@ -9,6 +9,7 @@ import UIKit
 import SwiftyJSON
 import MessageUI
 import MWPhotoBrowser
+import MarqueeLabel
 
 class HouseDetailViewController: UIViewController {
     
@@ -685,7 +686,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             //           tableRows[indexPath.row] = cellInfo
             
-            NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+            NSLog("- Cell Instance [%p] Prepare Cell For Row[%d]", cell, indexPath.row)
             
             return cell
         }
@@ -694,6 +695,15 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         
     }
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell = cell as? HouseDetailTitleViewCell {
+            NSLog("willDisplayCell %@", cell)
+            let label:MarqueeLabel =  cell.houseTitleLabel as! MarqueeLabel
+            label.restartLabel()
+        }
+        
+    }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if var cellInfo = tableRows[indexPath.row] {

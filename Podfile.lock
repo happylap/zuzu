@@ -5,6 +5,7 @@ PODS:
   - DACircularProgress (2.3.1)
   - Dollar (4.0.1)
   - GoogleMaps (1.10.5)
+  - MarqueeLabel (2.3.5)
   - MBProgressHUD (0.9.1)
   - MWPhotoBrowser (2.1.1):
     - DACircularProgress (~> 2.3)
@@ -20,6 +21,7 @@ DEPENDENCIES:
   - AlamofireImage (~> 1.0)
   - Dollar (~> 4.0)
   - GoogleMaps
+  - MarqueeLabel
   - MWPhotoBrowser
   - SwiftyJSON (~> 2.3)
 
@@ -29,6 +31,7 @@ SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Dollar: a058e2659e0d3261307c12630dbc2fd8e32f80bf
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
+  MarqueeLabel: fd29be3b4cf5f37b01676749409679aac23eb6fa
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
   MWPhotoBrowser: ba0d0c09ffda3a7ea10093518738c502c1c7141c
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84

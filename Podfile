@@ -11,6 +11,7 @@ pod 'AlamofireImage', '~> 1.0'
 pod 'Dollar', '~>4.0'
 pod 'GoogleMaps'
 pod 'MWPhotoBrowser'
+pod 'MarqueeLabel'
 end
 
 target 'ZuzuTests' do
