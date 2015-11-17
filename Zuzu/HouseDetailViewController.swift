@@ -291,19 +291,23 @@ class HouseDetailViewController: UIViewController {
             12:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: true, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     cell.contentLabel.adjustsFontSizeToFitWidth = false
-                    cell.contentLabel.numberOfLines = 0
+                    //cell.contentLabel.numberOfLines = 0
                     
                     if let houseDetail = self.houseItemDetail {
                         var resultString:String = ""
+                        
+                        cell.contentLabel.preferredMaxLayoutWidth = cell.contentView.frame.width - 2 * 8
                         
                         //Desc
                         if let desc = houseDetail.valueForKey("desc") as? String {
                             
                             resultString += desc
                         }
-                        NSLog("Set desc: %@", resultString)
+                        NSLog("Desc Set: %@", resultString)
                         cell.contentLabel.text = resultString
-                        cell.layoutIfNeeded()
+                        cell.contentLabel.sizeToFit()
+                        
+                        NSLog("Frame Height: %f", cell.contentLabel.frame.height)
                     }
                 }
             })
@@ -312,7 +316,6 @@ class HouseDetailViewController: UIViewController {
     
     private func alertMailAppNotReady() {
         // Initialize Alert View
-        
         let alertView = UIAlertView(
             title: "找不到預設的郵件應用",
             message: "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成",
@@ -338,6 +341,9 @@ class HouseDetailViewController: UIViewController {
         //Configure table DataSource & Delegate
         tableView.dataSource = self
         tableView.delegate = self
+        
+        self.tableView.setNeedsLayout()
+        self.tableView.layoutIfNeeded()
         
         //Remove extra cells with some padding height
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
@@ -630,7 +636,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 return 0
             } else {
                 if(indexPath.row == 12) {
-                    return cellInfo.cellHeight + 20
+                    return cellInfo.cellHeight + 2 * 8
                 } else {
                     return cellInfo.cellHeight
                 }
@@ -653,13 +659,20 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             if let cell = cell as? HouseDetailExpandableContentCell {
                 
-                cellInfo.cellHeight
-                    = max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
+                cell.layoutIfNeeded()
+                
+                let testheight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+                
+                NSLog("Layout Height: %f", testheight)
+                
+                cellInfo.cellHeight = max(cellInfo.cellHeight, testheight)
+                    //= max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
                 
                 tableRows[indexPath.row] = cellInfo
                 
-                NSLog("intrinsicContentSize Height: %f for Row: %d", cell.contentLabel.intrinsicContentSize().height, indexPath.row)
-                NSLog("Update Cell Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
+                NSLog("IntrinsicContentSize Height: %f for Row: %d", cell.contentLabel.intrinsicContentSize().height, indexPath.row)
+                
+                NSLog("Updated Cell Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
             }
             
             //           tableRows[indexPath.row] = cellInfo

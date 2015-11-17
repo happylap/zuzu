@@ -1154,27 +1154,19 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內容說明" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vil-gD-7zS">
-                                                    <rect key="frame" x="20" y="8" width="622" height="38.5"/>
+                                                    <rect key="frame" x="8" y="5" width="634" height="44.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="11" id="0r3-bd-7jY"/>
-                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="8" id="ApU-rD-1zm"/>
-                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="centerY" secondItem="hMY-Ey-K1Q" secondAttribute="centerY" id="GNZ-wp-EcI"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Vil-gD-7zS" secondAttribute="bottom" priority="750" constant="8" id="GqU-RS-2MG"/>
-                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="leading" secondItem="hMY-Ey-K1Q" secondAttribute="leading" constant="20" symbolic="YES" id="PsI-iv-APw"/>
+                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="5" id="ApU-rD-1zm"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Vil-gD-7zS" secondAttribute="bottom" constant="5" id="GqU-RS-2MG"/>
+                                                <constraint firstItem="Vil-gD-7zS" firstAttribute="leading" secondItem="hMY-Ey-K1Q" secondAttribute="leading" constant="8" id="PsI-iv-APw"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Vil-gD-7zS" secondAttribute="trailing" constant="8" id="pIb-Sc-7z1"/>
                                             </constraints>
                                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="0r3-bd-7jY"/>
-                                                    <exclude reference="GNZ-wp-EcI"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                         <connections>

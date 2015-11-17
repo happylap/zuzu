@@ -500,7 +500,7 @@ class SearchResultViewController: UIViewController {
         }
         
         //Configure cell height
-        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.estimatedRowHeight = 213//tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         
         //Configure table DataSource & Delegate
