@@ -10,8 +10,44 @@ import SwiftyJSON
 import MessageUI
 import MWPhotoBrowser
 import MarqueeLabel
+import Social
 
 class HouseDetailViewController: UIViewController {
+    
+    class HouseUrl: NSObject, UIActivityItemSource{
+        
+        var houseUrl:NSURL
+        
+        init(houseUrl:NSURL) {
+            self.houseUrl = houseUrl
+        }
+        
+        func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+            return  houseUrl
+        }
+        
+        func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
+            
+            return  (activityType == UIActivityTypePostToFacebook) ? houseUrl : nil
+        }
+    }
+    
+    class HouseText: NSObject, UIActivityItemSource {
+        
+        var houseText:String
+        
+        init(houseText:String) {
+            self.houseText = houseText
+        }
+        
+        func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+            return houseText
+        }
+        
+        func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
+            return houseText
+        }
+    }
     
     struct ViewTransConst {
         static let displayHouseOnMap:String = "displayHouseOnMap"
@@ -492,6 +528,34 @@ class HouseDetailViewController: UIViewController {
         }
     }
     
+    func shareButtonTouched(sender: UIButton) {
+        
+        if let houseItemDetail = self.houseItemDetail,
+            let houseLink = houseItemDetail.valueForKey("mobile_link") as? String {
+                if let houseURL = NSURL(string: houseLink) {
+                    var objectsToShare = [AnyObject]()
+                    
+                    let appSlogan = "想租屋就找豬豬! 本資訊透過[豬豬快租App]與您分享"
+                    let titleToShare = self.houseItem?.title ?? ""
+                    let addressToShare = self.houseItem?.addr ?? ""
+                    
+                    let text = ("\n\(titleToShare)\n\(addressToShare)\n\(houseLink)\n\n\(appSlogan)\n")
+                    
+                    objectsToShare.append(HouseUrl(houseUrl: houseURL))
+                    objectsToShare.append(HouseText(houseText: text))
+                    
+                    
+                    let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                    
+                    self.presentViewController(activityVC, animated: true, completion: nil)
+                }
+                
+        } else {
+            NSLog("No data to share now")
+        }
+        
+    }
+    
     func gotoSourceButtonTouched(sender: UIButton) {
         
         self.performSegueWithIdentifier("displayHouseSource", sender: self)
@@ -527,6 +591,26 @@ class HouseDetailViewController: UIViewController {
         
         ///Hide tab bar
         self.tabBarController!.tabBar.hidden = true
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        //        let serviceType = SLServiceTypeTwitter
+        //        if SLComposeViewController.isAvailableForServiceType(serviceType){
+        //            let controller = SLComposeViewController(forServiceType: serviceType)
+        //            controller.setInitialText("Safari is a great browser!")
+        //            controller.addImage(UIImage(named: "Safari"))
+        //            controller.addURL(NSURL(string: "http://www.apple.com/safari/"))
+        //            controller.completionHandler = {(result: SLComposeViewControllerResult) in
+        //                print("Completed")
+        //            }
+        //
+        //            presentViewController(controller, animated: true, completion: nil)
+        //
+        //        }else{
+        //            print("The Twitter service is not available")
+        //        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -667,7 +751,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 NSLog("Layout Height: %f", testheight)
                 
                 cellInfo.cellHeight = max(cellInfo.cellHeight, testheight)
-                    //= max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
+                //= max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
                 
                 tableRows[indexPath.row] = cellInfo
                 
@@ -789,7 +873,6 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
             } else {
                 return nil
             }
-            
         } else {
             return nil
         }
