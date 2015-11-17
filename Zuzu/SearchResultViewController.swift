@@ -118,9 +118,6 @@ class SearchResultViewController: UIViewController {
             delegate: self,
             cancelButtonTitle: "知道了")
         
-        // Configure Alert View
-        alertView.tag = 2
-        
         // Show Alert View
         alertView.show()
         

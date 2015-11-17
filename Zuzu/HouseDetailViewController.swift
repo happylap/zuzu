@@ -363,6 +363,24 @@ class HouseDetailViewController: UIViewController {
         alertView.show()
     }
     
+    private func alertAddingToCollectionSuccess() {
+        // Initialize Alert View
+        
+        let alertView = UIAlertView(
+            title: "新增我的收藏",
+            message: "新增了一筆物件到我的收藏",
+            delegate: self,
+            cancelButtonTitle: "知道了")
+        
+        // Show Alert View
+        alertView.show()
+        
+        // Delay the dismissal
+        self.runOnMainThreadAfter(2.0) {
+            alertView.dismissWithClickedButtonIndex(-1, animated: true)
+        }
+    }
+    
     private func configureViewsOnDataLoaded() {
         
         ///Configure Contact Bar View
@@ -554,6 +572,14 @@ class HouseDetailViewController: UIViewController {
             NSLog("No data to share now")
         }
         
+    }
+    
+    func collectButtonTouched(sender: UIButton){
+        if let houseItemDetail = self.houseItemDetail {
+            let houseDao = HouseDao.sharedInstance
+            houseDao.addHouse(houseItemDetail, save: true)
+            self.alertAddingToCollectionSuccess()
+        }
     }
     
     func gotoSourceButtonTouched(sender: UIButton) {
