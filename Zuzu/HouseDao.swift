@@ -175,31 +175,31 @@ class HouseDao: NSObject {
         let mobileLink = data["mobile_link"].stringValue
         let title = data["title"].stringValue
         let addr = data["addr"].stringValue
-        let city = data["city"].intValue
-        let usage = data["purpose_type"].intValue
-        let type = data["house_type"].intValue
-        let price = data["price"].intValue
+        let city = data["city"].int32Value
+        let usage = data["purpose_type"].int32Value
+        let type = data["house_type"].int32Value
+        let price = data["price"].int32Value
         
         /* Optional Fields */
-        let region = data["region"].intValue
+        let region = data["region"].int32Value
         let community = data["community"].stringValue
-        let size = data["size"].intValue
-        let totalFloor = data["total_floor"].intValue
+        let size = data["size"].int32Value
+        let totalFloor = data["total_floor"].int32Value
         let floor = data["floor"].arrayObject as? [Int] ?? [Int]()
-        let numBedroom = data["num_bedroom"].intValue
-        let numTing = data["num_ting"].intValue
-        let numPatio = data["num_patio"].intValue
-        let orientation = data["orientation"].intValue
+        let numBedroom = data["num_bedroom"].int32Value
+        let numTing = data["num_ting"].int32Value
+        let numPatio = data["num_patio"].int32Value
+        let orientation = data["orientation"].int32Value
         let wallMtl = data["wall_mtl"].stringValue
         let parkingLot = data["parking_lot"].boolValue
-        let parkingType = data["parkingType"].intValue
+        let parkingType = data["parkingType"].int32Value
         let readyDate: NSDate? = dateFormatter.dateFromString(data["ready_date"].stringValue)
-        let shortestLease = data["shortest_lease"].intValue
+        let shortestLease = data["shortest_lease"].int32Value
         
         /* Money Related */
         let priceIncl = data["price_incl"].arrayObject as? [Int] ?? [Int]()
         let otherExpense = data["other_expense"].arrayObject as? [Int] ?? [Int]()
-        let mgmtFee = data["mgmt_fee"].intValue
+        let mgmtFee = data["mgmt_fee"].int32Value
         let hasMgmtFee = data["has_mgmt_fee"].boolValue
         let deposit = data["deposit"].stringValue
         
@@ -207,7 +207,7 @@ class HouseDao: NSObject {
         let allowPet = data["allow_pet"].boolValue
         let allowCooking = data["allow_cooking"].boolValue
         let restrProfile = data["restr_profile"].stringValue
-        let restrSex = data["restr_sex"].intValue
+        let restrSex = data["restr_sex"].int32Value
         
         /* Extra Benefits */
         let furniture = data["furniture"].arrayObject as? [Int] ?? [Int]()
@@ -220,7 +220,7 @@ class HouseDao: NSObject {
         
         /* Sales Agent Info */
         let agent = data["agent"].stringValue
-        let agentType = data["agent_type"].intValue
+        let agentType = data["agent_type"].int32Value
         let phone = data["phone"].arrayObject as? [String] ?? [String]()
         
         /* Extra Description */

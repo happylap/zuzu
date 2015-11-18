@@ -18,31 +18,31 @@ public class House: NSManagedObject {
     @NSManaged var mobileLink: String
     @NSManaged var title: String
     @NSManaged var addr: String
-    @NSManaged var city: Int
-    @NSManaged var usage: Int
-    @NSManaged var type: Int
-    @NSManaged var price: Int
+    @NSManaged var city: Int32
+    @NSManaged var usage: Int32
+    @NSManaged var type: Int32
+    @NSManaged var price: Int32
 
     /* Optional Fields */
-    @NSManaged var region: Int
+    @NSManaged var region: Int32
     @NSManaged var community: String?
-    @NSManaged var size: Int
-    @NSManaged var totalFloor: Int
+    @NSManaged var size: Int32
+    @NSManaged var totalFloor: Int32
     @NSManaged var floor: [Int]?
-    @NSManaged var numBedroom: Int
-    @NSManaged var numTing: Int
-    @NSManaged var numPatio: Int
-    @NSManaged var orientation: Int
+    @NSManaged var numBedroom: Int32
+    @NSManaged var numTing: Int32
+    @NSManaged var numPatio: Int32
+    @NSManaged var orientation: Int32
     @NSManaged var wallMtl: String?
     @NSManaged var parkingLot: Bool
-    @NSManaged var parkingType: Int
+    @NSManaged var parkingType: Int32
     @NSManaged var readyDate: NSDate?
-    @NSManaged var shortestLease: Int
+    @NSManaged var shortestLease: Int32
     
     /* Money Related */
     @NSManaged var priceIncl: [Int]?
     @NSManaged var otherExpense: [Int]?
-    @NSManaged var mgmtFee: Int
+    @NSManaged var mgmtFee: Int32
     @NSManaged var hasMgmtFee: Bool
     @NSManaged var deposit: String?
     
@@ -50,7 +50,7 @@ public class House: NSManagedObject {
     @NSManaged var allowPet: Bool
     @NSManaged var allowCooking: Bool
     @NSManaged var restrProfile: String?
-    @NSManaged var restrSex: Int
+    @NSManaged var restrSex: Int32
     
     /* Extra Benefits */
     @NSManaged var furniture: [Int]?
@@ -63,7 +63,7 @@ public class House: NSManagedObject {
     
     /* Sales Agent Info */
     @NSManaged var agent: String?
-    @NSManaged var agentType: Int
+    @NSManaged var agentType: Int32
     @NSManaged var phone: [String]?
     
     /* Extra Description */
