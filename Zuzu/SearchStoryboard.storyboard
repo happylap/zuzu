@@ -493,7 +493,9 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="租屋快搜" id="izc-kA-Us3">
-                        <barButtonItem key="rightBarButtonItem" image="bell-outline" id="6YQ-kr-34O"/>
+                        <barButtonItem key="rightBarButtonItem" image="notification_n" id="6YQ-kr-34O">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -807,7 +809,7 @@
                                             <constraint firstAttribute="width" constant="30" id="GSF-0c-DHR"/>
                                             <constraint firstAttribute="width" secondItem="njk-V3-8Pl" secondAttribute="height" multiplier="1:1" id="Lmv-SO-cCl"/>
                                         </constraints>
-                                        <state key="normal" image="filter_n@1x"/>
+                                        <state key="normal" image="filter_n"/>
                                         <variation key="widthClass=compact" misplaced="YES">
                                             <rect key="frame" x="775.5" y="-10.5" width="248" height="68"/>
                                         </variation>
@@ -913,7 +915,8 @@
                     <navigationItem key="navigationItem" title="搜尋結果" id="NBD-dJ-SqW">
                         <barButtonItem key="backBarButtonItem" title="返回結果" id="9qK-pP-zMQ"/>
                         <rightBarButtonItems>
-                            <barButtonItem image="bookmark-outline-plus" id="8EG-ML-NRj">
+                            <barButtonItem image="list_icon_n" id="8EG-ML-NRj">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="onSaveSearchButtonClicked:" destination="ewd-BO-qUn" id="2EE-wP-JXq"/>
                                 </connections>
@@ -1498,7 +1501,7 @@
         <scene sceneID="glm-kh-USI">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ybg-AC-NMz" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="租屋快搜" image="first" id="Be4-CX-ExJ"/>
+                    <tabBarItem key="tabBarItem" title="租屋快搜" image="main_search_n" id="Be4-CX-ExJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LVf-gq-zQj" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1515,16 +1518,16 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow_down02_n" width="30" height="30"/>
-        <image name="bell-outline" width="48" height="48"/>
-        <image name="bookmark-outline-plus" width="36" height="36"/>
-        <image name="filter_n@1x" width="60" height="60"/>
-        <image name="first" width="30" height="30"/>
+        <image name="arrow_down02_n" width="15" height="15"/>
+        <image name="filter_n" width="60" height="60"/>
         <image name="house_img" width="1440" height="700"/>
-        <image name="location" width="60" height="60"/>
-        <image name="search item_01" width="120" height="120"/>
-        <image name="search item_02" width="120" height="120"/>
-        <image name="search item_03" width="120" height="120"/>
-        <image name="search item_04" width="120" height="120"/>
+        <image name="list_icon_n" width="30" height="30"/>
+        <image name="location" width="30" height="30"/>
+        <image name="main_search_n" width="38" height="38"/>
+        <image name="notification_n" width="30" height="30"/>
+        <image name="search item_01" width="30" height="30"/>
+        <image name="search item_02" width="30" height="30"/>
+        <image name="search item_03" width="30" height="30"/>
+        <image name="search item_04" width="30" height="30"/>
     </resources>
 </document>

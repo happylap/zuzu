@@ -107,8 +107,8 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTypeAndUsage.text = nil
         houseSize.text = nil
         housePrice.text = nil
-        addToCollectionButton.image = UIImage(named: "Heart_n")
-        prefixedButton.image = UIImage(named: "Heart_n")
+        addToCollectionButton.image = UIImage(named: "heart_n")
+        prefixedButton.image = UIImage(named: "heart_n")
         
         // Cancel image loading operation
         houseImg.af_cancelImageRequest()
@@ -181,9 +181,9 @@ class SearchResultTableViewCell: UITableViewCell {
             }
             
             if house.contacted == true {
-                prefixedButton.image = UIImage(named: "Heart_p")
+                prefixedButton.image = UIImage(named: "heart_p")
             } else {
-                prefixedButton.image = UIImage(named: "Heart_n")
+                prefixedButton.image = UIImage(named: "heart_n")
             }
             self.prefixedButton.hidden = false
             self.prefixedButton.userInteractionEnabled = true
