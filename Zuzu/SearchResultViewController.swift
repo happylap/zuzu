@@ -537,6 +537,11 @@ class SearchResultViewController: UIViewController {
         configureFilterButtons()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        NSLog("%@ [[viewDidAppear]]", self)
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         NSLog("%@ [[viewWillDisappear]]", self)

@@ -31,6 +31,13 @@ extension UIViewController {
             block()
         })
     }
+    
+    func synchronize<T>(lockObj: AnyObject!, closure: ()->T) -> T {
+        objc_sync_enter(lockObj)
+        let retVal: T = closure()
+        objc_sync_exit(lockObj)
+        return retVal
+    }
 }
 
 

@@ -98,50 +98,6 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    internal func addImageOverlay() {
-        
-        ///Gradient layer
-        let gradientColors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
-        //let gradientLocations = [0.0, 0.8, 0.9, 1.0]
-        
-        let layerRect = CGRect(x: houseImg.bounds.origin.x, y: houseImg.bounds.origin.y, width: houseImg.bounds.width, height: houseImg.bounds.width * 188/1441)
-        
-        titleBackground.frame = layerRect
-        titleBackground.colors = gradientColors
-        //titleBackground.locations = gradientLocations
-        
-        houseImg.layer.addSublayer(titleBackground)
-        
-        let infoHeight = self.contentView.bounds.width * (200/1441)
-        let newOrigin = CGPoint(x: houseImg.bounds.origin.x,
-            y: houseImg.bounds.origin.y + houseImg.bounds.height - infoHeight)
-        
-        infoBackground.frame = CGRect(origin: newOrigin,
-            size: CGSize(width: houseImg.bounds.width, height: infoHeight))
-        
-        infoBackground.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.3).CGColor
-        
-        houseImg.layer.addSublayer(infoBackground)
-        
-        ///Text Layer
-        //        let textMargin = CGFloat(8.0)
-        //        let newOrigin = CGPoint(x: houseImg.bounds.origin.x + textMargin, y: houseImg.bounds.origin.y + textMargin)
-        //        textLayer.frame = CGRect(origin: newOrigin,
-        //            size: CGSize(width: houseImg.bounds.width - 2 * textMargin, height: houseImg.bounds.height))
-        //
-        //        textLayer.string = title
-        //        textLayer.fontSize = 24.0
-        //        let fontName: CFStringRef = UIFont.boldSystemFontOfSize(20).fontName//"Noteworthy-Light"
-        //        textLayer.font = CTFontCreateWithName(fontName, 24.0, nil)
-        //        //textLayer.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2).CGColor
-        //        textLayer.foregroundColor = UIColor.whiteColor().CGColor
-        //        textLayer.wrapped = false
-        //        textLayer.alignmentMode = kCAAlignmentLeft
-        //        textLayer.contentsScale = UIScreen.mainScreen().scale
-        //
-        //        houseImg.layer.addSublayer(textLayer)
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -163,6 +119,7 @@ class SearchResultTableViewCell: UITableViewCell {
         NSLog("- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
         
     }
+    
     
     func updateUI() {
         
@@ -191,6 +148,7 @@ class SearchResultTableViewCell: UITableViewCell {
                 if let firstURL = NSURL(string: imageURLList[0]) {
                     
                     let size = houseImg.frame.size
+                    print("xxhouseImg.frame.size: \(houseImg.frame.size)")
                     
                     NSLog("    <Start> Loading Img for Row[\(indexPath.row)]")
                     
@@ -198,10 +156,12 @@ class SearchResultTableViewCell: UITableViewCell {
                         { (request, response, result) -> Void in
                             NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                             NSLog("    <URL> %@", firstURL)
+                            
+                            
                     }
                 }
             }
-            self.addImageOverlay()
+            
         }
     }
     
@@ -256,8 +216,6 @@ class SearchResultTableViewCell: UITableViewCell {
                     }
                 }
             }
-            
-            self.addImageOverlay()
         }
     }
     
