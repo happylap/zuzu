@@ -148,7 +148,6 @@ class SearchResultTableViewCell: UITableViewCell {
                 if let firstURL = NSURL(string: imageURLList[0]) {
                     
                     let size = houseImg.frame.size
-                    print("xxhouseImg.frame.size: \(houseImg.frame.size)")
                     
                     NSLog("    <Start> Loading Img for Row[\(indexPath.row)]")
                     

@@ -14,6 +14,13 @@ class UIOverlayImageView: UIImageView {
     
     internal func addImageOverlay() {
         
+        if let sublayers = layer.sublayers {
+            if (sublayers.contains(infoBackground) && sublayers.contains(infoBackground)) {
+                print("addImageOverlay: overlays already exist")
+                return
+            }
+        }
+        
         ///Title Gradient Layer
         let gradientColors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
         let gradientLocations = [0.0, 1.0] //Evenly distributed
