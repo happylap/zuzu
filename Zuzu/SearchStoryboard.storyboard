@@ -530,14 +530,14 @@
                         <viewControllerLayoutGuide type="bottom" id="zbO-Cm-iDj"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8hK-gk-03e">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="257.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wdk-L0-myn">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="257.5"/>
                             </pickerView>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Wdk-L0-myn" firstAttribute="centerX" secondItem="8hK-gk-03e" secondAttribute="centerX" id="BcS-ob-lfl"/>
                             <constraint firstItem="Wdk-L0-myn" firstAttribute="leading" secondItem="8hK-gk-03e" secondAttribute="leadingMargin" id="bET-Wy-uzq"/>
@@ -570,32 +570,13 @@
             <objects>
                 <tableViewController title="Region Table" id="ypp-eh-ebb" customClass="RegionTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="IdP-9b-BqB">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="520"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="392.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="Mfg-H9-XNc">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0yN-TF-go9">
-                                    <rect key="frame" x="255" y="-4" width="90" height="30"/>
-                                    <state key="normal" title="清除所有選擇">
-                                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="onSelectionCleared:" destination="ypp-eh-ebb" eventType="touchUpInside" id="5l9-fj-hfQ"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstItem="0yN-TF-go9" firstAttribute="centerX" secondItem="Mfg-H9-XNc" secondAttribute="centerX" id="3gf-ma-Xqv"/>
-                                <constraint firstItem="0yN-TF-go9" firstAttribute="centerY" secondItem="Mfg-H9-XNc" secondAttribute="centerY" id="6YY-fz-l0R"/>
-                            </constraints>
-                        </view>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="regionCell" textLabel="EA0-Q2-cyL" style="IBUITableViewCellStyleDefault" id="hei-Kt-2pJ">
-                                <rect key="frame" x="0.0" y="50" width="600" height="50"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hei-Kt-2pJ" id="qgy-yK-MV2">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="49.5"/>
@@ -610,6 +591,7 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -626,7 +608,7 @@
         <!--City Region Selector Container-->
         <scene sceneID="clb-jO-Btr">
             <objects>
-                <viewController title="City Region Selector Container" id="Tna-2J-h7R" customClass="CityRegionContainerViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="City Region Selector Container" automaticallyAdjustsScrollViewInsets="NO" id="Tna-2J-h7R" customClass="CityRegionContainerViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="v8s-A5-7b4"/>
                         <viewControllerLayoutGuide type="bottom" id="Ukg-Q0-W6T"/>
@@ -635,22 +617,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <containerView opaque="NO" tag="1" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Z2K-S5-rZH" userLabel="Picker Container View">
-                                <rect key="frame" x="0.0" y="516" width="600" height="240"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="unJ-Uo-JgT"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="unJ-Uo-JgT"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <segue destination="UUv-42-zi3" kind="embed" identifier="showCityPicker" id="vCL-eZ-vDa"/>
-                                </connections>
-                            </containerView>
                             <containerView opaque="NO" tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lTF-aa-MHS" userLabel="Area Table Container View">
-                                <rect key="frame" x="0.0" y="64" width="600" height="520"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="392.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="400" id="Qhe-OL-A9d"/>
                                     <constraint firstAttribute="height" constant="450" id="wiQ-u3-RzQ"/>
@@ -665,36 +633,42 @@
                                     <segue destination="ypp-eh-ebb" kind="embed" identifier="showRegionTable" id="4Yb-iL-oPz"/>
                                 </connections>
                             </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="34M-KA-oZp">
+                                <rect key="frame" x="0.0" y="456.5" width="600" height="42"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </view>
+                            <containerView opaque="NO" tag="1" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Z2K-S5-rZH" userLabel="Picker Container View">
+                                <rect key="frame" x="0.0" y="498.5" width="600" height="257.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="unJ-Uo-JgT"/>
+                                </constraints>
+                                <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="unJ-Uo-JgT"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <segue destination="UUv-42-zi3" kind="embed" identifier="showCityPicker" id="vCL-eZ-vDa"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="bottom" secondItem="Ukg-Q0-W6T" secondAttribute="top" id="2UJ-k0-GTU"/>
-                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="height" secondItem="5bA-Hi-HDt" secondAttribute="height" multiplier="3:10" id="3MS-hK-Jda"/>
+                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="height" secondItem="5bA-Hi-HDt" secondAttribute="height" multiplier="429:1334" id="3MS-hK-Jda"/>
                             <constraint firstItem="lTF-aa-MHS" firstAttribute="top" secondItem="v8s-A5-7b4" secondAttribute="bottom" id="690-GL-Lhz"/>
-                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="top" secondItem="lTF-aa-MHS" secondAttribute="bottom" id="7JI-Sb-jwo"/>
                             <constraint firstItem="lTF-aa-MHS" firstAttribute="width" secondItem="5bA-Hi-HDt" secondAttribute="width" id="BKu-Bi-068"/>
                             <constraint firstItem="lTF-aa-MHS" firstAttribute="centerX" secondItem="5bA-Hi-HDt" secondAttribute="centerX" id="Bda-Pa-4Ia"/>
+                            <constraint firstItem="34M-KA-oZp" firstAttribute="width" secondItem="lTF-aa-MHS" secondAttribute="width" id="DQv-ld-WJT"/>
                             <constraint firstItem="Ukg-Q0-W6T" firstAttribute="top" secondItem="Z2K-S5-rZH" secondAttribute="bottom" id="N2o-tr-fcs"/>
                             <constraint firstItem="Z2K-S5-rZH" firstAttribute="centerX" secondItem="5bA-Hi-HDt" secondAttribute="centerX" id="OUo-5e-wyc"/>
-                            <constraint firstAttribute="trailing" secondItem="Z2K-S5-rZH" secondAttribute="trailing" id="OYx-Zp-77L"/>
-                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="leading" secondItem="5bA-Hi-HDt" secondAttribute="leading" id="YHE-BX-Vfw"/>
-                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="centerY" secondItem="5bA-Hi-HDt" secondAttribute="centerY" id="ZjX-E6-ZES"/>
-                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="centerX" secondItem="5bA-Hi-HDt" secondAttribute="centerX" id="gHN-3c-H2y"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Z2K-S5-rZH" secondAttribute="trailing" id="mft-yv-nYi"/>
+                            <constraint firstItem="34M-KA-oZp" firstAttribute="top" secondItem="lTF-aa-MHS" secondAttribute="bottom" id="P7n-Yu-Hvj"/>
+                            <constraint firstItem="34M-KA-oZp" firstAttribute="height" secondItem="5bA-Hi-HDt" secondAttribute="height" multiplier="70:1334" id="WP6-Ey-BUw"/>
+                            <constraint firstItem="34M-KA-oZp" firstAttribute="leading" secondItem="lTF-aa-MHS" secondAttribute="leading" id="mJe-jc-3iV"/>
+                            <constraint firstItem="Z2K-S5-rZH" firstAttribute="top" secondItem="34M-KA-oZp" secondAttribute="bottom" id="qL1-b9-2iC"/>
                             <constraint firstItem="Z2K-S5-rZH" firstAttribute="width" secondItem="5bA-Hi-HDt" secondAttribute="width" id="vAe-2i-Byb"/>
-                            <constraint firstItem="lTF-aa-MHS" firstAttribute="height" secondItem="5bA-Hi-HDt" secondAttribute="height" multiplier="6.5:10" id="vln-6A-Xtz"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="2UJ-k0-GTU"/>
-                                <exclude reference="7JI-Sb-jwo"/>
-                                <exclude reference="OYx-Zp-77L"/>
-                                <exclude reference="YHE-BX-Vfw"/>
-                                <exclude reference="ZjX-E6-ZES"/>
-                                <exclude reference="gHN-3c-H2y"/>
-                                <exclude reference="mft-yv-nYi"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="區域選擇" id="0Zm-g3-mGd">
                         <barButtonItem key="rightBarButtonItem" title="完成" id="vhU-4t-ben">
@@ -1266,7 +1240,7 @@
         <!--Browser View Controller-->
         <scene sceneID="KPq-L4-VJt">
             <objects>
-                <viewController id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
