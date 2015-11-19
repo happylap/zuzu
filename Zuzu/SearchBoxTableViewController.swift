@@ -41,7 +41,7 @@
         
         // Price & Size Picker Vars
         struct PickerConst {
-            static let anyLower:(label:String, value:Int) = ("不限",CriteriaConst.Bound.LOWER_ANY)
+            static let anyLower:(label:String, value:Int) = ("0",CriteriaConst.Bound.LOWER_ANY)
             static let anyUpper:(label:String, value:Int) = ("不限",CriteriaConst.Bound.UPPER_ANY)
             static let upperBoundStartZero = 0
             
