@@ -635,7 +635,7 @@
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="34M-KA-oZp">
                                 <rect key="frame" x="0.0" y="456.5" width="600" height="42"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <containerView opaque="NO" tag="1" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Z2K-S5-rZH" userLabel="Picker Container View">
                                 <rect key="frame" x="0.0" y="498.5" width="600" height="257.5"/>
@@ -1110,7 +1110,7 @@
                                                     <state key="normal" title="Button" image="arrow_down02_n"/>
                                                 </button>
                                             </subviews>
-                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="3x4-yg-9HK" firstAttribute="top" secondItem="V9N-G1-Fvz" secondAttribute="topMargin" constant="11" id="D82-ac-5CT"/>
                                                 <constraint firstItem="3x4-yg-9HK" firstAttribute="leading" secondItem="V9N-G1-Fvz" secondAttribute="leading" constant="8" id="FHt-Ee-RLa"/>

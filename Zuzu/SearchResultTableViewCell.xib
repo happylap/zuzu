@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -46,33 +47,31 @@
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
-                        <rect key="frame" x="351" y="163" width="48" height="20.5"/>
+                        <rect key="frame" x="368.5" y="167" width="30.5" height="16"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Edm-z3-ZwW"/>
                             <constraint firstAttribute="width" constant="48" id="FLK-bZ-amz"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="Edm-z3-ZwW"/>
+                                <exclude reference="FLK-bZ-amz"/>
                             </mask>
-                        </variation>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
-                        <rect key="frame" x="15" y="138.5" width="392" height="20.5"/>
+                        <rect key="frame" x="15" y="147" width="353.5" height="16"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Hkh-YS-0jf"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
@@ -80,18 +79,15 @@
                                 <exclude reference="Hkh-YS-0jf"/>
                             </mask>
                         </variation>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
-                        <rect key="frame" x="15" y="166" width="142" height="20.5"/>
+                        <rect key="frame" x="15" y="170" width="108.5" height="16"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="um8-id-ng9"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="8"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
@@ -99,18 +95,15 @@
                                 <exclude reference="um8-id-ng9"/>
                             </mask>
                         </variation>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
-                        <rect key="frame" x="165" y="166" width="38" height="20.5"/>
+                        <rect key="frame" x="131" y="170" width="29.5" height="16"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="42" id="Q5z-nT-JY8"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
@@ -118,27 +111,21 @@
                                 <exclude reference="Q5z-nT-JY8"/>
                             </mask>
                         </variation>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
-                        <rect key="frame" x="295" y="163" width="49" height="20.5"/>
+                        <rect key="frame" x="319.5" y="167" width="42" height="16"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="64" id="hjg-Yj-Y0i"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="hjg-Yj-Y0i"/>
                             </mask>
-                        </variation>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         </variation>
                     </label>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
@@ -175,21 +162,40 @@
                             <constraint firstAttribute="height" constant="20" id="gyR-eA-Shd"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="591" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KeF-nv-cuS" userLabel="Source Label">
+                        <rect key="frame" x="376.5" y="147" width="22.5" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="26" id="jvn-UV-fFy"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="jvn-UV-fFy"/>
+                            </mask>
+                        </variation>
+                    </label>
                 </subviews>
                 <animations/>
                 <constraints>
+                    <constraint firstItem="zzB-16-z6B" firstAttribute="top" secondItem="KeF-nv-cuS" secondAttribute="bottom" constant="8" id="2zr-VB-IYd"/>
                     <constraint firstItem="Sa0-Cs-laH" firstAttribute="top" secondItem="11f-2y-aXb" secondAttribute="bottom" constant="7" id="3gf-8o-Nhq"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" id="3nc-Tv-eYE"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zzB-16-z6B" secondAttribute="trailing" constant="8" id="4fQ-0W-376"/>
                     <constraint firstItem="11f-2y-aXb" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="leading" id="5Od-sx-1I1"/>
+                    <constraint firstItem="KeF-nv-cuS" firstAttribute="centerY" secondItem="11f-2y-aXb" secondAttribute="centerY" id="8B3-Dn-i7k"/>
                     <constraint firstAttribute="bottomMargin" secondItem="zzB-16-z6B" secondAttribute="bottom" constant="8" id="920-7o-Snd"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="95t-2C-vcI"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GD9-Jc-zPa" secondAttribute="trailing" id="Cc8-sH-bbT"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="trailing" constant="8" symbolic="YES" id="EY4-hO-fbE"/>
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="top" id="FUD-wu-VhK"/>
                     <constraint firstAttribute="trailingMargin" secondItem="ttQ-yW-U9H" secondAttribute="trailing" id="GLw-Oj-pH8"/>
+                    <constraint firstItem="KeF-nv-cuS" firstAttribute="top" secondItem="KFe-03-eKb" secondAttribute="bottom" constant="8" symbolic="YES" id="Jzm-4H-CQn"/>
+                    <constraint firstItem="KeF-nv-cuS" firstAttribute="width" secondItem="QwY-Xe-T1B" secondAttribute="width" multiplier="1:7" id="KMu-g1-vLy"/>
                     <constraint firstItem="Sa0-Cs-laH" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="NX7-9T-wfc"/>
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="T5V-z7-wUS"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="KeF-nv-cuS" secondAttribute="trailing" constant="8" id="aPq-Hx-Y9e"/>
                     <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="7" id="fEz-oG-VR4"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sa0-Cs-laH" secondAttribute="bottom" constant="5" id="g4m-xp-pW3"/>
                     <constraint firstItem="hPJ-o1-WHC" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="j6G-Uq-3bU"/>
@@ -200,11 +206,20 @@
                     <constraint firstAttribute="trailingMargin" secondItem="11f-2y-aXb" secondAttribute="trailing" id="ozt-zU-aVW"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="baseline" secondItem="Sa0-Cs-laH" secondAttribute="baseline" id="qDp-tf-RuV"/>
                     <constraint firstItem="Btt-ya-h7f" firstAttribute="top" secondItem="KFe-03-eKb" secondAttribute="bottom" constant="3" id="qEr-A9-Ydh"/>
+                    <constraint firstItem="KeF-nv-cuS" firstAttribute="leading" secondItem="11f-2y-aXb" secondAttribute="trailing" constant="8" id="roD-cb-uea"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Hbn-Ap-XJT" secondAttribute="trailing" id="seC-2l-Ms1"/>
                     <constraint firstItem="hPJ-o1-WHC" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="svp-fv-6uQ"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="t5x-sW-gOn"/>
                 </constraints>
                 <edgeInsets key="layoutMargins" top="5" left="7" bottom="5" right="7"/>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="ozt-zU-aVW"/>
+                        <exclude reference="Jzm-4H-CQn"/>
+                        <exclude reference="KMu-g1-vLy"/>
+                        <exclude reference="2zr-VB-IYd"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <animations/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -216,6 +231,7 @@
                 <outlet property="houseImg" destination="Hbn-Ap-XJT" id="BwR-sB-AG3"/>
                 <outlet property="housePrice" destination="Kgs-Ox-hob" id="DXn-o0-6KX"/>
                 <outlet property="houseSize" destination="GD9-Jc-zPa" id="7Qw-L3-R4x"/>
+                <outlet property="houseSourceLabel" destination="KeF-nv-cuS" id="tky-aX-8ff"/>
                 <outlet property="houseTitle" destination="KFe-03-eKb" id="IoH-ai-Z6l"/>
                 <outlet property="houseTypeAndUsage" destination="Sa0-Cs-laH" id="MmL-ba-y1k"/>
                 <outlet property="prefixedButton" destination="hPJ-o1-WHC" id="27q-w4-Bud"/>

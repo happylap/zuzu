@@ -914,8 +914,8 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             
             if let cell = cell as? HouseDetailExpandableContentCell {
-                cell.setNeedsLayout()
-                cell.layoutIfNeeded()
+                //cell.setNeedsLayout()
+                //cell.layoutIfNeeded()
                 
                 let contentHeight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
                 let labelHeight = cell.contentLabel.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height

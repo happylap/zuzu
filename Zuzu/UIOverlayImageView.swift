@@ -37,7 +37,7 @@ class UIOverlayImageView: UIImageView {
         
         
         ///Bottom Info Layer
-        let infoHeight = self.bounds.width * (200/1441)
+        let infoHeight = self.bounds.width * (220/1441)
         let newOrigin = CGPoint(x: self.bounds.origin.x,
             y: self.bounds.origin.y + self.bounds.height - infoHeight)
         
