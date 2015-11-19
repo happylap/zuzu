@@ -138,23 +138,70 @@ class HouseDetailViewController: UIViewController {
             }),
             1:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailBasicInfoCell {
-                    if let houseItem = self.houseItem {
-                        cell.leftInfoText.text = "\(houseItem.price) 月/元"
-                        cell.rightInfoText.text = "\(houseItem.size) 坪"
+                    
+                    var priceDetail:String?
+                    if let houseItemDetail = self.houseItemDetail {
+                        
+                        if let priceIncl = houseItemDetail.valueForKey("price_incl") as? [Int] {
+                            
+                            let priceStringList = priceIncl.map { (code) -> String in
+                                self.houseTypeLabelMaker!.fromCodeForField("price_incl", code: code, defaultValue: "—")
+                            }
+                            
+                            priceDetail = "租金包含: \(priceStringList.joinWithSeparator("; "))"
+                            
+                        } else if let otherExpense = houseItemDetail.valueForKey("other_expense") as? [Int] {
+                            
+                            let otherExpenseStringList = otherExpense.map { (code) -> String in
+                                self.houseTypeLabelMaker!.fromCodeForField("other_expense", code: code, defaultValue: "—")
+                            }
+                            
+                            priceDetail = "其他費用: \(otherExpenseStringList.joinWithSeparator("; "))"
+                        }
+                        
+                        if let priceDetail = priceDetail {
+                            cell.leftInfoSub.text = "( \(priceDetail) )"
+                            cell.leftInfoSub.hidden = false
+                        }
+                        
+                        if let price = houseItemDetail.valueForKey("price") as? Int {
+                            cell.leftInfoText.text = "\(price) 月/元"
+                        }
+                        
+                        if let size = houseItemDetail.valueForKey("size") as? Int {
+                            cell.rightInfoText.text = "\(size) 坪"
+                        }
                     }
                 }
             }),
             2:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailBasicInfoCell {
-                    if let houseItem = self.houseItem {
-                        let houseType = self.houseTypeLabelMaker!.fromCodeForField("house_type", code: houseItem.houseType,defaultValue: "")
-                        let purposeType = self.houseTypeLabelMaker!.fromCodeForField("purpose_type", code: houseItem.purposeType, defaultValue: "")
-                        
-                        cell.rightInfoText.text = "\(houseType) / \(purposeType)"
-                    }
                     
                     if let houseDetail = self.houseItemDetail {
-                        cell.leftInfoText.text = "隔間:" + (houseDetail.valueForKey("wall_mtl") as? String ?? "—")
+                        
+                        var houseTypeString = String()
+                        var purposeTypeString = String()
+                        
+                        if let houseType = houseDetail.valueForKey("house_type") as? Int{
+                            houseTypeString = self.houseTypeLabelMaker!.fromCodeForField("house_type", code: houseType,defaultValue: "")
+                        }
+                        
+                        if let purposeType = houseDetail.valueForKey("purpose_type") as? Int{
+                            purposeTypeString = self.houseTypeLabelMaker!.fromCodeForField("purpose_type", code: purposeType, defaultValue: "")
+                        }
+                        
+                        cell.leftInfoText.text = "\(houseTypeString) / \(purposeTypeString)"
+                        
+                        var parkingTypeLabel = "—"
+                        
+                        if let hasParking = houseDetail.valueForKey("parking_lot") as? Bool{
+                            if hasParking,
+                                let parkingType = houseDetail.valueForKey("parking_type") as? Int {
+                                    parkingTypeLabel = self.houseTypeLabelMaker!.fromCodeForField("parking_type", code: parkingType, defaultValue: "")
+                            }
+                        }
+                        
+                        cell.rightInfoText.text = "車位: \(parkingTypeLabel)"
                     }
                 }
             }),
@@ -168,18 +215,33 @@ class HouseDetailViewController: UIViewController {
                         
                         cell.leftInfoText.text = "樓層: \(floor!)/\(total_floor)"
                         
+                        var layoutLabel = "—"
                         let room = houseDetail.valueForKey("num_bedroom") as? Int ?? 0
                         let ting = houseDetail.valueForKey("num_ting") as? Int ?? 0
                         
                         if(room != 0 || ting != 0) {
-                            cell.rightInfoText.text = "\(room)房\(ting)廳"
-                        } else {
-                            cell.rightInfoText.text = ""
+                            layoutLabel = "\(room)房\(ting)廳"
                         }
+                        
+                        cell.rightInfoText.text = "格局: \(layoutLabel)"
                     }
                 }
             }),
-            4:CellInfo(cellIdentifier: .AddressCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            4:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+                if let cell = cell as? HouseDetailBasicInfoCell {
+                    
+                    if let houseDetail = self.houseItemDetail {
+                        
+                        let community = houseDetail.valueForKey("community") as? String ?? "—"
+                        let mgmtFee = houseDetail.valueForKey("mgmt_fee") as? String ?? "—"
+                        
+                        cell.leftInfoText.text = "社區: \(community)"
+                        
+                        cell.rightInfoText.text = "管理費: \(mgmtFee)"
+                    }
+                }
+            }),
+            5:CellInfo(cellIdentifier: .AddressCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailAddressCell {
                     if let houseItem = self.houseItem {
                         cell.addressLabel.text = houseItem.addr
@@ -187,18 +249,18 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            5:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            6:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "提供物品"
                 }
             }),
-            6:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: true, cellHeight: 55, handler: { (cell) -> () in
+            7:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     
                     if let houseDetail = self.houseItemDetail {
                         
-                        var resultString:String = ""
+                        var resultString = String()
                         
                         if let furnitureList = houseDetail.valueForKey("furniture") as? [Int]  {
                             
@@ -217,22 +279,26 @@ class HouseDetailViewController: UIViewController {
                             resultString += facilityStringList.joinWithSeparator("; ")
                         }
                         
-                        cell.contentLabel.text = resultString
+                        if(resultString.characters.count > 0) {
+                            cell.contentLabel.text = resultString
+                        } else {
+                            cell.contentLabel.text = "無資訊\n"
+                        }
                     }
                     
                 }
             }),
-            7:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            8:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "生活機能"
                 }
             }),
-            8:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: true, cellHeight: 55, handler: { (cell) -> () in
+            9:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     if let houseDetail = self.houseItemDetail {
                         
-                        var resultString:String = ""
+                        var resultString = String()
                         
                         if let surroundingList = houseDetail.valueForKey("surrounding") as? [Int]  {
                             
@@ -240,7 +306,20 @@ class HouseDetailViewController: UIViewController {
                                 self.houseTypeLabelMaker!.fromCodeForField("surrounding", code: code, defaultValue: "—")
                             }
                             
-                            resultString += surroundingStringList.joinWithSeparator("; ") + "\n\n"
+                            let itemsPerRow = 4
+                            var allItems = surroundingStringList
+                            
+                            while(allItems.count > itemsPerRow) {
+                                let row = Array(allItems.prefix(itemsPerRow))
+                                resultString += row.joinWithSeparator("; ") + "\n"
+                                
+                                let rangeToRemove = allItems.startIndex..<allItems.startIndex.advancedBy(itemsPerRow)
+                                allItems.removeRange(rangeToRemove)
+                            }
+                            
+                            resultString += allItems.joinWithSeparator("; ") + "\n\n"
+                            
+                            //resultString += surroundingStringList.joinWithSeparator("; ") + "\n\n"
                         }
                         
                         var transportationList = [String]()
@@ -263,21 +342,25 @@ class HouseDetailViewController: UIViewController {
                         
                         resultString += transportationList.joinWithSeparator("; ")
                         
-                        cell.contentLabel.text = resultString
+                        if(resultString.characters.count > 0) {
+                            cell.contentLabel.text = "\(resultString)\n"
+                        } else {
+                            cell.contentLabel.text = "無資訊\n"
+                        }
                     }
                     
                 }
             }),
-            9:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            10:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "租屋限制"
                 }
             }),
-            10:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: true, cellHeight: 55, handler: { (cell) -> () in
+            11:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     if let houseDetail = self.houseItemDetail {
-                        var resultString:String = ""
+                        var resultString = String()
                         
                         //Profile
                         if let profiles = houseDetail.valueForKey("restr_profile") as? [String] {
@@ -286,7 +369,7 @@ class HouseDetailViewController: UIViewController {
                                 self.houseTypeLabelMaker!.fromCodeForField("restr_profile", code: Int(code)!, defaultValue: "—")
                             }
                             
-                            resultString += profilesStringList.joinWithSeparator("; ") + "\n"
+                            resultString += profilesStringList.joinWithSeparator("; ") + "\n\n"
                         }
                         
                         var restrictionList = [String]()
@@ -306,43 +389,104 @@ class HouseDetailViewController: UIViewController {
                         //Allow Cooking
                         if let allow_cooking = houseDetail.valueForKey("allow_cooking") as? Bool {
                             
-                            restrictionList.append( (allow_cooking ? "可開伙" : "不可養開伙"))
+                            restrictionList.append( (allow_cooking ? "可開伙" : "不可開伙"))
                         }
                         
-                        resultString += restrictionList.joinWithSeparator("; ") + "\n"
+                        if(restrictionList.count > 0) {
+                            resultString += restrictionList.joinWithSeparator("; ") + "\n"
+                        }
                         
                         //Shortest Lease
-                        if let lease_period = houseDetail.valueForKey("shortest_lease") as? Int {
-                            resultString += "最短租期: \(lease_period)天"
+                        if let leasePeriod = houseDetail.valueForKey("shortest_lease") as? Int {
+                            if let leasePeriodLabel = self.houseTypeLabelMaker!.fromCodeForField("shortest_lease", code: leasePeriod) {
+                                resultString += "最短租期: \(leasePeriodLabel) \n"
+                            } else {
+                                resultString += "最短租期: \(leasePeriod)天 \n"
+                            }
                         }
                         
-                        cell.contentLabel.text = resultString
+                        if(resultString.characters.count > 0) {
+                            cell.contentLabel.text = resultString
+                        } else {
+                            cell.contentLabel.text = "無資訊\n"
+                        }
                     }
                 }
             }),
-            11:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            12:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "其他資訊"
                 }
             }),
-            12:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: true, cellHeight: 55, handler: { (cell) -> () in
+            13:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+                if let cell = cell as? HouseDetailExpandableContentCell {
+                    
+                    var otherInfoList = [String]()
+                    if let houseDetail = self.houseItemDetail {
+                        otherInfoList.append("隔間材料: \( (houseDetail.valueForKey("wall_mtl") as? String ?? "—") )")
+                        
+                        var orientationStr = "—"
+                        if let orientation = houseDetail.valueForKey("orientation") as? Int {
+                            orientationStr = self.houseTypeLabelMaker!.fromCodeForField("orientation", code: orientation, defaultValue: "")
+                        }
+                        
+                        otherInfoList.append("朝向: \(orientationStr)")
+                        
+                        
+                        var readyDateStr = "—"
+                        if let readyDate = houseDetail.valueForKey("ready_date") as? String {
+                            if let dateEnd = readyDate.characters.indexOf("T") {
+                                readyDateStr = String(readyDate.characters.prefixUpTo(dateEnd))
+                            }
+                        }
+                        
+                        otherInfoList.append("可遷入日: \(readyDateStr)")
+                        
+                        
+                        if(otherInfoList.count > 0) {
+                            cell.contentLabel.text = otherInfoList.joinWithSeparator("\n") + "\n"
+                        } else {
+                            cell.contentLabel.text = "無資訊\n"
+                        }
+                        
+                        
+                    } else {
+                        cell.contentLabel.text = "無資訊\n"
+                    }
+                }
+            }),
+            14:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+                if let cell = cell as? HouseDetailExpandableHeaderCell {
+                    cell.headerLabel.text = "屋主說明"
+                }
+            }),
+            15:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     cell.contentLabel.adjustsFontSizeToFitWidth = false
-                    //cell.contentLabel.numberOfLines = 0
+                    cell.contentLabel.numberOfLines = 0
                     
                     if let houseDetail = self.houseItemDetail {
-                        var resultString:String = ""
+                        var resultString = String()
                         
-                        cell.contentLabel.preferredMaxLayoutWidth = cell.contentView.frame.width - 2 * 8
+                        //cell.contentLabel.preferredMaxLayoutWidth = cell.contentView.frame.width - 2 * 8
                         
                         //Desc
                         if let desc = houseDetail.valueForKey("desc") as? String {
                             
-                            resultString += desc
+                            resultString = desc
                         }
                         NSLog("Desc Set: %@", resultString)
-                        cell.contentLabel.text = resultString
-                        cell.contentLabel.sizeToFit()
+                        
+                        
+                        if(resultString.characters.count > 0) {
+                            cell.contentLabel.text = "\(resultString)\n"
+                        } else {
+                            cell.contentLabel.text = "無資訊\n"
+                        }
+                        
+                        //cell.contentLabel.sizeToFit()
+                        //cell.setNeedsLayout()
+                        // cell.layoutIfNeeded()
                         
                         NSLog("Frame Height: %f", cell.contentLabel.frame.height)
                     }
@@ -388,7 +532,6 @@ class HouseDetailViewController: UIViewController {
     }
     
     private func configureTableView() {
-        
         //Configure cell height
         tableView.estimatedRowHeight = 213//tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -480,6 +623,8 @@ class HouseDetailViewController: UIViewController {
         "再麻煩您回覆方便的時間！\n"
         
         let toRecipents = ["pikapai@gmail.com"]
+        
+        LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
         
         if MFMailComposeViewController.canSendMail() {
             if let mc: MFMailComposeViewController = MFMailComposeViewController() {
@@ -739,23 +884,23 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         return tableRows.count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if var cellInfo = tableRows[indexPath.row] {
-            NSLog("heightForRowAtIndexPath> Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
-            
-            if(cellInfo.hidden) {
-                return 0
-            } else {
-                if(indexPath.row == 12) {
-                    return cellInfo.cellHeight + 2 * 8
-                } else {
-                    return cellInfo.cellHeight
-                }
-            }
-        } else {
-            return 0
-        }
-    }
+    //    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    //        if var cellInfo = tableRows[indexPath.row] {
+    //            NSLog("heightForRowAtIndexPath> Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
+    //
+    //            if(cellInfo.hidden) {
+    //                return 0
+    //            } else {
+    //                if(indexPath.row == 12) {
+    //                    return cellInfo.cellHeight + 2 * 8
+    //                } else {
+    //                    return cellInfo.cellHeight
+    //                }
+    //            }
+    //        } else {
+    //            return 0
+    //        }
+    //    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -769,15 +914,17 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             
             if let cell = cell as? HouseDetailExpandableContentCell {
-                
+                cell.setNeedsLayout()
                 cell.layoutIfNeeded()
                 
-                let testheight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+                let contentHeight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+                let labelHeight = cell.contentLabel.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
                 
-                NSLog("Layout Height: %f", testheight)
+                NSLog("Content Layout Height: %f", contentHeight)
+                NSLog("Label Layout Height: %f", labelHeight)
                 
-                cellInfo.cellHeight = max(cellInfo.cellHeight, testheight)
-                //= max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
+                cellInfo.cellHeight = max(cellInfo.cellHeight, contentHeight)
+                cellInfo.cellHeight = max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
                 
                 tableRows[indexPath.row] = cellInfo
                 
@@ -785,16 +932,6 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 
                 NSLog("Updated Cell Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
             }
-            
-            //           tableRows[indexPath.row] = cellInfo
-            
-            //            if let cell = cell as? HouseDetailTitleViewCell {
-            //                cellInfo.cellHeight = cell.titleImage.frame.height
-            //
-            //                NSLog("Cell Size: %f, %f", cell.titleImage.frame.size.width, cell.titleImage.frame.size.height)
-            //            }
-            
-            //           tableRows[indexPath.row] = cellInfo
             
             NSLog("- Cell Instance [%p] Prepare Cell For Row[%d]", cell, indexPath.row)
             
@@ -827,6 +964,9 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                     self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
                 }
             case .HouseDetailTitleCell:
+                
+                LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+                
                 let browser = MWPhotoBrowser(delegate: self)
                 
                 browser.displayActionButton = true // Show action button to allow sharing, copying, etc (defaults to YES)
