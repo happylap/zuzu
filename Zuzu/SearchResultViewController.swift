@@ -137,8 +137,8 @@ class SearchResultViewController: UIViewController {
     
     private func loadHouseListPage(pageNo: Int) {
         
-        if(pageNo > dataSource.estimatedNumberOfPages){
-            NSLog("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedNumberOfPages)]")
+        if(pageNo > dataSource.estimatedTotalResults){
+            NSLog("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedTotalResults)]")
             return
         }
         
@@ -167,6 +167,9 @@ class SearchResultViewController: UIViewController {
         }
         
         self.stopSpinner()
+        if(dataSource.estimatedTotalResults > 0) {
+            self.title = "共\(dataSource.estimatedTotalResults)筆結果"
+        }
         self.tableView.reloadData()
         
         NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getSize())", self)
@@ -600,7 +603,7 @@ class SearchResultViewController: UIViewController {
     }
 }
 
-    // MARK: - Table View Data Source
+// MARK: - Table View Data Source
 extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -633,7 +636,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
                 cell.addToCollectionButton.image = UIImage(named: "heart_p")
             }
         }
- 
+        
         
         cell.addToCollectionButton.hidden = false
         cell.addToCollectionButton.userInteractionEnabled = true
@@ -648,7 +651,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     
 }
 
-    // MARK: - Scroll View Delegate
+// MARK: - Scroll View Delegate
 extension SearchResultViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -702,7 +705,7 @@ extension SearchResultViewController: UIScrollViewDelegate {
                 
                 let nextPage = self.dataSource.currentPage + 1
                 
-                if(nextPage <= dataSource.estimatedNumberOfPages){
+                if(nextPage <= dataSource.estimatedTotalResults){
                     startSpinner()
                     return
                 }
@@ -717,7 +720,7 @@ extension SearchResultViewController: UIScrollViewDelegate {
 }
 
 
-    // MARK: - UIAdaptivePresentationControllerDelegate
+// MARK: - UIAdaptivePresentationControllerDelegate
 extension SearchResultViewController: UIAdaptivePresentationControllerDelegate {
     
     //Need to figure out the use of this...
@@ -727,7 +730,7 @@ extension SearchResultViewController: UIAdaptivePresentationControllerDelegate {
     
 }
 
-    // MARK: - UIAlertViewDelegate
+// MARK: - UIAlertViewDelegate
 extension SearchResultViewController: UIAlertViewDelegate {
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
@@ -736,7 +739,7 @@ extension SearchResultViewController: UIAlertViewDelegate {
     
 }
 
-    // MARK: - FilterTableViewControllerDelegate
+// MARK: - FilterTableViewControllerDelegate
 extension SearchResultViewController: FilterTableViewControllerDelegate {
     
     private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {

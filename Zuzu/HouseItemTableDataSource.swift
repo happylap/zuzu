@@ -37,7 +37,7 @@ public class HouseItemTableDataSource {
     var debugStr: String {
         
         get {
-            let pageInfo = "Total Result: \(estimatedNumberOfPages)\n"
+            let pageInfo = "Total Result: \(estimatedTotalResults)\n"
                 + "Items Per Page: \(Const.PAGE_SIZE)\n"
                 + "Last Page No: \(self.currentPage)\n"
                 + "Total Items in Table: \(self.getSize())\n"
@@ -85,7 +85,7 @@ public class HouseItemTableDataSource {
     }
     
     //Total Number of items
-    var estimatedNumberOfPages:Int = 0
+    var estimatedTotalResults:Int = 0
     
     //Cache Data
     private var cachedData = [HouseItem]()
@@ -152,7 +152,7 @@ public class HouseItemTableDataSource {
         
         requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, error) -> Void in
             
-            self.estimatedNumberOfPages = totalNum
+            self.estimatedTotalResults = totalNum
             
             if let result = result {
                 self.appendDataForPage(pageNo, data: result)
