@@ -876,6 +876,7 @@ class HouseDetailViewController: UIViewController {
                         }
                         
                         mvc.houseTitle = self.houseItem?.title
+                        mvc.houseAddres = self.houseItem?.addr
                     }
                 }
                 

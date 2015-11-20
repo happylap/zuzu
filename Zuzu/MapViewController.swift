@@ -9,7 +9,7 @@ import UIKit
 import GoogleMaps
 
 class MapViewController: UIViewController {
-    
+    var houseAddres: String?
     var houseTitle: String?
     var coordinate: (latitude: CLLocationDegrees, longitude: CLLocationDegrees)?
     
@@ -53,9 +53,12 @@ class MapViewController: UIViewController {
             
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude)
+            marker.icon = GMSMarker.markerImageWithColor(UIColor.colorWithRGB(0x1CD4C6))
             marker.title = houseTitle ?? "租屋地點"
-            marker.snippet = "Taiwan"
+            marker.snippet = houseAddres ?? "無住址"
             marker.map = mapView
+            
+            mapView.selectedMarker = marker
         }
     }
     
