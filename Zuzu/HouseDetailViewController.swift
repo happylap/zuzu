@@ -94,17 +94,10 @@ class HouseDetailViewController: UIViewController {
     
     private func fetchHouseDetail(houseItem: HouseItem) {
         
-        //LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
-        
-        
-        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        dialog.graceTime = 0.5
-        dialog.show(true)
-        
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
             
-            //LoadingSpinnerOverlay.shared.hideOverlayView()
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
+            LoadingSpinner.shared.stop()
+            
             
             if let error = error {
                 NSLog("Cannot get remote data %@", error.localizedDescription)
@@ -612,7 +605,7 @@ class HouseDetailViewController: UIViewController {
     }
     
     private func initContactBarView() {
-        contactBarView.contactName.text = "———"
+        contactBarView.contactName.text = " "
         
         contactBarView.contactByMailButton.hidden = true
         
@@ -621,7 +614,7 @@ class HouseDetailViewController: UIViewController {
     
     private func configureContactBarView() {
         if let houseDetail = self.houseItemDetail {
-            contactBarView.contactName.text = houseDetail.valueForKey("agent") as? String ?? "———"
+            contactBarView.contactName.text = houseDetail.valueForKey("agent") as? String ?? "—"
             
             contactBarView.contactByMailButton
                 .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -775,6 +768,10 @@ class HouseDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        ///Start Loading
+        LoadingSpinner.shared.setDimBackground(true)
+        LoadingSpinner.shared.startOnView(view)
         
         ///Init Contact Bar View
         initContactBarView()

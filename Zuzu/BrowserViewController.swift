@@ -20,7 +20,6 @@ class BrowserViewController: UIViewController {
     @IBOutlet var pesudoAnchor: UIBarButtonItem!
     var webView: WKWebView?
     
-    
     private func configureNavigationBarItems() {
         
         ///Prepare custom UIButton for UIBarButtonItem
@@ -66,7 +65,12 @@ class BrowserViewController: UIViewController {
         
         if let sourceLink = self.sourceLink {
             if let url = NSURL(string:sourceLink) {
-                let req = NSURLRequest(URL:url)
+                
+                LoadingSpinner.shared.startOnView(view)
+                
+                self.webView?.UIDelegate = self
+                self.webView?.navigationDelegate = self
+                let req = NSURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 45)
                 self.webView!.loadRequest(req)
             }
         }
@@ -131,5 +135,25 @@ extension BrowserViewController: UrlPopoverViewControllerDelegate {
             MBProgressHUD.hideHUDForView(self.view, animated: true)
         }
     }
+    
+}
+
+extension BrowserViewController: WKNavigationDelegate {
+    
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        LoadingSpinner.shared.stop()
+    }
+    
+//    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+//        LoadingSpinner.shared.stop()
+//    }
+    
+    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        LoadingSpinner.shared.stop()
+    }
+}
+
+extension BrowserViewController: WKUIDelegate {
+    
     
 }
