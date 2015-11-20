@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSFontAttributeName : font]
         UINavigationBar.appearance().barTintColor = bgColor
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        
+        //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {

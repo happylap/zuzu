@@ -11,6 +11,7 @@ import MessageUI
 import MWPhotoBrowser
 import MarqueeLabel
 import Social
+import MBProgressHUD
 
 class HouseDetailViewController: UIViewController {
     
@@ -93,11 +94,17 @@ class HouseDetailViewController: UIViewController {
     
     private func fetchHouseDetail(houseItem: HouseItem) {
         
-        LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+        //LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+        
+        
+        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        dialog.graceTime = 0.5
+        dialog.show(true)
         
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
             
-            LoadingSpinnerOverlay.shared.hideOverlayView()
+            //LoadingSpinnerOverlay.shared.hideOverlayView()
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
             
             if let error = error {
                 NSLog("Cannot get remote data %@", error.localizedDescription)
@@ -112,6 +119,8 @@ class HouseDetailViewController: UIViewController {
                 
                 ///Configure Views On Data Loaded
                 self.configureViewsOnDataLoaded()
+                
+                self.enableNavigationBarItems()
             }
         }
     }
@@ -284,6 +293,8 @@ class HouseDetailViewController: UIViewController {
                         } else {
                             cell.contentLabel.text = "無資訊\n"
                         }
+                    } else {
+                        cell.contentLabel.text = "無資訊\n"
                     }
                     
                 }
@@ -347,6 +358,8 @@ class HouseDetailViewController: UIViewController {
                         } else {
                             cell.contentLabel.text = "無資訊\n"
                         }
+                    } else {
+                        cell.contentLabel.text = "無資訊\n"
                     }
                     
                 }
@@ -410,6 +423,8 @@ class HouseDetailViewController: UIViewController {
                         } else {
                             cell.contentLabel.text = "無資訊\n"
                         }
+                    } else {
+                        cell.contentLabel.text = "無資訊\n"
                     }
                 }
             }),
@@ -489,6 +504,8 @@ class HouseDetailViewController: UIViewController {
                         // cell.layoutIfNeeded()
                         
                         NSLog("Frame Height: %f", cell.contentLabel.frame.height)
+                    } else {
+                        cell.contentLabel.text = "無資訊\n"
                     }
                 }
             })
@@ -565,14 +582,33 @@ class HouseDetailViewController: UIViewController {
         collectButton.addTarget(self, action: "collectButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
         collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         
+        let collectItem = UIBarButtonItem(customView: collectButton)
+        collectItem.enabled = false
+        let shareItem = UIBarButtonItem(customView: shareButton)
+        shareItem.enabled = false
+        let sourceItem = UIBarButtonItem(customView: gotoSourceButton)
+        sourceItem.enabled = false
+        
         /// From right to left
         self.navigationItem.setRightBarButtonItems(
             [
-                UIBarButtonItem(customView: collectButton),
-                UIBarButtonItem(customView: shareButton),
-                UIBarButtonItem(customView: gotoSourceButton)
+                collectItem,
+                shareItem,
+                sourceItem
             ],
             animated: false)
+    }
+    
+    
+    private func enableNavigationBarItems() {
+        /// From right to left
+        if let items = self.navigationItem.rightBarButtonItems {
+            
+            for item in items {
+                item.enabled = true
+            }
+            
+        }
     }
     
     private func initContactBarView() {
@@ -729,7 +765,7 @@ class HouseDetailViewController: UIViewController {
     
     func gotoSourceButtonTouched(sender: UIButton) {
         
-        self.performSegueWithIdentifier("displayHouseSource", sender: self)
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
         
     }
     

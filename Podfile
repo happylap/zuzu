@@ -12,6 +12,7 @@ pod 'Dollar', '~>4.0'
 pod 'GoogleMaps'
 pod 'MWPhotoBrowser'
 pod 'MarqueeLabel'
+pod 'MBProgressHUD', '~> 0.9.1'
 end
 
 target 'ZuzuTests' do

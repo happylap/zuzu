@@ -7,25 +7,63 @@
 
 import UIKit
 import WebKit
+import MBProgressHUD
 
 class BrowserViewController: UIViewController {
-
+    
     var sourceLink: String?
     
-    @IBOutlet weak var containerView: UIView!
+    struct ViewTransConst {
+        static let displayHouseUrl:String = "displayHouseUrl"
+    }
     
+    @IBOutlet var pesudoAnchor: UIBarButtonItem!
     var webView: WKWebView?
+    
+    
+    private func configureNavigationBarItems() {
+        
+        ///Prepare custom UIButton for UIBarButtonItem
+        let copyLinkButton: UIButton = UIButton(type: UIButtonType.Custom)
+        copyLinkButton.setImage(UIImage(named: "copy_link")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+        copyLinkButton.addTarget(self, action: "copyLinkButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        copyLinkButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        copyLinkButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        
+        pesudoAnchor.customView = copyLinkButton
+        pesudoAnchor.tintColor = UIColor.whiteColor()
+        
+        /// From right to left
+        self.navigationItem.setRightBarButtonItems(
+            [
+                pesudoAnchor
+            ],
+            animated: false)
+    }
+    
+    func copyLinkButtonTouched(sender:UIButton) {
+        performSegueWithIdentifier(ViewTransConst.displayHouseUrl, sender: self)
+    }
     
     override func loadView() {
         super.loadView()
         
-        self.webView = WKWebView()
-        self.view = self.webView!
+        self.webView = WKWebView(frame: CGRectZero)
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        configureNavigationBarItems()
+        
+        view.addSubview(self.webView!)
+        
+        webView!.translatesAutoresizingMaskIntoConstraints = false
+        let height = NSLayoutConstraint(item: webView!, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 1, constant: 0)
+        let width = NSLayoutConstraint(item: webView!, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1, constant: 0)
+        view.addConstraints([height, width])
+        
         if let sourceLink = self.sourceLink {
             if let url = NSURL(string:sourceLink) {
                 let req = NSURLRequest(URL:url)
@@ -38,16 +76,60 @@ class BrowserViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
-    /*
+    
+    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier{
+            
+            NSLog("prepareForSegue: %@", identifier)
+            
+            switch identifier{
+            case ViewTransConst.displayHouseUrl:
+                
+                if let urlVc = segue.destinationViewController as? UrlPopoverViewController {
+                    urlVc.urlLabelText = self.sourceLink
+                    urlVc.delegate = self
+                    
+                    if let pVc = urlVc.presentationController {
+                        pVc.delegate = self
+                    }
+                }
+                
+            default: break
+            }
+        }
     }
-    */
+}
 
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
+    
+    //Need to figure out the use of this...
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
+    }
+    
+}
+
+extension BrowserViewController: UrlPopoverViewControllerDelegate {
+    
+    func onUrlCopiedDone(status:Bool) {
+        
+        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
+        if let image = UIImage(named: "checked_green"){
+            dialog.mode = .CustomView
+            dialog.customView = UIImageView(image: image)
+        }
+        dialog.animationType = .ZoomIn
+        dialog.dimBackground = true
+        dialog.labelText = "已複製"
+        
+        self.runOnMainThreadAfter(1) { () -> Void in
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
+        }
+    }
+    
 }

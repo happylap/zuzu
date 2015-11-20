@@ -22,6 +22,7 @@ DEPENDENCIES:
   - Dollar (~> 4.0)
   - GoogleMaps
   - MarqueeLabel
+  - MBProgressHUD (~> 0.9.1)
   - MWPhotoBrowser
   - SwiftyJSON (~> 2.3)
 
