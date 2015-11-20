@@ -35,7 +35,7 @@ public class LoadingSpinner{
             dialog.opacity = 0.3
             dialog.animationType = .Fade
             dialog.taskInProgress = true
-            dialog.graceTime = 0.2
+            dialog.graceTime = 0.6
             view.addSubview(dialog)
             dialog.show(true)
         }

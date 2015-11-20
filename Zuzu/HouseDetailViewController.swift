@@ -163,16 +163,24 @@ class HouseDetailViewController: UIViewController {
                         
                         if let priceDetail = priceDetail {
                             cell.leftInfoSub.text = "( \(priceDetail) )"
-                            cell.leftInfoSub.hidden = false
+                        } else {
+                            cell.leftInfoSub.text = " " //To reserve the height
                         }
+                        cell.leftInfoSub.hidden = false
                         
                         if let price = houseItemDetail.valueForKey("price") as? Int {
+                            cell.leftInfoText.font = UIFont.boldSystemFontOfSize(18)
                             cell.leftInfoText.text = "\(price) 月/元"
                         }
                         
                         if let size = houseItemDetail.valueForKey("size") as? Int {
+                            cell.rightInfoText.font = UIFont.boldSystemFontOfSize(18)
                             cell.rightInfoText.text = "\(size) 坪"
                         }
+                    } else {
+                        ///Before data is loaded
+                        cell.leftInfoSub.text = " " //To reserve the height
+                        cell.leftInfoSub.hidden = false
                     }
                 }
             }),
