@@ -954,10 +954,7 @@
                                                     <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="超豪華辦公室等你來租" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjz-Vf-7cD" customClass="MarqueeLabel">
-                                                    <rect key="frame" x="0.0" y="0.0" width="650" height="65"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="jjz-Vf-7cD" secondAttribute="height" multiplier="100:10" id="kuv-Qe-rLR"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="8" y="8" width="634" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -974,25 +971,17 @@
                                             <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="zKm-Lp-uz6" secondAttribute="bottom" priority="900" id="7I1-OS-pEw"/>
+                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="leading" secondItem="Ck8-WE-6z5" secondAttribute="leadingMargin" constant="8" id="LCO-pe-aQZ"/>
                                                 <constraint firstItem="zKm-Lp-uz6" firstAttribute="width" secondItem="Ck8-WE-6z5" secondAttribute="width" id="c7a-Hg-64I"/>
                                                 <constraint firstItem="zKm-Lp-uz6" firstAttribute="leading" secondItem="Ck8-WE-6z5" secondAttribute="leadingMargin" id="hBW-r2-2mB"/>
                                                 <constraint firstItem="zKm-Lp-uz6" firstAttribute="top" secondItem="Ck8-WE-6z5" secondAttribute="topMargin" id="iVD-Fl-ZGq"/>
-                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="top" secondItem="zKm-Lp-uz6" secondAttribute="top" id="jen-GI-S4D"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="zKm-Lp-uz6" secondAttribute="trailing" id="mVM-Lz-hgR"/>
-                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="leading" secondItem="zKm-Lp-uz6" secondAttribute="leading" id="pIC-yL-KQd"/>
-                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="width" secondItem="Ck8-WE-6z5" secondAttribute="width" id="re9-Ia-Ih1"/>
+                                                <constraint firstItem="jjz-Vf-7cD" firstAttribute="top" secondItem="Ck8-WE-6z5" secondAttribute="topMargin" constant="8" id="sDg-kL-E6Y"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="jjz-Vf-7cD" secondAttribute="trailing" constant="8" id="yp3-Wv-Gkb"/>
                                             </constraints>
                                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                         </tableViewCellContentView>
-                                        <constraints>
-                                            <constraint firstItem="zKm-Lp-uz6" firstAttribute="width" secondItem="NNe-KS-vPG" secondAttribute="width" id="Ddk-4X-4az"/>
-                                        </constraints>
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="Ddk-4X-4az"/>
-                                            </mask>
-                                        </variation>
                                         <connections>
                                             <outlet property="houseTitleLabel" destination="jjz-Vf-7cD" id="khe-Be-2Lv"/>
                                             <outlet property="titleImage" destination="zKm-Lp-uz6" id="QGa-vF-tpJ"/>

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 class HouseDetailContactBarView: UIView {
 
@@ -27,21 +28,39 @@ class HouseDetailContactBarView: UIView {
         self.setup()
     }
     
-    private func setup() {
-        self.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        
-        view = loadViewFromNib()
-        view.frame = bounds
-        view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
-        
-        addSubview(view)
-    }
-    
-    func loadViewFromNib() -> UIView {
+    private func loadViewFromNib() -> UIView {
         let bundle = NSBundle(forClass:self.dynamicType)
         let nib = UINib(nibName: "HouseDetailContactBarView", bundle: bundle)
         let view = nib.instantiateWithOwner(self, options: nil)[0] as! UIView
         
         return view
     }
+    
+    private func setup() {
+        
+        view = loadViewFromNib()
+        view.frame = bounds
+        view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+        
+        view.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        
+        addSubview(view)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        NSLog("awakeFromNib %@", self)
+        
+        // Initialization code
+        let label:MarqueeLabel =  contactName as! MarqueeLabel
+        label.userInteractionEnabled = true
+        label.trailingBuffer = 30
+        label.rate = 30 //pixels/sec
+        label.fadeLength = 5
+        label.animationDelay = 1.5 //Sec
+        label.marqueeType = .MLContinuous
+        
+    }
+    
 }

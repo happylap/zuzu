@@ -58,7 +58,7 @@ class HouseDetailViewController: UIViewController {
     @IBOutlet weak var contactBarView: HouseDetailContactBarView!
     @IBOutlet weak var tableView: UITableView!
     
-    let houseTypeLabelMaker = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+    let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
     
     var photos = [MWPhoto]()
     
@@ -147,7 +147,7 @@ class HouseDetailViewController: UIViewController {
                         if let priceIncl = houseItemDetail.valueForKey("price_incl") as? [Int] {
                             
                             let priceStringList = priceIncl.map { (code) -> String in
-                                self.houseTypeLabelMaker!.fromCodeForField("price_incl", code: code, defaultValue: "—")
+                                self.houseTypeLabelMaker.fromCodeForField("price_incl", code: code, defaultValue: "—")
                             }
                             
                             priceDetail = "租金包含: \(priceStringList.joinWithSeparator("; "))"
@@ -155,7 +155,7 @@ class HouseDetailViewController: UIViewController {
                         } else if let otherExpense = houseItemDetail.valueForKey("other_expense") as? [Int] {
                             
                             let otherExpenseStringList = otherExpense.map { (code) -> String in
-                                self.houseTypeLabelMaker!.fromCodeForField("other_expense", code: code, defaultValue: "—")
+                                self.houseTypeLabelMaker.fromCodeForField("other_expense", code: code, defaultValue: "—")
                             }
                             
                             priceDetail = "其他費用: \(otherExpenseStringList.joinWithSeparator("; "))"
@@ -193,11 +193,11 @@ class HouseDetailViewController: UIViewController {
                         var purposeTypeString = String()
                         
                         if let houseType = houseDetail.valueForKey("house_type") as? Int{
-                            houseTypeString = self.houseTypeLabelMaker!.fromCodeForField("house_type", code: houseType,defaultValue: "")
+                            houseTypeString = self.houseTypeLabelMaker.fromCodeForField("house_type", code: houseType,defaultValue: "")
                         }
                         
                         if let purposeType = houseDetail.valueForKey("purpose_type") as? Int{
-                            purposeTypeString = self.houseTypeLabelMaker!.fromCodeForField("purpose_type", code: purposeType, defaultValue: "")
+                            purposeTypeString = self.houseTypeLabelMaker.fromCodeForField("purpose_type", code: purposeType, defaultValue: "")
                         }
                         
                         cell.leftInfoText.text = "\(houseTypeString) / \(purposeTypeString)"
@@ -207,7 +207,7 @@ class HouseDetailViewController: UIViewController {
                         if let hasParking = houseDetail.valueForKey("parking_lot") as? Bool{
                             if hasParking,
                                 let parkingType = houseDetail.valueForKey("parking_type") as? Int {
-                                    parkingTypeLabel = self.houseTypeLabelMaker!.fromCodeForField("parking_type", code: parkingType, defaultValue: "")
+                                    parkingTypeLabel = self.houseTypeLabelMaker.fromCodeForField("parking_type", code: parkingType, defaultValue: "")
                             }
                         }
                         
@@ -275,7 +275,7 @@ class HouseDetailViewController: UIViewController {
                         if let furnitureList = houseDetail.valueForKey("furniture") as? [Int]  {
                             
                             let furnitureStringList = furnitureList.map { (code) -> String in
-                                self.houseTypeLabelMaker!.fromCodeForField("furniture", code: code, defaultValue: "—")
+                                self.houseTypeLabelMaker.fromCodeForField("furniture", code: code, defaultValue: "—")
                             }
                             
                             resultString += furnitureStringList.joinWithSeparator("; ") + "\n"
@@ -283,7 +283,7 @@ class HouseDetailViewController: UIViewController {
                         
                         if let facilityList = houseDetail.valueForKey("facility") as? [Int]  {
                             let facilityStringList = facilityList.map { (code) -> String in
-                                self.houseTypeLabelMaker!.fromCodeForField("facility", code: code, defaultValue: "—")
+                                self.houseTypeLabelMaker.fromCodeForField("facility", code: code, defaultValue: "—")
                             }
                             
                             resultString += facilityStringList.joinWithSeparator("; ")
@@ -315,7 +315,7 @@ class HouseDetailViewController: UIViewController {
                         if let surroundingList = houseDetail.valueForKey("surrounding") as? [Int]  {
                             
                             let surroundingStringList = surroundingList.map { (code) -> String in
-                                self.houseTypeLabelMaker!.fromCodeForField("surrounding", code: code, defaultValue: "—")
+                                self.houseTypeLabelMaker.fromCodeForField("surrounding", code: code, defaultValue: "—")
                             }
                             
                             let itemsPerRow = 4
@@ -380,7 +380,7 @@ class HouseDetailViewController: UIViewController {
                         if let profiles = houseDetail.valueForKey("restr_profile") as? [String] {
                             
                             let profilesStringList = profiles.map { (code) -> String in
-                                self.houseTypeLabelMaker!.fromCodeForField("restr_profile", code: Int(code)!, defaultValue: "—")
+                                self.houseTypeLabelMaker.fromCodeForField("restr_profile", code: Int(code)!, defaultValue: "—")
                             }
                             
                             resultString += profilesStringList.joinWithSeparator("; ") + "\n\n"
@@ -389,7 +389,7 @@ class HouseDetailViewController: UIViewController {
                         var restrictionList = [String]()
                         //Sex
                         if let sex = houseDetail.valueForKey("restr_sex") as? Int {
-                            if let sexString = self.houseTypeLabelMaker!.fromCodeForField("restr_sex", code: sex) {
+                            if let sexString = self.houseTypeLabelMaker.fromCodeForField("restr_sex", code: sex) {
                                 restrictionList.append("限\(sexString)性")
                             }
                         }
@@ -412,7 +412,7 @@ class HouseDetailViewController: UIViewController {
                         
                         //Shortest Lease
                         if let leasePeriod = houseDetail.valueForKey("shortest_lease") as? Int {
-                            if let leasePeriodLabel = self.houseTypeLabelMaker!.fromCodeForField("shortest_lease", code: leasePeriod) {
+                            if let leasePeriodLabel = self.houseTypeLabelMaker.fromCodeForField("shortest_lease", code: leasePeriod) {
                                 resultString += "最短租期: \(leasePeriodLabel) \n"
                             } else {
                                 resultString += "最短租期: \(leasePeriod)天 \n"
@@ -443,7 +443,7 @@ class HouseDetailViewController: UIViewController {
                         
                         var orientationStr = "—"
                         if let orientation = houseDetail.valueForKey("orientation") as? Int {
-                            orientationStr = self.houseTypeLabelMaker!.fromCodeForField("orientation", code: orientation, defaultValue: "")
+                            orientationStr = self.houseTypeLabelMaker.fromCodeForField("orientation", code: orientation, defaultValue: "")
                         }
                         
                         otherInfoList.append("朝向: \(orientationStr)")
@@ -621,8 +621,21 @@ class HouseDetailViewController: UIViewController {
     }
     
     private func configureContactBarView() {
+
         if let houseDetail = self.houseItemDetail {
-            contactBarView.contactName.text = houseDetail.valueForKey("agent") as? String ?? "—"
+            
+            var contactDisplayStr = ""
+
+            if let contactName = houseDetail.valueForKey("agent") as? String {
+                contactDisplayStr = contactName
+            }
+            
+            if let agentType = houseDetail.valueForKey("agent_type") as? Int {
+                let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
+                contactDisplayStr += " (\(agentTypeStr))"
+            }
+            
+            contactBarView.contactName.text = contactDisplayStr
             
             contactBarView.contactByMailButton
                 .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -685,17 +698,24 @@ class HouseDetailViewController: UIViewController {
     func contactByPhoneButtonTouched(sender: UIButton) {
         if let houseDetail = self.houseItemDetail {
             
-            var message = "確認聯絡"
+            var message = "確認聯絡: "
+            let maxDisplayChars = 15
+            
             if let contactName = houseDetail.valueForKey("agent") as? String {
                 
                 let toIndex: String.Index = contactName.startIndex
-                    .advancedBy(9, limit: contactName.endIndex)
+                    .advancedBy(maxDisplayChars, limit: contactName.endIndex)
                 
-                message += contactName.substringToIndex(toIndex)
+                if(maxDisplayChars < contactName.characters.count) {
+                    message += contactName.substringToIndex(toIndex) + "..."
+                } else {
+                    message += contactName.substringToIndex(toIndex)
+                }
             }
             
             if let agentType = houseDetail.valueForKey("agent_type") as? Int {
-                message += "(\(agentType))"
+                let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
+                message += " (\(agentTypeStr))"
             }
             
             let optionMenu = UIAlertController(title: nil, message: message , preferredStyle: .ActionSheet)
