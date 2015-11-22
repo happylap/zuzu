@@ -30,6 +30,19 @@ class CityPickerViewController:UIViewController {
         cityPicker.delegate = self
     }
     
+    private func getFirstSelectedCityIndex() -> Int?{
+        
+        for (index, city) in cityRegions.enumerate() {
+            if let regionSelectionState = regionSelectionState {
+                if(regionSelectionState.contains(city)) {
+                    return index
+                }
+            }
+        }
+        
+        return nil
+    }
+    
     // MARK: - Notification Selector
     func onRegionSelectionUpdated(notification:NSNotification) {
         if let userInfo = notification.userInfo {
@@ -62,16 +75,21 @@ class CityPickerViewController:UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSLog("viewWillAppear: %@", self)
+        
+        ///Auto-pick the fisrt city with selected region
+        if let index = getFirstSelectedCityIndex() {
+            cityPicker.selectRow(index, inComponent: 0, animated: false)
+        }
+        
+        ///Notify the slected city
+        let row = cityPicker.selectedRowInComponent(0)
+        let selectedCity = cityRegions[row].code // cityItems[0][row].value
+        delegate?.onCitySelected(selectedCity)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         NSLog("viewDidAppear: %@", self)
-        
-        let row = cityPicker.selectedRowInComponent(0)
-        let selectedCity = cityRegions[row].code // cityItems[0][row].value
-        
-        delegate?.onCitySelected(selectedCity)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -101,10 +119,10 @@ extension CityPickerViewController: UIPickerViewDelegate {
         
         let city = cityRegions[row]
         
-        if(regionSelectionState != nil) {
-            if let index = regionSelectionState!.indexOf(city){
-                let selectedRegions = regionSelectionState![index].regions
-                let numberOfSelection = regionSelectionState![index].regions.count
+        if let regionSelectionState = regionSelectionState {
+            if let index = regionSelectionState.indexOf(city){
+                let selectedRegions = regionSelectionState[index].regions
+                let numberOfSelection = selectedRegions.count
                 
                 if(numberOfSelection > 0) {
                     
