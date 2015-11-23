@@ -22,6 +22,7 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var addToCollectionButton: UIImageView!
     @IBOutlet weak var prefixedButton: UIImageView!
     @IBOutlet weak var contactedView: UIView!
+    @IBOutlet weak var houseSourceLabel: UILabel!
     
     let placeholderImg = UIImage(named: "house_img")
     
@@ -70,6 +71,23 @@ class SearchResultTableViewCell: UITableViewCell {
             return nil
         }
     }
+   
+    private func prpcessSourceString(label:UILabel, source:Int) {
+        switch source {
+        case 1:
+            label.textColor = UIColor.colorWithRGB(0xFF9500)
+            label.text = "591"
+        case 2:
+            label.textColor = UIColor.colorWithRGB(0x55EFCB)
+            label.text = "好房網"
+        case 3:
+            label.textColor = UIColor.colorWithRGB(0xFFCD02)
+            label.text = "樂屋網"
+        default:
+            label.text = nil
+            break
+        }
+    }
     
     
     private func getUsageString(usage:Int) -> String? {
@@ -101,6 +119,8 @@ class SearchResultTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         
         // Reset any existing information
         houseTitle.text = nil
@@ -147,6 +167,8 @@ class SearchResultTableViewCell: UITableViewCell {
                 }
             }
             
+            prpcessSourceString(houseSourceLabel, source: houseItem.source)
+
             houseSize.text = String(format: "%d 坪", houseItem.size)
             housePrice.text = String(houseItem.price)
             houseImg.image = placeholderImg

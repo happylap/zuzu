@@ -42,6 +42,7 @@ struct SolrConst {
         static let HOUSE_TYPE = "house_type"
         static let PRICE = "price"
         static let SIZE = "size"
+        static let SOURCE = "source"
         static let CITY = "city"
         static let REGION = "region"
         static let IMG_LIST = "img"
@@ -64,6 +65,7 @@ class HouseItem:NSObject, NSCoding {
         private var purposeType: Int?
         private var price: Int?
         private var size: Int?
+        private var source: Int?
         private var desc: String?
         private var imgList: [String]?
         
@@ -72,41 +74,46 @@ class HouseItem:NSObject, NSCoding {
                 && (self.price != nil) && (self.size != nil)
         }
         
-        init(id:String?) {
+        init(id:String) {
             self.id = id
         }
         
-        func addTitle(title:String?) -> Builder {
+        func addTitle(title:String) -> Builder {
             self.title = title
             return self
         }
         
-        func addAddr(addr:String?) -> Builder {
+        func addAddr(addr:String) -> Builder {
             self.addr = addr
             return self
         }
         
-        func addHouseType(type:Int?) -> Builder {
+        func addHouseType(type:Int) -> Builder {
             self.houseType = type
             return self
         }
         
-        func addPurposeType(usage:Int?) -> Builder {
+        func addPurposeType(usage:Int) -> Builder {
             self.purposeType = usage
             return self
         }
         
-        func addPrice(price:Int?) -> Builder {
+        func addPrice(price:Int) -> Builder {
             self.price = price
             return self
         }
         
-        func addSize(size:Int?) -> Builder {
+        func addSize(size:Int) -> Builder {
             self.size = size
             return self
         }
         
-        func addDesc(desc:String?) -> Builder {
+        func addSource(source:Int) -> Builder {
+            self.source = source
+            return self
+        }
+        
+        func addDesc(desc:String) -> Builder {
             self.desc = desc
             return self
         }
@@ -129,6 +136,7 @@ class HouseItem:NSObject, NSCoding {
     let houseType: Int
     let purposeType: Int
     let price: Int
+    let source: Int
     let size: Int
     let desc: String?
     let imgList: [String]?
@@ -136,7 +144,7 @@ class HouseItem:NSObject, NSCoding {
     
     private init(builder: Builder){
         /// Assign default value for mandatory fields
-        /// cause we don't want the app exists because of some incorrect data in the backend
+        /// cause we don't want some exceptions happen in the App because of some incorrect data in the backend
         self.id = builder.id ?? ""
         self.title = builder.title ?? ""
         self.addr = builder.addr ?? ""
@@ -144,6 +152,7 @@ class HouseItem:NSObject, NSCoding {
         self.purposeType = builder.purposeType ?? 0
         self.price = builder.price ?? 0
         self.size = builder.size ?? 0
+        self.source = builder.source ?? 0
         self.desc = builder.desc
         self.imgList = builder.imgList
         
@@ -159,6 +168,7 @@ class HouseItem:NSObject, NSCoding {
         let purposeType = decoder.decodeIntegerForKey("purposeType") as Int
         let price = decoder.decodeIntegerForKey("price") as Int
         let size = decoder.decodeIntegerForKey("size") as Int
+        let source = decoder.decodeIntegerForKey("source") as Int
         let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
         let imgList = decoder.decodeObjectForKey("imgList") as? [String] ?? [String]()
         
@@ -169,6 +179,7 @@ class HouseItem:NSObject, NSCoding {
             .addPurposeType(purposeType)
             .addPrice(price)
             .addSize(size)
+            .addSource(source)
             .addDesc(desc)
             .addImageList(imgList)
         
@@ -183,6 +194,7 @@ class HouseItem:NSObject, NSCoding {
         aCoder.encodeInteger(purposeType, forKey:"purposeType")
         aCoder.encodeInteger(price, forKey:"price")
         aCoder.encodeInteger(size, forKey:"size")
+        aCoder.encodeInteger(source, forKey:"source")
         aCoder.encodeObject(desc, forKey:"desc")
         aCoder.encodeObject(imgList, forKey:"imgList")
     }
@@ -191,7 +203,7 @@ class HouseItem:NSObject, NSCoding {
 
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
-    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE, SolrConst.Filed.IMG_LIST]
+    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE,SolrConst.Filed.SOURCE, SolrConst.Filed.IMG_LIST]
     
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
@@ -413,13 +425,14 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                             if let itemList = response["docs"]?.arrayValue {
                                 
                                 for house in itemList {
-                                    let id = house["id"].string
-                                    let title = house["title"].string
-                                    let addr = house["addr"].string
-                                    let houseType = house["house_type"].int
-                                    let purpose = house["purpose_type"].int
-                                    let price = house["price"].int
-                                    let size = house["size"].int
+                                    let id = house["id"].string ?? ""
+                                    let title = house["title"].string ?? ""
+                                    let addr = house["addr"].string ?? ""
+                                    let houseType = house["house_type"].int ?? 0
+                                    let purpose = house["purpose_type"].int ?? 0
+                                    let price = house["price"].int ?? 0
+                                    let size = house["size"].int ?? 0
+                                    let source = house["source"].int  ?? 1
                                     let imgList = house["img"].array?.map({ (jsonObj) -> String in
                                         return jsonObj.stringValue
                                     })
@@ -433,6 +446,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                         .addPurposeType(purpose)
                                         .addPrice(price)
                                         .addSize(size)
+                                        .addSource(source)
                                         .addImageList(imgList)
                                         .build()
                                     
