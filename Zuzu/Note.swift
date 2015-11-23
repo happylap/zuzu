@@ -13,8 +13,8 @@ import CoreData
 public class Note: NSManagedObject {
     
     /* Mandatory Fields */
-    @NSManaged var id: String
-    @NSManaged var houseId: String
+    @NSManaged var title: String
     @NSManaged var desc: String
     @NSManaged var createDate: NSDate
+    @NSManaged var house: House
 }

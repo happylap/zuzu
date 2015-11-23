@@ -39,12 +39,20 @@ class NoteDao: NSObject {
         let note = Note(entity: model!, insertIntoManagedObjectContext: context)
         
         if model != nil {
-            note.id = $.now().description
-            note.houseId = houseId
+            note.title = noteDesc
             note.desc = noteDesc
             note.createDate = NSDate()
-            CoreDataManager.shared.save()
+            
+            if let house = HouseDao.sharedInstance.getHouseById(houseId) {
+                let notes = house.notes.mutableCopy() as! NSMutableOrderedSet
+                notes.addObject(note)
+                house.notes = notes.copy() as! NSOrderedSet
+                CoreDataManager.shared.save()
+            }
         }
+        
+        
+        
     }
     
     // MARK: Read
