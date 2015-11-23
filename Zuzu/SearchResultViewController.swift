@@ -633,7 +633,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         /// Enable add to collection button
         if let collectionIdList = self.collectionIdList {
             if(collectionIdList.contains(houseItem.id)) {
-                cell.addToCollectionButton.image = UIImage(named: "heart_p")
+                cell.addToCollectionButton.image = UIImage(named: "Heart_p")
             }
         }
         
