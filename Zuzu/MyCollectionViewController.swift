@@ -55,22 +55,34 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
     }
 
-    private func sortByField(button: UIButton, sortingOrder: String) {
+    private func imageWithColor(color: UIColor) -> UIImage {
         
+        let rect:CGRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        UIGraphicsBeginImageContext(rect.size)
+        let context:CGContextRef? = UIGraphicsGetCurrentContext()
+        
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        
+        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
+        
+    }
+
+    private func sortByField(button: UIButton, sortingOrder: String) {
         ///Switch from other sorting fields
-        if(!button.selected) {
+        if (!button.selected) {
             ///Disselect all & Clear all sorting icon for Normal state
             sortByPriceButton.selected = false
-            sortByPriceButton.setImage(nil,
-                forState: UIControlState.Normal)
+            sortByPriceButton.setImage(nil, forState: UIControlState.Normal)
             
             sortBySizeButton.selected = false
-            sortBySizeButton.setImage(nil,
-                forState: UIControlState.Normal)
+            sortBySizeButton.setImage(nil, forState: UIControlState.Normal)
             
             sortByPostTimeButton.selected = false
-            sortByPostTimeButton.setImage(nil,
-                forState: UIControlState.Normal)
+            sortByPostTimeButton.setImage(nil, forState: UIControlState.Normal)
             
             ///Select the one specified by hte user
             button.selected = true
@@ -97,9 +109,16 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
         NSLog("%@ onShowNoteEditorTouched", self)
-        if let imgView = sender.view {
         
-        }
+        self.performSegueWithIdentifier("showNotes", sender: sender)
+        
+        
+
+        
+        
+//        if let imgView = sender.view {
+//        
+//        }
     }
     
     
@@ -159,6 +178,12 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
     
+        //Configure Sorting Status
+        let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
+        self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        
         // Load the first page of data
         self.loadData()
     }
@@ -178,10 +203,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if let indexPath = self.tableView.indexPathForSelectedRow {
-            
-            if segue.identifier == "showMyCollectionDetail" {
-                
+        NSLog("%@ prepareForSegue", self)
+        
+        if segue.identifier == "showMyCollectionDetail" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
                 NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
                 
                 let destController = segue.destinationViewController as! MyCollectionDetailViewController
@@ -191,6 +216,29 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                 
             }
         }
+        
+        if segue.identifier == "showNotes" {
+//            NSLog("%@ segue to showNotes: \(indexPath)", self)
+            let destController = segue.destinationViewController as! MyNoteViewController
+//            if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+//                destController.houseItem = houseItem
+//            }
+            
+            if let sender = sender as? UITapGestureRecognizer {
+                if let imgView = sender.view {
+                    if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
+                        let indexPath = cell.indexPath
+                        NSLog("%@ segue to showNotes: \(indexPath)", self)
+                        if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+                            destController.houseItem = houseItem
+                        }
+                    }
+                }
+            }
+            
+            
+        }
+
     }
     
     
@@ -217,7 +265,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath) as! House
+        
+        if let house: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+            cell.houseItemForCollection = house
+        }
         
         /// Enable add to collection button
         cell.addToCollectionButton.userInteractionEnabled = true

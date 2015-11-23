@@ -63,6 +63,7 @@
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
+		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
 		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
@@ -167,6 +168,7 @@
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
 		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				81FA28231BDA3A0F0038DD19 /* MyCollectionCell.swift */,
 				81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */,
 				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
+				8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */,
 			);
 			name = Collection;
 			sourceTree = "<group>";
@@ -545,7 +548,7 @@
 				TargetAttributes = {
 					2F482DF11BAFE09100C68670 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = QUW3NPMSPB;
+						DevelopmentTeam = 8DFEJ29573;
 					};
 					2F482E071BAFE09100C68670 = {
 						CreatedOnToolsVersion = 7.0;
@@ -708,6 +711,7 @@
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
 				2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */,
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
+				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
 				2F6155591BD888660024145E /* SearchItemService.swift in Sources */,
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
@@ -890,7 +894,7 @@
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap3.Zuzu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
@@ -910,7 +914,7 @@
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap3.Zuzu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
