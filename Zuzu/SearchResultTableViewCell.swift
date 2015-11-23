@@ -14,6 +14,7 @@ class SearchResultTableViewCell: UITableViewCell {
     
     @IBOutlet weak var houseImg: UIImageView!
     @IBOutlet weak var houseTitle: UILabel!
+    @IBOutlet weak var houseTitleForCollection: UILabel!
     @IBOutlet weak var houseTypeAndUsage: UILabel!
     @IBOutlet weak var houseSize: UILabel!
     @IBOutlet weak var houseAddr: UILabel!
@@ -107,13 +108,18 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTypeAndUsage.text = nil
         houseSize.text = nil
         housePrice.text = nil
-        addToCollectionButton.image = UIImage(named: "heart_n")
-        prefixedButton.image = UIImage(named: "heart_n")
+        addToCollectionButton.image = UIImage(named: "Heart_n")
+        prefixedButton.image = UIImage(named: "uncheck")
         
         // Cancel image loading operation
         houseImg.af_cancelImageRequest()
         houseImg.layer.removeAllAnimations()
         houseImg.image = nil
+        
+        houseTitle.hidden = true
+        houseTitleForCollection.hidden = true
+        contactedView.hidden = true
+        
         
         NSLog("\n")
         NSLog("- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
@@ -125,6 +131,7 @@ class SearchResultTableViewCell: UITableViewCell {
         
         // load new information (if any)
         if let houseItem = self.houseItem {
+            houseTitle.hidden = false
             houseTitle.text = houseItem.title
             houseAddr.text = houseItem.addr
             
@@ -170,7 +177,7 @@ class SearchResultTableViewCell: UITableViewCell {
         
         // load new information (if any)
         if let house = self.houseItemForCollection {
-            
+            /*
             for constraintWithItem: NSLayoutConstraint in self.contentView.constraints {
                 if constraintWithItem.firstItem.restorationIdentifier == "SearchResultTableViewCell_houseTitle" {
                     if constraintWithItem.firstAttribute == .Leading {
@@ -179,22 +186,27 @@ class SearchResultTableViewCell: UITableViewCell {
                     }
                 }
             }
+            */
+            
+            self.addToCollectionButton.hidden = false
+            self.houseTitleForCollection.hidden = false
+            self.prefixedButton.hidden = false
+            self.contactedView.hidden = !(house.contacted)
+            
             
             if house.contacted == true {
-                prefixedButton.image = UIImage(named: "heart_p")
+                prefixedButton.image = UIImage(named: "checked_green")
             } else {
-                prefixedButton.image = UIImage(named: "heart_n")
+                prefixedButton.image = UIImage(named: "uncheck")
             }
-            self.prefixedButton.hidden = false
             self.prefixedButton.userInteractionEnabled = true
             self.prefixedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onContactTouched:")))
             
-            self.contactedView.hidden = !(house.contacted)
             
-            self.addToCollectionButton.image = UIImage(named: "bookmark-outline-plus")
-            self.addToCollectionButton.hidden = false
+            self.addToCollectionButton.image = UIImage(named: "note_n")
             
-            self.houseTitle.text = house.title
+            self.houseTitleForCollection.text = house.title
+            //self.houseTitle.text = "    \(house.title)"
             self.housePrice.text = house.price.description
             self.houseAddr.text = house.addr
             self.houseSize.text = "\(house.size) 坪"
@@ -226,6 +238,7 @@ class SearchResultTableViewCell: UITableViewCell {
             } else {
                 HouseDao.sharedInstance.updateByObjectId(house.objectID, dataToUpdate: ["contacted": false])
             }
+            parentTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
         }
     }
     
