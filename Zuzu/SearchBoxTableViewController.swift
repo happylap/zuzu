@@ -543,12 +543,20 @@
         
         func onButtonClicked(sender: UIButton) {
             if let toogleButton = sender as? ToggleButton {
-                toogleButton.toggleButtonState()
                 
-                //toggle off the select all button if any type is selected
-                if(toogleButton.tag != UIControlTag.NOT_LIMITED_BUTTON_TAG
-                    && toogleButton.getToggleState()==true) {
-                        selectAllButton?.setToggleState(false)
+                if(toogleButton.tag == UIControlTag.NOT_LIMITED_BUTTON_TAG) {
+                    selectAllButton?.setToggleState(true)
+                    return
+                
+                } else {
+                 
+                    toogleButton.toggleButtonState()
+                    
+                    //Toggle off the select all button if any type is selected
+                    if(toogleButton.getToggleState()==true) {
+                            selectAllButton?.setToggleState(false)
+                    }
+                    
                 }
                 
                 currentCriteria = self.stateToSearhCriteria()
