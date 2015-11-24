@@ -51,6 +51,7 @@
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
+		2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF525A1C04BFF000B3F47B /* InfoPlist.strings */; };
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */; };
@@ -158,6 +159,9 @@
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		2FBF52591C04BFF000B3F47B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2FBF525B1C04BFF200B3F47B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2FBF525C1C04BFF300B3F47B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterOptionTableViewController.swift; sourceTree = "<group>"; };
@@ -440,6 +444,7 @@
 				2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */,
 				2FDCA0D41BE0721800498FC0 /* resultFilters.json */,
 				2F9791BB1BF576C40056B721 /* fieldLabels.json */,
+				2FBF525A1C04BFF000B3F47B /* InfoPlist.strings */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -598,6 +603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */,
+				2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */,
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
@@ -806,6 +812,16 @@
 				2F482E011BAFE09100C68670 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		2FBF525A1C04BFF000B3F47B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2FBF52591C04BFF000B3F47B /* Base */,
+				2FBF525B1C04BFF200B3F47B /* en */,
+				2FBF525C1C04BFF300B3F47B /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

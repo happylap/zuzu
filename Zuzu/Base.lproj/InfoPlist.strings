@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Zuzu
+
+  Created by Jung-Shuo Pai on 2015/11/24.
+  Copyright © 2015年 Jung-Shuo Pai. All rights reserved.
+*/
+
+"CFBundleDisplayName" = "ZuZu Rentals";
+"CFBundleName" = "ZuZu Rentals";
