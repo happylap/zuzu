@@ -554,7 +554,7 @@
 				TargetAttributes = {
 					2F482DF11BAFE09100C68670 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 8DFEJ29573;
+						DevelopmentTeam = QUW3NPMSPB;
 					};
 					2F482E071BAFE09100C68670 = {
 						CreatedOnToolsVersion = 7.0;
@@ -902,7 +902,7 @@
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lap3.Zuzu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
@@ -922,7 +922,7 @@
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lap3.Zuzu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
