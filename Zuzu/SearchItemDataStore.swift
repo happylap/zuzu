@@ -96,6 +96,73 @@ class SearchCriteria: NSObject, NSCoding {
         
         aCoder.encodeObject(types, forKey:"types")
     }
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        if let targetObj = object as? SearchCriteria {
+            
+            var isEqual = true
+            
+            isEqual = isEqual && (self.keyword == targetObj.keyword)
+            
+            if let region1 = self.region, let region2 = targetObj.region {
+                
+                    if region1.count != region2.count {
+                        
+                         isEqual = isEqual && false
+                        
+                    } else {
+                        
+                        for city1 in region1 {
+                            if let index = region2.indexOf(city1) {
+                                let city2 = region2[index]
+                                
+                                isEqual = isEqual && (city1.regions == city2.regions)
+                                
+                            } else {
+                                
+                                isEqual = isEqual && false
+                            }
+                        }
+                        
+                    }
+                    
+            } else {
+                isEqual = isEqual && (self.region == nil && targetObj.region == nil)
+            }
+            
+            
+            isEqual = isEqual && (self.price == targetObj.price)
+            
+            isEqual = isEqual && (self.size == targetObj.size)
+            
+            isEqual = isEqual && (self.types == targetObj.types)
+            
+            return isEqual
+        }
+        return false
+    }
+}
+
+func ==<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
+    switch (lhs,rhs) {
+    case (.Some(let lhs), .Some(let rhs)):
+        return lhs == rhs
+    case (.None, .None):
+        return true
+    default:
+        return false
+    }
+}
+
+func == <T:Equatable> (tuple1:(T,T)?,tuple2:(T,T)?) -> Bool {
+    switch (tuple1,tuple2) {
+    case (.Some(let tuple1), .Some(let tuple2)):
+        return (tuple1.0 == tuple2.0) && (tuple1.1 == tuple2.1)
+    case (.None, .None):
+        return true
+    default:
+        return false
+    }
 }
 
 class SearchItem: NSObject, NSCoding {

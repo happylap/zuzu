@@ -57,57 +57,84 @@
         // Trigger the fetching of total number of items that meet the current criteria
         lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
         
-        let searchItemService : SearchItemService = SearchItemService.getInstance()
+        // Data Store Insatance
+        private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+        private let cityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
+        private let searchItemService = SearchItemService.getInstance()
+        private lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
         
-        let cityRegionDataStore: CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
-        
-        lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
+        private func updateRegionLabel(regionSelectionState: [City]) {
+            
+            var regionLabel = "不限"
+            
+            var labelStr:[String] = [String]()
+            
+            if(regionSelectionState.count > 0) {
+                
+                var numOfCity = 0
+                for city in regionSelectionState {
+                    
+                    if(city.regions.count == 0) {
+                        continue
+                    }
+                    
+                    if(labelStr.count < 3) {
+                        labelStr.append("\(city.name) (\(city.regions.count))")
+                    }
+                    numOfCity++
+                }
+                
+                regionLabel = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
+                
+            } else {
+                self.fastItemCountLabel.text = nil
+            }
+            
+            cityRegionLabel.text = regionLabel
+            
+        }
         
         var regionSelectionState: [City]? {
+            
             didSet {
-                
-                cityRegionLabel.text = "不限"
                 
                 if(regionSelectionState != nil) {
                     
-                    var labelStr:[String] = [String]()
-                    
                     if(regionSelectionState?.count > 0) {
                         
-                        var numOfCity = 0
-                        for city in regionSelectionState! {
-                            
-                            if(city.regions.count == 0) {
-                                continue
-                            }
-                            
-                            if(labelStr.count < 3) {
-                                labelStr.append("\(city.name) (\(city.regions.count))")
-                            }
-                            numOfCity++
-                        }
+                        updateRegionLabel(regionSelectionState!)
                         
-                        cityRegionLabel.text = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
+                        currentCriteria = self.toSearhCriteria()
                         
-                        stateObserver.onCriteriaChanged(self.toSearhCriteria())
                     } else {
                         self.fastItemCountLabel.text = nil
                     }
                 }
-                
-                
             }
+            
         }
         
-        var currentCriteria: SearchCriteria? {
+        var currentCriteria: SearchCriteria =  SearchCriteria() {
             
             didSet{
-                if(currentCriteria != nil) {
+                
+                if !(oldValue == currentCriteria) {
+                    filterDataStore.clearFilterSetting()
+                    
+                    stateObserver.onCriteriaChanged(currentCriteria)
+                    
                     ///Reset the prefetch house number label
                     self.fastItemCountLabel.text = nil
                     
+                    /// Save the current criteria
+//                    if(regionSelectionState != nil) {
+//                        cityRegionDataStore.saveSelectedCityRegions(regionSelectionState!)
+//                    } else{
+//                        cityRegionDataStore.saveSelectedCityRegions([City]())
+//                    }
+                    
                     ///Load the criteria to the Search Box UI
-                    self.loadFromSearchCriteria(currentCriteria!)
+                    self.populateViewFromSearchCriteria(currentCriteria)
                 }
             }
         }
@@ -186,8 +213,8 @@
             let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
             let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
             
-            if(fromTuple?.label == toTuple?.label) {
-                pickerStr = "\((fromTuple?.label)!)"
+            if(fromTuple?.value == toTuple?.value) {
+                pickerStr = "\((toTuple?.label)!)"
             } else {
                 pickerStr = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
             }
@@ -333,36 +360,33 @@
             }
         }
         
-        private func loadFromSearchCriteria(criteria: SearchCriteria) {
+        private func populateViewFromSearchCriteria(criteria: SearchCriteria) {
             
             ///Keywords
             searchBar.text = criteria.keyword
             
             ///Region
-            regionSelectionState = criteria.region
-            if(regionSelectionState != nil) {
-                cityRegionDataStore.saveSelectedCityRegions(regionSelectionState!)
-            } else{
-                cityRegionDataStore.saveSelectedCityRegions([City]())
+            if let regions = criteria.region {
+                self.updateRegionLabel(regions)
             }
             
             ///Price Range
             var pickerPriceFrom:(component:Int, row:Int) = (0,0)
-            var pickerPriceTo:(component:Int, row:Int) = (0,0)
+            var pickerPriceTo:(component:Int, row:Int) = (1,0)
             
             if let priceRange = criteria.price {
                 
                 for (index, price) in priceItems[PickerConst.lowerComponentIndex].enumerate() {
                     if(priceRange.0 == price.value) {
                         
-                        pickerPriceFrom = (0, index + 1)
+                        pickerPriceFrom = (PickerConst.lowerComponentIndex, index + 1)
                     }
                 }
                 
                 for (index, price) in priceItems[PickerConst.upperComponentIndex].enumerate() {
                     if(priceRange.1 == price.value) {
                         
-                        pickerPriceTo = (1, index + 1)
+                        pickerPriceTo = (PickerConst.upperComponentIndex, index + 1)
                     }
                 }
             }
@@ -379,19 +403,19 @@
             
             ///Size Range
             var pickerSizeFrom:(component:Int, row:Int) = (0,0)
-            var pickerSizeTo:(component:Int, row:Int) = (0,0)
+            var pickerSizeTo:(component:Int, row:Int) = (1,0)
             
             if let sizeRange = criteria.size {
                 
                 for (index, size) in sizeItems[PickerConst.lowerComponentIndex].enumerate() {
                     if(sizeRange.0 == size.value) {
-                        pickerSizeFrom = (0, index + 1)
+                        pickerSizeFrom = (PickerConst.lowerComponentIndex, index + 1)
                     }
                 }
                 
                 for (index, size) in sizeItems[PickerConst.upperComponentIndex].enumerate() {
                     if(sizeRange.1 == size.value) {
-                        pickerSizeTo = (1, index + 1)
+                        pickerSizeTo = (PickerConst.upperComponentIndex, index + 1)
                     }
                 }
             }
@@ -545,7 +569,7 @@
                         selectAllButton?.setToggleState(false)
                 }
                 
-                stateObserver.onCriteriaChanged(self.toSearhCriteria())
+                currentCriteria = self.toSearhCriteria()
             }
         }
         
@@ -553,10 +577,8 @@
             NSLog("onSearchButtonClicked: %@", self)
             
             //Hide size & price pickers
-            hiddenCells.insert(3)
-            hiddenCells.insert(5)
-            tableView.beginUpdates()
-            tableView.endUpdates()
+            self.setRowVisible(3, visible: false)
+            self.setRowVisible(5, visible: false)
             
             //Validate field
             if(self.regionSelectionState == nil || self.regionSelectionState?.count <= 0) {
@@ -698,9 +720,9 @@
                         navigationItem.backBarButtonItem = UIBarButtonItem(title: "重新搜尋", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
                         
                         ///Collect the search criteria set by the user
-                        let criteria = toSearhCriteria()
+                        //let criteria = toSearhCriteria()
                         
-                        srtvc.searchCriteria = criteria
+                        srtvc.searchCriteria = currentCriteria
                         
                         ///Save search history (works like a ring buffer, delete the oldest record if maxItemSize is exceeded)
                         
@@ -713,7 +735,7 @@
                         }
                         
                         do{
-                            try searchItemService.addNewSearchItem(SearchItem(criteria: criteria, type: .HistoricalSearch))
+                            try searchItemService.addNewSearchItem(SearchItem(criteria: currentCriteria, type: .HistoricalSearch))
                         } catch {
                             NSLog("Fail to save search history")
                         }
@@ -994,7 +1016,7 @@
             //Update selection label
             updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
             
-            stateObserver.onCriteriaChanged(self.toSearhCriteria())
+            currentCriteria = self.toSearhCriteria()
         }
     }
     

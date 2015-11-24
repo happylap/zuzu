@@ -42,6 +42,6 @@ struct CriteriaConst {
     
     struct Bound {
         static let LOWER_ANY = -1
-        static let UPPER_ANY = -2
+        static let UPPER_ANY = -1
     }
 }
