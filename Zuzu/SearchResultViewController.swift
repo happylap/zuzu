@@ -169,7 +169,10 @@ class SearchResultViewController: UIViewController {
         self.stopSpinner()
         if(dataSource.estimatedTotalResults > 0) {
             self.title = "共\(dataSource.estimatedTotalResults)筆結果"
+        } else {
+            self.title = "查無資料"
         }
+        
         self.tableView.reloadData()
         
         NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getSize())", self)
