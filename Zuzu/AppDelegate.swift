@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    
     private func commonSetup() {
         GMSServices.provideAPIKey(googleMapsApiKey)
     }
@@ -67,6 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        //Filter data is not cached across App instance
+        filterDataStore.clearFilterSetting()
+        
     }
     
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {

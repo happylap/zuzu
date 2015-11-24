@@ -500,6 +500,11 @@ class SearchResultViewController: UIViewController {
             for (key, value) in selectedFilterSetting {
                 self.selectedFilterIdSet[key] = value
             }
+            
+            //Load previous filters to search critea
+            if let criteria = searchCriteria {
+                criteria.filters = getFilterDic(self.selectedFilterIdSet)
+            }
         }
         
         //Configure cell height
