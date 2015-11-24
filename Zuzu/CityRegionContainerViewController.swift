@@ -1,5 +1,5 @@
 //
-//  CityRegionContainerViewController.swift
+//  CityRegionContainerController.swift
 //  Zuzu
 //
 //  Created by Jung-Shuo Pai on 2015/10/13.
@@ -9,15 +9,21 @@
 import UIKit
 import SwiftyJSON
 
+protocol CityRegionContainerControllerDelegate: class {
+    func onCitySelectionDone(regions:[City])
+}
 
-
-class CityRegionContainerViewController: UIViewController {
+class CityRegionContainerController: UIViewController {
+    
+    var delegate: CityRegionContainerControllerDelegate?
     
     var isDataPrepared = false
     
     let dataStore : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
     
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
+    var regionSelectionState: [City] = [City]()
+    
     var cityRegions = [Int : City]()//City dictionary by city code
     var cityList = [City]()//City list
     
@@ -25,8 +31,6 @@ class CityRegionContainerViewController: UIViewController {
         static let showRegionTable:String = "showRegionTable"
         static let showCityPicker:String = "showCityPicker"
     }
-    
-    var regionSelectionState: [City] = [City]()
     
     weak var cityPicker:CityPickerViewController?
     weak var regionTable:RegionTableViewController?
@@ -81,36 +85,28 @@ class CityRegionContainerViewController: UIViewController {
             }
             
             ///Init selected regions
-            if let selectedCities = dataStore.loadSelectedCityRegions() {
-                for city in selectedCities {
-                    
-                    let selectedRegions = city.regions
-                    
-                    if(selectedRegions.isEmpty) {
-                        checkedRegions[city.code]?[0] = true
-                    } else {
-                        for region in selectedRegions {
-                            if let index = cityRegions[city.code]?.regions.indexOf(region) { ///Region needs to be Equatable
-                                checkedRegions[city.code]?[index] = true
-                            }
+            let selectedCities = self.regionSelectionState
+            for city in selectedCities {
+                
+                let selectedRegions = city.regions
+                
+                if(selectedRegions.isEmpty) {
+                    checkedRegions[city.code]?[0] = true
+                } else {
+                    for region in selectedRegions {
+                        if let index = cityRegions[city.code]?.regions.indexOf(region) { ///Region needs to be Equatable
+                            checkedRegions[city.code]?[index] = true
                         }
                     }
                 }
             }
-        }
-    }
-    
-    private func loadSelectedRegion() {
-        if let states = dataStore.loadSelectedCityRegions() {
-            regionSelectionState.appendContentsOf(states)
+            
         }
     }
     
     private func prepareDataIfNeeded() {
         if(!isDataPrepared) {
             loadCityRegionData()
-            loadSelectedRegion()
-            
             isDataPrepared = true
         }
     }
@@ -122,7 +118,9 @@ class CityRegionContainerViewController: UIViewController {
         
         //Save selection to user defaults only when the user presses "Done" button
         
-        dataStore.saveSelectedCityRegions(regionSelectionState)
+        //dataStore.saveSelectedCityRegions(regionSelectionState)
+        
+        delegate?.onCitySelectionDone(regionSelectionState)
         
         navigationController?.popToRootViewControllerAnimated(true)
     }

@@ -62,6 +62,7 @@
 		2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */; };
 		2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */; };
 		2FE912741BFF796C00019053 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE912731BFF796C00019053 /* LoadingSpinner.swift */; };
+		2FE912761C045B0400019053 /* SearchCriteriaDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */; };
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
@@ -168,6 +169,7 @@
 		2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
 		2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlPopoverViewController.swift; sourceTree = "<group>"; };
 		2FE912731BFF796C00019053 /* LoadingSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
+		2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaDataStore.swift; sourceTree = "<group>"; };
 		2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = searchCriteriaOptions.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 			children = (
 				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
 				2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */,
+				2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */,
 				2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */,
 				81FA28081BDA397B0038DD19 /* HouseDao.swift */,
 				81FA28121BDA39B10038DD19 /* NoteDao.swift */,
@@ -735,6 +738,7 @@
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
 				81FA28131BDA39B10038DD19 /* Note.swift in Sources */,
+				2FE912761C045B0400019053 /* SearchCriteriaDataStore.swift in Sources */,
 				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,
 				81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */,
 				2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */,

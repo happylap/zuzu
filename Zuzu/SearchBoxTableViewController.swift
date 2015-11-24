@@ -49,6 +49,14 @@
             static let upperComponentIndex = 1
         }
         
+        var regionSelectionState: [City]? {
+            didSet {
+                if (regionSelectionState != nil) {
+                    updateRegionLabel(regionSelectionState!)
+                }
+            }
+        }
+        
         var sizeUpperRange:Range<Int>?
         var priceUpperRange:Range<Int>?
         let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
@@ -58,21 +66,22 @@
         lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
         
         // Data Store Insatance
+        private let criteriaDataStore = UserDefaultsSearchCriteriaDataStore.getInstance()
         private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
         private let cityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
         private let searchItemService = SearchItemService.getInstance()
         private lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
         
-        private func updateRegionLabel(regionSelectionState: [City]) {
+        private func updateRegionLabel(regionSelection: [City]) {
             
             var regionLabel = "不限"
             
             var labelStr:[String] = [String]()
             
-            if(regionSelectionState.count > 0) {
+            if(regionSelection.count > 0) {
                 
                 var numOfCity = 0
-                for city in regionSelectionState {
+                for city in regionSelection {
                     
                     if(city.regions.count == 0) {
                         continue
@@ -94,26 +103,6 @@
             
         }
         
-        var regionSelectionState: [City]? {
-            
-            didSet {
-                
-                if(regionSelectionState != nil) {
-                    
-                    if(regionSelectionState?.count > 0) {
-                        
-                        updateRegionLabel(regionSelectionState!)
-                        
-                        currentCriteria = self.toSearhCriteria()
-                        
-                    } else {
-                        self.fastItemCountLabel.text = nil
-                    }
-                }
-            }
-            
-        }
-        
         var currentCriteria: SearchCriteria =  SearchCriteria() {
             
             didSet{
@@ -126,12 +115,7 @@
                     ///Reset the prefetch house number label
                     self.fastItemCountLabel.text = nil
                     
-                    /// Save the current criteria
-//                    if(regionSelectionState != nil) {
-//                        cityRegionDataStore.saveSelectedCityRegions(regionSelectionState!)
-//                    } else{
-//                        cityRegionDataStore.saveSelectedCityRegions([City]())
-//                    }
+                    criteriaDataStore.saveSearchCriteria(currentCriteria)
                     
                     ///Load the criteria to the Search Box UI
                     self.populateViewFromSearchCriteria(currentCriteria)
@@ -366,9 +350,7 @@
             searchBar.text = criteria.keyword
             
             ///Region
-            if let regions = criteria.region {
-                self.updateRegionLabel(regions)
-            }
+            regionSelectionState = criteria.region
             
             ///Price Range
             var pickerPriceFrom:(component:Int, row:Int) = (0,0)
@@ -470,7 +452,7 @@
             
         }
         
-        private func toSearhCriteria() -> SearchCriteria {
+        private func stateToSearhCriteria() -> SearchCriteria {
             
             let searchCriteria = SearchCriteria()
             
@@ -569,7 +551,7 @@
                         selectAllButton?.setToggleState(false)
                 }
                 
-                currentCriteria = self.toSearhCriteria()
+                currentCriteria = self.stateToSearhCriteria()
             }
         }
         
@@ -581,7 +563,7 @@
             self.setRowVisible(5, visible: false)
             
             //Validate field
-            if(self.regionSelectionState == nil || self.regionSelectionState?.count <= 0) {
+            if(currentCriteria.region?.count <= 0) {
                 alertInvalidRegionSelection()
                 return
             }
@@ -667,6 +649,19 @@
             
             //Configure Guesture
             self.configureGestureRecognizer()
+            
+            //Load Search Criteria
+            if let criteria = criteriaDataStore.loadSearchCriteria() {
+                
+                currentCriteria.keyword = criteria.keyword
+                currentCriteria.region = criteria.region
+                currentCriteria.price  = criteria.price
+                currentCriteria.size = criteria.size
+                currentCriteria.types = criteria.types
+                
+                self.populateViewFromSearchCriteria(currentCriteria)
+            }
+            
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
@@ -676,11 +671,6 @@
         
         override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
-            
-            //Load selected areas
-            regionSelectionState = cityRegionDataStore.loadSelectedCityRegions()
-            
-            print(regionSelectionState)
             
             //Load search item segment data
             loadSearchItemsForSegment(searchItemSegment.selectedSegmentIndex)
@@ -720,8 +710,6 @@
                         navigationItem.backBarButtonItem = UIBarButtonItem(title: "重新搜尋", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
                         
                         ///Collect the search criteria set by the user
-                        //let criteria = toSearhCriteria()
-                        
                         srtvc.searchCriteria = currentCriteria
                         
                         ///Save search history (works like a ring buffer, delete the oldest record if maxItemSize is exceeded)
@@ -745,9 +733,13 @@
                     NSLog("showAreaSlector")
                     
                     ///Setup delegat to receive result
-                    //                    if let vc = segue.destinationViewController as? CityRegionContainerViewController {
-                    //                        vc.delegate = self
-                    //                    }
+                    if let vc = segue.destinationViewController as? CityRegionContainerController {
+                        vc.delegate = self
+                        
+                        if let regionSelectionState = currentCriteria.region {
+                            vc.regionSelectionState = regionSelectionState
+                        }
+                    }
                     
                     ///So that we'll not see the pickerView expand when loading the area selector view
                     self.tabBarController!.tabBar.hidden = true;
@@ -1016,7 +1008,7 @@
             //Update selection label
             updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
             
-            currentCriteria = self.toSearhCriteria()
+            currentCriteria = self.stateToSearhCriteria()
         }
     }
     
@@ -1056,5 +1048,13 @@
             //            }
             
             return true
+        }
+    }
+    
+    extension SearchBoxTableViewController : CityRegionContainerControllerDelegate {
+        func onCitySelectionDone(regions:[City]) {
+            regionSelectionState = regions
+            
+            currentCriteria = self.stateToSearhCriteria()
         }
     }
