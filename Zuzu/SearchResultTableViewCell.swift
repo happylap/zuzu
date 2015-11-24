@@ -128,7 +128,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTypeAndUsage.text = nil
         houseSize.text = nil
         housePrice.text = nil
-        addToCollectionButton.image = UIImage(named: "Heart_n")
+        addToCollectionButton.image = UIImage(named: "heart_n")
         prefixedButton.image = UIImage(named: "uncheck")
         
         // Cancel image loading operation
