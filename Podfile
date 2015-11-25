@@ -13,6 +13,7 @@ pod 'GoogleMaps'
 pod 'MWPhotoBrowser'
 pod 'MarqueeLabel'
 pod 'MBProgressHUD', '~> 0.9.1'
+pod 'Device', '~> 0.0.4'
 end
 
 target 'ZuzuTests' do

@@ -63,6 +63,7 @@ class SearchCriteriaObserver:NSObject {
         currentTimer?.invalidate()
         
         //Reset fast house count label
+        self.viewController.fastItemCountLabel.hidden = false
         self.viewController.fastItemCountLabel.alpha = 0
         self.viewController.fastItemCountLabel.text = nil
         

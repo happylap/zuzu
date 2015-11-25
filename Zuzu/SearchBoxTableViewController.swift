@@ -170,15 +170,7 @@
             }
         }
         
-        @IBOutlet weak var fastItemCountLabel: UILabel! {
-            didSet {
-                
-                fastItemCountLabel.font = UIFont.systemFontOfSize(13)
-                fastItemCountLabel.textColor = UIColor.colorWithRGB(0x6E6E70)
-                
-            }
-        }
-        
+        @IBOutlet weak var fastItemCountLabel: UILabel!
         @IBOutlet weak var cityRegionLabel: UILabel!
         @IBOutlet weak var sizeLabel: UILabel!
         @IBOutlet weak var priceLabel: UILabel!

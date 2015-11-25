@@ -3,6 +3,7 @@ PODS:
   - AlamofireImage (1.1.2):
     - Alamofire (~> 2.0)
   - DACircularProgress (2.3.1)
+  - Device (0.0.4)
   - Dollar (4.0.1)
   - GoogleMaps (1.10.5)
   - MarqueeLabel (2.3.5)
@@ -19,6 +20,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 2.0)
   - AlamofireImage (~> 1.0)
+  - Device (~> 0.0.4)
   - Dollar (~> 4.0)
   - GoogleMaps
   - MarqueeLabel
@@ -30,6 +32,7 @@ SPEC CHECKSUMS:
   Alamofire: 8edbab00802a752bb5240cc2abe70e7e881488ad
   AlamofireImage: dc3d3de5d095fd9545b144ba8f6da5bfc539512a
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
   Dollar: a058e2659e0d3261307c12630dbc2fd8e32f80bf
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
   MarqueeLabel: fd29be3b4cf5f37b01676749409679aac23eb6fa
