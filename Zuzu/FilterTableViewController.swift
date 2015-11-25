@@ -30,6 +30,9 @@ class FilterTableViewController: UITableViewController {
     
     @IBOutlet weak var resetAllButton: UIButton! {
         didSet {
+            
+            resetAllButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
+            resetAllButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
             resetAllButton.enabled = false
             
             resetAllButton.addTarget(self, action: "resetAllFilters:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -165,6 +168,7 @@ class FilterTableViewController: UITableViewController {
         
         selectedFilterIdSet.removeAll()
         tableView.reloadData()
+        
         resetAllButton.enabled = false
     }
     

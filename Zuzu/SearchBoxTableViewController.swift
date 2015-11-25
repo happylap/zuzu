@@ -140,6 +140,9 @@
         
         @IBOutlet weak var clearCriteriaButton: UIButton! {
             didSet {
+                
+                clearCriteriaButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
+                clearCriteriaButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
                 clearCriteriaButton.enabled = false
                 clearCriteriaButton.addTarget(self, action: "onClearCriteriaButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
                 
@@ -566,6 +569,7 @@
             
             self.currentCriteria = SearchCriteria()
             self.criteriaDataStore.clear()
+            
             clearCriteriaButton.enabled = false
         }
         
@@ -689,13 +693,17 @@
             //Load Search Criteria
             if let criteria = criteriaDataStore.loadSearchCriteria() {
                 
-                currentCriteria.keyword = criteria.keyword
-                currentCriteria.region = criteria.region
-                currentCriteria.price  = criteria.price
-                currentCriteria.size = criteria.size
-                currentCriteria.types = criteria.types
-                
-                self.populateViewFromSearchCriteria(currentCriteria)
+                if(!criteria.isEmpty()) {
+                    currentCriteria.keyword = criteria.keyword
+                    currentCriteria.region = criteria.region
+                    currentCriteria.price  = criteria.price
+                    currentCriteria.size = criteria.size
+                    currentCriteria.types = criteria.types
+                    
+                    self.populateViewFromSearchCriteria(currentCriteria)
+
+                    clearCriteriaButton.enabled = true
+                }
             }
         }
         

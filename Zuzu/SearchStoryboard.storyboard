@@ -29,9 +29,7 @@
                                         <constraint firstAttribute="width" constant="94" id="GQb-fp-Kz6"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <state key="normal" title="重設搜尋條件">
-                                        <color key="titleColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    </state>
+                                    <state key="normal" title="重設搜尋條件"/>
                                     <variation key="default">
                                         <mask key="constraints">
                                             <exclude reference="GQb-fp-Kz6"/>
@@ -452,8 +450,8 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="F2v-MB-Dla">
-                                                    <rect key="frame" x="50" y="125" width="499" height="47.5"/>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="F2v-MB-Dla">
+                                                    <rect key="frame" x="50" y="95" width="499" height="47.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="F2v-MB-Dla" secondAttribute="height" multiplier="1248:116" id="cBJ-rq-gWG"/>
                                                     </constraints>
@@ -473,11 +471,11 @@
                                                 <constraint firstItem="xyz-ye-gDa" firstAttribute="width" secondItem="3MW-xc-DJE" secondAttribute="width" id="box-0d-ITY"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="F2v-MB-Dla" secondAttribute="bottom" id="fiW-o3-hli"/>
                                                 <constraint firstItem="xyz-ye-gDa" firstAttribute="top" secondItem="3MW-xc-DJE" secondAttribute="topMargin" id="ilp-Sd-g3D"/>
-                                                <constraint firstItem="e8W-AW-LWF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3MW-xc-DJE" secondAttribute="topMargin" priority="750" constant="50" id="jMe-h4-fWI"/>
+                                                <constraint firstItem="e8W-AW-LWF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3MW-xc-DJE" secondAttribute="topMargin" priority="750" constant="30" id="jMe-h4-fWI"/>
                                                 <constraint firstItem="F2v-MB-Dla" firstAttribute="centerX" secondItem="e8W-AW-LWF" secondAttribute="centerX" id="ndt-2k-fzv"/>
                                                 <constraint firstItem="e8W-AW-LWF" firstAttribute="top" secondItem="xyz-ye-gDa" secondAttribute="bottom" constant="4" id="r59-2f-J5T"/>
                                                 <constraint firstItem="e8W-AW-LWF" firstAttribute="centerX" secondItem="3MW-xc-DJE" secondAttribute="centerX" id="tCa-9S-0Lo"/>
-                                                <constraint firstItem="F2v-MB-Dla" firstAttribute="top" relation="greaterThanOrEqual" secondItem="e8W-AW-LWF" secondAttribute="bottom" priority="750" constant="40" id="tIA-Ie-VHN"/>
+                                                <constraint firstItem="F2v-MB-Dla" firstAttribute="top" relation="greaterThanOrEqual" secondItem="e8W-AW-LWF" secondAttribute="bottom" priority="750" constant="20" id="tIA-Ie-VHN"/>
                                                 <constraint firstItem="xyz-ye-gDa" firstAttribute="centerX" secondItem="e8W-AW-LWF" secondAttribute="centerX" id="yEI-0h-3Jg"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1419,9 +1417,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czk-Se-eDg">
                                     <rect key="frame" x="332" y="5.5" width="136" height="33"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <state key="normal" title="重設所有過濾條件">
-                                        <color key="titleColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    </state>
+                                    <state key="normal" title="重設所有過濾條件"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                     </userDefinedRuntimeAttributes>
