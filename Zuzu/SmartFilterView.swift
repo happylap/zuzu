@@ -97,11 +97,12 @@ class SmartFilterView: UIView {
             button.setTitle(filter.label, forState: .Normal)
             button.titleLabel!.font =  UIFont.systemFontOfSize(12)
             button.offBackgroundColor = UIColor.clearColor()
-            //UIColor(red: 0x01/255, green: 0xA7/255, blue: 0x9A/255, alpha: 0.65)
             button.offColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
             
             button.onBackgroundColor = UIColor.colorWithRGB(0x16BFB3, alpha: 1)
             button.onColor = UIColor.whiteColor()
+            
+            button.layer.cornerRadius = 10
             button.setToggleState(false)
             
             filtersByButton[button] = filter
