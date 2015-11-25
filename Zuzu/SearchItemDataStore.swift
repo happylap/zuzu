@@ -97,6 +97,15 @@ class SearchCriteria: NSObject, NSCoding {
         aCoder.encodeObject(types, forKey:"types")
     }
     
+    func isEmpty() ->Bool {
+        
+        return (keyword == nil)
+            && (region == nil)
+            && (price == nil)
+            && (size == nil)
+            && (types == nil)
+    }
+    
     override func isEqual(object: AnyObject?) -> Bool {
         if let targetObj = object as? SearchCriteria {
             

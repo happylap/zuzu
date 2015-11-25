@@ -39,6 +39,16 @@
             static let NOT_LIMITED_BUTTON_TAG = 99
         }
         
+        struct CellConst {
+            static let searchBar = 0
+            static let area = 1
+            static let priceLabel = 3
+            static let pricePicker = 4
+            static let sizeLabel = 5
+            static let sizePicker = 6
+            static let searchHistory = 8
+        }
+        
         // Price & Size Picker Vars
         struct PickerConst {
             static let anyLower:(label:String, value:Int) = ("0",CriteriaConst.Bound.LOWER_ANY)
@@ -51,9 +61,7 @@
         
         var regionSelectionState: [City]? {
             didSet {
-                if (regionSelectionState != nil) {
-                    updateRegionLabel(regionSelectionState!)
-                }
+                updateRegionLabel(regionSelectionState)
             }
         }
         
@@ -72,38 +80,38 @@
         private let searchItemService = SearchItemService.getInstance()
         private lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
         
-        private func updateRegionLabel(regionSelection: [City]) {
+        private func updateRegionLabel(regionSelection: [City]?) {
             
             var regionLabel = "不限"
             
-            var labelStr:[String] = [String]()
-            
-            if(regionSelection.count > 0) {
-                
-                var numOfCity = 0
-                for city in regionSelection {
-                    
-                    if(city.regions.count == 0) {
-                        continue
+            if let regionSelection = regionSelection {
+                if(regionSelection.count > 0) {
+                    var labelStr:[String] = [String]()
+                    var numOfCity = 0
+                    for city in regionSelection {
+                        
+                        if(city.regions.count == 0) {
+                            continue
+                        }
+                        
+                        if(labelStr.count < 3) {
+                            labelStr.append("\(city.name) (\(city.regions.count))")
+                        }
+                        numOfCity++
                     }
                     
-                    if(labelStr.count < 3) {
-                        labelStr.append("\(city.name) (\(city.regions.count))")
-                    }
-                    numOfCity++
+                    regionLabel = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
+                    
+                } else {
+                    self.fastItemCountLabel.text = nil
                 }
-                
-                regionLabel = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
-                
-            } else {
-                self.fastItemCountLabel.text = nil
             }
             
             cityRegionLabel.text = regionLabel
             
         }
         
-        var currentCriteria: SearchCriteria =  SearchCriteria() {
+        var currentCriteria: SearchCriteria = SearchCriteria() {
             
             didSet{
                 
@@ -115,7 +123,11 @@
                     ///Reset the prefetch house number label
                     self.fastItemCountLabel.text = nil
                     
-                    criteriaDataStore.saveSearchCriteria(currentCriteria)
+                    ///Save search criteria and enable reset button
+                    if(!currentCriteria.isEmpty()) {
+                        criteriaDataStore.saveSearchCriteria(currentCriteria)
+                        clearCriteriaButton.enabled = true
+                    }
                     
                     ///Load the criteria to the Search Box UI
                     self.populateViewFromSearchCriteria(currentCriteria)
@@ -124,6 +136,15 @@
         }
         
         var selectAllButton:ToggleButton?
+        
+        
+        @IBOutlet weak var clearCriteriaButton: UIButton! {
+            didSet {
+                clearCriteriaButton.enabled = false
+                clearCriteriaButton.addTarget(self, action: "onClearCriteriaButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                
+            }
+        }
         
         @IBOutlet weak var typeButtonContainer: UIView! {
             didSet {
@@ -142,7 +163,7 @@
                                     selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
                             }
                             
-                            typeButton.addTarget(self, action: "onButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+                            typeButton.addTarget(self, action: "onTypeButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
                         }
                     }
                 }
@@ -310,28 +331,28 @@
             var picker:UIPickerView?
             
             switch(indexPath.row) {
-            case 2: // Price Picker
+            case CellConst.priceLabel: // Price Picker
                 picker = pricePicker
-                if(hiddenCells.contains(3)) {
-                    hiddenCells.insert(5) //Hide 5
-                    hiddenCells.remove(3) //Show 3
+                if(hiddenCells.contains(CellConst.pricePicker)) {
+                    hiddenCells.insert(CellConst.sizePicker)
+                    hiddenCells.remove(CellConst.pricePicker)
                     
                     priceUpperRange = getUpperBoundRangeForPicker(picker!, items: priceItems)
                     picker?.reloadComponent(PickerConst.upperComponentIndex)
                 } else { //Hide
-                    hiddenCells.insert(3)
+                    hiddenCells.insert(CellConst.pricePicker)
                 }
                 
-            case 4: // Size Picker
+            case CellConst.sizeLabel: // Size Picker
                 picker = sizePicker
-                if(hiddenCells.contains(5)) {
-                    hiddenCells.insert(3) //Hide 3
-                    hiddenCells.remove(5) //Show 5
+                if(hiddenCells.contains(CellConst.sizePicker)) {
+                    hiddenCells.insert(CellConst.pricePicker)
+                    hiddenCells.remove(CellConst.sizePicker)
                     
                     sizeUpperRange = getUpperBoundRangeForPicker(picker!, items: sizeItems)
                     picker?.reloadComponent(PickerConst.upperComponentIndex)
                 } else { //Hide
-                    hiddenCells.insert(5)
+                    hiddenCells.insert(CellConst.sizePicker)
                 }
             default: break
             }
@@ -538,23 +559,30 @@
             loadSearchItemsForSegment(sender.selectedSegmentIndex)
             
             //Scroll to the bottom of the table to see the search item table fully
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 7, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchHistory, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
         
-        func onButtonClicked(sender: UIButton) {
+        func onClearCriteriaButtonTouched(sender: UIButton) {
+            
+            self.currentCriteria = SearchCriteria()
+            self.criteriaDataStore.clear()
+            clearCriteriaButton.enabled = false
+        }
+        
+        func onTypeButtonTouched(sender: UIButton) {
             if let toogleButton = sender as? ToggleButton {
                 
                 if(toogleButton.tag == UIControlTag.NOT_LIMITED_BUTTON_TAG) {
                     selectAllButton?.setToggleState(true)
                     return
-                
+                    
                 } else {
-                 
+                    
                     toogleButton.toggleButtonState()
                     
                     //Toggle off the select all button if any type is selected
                     if(toogleButton.getToggleState()==true) {
-                            selectAllButton?.setToggleState(false)
+                        selectAllButton?.setToggleState(false)
                     }
                     
                 }
@@ -567,8 +595,8 @@
             NSLog("onSearchButtonClicked: %@", self)
             
             //Hide size & price pickers
-            self.setRowVisible(3, visible: false)
-            self.setRowVisible(5, visible: false)
+            self.setRowVisible(CellConst.pricePicker, visible: false)
+            self.setRowVisible(CellConst.sizePicker, visible: false)
             
             //Validate field
             if(currentCriteria.region?.count <= 0) {
@@ -589,10 +617,10 @@
         override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
             
             switch(indexPath.row) {
-            case 2, 4: // Price, Size Picker
+            case CellConst.sizeLabel, CellConst.priceLabel: // Price, Size Picker
                 handlePicker(indexPath)
                 
-            case 0: //Area Picker
+            case CellConst.area: //Area Picker
                 ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
                 self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
                 
@@ -602,7 +630,7 @@
             
         }
         
-        var hiddenCells:Set<Int> = [3, 5]
+        var hiddenCells:Set<Int> = [CellConst.pricePicker, CellConst.sizePicker]
         
         override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
             
@@ -611,10 +639,10 @@
             if(hiddenCells.contains(indexPath.row)) {
                 return 0
             } else {
-                if (indexPath.row == 3) {
+                if (indexPath.row == CellConst.pricePicker) {
                     return pricePicker.intrinsicContentSize().height
                 }
-                if (indexPath.row == 5) {
+                if (indexPath.row == CellConst.sizePicker) {
                     return sizePicker.intrinsicContentSize().height
                 }
                 //                if (indexPath.row == 7) {
@@ -669,7 +697,6 @@
                 
                 self.populateViewFromSearchCriteria(currentCriteria)
             }
-            
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
@@ -683,7 +710,10 @@
             //Load search item segment data
             loadSearchItemsForSegment(searchItemSegment.selectedSegmentIndex)
             
-            //Scroll search item data to the top of the table
+            //Scroll main table to the Search Bar
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            
+            //Scroll search history table to the top
             if(searchItemTable.numberOfRowsInSection(0) > 0) {
                 self.searchItemTable.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
             }
