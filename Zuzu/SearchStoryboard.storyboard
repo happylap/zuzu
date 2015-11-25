@@ -24,11 +24,14 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cmt-TC-vyL">
-                                    <rect key="frame" x="255" y="10" width="90" height="30"/>
+                                    <rect key="frame" x="249" y="8.5" width="102" height="33"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="94" id="GQb-fp-Kz6"/>
                                     </constraints>
-                                    <state key="normal" title="清除搜尋條件"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <state key="normal" title="重設搜尋條件">
+                                        <color key="titleColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                     <variation key="default">
                                         <mask key="constraints">
                                             <exclude reference="GQb-fp-Kz6"/>
@@ -1361,7 +1364,9 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czk-Se-eDg">
                                     <rect key="frame" x="332" y="5.5" width="136" height="33"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <state key="normal" title="重設所有過濾條件"/>
+                                    <state key="normal" title="重設所有過濾條件">
+                                        <color key="titleColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
