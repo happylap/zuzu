@@ -10,10 +10,10 @@
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
-        <!--Search Box View-->
+        <!--Search Box-->
         <scene sceneID="xf9-UI-zb3">
             <objects>
-                <tableViewController title="Search Box View" id="avK-Pq-NJf" customClass="SearchBoxTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Search Box" id="avK-Pq-NJf" customClass="SearchBoxTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="AKQ-Eg-pud">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="1400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -654,6 +654,9 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -750,10 +753,10 @@
             </objects>
             <point key="canvasLocation" x="2546" y="-1661"/>
         </scene>
-        <!--Search Result View Controller-->
+        <!--Search Result-->
         <scene sceneID="Brr-FQ-XTv">
             <objects>
-                <viewController title="Search Result View Controller" automaticallyAdjustsScrollViewInsets="NO" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Search Result" automaticallyAdjustsScrollViewInsets="NO" id="ewd-BO-qUn" customClass="SearchResultViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yxI-Jr-QgG"/>
                         <viewControllerLayoutGuide type="bottom" id="hmg-sM-QSC"/>
@@ -997,10 +1000,10 @@
             </objects>
             <point key="canvasLocation" x="1725" y="471"/>
         </scene>
-        <!--House Detail View Controller-->
+        <!--House Detail-->
         <scene sceneID="r06-4y-ETW">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="RI5-UG-EkB" customClass="HouseDetailViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="House Detail" automaticallyAdjustsScrollViewInsets="NO" id="RI5-UG-EkB" customClass="HouseDetailViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sr3-gP-XzE"/>
                         <viewControllerLayoutGuide type="bottom" id="z6L-pd-X4C"/>
@@ -1277,10 +1280,10 @@
             </objects>
             <point key="canvasLocation" x="1725" y="1573"/>
         </scene>
-        <!--Map View Controller-->
+        <!--House Map-->
         <scene sceneID="LeV-xK-fi9">
             <objects>
-                <viewController id="H6B-iW-L9e" customClass="MapViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="House Map" id="H6B-iW-L9e" customClass="MapViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="J6q-x0-p0k"/>
                         <viewControllerLayoutGuide type="bottom" id="Gwr-WJ-4Sj"/>
@@ -1310,10 +1313,10 @@
             </objects>
             <point key="canvasLocation" x="2752" y="1573"/>
         </scene>
-        <!--URL-->
+        <!--House Url Popover -->
         <scene sceneID="yrg-vl-0v0">
             <objects>
-                <viewController title="URL" id="GWc-bl-zmC" customClass="UrlPopoverViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="House Url Popover " id="GWc-bl-zmC" customClass="UrlPopoverViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Y9M-yf-nE8"/>
                         <viewControllerLayoutGuide type="bottom" id="NS6-ZC-Lnv"/>
@@ -1371,10 +1374,10 @@
             </objects>
             <point key="canvasLocation" x="2552" y="2482"/>
         </scene>
-        <!--物件資訊-->
+        <!--House Source-->
         <scene sceneID="KPq-L4-VJt">
             <objects>
-                <viewController title="物件資訊" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
@@ -1400,10 +1403,10 @@
             </objects>
             <point key="canvasLocation" x="1836" y="2636"/>
         </scene>
-        <!--過濾條件-->
+        <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
             <objects>
-                <tableViewController id="smZ-ZU-g2D" customClass="FilterTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Filter Table" id="smZ-ZU-g2D" customClass="FilterTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="55" sectionHeaderHeight="18" sectionFooterHeight="18" id="cDX-mW-A5x">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1543,10 +1546,10 @@
             </objects>
             <point key="canvasLocation" x="3478" y="-108"/>
         </scene>
-        <!--Filter Option Table View Controller-->
+        <!--Filter Sub Table-->
         <scene sceneID="8ca-wP-8DV">
             <objects>
-                <tableViewController id="yay-dO-qvR" customClass="FilterOptionTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Filter Sub Table" id="yay-dO-qvR" customClass="FilterOptionTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="28" sectionFooterHeight="28" id="3cn-C0-l6V">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

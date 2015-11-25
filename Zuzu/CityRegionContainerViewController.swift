@@ -162,6 +162,9 @@ class CityRegionContainerController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSLog("viewWillAppear: %@", self)
+        
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func viewWillDisappear(animated: Bool) {

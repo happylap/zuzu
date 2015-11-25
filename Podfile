@@ -14,6 +14,9 @@ pod 'MWPhotoBrowser'
 pod 'MarqueeLabel'
 pod 'MBProgressHUD', '~> 0.9.1'
 pod 'Device', '~> 0.0.4'
+pod 'Google/Analytics'
+pod 'Google/SignIn'
+pod 'Google/AdMob'
 end
 
 target 'ZuzuTests' do

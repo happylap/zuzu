@@ -39,6 +39,14 @@ class FilterOptionTableViewController: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSLog("%@ [[viewWillAppear]]", self)
+        
+        //Google Analytics Tracker
+        self.trackScreen()
+    }
+    
     override func willMoveToParentViewController(parent: UIViewController?) {
         super.willMoveToParentViewController(parent)
         

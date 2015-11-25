@@ -554,6 +554,9 @@ class SearchResultViewController: UIViewController {
         
         //Configure Filter Buttons
         configureFilterButtons()
+        
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func viewDidAppear(animated: Bool) {

@@ -186,6 +186,14 @@ class FilterTableViewController: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSLog("%@ [[viewWillAppear]]", self)
+        
+        //Google Analytics Tracker
+        self.trackScreen()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -53,6 +53,9 @@
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
 		2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF525A1C04BFF000B3F47B /* InfoPlist.strings */; };
 		2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */; };
+		2FBF52661C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
+		2FBF52671C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
+		2FBF52681C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */; };
@@ -164,6 +167,7 @@
 		2FBF525B1C04BFF200B3F47B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FBF525C1C04BFF300B3F47B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleExtensions.swift; sourceTree = "<group>"; };
+		2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterOptionTableViewController.swift; sourceTree = "<group>"; };
@@ -279,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				2F31F5121BC2BC4400054355 /* .gitignore */,
+				2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */,
 				2F482DF41BAFE09100C68670 /* Zuzu */,
 				81F05D631BF0E73600441A84 /* ZuzuTests */,
 				2F482DF31BAFE09100C68670 /* Products */,
@@ -617,6 +622,7 @@
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
 				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
+				2FBF52661C05EFF700B3F47B /* GoogleService-Info.plist in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
 				2F9791BC1BF576C40056B721 /* fieldLabels.json in Resources */,
 				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,
@@ -628,6 +634,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FBF52671C05EFF700B3F47B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,6 +642,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FBF52681C05EFF700B3F47B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

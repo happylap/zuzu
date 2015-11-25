@@ -76,6 +76,14 @@ class BrowserViewController: UIViewController {
         }
     }
     
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        ///Google Analytics Tracker
+        self.trackScreen()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -144,9 +152,9 @@ extension BrowserViewController: WKNavigationDelegate {
         LoadingSpinner.shared.stop()
     }
     
-//    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-//        LoadingSpinner.shared.stop()
-//    }
+    //    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    //        LoadingSpinner.shared.stop()
+    //    }
     
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
         LoadingSpinner.shared.stop()

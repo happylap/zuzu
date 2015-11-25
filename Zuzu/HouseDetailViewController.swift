@@ -168,7 +168,7 @@ class HouseDetailViewController: UIViewController {
                         cell.leftInfoSub.hidden = false
                         
                         if let price = houseItemDetail.valueForKey("price") as? Int {
-
+                            
                             cell.leftInfoText.font = UIFont.boldSystemFontOfSize(cell.leftInfoText.font.pointSize)
                             cell.leftInfoText.text = "\(price) 月/元"
                         }
@@ -621,11 +621,11 @@ class HouseDetailViewController: UIViewController {
     }
     
     private func configureContactBarView() {
-
+        
         if let houseDetail = self.houseItemDetail {
             
             var contactDisplayStr = ""
-
+            
             if let contactName = houseDetail.valueForKey("agent") as? String {
                 contactDisplayStr = contactName
             }
@@ -834,6 +834,9 @@ class HouseDetailViewController: UIViewController {
         
         ///Hide tab bar
         self.tabBarController!.tabBar.hidden = true
+        
+        ///Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func viewDidAppear(animated: Bool) {

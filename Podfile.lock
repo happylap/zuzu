@@ -5,7 +5,40 @@ PODS:
   - DACircularProgress (2.3.1)
   - Device (0.0.4)
   - Dollar (4.0.1)
+  - Google/AdMob (1.2.1):
+    - Google/Core
+    - GoogleMobileAds (~> 7.3)
+  - Google/Analytics (1.2.1):
+    - Google/Core
+    - GoogleAnalytics (~> 3.12)
+  - Google/Core (1.2.1):
+    - GoogleInterchangeUtilities (~> 1.0)
+    - GoogleNetworkingUtilities (~> 1.0)
+    - GoogleSymbolUtilities (~> 1.0)
+    - GoogleUtilities (~> 1.1)
+  - Google/SignIn (1.2.1):
+    - Google/Core
+    - GoogleSignIn (~> 2.0)
+  - GoogleAnalytics (3.14.0)
+  - GoogleAppUtilities (1.0.0):
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleAuthUtilities (1.0.1):
+    - GoogleNetworkingUtilities (~> 1.0)
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleInterchangeUtilities (1.1.0):
+    - GoogleSymbolUtilities (~> 1.0)
   - GoogleMaps (1.10.5)
+  - GoogleMobileAds (7.5.2)
+  - GoogleNetworkingUtilities (1.0.0):
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleSignIn (2.4.0):
+    - GoogleAppUtilities (~> 1.0)
+    - GoogleAuthUtilities (~> 1.0)
+    - GoogleNetworkingUtilities (~> 1.0)
+    - GoogleUtilities (~> 1.0)
+  - GoogleSymbolUtilities (1.0.3)
+  - GoogleUtilities (1.1.0):
+    - GoogleSymbolUtilities (~> 1.0.0)
   - MarqueeLabel (2.3.5)
   - MBProgressHUD (0.9.1)
   - MWPhotoBrowser (2.1.1):
@@ -22,6 +55,9 @@ DEPENDENCIES:
   - AlamofireImage (~> 1.0)
   - Device (~> 0.0.4)
   - Dollar (~> 4.0)
+  - Google/AdMob
+  - Google/Analytics
+  - Google/SignIn
   - GoogleMaps
   - MarqueeLabel
   - MBProgressHUD (~> 0.9.1)
@@ -34,7 +70,17 @@ SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
   Dollar: a058e2659e0d3261307c12630dbc2fd8e32f80bf
+  Google: fd33b5fa40fa3aaee5176de49c873a74e3d11dce
+  GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
+  GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
+  GoogleAuthUtilities: 049ffd3a297cdffd271451b82fd4e75304f15ef3
+  GoogleInterchangeUtilities: d7f7174176fbcf9710f696f1acebad4dbd98ac03
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
+  GoogleMobileAds: 97392919ee98f23202431221ffb36e9fbaeb1bdc
+  GoogleNetworkingUtilities: 292992ab31b7b4ba32809a0e8b40e324cdfb2c0c
+  GoogleSignIn: 79929b51e6299c69f1197bbd9c7a1367d523ecd8
+  GoogleSymbolUtilities: 82ad9f93d3615244b3f4ce440f5ab2515e8b4f56
+  GoogleUtilities: 8ed9134debe11719097881711464752900668f10
   MarqueeLabel: fd29be3b4cf5f37b01676749409679aac23eb6fa
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
   MWPhotoBrowser: ba0d0c09ffda3a7ea10093518738c502c1c7141c

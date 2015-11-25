@@ -42,6 +42,13 @@ class UrlPopoverViewController: UIViewController {
         self.urlLabel.text = urlLabelText
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        ///Google Analytics Tracker
+        self.trackScreen()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         

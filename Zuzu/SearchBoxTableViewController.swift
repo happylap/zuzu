@@ -719,7 +719,10 @@
             }
             
             //Restore hidden tab bar before apeearing
-            self.tabBarController!.tabBar.hidden = false;
+            self.tabBarController!.tabBar.hidden = false
+            
+            //Google Analytics Tracker
+            self.trackScreen()
         }
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
@@ -820,6 +823,8 @@
                     
                     NSLog("Cannot load area json file %@", error)
                     
+                } catch {
+                    NSLog("Cannot load area json file")
                 }
             }
             
