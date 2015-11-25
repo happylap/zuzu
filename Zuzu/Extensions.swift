@@ -55,6 +55,7 @@ extension UIViewController {
         let title = "View: \(self.title ?? self.description)"
         let tracker = GAI.sharedInstance().defaultTracker
         tracker.set(kGAIScreenName, value: title)
+        tracker.allowIDFACollection = true
         
         let builder = GAIDictionaryBuilder.createScreenView()
         tracker.send(builder.build() as [NSObject : AnyObject])

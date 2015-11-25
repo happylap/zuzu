@@ -168,9 +168,9 @@ class SearchResultViewController: UIViewController {
         
         self.stopSpinner()
         if(dataSource.estimatedTotalResults > 0) {
-            self.title = "共\(dataSource.estimatedTotalResults)筆結果"
+            self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
         } else {
-            self.title = "查無資料"
+            self.navigationItem.title = "查無資料"
         }
         
         self.tableView.reloadData()

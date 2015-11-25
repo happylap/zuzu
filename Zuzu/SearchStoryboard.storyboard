@@ -1310,6 +1310,7 @@
                             <constraint firstItem="7jF-KR-mPn" firstAttribute="top" secondItem="J6q-x0-p0k" secondAttribute="bottom" id="fRI-W3-9nc"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="dJu-2H-WfU"/>
                     <connections>
                         <outlet property="mapView" destination="7jF-KR-mPn" id="HHV-FG-RYe"/>
                     </connections>
