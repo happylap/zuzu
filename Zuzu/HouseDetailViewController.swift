@@ -77,7 +77,6 @@ class HouseDetailViewController: UIViewController {
         case AddressCell = "addressCell"
         case ExpandableHeaderCell = "expandableHeaderCell"
         case ExpandableContentCell = "expandableContentCell"
-        case EmptyCell = "emptyCell"
     }
     
     
@@ -169,12 +168,13 @@ class HouseDetailViewController: UIViewController {
                         cell.leftInfoSub.hidden = false
                         
                         if let price = houseItemDetail.valueForKey("price") as? Int {
-                            cell.leftInfoText.font = UIFont.boldSystemFontOfSize(18)
+
+                            cell.leftInfoText.font = UIFont.boldSystemFontOfSize(cell.leftInfoText.font.pointSize)
                             cell.leftInfoText.text = "\(price) 月/元"
                         }
                         
                         if let size = houseItemDetail.valueForKey("size") as? Int {
-                            cell.rightInfoText.font = UIFont.boldSystemFontOfSize(18)
+                            cell.rightInfoText.font = UIFont.boldSystemFontOfSize(cell.rightInfoText.font.pointSize)
                             cell.rightInfoText.text = "\(size) 坪"
                         }
                     } else {
@@ -637,6 +637,9 @@ class HouseDetailViewController: UIViewController {
             
             contactBarView.contactName.text = contactDisplayStr
             
+            let tapGuesture = UITapGestureRecognizer(target: self, action: "contactNameTouched:")
+            contactBarView.contactName.addGestureRecognizer(tapGuesture)
+            
             contactBarView.contactByMailButton
                 .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             contactBarView.contactByMailButton.hidden = false
@@ -695,7 +698,7 @@ class HouseDetailViewController: UIViewController {
         
     }
     
-    func contactByPhoneButtonTouched(sender: UIButton) {
+    private func displayPhoneNumberMenu() {
         if let houseDetail = self.houseItemDetail {
             
             var message = "確認聯絡: "
@@ -746,6 +749,14 @@ class HouseDetailViewController: UIViewController {
             
             self.presentViewController(optionMenu, animated: true, completion: nil)
         }
+    }
+    
+    func contactNameTouched(sender: UITapGestureRecognizer) {
+        displayPhoneNumberMenu()
+    }
+    
+    func contactByPhoneButtonTouched(sender: UIButton) {
+        displayPhoneNumberMenu()
     }
     
     func shareButtonTouched(sender: UIButton) {
