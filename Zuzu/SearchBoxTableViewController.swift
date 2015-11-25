@@ -557,6 +557,19 @@
         
         
         //The UI control event handler Should not be private
+        
+        @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
+            
+            if let url = NSURL(string: "fb://profile/1675724006047703") {
+                if(UIApplication.sharedApplication().canOpenURL(url)) {
+                    UIApplication.sharedApplication().openURL(url)
+                }
+            } else {
+                ///Use embed browser view
+                
+            }
+        }
+        
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
             
             loadSearchItemsForSegment(sender.selectedSegmentIndex)
@@ -701,7 +714,7 @@
                     currentCriteria.types = criteria.types
                     
                     self.populateViewFromSearchCriteria(currentCriteria)
-
+                    
                     clearCriteriaButton.enabled = true
                 }
             }

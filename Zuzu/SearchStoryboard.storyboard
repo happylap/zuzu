@@ -557,7 +557,13 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="租屋快搜" id="izc-kA-Us3">
-                        <barButtonItem key="rightBarButtonItem" image="notification_n" id="6YQ-kr-34O">
+                        <barButtonItem key="leftBarButtonItem" image="facebook_fan" id="a4z-Kk-iW8">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="onOpenFanPage:" destination="avK-Pq-NJf" id="YCr-Tu-zQy"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" id="6YQ-kr-34O">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
                     </navigationItem>
@@ -1265,6 +1271,7 @@
                             <constraint firstItem="z6L-pd-X4C" firstAttribute="top" secondItem="05l-B1-oJ7" secondAttribute="bottom" id="gPC-ew-FYB"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="maV-fu-tgx"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="650" height="800"/>
                     <connections>
@@ -1660,12 +1667,12 @@
     </scenes>
     <resources>
         <image name="arrow_down02_n" width="15" height="15"/>
+        <image name="facebook_fan" width="30" height="30"/>
         <image name="filter_n" width="60" height="60"/>
         <image name="house_img" width="1440" height="700"/>
         <image name="list_icon_n" width="30" height="30"/>
         <image name="location" width="30" height="30"/>
         <image name="main_search_n" width="38" height="38"/>
-        <image name="notification_n" width="30" height="30"/>
         <image name="search item_01" width="30" height="30"/>
         <image name="search item_02" width="30" height="30"/>
         <image name="search item_03" width="30" height="30"/>
