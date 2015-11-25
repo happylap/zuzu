@@ -210,15 +210,15 @@ class SearchResultViewController: UIViewController {
         
         ///Set image for selected state
         if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
-            button.setImage(UIImage(named: "sort-ascending"),
+            button.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Selected)
-            button.setImage(UIImage(named: "sort-ascending"),
+            button.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Normal)
             
         } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
-            button.setImage(UIImage(named: "sort-descending"),
+            button.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Selected)
-            button.setImage(UIImage(named: "sort-descending"),
+            button.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Normal)
             
         } else {

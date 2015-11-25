@@ -96,6 +96,7 @@ class SmartFilterView: UIView {
             let button : ToggleButton = ToggleButton()
             button.setTitle(filter.label, forState: .Normal)
             button.titleLabel!.font =  UIFont.systemFontOfSize(12)
+            button.titleLabel?.autoScaleFontSize = true
             button.offBackgroundColor = UIColor.clearColor()
             button.offColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
             
