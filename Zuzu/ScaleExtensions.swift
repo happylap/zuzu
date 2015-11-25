@@ -121,6 +121,32 @@ extension UILabel {
     }
 }
 
+extension UINavigationBar {
+    
+    var autoScaleFontSize: Bool {
+        set {
+            if newValue {
+                
+                if let attributes = self.titleTextAttributes {
+                    
+                    if let baseFont = attributes[NSFontAttributeName] as? UIFont {
+                        
+                        let scaledSize = getScaledFontSize(baseFont)
+                        
+                        self.titleTextAttributes![NSFontAttributeName] = UIFont.systemFontOfSize(scaledSize)
+                        
+                    }
+                }
+            }
+        }
+        
+        get {
+            return false
+        }
+    }
+    
+}
+
 extension Device {
     struct ScreenSize {
         static let iPhone5 = CGSize(width: 320, height: 568)

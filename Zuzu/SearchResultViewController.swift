@@ -488,12 +488,20 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    
+    func dismissCurrentView(sender: UIBarButtonItem) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NSLog("%@ [[viewDidLoad]]", self)
+        
+        // Config navigation left bar
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"search_toolbar_n"), style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
         
         // Load Selected filters
         if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {

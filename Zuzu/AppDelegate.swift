@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = bgColor
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         
+        UINavigationBar.appearance().autoScaleFontSize = true
         //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
