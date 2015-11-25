@@ -48,7 +48,7 @@ class ToggleButton: UIButton {
     }
     
     private func setup() {
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = 8
         self.layer.borderWidth = 1
         self.toggleOff()
     }

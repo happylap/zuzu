@@ -153,6 +153,9 @@
                                                         <constraint firstAttribute="height" constant="30" id="xsk-sd-fg3"/>
                                                     </constraints>
                                                     <state key="normal" title="不限"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                     <variation key="default">
                                                         <mask key="constraints">
                                                             <exclude reference="3k1-F6-KJn"/>
@@ -165,22 +168,37 @@
                                                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OkQ-AO-Lez" customClass="ToggleButton" customModule="Zuzu" customModuleProvider="target">
                                                     <rect key="frame" x="332" y="8" width="126" height="63"/>
                                                     <state key="normal" title="整層住家"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RMU-sc-8es" customClass="ToggleButton" customModule="Zuzu" customModuleProvider="target">
                                                     <rect key="frame" x="466" y="8" width="126" height="63"/>
                                                     <state key="normal" title="獨立套房"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fqe-Zz-3Uo" customClass="ToggleButton" customModule="Zuzu" customModuleProvider="target">
                                                     <rect key="frame" x="332" y="79" width="126" height="63"/>
                                                     <state key="normal" title="雅房"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pwa-n7-244" customClass="ToggleButton" customModule="Zuzu" customModuleProvider="target">
                                                     <rect key="frame" x="466" y="79" width="126" height="63"/>
                                                     <state key="normal" title="住辦"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKw-Ml-1Ub" customClass="ToggleButton" customModule="Zuzu" customModuleProvider="target">
                                                     <rect key="frame" x="198" y="79" width="126" height="63"/>
                                                     <state key="normal" title="分租套房"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" image="search item_03" translatesAutoresizingMaskIntoConstraints="NO" id="O23-ho-GI1">
                                                     <rect key="frame" x="8" y="24" width="30" height="30.5"/>
@@ -381,11 +399,11 @@
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="180" id="Nfi-pe-zhq">
-                                        <rect key="frame" x="0.0" y="854" width="600" height="180"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="150" id="Nfi-pe-zhq">
+                                        <rect key="frame" x="0.0" y="854" width="600" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nfi-pe-zhq" id="3MW-xc-DJE">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="179.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="149.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="立即查詢1024筆資料" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyz-ye-gDa">
@@ -419,13 +437,13 @@
                                                         <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                             <integer key="value" value="25"/>
                                                         </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="F2v-MB-Dla">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="F2v-MB-Dla">
                                                     <rect key="frame" x="50" y="125" width="499" height="47.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="F2v-MB-Dla" secondAttribute="height" multiplier="1248:116" id="cBJ-rq-gWG"/>
@@ -458,7 +476,7 @@
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="270" id="0BD-Xg-haV">
-                                        <rect key="frame" x="0.0" y="1034" width="600" height="270"/>
+                                        <rect key="frame" x="0.0" y="1004" width="600" height="270"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0BD-Xg-haV" id="qZd-VB-W4l">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="269.5"/>
