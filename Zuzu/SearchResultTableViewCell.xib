@@ -25,14 +25,14 @@
                         </constraints>
                     </imageView>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFe-03-eKb">
-                        <rect key="frame" x="15" y="13" width="354" height="24"/>
+                        <rect key="frame" x="15" y="13" width="354" height="20.5"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="1Km-DR-qGJ"/>
                             <constraint firstAttribute="width" constant="42" id="EL6-lT-RnV"/>
                             <constraint firstAttribute="height" constant="20" id="ia0-aJ-MgA"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
@@ -41,9 +41,6 @@
                                 <exclude reference="EL6-lT-RnV"/>
                                 <exclude reference="ia0-aJ-MgA"/>
                             </mask>
-                        </variation>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
@@ -129,7 +126,7 @@
                         </variation>
                     </label>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
-                        <rect key="frame" x="377" y="10" width="30" height="30"/>
+                        <rect key="frame" x="377" y="8.5" width="30" height="30"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="bBi-LL-rPR"/>
@@ -195,14 +192,11 @@
                         </variation>
                     </label>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UBI-K0-9Hv" userLabel="House Title For Collection">
-                        <rect key="frame" x="48" y="13" width="321" height="24"/>
+                        <rect key="frame" x="48" y="13" width="321" height="20.5"/>
                         <animations/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
-                        <variation key="widthClass=compact">
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                        </variation>
                     </label>
                 </subviews>
                 <animations/>
