@@ -1045,14 +1045,31 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 
                 let browser = MWPhotoBrowser(delegate: self)
                 
-                browser.displayActionButton = true // Show action button to allow sharing, copying, etc (defaults to YES)
-                browser.displayNavArrows = true // Whether to display left and right nav arrows on toolbar (defaults to NO)
-                browser.displaySelectionButtons = false // Whether selection buttons are shown on each image (defaults to NO)
-                browser.zoomPhotosToFill = true // Images that almost fill the screen will be initially zoomed to fill (defaults to YES)
-                browser.alwaysShowControls = false // Allows to control whether the bars and controls are always visible or whether they fade away to show the photo full (defaults to NO)
-                browser.enableGrid = true; // Whether to allow the viewing of all the photo thumbnails on a grid (defaults to YES)
-                browser.startOnGrid = false // Whether to start on the grid of thumbnails instead of the first photo (defaults to NO)
-                browser.autoPlayOnAppear = false; // Auto-play first video
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+                
+                // Action button to allow sharing, copying, etc (default: true)
+                browser.displayActionButton = true
+                
+                // Whether to display nav arrows on toolbar (default: false)
+                browser.displayNavArrows = true
+                
+                // Whether selection buttons are shown on each image (default: true)
+                browser.displaySelectionButtons = false
+                
+                // Images that almost fill the screen will be initially zoomed to fill (default: true)
+                browser.zoomPhotosToFill = true
+                
+                // Whether the bars and controls are always visible or not (default: false)
+                browser.alwaysShowControls = false
+                
+                // Whether to allow the grid view (default: true)
+                browser.enableGrid = true;
+                
+                // Whether to start on the grid view (default: false)
+                browser.startOnGrid = false
+                
+                // Auto-play first video
+                browser.autoPlayOnAppear = false;
                 
                 browser.setCurrentPhotoIndex(0)
                 
@@ -1106,6 +1123,22 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
     
     func photoBrowser(photoBrowser: MWPhotoBrowser!, photoAtIndex index: UInt) -> MWPhotoProtocol! {
         
+        let photoIndex: Int = Int(index)
+        
+        if let houseItem = self.houseItem, let imgList = houseItem.imgList {
+            
+            if (photoIndex < imgList.endIndex) {
+                return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    
+    func photoBrowser(photoBrowser: MWPhotoBrowser!, thumbPhotoAtIndex index: UInt) -> MWPhotoProtocol! {
         let photoIndex: Int = Int(index)
         
         if let houseItem = self.houseItem, let imgList = houseItem.imgList {
