@@ -21,7 +21,7 @@ class FilterTableViewController: UITableViewController {
     
     ///The list of all filter options grouped by sections
     static var filterSections:[FilterSection] = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
-
+    
     var filterSections:[FilterSection] {
         get {
             return FilterTableViewController.filterSections
@@ -60,7 +60,7 @@ class FilterTableViewController: UITableViewController {
             resetAllButton.enabled = false
         }
     }
-
+    
     private func getFilterLabel(filterIdentifier: FilterIdentifier) -> String? {
         for section in self.filterSections {
             for group in section.filterGroups {
@@ -188,6 +188,9 @@ class FilterTableViewController: UITableViewController {
         
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = false
+        
+        self.tableView.registerNib(UINib(nibName: "FilterTableViewCell", bundle: nil), forCellReuseIdentifier: "filterTableCell")
+        self.tableView.registerNib(UINib(nibName: "SimpleFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "simpleFilterTableCell")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -239,6 +242,10 @@ class FilterTableViewController: UITableViewController {
             }
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        } else {
+            
+            performSegueWithIdentifier(ViewTransConst.displayFilterOptions, sender: self)
+            
         }
     }
     
@@ -262,7 +269,10 @@ class FilterTableViewController: UITableViewController {
             
             if let currentFilter = filterGroup.filters.first, let filterSetForGroup = filterIdSetForGroup {
                 if filterSetForGroup.contains(currentFilter.identifier) {
-                    cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                    cell.filterCheckMark.image = UIImage(named: "checked_green")
+                } else {
+                    cell.filterCheckMark.image = UIImage(named: "uncheck")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+                    cell.filterCheckMark.tintColor = UIColor.grayColor()
                 }
             }
             

@@ -22,12 +22,12 @@ class FilterOptionTableViewController: UITableViewController {
     
     var filterOptions : FilterGroup!
     
-    var unlimitIndex: Int?
+    var nolimitCell: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        unlimitIndex = filterOptions.filters.indexOf({ (filter) -> Bool in
+        nolimitCell = filterOptions.filters.indexOf({ (filter) -> Bool in
             return (filter.key == Filter.defaultKeyUnlimited)
         })
         
@@ -37,6 +37,9 @@ class FilterOptionTableViewController: UITableViewController {
         
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = false
+        
+        
+        self.tableView.registerNib(UINib(nibName: "SimpleFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "simpleFilterTableCell")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -77,7 +80,7 @@ class FilterOptionTableViewController: UITableViewController {
         NSLog("didSelectRowAtIndexPath %@", indexPath)
         
         ///The user selects unlimited option
-        if(unlimitIndex == indexPath.row) {
+        if(nolimitCell == indexPath.row) {
             selectedFilterIds.removeAll()
             tableView.reloadData()
             return
@@ -100,7 +103,7 @@ class FilterOptionTableViewController: UITableViewController {
         }
         
         ///Refresh unlimited cell
-        if let unlimitIndex = unlimitIndex {
+        if let unlimitIndex = nolimitCell {
             let unlimitIndexPath = NSIndexPath(forRow: unlimitIndex, inSection: 0)
             tableView.reloadRowsAtIndexPaths([unlimitIndexPath], withRowAnimation: UITableViewRowAnimation.None)
         }
@@ -113,25 +116,27 @@ class FilterOptionTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let currentFilter = filterOptions.filters[indexPath.row]
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("filterOptionsCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("simpleFilterTableCell", forIndexPath: indexPath) as! FilterTableViewCell
         
-        if(unlimitIndex == indexPath.row) {
+        if(nolimitCell == indexPath.row) {
             ///For unlimited cell, check if not filter selected
             if(selectedFilterIds.isEmpty) {
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                cell.filterCheckMark.image = UIImage(named: "checked_green")
             } else {
-                cell.accessoryType = UITableViewCellAccessoryType.None
+                cell.filterCheckMark.image = UIImage(named: "uncheck")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+                cell.filterCheckMark.tintColor = UIColor.grayColor()
             }
         } else {
             ///For other cells
             if(selectedFilterIds.contains(currentFilter.identifier)) {
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                cell.filterCheckMark.image = UIImage(named: "checked_green")
             } else {
-                cell.accessoryType = UITableViewCellAccessoryType.None
+                cell.filterCheckMark.image = UIImage(named: "uncheck")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+                cell.filterCheckMark.tintColor = UIColor.grayColor()
             }
         }
         
-        cell.textLabel?.text = currentFilter.label
+        cell.simpleFilterLabel.text = currentFilter.label
         
         return cell
     }

@@ -56,10 +56,11 @@
 		2FBF52661C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
 		2FBF52671C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
 		2FBF52681C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
+		2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */; };
+		2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */; };
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */; };
-		2FDA072F1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDA072D1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib */; };
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
 		2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* resultFilters.json */; };
@@ -168,10 +169,11 @@
 		2FBF525C1C04BFF300B3F47B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleExtensions.swift; sourceTree = "<group>"; };
 		2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
+		2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleFilterTableViewCell.xib; sourceTree = "<group>"; };
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterOptionTableViewController.swift; sourceTree = "<group>"; };
-		2FDA072D1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterOptionTableViewController.xib; sourceTree = "<group>"; };
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
 		2FDCA0D41BE0721800498FC0 /* resultFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = resultFilters.json; sourceTree = "<group>"; };
@@ -253,7 +255,6 @@
 				2F9791BF1BF59C4D0056B721 /* BrowserViewController.swift */,
 				2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */,
 				2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */,
-				2FDA072D1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -469,6 +470,8 @@
 				2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */,
 				2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */,
 				2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */,
+				2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */,
+				2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -615,10 +618,11 @@
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
+				2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */,
+				2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
-				2FDA072F1BEA1AE200CDA8BE /* FilterOptionTableViewController.xib in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
 				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,

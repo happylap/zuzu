@@ -18,14 +18,27 @@ class FilterTableViewCell: UITableViewCell {
     
     @IBOutlet weak var filterSelection: UILabel!
     
+    @IBOutlet weak var filterCheckMark: UIImageView!
+    
     weak var parentTableView: UITableView!
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.accessoryType = UITableViewCellAccessoryType.None
+    private func setup() {
+        self.filterCheckMark?.image = UIImage(named: "uncheck")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        self.filterCheckMark?.tintColor = UIColor.grayColor()
+        self.filterCheckMark?.tintColorDidChange()
+        
         self.simpleFilterLabel?.text = nil
         self.filterLabel?.text = nil
         self.filterSelection?.text = nil
+    }
+    
+    override func awakeFromNib() {
+        setup()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setup()
     }
     
 }

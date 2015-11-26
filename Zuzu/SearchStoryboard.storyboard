@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -1437,108 +1436,6 @@
                                 <constraint firstItem="czk-Se-eDg" firstAttribute="centerY" secondItem="JBT-Ez-hRO" secondAttribute="centerY" id="kNi-LH-dse"/>
                             </constraints>
                         </view>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="simpleFilterTableCell" id="04Z-NU-OU0" customClass="FilterTableViewCell" customModule="Zuzu" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="157.5" width="800" height="55"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="04Z-NU-OU0" id="8k6-RL-Piu">
-                                    <rect key="frame" x="0.0" y="0.0" width="800" height="54.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不要地下室" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="te8-Sy-hbp">
-                                            <rect key="frame" x="8" y="17" width="85" height="20.5"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="102" id="iZT-rz-aa1"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="iZT-rz-aa1"/>
-                                                </mask>
-                                            </variation>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="te8-Sy-hbp" firstAttribute="leading" secondItem="8k6-RL-Piu" secondAttribute="leadingMargin" id="YJY-fA-Q6D"/>
-                                        <constraint firstItem="te8-Sy-hbp" firstAttribute="top" secondItem="8k6-RL-Piu" secondAttribute="topMargin" constant="3" id="gUV-B5-qH6"/>
-                                        <constraint firstItem="te8-Sy-hbp" firstAttribute="centerY" secondItem="8k6-RL-Piu" secondAttribute="centerY" id="oCr-88-iJd"/>
-                                    </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="gUV-B5-qH6"/>
-                                        </mask>
-                                    </variation>
-                                </tableViewCellContentView>
-                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
-                                <connections>
-                                    <outlet property="simpleFilterLabel" destination="te8-Sy-hbp" id="UFK-Rf-mJY"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="filterTableCell" id="kSi-or-MC0" customClass="FilterTableViewCell" customModule="Zuzu" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="212.5" width="800" height="55"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kSi-or-MC0" id="wig-7U-ewV">
-                                    <rect key="frame" x="0.0" y="0.0" width="698" height="54.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="格局" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="asX-h3-9l9">
-                                            <rect key="frame" x="8" y="17" width="34" height="20.5"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="42" id="TQN-nK-OmN"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="TQN-nK-OmN"/>
-                                                </mask>
-                                            </variation>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不限" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Al3-iZ-Zjz">
-                                            <rect key="frame" x="50" y="17" width="640" height="20.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="Al3-iZ-Zjz" firstAttribute="centerY" secondItem="asX-h3-9l9" secondAttribute="centerY" id="30j-Af-H7O"/>
-                                        <constraint firstItem="asX-h3-9l9" firstAttribute="firstBaseline" secondItem="Al3-iZ-Zjz" secondAttribute="firstBaseline" id="566-xT-VRp"/>
-                                        <constraint firstItem="Al3-iZ-Zjz" firstAttribute="leading" secondItem="asX-h3-9l9" secondAttribute="trailing" constant="8" symbolic="YES" id="6kb-Ye-iOD"/>
-                                        <constraint firstItem="asX-h3-9l9" firstAttribute="centerY" secondItem="wig-7U-ewV" secondAttribute="centerY" id="Ael-4a-rGs"/>
-                                        <constraint firstItem="asX-h3-9l9" firstAttribute="top" secondItem="wig-7U-ewV" secondAttribute="topMargin" constant="3" id="H6Y-uH-WNH"/>
-                                        <constraint firstItem="asX-h3-9l9" firstAttribute="baseline" secondItem="Al3-iZ-Zjz" secondAttribute="baseline" id="KGL-P6-yss"/>
-                                        <constraint firstItem="Al3-iZ-Zjz" firstAttribute="trailing" secondItem="wig-7U-ewV" secondAttribute="trailingMargin" id="YCy-kQ-hgs"/>
-                                        <constraint firstItem="asX-h3-9l9" firstAttribute="leading" secondItem="wig-7U-ewV" secondAttribute="leadingMargin" id="m7L-dt-olG"/>
-                                    </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="566-xT-VRp"/>
-                                            <exclude reference="H6Y-uH-WNH"/>
-                                            <exclude reference="KGL-P6-yss"/>
-                                        </mask>
-                                    </variation>
-                                </tableViewCellContentView>
-                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
-                                <connections>
-                                    <outlet property="filterLabel" destination="asX-h3-9l9" id="U76-sg-Sya"/>
-                                    <outlet property="filterSelection" destination="Al3-iZ-Zjz" id="fQp-z8-yHB"/>
-                                    <segue destination="yay-dO-qvR" kind="show" identifier="displayFilterOptions" id="BNj-4p-WpJ"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
                         <sections/>
                         <connections>
                             <outlet property="dataSource" destination="smZ-ZU-g2D" id="3Vg-IN-OUl"/>
@@ -1556,6 +1453,7 @@
                     <size key="freeformSize" width="800" height="800"/>
                     <connections>
                         <outlet property="resetAllButton" destination="czk-Se-eDg" id="mQ3-O9-dQm"/>
+                        <segue destination="yay-dO-qvR" kind="show" identifier="displayFilterOptions" id="dgc-3x-eBE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yte-p9-aTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1571,29 +1469,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="filterOptionsCell" textLabel="xbX-OH-qNv" style="IBUITableViewCellStyleDefault" id="j3y-fr-gJM">
-                                <rect key="frame" x="0.0" y="92" width="800" height="55"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j3y-fr-gJM" id="qkC-Zc-x3g">
-                                    <rect key="frame" x="0.0" y="0.0" width="800" height="54.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xbX-OH-qNv">
-                                            <rect key="frame" x="84" y="0.0" width="632" height="54.5"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="yay-dO-qvR" id="ep3-cj-ibF"/>
                             <outlet property="delegate" destination="yay-dO-qvR" id="pMt-I4-jKf"/>
@@ -1602,7 +1477,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uRL-af-d6l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4388" y="-103"/>
+            <point key="canvasLocation" x="4393" y="-108"/>
         </scene>
         <!--Debug-->
         <scene sceneID="F5o-3h-u7z">
