@@ -516,7 +516,8 @@ class SearchResultViewController: UIViewController {
         }
         
         //Configure cell height
-        tableView.estimatedRowHeight = 213//tableView.rowHeight
+        tableView.estimatedRowHeight = 174 * getCurrentScale()
+        //148.5//194//tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         
         //Configure table DataSource & Delegate
