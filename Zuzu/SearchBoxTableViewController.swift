@@ -65,6 +65,8 @@
             }
         }
         
+        var keywordTextChanged = false
+        
         var sizeUpperRange:Range<Int>?
         var priceUpperRange:Range<Int>?
         let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
@@ -135,7 +137,7 @@
             }
         }
         
-        var selectAllButton:ToggleButton?
+        var selectAllButton:ToggleButton!
         
         
         @IBOutlet weak var clearCriteriaButton: UIButton! {
@@ -468,10 +470,10 @@
                     }
                 }
                 //At lease one type is selected, so "Select All" button can be set to false
-                selectAllButton?.setToggleState(false)
+                selectAllButton.setToggleState(false)
                 
             } else {
-                selectAllButton?.setToggleState(true)
+                selectAllButton.setToggleState(true)
             }
             
         }
@@ -518,7 +520,7 @@
             ///House Types
             var typeList = [Int]()
             
-            if(selectAllButton!.getToggleState() == false) {
+            if(selectAllButton.getToggleState() == false) {
                 let views = typeButtonContainer.subviews
                 
                 //Other type buttons are controlled by "select all" button
@@ -590,21 +592,29 @@
             if let toogleButton = sender as? ToggleButton {
                 
                 if(toogleButton.tag == UIControlTag.NOT_LIMITED_BUTTON_TAG) {
-                    selectAllButton?.setToggleState(true)
-                    return
+                    
+                    //Only allow toggling the "select all" button when it's off
+                    if (!selectAllButton.getToggleState()) {
+                        
+                        selectAllButton.setToggleState(true)
+                        
+                        currentCriteria = self.stateToSearhCriteria()
+                    }
                     
                 } else {
                     
                     toogleButton.toggleButtonState()
                     
                     //Toggle off the select all button if any type is selected
-                    if(toogleButton.getToggleState()==true) {
-                        selectAllButton?.setToggleState(false)
+                    if(toogleButton.getToggleState()) {
+                        selectAllButton.setToggleState(false)
                     }
+                    
+                    currentCriteria = self.stateToSearhCriteria()
                     
                 }
                 
-                currentCriteria = self.stateToSearhCriteria()
+                
             }
         }
         
@@ -1086,14 +1096,24 @@
         }
         
         // MARK: - UISearchBarDelegate
+        func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+            NSLog("textDidChange: %@, %@", self, searchText)
+            keywordTextChanged = true
+        }
         func searchBarSearchButtonClicked(searchBar: UISearchBar) {
             NSLog("searchBarSearchButtonClicked: %@", self)
-            searchBar.resignFirstResponder()//.endEditing(true)
+            searchBar.resignFirstResponder()
         }
         
         func searchBarTextDidEndEditing(searchBar: UISearchBar) {
             NSLog("searchBarTextDidEndEditing: %@", self)
             searchBar.resignFirstResponder()
+            
+            if(keywordTextChanged) {
+                currentCriteria = self.stateToSearhCriteria()
+            }
+            
+            keywordTextChanged = false
         }
     }
     
