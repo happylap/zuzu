@@ -42,6 +42,7 @@
         struct CellConst {
             static let searchBar = 0
             static let area = 1
+            static let houseType = 2
             static let priceLabel = 3
             static let pricePicker = 4
             static let sizeLabel = 5
@@ -294,8 +295,6 @@
             tableView.tableFooterView = UIView(frame: CGRectZero)
             
             //Configure cell height
-            tableView.estimatedRowHeight = tableView.rowHeight
-            tableView.rowHeight = UITableViewAutomaticDimension
             tableView.delegate = self
         }
         
@@ -672,12 +671,6 @@
                 if (indexPath.row == CellConst.sizePicker) {
                     return sizePicker.intrinsicContentSize().height
                 }
-                //                if (indexPath.row == 7) {
-                //                    self.searchItemTable.layoutIfNeeded()
-                //                    let height = self.searchItemTable.contentSize.height
-                //                    return height
-                //                }
-                
             }
             
             return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
@@ -738,6 +731,9 @@
         override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
             
+            //Scroll main table to the Search Bar
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            
             //Load search item segment data
             loadSearchItemsForSegment(searchItemSegment.selectedSegmentIndex)
             
@@ -752,13 +748,11 @@
             //Google Analytics Tracker
             self.trackScreen()
         }
+        
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
             NSLog("viewDidAppear: %@", self)
             self.stateObserver.start()
-            
-            //Scroll main table to the Search Bar
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
         }
         
         override func viewDidDisappear(animated: Bool) {
