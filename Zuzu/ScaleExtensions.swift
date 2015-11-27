@@ -9,9 +9,15 @@
 import Foundation
 import Device
 
+/// Definitions of all layout diementions for the base setting (iPhone 6)
+struct BaseLayoutConst {
+    static let houseImageWidth:CGFloat = 174
+}
+
+/// Definitions of the scale ratio for devices with larger or smaller screens
 struct ScaleConst {
-    static let smallScale = Device.ScreenSize.iPhone5.width / Device.ScreenSize.iPhone6.width
-    static let largeScale = Device.ScreenSize.iPhone6P.width / Device.ScreenSize.iPhone6.width
+    static let smallScale:CGFloat = Device.ScreenSize.iPhone5.width / Device.ScreenSize.iPhone6.width
+    static let largeScale:CGFloat = Device.ScreenSize.iPhone6P.width / Device.ScreenSize.iPhone6.width
 }
 
 internal func getCurrentScale() -> CGFloat{
