@@ -12,7 +12,12 @@ import MBProgressHUD
 public class LoadingSpinner{
     
     var dialog : MBProgressHUD?
+    private static let defaultGraceTime:Float = 0.6
+    private static let defaultOpacity:Float = 0.3
+    
+    private var opacity = LoadingSpinner.defaultOpacity
     private var dimBackground = false
+    private var immediateAppear = false
     
     class var shared: LoadingSpinner {
         struct Static {
@@ -25,6 +30,14 @@ public class LoadingSpinner{
         dimBackground = status
     }
     
+    public func setImmediateAppear(status:Bool) {
+        immediateAppear = status
+    }
+    
+    public func setOpacity(opacity:Float) {
+        self.opacity = opacity
+    }
+    
     public func startOnView(view: UIView) {
         
         dialog = MBProgressHUD(view: view)
@@ -32,10 +45,14 @@ public class LoadingSpinner{
         if let dialog = dialog {
             dialog.removeFromSuperViewOnHide = true
             dialog.dimBackground = dimBackground
-            dialog.opacity = 0.3
+            dialog.opacity = opacity
             dialog.animationType = .Fade
             dialog.taskInProgress = true
-            dialog.graceTime = 0.6
+            if(immediateAppear) {
+                dialog.graceTime = 0
+            } else {
+                dialog.graceTime = LoadingSpinner.defaultGraceTime
+            }
             view.addSubview(dialog)
             dialog.show(true)
         }
@@ -52,5 +69,7 @@ public class LoadingSpinner{
     
     private func resetParams() {
         dimBackground = false
+        immediateAppear = false
+        opacity = LoadingSpinner.defaultOpacity
     }
 }

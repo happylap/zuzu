@@ -202,7 +202,9 @@ class SearchResultViewController: UIViewController {
             alertView.show()
         }
         
+        LoadingSpinner.shared.stop()
         self.stopSpinner()
+        
         if(dataSource.estimatedTotalResults > 0) {
             self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
         } else {
@@ -297,9 +299,13 @@ class SearchResultViewController: UIViewController {
     
     private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
         self.dataSource.criteria = criteria
-        self.startSpinner()
+
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.startOnView(view)
+        
         self.dataSource.initData()
-        //self.tableView.reloadData()
+        self.tableView.reloadData()//To reflect the latest table data
     }
     
     private func getStateForSmartFilterButton(filterGroup : FilterGroup) -> Bool {
@@ -566,9 +572,7 @@ class SearchResultViewController: UIViewController {
         self.dataSource.criteria = searchCriteria
         
         //Load the first page of data
-        self.startSpinner()
         self.sortByField(HouseItemDocument.postTime, sortingOrder: HouseItemDocument.Sorting.sortDesc)
-        //self.dataSource.initData()
     }
     
     override func viewWillAppear(animated: Bool) {

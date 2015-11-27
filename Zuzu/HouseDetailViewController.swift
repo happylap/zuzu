@@ -691,7 +691,7 @@ class HouseDetailViewController: UIViewController {
         
         let toRecipents = ["pikapai@gmail.com"]
         
-        LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+        LoadingSpinner.shared.startOnView(self.view)
         
         if MFMailComposeViewController.canSendMail() {
             if let mc: MFMailComposeViewController = MFMailComposeViewController() {
@@ -872,7 +872,7 @@ class HouseDetailViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        LoadingSpinnerOverlay.shared.hideOverlayView()
+        LoadingSpinner.shared.stop()
     }
     
     override func didReceiveMemoryWarning() {
@@ -1043,7 +1043,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             switch(cellInfo.cellIdentifier) {
             case .AddressCell:
-                LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+                LoadingSpinner.shared.startOnView(self.view)
                 
                 ///It takes time to load the map, leave some time to display loading spinner makes the flow look smoother
                 self.runOnMainThreadAfter(0.1){
@@ -1051,7 +1051,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 }
             case .HouseDetailTitleCell:
                 
-                LoadingSpinnerOverlay.shared.showOverlayOnView(self.view)
+                LoadingSpinner.shared.startOnView(self.view)
                 
                 let browser = MWPhotoBrowser(delegate: self)
                 
