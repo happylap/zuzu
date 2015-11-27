@@ -17,6 +17,7 @@ pod 'Device', '~> 0.0.4'
 pod 'Google/Analytics'
 pod 'Google/SignIn'
 pod 'Google/AdMob'
+pod 'AwesomeCache', '~> 2.0'
 end
 
 target 'ZuzuTests' do

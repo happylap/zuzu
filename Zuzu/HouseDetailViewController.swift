@@ -12,8 +12,12 @@ import MWPhotoBrowser
 import MarqueeLabel
 import Social
 import MBProgressHUD
+import AwesomeCache
 
 class HouseDetailViewController: UIViewController {
+    
+    let cacheName = "houseDetailCache"
+    let cacheTime:Double = 3 * 60 * 60 //3 hours
     
     class HouseUrl: NSObject, UIActivityItemSource{
         
@@ -91,29 +95,73 @@ class HouseDetailViewController: UIViewController {
     
     var tableRows:[Int: CellInfo]!
     
+    private func handleHouseDetailResponse(result: AnyObject) {
+        
+        self.houseItemDetail = result
+        
+        ///Reload Table View
+        self.tableView.reloadData()
+        
+        ///Configure Views On Data Loaded
+        self.configureViewsOnDataLoaded()
+        
+        self.enableNavigationBarItems()
+    }
+    
+    
     private func fetchHouseDetail(houseItem: HouseItem) {
         
-        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+        var hitCache = false
+        
+        do {
+            let cache = try Cache<NSData>(name: cacheName)
             
-            LoadingSpinner.shared.stop()
-            
-            
-            if let error = error {
-                NSLog("Cannot get remote data %@", error.localizedDescription)
-                return
+            ///Return cached data if there is cached data
+            if let cachedData = cache.objectForKey(houseItem.id),
+                let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) {
+                    
+                    NSLog("Hit Cache for item: Id: %@, Title: %@", houseItem.id, houseItem.title)
+                    
+                    hitCache = true
+                    
+                    LoadingSpinner.shared.stop()
+                    
+                    handleHouseDetailResponse(result)
             }
             
-            if let result = result {
-                self.houseItemDetail = result
+        } catch _ {
+            print("Something went wrong with the cache")
+        }
+        
+        
+        if(!hitCache) {
+            
+            HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                 
-                ///Reload Table View
-                self.tableView.reloadData()
+                LoadingSpinner.shared.stop()
                 
-                ///Configure Views On Data Loaded
-                self.configureViewsOnDataLoaded()
                 
-                self.enableNavigationBarItems()
+                if let error = error {
+                    NSLog("Cannot get remote data %@", error.localizedDescription)
+                    return
+                }
+                
+                if let result = result {
+                    
+                    ///Try to cache the house detail response
+                    do {
+                        let cache = try Cache<NSData>(name: self.cacheName)
+                        let cachedData = NSKeyedArchiver.archivedDataWithRootObject(result)
+                        cache.setObject(cachedData, forKey: houseItem.id, expires: CacheExpiry.Seconds(self.cacheTime))
+                        
+                    } catch _ {
+                        print("Something went wrong with the cache")
+                    }
+                    
+                    self.handleHouseDetailResponse(result)
+                }
             }
+            
         }
     }
     
