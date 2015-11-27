@@ -67,6 +67,42 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - Private Utils
     
+    private func configureTableView() {
+        
+        tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        //Configure table DataSource & Delegate
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+    }
+    
+    private func configureFilterButtons() {
+        
+        if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
+            
+            for button in smartFilterView.filterButtons {
+                button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+                
+                ///Check selection state
+                if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
+                    
+                    button.setToggleState(getStateForSmartFilterButton(filterGroup))
+                    
+                }
+            }
+        }
+    }
+    
+    private func configureSortingButtons() {
+        let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
+        self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+    }
+    
     private func alertSavingCurrentSearchSuccess() {
         // Initialize Alert View
         
@@ -180,16 +216,33 @@ class SearchResultViewController: UIViewController {
         self.debugTextStr = self.dataSource.debugStr
     }
     
-    private func updateSortingField(field:String, order:String) {
-        NSLog("Sorting = %@ %@", field, order)
-        self.searchCriteria?.sorting = "\(field) \(order)"
-        self.sortingStatus[field] = order
+    private func sortByField(sortingField:String, sortingOrder:String) {
+        
+        NSLog("Sorting = %@ %@", sortingField, sortingOrder)
+        self.searchCriteria?.sorting = "\(sortingField) \(sortingOrder)"
+        self.sortingStatus[sortingField] = sortingOrder
+        
+        reloadDataWithNewCriteria(searchCriteria)
+        
+        updateSortingButton(sortingField, sortingOrder: sortingOrder)
     }
     
-    private func sortByField(button: UIButton, sortingOrder: String) {
+    private func updateSortingButton(field: String, sortingOrder: String) {
+        
+        var targetButton: UIButton!
+        
+        switch field {
+        case HouseItemDocument.price:
+            targetButton = sortByPriceButton
+        case  HouseItemDocument.size:
+            targetButton = sortBySizeButton
+        case HouseItemDocument.postTime:
+            targetButton = sortByPostTimeButton
+        default: break
+        }
         
         ///Switch from other sorting fields
-        if(!button.selected) {
+        if(!targetButton.selected) {
             ///Disselect all & Clear all sorting icon for Normal state
             sortByPriceButton.selected = false
             sortByPriceButton.setImage(nil,
@@ -204,21 +257,21 @@ class SearchResultViewController: UIViewController {
                 forState: UIControlState.Normal)
             
             ///Select the one specified by hte user
-            button.selected = true
+            targetButton.selected = true
         }
         
         
         ///Set image for selected state
         if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
-            button.setImage(UIImage(named: "arrow_up_n"),
+            targetButton.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Selected)
-            button.setImage(UIImage(named: "arrow_up_n"),
+            targetButton.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Normal)
             
         } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
-            button.setImage(UIImage(named: "arrow_down_n"),
+            targetButton.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Selected)
-            button.setImage(UIImage(named: "arrow_down_n"),
+            targetButton.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Normal)
             
         } else {
@@ -246,24 +299,7 @@ class SearchResultViewController: UIViewController {
         self.dataSource.criteria = criteria
         self.startSpinner()
         self.dataSource.initData()
-        self.tableView.reloadData()
-    }
-    
-    private func configureFilterButtons() {
-        
-        if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
-            
-            for button in smartFilterView.filterButtons {
-                button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
-                
-                ///Check selection state
-                if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
-                    
-                    button.setToggleState(getStateForSmartFilterButton(filterGroup))
-                    
-                }
-            }
-        }
+        //self.tableView.reloadData()
     }
     
     private func getStateForSmartFilterButton(filterGroup : FilterGroup) -> Bool {
@@ -407,8 +443,8 @@ class SearchResultViewController: UIViewController {
     
     @IBAction func onSortingButtonTouched(sender: UIButton) {
         
-        var sortingOrder:String?
-        var sortingField:String?
+        var sortingOrder:String!
+        var sortingField:String!
         
         switch sender {
         case sortByPriceButton:
@@ -417,44 +453,42 @@ class SearchResultViewController: UIViewController {
             sortingField = HouseItemDocument.size
         case sortByPostTimeButton:
             sortingField = HouseItemDocument.postTime
-        default: break
+        default:
+            assert(false, "Unknown sorting type")
+            break
         }
         
-        if let sortingField = sortingField {
-            if(sender.selected) { ///Touchd when already selected
+        
+        if(sender.selected) { ///Touch on an already selected button
+            
+            if let status = sortingStatus[sortingField] {
                 
-                if let status = self.sortingStatus[sortingField] {
-                    
-                    ///Reverse the previous sorting order
-                    
-                    sortingOrder = ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc)
-                    
-                }
+                ///Reverse the previous sorting order
                 
-            } else { ///Switched from other sorting fields
+                sortingOrder = ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc)
                 
-                if let status = self.sortingStatus[sortingField] {
-                    
-                    ///Use the previous sorting order
-                    sortingOrder = status
-                    
-                } else {
-                    
-                    ///Use Default Ordering Asc
-                    sortingOrder = HouseItemDocument.Sorting.sortAsc
-                }
+            } else {
+                
+                assert(false, "Incorrect sorting status")
                 
             }
             
-            if let sortingOrder = sortingOrder {
+        } else { ///Switched from other sorting buttons
+            
+            if let status = self.sortingStatus[sortingField] {
                 
-                updateSortingField(sortingField, order: sortingOrder)
+                ///Use the previous sorting order
+                sortingOrder = status
                 
-                reloadDataWithNewCriteria(searchCriteria)
+            } else {
                 
-                sortByField(sender, sortingOrder: sortingOrder)
+                ///Use Default Ordering Asc
+                sortingOrder = HouseItemDocument.Sorting.sortAsc
             }
         }
+        
+        sortByField(sortingField, sortingOrder: sortingOrder)
+        
     }
     
     func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
@@ -516,34 +550,25 @@ class SearchResultViewController: UIViewController {
         }
         
         //Configure cell height
-        tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
-
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
-        //Configure table DataSource & Delegate
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+        configureTableView()
         
         //Configure Sorting Status
-        let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
-        self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
-        self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
-        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
-        
-        //Configure remote data source
-        self.dataSource.setDataLoadedHandler(onDataLoaded)
-        self.dataSource.criteria = searchCriteria
+        configureSortingButtons()
         
         //Configure Filter Buttons
-        self.configureFilterButtons()
+        configureFilterButtons()
         
         //Load list my collections
         collectionIdList = HouseDao.sharedInstance.getHouseIdList()
         
+        //Setup remote data source
+        self.dataSource.setDataLoadedHandler(onDataLoaded)
+        self.dataSource.criteria = searchCriteria
+        
         //Load the first page of data
         self.startSpinner()
-        self.dataSource.initData()
+        self.sortByField(HouseItemDocument.postTime, sortingOrder: HouseItemDocument.Sorting.sortDesc)
+        //self.dataSource.initData()
     }
     
     override func viewWillAppear(animated: Bool) {
