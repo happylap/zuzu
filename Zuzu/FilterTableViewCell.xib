@@ -55,9 +55,9 @@
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
+                        <exclude reference="9Lv-Pf-YAS"/>
                         <exclude reference="cL2-XC-jvw"/>
                         <exclude reference="zt6-E2-K9o"/>
-                        <exclude reference="9Lv-Pf-YAS"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>

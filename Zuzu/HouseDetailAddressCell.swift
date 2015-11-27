@@ -14,6 +14,8 @@ class HouseDetailAddressCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        ///Pass the touch event to parent table cell
+        mapIcon.userInteractionEnabled = false
     }
 }

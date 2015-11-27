@@ -26,7 +26,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="連絡人姓名" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2YX-jY-G9b" customClass="MarqueeLabel">
-                    <rect key="frame" x="53" y="24.5" width="236" height="20.5"/>
+                    <rect key="frame" x="53" y="0.0" width="236" height="71"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -41,38 +41,40 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tsm-Ar-y2Y">
-                    <rect key="frame" x="297" y="20.5" width="30" height="30"/>
+                    <rect key="frame" x="297" y="0.0" width="30" height="71"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="tsm-Ar-y2Y" secondAttribute="height" multiplier="1:1" id="5XN-fz-3jT"/>
+                        <constraint firstAttribute="width" secondItem="tsm-Ar-y2Y" secondAttribute="height" multiplier="1:2" id="5XN-fz-3jT"/>
                         <constraint firstAttribute="width" constant="30" id="J9n-DM-RTm"/>
                     </constraints>
-                    <state key="normal" title="Button" image="phone_n"/>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6yl-dO-wBg">
-                    <rect key="frame" x="335" y="20.5" width="30" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="30" id="7FU-lB-Tpr"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="X5w-g7-v9e"/>
-                        <constraint firstAttribute="width" secondItem="6yl-dO-wBg" secondAttribute="height" multiplier="1:1" id="bSm-w6-U1j"/>
-                    </constraints>
-                    <state key="normal" title="Button" image="envelope_n"/>
+                    <state key="normal" image="phone_n"/>
                     <variation key="default">
                         <mask key="constraints">
-                            <exclude reference="X5w-g7-v9e"/>
+                            <exclude reference="5XN-fz-3jT"/>
                         </mask>
                     </variation>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6yl-dO-wBg">
+                    <rect key="frame" x="335" y="0.5" width="30" height="71"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="7FU-lB-Tpr"/>
+                    </constraints>
+                    <state key="normal" image="envelope_n"/>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="zt5-h6-ISa" firstAttribute="centerY" secondItem="PHz-ua-JMV" secondAttribute="centerY" id="6lW-fG-Dvz"/>
                 <constraint firstItem="2YX-jY-G9b" firstAttribute="leading" secondItem="zt5-h6-ISa" secondAttribute="trailing" constant="8" symbolic="YES" id="83A-vT-7pf"/>
-                <constraint firstItem="6yl-dO-wBg" firstAttribute="centerY" secondItem="PHz-ua-JMV" secondAttribute="centerY" id="FW3-VF-UUc"/>
+                <constraint firstItem="tsm-Ar-y2Y" firstAttribute="top" secondItem="PHz-ua-JMV" secondAttribute="top" id="Ax5-be-VbL"/>
                 <constraint firstAttribute="trailing" secondItem="6yl-dO-wBg" secondAttribute="trailing" constant="15" id="KjC-n6-0yZ"/>
                 <constraint firstItem="zt5-h6-ISa" firstAttribute="leading" secondItem="PHz-ua-JMV" secondAttribute="leading" constant="15" id="Sgs-yb-VcH"/>
                 <constraint firstItem="6yl-dO-wBg" firstAttribute="leading" secondItem="tsm-Ar-y2Y" secondAttribute="trailing" constant="8" id="Vgr-qg-hvR"/>
+                <constraint firstItem="6yl-dO-wBg" firstAttribute="height" secondItem="tsm-Ar-y2Y" secondAttribute="height" id="fTy-W7-JIh"/>
                 <constraint firstItem="tsm-Ar-y2Y" firstAttribute="centerY" secondItem="6yl-dO-wBg" secondAttribute="centerY" id="gc9-kp-squ"/>
+                <constraint firstAttribute="bottom" secondItem="2YX-jY-G9b" secondAttribute="bottom" id="h0q-lK-69d"/>
+                <constraint firstAttribute="bottom" secondItem="tsm-Ar-y2Y" secondAttribute="bottom" id="kQK-Yh-WC7"/>
                 <constraint firstItem="tsm-Ar-y2Y" firstAttribute="leading" secondItem="2YX-jY-G9b" secondAttribute="trailing" constant="8" symbolic="YES" id="lOL-aN-YxS"/>
+                <constraint firstItem="2YX-jY-G9b" firstAttribute="top" secondItem="PHz-ua-JMV" secondAttribute="top" id="m6f-LR-dDd"/>
                 <constraint firstItem="2YX-jY-G9b" firstAttribute="centerY" secondItem="zt5-h6-ISa" secondAttribute="centerY" id="w5F-7u-KtL"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
