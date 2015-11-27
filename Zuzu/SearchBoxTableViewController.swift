@@ -741,9 +741,6 @@
             //Load search item segment data
             loadSearchItemsForSegment(searchItemSegment.selectedSegmentIndex)
             
-            //Scroll main table to the Search Bar
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-            
             //Scroll search history table to the top
             if(searchItemTable.numberOfRowsInSection(0) > 0) {
                 self.searchItemTable.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
@@ -759,6 +756,9 @@
             super.viewDidAppear(animated)
             NSLog("viewDidAppear: %@", self)
             self.stateObserver.start()
+            
+            //Scroll main table to the Search Bar
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
         }
         
         override func viewDidDisappear(animated: Bool) {
