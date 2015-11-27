@@ -140,9 +140,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTitleForCollection.hidden = true
         contactedView.hidden = true
         
-        
-        NSLog("\n")
-        NSLog("- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
+        NSLog("\n- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
         
     }
     
@@ -180,7 +178,7 @@ class SearchResultTableViewCell: UITableViewCell {
                     
                     NSLog("    <Start> Loading Img for Row[\(indexPath.row)]")
                     
-                    houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2))
+                    houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
                         { (request, response, result) -> Void in
                             NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                             NSLog("    <URL> %@", firstURL)

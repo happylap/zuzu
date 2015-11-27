@@ -25,7 +25,7 @@
                         </constraints>
                     </imageView>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFe-03-eKb">
-                        <rect key="frame" x="15" y="13" width="354" height="20.5"/>
+                        <rect key="frame" x="15" y="8" width="354" height="20.5"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="1Km-DR-qGJ"/>
@@ -47,14 +47,14 @@
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
-                        <rect key="frame" x="368.5" y="167" width="30.5" height="16"/>
+                        <rect key="frame" x="361.5" y="169.5" width="37.5" height="19"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Edm-z3-ZwW"/>
                             <constraint firstAttribute="width" constant="48" id="FLK-bZ-amz"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
@@ -67,14 +67,14 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
-                        <rect key="frame" x="15" y="147" width="353.5" height="16"/>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
+                        <rect key="frame" x="15" y="150.5" width="352" height="17"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="Hkh-YS-0jf"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
@@ -86,15 +86,15 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
-                        <rect key="frame" x="15" y="170" width="108.5" height="16"/>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
+                        <rect key="frame" x="15" y="174.5" width="117" height="17"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="um8-id-ng9"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="8"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
@@ -105,14 +105,14 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
-                        <rect key="frame" x="131.5" y="170" width="29.5" height="16"/>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
+                        <rect key="frame" x="140" y="174.5" width="31.5" height="17"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="42" id="Q5z-nT-JY8"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
@@ -125,13 +125,13 @@
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
-                        <rect key="frame" x="319.5" y="167" width="42" height="16"/>
+                        <rect key="frame" x="314" y="170" width="44.5" height="18.5"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="64" id="hjg-Yj-Y0i"/>
                         </constraints>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
@@ -144,7 +144,7 @@
                         </variation>
                     </label>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
-                        <rect key="frame" x="377" y="8.5" width="30" height="30"/>
+                        <rect key="frame" x="377" y="3.5" width="30" height="30"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="bBi-LL-rPR"/>
@@ -152,7 +152,7 @@
                         </constraints>
                     </imageView>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="hPJ-o1-WHC" userLabel="Prefixed Button">
-                        <rect key="frame" x="15" y="7" width="30" height="30"/>
+                        <rect key="frame" x="15" y="2" width="30" height="30"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="07F-hH-ZRb"/>
@@ -160,7 +160,7 @@
                         </constraints>
                     </imageView>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Btt-ya-h7f" userLabel="Contacted View">
-                        <rect key="frame" x="7" y="40" width="80" height="24"/>
+                        <rect key="frame" x="7" y="35" width="80" height="24"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lable" translatesAutoresizingMaskIntoConstraints="NO" id="SN1-LI-eoE">
                                 <rect key="frame" x="0.0" y="0.0" width="60" height="22"/>
@@ -195,12 +195,12 @@
                         </variation>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="591" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KeF-nv-cuS" userLabel="Source Label">
-                        <rect key="frame" x="376.5" y="147" width="22.5" height="16"/>
+                        <rect key="frame" x="375" y="150.5" width="24" height="17"/>
                         <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="26" id="jvn-UV-fFy"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
@@ -213,7 +213,7 @@
                         </variation>
                     </label>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UBI-K0-9Hv" userLabel="House Title For Collection">
-                        <rect key="frame" x="48" y="13" width="321" height="20.5"/>
+                        <rect key="frame" x="48" y="8" width="321" height="20.5"/>
                         <animations/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -242,7 +242,7 @@
                     <constraint firstItem="Sa0-Cs-laH" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="NX7-9T-wfc"/>
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="T5V-z7-wUS"/>
                     <constraint firstAttribute="trailingMargin" secondItem="KeF-nv-cuS" secondAttribute="trailing" constant="8" id="aPq-Hx-Y9e"/>
-                    <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="7" id="fEz-oG-VR4"/>
+                    <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="3" id="fEz-oG-VR4"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sa0-Cs-laH" secondAttribute="bottom" constant="5" id="g4m-xp-pW3"/>
                     <constraint firstItem="hPJ-o1-WHC" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="2" id="j6G-Uq-3bU"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="leading" secondItem="KFe-03-eKb" secondAttribute="trailing" constant="8" id="kEy-0S-Upg"/>
@@ -259,7 +259,7 @@
                     <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="t5x-sW-gOn"/>
                     <constraint firstItem="UBI-K0-9Hv" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="41" id="u3I-Km-ebj"/>
                 </constraints>
-                <edgeInsets key="layoutMargins" top="5" left="7" bottom="5" right="7"/>
+                <edgeInsets key="layoutMargins" top="0.0" left="7" bottom="0.0" right="7"/>
                 <variation key="default">
                     <mask key="constraints">
                         <exclude reference="qEr-A9-Ydh"/>
@@ -274,6 +274,7 @@
             <animations/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+            <inset key="separatorInset" minX="7" minY="0.0" maxX="7" maxY="0.0"/>
             <connections>
                 <outlet property="addToCollectionButton" destination="ttQ-yW-U9H" id="xCJ-km-OGR"/>
                 <outlet property="contactedView" destination="Btt-ya-h7f" id="qNw-sY-s1N"/>
