@@ -301,7 +301,7 @@ class SearchResultViewController: UIViewController {
         self.dataSource.criteria = criteria
 
         LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(view)
         
         self.dataSource.initData()
