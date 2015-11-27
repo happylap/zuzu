@@ -652,14 +652,17 @@ class HouseDetailViewController: UIViewController {
         let sourceItem = UIBarButtonItem(customView: gotoSourceButton)
         sourceItem.enabled = false
         
-        /// From right to left
-        self.navigationItem.setRightBarButtonItems(
-            [
-                collectItem,
-                shareItem,
-                sourceItem
-            ],
-            animated: false)
+        /// Add bar items from right to left
+        var barItems = [UIBarButtonItem]()
+        
+        if(FeatureOption.enableCollection) {
+            barItems.append(collectItem)
+        }
+        
+        barItems.append(shareItem)
+        barItems.append(sourceItem)
+        
+        self.navigationItem.setRightBarButtonItems(barItems, animated: false)
     }
     
     
@@ -891,7 +894,7 @@ class HouseDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         ///Hide tab bar
-        self.tabBarController!.tabBar.hidden = true
+        self.tabBarController!.tabBarHidden = true
         
         ///Google Analytics Tracker
         self.trackScreen()

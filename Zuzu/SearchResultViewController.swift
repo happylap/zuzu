@@ -299,7 +299,7 @@ class SearchResultViewController: UIViewController {
     
     private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
         self.dataSource.criteria = criteria
-
+        
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(view)
@@ -580,7 +580,7 @@ class SearchResultViewController: UIViewController {
         NSLog("%@ [[viewWillAppear]]", self)
         
         ///Hide tab bar
-        self.tabBarController!.tabBar.hidden = true
+        self.tabBarController!.tabBarHidden = true
         
         //Configure Filter Buttons
         configureFilterButtons()
@@ -667,6 +667,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
@@ -679,17 +680,20 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         cell.houseItem = houseItem
         
-        /// Enable add to collection button
-        if let collectionIdList = self.collectionIdList {
-            if(collectionIdList.contains(houseItem.id)) {
-                cell.addToCollectionButton.image = UIImage(named: "heart_pink")
+        if(FeatureOption.enableCollection) {
+            
+            /// Enable add to collection button
+            cell.addToCollectionButton.hidden = false
+            cell.addToCollectionButton.userInteractionEnabled = true
+            cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
+            
+            /// Init icon type
+            if let collectionIdList = self.collectionIdList {
+                if(collectionIdList.contains(houseItem.id)) {
+                    cell.addToCollectionButton.image = UIImage(named: "heart_pink")
+                }
             }
         }
-        
-        
-        cell.addToCollectionButton.hidden = false
-        cell.addToCollectionButton.userInteractionEnabled = true
-        cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
         
         return cell
     }

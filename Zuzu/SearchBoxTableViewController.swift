@@ -747,7 +747,7 @@
             }
             
             //Restore hidden tab bar before apeearing
-            self.tabBarController!.tabBar.hidden = false
+            self.tabBarController!.tabBarHidden = false
             
             //Google Analytics Tracker
             self.trackScreen()
@@ -776,8 +776,6 @@
                 case ViewTransConst.showSearchResult:
                     NSLog("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
-                        
-                        self.tabBarController!.tabBar.hidden = true
                         
                         ///Collect the search criteria set by the user
                         srtvc.searchCriteria = currentCriteria
@@ -810,9 +808,6 @@
                             vc.regionSelectionState = regionSelectionState
                         }
                     }
-                    
-                    ///So that we'll not see the pickerView expand when loading the area selector view
-                    self.tabBarController!.tabBar.hidden = true;
                     
                     navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
                     

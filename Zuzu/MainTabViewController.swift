@@ -22,23 +22,38 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
         
-
+        
         
         self.viewControllers =
             [searchViewController, collectionViewController, radarViewController]
         
         self.delegate = self
+        
+        self.tabBar.hidden = true
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.tabBar.hidden = true
     }
-    */
+    
+}
 
+extension UITabBarController {
+    
+    var tabBarHidden: Bool {
+        
+        set {
+            if(FeatureOption.enableCollection || FeatureOption.enableZadar) {
+                tabBar.hidden = newValue
+            } else {
+                tabBar.hidden = true
+            }
+        }
+        
+        get {
+            return tabBar.hidden
+        }
+    }
 }

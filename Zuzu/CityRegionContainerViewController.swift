@@ -163,6 +163,9 @@ class CityRegionContainerController: UIViewController {
         super.viewWillAppear(animated)
         NSLog("viewWillAppear: %@", self)
         
+        ///Hide tab bar
+        self.tabBarController!.tabBarHidden = true
+        
         //Google Analytics Tracker
         self.trackScreen()
     }
