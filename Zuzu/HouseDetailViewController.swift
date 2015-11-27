@@ -255,7 +255,6 @@ class HouseDetailViewController: UIViewController {
                 if let cell = cell as? HouseDetailAddressCell {
                     if let houseItem = self.houseItem {
                         cell.addressLabel.text = houseItem.addr
-                        //                        cell.mapIcon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onMapButtonTouched:")))
                     }
                 }
             }),
@@ -410,12 +409,27 @@ class HouseDetailViewController: UIViewController {
                             resultString += restrictionList.joinWithSeparator("; ") + "\n"
                         }
                         
+                        let daysInMonth = 30
+                        let monthInYear = 12
+                        
                         //Shortest Lease
                         if let leasePeriod = houseDetail.valueForKey("shortest_lease") as? Int {
-                            if let leasePeriodLabel = self.houseTypeLabelMaker.fromCodeForField("shortest_lease", code: leasePeriod) {
-                                resultString += "最短租期: \(leasePeriodLabel) \n"
+                            
+                            var leasePeriodLabel = "\(leasePeriod)天"
+                            
+                            if(leasePeriod != 0 && leasePeriod % daysInMonth == 0) {
+                                let month = leasePeriod / daysInMonth
+                                leasePeriodLabel = "\(month)個月"
+                                
+                                if(month % monthInYear == 0) {
+                                    let year = month / monthInYear
+                                    leasePeriodLabel = "\(year)年"
+                                }
+                                
+                                resultString += "最短租期: \(leasePeriodLabel)\n"
+                                
                             } else {
-                                resultString += "最短租期: \(leasePeriod)天 \n"
+                                resultString += "最短租期: \(leasePeriodLabel)\n"
                             }
                         }
                         
@@ -800,10 +814,6 @@ class HouseDetailViewController: UIViewController {
         self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
         
     }
-    
-    //    func onMapButtonTouched(sender: UITapGestureRecognizer) {
-    //        self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
-    //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
