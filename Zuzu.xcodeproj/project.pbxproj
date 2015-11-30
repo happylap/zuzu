@@ -10,6 +10,8 @@
 		2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */; };
 		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; };
 		2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */; };
+		2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */; };
+		2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */; };
 		2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F276B2E1BBE989E00A41306 /* DataPersistence.swift */; };
 		2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */; };
 		2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31F5081BBF7B6400054355 /* MainTabViewController.swift */; };
@@ -52,11 +54,10 @@
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
+		2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */; };
+		2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */; };
 		2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF525A1C04BFF000B3F47B /* InfoPlist.strings */; };
 		2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */; };
-		2FBF52661C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
-		2FBF52671C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
-		2FBF52681C05EFF700B3F47B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */; };
 		2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */; };
 		2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */; };
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
@@ -117,6 +118,8 @@
 		2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayLabelMaker.swift; sourceTree = "<group>"; };
 		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentTableDataSource.swift; sourceTree = "<group>"; };
+		2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GAExtensions.swift; sourceTree = "<group>"; };
+		2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GAConst.swift; sourceTree = "<group>"; };
 		2F276B2E1BBE989E00A41306 /* DataPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPersistence.swift; sourceTree = "<group>"; };
 		2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterSettingDataStore.swift; sourceTree = "<group>"; };
 		2F31F5081BBF7B6400054355 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
@@ -166,11 +169,12 @@
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadUtils.swift; sourceTree = "<group>"; };
+		2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FBF52591C04BFF000B3F47B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FBF525B1C04BFF200B3F47B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FBF525C1C04BFF300B3F47B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleExtensions.swift; sourceTree = "<group>"; };
-		2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
 		2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleFilterTableViewCell.xib; sourceTree = "<group>"; };
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
@@ -238,6 +242,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */,
+				2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */,
+			);
+			name = GoogleAnalytics;
+			sourceTree = "<group>";
+		};
 		2F276B351BBED50300A41306 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,7 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				2F31F5121BC2BC4400054355 /* .gitignore */,
-				2FBF52651C05EFF700B3F47B /* GoogleService-Info.plist */,
+				2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */,
 				2F482DF41BAFE09100C68670 /* Zuzu */,
 				81F05D631BF0E73600441A84 /* ZuzuTests */,
 				2F482DF31BAFE09100C68670 /* Products */,
@@ -345,16 +358,18 @@
 		2F5854D01BB3CBA9007FF85B /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
 				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
 				2FBC05551BDE701F0035652D /* Refresh */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */,
 				2F05C6271BBA2FBB00100D5F /* StringUtils.swift */,
+				2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */,
+				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
+				2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */,
 				2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */,
 				2F276B2E1BBE989E00A41306 /* DataPersistence.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
-				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
-				2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */,
 				2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */,
 				2FE912731BFF796C00019053 /* LoadingSpinner.swift */,
 				2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */,
@@ -576,7 +591,7 @@
 				TargetAttributes = {
 					2F482DF11BAFE09100C68670 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = QUW3NPMSPB;
+						DevelopmentTeam = 956DA6WPUM;
 					};
 					2F482E071BAFE09100C68670 = {
 						CreatedOnToolsVersion = 7.0;
@@ -627,9 +642,9 @@
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
+				2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */,
 				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
-				2FBF52661C05EFF700B3F47B /* GoogleService-Info.plist in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
 				2F9791BC1BF576C40056B721 /* fieldLabels.json in Resources */,
 				2F31F5261BC3C34600054355 /* Localizable.strings in Resources */,
@@ -641,7 +656,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FBF52671C05EFF700B3F47B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,7 +663,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FBF52681C05EFF700B3F47B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,6 +721,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */,
 				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,
 				2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */,
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
@@ -736,6 +750,7 @@
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
 				81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */,
 				81FA28091BDA397B0038DD19 /* House.swift in Sources */,
+				2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */,
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */,
 				81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */,
@@ -761,6 +776,7 @@
 				2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */,
 				2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
+				2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
 				81FA28131BDA39B10038DD19 /* Note.swift in Sources */,
@@ -942,7 +958,7 @@
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.zuzurentals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";
@@ -962,7 +978,7 @@
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lap.Zuzu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lap.zuzurentals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Zuzu/Zuzu-Bridging-Header.h";

@@ -213,9 +213,14 @@ class SearchResultViewController: UIViewController {
         
         self.tableView.reloadData()
         
-        NSLog("%@ onDataLoaded: Total #Item in Table: \(self.dataSource.getSize())", self)
+        NSLog("%@ onDataLoaded: Total #Item in Table: \(dataSource.getSize())", self)
         
         self.debugTextStr = self.dataSource.debugStr
+        
+        ///GA Tracker
+        if let duration = dataSource.loadingDuration {
+            self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000, name: "searchHouse")
+        }
     }
     
     private func sortByField(sortingField:String, sortingOrder:String) {
@@ -227,6 +232,11 @@ class SearchResultViewController: UIViewController {
         reloadDataWithNewCriteria(searchCriteria)
         
         updateSortingButton(sortingField, sortingOrder: sortingOrder)
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting,
+            action: sortingField,
+            label: sortingOrder)
     }
     
     private func updateSortingButton(field: String, sortingOrder: String) {
@@ -408,6 +418,10 @@ class SearchResultViewController: UIViewController {
                 alertSavingCurrentSearchFailure()
             }
             
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                action: GAConst.Catrgory.Activity.Action.History.Name,
+                label: GAConst.Catrgory.Activity.Action.History.Label.Save)
         }
     }
     
@@ -428,6 +442,13 @@ class SearchResultViewController: UIViewController {
                             ///Replaced with Smart Filter Setting
                             filterIdSet[filterGroup.id] = [smartFilter.identifier]
                             self.appendSlectedFilterIdSet(filterIdSet)
+                            
+                            
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.SmartFilter,
+                                action: smartFilter.key,
+                                label: smartFilter.value)
+                            
                         } else {
                             ///Clear filters under this group
                             removeSlectedFilterIdSet(filterGroup.id)
@@ -643,6 +664,19 @@ class SearchResultViewController: UIViewController {
                         let houseItem = dataSource.getItemForRow(row)
                         
                         hdvc.houseItem = houseItem
+                        
+                        ///GA Tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                            label: "price", value:  houseItem.price)
+                        
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                            label: "size", value:  houseItem.size)
+                        
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                            label: "type", value:  houseItem.purposeType)
                     }
                 }
                 
@@ -826,6 +860,19 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
         if let searchCriteria = self.searchCriteria {
             
             searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
+            
+            ///GA Tracker
+            dispatch_async(GlobalBackgroundQueue) {
+                
+                if let filters = searchCriteria.filters {
+                    for (key, value) in filters {
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Filter,
+                            action: key,
+                            label: value)
+                    }
+                }
+                
+            }
             
         }
         

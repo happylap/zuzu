@@ -72,6 +72,8 @@ public class HouseItemTableDataSource {
     }
     
     var criteria:SearchCriteria?
+    private var loadStartTime: NSDate?
+    var loadingDuration: Double?
     
     private var isLoadingData = false
     
@@ -103,6 +105,8 @@ public class HouseItemTableDataSource {
     func initData(){
         //Remove previous data for initial data fetching
         cachedData.removeAll()
+        
+        loadStartTime = NSDate()
         loadRemoteData(Const.START_PAGE)
     }
     
@@ -120,6 +124,7 @@ public class HouseItemTableDataSource {
             return
         }
         
+        loadStartTime = NSDate()
         loadRemoteData(pageNo)
     }
     
@@ -156,6 +161,11 @@ public class HouseItemTableDataSource {
             
             if let result = result {
                 self.appendDataForPage(pageNo, data: result)
+            }
+            
+            if let loadStartTime = self.loadStartTime {
+                let loadEndTime = NSDate()
+                self.loadingDuration = loadEndTime.timeIntervalSinceDate(loadStartTime)
             }
             
             //Callback to table

@@ -9,13 +9,13 @@
 	<key>TRACKING_ID</key>
 	<string>UA-70680677-1</string>
 	<key>CLIENT_ID</key>
-	<string>846012605406-vu7rkaaieatdbbbc0vk864q3v2ohl7ch.apps.googleusercontent.com</string>
+	<string>846012605406-9tnrh80j8kcbcma29omhlsekot2mo0gm.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.846012605406-vu7rkaaieatdbbbc0vk864q3v2ohl7ch</string>
+	<string>com.googleusercontent.apps.846012605406-9tnrh80j8kcbcma29omhlsekot2mo0gm</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.lap.Zuzu</string>
+	<string>com.lap.zuzurentals</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -27,6 +27,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:846012605406:ios:8aef94c88ee2ed0f</string>
+	<string>1:846012605406:ios:0ded512aac536c30</string>
 </dict>
 </plist>

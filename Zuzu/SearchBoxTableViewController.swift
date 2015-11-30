@@ -561,14 +561,36 @@
         
         @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
             
+            var targetUrl:String?
+            var result = false
+            
+            ///Open by Facebook App
             if let url = NSURL(string: "fb://profile/1675724006047703") {
+                
                 if(UIApplication.sharedApplication().canOpenURL(url)) {
-                    UIApplication.sharedApplication().openURL(url)
+                    
+                    result = UIApplication.sharedApplication().openURL(url)
+                    targetUrl = url.absoluteString
                 }
-            } else {
-                ///Use embed browser view
                 
             }
+            
+            ///Open by Browser
+            if(!result) {
+                if let url = NSURL(string: "https://www.facebook.com/zuzutw") {
+                    
+                    if(UIApplication.sharedApplication().canOpenURL(url)) {
+                        
+                        result = UIApplication.sharedApplication().openURL(url)
+                        targetUrl = url.absoluteString
+                    }
+                    
+                }
+            }
+            
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name, action: GAConst.Catrgory.Activity.Action.FanPage, label: targetUrl ?? "", value: Int(result))
+            
+            
         }
         
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
@@ -585,6 +607,10 @@
             self.criteriaDataStore.clear()
             
             clearCriteriaButton.enabled = false
+            
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                action: GAConst.Catrgory.Activity.Action.ResetCriteria)
         }
         
         func onTypeButtonTouched(sender: UIButton) {
@@ -607,10 +633,27 @@
                     //Toggle off the select all button if any type is selected
                     if(toogleButton.getToggleState()) {
                         selectAllButton.setToggleState(false)
+                        
+                        var type:Int?
+                        
+                        if(toogleButton.getToggleState()) {
+                            switch toogleButton.tag {
+                            case 1:
+                                type = CriteriaConst.PrimaryType.FULL_FLOOR
+                            case 2:
+                                type = CriteriaConst.PrimaryType.SUITE_INDEPENDENT
+                            case 3:
+                                type = CriteriaConst.PrimaryType.SUITE_COMMON_AREA
+                            case 4:
+                                type = CriteriaConst.PrimaryType.ROOM_NO_TOILET
+                            case 5:
+                                type = CriteriaConst.PrimaryType.HOME_OFFICE
+                            default: break
+                            }
+                        }
                     }
                     
                     currentCriteria = self.stateToSearhCriteria()
-                    
                 }
                 
                 
@@ -770,6 +813,49 @@
                 case ViewTransConst.showSearchResult:
                     NSLog("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
+                        
+                        ///GA Tracker
+                        dispatch_async(GlobalBackgroundQueue) {
+                            
+                            if let keyword = self.currentCriteria.keyword {
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Keyword, label: keyword)
+                            }
+                            
+                            if let priceRange = self.currentCriteria.price {
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
+                                    action: GAConst.Catrgory.Criteria.Action.Price.Name,
+                                    label: GAConst.Catrgory.Criteria.Action.Price.Label.Min,
+                                    value: priceRange.0)
+                                
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
+                                    action: GAConst.Catrgory.Criteria.Action.Price.Name,
+                                    label: GAConst.Catrgory.Criteria.Action.Price.Label.Max,
+                                    value: priceRange.1)
+                            }
+                            
+                            if let sizeRange = self.currentCriteria.size {
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
+                                    action: GAConst.Catrgory.Criteria.Action.Size.Name,
+                                    label: GAConst.Catrgory.Criteria.Action.Size.Label.Min,
+                                    value: sizeRange.0)
+                                
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
+                                    action: GAConst.Catrgory.Criteria.Action.Size.Name,
+                                    label: GAConst.Catrgory.Criteria.Action.Size.Label.Max,
+                                    value: sizeRange.1)
+                            }
+                            
+                            
+                            
+                            if let types = self.currentCriteria.types {
+                                for type in types {
+                                    self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Type, label: String(type))
+                                }
+                            } else {
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Type, label: "99")
+                            }
+                            
+                        }
                         
                         ///Collect the search criteria set by the user
                         srtvc.searchCriteria = currentCriteria
@@ -1029,6 +1115,7 @@
                 }
                 
                 targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
+                
         }
         
         func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -1127,5 +1214,17 @@
             regionSelectionState = regions
             
             currentCriteria = self.stateToSearhCriteria()
+            
+            ///GA Tracker
+            dispatch_async(GlobalBackgroundQueue) {
+                
+                if let regions = self.regionSelectionState {
+                    for region in regions {
+                        for label in region.regions {
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Region + String(region.code), label: String(label))
+                        }
+                    }
+                }
+            }
         }
     }

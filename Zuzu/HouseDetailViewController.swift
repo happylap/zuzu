@@ -179,7 +179,7 @@ class HouseDetailViewController: UIViewController {
                         let imgUrl = NSURL(string: imgString){
                             
                             cell.titleImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
-                                NSLog("Img loading done, status = \(response)")
+                                NSLog("Img loading done, status = \(response?.statusCode)")
                             }
                             
                     }
@@ -796,9 +796,17 @@ class HouseDetailViewController: UIViewController {
                     let numberAction = UIAlertAction(title: String(phoneNumber), style: .Default, handler: {
                         (alert: UIAlertAction!) -> Void in
                         
+                        var success = false
+                        
                         if let phoneStr = alert.title, let url = NSURL(string: "tel://\(phoneStr)") {
-                            UIApplication.sharedApplication().openURL(url)
+                            success = UIApplication.sharedApplication().openURL(url)
                         }
+                        
+                        ///GA Tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                            action: GAConst.Catrgory.Activity.Action.Contact.Name,
+                            label: GAConst.Catrgory.Activity.Action.Contact.Label.Phone,
+                            value:  UInt(success))
                         
                     })
                     
@@ -808,6 +816,12 @@ class HouseDetailViewController: UIViewController {
             
             let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
                 (alert: UIAlertAction!) -> Void in
+                
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                    action: GAConst.Catrgory.Activity.Action.Contact.Name,
+                    label: GAConst.Catrgory.Activity.Action.Contact.Label.Phone,
+                    value:  2)
             })
             
             optionMenu.addAction(cancelAction)
@@ -826,8 +840,11 @@ class HouseDetailViewController: UIViewController {
     
     func shareButtonTouched(sender: UIButton) {
         
+        var success = false
+        
         if let houseItemDetail = self.houseItemDetail,
             let houseLink = houseItemDetail.valueForKey("mobile_link") as? String {
+                
                 if let houseURL = NSURL(string: houseLink) {
                     var objectsToShare = [AnyObject]()
                     
@@ -844,10 +861,27 @@ class HouseDetailViewController: UIViewController {
                     let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
                     
                     self.presentViewController(activityVC, animated: true, completion: nil)
+                    
+                    success = true
                 }
                 
         } else {
             NSLog("No data to share now")
+        }
+        
+        ///GA Tracker
+        if let houseItem = houseItem {
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                action: GAConst.Catrgory.Activity.Action.ShareItem,
+                label: "price", value:  houseItem.price)
+            
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                action: GAConst.Catrgory.Activity.Action.ShareItem,
+                label: "size", value:  houseItem.size)
+            
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                action: GAConst.Catrgory.Activity.Action.ShareItem,
+                label: "type", value:  houseItem.purposeType)
         }
         
     }
@@ -978,7 +1012,17 @@ class HouseDetailViewController: UIViewController {
             case ViewTransConst.displayHouseSource:
                 if let bvc = segue.destinationViewController as? BrowserViewController {
                     if let houseItemDetail = self.houseItemDetail {
-                        bvc.sourceLink = houseItemDetail.valueForKey("mobile_link") as? String
+                        
+                        let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String
+                        
+                        bvc.sourceLink = sourceLink
+                        
+                        ///GA Tracker
+                        if let houseItem = houseItem {
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                                action: GAConst.Catrgory.Activity.Action.ViewSource,
+                                label: String(houseItem.source))
+                        }
                     }
                 }
             default: break
@@ -991,18 +1035,29 @@ class HouseDetailViewController: UIViewController {
 extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
     
     func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError?) {
+        
+        var success = false
+        
         switch result {
         case MFMailComposeResultCancelled:
             print("Mail cancelled")
         case MFMailComposeResultSaved:
             print("Mail saved")
         case MFMailComposeResultSent:
+            success = true
             print("Mail sent")
         case MFMailComposeResultFailed:
             print("Mail sent failure: %@", error?.localizedDescription)
         default:
             break
         }
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+            action: GAConst.Catrgory.Activity.Action.Contact.Name,
+            label: GAConst.Catrgory.Activity.Action.Contact.Label.Email,
+            value:  UInt(success))
+        
         //self.navigationController?.popViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -1135,6 +1190,8 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 browser.setCurrentPhotoIndex(0)
                 
                 self.navigationController?.pushViewController(browser, animated: true)
+                
+                self.trackScreenWithTitle("View: Image Viewer")
                 
             case .ExpandableHeaderCell:
                 let nextRow = indexPath.row + 1

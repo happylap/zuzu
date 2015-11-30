@@ -40,6 +40,11 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
             
             //Scroll to the top of the table to see the search item table fully
             tableViewController.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            
+            ///GA Tracker
+            tableViewController.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
+                action: GAConst.Catrgory.Activity.Action.History.Name,
+                label: GAConst.Catrgory.Activity.Action.History.Label.Load)
         }
     }
     
