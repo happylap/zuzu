@@ -1204,11 +1204,11 @@
             ///GA Tracker
             dispatch_async(GlobalBackgroundQueue) {
                 
-                if let regions = self.regionSelectionState {
-                    for region in regions {
-                        for label in region.regions {
+                if let cities = self.regionSelectionState {
+                    for city in cities {
+                        for region in city.regions {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                action: GAConst.Action.Criteria.Region + String(region.code), label: String(label))
+                                action: GAConst.Action.Criteria.Region + String(region.code), label: String(region.code))
                         }
                     }
                 }
