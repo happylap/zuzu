@@ -200,6 +200,10 @@ class SearchResultViewController: UIViewController {
             
             // Show Alert View
             alertView.show()
+            
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Error,
+                action: GAConst.Action.Error.SearchHouse, label: String(error!.code))
         }
         
         LoadingSpinner.shared.stop()
@@ -419,9 +423,9 @@ class SearchResultViewController: UIViewController {
             }
             
             ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.History.Name,
-                label: GAConst.Catrgory.Activity.Action.History.Label.Save)
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.History,
+                label: GAConst.Label.History.Save)
         }
     }
     
@@ -666,16 +670,16 @@ class SearchResultViewController: UIViewController {
                         hdvc.houseItem = houseItem
                         
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItem,
                             label: "price", value:  houseItem.price)
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItem,
                             label: "size", value:  houseItem.size)
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItem,
                             label: "type", value:  houseItem.purposeType)
                     }
                 }

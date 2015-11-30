@@ -172,8 +172,7 @@ class FilterTableViewController: UITableViewController {
         resetAllButton.enabled = false
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-            action: GAConst.Catrgory.Activity.Action.ResetFilters)
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity, action: GAConst.Action.Activity.ResetFilters)
     }
     
     @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {

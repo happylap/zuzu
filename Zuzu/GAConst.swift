@@ -12,74 +12,88 @@ struct GAConst {
     
     struct Catrgory {
         ///Common UI event
-        struct Activity {
-            static let Name = "activity"
-            
-            struct Action {
-                
-                struct History {
-                    static let Name = "history"
-                    struct Label {
-                        static let Load = "load"
-                        static let Save = "save"
-                    }
-                }
-
-                struct Contact {
-                    static let Name = "contact"
-                    struct Label {
-                        static let Phone = "phone"
-                        static let Email = "email"
-                    }
-                }
-                
-                static let ViewSource = "viewSource"
-                
-                static let FanPage = "fanPage"
-                
-                static let ShareItem = "shareItem"
-                
-                static let ViewItem = "viewItem"
-                
-                static let ResetCriteria = "resetCriteria"
-                
-                static let ResetFilters = "resetFilters"
-            }
-        }
+        static let Activity = "activity"
         
-        ///Criteria Setting event
-        struct Criteria {
-            static let Name = "criteria"
-            
-            struct Action {
-                static let Keyword = "keyword"
-                static let Region = "region"
-                static let Type = "type"
-
-                struct Price {
-                    static let Name = "price"
-                    struct Label {
-                        static let Max = "max"
-                        static let Min = "min"
-                    }
-                }
-                
-                struct Size {
-                    static let Name = "size"
-                    struct Label {
-                        static let Max = "max"
-                        static let Min = "min"
-                    }
-                }
-            }
-        }
-
-        ///Filter Setting event
+        ///Criteria event
+        static let Criteria = "criteria"
+        
+        ///Filter event
         static let SmartFilter = "smartFilter"
         
         static let Filter = "filter"
         
         ///Sorting event
         static let Sorting = "sorting"
+        
+        ///Error event
+        static let Error = "error"
     }
+    
+    
+    struct Action {
+        
+        struct Activity {
+            
+            static let History = "history"
+            
+            static let Contact = "contact"
+            
+            static let ViewSource = "viewSource"
+            
+            static let FanPage = "fanPage"
+            
+            static let ShareItem = "shareItem"
+            
+            static let ViewItem = "viewItem"
+            
+            static let ResetCriteria = "resetCriteria"
+            
+            static let ResetFilters = "resetFilters"
+            
+        }
+        
+        struct Criteria {
+            
+            static let Keyword = "keyword"
+            
+            static let Region = "region"
+            
+            static let Type = "type"
+            
+            static let Price = "price"
+            
+            static let Size = "size"
+            
+        }
+        
+        struct Error {
+            
+            static let SearchHouse = "searchHouse"
+            
+        }
+    }
+    
+    struct Label {
+        
+        struct History {
+            static let Load = "load"
+            static let Save = "save"
+        }
+        
+        struct Contact {
+            static let Phone = "phone"
+            static let Email = "email"
+        }
+        
+        struct Price {
+            static let Max = "max"
+            static let Min = "min"
+        }
+        
+        struct Size {
+            static let Max = "max"
+            static let Min = "min"
+        }
+    }
+    
 }

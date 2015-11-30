@@ -588,7 +588,10 @@
                 }
             }
             
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name, action: GAConst.Catrgory.Activity.Action.FanPage, label: targetUrl ?? "", value: Int(result))
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.FanPage,
+                label: targetUrl ?? "", value: Int(result))
             
             
         }
@@ -609,8 +612,8 @@
             clearCriteriaButton.enabled = false
             
             ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.ResetCriteria)
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.ResetCriteria)
         }
         
         func onTypeButtonTouched(sender: UIButton) {
@@ -633,24 +636,6 @@
                     //Toggle off the select all button if any type is selected
                     if(toogleButton.getToggleState()) {
                         selectAllButton.setToggleState(false)
-                        
-                        var type:Int?
-                        
-                        if(toogleButton.getToggleState()) {
-                            switch toogleButton.tag {
-                            case 1:
-                                type = CriteriaConst.PrimaryType.FULL_FLOOR
-                            case 2:
-                                type = CriteriaConst.PrimaryType.SUITE_INDEPENDENT
-                            case 3:
-                                type = CriteriaConst.PrimaryType.SUITE_COMMON_AREA
-                            case 4:
-                                type = CriteriaConst.PrimaryType.ROOM_NO_TOILET
-                            case 5:
-                                type = CriteriaConst.PrimaryType.HOME_OFFICE
-                            default: break
-                            }
-                        }
                     }
                     
                     currentCriteria = self.stateToSearhCriteria()
@@ -818,41 +803,42 @@
                         dispatch_async(GlobalBackgroundQueue) {
                             
                             if let keyword = self.currentCriteria.keyword {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Keyword, label: keyword)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.Keyword, label: keyword)
                             }
                             
                             if let priceRange = self.currentCriteria.price {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Price.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Price.Label.Min,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.Price,
+                                    label: GAConst.Label.Price.Min,
                                     value: priceRange.0)
                                 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Price.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Price.Label.Max,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.Price,
+                                    label: GAConst.Label.Price.Max,
                                     value: priceRange.1)
                             }
                             
                             if let sizeRange = self.currentCriteria.size {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Size.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Size.Label.Min,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.Size,
+                                    label: GAConst.Label.Size.Min,
                                     value: sizeRange.0)
                                 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Size.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Size.Label.Max,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.Size,
+                                    label: GAConst.Label.Size.Max,
                                     value: sizeRange.1)
                             }
                             
-                            
-                            
                             if let types = self.currentCriteria.types {
                                 for type in types {
-                                    self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Type, label: String(type))
+                                    self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                        action: GAConst.Action.Criteria.Type, label: String(type))
                                 }
                             } else {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Type, label: "99")
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria, action:
+                                    GAConst.Action.Criteria.Type, label: "99")
                             }
                             
                         }
@@ -1221,7 +1207,8 @@
                 if let regions = self.regionSelectionState {
                     for region in regions {
                         for label in region.regions {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Region + String(region.code), label: String(label))
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                action: GAConst.Action.Criteria.Region + String(region.code), label: String(label))
                         }
                     }
                 }
