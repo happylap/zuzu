@@ -236,11 +236,6 @@ class SearchResultViewController: UIViewController {
         reloadDataWithNewCriteria(searchCriteria)
         
         updateSortingButton(sortingField, sortingOrder: sortingOrder)
-        
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting,
-            action: sortingField,
-            label: sortingOrder)
     }
     
     private func updateSortingButton(field: String, sortingOrder: String) {
@@ -520,6 +515,10 @@ class SearchResultViewController: UIViewController {
         
         sortByField(sortingField, sortingOrder: sortingOrder)
         
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting,
+            action: sortingField,
+            label: sortingOrder)
     }
     
     func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
