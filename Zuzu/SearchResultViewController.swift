@@ -185,7 +185,7 @@ class SearchResultViewController: UIViewController {
     
     private func onDataLoaded(dataSource: HouseItemTableDataSource, pageNo: Int, error: NSError?) -> Void {
         
-        if(error != nil) {
+        if let error = error {
             // Initialize Alert View
             
             let alertView = UIAlertView(
@@ -194,16 +194,20 @@ class SearchResultViewController: UIViewController {
                 delegate: self,
                 cancelButtonTitle: NSLocalizedString("unable_to_get_data.alert.button.ok", comment: ""))
             
-            // Configure Alert View
             alertView.tag = 1
-            
-            
-            // Show Alert View
             alertView.show()
             
             ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Error,
-                action: GAConst.Action.Error.SearchHouse, label: String(error!.code))
+            if let duration = dataSource.loadingDuration {
+                self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000,
+                    name: "searchHouse", label: String(error.code))
+            }
+        } else {
+            
+            ///GA Tracker
+            if let duration = dataSource.loadingDuration {
+                self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000, name: "searchHouse")
+            }
         }
         
         LoadingSpinner.shared.stop()
@@ -220,11 +224,6 @@ class SearchResultViewController: UIViewController {
         NSLog("%@ onDataLoaded: Total #Item in Table: \(dataSource.getSize())", self)
         
         self.debugTextStr = self.dataSource.debugStr
-        
-        ///GA Tracker
-        if let duration = dataSource.loadingDuration {
-            self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000, name: "searchHouse")
-        }
     }
     
     private func sortByField(sortingField:String, sortingOrder:String) {
