@@ -133,7 +133,7 @@
                     }
                     
                     ///Load the criteria to the Search Box UI
-                    self.populateViewFromSearchCriteria(currentCriteria)
+                    //self.populateViewFromSearchCriteria(currentCriteria)
                 }
             }
         }
@@ -402,7 +402,7 @@
             pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
             
             //Init Price Picker Upper Bound display range
-            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
+            priceUpperRange = getUpperBoundRangeForPicker(pricePicker, items: priceItems)//(PickerConst.upperBoundStartZero...self.priceItems.count - 1)
             
             priceLabel.text =
                 pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
@@ -431,7 +431,7 @@
             sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
             
             //Init Price Picker Upper Bound display range
-            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
+            sizeUpperRange = getUpperBoundRangeForPicker(sizePicker, items: sizeItems)//(PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
             
             sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
             
@@ -493,13 +493,17 @@
             let priceMaxRow =
             pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
             
-            if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
-                if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
-                    if(priceMin.value != CriteriaConst.Bound.LOWER_ANY || priceMax.value != CriteriaConst.Bound.UPPER_ANY) {
-                        searchCriteria.price = (priceMin.value, priceMax.value)
-                    }
-                }
+            var priceMin = PickerConst.anyLower
+            if priceMinRow > 0 {
+                priceMin = priceItems[PickerConst.lowerComponentIndex][priceMinRow - 1]
             }
+            
+            var priceMax = PickerConst.anyUpper
+            if priceMaxRow > 0 {
+                priceMax = priceItems[PickerConst.lowerComponentIndex][priceMaxRow - 1]
+            }
+
+            searchCriteria.price = (priceMin.value, priceMax.value)
             
             ///Size Range
             let sizeMinRow =
@@ -507,14 +511,17 @@
             let sizeMaxRow =
             sizePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
             
-            
-            if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
-                if let sizeMax = self.getItemForPicker(sizePicker, component: PickerConst.upperComponentIndex, row: sizeMaxRow){
-                    if(sizeMin.value != CriteriaConst.Bound.LOWER_ANY || sizeMax.value != CriteriaConst.Bound.UPPER_ANY) {
-                        searchCriteria.size = (sizeMin.value, sizeMax.value)
-                    }
-                }
+            var sizeMin = PickerConst.anyLower
+            if sizeMinRow > 0 {
+                sizeMin = sizeItems[PickerConst.lowerComponentIndex][sizeMinRow - 1]
             }
+            
+            var sizeMax = PickerConst.anyUpper
+            if sizeMaxRow > 0 {
+                sizeMax = sizeItems[PickerConst.lowerComponentIndex][sizeMaxRow - 1]
+            }
+            
+            searchCriteria.size = (sizeMin.value, sizeMax.value)
             
             ///House Types
             var typeList = [Int]()
