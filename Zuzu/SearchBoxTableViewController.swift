@@ -56,8 +56,8 @@
             static let anyUpper:(label:String, value:Int) = ("不限",CriteriaConst.Bound.UPPER_ANY)
             static let upperBoundStartZero = 0
             
-            static let lowerComponentIndex = 0
-            static let upperComponentIndex = 1
+            static let lowerCompIdx = 0
+            static let upperCompIdx = 1
         }
         
         var regionSelectionState: [City]? {
@@ -342,7 +342,7 @@
                     hiddenCells.remove(CellConst.pricePicker)
                     
                     priceUpperRange = getUpperBoundRangeForPicker(picker!, items: priceItems)
-                    picker?.reloadComponent(PickerConst.upperComponentIndex)
+                    picker?.reloadComponent(PickerConst.upperCompIdx)
                 } else { //Hide
                     hiddenCells.insert(CellConst.pricePicker)
                 }
@@ -354,7 +354,7 @@
                     hiddenCells.remove(CellConst.sizePicker)
                     
                     sizeUpperRange = getUpperBoundRangeForPicker(picker!, items: sizeItems)
-                    picker?.reloadComponent(PickerConst.upperComponentIndex)
+                    picker?.reloadComponent(PickerConst.upperCompIdx)
                 } else { //Hide
                     hiddenCells.insert(CellConst.sizePicker)
                 }
@@ -378,22 +378,26 @@
             regionSelectionState = criteria.region
             
             ///Price Range
+            
             var pickerPriceFrom:(component:Int, row:Int) = (0,0)
             var pickerPriceTo:(component:Int, row:Int) = (1,0)
             
+            //Init Price Picker Upper Bound display range
+            if let priceUpperRange = getUpperBoundRangeForPicker(pricePicker, items: priceItems) {
+            
             if let priceRange = criteria.price {
                 
-                for (index, price) in priceItems[PickerConst.lowerComponentIndex].enumerate() {
+                for (index, price) in priceItems[PickerConst.lowerCompIdx].enumerate() {
                     if(priceRange.0 == price.value) {
                         
-                        pickerPriceFrom = (PickerConst.lowerComponentIndex, index + 1)
+                        pickerPriceFrom = (PickerConst.lowerCompIdx, index + 1)
                     }
                 }
                 
-                for (index, price) in priceItems[PickerConst.upperComponentIndex].enumerate() {
+                for (index, price) in priceItems[PickerConst.upperCompIdx].enumerate() {
                     if(priceRange.1 == price.value) {
                         
-                        pickerPriceTo = (PickerConst.upperComponentIndex, index + 1)
+                        pickerPriceTo = (PickerConst.upperCompIdx, index - priceUpperRange.startIndex + 1)
                     }
                 }
             }
@@ -401,28 +405,28 @@
             pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
             pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
             
-            //Init Price Picker Upper Bound display range
-            priceUpperRange = getUpperBoundRangeForPicker(pricePicker, items: priceItems)//(PickerConst.upperBoundStartZero...self.priceItems.count - 1)
-            
             priceLabel.text =
                 pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
-            
+            }
             
             ///Size Range
             var pickerSizeFrom:(component:Int, row:Int) = (0,0)
             var pickerSizeTo:(component:Int, row:Int) = (1,0)
             
+            //Init Price Picker Upper Bound display range
+            if let sizeUpperRange = getUpperBoundRangeForPicker(sizePicker, items: sizeItems) {
+            
             if let sizeRange = criteria.size {
                 
-                for (index, size) in sizeItems[PickerConst.lowerComponentIndex].enumerate() {
+                for (index, size) in sizeItems[PickerConst.lowerCompIdx].enumerate() {
                     if(sizeRange.0 == size.value) {
-                        pickerSizeFrom = (PickerConst.lowerComponentIndex, index + 1)
+                        pickerSizeFrom = (PickerConst.lowerCompIdx, index + 1)
                     }
                 }
                 
-                for (index, size) in sizeItems[PickerConst.upperComponentIndex].enumerate() {
+                for (index, size) in sizeItems[PickerConst.upperCompIdx].enumerate() {
                     if(sizeRange.1 == size.value) {
-                        pickerSizeTo = (PickerConst.upperComponentIndex, index + 1)
+                        pickerSizeTo = (PickerConst.upperCompIdx, index - sizeUpperRange.startIndex + 1)
                     }
                 }
             }
@@ -430,10 +434,8 @@
             sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
             sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
             
-            //Init Price Picker Upper Bound display range
-            sizeUpperRange = getUpperBoundRangeForPicker(sizePicker, items: sizeItems)//(PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
-            
             sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
+            }
             
             ///House Types
             if let houseTypes = criteria.types {
@@ -489,39 +491,32 @@
             
             ///Price Range
             let priceMinRow =
-            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            pricePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
             let priceMaxRow =
-            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            pricePicker.selectedRowInComponent(PickerConst.upperCompIdx)
             
-            var priceMin = PickerConst.anyLower
-            if priceMinRow > 0 {
-                priceMin = priceItems[PickerConst.lowerComponentIndex][priceMinRow - 1]
+            if let priceMin = getItemForPicker(pricePicker, component: PickerConst.lowerCompIdx, row: priceMinRow),
+                let priceMax = getItemForPicker(pricePicker, component: PickerConst.upperCompIdx, row: priceMaxRow) {
+                    
+                    if(priceMin.value != PickerConst.anyLower.value || priceMax.value != PickerConst.anyUpper.value) {
+                        searchCriteria.price = (priceMin.value, priceMax.value)
+                    }
+                    
             }
-            
-            var priceMax = PickerConst.anyUpper
-            if priceMaxRow > 0 {
-                priceMax = priceItems[PickerConst.lowerComponentIndex][priceMaxRow - 1]
-            }
-
-            searchCriteria.price = (priceMin.value, priceMax.value)
             
             ///Size Range
             let sizeMinRow =
-            sizePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            sizePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
             let sizeMaxRow =
-            sizePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            sizePicker.selectedRowInComponent(PickerConst.upperCompIdx)
             
-            var sizeMin = PickerConst.anyLower
-            if sizeMinRow > 0 {
-                sizeMin = sizeItems[PickerConst.lowerComponentIndex][sizeMinRow - 1]
+            if let sizeMin = getItemForPicker(sizePicker, component: PickerConst.lowerCompIdx, row: sizeMinRow),
+                let sizeMax = getItemForPicker(sizePicker, component: PickerConst.upperCompIdx, row: sizeMaxRow){
+                    
+                    if(sizeMin.value != PickerConst.anyLower.value || sizeMax.value != PickerConst.anyUpper.value) {
+                        searchCriteria.size = (sizeMin.value, sizeMax.value)
+                    }
             }
-            
-            var sizeMax = PickerConst.anyUpper
-            if sizeMaxRow > 0 {
-                sizeMax = sizeItems[PickerConst.lowerComponentIndex][sizeMaxRow - 1]
-            }
-            
-            searchCriteria.size = (sizeMin.value, sizeMax.value)
             
             ///House Types
             var typeList = [Int]()
@@ -968,10 +963,10 @@
             
             ///1st row is always "any value"
             if(row == 0){
-                if(component == PickerConst.lowerComponentIndex) {
+                if(component == PickerConst.lowerCompIdx) {
                     return PickerConst.anyLower
                 }
-                if(component == PickerConst.upperComponentIndex) {
+                if(component == PickerConst.upperCompIdx) {
                     return PickerConst.anyUpper
                 }
             }
@@ -1076,14 +1071,14 @@
                 var pickerFrom:(component:Int, row:Int) = (0,0)
                 var pickerTo:(component:Int, row:Int) = (0,0)
                 
-                if(component == PickerConst.lowerComponentIndex) {
+                if(component == PickerConst.lowerCompIdx) {
                     let fromItemIdx = row
                     let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
                     
                     pickerFrom = (component, fromItemIdx)
                     pickerTo = ((targetItems.endIndex - 1), toItemIdx)
                     
-                }else if(component == PickerConst.upperComponentIndex) {
+                }else if(component == PickerConst.upperCompIdx) {
                     let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
                     let toItemIdx = row
                     
@@ -1122,7 +1117,7 @@
             }
             
             ///Try to refresh upper picker component items if lower component selection is changed
-            if(component == PickerConst.lowerComponentIndex) {
+            if(component == PickerConst.lowerCompIdx) {
                 
                 switch(pickerView) {
                 case sizePicker:
@@ -1136,10 +1131,10 @@
                 }
                 
                 //Reload for new index
-                pickerView.reloadComponent(PickerConst.upperComponentIndex)
+                pickerView.reloadComponent(PickerConst.upperCompIdx)
                 
                 //Select the first item if the original selected item is not in range (Just a temp & consistent solution)
-                pickerView.selectRow(targetItems.startIndex, inComponent: PickerConst.upperComponentIndex, animated: false)
+                pickerView.selectRow(targetItems.startIndex, inComponent: PickerConst.upperCompIdx, animated: false)
             }
             
             //Update selection label
