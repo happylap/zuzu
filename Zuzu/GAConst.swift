@@ -60,9 +60,13 @@ struct GAConst {
             
             static let Type = "type"
             
-            static let Price = "price"
+            static let PriceMax = "priceMax"
             
-            static let Size = "size"
+            static let PriceMin = "priceMin"
+            
+            static let SizeMax = "sizeMax"
+            
+            static let SizeMin = "sizeMin"
             
         }
         
@@ -83,16 +87,6 @@ struct GAConst {
         struct Contact {
             static let Phone = "phone"
             static let Email = "email"
-        }
-        
-        struct Price {
-            static let Max = "max"
-            static let Min = "min"
-        }
-        
-        struct Size {
-            static let Max = "max"
-            static let Min = "min"
         }
     }
     

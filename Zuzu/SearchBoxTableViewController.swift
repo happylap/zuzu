@@ -809,26 +809,22 @@
                             
                             if let priceRange = self.currentCriteria.price {
                                 self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.Price,
-                                    label: GAConst.Label.Price.Min,
-                                    value: priceRange.0)
+                                    action: GAConst.Action.Criteria.PriceMin,
+                                    label: String(priceRange.0))
                                 
                                 self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.Price,
-                                    label: GAConst.Label.Price.Max,
-                                    value: priceRange.1)
+                                    action: GAConst.Action.Criteria.PriceMax,
+                                    label: String(priceRange.1))
                             }
                             
                             if let sizeRange = self.currentCriteria.size {
                                 self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.Size,
-                                    label: GAConst.Label.Size.Min,
-                                    value: sizeRange.0)
+                                    action: GAConst.Action.Criteria.SizeMin,
+                                    label: String(sizeRange.0))
                                 
                                 self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.Size,
-                                    label: GAConst.Label.Size.Max,
-                                    value: sizeRange.1)
+                                    action: GAConst.Action.Criteria.SizeMax,
+                                    label: String(sizeRange.1))
                             }
                             
                             if let types = self.currentCriteria.types {
