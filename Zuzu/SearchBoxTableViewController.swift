@@ -1206,7 +1206,7 @@
                     for city in cities {
                         for region in city.regions {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                action: GAConst.Action.Criteria.Region + String(region.code), label: String(region.code))
+                                action: GAConst.Action.Criteria.Region + String(city.code), label: String(region.code))
                         }
                     }
                 }
