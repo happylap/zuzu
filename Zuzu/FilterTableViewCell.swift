@@ -27,8 +27,8 @@ class FilterTableViewCell: UITableViewCell {
         self.filterCheckMark?.tintColor = UIColor.grayColor()
         self.filterCheckMark?.tintColorDidChange()
         
-        self.simpleFilterLabel?.text = nil
-        self.filterLabel?.text = nil
+        self.simpleFilterLabel?.textColor = UIColor.colorWithRGB(0x2e2e2e)
+        self.filterLabel?.textColor = UIColor.colorWithRGB(0x2e2e2e)
         self.filterSelection?.text = nil
     }
     

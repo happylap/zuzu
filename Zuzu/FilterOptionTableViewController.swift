@@ -16,6 +16,8 @@ protocol FilterOptionTableViewControllerDelegate {
 
 class FilterOptionTableViewController: UITableViewController {
     
+    static let cellHeight = 55 * getCurrentScale()
+    
     var filterOptionDelegate: FilterOptionTableViewControllerDelegate?
     
     var selectedFilterIds = Set<FilterIdentifier>()
@@ -112,6 +114,9 @@ class FilterOptionTableViewController: UITableViewController {
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return FilterOptionTableViewController.cellHeight
+    }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let currentFilter = filterOptions.filters[indexPath.row]
