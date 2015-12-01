@@ -18,6 +18,7 @@ pod 'Google/Analytics'
 pod 'Google/SignIn'
 pod 'Google/AdMob'
 pod 'AwesomeCache', '~> 2.0'
+pod 'XCGLogger', '~> 3.1'
 end
 
 target 'ZuzuTests' do
