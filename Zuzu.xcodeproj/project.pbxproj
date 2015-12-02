@@ -77,6 +77,7 @@
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
+		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
 		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
@@ -198,6 +199,7 @@
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
+		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyNoteViewCell.swift; path = Collection/MyNoteViewCell.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
 		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 				81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */,
 				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
 				8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */,
+				816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */,
 			);
 			name = Collection;
 			sourceTree = "<group>";
@@ -744,6 +747,7 @@
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				81FA28051BDA39140038DD19 /* MyCollectionTableViewController.swift in Sources */,
+				816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,

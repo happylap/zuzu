@@ -12,6 +12,8 @@ import CoreData
 
 class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
+    let cellReuseIdentifier = "NoteCell"
+    
     var houseItem: House?
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -130,12 +132,14 @@ extension MyNoteViewController {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(self.cellReuseIdentifier, forIndexPath: indexPath) as! MyNoteViewCell
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         
         if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
-            cell.textLabel?.text = note.title
+            //cell.textLabel?.text = note.title
+            
+            cell.noteItem = note
         }
         
         return cell
@@ -172,9 +176,10 @@ extension MyNoteViewController {
         case .Delete:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Update:
-            let cell = self.tableView.cellForRowAtIndexPath(indexPath!)! as UITableViewCell
+            let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! MyNoteViewCell
             if let note: Note = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Note {
-                cell.textLabel?.text = note.title
+                //cell.textLabel?.text = note.title
+                cell.noteItem = note
             }
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
