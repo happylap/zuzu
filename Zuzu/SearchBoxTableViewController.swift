@@ -9,6 +9,7 @@
     import UIKit
     import SwiftyJSON
     
+    private let Log = Logger.fileLogger
     
     class ToggleButtonListenr: ToggleStateListenr {
         
@@ -56,9 +57,13 @@
             static let anyUpper:(label:String, value:Int) = ("不限",CriteriaConst.Bound.UPPER_ANY)
             static let upperBoundStartZero = 0
             
-            static let lowerComponentIndex = 0
-            static let upperComponentIndex = 1
+            static let lowerCompIdx = 0
+            static let upperCompIdx = 1
         }
+        
+        var userSetRegion = false
+        
+        let locationManager = CLLocationManager()
         
         var regionSelectionState: [City]? {
             didSet {
@@ -133,7 +138,7 @@
                     }
                     
                     ///Load the criteria to the Search Box UI
-                    self.populateViewFromSearchCriteria(currentCriteria)
+                    //self.populateViewFromSearchCriteria(currentCriteria)
                 }
             }
         }
@@ -342,7 +347,7 @@
                     hiddenCells.remove(CellConst.pricePicker)
                     
                     priceUpperRange = getUpperBoundRangeForPicker(picker!, items: priceItems)
-                    picker?.reloadComponent(PickerConst.upperComponentIndex)
+                    picker?.reloadComponent(PickerConst.upperCompIdx)
                 } else { //Hide
                     hiddenCells.insert(CellConst.pricePicker)
                 }
@@ -354,7 +359,7 @@
                     hiddenCells.remove(CellConst.sizePicker)
                     
                     sizeUpperRange = getUpperBoundRangeForPicker(picker!, items: sizeItems)
-                    picker?.reloadComponent(PickerConst.upperComponentIndex)
+                    picker?.reloadComponent(PickerConst.upperCompIdx)
                 } else { //Hide
                     hiddenCells.insert(CellConst.sizePicker)
                 }
@@ -378,62 +383,64 @@
             regionSelectionState = criteria.region
             
             ///Price Range
+            
             var pickerPriceFrom:(component:Int, row:Int) = (0,0)
             var pickerPriceTo:(component:Int, row:Int) = (1,0)
             
-            if let priceRange = criteria.price {
-                
-                for (index, price) in priceItems[PickerConst.lowerComponentIndex].enumerate() {
-                    if(priceRange.0 == price.value) {
-                        
-                        pickerPriceFrom = (PickerConst.lowerComponentIndex, index + 1)
-                    }
-                }
-                
-                for (index, price) in priceItems[PickerConst.upperComponentIndex].enumerate() {
-                    if(priceRange.1 == price.value) {
-                        
-                        pickerPriceTo = (PickerConst.upperComponentIndex, index + 1)
-                    }
-                }
-            }
-            
-            pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
-            pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
-            
             //Init Price Picker Upper Bound display range
-            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
-            
-            priceLabel.text =
-                pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
-            
+            if let priceUpperRange = getUpperBoundRangeForPicker(pricePicker, items: priceItems) {
+                
+                if let priceRange = criteria.price {
+                    
+                    for (index, price) in priceItems[PickerConst.lowerCompIdx].enumerate() {
+                        if(priceRange.0 == price.value) {
+                            
+                            pickerPriceFrom = (PickerConst.lowerCompIdx, index + 1)
+                        }
+                    }
+                    
+                    for (index, price) in priceItems[PickerConst.upperCompIdx].enumerate() {
+                        if(priceRange.1 == price.value) {
+                            
+                            pickerPriceTo = (PickerConst.upperCompIdx, index - priceUpperRange.startIndex + 1)
+                        }
+                    }
+                }
+                
+                pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
+                pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
+                
+                priceLabel.text =
+                    pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
+            }
             
             ///Size Range
             var pickerSizeFrom:(component:Int, row:Int) = (0,0)
             var pickerSizeTo:(component:Int, row:Int) = (1,0)
             
-            if let sizeRange = criteria.size {
-                
-                for (index, size) in sizeItems[PickerConst.lowerComponentIndex].enumerate() {
-                    if(sizeRange.0 == size.value) {
-                        pickerSizeFrom = (PickerConst.lowerComponentIndex, index + 1)
-                    }
-                }
-                
-                for (index, size) in sizeItems[PickerConst.upperComponentIndex].enumerate() {
-                    if(sizeRange.1 == size.value) {
-                        pickerSizeTo = (PickerConst.upperComponentIndex, index + 1)
-                    }
-                }
-            }
-            
-            sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
-            sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
-            
             //Init Price Picker Upper Bound display range
-            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
-            
-            sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
+            if let sizeUpperRange = getUpperBoundRangeForPicker(sizePicker, items: sizeItems) {
+                
+                if let sizeRange = criteria.size {
+                    
+                    for (index, size) in sizeItems[PickerConst.lowerCompIdx].enumerate() {
+                        if(sizeRange.0 == size.value) {
+                            pickerSizeFrom = (PickerConst.lowerCompIdx, index + 1)
+                        }
+                    }
+                    
+                    for (index, size) in sizeItems[PickerConst.upperCompIdx].enumerate() {
+                        if(sizeRange.1 == size.value) {
+                            pickerSizeTo = (PickerConst.upperCompIdx, index - sizeUpperRange.startIndex + 1)
+                        }
+                    }
+                }
+                
+                sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
+                sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
+                
+                sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
+            }
             
             ///House Types
             if let houseTypes = criteria.types {
@@ -489,31 +496,31 @@
             
             ///Price Range
             let priceMinRow =
-            pricePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            pricePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
             let priceMaxRow =
-            pricePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            pricePicker.selectedRowInComponent(PickerConst.upperCompIdx)
             
-            if let priceMin = self.getItemForPicker(pricePicker, component: PickerConst.lowerComponentIndex, row: priceMinRow) {
-                if let priceMax = self.getItemForPicker(pricePicker, component: PickerConst.upperComponentIndex, row: priceMaxRow){
-                    if(priceMin.value != CriteriaConst.Bound.LOWER_ANY || priceMax.value != CriteriaConst.Bound.UPPER_ANY) {
+            if let priceMin = getItemForPicker(pricePicker, component: PickerConst.lowerCompIdx, row: priceMinRow),
+                let priceMax = getItemForPicker(pricePicker, component: PickerConst.upperCompIdx, row: priceMaxRow) {
+                    
+                    if(priceMin.value != PickerConst.anyLower.value || priceMax.value != PickerConst.anyUpper.value) {
                         searchCriteria.price = (priceMin.value, priceMax.value)
                     }
-                }
+                    
             }
             
             ///Size Range
             let sizeMinRow =
-            sizePicker.selectedRowInComponent(PickerConst.lowerComponentIndex)
+            sizePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
             let sizeMaxRow =
-            sizePicker.selectedRowInComponent(PickerConst.upperComponentIndex)
+            sizePicker.selectedRowInComponent(PickerConst.upperCompIdx)
             
-            
-            if let sizeMin = self.getItemForPicker(sizePicker, component: PickerConst.lowerComponentIndex, row: sizeMinRow) {
-                if let sizeMax = self.getItemForPicker(sizePicker, component: PickerConst.upperComponentIndex, row: sizeMaxRow){
-                    if(sizeMin.value != CriteriaConst.Bound.LOWER_ANY || sizeMax.value != CriteriaConst.Bound.UPPER_ANY) {
+            if let sizeMin = getItemForPicker(sizePicker, component: PickerConst.lowerCompIdx, row: sizeMinRow),
+                let sizeMax = getItemForPicker(sizePicker, component: PickerConst.upperCompIdx, row: sizeMaxRow){
+                    
+                    if(sizeMin.value != PickerConst.anyLower.value || sizeMax.value != PickerConst.anyUpper.value) {
                         searchCriteria.size = (sizeMin.value, sizeMax.value)
                     }
-                }
             }
             
             ///House Types
@@ -588,7 +595,10 @@
                 }
             }
             
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name, action: GAConst.Catrgory.Activity.Action.FanPage, label: targetUrl ?? "", value: Int(result))
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.FanPage,
+                label: targetUrl ?? "", value: Int(result))
             
             
         }
@@ -609,8 +619,8 @@
             clearCriteriaButton.enabled = false
             
             ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.ResetCriteria)
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.ResetCriteria)
         }
         
         func onTypeButtonTouched(sender: UIButton) {
@@ -633,24 +643,6 @@
                     //Toggle off the select all button if any type is selected
                     if(toogleButton.getToggleState()) {
                         selectAllButton.setToggleState(false)
-                        
-                        var type:Int?
-                        
-                        if(toogleButton.getToggleState()) {
-                            switch toogleButton.tag {
-                            case 1:
-                                type = CriteriaConst.PrimaryType.FULL_FLOOR
-                            case 2:
-                                type = CriteriaConst.PrimaryType.SUITE_INDEPENDENT
-                            case 3:
-                                type = CriteriaConst.PrimaryType.SUITE_COMMON_AREA
-                            case 4:
-                                type = CriteriaConst.PrimaryType.ROOM_NO_TOILET
-                            case 5:
-                                type = CriteriaConst.PrimaryType.HOME_OFFICE
-                            default: break
-                            }
-                        }
                     }
                     
                     currentCriteria = self.stateToSearhCriteria()
@@ -764,6 +756,11 @@
                     clearCriteriaButton.enabled = true
                 }
             }
+            
+            //Configure location manager
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestWhenInUseAuthorization()
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
@@ -790,6 +787,11 @@
             
             //Google Analytics Tracker
             self.trackScreen()
+            
+            //Start monitoring location
+            if(!userSetRegion) {
+                locationManager.startUpdatingLocation()
+            }
         }
         
         override func viewDidAppear(animated: Bool) {
@@ -818,41 +820,38 @@
                         dispatch_async(GlobalBackgroundQueue) {
                             
                             if let keyword = self.currentCriteria.keyword {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Keyword, label: keyword)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.Keyword, label: keyword)
                             }
                             
                             if let priceRange = self.currentCriteria.price {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Price.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Price.Label.Min,
-                                    value: priceRange.0)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.PriceMin,
+                                    label: String(priceRange.0))
                                 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Price.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Price.Label.Max,
-                                    value: priceRange.1)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.PriceMax,
+                                    label: String(priceRange.1))
                             }
                             
                             if let sizeRange = self.currentCriteria.size {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Size.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Size.Label.Min,
-                                    value: sizeRange.0)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.SizeMin,
+                                    label: String(sizeRange.0))
                                 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name,
-                                    action: GAConst.Catrgory.Criteria.Action.Size.Name,
-                                    label: GAConst.Catrgory.Criteria.Action.Size.Label.Max,
-                                    value: sizeRange.1)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                    action: GAConst.Action.Criteria.SizeMax,
+                                    label: String(sizeRange.1))
                             }
-                            
-                            
                             
                             if let types = self.currentCriteria.types {
                                 for type in types {
-                                    self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Type, label: String(type))
+                                    self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                        action: GAConst.Action.Criteria.Type, label: String(type))
                                 }
                             } else {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Type, label: "99")
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria, action:
+                                    GAConst.Action.Criteria.Type, label: "99")
                             }
                             
                         }
@@ -979,10 +978,10 @@
             
             ///1st row is always "any value"
             if(row == 0){
-                if(component == PickerConst.lowerComponentIndex) {
+                if(component == PickerConst.lowerCompIdx) {
                     return PickerConst.anyLower
                 }
-                if(component == PickerConst.upperComponentIndex) {
+                if(component == PickerConst.upperCompIdx) {
                     return PickerConst.anyUpper
                 }
             }
@@ -1087,14 +1086,14 @@
                 var pickerFrom:(component:Int, row:Int) = (0,0)
                 var pickerTo:(component:Int, row:Int) = (0,0)
                 
-                if(component == PickerConst.lowerComponentIndex) {
+                if(component == PickerConst.lowerCompIdx) {
                     let fromItemIdx = row
                     let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
                     
                     pickerFrom = (component, fromItemIdx)
                     pickerTo = ((targetItems.endIndex - 1), toItemIdx)
                     
-                }else if(component == PickerConst.upperComponentIndex) {
+                }else if(component == PickerConst.upperCompIdx) {
                     let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
                     let toItemIdx = row
                     
@@ -1133,7 +1132,7 @@
             }
             
             ///Try to refresh upper picker component items if lower component selection is changed
-            if(component == PickerConst.lowerComponentIndex) {
+            if(component == PickerConst.lowerCompIdx) {
                 
                 switch(pickerView) {
                 case sizePicker:
@@ -1147,10 +1146,10 @@
                 }
                 
                 //Reload for new index
-                pickerView.reloadComponent(PickerConst.upperComponentIndex)
+                pickerView.reloadComponent(PickerConst.upperCompIdx)
                 
                 //Select the first item if the original selected item is not in range (Just a temp & consistent solution)
-                pickerView.selectRow(targetItems.startIndex, inComponent: PickerConst.upperComponentIndex, animated: false)
+                pickerView.selectRow(targetItems.startIndex, inComponent: PickerConst.upperCompIdx, animated: false)
             }
             
             //Update selection label
@@ -1213,18 +1212,97 @@
         func onCitySelectionDone(regions:[City]) {
             regionSelectionState = regions
             
+            userSetRegion = true
+            
             currentCriteria = self.stateToSearhCriteria()
             
             ///GA Tracker
             dispatch_async(GlobalBackgroundQueue) {
                 
-                if let regions = self.regionSelectionState {
-                    for region in regions {
-                        for label in region.regions {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria.Name, action: GAConst.Catrgory.Criteria.Action.Region + String(region.code), label: String(label))
+                if let cities = self.regionSelectionState {
+                    for city in cities {
+                        for region in city.regions {
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
+                                action: GAConst.Action.Criteria.Region + String(city.code), label: String(region.code))
                         }
                     }
                 }
             }
+        }
+    }
+    
+    extension SearchBoxTableViewController : CLLocationManagerDelegate {
+        
+        private func getDefaultLocation(placemark: CLPlacemark?) -> City {
+            
+            var currentCity = City(code: 100, name: "台北市", regions: [Region.allRegions])
+            
+            let regionlist = ConfigLoader.RegionList
+            
+            if let placemark = placemark {
+                let postalCode = placemark.postalCode
+                
+                for (_, city) in regionlist {
+                    
+                    if let region = city.regions.filter({ (region) -> Bool in
+                        return String(region.code) == postalCode
+                    }).first {
+                        
+                        currentCity = City(code: city.code, name: city.name, regions: [region])
+                        break
+                    }
+                    
+                }
+                
+            }
+            
+            Log.debug("\(currentCity)")
+            
+            return currentCity
+        }
+        
+        private func setRegionToCriteria(city:City) {
+            //stop updating location to save battery life
+            locationManager.stopUpdatingLocation()
+            
+            if (!userSetRegion || currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
+                currentCriteria.region = [city]
+                self.populateViewFromSearchCriteria(currentCriteria)
+            }
+        }
+        
+        func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            
+            Log.debug("Location update: \(manager.location?.coordinate)")
+            
+            CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error) -> Void in
+                if let error = error {
+                    Log.debug("Reverse geocoder failed error = \(error.localizedDescription)")
+                    return
+                }
+                
+                if let placemarks = placemarks where placemarks.count > 0 {
+                    if let pm = placemarks.first {
+                        
+                        Log.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
+                        
+                        let currentCity = self.getDefaultLocation(pm)
+                        self.setRegionToCriteria(currentCity)
+                    }
+                } else {
+                    Log.debug("Problem with the data received from geocoder")
+                    let currentCity = self.getDefaultLocation(nil)
+                    self.setRegionToCriteria(currentCity)
+                }
+            })
+        }
+        
+        
+        func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+            Log.debug("Updating location failed error = \(error.localizedDescription)")
+            
+            let currentCity = self.getDefaultLocation(nil)
+            self.setRegionToCriteria(currentCity)
+            
         }
     }

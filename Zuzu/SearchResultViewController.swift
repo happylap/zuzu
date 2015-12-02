@@ -185,7 +185,7 @@ class SearchResultViewController: UIViewController {
     
     private func onDataLoaded(dataSource: HouseItemTableDataSource, pageNo: Int, error: NSError?) -> Void {
         
-        if(error != nil) {
+        if let error = error {
             // Initialize Alert View
             
             let alertView = UIAlertView(
@@ -194,12 +194,20 @@ class SearchResultViewController: UIViewController {
                 delegate: self,
                 cancelButtonTitle: NSLocalizedString("unable_to_get_data.alert.button.ok", comment: ""))
             
-            // Configure Alert View
             alertView.tag = 1
-            
-            
-            // Show Alert View
             alertView.show()
+            
+            ///GA Tracker
+            if let duration = dataSource.loadingDuration {
+                self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000,
+                    name: "searchHouse", label: String(error.code))
+            }
+        } else {
+            
+            ///GA Tracker
+            if let duration = dataSource.loadingDuration {
+                self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000, name: "searchHouse")
+            }
         }
         
         LoadingSpinner.shared.stop()
@@ -216,11 +224,6 @@ class SearchResultViewController: UIViewController {
         NSLog("%@ onDataLoaded: Total #Item in Table: \(dataSource.getSize())", self)
         
         self.debugTextStr = self.dataSource.debugStr
-        
-        ///GA Tracker
-        if let duration = dataSource.loadingDuration {
-            self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000, name: "searchHouse")
-        }
     }
     
     private func sortByField(sortingField:String, sortingOrder:String) {
@@ -232,11 +235,6 @@ class SearchResultViewController: UIViewController {
         reloadDataWithNewCriteria(searchCriteria)
         
         updateSortingButton(sortingField, sortingOrder: sortingOrder)
-        
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting,
-            action: sortingField,
-            label: sortingOrder)
     }
     
     private func updateSortingButton(field: String, sortingOrder: String) {
@@ -419,9 +417,9 @@ class SearchResultViewController: UIViewController {
             }
             
             ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.History.Name,
-                label: GAConst.Catrgory.Activity.Action.History.Label.Save)
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.History,
+                label: GAConst.Label.History.Save)
         }
     }
     
@@ -516,6 +514,10 @@ class SearchResultViewController: UIViewController {
         
         sortByField(sortingField, sortingOrder: sortingOrder)
         
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting,
+            action: sortingField,
+            label: sortingOrder)
     }
     
     func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
@@ -666,16 +668,16 @@ class SearchResultViewController: UIViewController {
                         hdvc.houseItem = houseItem
                         
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItem,
                             label: "price", value:  houseItem.price)
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItem,
                             label: "size", value:  houseItem.size)
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.ViewItem,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItem,
                             label: "type", value:  houseItem.purposeType)
                     }
                 }

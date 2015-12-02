@@ -679,10 +679,11 @@ class HouseDetailViewController: UIViewController {
     
     private func initContactBarView() {
         contactBarView.contactName.text = " "
+        contactBarView.contactName.enabled = false
         
-        contactBarView.contactByMailButton.hidden = true
+        contactBarView.contactByMailButton.enabled = false
         
-        contactBarView.contactByPhoneButton.hidden = true
+        contactBarView.contactByPhoneButton.enabled = false
     }
     
     private func configureContactBarView() {
@@ -702,17 +703,21 @@ class HouseDetailViewController: UIViewController {
             
             contactBarView.contactName.text = contactDisplayStr
             
-            let tapGuesture = UITapGestureRecognizer(target: self, action: "contactNameTouched:")
-            contactBarView.contactName.addGestureRecognizer(tapGuesture)
-            
-            contactBarView.contactByMailButton
-                .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-            contactBarView.contactByMailButton.hidden = false
+            if let _ = houseDetail.valueForKey("email") as? String {
+                contactBarView.contactByMailButton
+                    .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                contactBarView.contactByMailButton.enabled = true
+            }
             
             if let _ = houseDetail.valueForKey("phone") as? [String] {
+                
+                let tapGuesture = UITapGestureRecognizer(target: self, action: "contactNameTouched:")
+                contactBarView.contactName.addGestureRecognizer(tapGuesture)
+                contactBarView.contactName.enabled = true
+                
                 contactBarView.contactByPhoneButton
                     .addTarget(self, action: "contactByPhoneButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-                contactBarView.contactByPhoneButton.hidden = false
+                contactBarView.contactByPhoneButton.enabled = true
             }
         }
     }
@@ -730,37 +735,45 @@ class HouseDetailViewController: UIViewController {
         
         let emailTitle = "租屋物件詢問: " + (self.houseItem?.title ?? self.houseItem?.addr ?? "")
         
-        var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
         
-        if let houseItemDetail = self.houseItemDetail {
-            if let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String {
-                messageBody += "租屋物件網址: \(sourceLink) \n\n"
+        
+        if let houseDetail = self.houseItemDetail {
+            
+            if let email = houseDetail.valueForKey("email") as? String {
+                
+                var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
+                
+                let toRecipents = [email]
+                
+                LoadingSpinner.shared.startOnView(self.view)
+                
+                if let sourceLink = houseDetail.valueForKey("mobile_link") as? String {
+                    messageBody += "租屋物件網址: \(sourceLink) \n\n"
+                }
+                
+                messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n再麻煩您回覆方便的時間！\n"
+                
+                if MFMailComposeViewController.canSendMail() {
+                    if let mc: MFMailComposeViewController = MFMailComposeViewController() {
+                        ///Change Bar Item Color
+                        mc.navigationBar.tintColor = UIColor.whiteColor()
+                        
+                        mc.mailComposeDelegate = self
+                        mc.setSubject(emailTitle)
+                        mc.setMessageBody(messageBody, isHTML: false)
+                        mc.setToRecipients(toRecipents)
+                        self.presentViewController(mc, animated: true, completion: nil)
+                        //self.navigationController?.pushViewController(mc, animated: true)
+                        
+                    }
+                } else {
+                    alertMailAppNotReady()
+                }
+                
+            } else {
+                NSLog("No emails available")
             }
         }
-        messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n" +
-        "再麻煩您回覆方便的時間！\n"
-        
-        let toRecipents = ["pikapai@gmail.com"]
-        
-        LoadingSpinner.shared.startOnView(self.view)
-        
-        if MFMailComposeViewController.canSendMail() {
-            if let mc: MFMailComposeViewController = MFMailComposeViewController() {
-                ///Change Bar Item Color
-                mc.navigationBar.tintColor = UIColor.whiteColor()
-                
-                mc.mailComposeDelegate = self
-                mc.setSubject(emailTitle)
-                mc.setMessageBody(messageBody, isHTML: false)
-                mc.setToRecipients(toRecipents)
-                self.presentViewController(mc, animated: true, completion: nil)
-                //self.navigationController?.pushViewController(mc, animated: true)
-                
-            }
-        } else {
-            alertMailAppNotReady()
-        }
-        
     }
     
     private func displayPhoneNumberMenu() {
@@ -803,9 +816,9 @@ class HouseDetailViewController: UIViewController {
                         }
                         
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                            action: GAConst.Catrgory.Activity.Action.Contact.Name,
-                            label: GAConst.Catrgory.Activity.Action.Contact.Label.Phone,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.Contact,
+                            label: GAConst.Label.Contact.Phone,
                             value:  UInt(success))
                         
                     })
@@ -818,9 +831,9 @@ class HouseDetailViewController: UIViewController {
                 (alert: UIAlertAction!) -> Void in
                 
                 ///GA Tracker
-                self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                    action: GAConst.Catrgory.Activity.Action.Contact.Name,
-                    label: GAConst.Catrgory.Activity.Action.Contact.Label.Phone,
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                    action: GAConst.Action.Activity.Contact,
+                    label: GAConst.Label.Contact.Phone,
                     value:  2)
             })
             
@@ -871,16 +884,16 @@ class HouseDetailViewController: UIViewController {
         
         ///GA Tracker
         if let houseItem = houseItem {
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.ShareItem,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.ShareItem,
                 label: "price", value:  houseItem.price)
             
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.ShareItem,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.ShareItem,
                 label: "size", value:  houseItem.size)
             
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                action: GAConst.Catrgory.Activity.Action.ShareItem,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.ShareItem,
                 label: "type", value:  houseItem.purposeType)
         }
         
@@ -1019,8 +1032,8 @@ class HouseDetailViewController: UIViewController {
                         
                         ///GA Tracker
                         if let houseItem = houseItem {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-                                action: GAConst.Catrgory.Activity.Action.ViewSource,
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                                action: GAConst.Action.Activity.ViewSource,
                                 label: String(houseItem.source))
                         }
                     }
@@ -1053,9 +1066,9 @@ extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
         }
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-            action: GAConst.Catrgory.Activity.Action.Contact.Name,
-            label: GAConst.Catrgory.Activity.Action.Contact.Label.Email,
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+            action: GAConst.Action.Activity.Contact,
+            label: GAConst.Label.Contact.Email,
             value:  UInt(success))
         
         //self.navigationController?.popViewControllerAnimated(true)

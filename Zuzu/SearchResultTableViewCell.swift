@@ -10,6 +10,8 @@ import AlamofireImage
 import UIKit
 import Foundation
 
+private let Log = Logger.defaultLogger
+
 class SearchResultTableViewCell: UITableViewCell {
     
     @IBOutlet weak var houseImg: UIImageView!
@@ -140,7 +142,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTitleForCollection.hidden = true
         contactedView.hidden = true
         
-        NSLog("\n- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
+        Log.debug("\n- Cell Instance [\(self)] Reset Data For Current Row[\(indexPath.row)]")
         
     }
     
@@ -176,14 +178,11 @@ class SearchResultTableViewCell: UITableViewCell {
                     
                     let size = houseImg.frame.size
                     
-                    NSLog("    <Start> Loading Img for Row[\(indexPath.row)]")
+                    Log.debug("Start> Loading Img for Row[\(indexPath.row)]")
                     
                     houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
                         { (request, response, result) -> Void in
-                            NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
-                            NSLog("    <URL> %@", firstURL)
-                            
-                            
+                            Log.debug("End> Loading Img for row = [\(self.indexPath.row)], url = \(firstURL), status = \(response?.statusCode)")
                     }
                 }
             }
@@ -243,7 +242,7 @@ class SearchResultTableViewCell: UITableViewCell {
                     
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                         
-                        NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
+                        Log.debug("End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                     }
                 }
             }
@@ -251,7 +250,9 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     func onContactTouched(sender: UITapGestureRecognizer) {
-        NSLog("%@ onCalledTouched", self)
+        
+        Log.debug("\(self) onCalledTouched")
+        
         if let house: House = houseItemForCollection {
             if house.contacted == false {
                 HouseDao.sharedInstance.updateByObjectId(house.objectID, dataToUpdate: ["contacted": true])

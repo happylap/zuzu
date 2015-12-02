@@ -56,6 +56,8 @@
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
 		2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */; };
 		2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */; };
+		2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0E1C0D7FC700B45E5B /* Logger.swift */; };
+		2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB121C0E988300B45E5B /* ConfigLoader.swift */; };
 		2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF525A1C04BFF000B3F47B /* InfoPlist.strings */; };
 		2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */; };
 		2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */; };
@@ -171,6 +173,9 @@
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadUtils.swift; sourceTree = "<group>"; };
 		2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2FBDAB0E1C0D7FC700B45E5B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		2FBDAB101C0E8FAE00B45E5B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		2FBDAB121C0E988300B45E5B /* ConfigLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigLoader.swift; sourceTree = "<group>"; };
 		2FBF52591C04BFF000B3F47B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FBF525B1C04BFF200B3F47B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FBF525C1C04BFF300B3F47B /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -373,6 +378,8 @@
 				2F94105E1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift */,
 				2FE912731BFF796C00019053 /* LoadingSpinner.swift */,
 				2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */,
+				2FBDAB0E1C0D7FC700B45E5B /* Logger.swift */,
+				2FBDAB121C0E988300B45E5B /* ConfigLoader.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -497,6 +504,7 @@
 		797B8184BE32AA80123C1AB8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FBDAB101C0E8FAE00B45E5B /* CoreLocation.framework */,
 				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
 			);
 			name = Frameworks;
@@ -741,6 +749,7 @@
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
 				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
+				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
 				2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
@@ -776,6 +785,7 @@
 				2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */,
 				2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
+				2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */,
 				2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
@@ -902,6 +912,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -940,6 +951,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

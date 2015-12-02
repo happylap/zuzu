@@ -13,25 +13,20 @@ class RegionTableViewController: UITableViewController {
     
     static let maxNumOfCitiesAllowed = 3
     static let numberOfSections = 1
+    static let cellHeight = 45 * getCurrentScale()
     
     var citySelected:Int = 100 //Default value
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var cityRegions = [Int : City]()//City dictionary by city code
     
     // MARK: - Private Utils
-    
-    private func configureRegionTable() {
-        
-        //Configure cell height
-        tableView.estimatedRowHeight = tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
-    }
+
     
     private func validateCityRegionSelection(cityRegionStatus: [Int:[Bool]], selectedCity: Int) -> Bool {
         
         ///Count the number of cities selected (regions are not restricted)
         var count = 0
-
+        
         for cityCode in cityRegionStatus.keys {
             
             if let status = cityRegionStatus[cityCode] {
@@ -197,30 +192,30 @@ class RegionTableViewController: UITableViewController {
         return cityRegions[citySelected]?.regions.count ?? 0
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return RegionTableViewController.cellHeight
+    }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("regionCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("simpleFilterTableCell", forIndexPath: indexPath) as! FilterTableViewCell
         
         let row = indexPath.row
         
         NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
         
-        ///Reset for reuse
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.accessoryType = UITableViewCellAccessoryType.None
-        
         if let statusForCity = checkedRegions[citySelected]{
             if(statusForCity[row]) {
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                cell.filterCheckMark.hidden = false
+                cell.filterCheckMark.image = UIImage(named: "checked_green")
             } else {
-                cell.accessoryType = UITableViewCellAccessoryType.None
+                cell.filterCheckMark.hidden = true
             }
         }
         
-        cell.textLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline).fontWithSize(20)
+        cell.simpleFilterLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline).fontWithSize(20)
         
         if let city = cityRegions[citySelected] {
-            cell.textLabel?.text = city.regions[indexPath.row].name
+            cell.simpleFilterLabel?.text = city.regions[indexPath.row].name
         }
         
         return cell
@@ -230,10 +225,10 @@ class RegionTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.configureRegionTable()
-        
+
         NSLog("viewDidLoad: %@", self)
+        
+        self.tableView.registerNib(UINib(nibName: "SimpleFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "simpleFilterTableCell")
     }
     
     override func viewWillDisappear(animated: Bool) {

@@ -19,6 +19,9 @@ protocol FilterTableViewControllerDelegate {
 
 class FilterTableViewController: UITableViewController {
     
+    static let cellHeight = 55 * getCurrentScale()
+    static let headerHeight = 45 * getCurrentScale()
+    
     ///The list of all filter options grouped by sections
     static var filterSections:[FilterSection] = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
     
@@ -172,8 +175,7 @@ class FilterTableViewController: UITableViewController {
         resetAllButton.enabled = false
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity.Name,
-            action: GAConst.Catrgory.Activity.Action.ResetFilters)
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity, action: GAConst.Action.Activity.ResetFilters)
     }
     
     @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
@@ -316,9 +318,13 @@ class FilterTableViewController: UITableViewController {
         return self.filterSections[section].label
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return FilterTableViewController.cellHeight
+    }
+    
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return 44
+        return FilterTableViewController.headerHeight
         
     }
     
