@@ -9,6 +9,7 @@
     import UIKit
     import SwiftyJSON
     
+    private let Log = Logger.fileLogger
     
     class ToggleButtonListenr: ToggleStateListenr {
         
@@ -59,6 +60,10 @@
             static let lowerCompIdx = 0
             static let upperCompIdx = 1
         }
+        
+        var userSetRegion = false
+        
+        let locationManager = CLLocationManager()
         
         var regionSelectionState: [City]? {
             didSet {
@@ -384,29 +389,29 @@
             
             //Init Price Picker Upper Bound display range
             if let priceUpperRange = getUpperBoundRangeForPicker(pricePicker, items: priceItems) {
-            
-            if let priceRange = criteria.price {
                 
-                for (index, price) in priceItems[PickerConst.lowerCompIdx].enumerate() {
-                    if(priceRange.0 == price.value) {
-                        
-                        pickerPriceFrom = (PickerConst.lowerCompIdx, index + 1)
+                if let priceRange = criteria.price {
+                    
+                    for (index, price) in priceItems[PickerConst.lowerCompIdx].enumerate() {
+                        if(priceRange.0 == price.value) {
+                            
+                            pickerPriceFrom = (PickerConst.lowerCompIdx, index + 1)
+                        }
+                    }
+                    
+                    for (index, price) in priceItems[PickerConst.upperCompIdx].enumerate() {
+                        if(priceRange.1 == price.value) {
+                            
+                            pickerPriceTo = (PickerConst.upperCompIdx, index - priceUpperRange.startIndex + 1)
+                        }
                     }
                 }
                 
-                for (index, price) in priceItems[PickerConst.upperCompIdx].enumerate() {
-                    if(priceRange.1 == price.value) {
-                        
-                        pickerPriceTo = (PickerConst.upperCompIdx, index - priceUpperRange.startIndex + 1)
-                    }
-                }
-            }
-            
-            pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
-            pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
-            
-            priceLabel.text =
-                pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
+                pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
+                pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
+                
+                priceLabel.text =
+                    pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
             }
             
             ///Size Range
@@ -415,26 +420,26 @@
             
             //Init Price Picker Upper Bound display range
             if let sizeUpperRange = getUpperBoundRangeForPicker(sizePicker, items: sizeItems) {
-            
-            if let sizeRange = criteria.size {
                 
-                for (index, size) in sizeItems[PickerConst.lowerCompIdx].enumerate() {
-                    if(sizeRange.0 == size.value) {
-                        pickerSizeFrom = (PickerConst.lowerCompIdx, index + 1)
+                if let sizeRange = criteria.size {
+                    
+                    for (index, size) in sizeItems[PickerConst.lowerCompIdx].enumerate() {
+                        if(sizeRange.0 == size.value) {
+                            pickerSizeFrom = (PickerConst.lowerCompIdx, index + 1)
+                        }
+                    }
+                    
+                    for (index, size) in sizeItems[PickerConst.upperCompIdx].enumerate() {
+                        if(sizeRange.1 == size.value) {
+                            pickerSizeTo = (PickerConst.upperCompIdx, index - sizeUpperRange.startIndex + 1)
+                        }
                     }
                 }
                 
-                for (index, size) in sizeItems[PickerConst.upperCompIdx].enumerate() {
-                    if(sizeRange.1 == size.value) {
-                        pickerSizeTo = (PickerConst.upperCompIdx, index - sizeUpperRange.startIndex + 1)
-                    }
-                }
-            }
-            
-            sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
-            sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
-            
-            sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
+                sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
+                sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
+                
+                sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
             }
             
             ///House Types
@@ -751,6 +756,11 @@
                     clearCriteriaButton.enabled = true
                 }
             }
+            
+            //Configure location manager
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestWhenInUseAuthorization()
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
@@ -777,6 +787,11 @@
             
             //Google Analytics Tracker
             self.trackScreen()
+            
+            //Start monitoring location
+            if(!userSetRegion) {
+                locationManager.startUpdatingLocation()
+            }
         }
         
         override func viewDidAppear(animated: Bool) {
@@ -1197,6 +1212,8 @@
         func onCitySelectionDone(regions:[City]) {
             regionSelectionState = regions
             
+            userSetRegion = true
+            
             currentCriteria = self.stateToSearhCriteria()
             
             ///GA Tracker
@@ -1211,5 +1228,81 @@
                     }
                 }
             }
+        }
+    }
+    
+    extension SearchBoxTableViewController : CLLocationManagerDelegate {
+        
+        private func getDefaultLocation(placemark: CLPlacemark?) -> City {
+            
+            var currentCity = City(code: 100, name: "台北市", regions: [Region.allRegions])
+            
+            let regionlist = ConfigLoader.RegionList
+            
+            if let placemark = placemark {
+                let postalCode = placemark.postalCode
+                
+                for (_, city) in regionlist {
+                    
+                    if let region = city.regions.filter({ (region) -> Bool in
+                        return String(region.code) == postalCode
+                    }).first {
+                        
+                        currentCity = City(code: city.code, name: city.name, regions: [region])
+                        break
+                    }
+                    
+                }
+                
+            }
+            
+            Log.debug("\(currentCity)")
+            
+            return currentCity
+        }
+        
+        private func setRegionToCriteria(city:City) {
+            //stop updating location to save battery life
+            locationManager.stopUpdatingLocation()
+            
+            if (!userSetRegion || currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
+                currentCriteria.region = [city]
+                self.populateViewFromSearchCriteria(currentCriteria)
+            }
+        }
+        
+        func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            
+            Log.debug("Location update: \(manager.location?.coordinate)")
+            
+            CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error) -> Void in
+                if let error = error {
+                    Log.debug("Reverse geocoder failed error = \(error.localizedDescription)")
+                    return
+                }
+                
+                if let placemarks = placemarks where placemarks.count > 0 {
+                    if let pm = placemarks.first {
+                        
+                        Log.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
+                        
+                        let currentCity = self.getDefaultLocation(pm)
+                        self.setRegionToCriteria(currentCity)
+                    }
+                } else {
+                    Log.debug("Problem with the data received from geocoder")
+                    let currentCity = self.getDefaultLocation(nil)
+                    self.setRegionToCriteria(currentCity)
+                }
+            })
+        }
+        
+        
+        func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+            Log.debug("Updating location failed error = \(error.localizedDescription)")
+            
+            let currentCity = self.getDefaultLocation(nil)
+            self.setRegionToCriteria(currentCity)
+            
         }
     }

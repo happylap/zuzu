@@ -25,7 +25,6 @@ class CityRegionContainerController: UIViewController {
     var regionSelectionState: [City] = [City]()
     
     var cityRegions = [Int : City]()//City dictionary by city code
-    var cityList = [City]()//City list
     
     struct ViewTransConst {
         static let showRegionTable:String = "showRegionTable"
@@ -75,7 +74,6 @@ class CityRegionContainerController: UIViewController {
                     let city = City(code: code, name: name, regions: regionList)
                     
                     cityRegions[code] = city
-                    cityList.append(city)
                 }
                 
             } catch let error as NSError{
@@ -197,7 +195,7 @@ class CityRegionContainerController: UIViewController {
                 
                 if let vc = segue.destinationViewController as? CityPickerViewController {
                     cityPicker = vc
-                    vc.cityRegions  = cityList
+                    vc.cityRegions  = [City](cityRegions.values)
                     vc.regionSelectionState = regionSelectionState
                 }
                 
