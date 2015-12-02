@@ -61,12 +61,12 @@
             static let upperCompIdx = 1
         }
         
-        var userSetRegion = false {
+        var locationManagerActive = false {
             didSet {
-                if (userSetRegion) {
-                    locationManager.stopUpdatingLocation()
-                } else {
+                if(locationManagerActive) {
                     locationManager.startUpdatingLocation()
+                } else {
+                    locationManager.stopUpdatingLocation()
                 }
             }
         }
@@ -382,6 +382,40 @@
             }
         }
         
+        private func resetSearchBox() {
+            ///Keywords
+            searchBar.text = nil
+            
+            ///Region
+            regionSelectionState = nil
+            
+            ///Price Range
+            
+            let pickerPriceFrom:(component:Int, row:Int) = (0,0)
+            let pickerPriceTo:(component:Int, row:Int) = (1,0)
+            pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
+            pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
+            
+            priceLabel.text = PickerConst.anyUpper.label
+            
+            ///Size Range
+            let pickerSizeFrom:(component:Int, row:Int) = (0,0)
+            let pickerSizeTo:(component:Int, row:Int) = (1,0)
+            sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
+            sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
+            sizeLabel.text =  PickerConst.anyUpper.label
+            
+            //Check each type button (each with a different tag as set in the Story Board)
+            for tag in (1...5) {
+                
+                if let typeButton = typeButtonContainer.viewWithTag(tag) as? ToggleButton {
+                    typeButton.setToggleState(false)
+                }
+            }
+            //At lease one type is selected, so "Select All" button can be set to false
+            selectAllButton.setToggleState(true)
+        }
+        
         private func populateViewFromSearchCriteria(criteria: SearchCriteria) {
             
             ///Keywords
@@ -623,6 +657,7 @@
             
             self.currentCriteria = SearchCriteria()
             self.criteriaDataStore.clear()
+            self.resetSearchBox()
             
             clearCriteriaButton.enabled = false
             
@@ -769,6 +804,13 @@
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.requestWhenInUseAuthorization()
+            
+            //Try to start monitoring location
+            if let regionList = currentCriteria.region where !regionList.isEmpty {
+                locationManagerActive = false
+            } else {
+                locationManagerActive = true
+            }
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
@@ -795,11 +837,6 @@
             
             //Google Analytics Tracker
             self.trackScreen()
-            
-            //Start monitoring location
-            if(!userSetRegion) {
-                locationManager.startUpdatingLocation()
-            }
         }
         
         override func viewDidAppear(animated: Bool) {
@@ -866,6 +903,11 @@
                         
                         ///Collect the search criteria set by the user
                         srtvc.searchCriteria = currentCriteria
+                        
+                        ///Save the final search criteria
+                        if(!currentCriteria.isEmpty()) {
+                            criteriaDataStore.saveSearchCriteria(currentCriteria)
+                        }
                         
                         ///Save search history (works like a ring buffer, delete the oldest record if maxItemSize is exceeded)
                         
@@ -1220,7 +1262,9 @@
         func onCitySelectionDone(regions:[City]) {
             regionSelectionState = regions
             
-            userSetRegion = (regions.count > 0)
+            if(!regions.isEmpty) {
+                locationManagerActive = false
+            }
             
             currentCriteria = self.stateToSearhCriteria()
             
@@ -1270,10 +1314,11 @@
         }
         
         private func setRegionToCriteria(city:City) {
+            
             //stop updating location to save battery life
             locationManager.stopUpdatingLocation()
             
-            if (!userSetRegion || currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
+            if (currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
                 currentCriteria.region = [city]
                 
                 ///Update Region (self.populateViewFromSearchCriteria cause some abnormal behavior for size/city picker)

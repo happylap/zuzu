@@ -24,8 +24,8 @@ class CityRegionContainerController: UIViewController {
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var regionSelectionState: [City] = [City]()
     
-    var cityRegions = [Int : City]()//City dictionary by city code
-    var cityList = [City]()//City list
+    var cityRegions = ConfigLoader.RegionList //City dictionary by city code
+    var cityList = ConfigLoader.SortedCityList //Sorted City list
     
     struct ViewTransConst {
         static let showRegionTable:String = "showRegionTable"
@@ -37,76 +37,32 @@ class CityRegionContainerController: UIViewController {
     
     // MARK: - Private Utils
     
-    private func loadCityRegionData() {
+    private func initCityRegionSelectionData() {
+        ///Init selection status for each city
+        for city in cityList {
+            let regionList = city.regions
+            checkedRegions[city.code] = [Bool](count:regionList.count, repeatedValue: false)
+        }
         
-        cityRegions.removeAll()
-        
-        if let path = NSBundle.mainBundle().pathForResource("areasInTaiwan", ofType: "json") {
+        ///Init selected regions
+        for city in regionSelectionState {
             
-            ///Load all city regions from json
-            do {
-                let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                let json = JSON(data: jsonData)
-                let cities = json["cities"].arrayValue
-                
-                NSLog("Cities = %d", cities.count)
-                
-                for cityJsonObj in cities {
-                    let name = cityJsonObj["name"].stringValue
-                    let code = cityJsonObj["code"].intValue
-                    let regions = cityJsonObj["region"].arrayValue
-                    
-                    ///Init Region Table data
-                    var regionList:[Region] = [Region]()
-                    
-                    regionList.append(Region.allRegions)///All region
-                    
-                    for region in regions {
-                        if let regionDic = region.dictionary {
-                            for key in regionDic.keys {
-                                regionList.append(Region(code: regionDic[key]!.intValue, name: key))
-                            }
-                        }
-                    }
-                    
-                    ///Init selection status for each city
-                    checkedRegions[code] = [Bool](count:regionList.count, repeatedValue: false)
-                    
-                    let city = City(code: code, name: name, regions: regionList)
-                    
-                    cityRegions[code] = city
-                    cityList.append(city)
-                }
-                
-            } catch let error as NSError{
-                
-                NSLog("Cannot load area json file %@", error)
-                
-            }
+            let selectedRegions = city.regions
             
-            ///Init selected regions
-            let selectedCities = self.regionSelectionState
-            for city in selectedCities {
-                
-                let selectedRegions = city.regions
-                
-                if(selectedRegions.isEmpty) {
-                    checkedRegions[city.code]?[0] = true
-                } else {
-                    for region in selectedRegions {
-                        if let index = cityRegions[city.code]?.regions.indexOf(region) { ///Region needs to be Equatable
-                            checkedRegions[city.code]?[index] = true
-                        }
+            for region in selectedRegions {
+                if let regionList = cityRegions[city.code]?.regions {
+                    
+                    if let index = regionList.indexOf(region) { ///Region needs to be Equatable
+                        checkedRegions[city.code]?[index] = true
                     }
                 }
             }
-            
         }
     }
     
     private func prepareDataIfNeeded() {
         if(!isDataPrepared) {
-            loadCityRegionData()
+            initCityRegionSelectionData()
             isDataPrepared = true
         }
     }
