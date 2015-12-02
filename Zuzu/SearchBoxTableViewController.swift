@@ -61,7 +61,15 @@
             static let upperCompIdx = 1
         }
         
-        var userSetRegion = false
+        var userSetRegion = false {
+            didSet {
+                if (userSetRegion) {
+                    locationManager.stopUpdatingLocation()
+                } else {
+                    locationManager.startUpdatingLocation()
+                }
+            }
+        }
         
         let locationManager = CLLocationManager()
         
@@ -1212,7 +1220,7 @@
         func onCitySelectionDone(regions:[City]) {
             regionSelectionState = regions
             
-            userSetRegion = true
+            userSetRegion = (regions.count > 0)
             
             currentCriteria = self.stateToSearhCriteria()
             
@@ -1267,7 +1275,10 @@
             
             if (!userSetRegion || currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
                 currentCriteria.region = [city]
-                self.populateViewFromSearchCriteria(currentCriteria)
+                
+                ///Update Region (self.populateViewFromSearchCriteria cause some abnormal behavior for size/city picker)
+                regionSelectionState = currentCriteria.region
+                
             }
         }
         
