@@ -85,6 +85,13 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
             let fetchError = error as NSError
             print("\(fetchError), \(fetchError.userInfo)")
         }
+        
+        //Remove extra cells when the table height is smaller than the screen
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        
+        // self.tableView.backgroundColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 1.0)
+        
+        // self.tableView.tableFooterView?.backgroundColor = UIColor.clearColor()
     }
     
     override func viewWillAppear(animated:Bool) {
@@ -142,11 +149,30 @@ extension MyNoteViewController {
             cell.noteItem = note
         }
         
+        cell.backgroundColor = UIColor.clearColor()
+        
         return cell
     }
     
     
     // MARK: - Table Edit Mode
+    
+
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        
+        let deleteButton = UITableViewRowAction(style: .Default, title: "", handler: { (action, indexPath) in
+            print("Delete pressed!")
+            self.tableView(tableView, commitEditingStyle: UITableViewCellEditingStyle.Delete, forRowAtIndexPath: indexPath)
+        })
+        
+        deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "delete_icon_small")!)
+        
+
+        
+        //deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "")).colorWithRGB(0x1cd4c6)
+        
+        return [deleteButton]
+    }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
@@ -160,6 +186,8 @@ extension MyNoteViewController {
             }
         }
     }
+    
+
     
     // MARK: -
     // MARK: Fetched Results Controller Delegate Methods
