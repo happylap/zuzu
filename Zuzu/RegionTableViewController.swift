@@ -210,6 +210,8 @@ class RegionTableViewController: UITableViewController {
             } else {
                 cell.filterCheckMark.hidden = true
             }
+        } else {
+            cell.filterCheckMark.hidden = true
         }
         
         cell.simpleFilterLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline).fontWithSize(20)
