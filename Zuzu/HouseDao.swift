@@ -283,7 +283,7 @@ class HouseDao: NSObject {
         house.coordinate = coordinate
         
         house.contacted = false
-        house.notes = NSOrderedSet()
+//        house.notes = NSOrderedSet()
         
         return house
     }

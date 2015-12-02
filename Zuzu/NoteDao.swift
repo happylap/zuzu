@@ -24,11 +24,7 @@ class NoteDao: NSObject {
     
     // MARK: Create
     
-    func addNote(houseId: String, noteDesc: String) {
-        
-        if HouseDao.sharedInstance.isExist(houseId) {
-            return
-        }
+    func addNote(house: House, noteDesc: String) {
         
         NSLog("%@ addNote", self)
         
@@ -42,22 +38,14 @@ class NoteDao: NSObject {
             note.title = noteDesc
             note.desc = noteDesc
             note.createDate = NSDate()
-            
-            if let house = HouseDao.sharedInstance.getHouseById(houseId) {
-                let notes = house.notes.mutableCopy() as! NSMutableOrderedSet
-                notes.addObject(note)
-                house.notes = notes.copy() as! NSOrderedSet
-                CoreDataManager.shared.save()
-            }
+            note.houseId = house.id
+            CoreDataManager.shared.save()
         }
-        
-        
-        
     }
     
     // MARK: Read
     
-    func getNoteListByHouseId(houseId: String) -> [AnyObject]? {
+    func getNoteListByHouseId(houseId: String) -> [Note]? {
         NSLog("%@ getNoteListByHouseId: \(houseId)", self)
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.Note.rawValue)
@@ -65,9 +53,9 @@ class NoteDao: NSObject {
         let findByIdPredicate = NSPredicate(format: "houseId == %@", houseId)
         fetchRequest.predicate = findByIdPredicate
         
-        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
+        //fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         
-        return CoreDataManager.shared.executeFetchRequest(fetchRequest)
+        return CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [Note]
     }
     
     func getNoteById(id: String) -> AnyObject? {

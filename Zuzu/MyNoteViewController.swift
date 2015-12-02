@@ -8,29 +8,60 @@
 
 
 import UIKit
+import CoreData
 
-class MyNoteViewController: UIViewController, UITextFieldDelegate {
-    
-    var noteList: [String] = []
+class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     var houseItem: House?
     
-    @IBOutlet weak var noteItemForCreate: UITextField!
-    @IBOutlet weak var tableView: UITableView!
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        // Initialize Fetch Request
+        let fetchRequest = NSFetchRequest(entityName: "Note")
+        
+        // Add Predicates
+        if let house = self.houseItem {
+            let findByIdPredicate = NSPredicate(format: "houseId == %@", house.id)
+            fetchRequest.predicate = findByIdPredicate
+        }
+        
+        // Add Sort Descriptors
+        let sortDescriptor = NSSortDescriptor(key: "createDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        // Initialize Fetched Results Controller
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        // Configure Fetched Results Controller
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
+    }()
     
+    private func addNote(title: String) {
+        if let house = self.houseItem {
+            let context = CoreDataManager.shared.managedObjectContext
+            
+            if let model = NSEntityDescription.entityForName(EntityTypes.Note.rawValue, inManagedObjectContext: context) {
+                let note = Note(entity: model, insertIntoManagedObjectContext: context)
+                note.title = title
+                note.desc = title
+                note.createDate = NSDate()
+                note.houseId = house.id
+                CoreDataManager.shared.save()
+            }
+        }
+    }
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var noteItemForCreate: UITextField!
+    
+    // MARK: Actions
     @IBAction func addNoteItem(sender: UIButton) {
         NSLog("%@ addNoteItem", self)
-        
         if self.noteItemForCreate.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            noteList.append(self.noteItemForCreate.text!)
-            if let house = self.houseItem {
-                NoteDao.sharedInstance.addNote(house.id, noteDesc: self.noteItemForCreate.text!)
-                houseItem = HouseDao.sharedInstance.getHouseById(house.id)
-            }
+            self.addNote(self.noteItemForCreate.text!)
             self.noteItemForCreate.text = ""
             self.view.endEditing(true)
-            
-            self.tableView.reloadData()
         }
     }
     
@@ -46,11 +77,16 @@ class MyNoteViewController: UIViewController, UITextFieldDelegate {
         NSLog("%@ viewDidLoad", self)
         noteItemForCreate.delegate = self
         
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
     }
     
     override func viewWillAppear(animated:Bool) {
         super.viewWillAppear(animated)
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
     }
@@ -61,60 +97,50 @@ class MyNoteViewController: UIViewController, UITextFieldDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+}
+
+extension MyNoteViewController: UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        
         return true
     }
     
-    var kbHeight: CGFloat!
-    
     func keyboardWillShow(notification: NSNotification) {
         NSLog("%@ keyboardWillShow", self)
-        
-//        if let userInfo = notification.userInfo {
-//            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-//                kbHeight = keyboardSize.height
-//                self.animateTextField(true)
-//            }
-//        }
     }
     
     func keyboardWillHide(notification: NSNotification) {
         NSLog("%@ keyboardWillHide", self)
-//        self.animateTextField(false)
-    }
-    
-    func animateTextField(up: Bool) {
-//        let movement = (up ? -kbHeight : kbHeight)
-//        
-//        UIView.animateWithDuration(0.3, animations: {
-//            self.view.frame = CGRectOffset(self.view.frame, 0, movement)
-//        })
     }
 }
 
-extension MyNoteViewController: UITableViewDataSource, UITableViewDelegate {
+extension MyNoteViewController {
     
     // MARK: - Table View Data Source
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return Const.SECTION_NUM
+        //return fetchedResultsController.sections!.count
+    }
+
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.noteList.count
-//        return self.houseItem?.notes.count ?? 0
+//        return self.noteList.count
+        let sectionInfo = fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
+        return sectionInfo.numberOfObjects
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cellIdentifier = "Cell"
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
         
-        // Configure the cell...
-        cell.textLabel?.text = self.noteList[indexPath.row]
-//        if let note = self.houseItem?.notes[indexPath.row] as? Note {
-//            cell.textLabel?.text = note.desc
-//        }
+        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+        
+        if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
+            cell.textLabel?.text = note.title
+        }
         
         return cell
     }
+    
     
     // MARK: - Table Edit Mode
     
@@ -124,10 +150,40 @@ extension MyNoteViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            if let _: String = self.noteList[indexPath.row] as String {
-                self.noteList.removeAtIndex(indexPath.row)
-                self.tableView.reloadData()
+            if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
+                CoreDataManager.shared.delete(note.objectID)
+                CoreDataManager.shared.save()
             }
         }
+    }
+    
+    // MARK: -
+    // MARK: Fetched Results Controller Delegate Methods
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        NSLog("%@ didChangeObject: \(type.rawValue)", self)
+        
+        switch type {
+        case .Insert:
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Delete:
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Update:
+            let cell = self.tableView.cellForRowAtIndexPath(indexPath!)! as UITableViewCell
+            if let note: Note = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Note {
+                cell.textLabel?.text = note.title
+            }
+        case .Move:
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        }
+        
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.endUpdates()
     }
 }

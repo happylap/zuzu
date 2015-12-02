@@ -74,6 +74,5 @@ public class House: NSManagedObject {
     
     /* */
     @NSManaged var contacted: Bool
-    @NSManaged var notes: NSOrderedSet
 
 }

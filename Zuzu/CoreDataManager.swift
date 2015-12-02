@@ -91,11 +91,12 @@ class CoreDataManager: NSObject {
                 try _persistentStoreCoordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: self.databaseOptions())
             } catch _ as NSError {
                 //error = error1
-                abort()
+                if(FeatureOption.enableCollection) {
+                    abort()
+                } else {
+                    NSLog("%@ [Core Data] persistentStoreCoordinator error", self)
+                }
             }
-            
-            
-            
         }
         return _persistentStoreCoordinator!;
     }

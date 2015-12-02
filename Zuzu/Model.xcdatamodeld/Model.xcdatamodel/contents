@@ -48,16 +48,15 @@
         <attribute name="type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="usage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="wallMtl" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Note" syncable="YES"/>
     </entity>
-    <entity name="Note" syncable="YES">
+    <entity name="Note" representedClassName=".Note" syncable="YES">
         <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="houseId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="house" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="House" syncable="YES"/>
     </entity>
     <elements>
-        <element name="House" positionX="-180" positionY="-2602" width="128" height="763"/>
-        <element name="Note" positionX="72" positionY="-1981" width="128" height="103"/>
+        <element name="House" positionX="-180" positionY="-2602" width="128" height="750"/>
+        <element name="Note" positionX="72" positionY="-1981" width="128" height="105"/>
     </elements>
 </model>
