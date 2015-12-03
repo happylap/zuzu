@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITableViewDataSource {
     
     var criteriaToLoad: SearchCriteria?
@@ -54,11 +56,11 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
     private func confirmLoadCriteria() {
         let alert = UIAlertController(title: "載入搜尋條件", message: "是否確認載入此搜尋條件?", preferredStyle: .ActionSheet)
         
-        let DeleteAction = UIAlertAction(title: "載入", style: .Destructive, handler: handleLoadCriteria)
-        let CancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: cancelLoadCriteria)
+        let loadAction = UIAlertAction(title: "載入", style: .Default, handler: handleLoadCriteria)
+        let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: cancelLoadCriteria)
         
-        alert.addAction(DeleteAction)
-        alert.addAction(CancelAction)
+        alert.addAction(loadAction)
+        alert.addAction(cancelAction)
         
         // Support display in iPad
         alert.popoverPresentationController?.sourceView = self.tableViewController.view
@@ -73,7 +75,8 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
             return 0
         }
         
-        NSLog("Current table number \(searchData!.count)")
+        Log.debug("Number of search history = \(searchData!.count)")
+        
         return searchData!.count
     }
     
@@ -122,13 +125,13 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
                 "Impossible to be inside this deletion delegate function, if there is no search item")
             
             if(self.searchData != nil) {
-
+                
                 let success = searchItemService.deleteSearchItem(indexPath.row, itemType: self.itemType)
-
+                
                 if(success) {
                     ///Reload from storage
                     self.searchData = searchItemService.getSearchItemsByType(self.itemType)
-
+                    
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                 }
             }

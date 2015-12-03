@@ -9,7 +9,8 @@
     import UIKit
     import SwiftyJSON
     
-    private let Log = Logger.fileLogger
+    private let FileLog = Logger.fileLogger
+    private let Log = Logger.defaultLogger
     
     class ToggleButtonListenr: ToggleStateListenr {
         
@@ -83,6 +84,7 @@
         
         var sizeUpperRange:Range<Int>?
         var priceUpperRange:Range<Int>?
+        
         let sizeItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
         let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
         
@@ -146,7 +148,7 @@
                     }
                     
                     ///Load the criteria to the Search Box UI
-                    //self.populateViewFromSearchCriteria(currentCriteria)
+                    self.populateViewFromSearchCriteria(currentCriteria)
                 }
             }
         }
@@ -236,6 +238,10 @@
             
             let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
             let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
+            
+            if(pickerView == pricePicker) {
+                Log.debug("pricePicker: Upper: \(toTuple)")
+            }
             
             if(fromTuple?.value == toTuple?.value) {
                 pickerStr = "\((toTuple?.label)!)"
@@ -353,9 +359,6 @@
                 if(hiddenCells.contains(CellConst.pricePicker)) {
                     hiddenCells.insert(CellConst.sizePicker)
                     hiddenCells.remove(CellConst.pricePicker)
-                    
-                    priceUpperRange = getUpperBoundRangeForPicker(picker!, items: priceItems)
-                    picker?.reloadComponent(PickerConst.upperCompIdx)
                 } else { //Hide
                     hiddenCells.insert(CellConst.pricePicker)
                 }
@@ -365,9 +368,6 @@
                 if(hiddenCells.contains(CellConst.sizePicker)) {
                     hiddenCells.insert(CellConst.pricePicker)
                     hiddenCells.remove(CellConst.sizePicker)
-                    
-                    sizeUpperRange = getUpperBoundRangeForPicker(picker!, items: sizeItems)
-                    picker?.reloadComponent(PickerConst.upperCompIdx)
                 } else { //Hide
                     hiddenCells.insert(CellConst.sizePicker)
                 }
@@ -429,60 +429,85 @@
             var pickerPriceFrom:(component:Int, row:Int) = (0,0)
             var pickerPriceTo:(component:Int, row:Int) = (1,0)
             
-            //Init Price Picker Upper Bound display range
-            if let priceUpperRange = getUpperBoundRangeForPicker(pricePicker, items: priceItems) {
+            if let priceRange = criteria.price {
                 
-                if let priceRange = criteria.price {
-                    
-                    for (index, price) in priceItems[PickerConst.lowerCompIdx].enumerate() {
-                        if(priceRange.0 == price.value) {
-                            
-                            pickerPriceFrom = (PickerConst.lowerCompIdx, index + 1)
-                        }
+                ///Get Lower Bound Index
+                for (index, price) in priceItems[PickerConst.lowerCompIdx].enumerate() {
+                    if(priceRange.0 == price.value) {
+                        
+                        pickerPriceFrom = (PickerConst.lowerCompIdx, index + 1)
+                        Log.debug("pickerPriceFrom = \(pickerPriceFrom)")
+                        break
                     }
-                    
+                }
+                
+                //Update Price Picker Upper Bound Range based on Lower Bound selection
+                priceUpperRange = getUpperBoundRangeForPicker(priceRange.0, items: priceItems)
+                Log.debug("priceUpperRange = \(priceUpperRange)")
+                
+                ///Get Upper Bound Index
+                if let priceUpperRange = priceUpperRange {
                     for (index, price) in priceItems[PickerConst.upperCompIdx].enumerate() {
                         if(priceRange.1 == price.value) {
                             
                             pickerPriceTo = (PickerConst.upperCompIdx, index - priceUpperRange.startIndex + 1)
+                            Log.debug("pickerPriceTo = \(pickerPriceTo)")
+                            break
                         }
                     }
                 }
+            } else {
                 
-                pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
-                pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
+                //Update Price Picker Upper Bound Range based on Lower Bound selection
+                priceUpperRange = getUpperBoundRangeForPicker(PickerConst.anyLower.value, items: priceItems)
+                Log.debug("priceUpperRange = \(priceUpperRange)")
                 
-                priceLabel.text =
-                    pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
             }
+            
+            //Reload for New Upper Bound Index (Number of items may be less)
+            pricePicker.reloadComponent(PickerConst.upperCompIdx)
+            pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
+            pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
+            
+            priceLabel.text =
+                pickerRangeToString(pricePicker, pickerFrom: pickerPriceFrom, pickerTo: pickerPriceTo)
             
             ///Size Range
             var pickerSizeFrom:(component:Int, row:Int) = (0,0)
             var pickerSizeTo:(component:Int, row:Int) = (1,0)
             
-            //Init Price Picker Upper Bound display range
-            if let sizeUpperRange = getUpperBoundRangeForPicker(sizePicker, items: sizeItems) {
+            if let sizeRange = criteria.size {
                 
-                if let sizeRange = criteria.size {
-                    
-                    for (index, size) in sizeItems[PickerConst.lowerCompIdx].enumerate() {
-                        if(sizeRange.0 == size.value) {
-                            pickerSizeFrom = (PickerConst.lowerCompIdx, index + 1)
-                        }
+                for (index, size) in sizeItems[PickerConst.lowerCompIdx].enumerate() {
+                    if(sizeRange.0 == size.value) {
+                        pickerSizeFrom = (PickerConst.lowerCompIdx, index + 1)
                     }
-                    
+                }
+                
+                //Update Size Picker Upper Bound display range based on Lower Bound selection
+                sizeUpperRange = getUpperBoundRangeForPicker(sizeRange.0, items: sizeItems)
+                Log.debug("sizeUpperRange = \(sizeUpperRange)")
+                
+                if let sizeUpperRange = sizeUpperRange {
                     for (index, size) in sizeItems[PickerConst.upperCompIdx].enumerate() {
                         if(sizeRange.1 == size.value) {
                             pickerSizeTo = (PickerConst.upperCompIdx, index - sizeUpperRange.startIndex + 1)
                         }
                     }
                 }
+            } else {
                 
-                sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
-                sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
-                
-                sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
+                //Update Size Picker Upper Bound display range based on Lower Bound selection
+                sizeUpperRange = getUpperBoundRangeForPicker(PickerConst.anyLower.value, items: sizeItems)
+                Log.debug("sizeUpperRange = \(sizeUpperRange)")
             }
+            
+            //Reload for New Upper Bound Index (Number of items may be less)
+            sizePicker.reloadComponent(PickerConst.upperCompIdx)
+            sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
+            sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
+            
+            sizeLabel.text = pickerRangeToString(sizePicker, pickerFrom: pickerSizeFrom, pickerTo: pickerSizeTo)
             
             ///House Types
             if let houseTypes = criteria.types {
@@ -654,10 +679,8 @@
         }
         
         func onClearCriteriaButtonTouched(sender: UIButton) {
-            
-            self.currentCriteria = SearchCriteria()
             self.criteriaDataStore.clear()
-            self.resetSearchBox()
+            self.currentCriteria = SearchCriteria()
             
             clearCriteriaButton.enabled = false
             
@@ -696,7 +719,7 @@
         }
         
         func onSearchButtonClicked(sender: UIButton) {
-            NSLog("onSearchButtonClicked: %@", self)
+            Log.debug("onSearchButtonClicked: \(self)")
             
             //Hide size & price pickers
             self.setRowVisible(CellConst.pricePicker, visible: false)
@@ -738,7 +761,7 @@
         
         override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
             
-            NSLog("heightForRowAtIndexPath\(indexPath)")
+            Log.debug("heightForRowAtIndexPath\(indexPath)")
             
             if(hiddenCells.contains(indexPath.row)) {
                 return 0
@@ -765,7 +788,7 @@
         override func viewDidLoad() {
             super.viewDidLoad()
             
-            NSLog("viewDidLoad: %@", self)
+            NSLog("Begin viewDidLoad: %@", self)
             self.configureButton()
             
             self.configureSearchHistoryTable()
@@ -776,8 +799,8 @@
             //cityRegionDataStore.clearSelectedCityRegions()
             
             //Confugure Price Picker
-            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems.count - 1)
-            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems.count - 1)
+            sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems[1].count - 1)
+            priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems[1].count - 1)
             
             self.configurePricePicker()
             
@@ -811,10 +834,12 @@
             } else {
                 locationManagerActive = true
             }
+            
+            NSLog("End viewDidLoad: %@", self)
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
-            NSLog("handleTap")
+            Log.debug("handleTap: view = \(sender.view)")
             searchBar.resignFirstResponder()
         }
         
@@ -964,7 +989,7 @@
                     let json = JSON(data: jsonData)
                     let items = json[criteriaLabel].arrayValue
                     
-                    NSLog("\(criteriaLabel) = %d", items.count)
+                    Log.debug("\(criteriaLabel) = \(items.count)")
                     
                     for itemJsonObj in items {
                         let label = itemJsonObj["label"].stringValue
@@ -974,53 +999,42 @@
                         resultItems[1].append( (label: label, value: value) )
                     }
                     
+                    Log.debug("LowerItems = \(resultItems[0])")
+                    Log.debug("UpperItems = \(resultItems[1])")
+                    
                 } catch let error as NSError{
                     
-                    NSLog("Cannot load area json file %@", error)
+                    Log.error("Cannot load area json file \(error)")
                     
                 } catch {
-                    NSLog("Cannot load area json file")
+                    Log.error("Cannot load area json file")
                 }
             }
             
             return resultItems
         }
         
-        private func getUpperBoundRangeForPicker(pickerView: UIPickerView, items: [[(label:String, value:Int)]]) -> Range<Int>?{
+        private func getUpperBoundRangeForPicker(lowerSelectedValue: Int, items: [[(label:String, value:Int)]]) -> Range<Int>?{
             
-            let numOfComponents = pickerView.numberOfComponents
+            let upperItems = items[PickerConst.upperCompIdx]
             
-            assert(numOfComponents == 2, "Cannot process pickers with components more or less than two")
-            assert(numOfComponents == items.count, "The number of components do not match")
+            ///Do not need to update Upper Bound values if there is not limit on Lower Bound
+            if(lowerSelectedValue == PickerConst.anyLower.value) {
+                return (PickerConst.upperBoundStartZero...upperItems.count - 1)
+            }
             
-            if(numOfComponents == 2) {
-                let from = items.startIndex, to = items.endIndex - 1
-                
-                let selectedRowInlowerBound = pickerView.selectedRowInComponent(from)
-                
-                if let selectedLowerBound = getItemForPicker(pickerView, component: from, row: selectedRowInlowerBound) {
-                    
-                    ///Do not need to update Upper Bound values if there is not limit on Lower Bound
-                    if(selectedLowerBound.value == PickerConst.anyLower.value) {
-                        return (PickerConst.upperBoundStartZero...items[to].count - 1)
-                    }
-                    
-                    var hasLargerValue:Bool = false
-                    
-                    for (index, item) in items[to].enumerate() {
-                        if(item.value > selectedLowerBound.value) {
-                            hasLargerValue = true
-                            return (index...items[to].count - 1)
-                        }
-                    }
-                    
-                    if(!hasLargerValue) {
-                        return nil
-                    }
+            var hasLargerValue:Bool = false
+            
+            for (index, item) in upperItems.enumerate() {
+                if(item.value > lowerSelectedValue) {
+                    hasLargerValue = true
+                    return (index...upperItems.count - 1)
                 }
             }
             
-            return nil
+            if(!hasLargerValue) {
+                return nil
+            }
         }
         
         ///Consider encapsulating items with any value in a class...
@@ -1046,6 +1060,10 @@
             case pricePicker:
                 targetItems = priceItems
                 targetUpperRange = priceUpperRange
+                
+                if(component == PickerConst.upperCompIdx) {
+                    Log.debug("Price targetUpperRange: \(targetUpperRange)")
+                }
             default:
                 assert(false,"Invalid picker view")
                 return nil
@@ -1054,11 +1072,16 @@
             let idxWithoutAnyValue = row - 1
             
             ///Upper values are limited to valus greater than the selected lower value
-            if(component == 1) {
+            if(component == PickerConst.upperCompIdx) {
                 if (targetUpperRange == nil) {
                     assert(false,"There should be no item except for any value")
                     return nil
                 }
+                
+                if(pickerView == pricePicker) {
+                    Log.debug("Index: \(idxWithoutAnyValue + targetUpperRange!.startIndex), Label: \(targetItems[component][idxWithoutAnyValue + targetUpperRange!.startIndex])")
+                }
+                
                 return targetItems[component][idxWithoutAnyValue + targetUpperRange!.startIndex]
             }
             
@@ -1081,6 +1104,10 @@
         func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
             
             if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
+                
+                if(pickerView == pricePicker && component == 1) {
+                    Log.debug("Upper Price: com = \(component), row = \(row), label = \(rowItem.label)")
+                }
                 
                 return rowItem.label
             } else {
@@ -1113,6 +1140,9 @@
                     return 1 //Only Any Value exisy
                 }
                 
+                if(pickerView == pricePicker) {
+                    Log.debug("Upper Price Num Items: \(numOfItemsWithAnyValue - targetUpperRange!.startIndex)")
+                }
                 return numOfItemsWithAnyValue - targetUpperRange!.startIndex
             }
             
@@ -1184,12 +1214,36 @@
             ///Try to refresh upper picker component items if lower component selection is changed
             if(component == PickerConst.lowerCompIdx) {
                 
+                var upperRangeDiff = 0
+                
                 switch(pickerView) {
                 case sizePicker:
-                    sizeUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+                    
+                    let prevStart = sizeUpperRange?.startIndex
+                    
+                    if let lowerSelected = getItemForPicker(sizePicker, component: PickerConst.lowerCompIdx, row: row) {
+                        sizeUpperRange = getUpperBoundRangeForPicker(lowerSelected.value, items: targetItems)
+                    } else {
+                        sizeUpperRange = getUpperBoundRangeForPicker(PickerConst.anyLower.value, items: targetItems)
+                    }
+                    
+                    if let sizeUpperRange = sizeUpperRange, prevStart = prevStart {
+                        upperRangeDiff =  sizeUpperRange.startIndex - prevStart
+                    }
                     
                 case pricePicker:
-                    priceUpperRange = getUpperBoundRangeForPicker(pickerView, items: targetItems)
+                    
+                    let prevStart = priceUpperRange?.startIndex
+                    
+                    if let lowerSelected = getItemForPicker(pricePicker, component: PickerConst.lowerCompIdx, row: row) {
+                        priceUpperRange = getUpperBoundRangeForPicker(lowerSelected.value, items: targetItems)
+                    } else {
+                        priceUpperRange = getUpperBoundRangeForPicker(PickerConst.anyLower.value, items: targetItems)
+                    }
+                    
+                    if let priceUpperRange = priceUpperRange, prevStart = prevStart  {
+                        upperRangeDiff =  priceUpperRange.startIndex - prevStart
+                    }
                     
                 default:
                     return
@@ -1199,7 +1253,14 @@
                 pickerView.reloadComponent(PickerConst.upperCompIdx)
                 
                 //Select the first item if the original selected item is not in range (Just a temp & consistent solution)
-                pickerView.selectRow(targetItems.startIndex, inComponent: PickerConst.upperCompIdx, animated: false)
+                var selectedRow = pickerView.selectedRowInComponent(PickerConst.upperCompIdx)
+                
+                if(selectedRow != PickerConst.upperBoundStartZero) {
+                    selectedRow = max(selectedRow - upperRangeDiff, PickerConst.upperBoundStartZero)
+                }
+                
+                
+                pickerView.selectRow(selectedRow, inComponent: PickerConst.upperCompIdx, animated: false)
             }
             
             //Update selection label
@@ -1222,16 +1283,16 @@
         
         // MARK: - UISearchBarDelegate
         func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-            NSLog("textDidChange: %@, %@", self, searchText)
+            Log.debug("textDidChange: \(self), \(searchText)")
             keywordTextChanged = true
         }
         func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-            NSLog("searchBarSearchButtonClicked: %@", self)
+            Log.debug("searchBarSearchButtonClicked: \(self)")
             searchBar.resignFirstResponder()
         }
         
         func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-            NSLog("searchBarTextDidEndEditing: %@", self)
+            Log.debug("searchBarTextDidEndEditing: \(self)")
             searchBar.resignFirstResponder()
             
             if(keywordTextChanged) {
@@ -1308,7 +1369,7 @@
                 
             }
             
-            Log.debug("\(currentCity)")
+            FileLog.debug("\(currentCity)")
             
             return currentCity
         }
@@ -1329,24 +1390,24 @@
         
         func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
             
-            Log.debug("Location update: \(manager.location?.coordinate)")
+            FileLog.debug("Location update: \(manager.location?.coordinate)")
             
             CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error) -> Void in
                 if let error = error {
-                    Log.debug("Reverse geocoder failed error = \(error.localizedDescription)")
+                    FileLog.debug("Reverse geocoder failed error = \(error.localizedDescription)")
                     return
                 }
                 
                 if let placemarks = placemarks where placemarks.count > 0 {
                     if let pm = placemarks.first {
                         
-                        Log.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
+                        FileLog.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
                         
                         let currentCity = self.getDefaultLocation(pm)
                         self.setRegionToCriteria(currentCity)
                     }
                 } else {
-                    Log.debug("Problem with the data received from geocoder")
+                    FileLog.debug("Problem with the data received from geocoder")
                     let currentCity = self.getDefaultLocation(nil)
                     self.setRegionToCriteria(currentCity)
                 }
@@ -1355,7 +1416,7 @@
         
         
         func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-            Log.debug("Updating location failed error = \(error.localizedDescription)")
+            FileLog.debug("Updating location failed error = \(error.localizedDescription)")
             
             let currentCity = self.getDefaultLocation(nil)
             self.setRegionToCriteria(currentCity)

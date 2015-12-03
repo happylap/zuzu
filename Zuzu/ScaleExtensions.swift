@@ -9,6 +9,8 @@
 import Foundation
 import Device
 
+private let Log = Logger.defaultLogger
+
 /// Definitions of all layout diementions for the base setting (iPhone 6)
 struct BaseLayoutConst {
     static let houseImageWidth:CGFloat = 174
@@ -33,9 +35,9 @@ internal func getCurrentScale() -> CGFloat{
     case .iPhone6Plus, .iPhone6SPlus:
         scale = ScaleConst.largeScale
     case .Simulator:
-        print("It's an simulator")
+        Log.debug("It's an simulator")
     default:
-        print("It's an unknown device")
+        Log.debug("It's an unknown device")
     }
 
     return scale
@@ -51,7 +53,7 @@ private func getScaledFontSize(baseFont: UIFont) -> CGFloat{
     
     scaledSize = round(baseSize * scale)
     
-    print("base = \(baseSize), scale = \(scale), scaledSize = \(scaledSize)")
+    Log.debug("base = \(baseSize), scale = \(scale), scaledSize = \(scaledSize)")
     
     return scaledSize
     
@@ -67,25 +69,20 @@ extension UIButton {
             switch Device.version() {
                 /*** iPhone ***/
             case .iPhone4, .iPhone4S, .iPhone5, .iPhone5C, .iPhone5S:
-                //print("It's an iPhone 4/5")
                 scale = ScaleConst.smallScale
                 scaledSize = floor(baseSize * scale)
             case .iPhone6, .iPhone6S:
-                //print("It's an iPhone 6/6S")
                 break
             case .iPhone6Plus, .iPhone6SPlus:
-                //print("It's an iPhone 6/6S Plus")
                 scale = ScaleConst.largeScale
                 scaledSize = ceil(baseSize * scale)
                 /*** Simulator ***/
             case .Simulator:
-                print("It's an  simulator")
+                Log.debug("It's an  simulator")
                 /*** Unknown ***/
             default:
-                print("It's an unknown device")
+                Log.debug("It's an unknown device")
             }
-            
-            //print("UIButton \(self), scale = \(scale), scaledSize = \(scaledSize)")
             
             self.layer.cornerRadius = scaledSize
             
