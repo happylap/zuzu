@@ -1119,8 +1119,6 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             
             
             if let cell = cell as? HouseDetailExpandableContentCell {
-                //cell.setNeedsLayout()
-                //cell.layoutIfNeeded()
                 
                 let contentHeight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
                 let labelHeight = cell.contentLabel.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
@@ -1141,10 +1139,11 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             NSLog("- Cell Instance [%p] Prepare Cell For Row[%d]", cell, indexPath.row)
             
             return cell
+            
+        } else {
+            assert(false, "No cellInfo for the row = \(indexPath.row)")
+            return UITableViewCell()
         }
-        
-        assert(false)
-        
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
