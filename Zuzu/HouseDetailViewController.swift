@@ -852,9 +852,7 @@ class HouseDetailViewController: UIViewController {
     }
     
     func shareButtonTouched(sender: UIButton) {
-        
-        var success = false
-        
+
         if let houseItemDetail = self.houseItemDetail,
             let houseLink = houseItemDetail.valueForKey("mobile_link") as? String {
                 
@@ -873,9 +871,10 @@ class HouseDetailViewController: UIViewController {
                     
                     let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
                     
-                    self.presentViewController(activityVC, animated: true, completion: nil)
+                    self.presentViewController(activityVC, animated: true, completion: { () -> Void in
+                    })
                     
-                    success = true
+                    
                 }
                 
         } else {
