@@ -1,5 +1,2 @@
 language: swift
 xcode_workspace: Zuzu.xcworkspace
-before_install:
-- gem install xcodeproj -v 0.24.3
-rvm: 2.0.0
