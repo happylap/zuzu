@@ -2,3 +2,4 @@ language: swift
 xcode_workspace: Zuzu.xcworkspace
 before_install:
 - gem install cocoapods
+rvm: 2.0.0
