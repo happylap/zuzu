@@ -73,6 +73,7 @@
 		2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */; };
 		2FE912741BFF796C00019053 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE912731BFF796C00019053 /* LoadingSpinner.swift */; };
 		2FE912761C045B0400019053 /* SearchCriteriaDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */; };
+		2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2FEC14CB1C15F41C000E652D /* .travis.yml */; };
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
@@ -194,6 +195,7 @@
 		2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlPopoverViewController.swift; sourceTree = "<group>"; };
 		2FE912731BFF796C00019053 /* LoadingSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
 		2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaDataStore.swift; sourceTree = "<group>"; };
+		2FEC14CB1C15F41C000E652D /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = searchCriteriaOptions.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 		2F482DE91BAFE09100C68670 = {
 			isa = PBXGroup;
 			children = (
+				2FEC14CB1C15F41C000E652D /* .travis.yml */,
 				2F31F5121BC2BC4400054355 /* .gitignore */,
 				2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */,
 				2F482DF41BAFE09100C68670 /* Zuzu */,
@@ -647,6 +650,7 @@
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
+				2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */,
 				2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */,
 				2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
