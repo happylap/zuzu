@@ -246,7 +246,7 @@
             if(fromTuple?.value == toTuple?.value) {
                 pickerStr = "\((toTuple?.label)!)"
             } else {
-                pickerStr = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
+                pickerStr = "\((fromTuple?.label)!) — \((toTuple?.label)!)"
             }
             
             return pickerStr
@@ -1190,7 +1190,7 @@
                 if(fromTuple?.label == toTuple?.label) {
                     targetLabel.text = "\((fromTuple?.label)!)"
                 } else {
-                    targetLabel.text = "\((fromTuple?.label)!) - \((toTuple?.label)!)"
+                    targetLabel.text = "\((fromTuple?.label)!) — \((toTuple?.label)!)"
                 }
                 
                 targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
