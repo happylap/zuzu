@@ -937,6 +937,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="1400"/>
                     <connections>
+                        <outlet property="debugBarButton" destination="9Py-vk-BeN" id="BpY-q0-oeK"/>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
                         <outlet property="smartFilterScrollView" destination="6D9-oo-jIk" id="MNX-Np-2pg"/>
                         <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>

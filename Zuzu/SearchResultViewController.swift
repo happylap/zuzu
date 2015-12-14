@@ -38,6 +38,17 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var debugBarButton: UIBarButtonItem! {
+        didSet {
+            #if DEBUG
+                debugBarButton.enabled = true
+            #else
+                debugBarButton.enabled = false
+            #endif
+
+        }
+    }
+    
     @IBOutlet weak var sortByPriceButton: UIButton!
     
     @IBOutlet weak var sortBySizeButton: UIButton!
@@ -52,6 +63,7 @@ class SearchResultViewController: UIViewController {
     private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
     
     var debugTextStr: String = ""
+    
     private let searchItemService : SearchItemService = SearchItemService.getInstance()
     private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
     private var lastContentOffset:CGFloat = 0
