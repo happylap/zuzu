@@ -681,16 +681,16 @@ class SearchResultViewController: UIViewController {
                         
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItem,
-                            label: "price", value:  houseItem.price)
+                            action: GAConst.Action.Activity.ViewItemPrice,
+                            label: String(houseItem.price))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItem,
-                            label: "size", value:  houseItem.size)
+                            action: GAConst.Action.Activity.ViewItemSize,
+                            label: String(houseItem.size))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItem,
-                            label: "type", value:  houseItem.purposeType)
+                            action: GAConst.Action.Activity.ViewItemType,
+                            label: String(houseItem.purposeType))
                     }
                 }
                 

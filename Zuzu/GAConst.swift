@@ -44,7 +44,11 @@ struct GAConst {
             
             static let ShareItem = "shareItem"
             
-            static let ViewItem = "viewItem"
+            static let ViewItemPrice = "viewItemPrice"
+            
+            static let ViewItemSize = "viewItemSize"
+            
+            static let ViewItemType = "viewItemType"
             
             static let ResetCriteria = "resetCriteria"
             
