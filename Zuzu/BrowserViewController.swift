@@ -11,6 +11,8 @@ import MBProgressHUD
 
 class BrowserViewController: UIViewController {
     
+    let viewTitle = "原始房源網頁"
+    
     var sourceLink: String?
     
     struct ViewTransConst {
@@ -48,7 +50,7 @@ class BrowserViewController: UIViewController {
         super.loadView()
         
         self.webView = WKWebView(frame: CGRectZero)
-        
+        self.title = viewTitle
     }
     
     override func viewDidLoad() {
