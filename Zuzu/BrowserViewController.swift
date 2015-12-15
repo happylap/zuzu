@@ -148,6 +148,65 @@ extension BrowserViewController: UrlPopoverViewControllerDelegate {
 
 extension BrowserViewController: WKNavigationDelegate {
     
+    private func makePhoneCallConfirmation(targetUrl: NSURL, phoneNum: String) {
+        
+        let alertView = UIAlertController(title: "確認撥打電話\n" + phoneNum, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let callAction = UIAlertAction(title: "撥打", style: .Default) { (action) -> Void in
+            
+            UIApplication.sharedApplication().openURL(targetUrl)
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .Cancel) { (action) -> Void in
+            
+        }
+        
+        alertView.addAction(callAction)
+        alertView.addAction(cancelAction)
+        
+        // Show Alert View
+        self.presentViewController(alertView, animated: true, completion: nil)
+    }
+    
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        
+        if let targetUrl = navigationAction.request.URL {
+            
+            if(targetUrl.scheme == "tel") {
+                
+                if(UIApplication.sharedApplication().canOpenURL(targetUrl)) {
+                    
+                    if let phoneNum = targetUrl.absoluteString.characters.split(":").last {
+                    
+                        makePhoneCallConfirmation(targetUrl, phoneNum: String(phoneNum))
+                        
+                    }
+                    
+                    decisionHandler(WKNavigationActionPolicy.Cancel)
+                }
+                
+                return
+            }
+            
+            if(targetUrl.scheme == "mailto") {
+                
+                if(UIApplication.sharedApplication().canOpenURL(targetUrl)) {
+                    
+                    UIApplication.sharedApplication().openURL(targetUrl)
+                    
+                    decisionHandler(WKNavigationActionPolicy.Cancel)
+                }
+                
+                return
+            }
+            
+            decisionHandler(WKNavigationActionPolicy.Allow)
+            
+        } else {
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+        }
+    }
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         LoadingSpinner.shared.stop()
     }
