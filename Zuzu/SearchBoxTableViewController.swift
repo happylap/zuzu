@@ -106,7 +106,30 @@
             var regionLabel = "不限"
             
             if let regionSelection = regionSelection {
-                if(regionSelection.count > 0) {
+                /// We can display more info when only one city is selected
+                if(regionSelection.count == 1) {
+                    
+                    var labelStr:String?
+                    
+                    if let city = regionSelection.first {
+                        
+                        if(city.regions.count == 1) {
+                            if let regionName = city.regions.first?.name {
+                                labelStr = ("\(city.name) (\(regionName))")
+                            } else {
+                                labelStr = ("\(city.name) (\(city.regions.count))")
+                            }
+                        } else {
+                            labelStr = ("\(city.name) (\(city.regions.count))")
+                        }
+                    }
+                    
+                    if let labelStr = labelStr {
+                        regionLabel = labelStr
+                    }
+                    
+                } else if(regionSelection.count > 1) {
+                    
                     var labelStr:[String] = [String]()
                     var numOfCity = 0
                     for city in regionSelection {
