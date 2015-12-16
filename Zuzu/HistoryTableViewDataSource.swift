@@ -71,13 +71,36 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
+        var itemSize = 0
+        
         if(searchData == nil) {
-            return 0
+            itemSize = 0
+        }else {
+            itemSize = searchData!.count
         }
         
-        Log.debug("Number of search history = \(searchData!.count)")
+        Log.debug("Number of search history = \(itemSize)")
         
-        return searchData!.count
+        let noSearchHistoryLabel = tableViewController.noSearchHistoryLabel
+        
+        if (itemSize == 0) {
+            
+            if(itemType == .SavedSearch) {
+                noSearchHistoryLabel.text = "尚無任何儲存的\"常用搜尋\"\n\n不妨嘗試在搜尋結果頁，把當前搜尋條件儲存起來"
+                noSearchHistoryLabel.sizeToFit()
+                noSearchHistoryLabel.hidden = false
+            }
+            
+            if(itemType == .HistoricalSearch) {
+                noSearchHistoryLabel.text = "尚無任何\"搜尋紀錄\"\n\n日後任何的搜尋紀錄，都會記錄在這邊，方便查找"
+                noSearchHistoryLabel.sizeToFit()
+                noSearchHistoryLabel.hidden = false
+            }
+        } else {
+            noSearchHistoryLabel.hidden = true
+        }
+        
+        return itemSize
     }
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
