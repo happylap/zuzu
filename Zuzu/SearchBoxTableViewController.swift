@@ -62,6 +62,9 @@
             static let upperCompIdx = 1
         }
         
+        // UILabel for empty search lisy
+        let noSearchHistoryLabel = UILabel()
+        
         var locationManagerActive = false {
             didSet {
                 if(locationManagerActive) {
@@ -333,6 +336,32 @@
             //Set delegate & datasource
             searchItemTable.dataSource = searchItemTableDataSource
             searchItemTable.delegate = searchItemTableDataSource
+            
+            //Add the message when no search history
+            
+            if let contentView = searchItemTable.superview {
+                
+                noSearchHistoryLabel.translatesAutoresizingMaskIntoConstraints = false
+                noSearchHistoryLabel.textAlignment = NSTextAlignment.Center
+                noSearchHistoryLabel.numberOfLines = -1
+                noSearchHistoryLabel.font = UIFont.systemFontOfSize(16)
+                noSearchHistoryLabel.textColor = UIColor.colorWithRGB(0x2E2E2E)
+                noSearchHistoryLabel.sizeToFit()
+                noSearchHistoryLabel.hidden = true
+                contentView.addSubview(noSearchHistoryLabel)
+                
+                
+                let xConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+                
+                let yConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+                
+                let leftConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+                
+                let rightConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: 8)
+                
+                contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+                
+            }
         }
         
         
