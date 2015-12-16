@@ -26,9 +26,12 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKl-Yc-iBw" userLabel="Sort By Price Button">
                                         <rect key="frame" x="0.0" y="0.0" width="341" height="109"/>
                                         <animations/>
+                                        <color key="backgroundColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="tintColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="租金">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="gNq-Yz-Ljp"/>
@@ -37,9 +40,12 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ma9-FJ-x4v" userLabel="Sort By Size Button">
                                         <rect key="frame" x="341" y="0.0" width="341" height="109"/>
                                         <animations/>
+                                        <color key="backgroundColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="tintColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="坪數">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="9HF-0V-M9n"/>
@@ -48,9 +54,12 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK7-Cq-xWf" userLabel="Sort By Post Time Button">
                                         <rect key="frame" x="682" y="0.0" width="341" height="109"/>
                                         <animations/>
+                                        <color key="backgroundColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <state key="normal" title="刊登時間">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="收藏時間">
+                                            <color key="titleColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="1Zt-bJ-3KA"/>
@@ -59,7 +68,7 @@
                                     </button>
                                 </subviews>
                                 <animations/>
-                                <color key="backgroundColor" red="0.30706797009999998" green="0.80789839659999996" blue="0.65081127760000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="ma9-FJ-x4v" firstAttribute="baseline" secondItem="SKl-Yc-iBw" secondAttribute="baseline" id="44X-Gj-cEs"/>
                                     <constraint firstItem="pK7-Cq-xWf" firstAttribute="baseline" secondItem="ma9-FJ-x4v" secondAttribute="baseline" id="8u5-ob-Fm1"/>
@@ -281,7 +290,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xEL-Hn-43X" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="我的收藏" image="main_collection_n" id="apk-kY-GBX"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JnO-pT-KBX">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JnO-pT-KBX" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>

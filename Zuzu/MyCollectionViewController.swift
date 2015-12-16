@@ -14,27 +14,62 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     let cellReuseIdentifier = "houseItemCell"
     
-    var houseList: [House] = []
-    
     var fetchedResultsController: NSFetchedResultsController!
     
-    var sortingStatus = [String: Bool]()  // SortingField Name, Ascending
+    private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
+    
+    
+    // MARK: - Member Fields
+    
+    @IBOutlet weak var sortByPriceButton: UIButton!
+    
+    @IBOutlet weak var sortBySizeButton: UIButton!
+    
+    @IBOutlet weak var sortByPostTimeButton: UIButton!
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: - Private Utils
+    
+    private func configureTableView() {
+        
+        tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+    }
+    
+    private func configureSortingButtons() {
+        let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
+        self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+    }
     
     private func loadData() {
+        self.loadDataBy(nil, ascending: nil)
+    }
+    
+    private func loadDataBy(sortingField: String?, ascending: Bool?) {
         NSLog("%@ loadData", self)
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         
-        if !sortingStatus.isEmpty {
-            for (sortingField, _ascending) in sortingStatus {
-                print("\(sortingField): \(_ascending)")
-                fetchRequest.sortDescriptors = [NSSortDescriptor(key: sortingField, ascending: _ascending)]
-            }
+        var _sortingField = "title"
+        var _ascending = true
+        
+        if sortingField != nil {
+            _sortingField = sortingField!
         }
-        else {
-            let defaultSorting = NSSortDescriptor(key: "title", ascending: true)
-            fetchRequest.sortDescriptors = [defaultSorting]
+        
+        if ascending != nil {
+            _ascending = ascending!
         }
+        
+        print("loadData by \(_sortingField) \(_ascending)")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: _sortingField, ascending: _ascending)]
+        
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         
@@ -71,35 +106,67 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
     }
 
-    private func sortByField(button: UIButton, sortingOrder: String) {
+    private func sortByField(sortingField:String, sortingOrder:String) {
+        
+        NSLog("Sorting = %@ %@", sortingField, sortingOrder)
+
+        self.sortingStatus[sortingField] = sortingOrder
+        
+        //self.loadData()
+        if sortingOrder == HouseItemDocument.Sorting.sortAsc {
+            self.loadDataBy(sortingField, ascending: true)
+        } else {
+            self.loadDataBy(sortingField, ascending: false)
+        }
+        
+        updateSortingButton(sortingField, sortingOrder: sortingOrder)
+    }
+    
+    private func updateSortingButton(field: String, sortingOrder: String) {
+        
+        var targetButton: UIButton!
+        
+        switch field {
+        case HouseItemDocument.price:
+            targetButton = sortByPriceButton
+        case  HouseItemDocument.size:
+            targetButton = sortBySizeButton
+        case "postTime":
+            targetButton = sortByPostTimeButton
+        default: break
+        }
+        
         ///Switch from other sorting fields
-        if (!button.selected) {
+        if(!targetButton.selected) {
             ///Disselect all & Clear all sorting icon for Normal state
             sortByPriceButton.selected = false
-            sortByPriceButton.setImage(nil, forState: UIControlState.Normal)
+            sortByPriceButton.setImage(nil,
+                forState: UIControlState.Normal)
             
             sortBySizeButton.selected = false
-            sortBySizeButton.setImage(nil, forState: UIControlState.Normal)
+            sortBySizeButton.setImage(nil,
+                forState: UIControlState.Normal)
             
             sortByPostTimeButton.selected = false
-            sortByPostTimeButton.setImage(nil, forState: UIControlState.Normal)
+            sortByPostTimeButton.setImage(nil,
+                forState: UIControlState.Normal)
             
             ///Select the one specified by hte user
-            button.selected = true
+            targetButton.selected = true
         }
         
         
         ///Set image for selected state
         if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
-            button.setImage(UIImage(named: "sort-ascending"),
+            targetButton.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Selected)
-            button.setImage(UIImage(named: "sort-ascending"),
+            targetButton.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Normal)
             
         } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
-            button.setImage(UIImage(named: "sort-descending"),
+            targetButton.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Selected)
-            button.setImage(UIImage(named: "sort-descending"),
+            targetButton.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Normal)
             
         } else {
@@ -107,34 +174,22 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
     }
     
+    
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
         NSLog("%@ onShowNoteEditorTouched", self)
         
         self.performSegueWithIdentifier("showNotes", sender: sender)
-        
-        
-
-        
-        
-//        if let imgView = sender.view {
-//        
-//        }
     }
     
     
     
-    @IBOutlet weak var sortByPriceButton: UIButton!
-    @IBOutlet weak var sortBySizeButton: UIButton!
-    @IBOutlet weak var sortByPostTimeButton: UIButton!
-    @IBOutlet weak var tableView: UITableView!
     
     // MARK: - Control Action Handlers
     
     @IBAction func onSortingButtonTouched(sender: UIButton) {
-        NSLog("%@ onSortingButtonTouched", self)
         
-        var sortingField: String?
-        var sortingOrder: String?
+        var sortingField: String!
+        var sortingOrder: String!
         
         switch sender {
         case sortByPriceButton:
@@ -143,46 +198,57 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             sortingField = HouseItemDocument.size
         case sortByPostTimeButton:
             sortingField = "postTime"
-        default: break
+        default:
+            assert(false, "Unknown sorting type")
+            break
         }
         
-        if let fieldName = sortingField {
-            if self.sortingStatus.keys.contains(fieldName) {
-                self.sortingStatus[fieldName] = (self.sortingStatus[fieldName] == true ? false : true)
-            }
-            else {
-                self.sortingStatus = [fieldName: true]
+        if(sender.selected) { ///Touch on an already selected button
+            
+            if let status = sortingStatus[sortingField] {
+                
+                ///Reverse the previous sorting order
+                
+                sortingOrder = ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc)
+                
+            } else {
+                
+                assert(false, "Incorrect sorting status")
+                
             }
             
-            sortingOrder = (self.sortingStatus[fieldName] == true ? HouseItemDocument.Sorting.sortAsc : HouseItemDocument.Sorting.sortDesc)
+        } else { ///Switched from other sorting buttons
+            
+            if let status = self.sortingStatus[sortingField] {
+                
+                ///Use the previous sorting order
+                sortingOrder = status
+                
+            } else {
+                
+                ///Use Default Ordering Asc
+                sortingOrder = HouseItemDocument.Sorting.sortAsc
+            }
         }
         
+        sortByField(sortingField, sortingOrder: sortingOrder)
         
-        NSLog("%@ onSortingButtonTouched: \(sortingField)", self)
-        
-        self.loadData()
-        
-        if let sortingOrder = sortingOrder {
-            self.sortByField(sender, sortingOrder: sortingOrder)
-        }
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting, action: sortingField, label: sortingOrder)
     }
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NSLog("%@ viewDidLoad", self)
         
-        tableView.estimatedRowHeight = tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
+        //Configure cell height
+        configureTableView()
         
-        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
-    
         //Configure Sorting Status
-        let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
-        self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
-        self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
-        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        configureSortingButtons()
         
         // Load the first page of data
         self.loadData()
@@ -210,10 +276,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                 NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
                 
                 let destController = segue.destinationViewController as! MyCollectionDetailViewController
-                if let houseItem: House = self.houseList[indexPath.row] {
+                
+                if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
                     destController.houseItem = houseItem
                 }
-                
             }
         }
         
@@ -250,8 +316,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NSLog("%@ tableView Count: \(self.houseList.count)", self)
-        //return self.houseList.count
         let sectionInfo = fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
         return sectionInfo.numberOfObjects
     }
