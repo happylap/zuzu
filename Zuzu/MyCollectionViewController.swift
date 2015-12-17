@@ -25,7 +25,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBOutlet weak var sortBySizeButton: UIButton!
     
-    @IBOutlet weak var sortByPostTimeButton: UIButton!
+    @IBOutlet weak var sortByCollectTimeButton: UIButton!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -44,7 +44,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
         self.sortByPriceButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
         self.sortBySizeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
-        self.sortByPostTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
+        self.sortByCollectTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
     }
     
     private func loadData() {
@@ -131,8 +131,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             targetButton = sortByPriceButton
         case  HouseItemDocument.size:
             targetButton = sortBySizeButton
-        case "postTime":
-            targetButton = sortByPostTimeButton
+        case "collectTime":
+            targetButton = sortByCollectTimeButton
         default: break
         }
         
@@ -147,8 +147,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             sortBySizeButton.setImage(nil,
                 forState: UIControlState.Normal)
             
-            sortByPostTimeButton.selected = false
-            sortByPostTimeButton.setImage(nil,
+            sortByCollectTimeButton.selected = false
+            sortByCollectTimeButton.setImage(nil,
                 forState: UIControlState.Normal)
             
             ///Select the one specified by hte user
@@ -198,8 +198,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             sortingField = HouseItemDocument.price
         case sortBySizeButton:
             sortingField = HouseItemDocument.size
-        case sortByPostTimeButton:
-            sortingField = "postTime"
+        case sortByCollectTimeButton:
+            sortingField = "collectTime"
         default:
             assert(false, "Unknown sorting type")
             break

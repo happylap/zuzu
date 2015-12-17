@@ -74,5 +74,6 @@ public class House: NSManagedObject {
     
     /* */
     @NSManaged var contacted: Bool
+    @NSManaged var collectTime: NSDate
 
 }

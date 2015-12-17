@@ -59,6 +59,7 @@ class HouseDao: NSObject {
             let model = NSEntityDescription.entityForName(EntityTypes.House.rawValue, inManagedObjectContext: context)
             
             let house = House(entity: model!, insertIntoManagedObjectContext: context)
+            house.collectTime = NSDate()
             
             if model != nil {
                 //var article = model as Article;

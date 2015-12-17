@@ -51,7 +51,7 @@
                                             <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="9HF-0V-M9n"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK7-Cq-xWf" userLabel="Sort By Post Time Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK7-Cq-xWf" userLabel="Sort By Collect Time Button">
                                         <rect key="frame" x="682" y="0.0" width="341" height="109"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.15686274509803921" green="0.77647058823529413" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
@@ -110,7 +110,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="1024" height="800"/>
                     <connections>
-                        <outlet property="sortByPostTimeButton" destination="pK7-Cq-xWf" id="FO9-de-4Te"/>
+                        <outlet property="sortByCollectTimeButton" destination="pK7-Cq-xWf" id="kh2-oz-KVT"/>
                         <outlet property="sortByPriceButton" destination="SKl-Yc-iBw" id="5Uf-8q-Xdg"/>
                         <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
                         <outlet property="tableView" destination="Bbm-3e-fwq" id="qjJ-rk-Dpf"/>
