@@ -655,7 +655,7 @@ class HouseDetailViewController: UIViewController {
         /// Add bar items from right to left
         var barItems = [UIBarButtonItem]()
         
-        if(FeatureOption.enableCollection) {
+        if(FeatureOption.Collection.enableMain) {
             barItems.append(collectItem)
         }
         

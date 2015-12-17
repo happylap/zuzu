@@ -23,9 +23,19 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
         
         
+        var tabViewControllers = [UIViewController]()
         
-        self.viewControllers =
-            [searchViewController, collectionViewController, radarViewController]
+        tabViewControllers.append(searchViewController)
+        
+        if(FeatureOption.Collection.enableMain) {
+            tabViewControllers.append(collectionViewController)
+        }
+        
+        if(FeatureOption.Radar.enableMain) {
+            tabViewControllers.append(radarViewController)
+        }
+        
+        self.viewControllers = tabViewControllers
         
         self.delegate = self
         
@@ -45,7 +55,7 @@ extension UITabBarController {
     var tabBarHidden: Bool {
         
         set {
-            if(FeatureOption.enableCollection || FeatureOption.enableZadar) {
+            if(FeatureOption.Collection.enableMain || FeatureOption.Radar.enableMain) {
                 tabBar.hidden = newValue
             } else {
                 tabBar.hidden = true

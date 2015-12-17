@@ -741,7 +741,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         cell.houseItem = houseItem
         
-        if(FeatureOption.enableCollection) {
+        if(FeatureOption.Collection.enableMain) {
             
             /// Enable add to collection button
             cell.addToCollectionButton.hidden = false
