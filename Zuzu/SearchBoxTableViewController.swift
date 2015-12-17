@@ -363,24 +363,26 @@
             //Add the message when no search history
             
             if let contentView = searchItemTable.superview {
-                
+
                 noSearchHistoryLabel.translatesAutoresizingMaskIntoConstraints = false
                 noSearchHistoryLabel.textAlignment = NSTextAlignment.Center
                 noSearchHistoryLabel.numberOfLines = -1
-                noSearchHistoryLabel.font = UIFont.systemFontOfSize(16)
-                noSearchHistoryLabel.textColor = UIColor.colorWithRGB(0x2E2E2E)
-                noSearchHistoryLabel.sizeToFit()
+                noSearchHistoryLabel.font = UIFont.systemFontOfSize(14)
+                noSearchHistoryLabel.textColor = UIColor.grayColor()
                 noSearchHistoryLabel.hidden = true
                 contentView.addSubview(noSearchHistoryLabel)
                 
-                
                 let xConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+                xConstraint.priority = UILayoutPriorityRequired
                 
                 let yConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+                yConstraint.priority = UILayoutPriorityRequired
                 
                 let leftConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+                leftConstraint.priority = UILayoutPriorityDefaultLow
                 
-                let rightConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: 8)
+                let rightConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+                rightConstraint.priority = UILayoutPriorityDefaultLow
                 
                 contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
                 
