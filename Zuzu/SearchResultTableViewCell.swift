@@ -206,8 +206,8 @@ class SearchResultTableViewCell: UITableViewCell {
                 }
             }
             */
+            self.addToCollectionButton.hidden = !FeatureOption.Collection.enableNote
             
-            self.addToCollectionButton.hidden = false
             self.houseTitleForCollection.hidden = false
             self.prefixedButton.hidden = false
             self.contactedView.hidden = !(house.contacted)

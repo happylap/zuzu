@@ -178,7 +178,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
         NSLog("%@ onShowNoteEditorTouched", self)
         
-        self.performSegueWithIdentifier("showNotes", sender: sender)
+        if FeatureOption.Collection.enableNote {
+            self.performSegueWithIdentifier("showNotes", sender: sender)
+        }
     }
     
     
