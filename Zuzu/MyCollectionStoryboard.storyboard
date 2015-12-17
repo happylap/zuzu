@@ -63,7 +63,6 @@
                                         </state>
                                         <connections>
                                             <action selector="onSortingButtonTouched:" destination="JEf-c3-Mui" eventType="touchDown" id="1Zt-bJ-3KA"/>
-                                            <segue destination="n73-o7-CN9" kind="modal" identifier="showNotes" modalTransitionStyle="crossDissolve" id="iiw-Zl-8Jj"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -115,11 +114,12 @@
                         <outlet property="sortByPriceButton" destination="SKl-Yc-iBw" id="5Uf-8q-Xdg"/>
                         <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
                         <outlet property="tableView" destination="Bbm-3e-fwq" id="qjJ-rk-Dpf"/>
+                        <segue destination="n73-o7-CN9" kind="modal" identifier="showNotes" modalTransitionStyle="crossDissolve" id="KRq-Pu-eHg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q3l-lU-wOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="252" y="1253"/>
+            <point key="canvasLocation" x="240" y="1319"/>
         </scene>
         <!--My Note View Controller-->
         <scene sceneID="kjJ-ca-Q3l">
@@ -282,7 +282,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Py-OJ-Zcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1096" y="1253"/>
+            <point key="canvasLocation" x="1105" y="1208"/>
         </scene>
         <!--我的收藏-->
         <scene sceneID="NCv-ef-QSc">

@@ -269,40 +269,33 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        NSLog("%@ prepareForSegue", self)
-        
-        if segue.identifier == "showMyCollectionDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                NSLog("%@ segue to showMyCollectionDetail: \(indexPath)", self)
-                
-                let destController = segue.destinationViewController as! MyCollectionDetailViewController
-                
-                if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-                    destController.houseItem = houseItem
-                }
-            }
-        }
-        
-        if segue.identifier == "showNotes" {
-//            NSLog("%@ segue to showNotes: \(indexPath)", self)
-            let destController = segue.destinationViewController as! MyNoteViewController
-//            if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-//                destController.houseItem = houseItem
-//            }
+        if let identifier = segue.identifier {
             
-            if let sender = sender as? UITapGestureRecognizer {
-                if let imgView = sender.view {
-                    if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
-                        let indexPath = cell.indexPath
-                        NSLog("%@ segue to showNotes: \(indexPath)", self)
-                        if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-                            destController.houseItem = houseItem
+            NSLog("%@ prepareForSegue", self)
+            
+            switch identifier {
+                
+            case "showMyCollectionDetail":
+                break
+                
+            case "showNotes":
+                let destController = segue.destinationViewController as! MyNoteViewController
+                if let sender = sender as? UITapGestureRecognizer {
+                    if let imgView = sender.view {
+                        if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
+                            let indexPath = cell.indexPath
+                            NSLog("%@ segue to showNotes: \(indexPath)", self)
+                            if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+                                
+                                NSLog("%@ segue to showNotes: house title: \(houseItem.title)", self)
+                                destController.houseItem = houseItem
+                            }
                         }
                     }
                 }
+                
+            default: break
             }
-            
-            
         }
 
     }
