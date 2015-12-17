@@ -538,25 +538,38 @@ class SearchResultViewController: UIViewController {
             
             if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                 
+                ///Get current house ID
                 let indexPath = cell.indexPath
                 let houseItem = self.dataSource.getItemForRow(indexPath.row)
                 
-                HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+                if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
                     
-                    if let error = error {
-                        NSLog("Cannot get remote data %@", error.localizedDescription)
-                        return
-                    }
+                    let houseDao = HouseDao.sharedInstance
+                    houseDao.deleteById(houseItem.id)
                     
-                    if let result = result {
-                        let houseDao = HouseDao.sharedInstance
-                        houseDao.addHouse(result, save: true)
-                        self.alertAddingToCollectionSuccess()
+                    // Reload collection list
+                    self.collectionIdList = houseDao.getHouseIdList()
+                    
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                
+                } else {
+                    HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                         
-                        // Reload collection list
-                        self.collectionIdList = houseDao.getHouseIdList()
+                        if let error = error {
+                            NSLog("Cannot get remote data %@", error.localizedDescription)
+                            return
+                        }
                         
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        if let result = result {
+                            let houseDao = HouseDao.sharedInstance
+                            houseDao.addHouse(result, save: true)
+                            self.alertAddingToCollectionSuccess()
+                            
+                            // Reload collection list
+                            self.collectionIdList = houseDao.getHouseIdList()
+                            
+                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        }
                     }
                 }
             }
