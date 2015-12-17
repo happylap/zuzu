@@ -9,6 +9,15 @@
 import Foundation
 
 struct FeatureOption {
-    static let enableCollection = false
-    static let enableZadar = false
+    struct Collection {
+        ///The main Collection function
+        static let enableMain = false
+        
+        /// The sub module depending on the main function
+        static let enableNote = false
+    }
+
+    struct Radar {
+        static let enableMain = false ///The main Radar function
+    }
 }

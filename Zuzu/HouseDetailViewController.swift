@@ -655,7 +655,7 @@ class HouseDetailViewController: UIViewController {
         /// Add bar items from right to left
         var barItems = [UIBarButtonItem]()
         
-        if(FeatureOption.enableCollection) {
+        if(FeatureOption.Collection.enableMain) {
             barItems.append(collectItem)
         }
         
@@ -884,16 +884,16 @@ class HouseDetailViewController: UIViewController {
         ///GA Tracker
         if let houseItem = houseItem {
             self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ShareItem,
-                label: "price", value:  houseItem.price)
+                action: GAConst.Action.Activity.ShareItemPrice,
+                label: String(houseItem.price))
             
             self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ShareItem,
-                label: "size", value:  houseItem.size)
+                action: GAConst.Action.Activity.ShareItemSize,
+                label: String(houseItem.size))
             
             self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ShareItem,
-                label: "type", value:  houseItem.purposeType)
+                action: GAConst.Action.Activity.ShareItemType,
+                label: String(houseItem.purposeType))
         }
         
     }

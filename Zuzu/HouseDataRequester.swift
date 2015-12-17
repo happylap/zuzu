@@ -10,6 +10,9 @@ import Foundation
 import SwiftyJSON
 
 struct SolrConst {
+    
+    static let DefaultPhraseSlope = 2
+    
     struct Server {
         static let SCHEME = "http"
         static let HOST = "ec2-52-76-69-228.ap-southeast-1.compute.amazonaws.com"
@@ -254,7 +257,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             // Main Query String (Keyword)
             if let keywordStr = keyword{
                 if(keywordStr.characters.count > 0) {
-                    let escapedStr = StringUtils.escapeForSolrString(keywordStr)
+                    let escapedStr = String(format: "\"%@\"~%d", StringUtils.escapeForSolrString(keywordStr), SolrConst.DefaultPhraseSlope)
                     mainQueryStr =
                         "title:\(escapedStr) \(SolrConst.Operator.OR) " +
                         "desc:\(escapedStr) \(SolrConst.Operator.OR) " +
