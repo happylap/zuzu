@@ -641,7 +641,19 @@ class HouseDetailViewController: UIViewController {
         shareButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         
         let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
-        collectButton.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+        
+        if let houseItem = self.houseItem {
+            if(HouseDao.sharedInstance.isExist(houseItem.id)) {
+                
+                collectButton.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+                
+            } else {
+                
+                collectButton.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                
+            }
+        }
+        
         collectButton.addTarget(self, action: "collectButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
         collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         
@@ -852,7 +864,7 @@ class HouseDetailViewController: UIViewController {
     }
     
     func shareButtonTouched(sender: UIButton) {
-
+        
         if let houseItemDetail = self.houseItemDetail,
             let houseLink = houseItemDetail.valueForKey("mobile_link") as? String {
                 
@@ -899,10 +911,31 @@ class HouseDetailViewController: UIViewController {
     }
     
     func collectButtonTouched(sender: UIButton){
-        if let houseItemDetail = self.houseItemDetail {
-            let houseDao = HouseDao.sharedInstance
-            houseDao.addHouse(houseItemDetail, save: true)
-            self.alertAddingToCollectionSuccess()
+        if let houseItemDetail = self.houseItemDetail,
+            let houseId = houseItemDetail.valueForKey("id") as? String {
+                
+                let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
+                
+                let houseDao = HouseDao.sharedInstance
+                
+                ///Determine action based on whether the house item is already in "My Collection"
+                if(HouseDao.sharedInstance.isExist(houseId)) {
+                    
+                    houseDao.deleteById(houseItemDetail.id)
+                    
+                    if let barItem = barItem {
+                        barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                    }
+                    
+                } else {
+                    
+                    houseDao.addHouse(houseItemDetail, save: true)
+                    self.alertAddingToCollectionSuccess()
+                    
+                    if let barItem = barItem {
+                        barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+                    }
+                }
         }
     }
     
