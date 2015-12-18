@@ -256,6 +256,8 @@ class HouseDetailViewController: UIViewController {
                             if hasParking,
                                 let parkingType = houseDetail.valueForKey("parking_type") as? Int {
                                     parkingTypeLabel = self.houseTypeLabelMaker.fromCodeForField("parking_type", code: parkingType, defaultValue: "")
+                            } else {
+                                parkingTypeLabel = "有"
                             }
                         }
                         
