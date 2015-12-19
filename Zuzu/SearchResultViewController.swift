@@ -211,14 +211,14 @@ class SearchResultViewController: UIViewController {
             
             ///GA Tracker
             if let duration = dataSource.loadingDuration {
-                self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000,
+                self.trackTimeForCurrentScreen("Networkdata", interval: Int(duration * 1000),
                     name: "searchHouse", label: String(error.code))
             }
         } else {
             
             ///GA Tracker
             if let duration = dataSource.loadingDuration {
-                self.trackTimeForCurrentScreen("Networkdata", interval: duration * 1000, name: "searchHouse")
+                self.trackTimeForCurrentScreen("Networkdata", interval: Int(duration * 1000), name: "searchHouse")
             }
         }
         

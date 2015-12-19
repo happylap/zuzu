@@ -363,7 +363,7 @@
             //Add the message when no search history
             
             if let contentView = searchItemTable.superview {
-
+                
                 noSearchHistoryLabel.translatesAutoresizingMaskIntoConstraints = false
                 noSearchHistoryLabel.textAlignment = NSTextAlignment.Center
                 noSearchHistoryLabel.numberOfLines = -1
@@ -689,37 +689,31 @@
         
         @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
             
-            var targetUrl:String?
+            var gaLabel:String = "empty url"
             var result = false
             
             ///Open by Facebook App
             if let url = NSURL(string: "fb://profile/1675724006047703") {
-                
-                if(UIApplication.sharedApplication().canOpenURL(url)) {
-                    
-                    result = UIApplication.sharedApplication().openURL(url)
-                    targetUrl = url.absoluteString
+                result = UIApplication.sharedApplication().openURL(url)
+                if(result) {
+                    gaLabel = url.absoluteString
                 }
-                
             }
             
             ///Open by Browser
             if(!result) {
                 if let url = NSURL(string: "https://www.facebook.com/zuzutw") {
-                    
-                    if(UIApplication.sharedApplication().canOpenURL(url)) {
-                        
-                        result = UIApplication.sharedApplication().openURL(url)
-                        targetUrl = url.absoluteString
+                    result = UIApplication.sharedApplication().openURL(url)
+                    if(result) {
+                        gaLabel = url.absoluteString
                     }
-                    
                 }
             }
             
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                 action: GAConst.Action.Activity.FanPage,
-                label: targetUrl ?? "", value: Int(result))
+                label: gaLabel)
             
             
         }
