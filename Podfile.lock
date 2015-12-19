@@ -26,6 +26,7 @@ PODS:
   - GoogleAuthUtilities (1.0.1):
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleSymbolUtilities (~> 1.0)
+  - GoogleIDFASupport (3.14.0)
   - GoogleInterchangeUtilities (1.1.0):
     - GoogleSymbolUtilities (~> 1.0)
   - GoogleMaps (1.10.5)
@@ -61,6 +62,7 @@ DEPENDENCIES:
   - Google/AdMob
   - Google/Analytics
   - Google/SignIn
+  - GoogleIDFASupport
   - GoogleMaps
   - MarqueeLabel
   - MBProgressHUD (~> 0.9.1)
@@ -79,6 +81,7 @@ SPEC CHECKSUMS:
   GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
   GoogleAuthUtilities: 049ffd3a297cdffd271451b82fd4e75304f15ef3
+  GoogleIDFASupport: aaf8c10bd429abb1c15349d5252244f5eda8ead1
   GoogleInterchangeUtilities: d7f7174176fbcf9710f696f1acebad4dbd98ac03
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
   GoogleMobileAds: 97392919ee98f23202431221ffb36e9fbaeb1bdc
