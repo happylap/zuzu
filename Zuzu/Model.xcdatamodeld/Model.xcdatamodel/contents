@@ -7,6 +7,7 @@
         <attribute name="allowCooking" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="allowPet" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="collectTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="community" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="contacted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="coordinate" optional="YES" attributeType="String" syncable="YES"/>
@@ -56,7 +57,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="House" positionX="-180" positionY="-2602" width="128" height="750"/>
+        <element name="House" positionX="-180" positionY="-2602" width="128" height="765"/>
         <element name="Note" positionX="72" positionY="-1981" width="128" height="105"/>
     </elements>
 </model>
