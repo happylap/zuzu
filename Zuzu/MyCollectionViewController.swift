@@ -54,6 +54,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     private func loadDataBy(sortingField: String?, ascending: Bool?) {
         NSLog("%@ loadData", self)
         
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(view)
+        
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         
         var _sortingField = "title"
@@ -83,6 +87,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             print("\(fetchError), \(fetchError.userInfo)")
         }
         
+        LoadingSpinner.shared.stop()
         self.tableView.reloadData()
     }
     
