@@ -234,6 +234,8 @@ class SearchResultTableViewCell: UITableViewCell {
             let purposeTypeStr = self.getUsageString(Int(house.usage)) ?? ""
             self.houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
             
+            prpcessSourceString(houseSourceLabel, source: Int(house.source))
+            
             self.houseImg.image = placeholderImg
             
             if house.img?.count > 0 {
