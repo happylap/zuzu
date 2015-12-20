@@ -14,8 +14,8 @@ struct GAConst {
         ///Common UI event
         static let Activity = "activity"
         
-        ///Criteria event
-        static let Criteria = "criteria"
+        ///SearchHouse event
+        static let SearchHouse = "searchHouse"
         
         ///Filter event
         static let SmartFilter = "smartFilter"
@@ -24,6 +24,9 @@ struct GAConst {
         
         ///Sorting event
         static let Sorting = "sorting"
+        
+        ///Blocking event
+        static let Blocking = "blocking"
         
         ///Error event
         static let Error = "error"
@@ -60,7 +63,7 @@ struct GAConst {
             
         }
         
-        struct Criteria {
+        struct SearchHouse {
             
             static let Keyword = "keyword"
             
@@ -75,6 +78,14 @@ struct GAConst {
             static let SizeMax = "sizeMax"
             
             static let SizeMin = "sizeMin"
+            
+            static let SearchResult = "SearchResult"
+        }
+
+        
+        struct Blocking {
+            
+            static let NoSearchResult = "NoSearchResult"
             
         }
         
@@ -95,6 +106,10 @@ struct GAConst {
         struct Contact {
             static let Phone = "phone"
             static let Email = "email"
+        }
+        
+        struct SearchResult {
+            static let Number = "number"
         }
     }
     
