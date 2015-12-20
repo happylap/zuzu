@@ -949,38 +949,38 @@
                         dispatch_async(GlobalBackgroundQueue) {
                             
                             if let keyword = self.currentCriteria.keyword {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.Keyword, label: keyword)
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                    action: GAConst.Action.SearchHouse.Keyword, label: keyword)
                             }
                             
                             if let priceRange = self.currentCriteria.price {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.PriceMin,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                    action: GAConst.Action.SearchHouse.PriceMin,
                                     label: String(priceRange.0))
                                 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.PriceMax,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                    action: GAConst.Action.SearchHouse.PriceMax,
                                     label: String(priceRange.1))
                             }
                             
                             if let sizeRange = self.currentCriteria.size {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.SizeMin,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                    action: GAConst.Action.SearchHouse.SizeMin,
                                     label: String(sizeRange.0))
                                 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                    action: GAConst.Action.Criteria.SizeMax,
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                    action: GAConst.Action.SearchHouse.SizeMax,
                                     label: String(sizeRange.1))
                             }
                             
                             if let types = self.currentCriteria.types {
                                 for type in types {
-                                    self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                        action: GAConst.Action.Criteria.Type, label: String(type))
+                                    self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                        action: GAConst.Action.SearchHouse.Type, label: String(type))
                                 }
                             } else {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria, action:
-                                    GAConst.Action.Criteria.Type, label: "99")
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse, action:
+                                    GAConst.Action.SearchHouse.Type, label: "99")
                             }
                             
                         }
@@ -1394,8 +1394,8 @@
                 if let cities = self.regionSelectionState {
                     for city in cities {
                         for region in city.regions {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Criteria,
-                                action: GAConst.Action.Criteria.Region + String(city.code), label: String(region.code))
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                action: GAConst.Action.SearchHouse.Region + String(city.code), label: String(region.code))
                         }
                     }
                 }

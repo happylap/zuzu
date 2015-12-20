@@ -45,7 +45,7 @@ class SearchResultViewController: UIViewController {
             #else
                 debugBarButton.enabled = false
             #endif
-
+            
         }
     }
     
@@ -225,10 +225,21 @@ class SearchResultViewController: UIViewController {
         LoadingSpinner.shared.stop()
         self.stopSpinner()
         
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+            action: GAConst.Action.SearchHouse.SearchResult,
+            label: GAConst.Label.SearchResult.Number,
+            value: dataSource.estimatedTotalResults)
+        
         if(dataSource.estimatedTotalResults > 0) {
             self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
         } else {
             self.navigationItem.title = "查無資料"
+
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                action: GAConst.Action.Blocking.NoSearchResult,
+                label: HouseDataRequester.getInstance().urlComp.URL?.query)
         }
         
         self.tableView.reloadData()
@@ -551,7 +562,7 @@ class SearchResultViewController: UIViewController {
                     self.collectionIdList = houseDao.getHouseIdList()
                     
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                
+                    
                 } else {
                     HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                         
