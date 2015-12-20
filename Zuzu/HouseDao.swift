@@ -229,6 +229,7 @@ class HouseDao: NSObject {
         let img = data["img"].arrayObject as? [String] ?? [String]()
         let postTime: NSDate? = dateFormatter.dateFromString(data["post_time"].stringValue)
         let coordinate = data["coordinate"].stringValue
+        let source = data["source"].int32Value
         
         house.id = id
         house.link = link
@@ -282,6 +283,7 @@ class HouseDao: NSObject {
         house.img = img
         house.postTime = postTime
         house.coordinate = coordinate
+        house.source = source
         
         house.contacted = false
 //        house.notes = NSOrderedSet()

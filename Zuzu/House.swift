@@ -71,6 +71,8 @@ public class House: NSManagedObject {
     @NSManaged var img: [String]?
     @NSManaged var postTime: NSDate?
     @NSManaged var coordinate: String?
+    @NSManaged var source: Int32
+    
     
     /* */
     @NSManaged var contacted: Bool
