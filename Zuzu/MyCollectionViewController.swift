@@ -179,6 +179,19 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
     }
     
+    private func convertToHouseItem(house: House) -> HouseItem {
+        let houseItem:HouseItem = HouseItem.Builder(id: house.id)
+            .addTitle(house.title)
+            .addAddr(house.addr)
+            .addHouseType(Int(house.type))
+            .addPurposeType(Int(house.usage))
+            .addPrice(Int(house.price))
+            .addSize(Int(house.size))
+            .addSource(Int(house.source))
+            .addImageList(house.img)
+            .build()
+        return houseItem
+    }
     
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
         NSLog("%@ onShowNoteEditorTouched", self)
@@ -187,6 +200,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             self.performSegueWithIdentifier("showNotes", sender: sender)
         }
     }
+    
     
     
     
@@ -282,7 +296,30 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             
             switch identifier {
                 
-            case "showMyCollectionDetail":
+            case "showHouseDetail":
+                NSLog("%@ showHouseDetail", self)
+                if let hdvc = segue.destinationViewController as? HouseDetailViewController {
+                    if let indexPath = tableView.indexPathForSelectedRow {
+                        if let house: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+                            if let houseItem: HouseItem = self.convertToHouseItem(house) {
+                            hdvc.houseItem = houseItem
+                        
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                                action: GAConst.Action.Activity.ViewItemPrice,
+                                label: String(houseItem.price))
+                        
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                                action: GAConst.Action.Activity.ViewItemSize,
+                                label: String(houseItem.size))
+                        
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                                action: GAConst.Action.Activity.ViewItemType,
+                                label: String(houseItem.purposeType))
+                            }
+                        }
+                    }
+                }
                 break
                 
             case "showNotes":
@@ -342,28 +379,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     
-    
-    //    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    //
-    //        let callActionHandler = { (action: UIAlertAction!) -> Void in
-    //            let alertMessage = UIAlertController(title: "Service Unavailable", message: "Sorry, the call feature is not available yet. Please retry later.", preferredStyle: .Alert)
-    //            alertMessage.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-    //            self.presentViewController(alertMessage, animated: true, completion: nil)
-    //        }
-    //
-    //        let optionMenu = UIAlertController(title: nil, message: "確認聯絡李先生 (代理人)", preferredStyle: .ActionSheet)
-    //
-    //        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-    //        optionMenu.addAction(cancelAction)
-    //
-    //        let house = self.data[indexPath.row]
-    //        let phone = house.valueForKey("phone")?[0] as? String
-    //        let callAction = UIAlertAction(title: "手機: \(phone!)", style: .Default, handler: callActionHandler)
-    //        optionMenu.addAction(callAction)
-    //
-    //        self.presentViewController(optionMenu, animated: true, completion: nil)
-    //    }
-    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("showHouseDetail", sender: self)
+    }
     
     // MARK: - Table Edit Mode
     
