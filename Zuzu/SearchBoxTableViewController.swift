@@ -689,20 +689,17 @@
         
         @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
             
-            var gaLabel:String = "empty url"
+            let fbUrl = "https://www.facebook.com/zuzutw"
+            let fbAppUrl = "fb://profile/1675724006047703"
+            
+            var gaLabel:String?
             var result = false
             
             ///Open by Facebook App
-            if let url = NSURL(string: "fb://profile/1675724006047703") {
-                result = UIApplication.sharedApplication().openURL(url)
-                if(result) {
-                    gaLabel = url.absoluteString
-                }
-            }
-            
-            ///Open by Browser
-            if(!result) {
-                if let url = NSURL(string: "https://www.facebook.com/zuzutw") {
+            if let url = NSURL(string: fbAppUrl) {
+                
+                if (UIApplication.sharedApplication().canOpenURL(url)) {
+                    
                     result = UIApplication.sharedApplication().openURL(url)
                     if(result) {
                         gaLabel = url.absoluteString
@@ -710,10 +707,24 @@
                 }
             }
             
+            ///FB failed, Open by Browser
+            if(!result) {
+                if let url = NSURL(string: fbUrl) {
+                    
+                    if (UIApplication.sharedApplication().canOpenURL(url)) {
+                        
+                        result = UIApplication.sharedApplication().openURL(url)
+                        if(result) {
+                            gaLabel = url.absoluteString
+                        }
+                    }
+                }
+            }
+            
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                 action: GAConst.Action.Activity.FanPage,
-                label: gaLabel)
+                label: gaLabel ?? "Open fan page failed")
             
             
         }
