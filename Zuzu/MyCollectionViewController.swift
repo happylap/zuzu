@@ -278,7 +278,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -295,33 +294,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             NSLog("%@ prepareForSegue", self)
             
             switch identifier {
-                
-            case "showHouseDetail":
-                NSLog("%@ showHouseDetail", self)
-                if let hdvc = segue.destinationViewController as? HouseDetailViewController {
-                    if let indexPath = tableView.indexPathForSelectedRow {
-                        if let house: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-                            if let houseItem: HouseItem = self.convertToHouseItem(house) {
-                            hdvc.houseItem = houseItem
-                        
-                            ///GA Tracker
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                                action: GAConst.Action.Activity.ViewItemPrice,
-                                label: String(houseItem.price))
-                        
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                                action: GAConst.Action.Activity.ViewItemSize,
-                                label: String(houseItem.size))
-                        
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                                action: GAConst.Action.Activity.ViewItemType,
-                                label: String(houseItem.purposeType))
-                            }
-                        }
-                    }
-                }
-                break
-                
             case "showNotes":
                 let destController = segue.destinationViewController as! MyNoteViewController
                 if let sender = sender as? UITapGestureRecognizer {
@@ -380,7 +352,31 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier("showHouseDetail", sender: self)
+        
+        let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                if let house: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+                    if let houseItem: HouseItem = self.convertToHouseItem(house) {
+                        vc.houseItem = houseItem
+                        
+                        ///GA Tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItemPrice,
+                            label: String(houseItem.price))
+                        
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItemSize,
+                            label: String(houseItem.size))
+                        
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                            action: GAConst.Action.Activity.ViewItemType,
+                            label: String(houseItem.purposeType))
+                    }
+                }
+            }
+            self.showViewController(vc, sender: self)
+        }
     }
     
     // MARK: - Table Edit Mode

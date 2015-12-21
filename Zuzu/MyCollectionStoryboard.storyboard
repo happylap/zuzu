@@ -115,7 +115,6 @@
                         <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
                         <outlet property="tableView" destination="Bbm-3e-fwq" id="qjJ-rk-Dpf"/>
                         <segue destination="n73-o7-CN9" kind="modal" identifier="showNotes" modalTransitionStyle="crossDissolve" id="KRq-Pu-eHg"/>
-                        <segue destination="wI5-sV-Hj0" kind="push" identifier="showHouseDetail" id="SJ4-9k-Qx8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q3l-lU-wOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -284,16 +283,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Py-OJ-Zcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1136" y="1629"/>
-        </scene>
-        <!--HouseDetailView-->
-        <scene sceneID="Lbp-5L-zQO">
-            <objects>
-                <viewControllerPlaceholder storyboardName="SearchStoryboard" referencedIdentifier="HouseDetailView" id="wI5-sV-Hj0" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="rP2-aD-J6R"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mLU-2k-x2q" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1043.5" y="1106"/>
         </scene>
         <!--我的收藏-->
         <scene sceneID="NCv-ef-QSc">
