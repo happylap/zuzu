@@ -11,6 +11,9 @@ import Foundation
 enum EntityTypes: String {
     case House = "House"
     case Note = "Note"
+    case AbstractHouseItem = "AbstractHouseItem"
+    case CollectionHouseItem = "CollectionHouseItem"
+    case NotificationHouseItem = "NotificationHouseItem"
     
     static let getAll = [House, Note]
 }
