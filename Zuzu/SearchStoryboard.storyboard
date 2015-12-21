@@ -955,7 +955,7 @@
         <!--House Detail-->
         <scene sceneID="r06-4y-ETW">
             <objects>
-                <viewController title="House Detail" automaticallyAdjustsScrollViewInsets="NO" id="RI5-UG-EkB" customClass="HouseDetailViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HouseDetailView" title="House Detail" automaticallyAdjustsScrollViewInsets="NO" id="RI5-UG-EkB" customClass="HouseDetailViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sr3-gP-XzE"/>
                         <viewControllerLayoutGuide type="bottom" id="z6L-pd-X4C"/>
