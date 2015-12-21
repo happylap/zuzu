@@ -2,7 +2,7 @@
 //  CollectionHouseItem+CoreDataProperties.swift
 //  Zuzu
 //
-//  Created by 李桄瑋 on 2015/12/21.
+//  Created by Ted on 2015/12/21.
 //  Copyright © 2015年 Jung-Shuo Pai. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu

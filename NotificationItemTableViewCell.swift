@@ -2,15 +2,16 @@
 //  NotificationItemTableViewCell.swift
 //  Zuzu
 //
-//  Created by 李桄瑋 on 2015/12/17.
+//  Created by Ted on 2015/12/17.
 //  Copyright © 2015年 Jung-Shuo Pai. All rights reserved.
 //
 
 import UIKit
 
+
 class NotificationItemTableViewCell: UITableViewCell
 {
-    var notificationItem:HouseItem?
+    var notificationItem:NotificationHouseItem?
         {
         didSet{
             updateUI()
@@ -50,7 +51,7 @@ class NotificationItemTableViewCell: UITableViewCell
             postTimeLabel?.text = "2015/12/17"
             var housetypeString = ""
             var purpose = ""
-            switch item.houseType{
+            switch item.houseType {
                 case 1: housetypeString = "整層住家"
                 case 2: housetypeString = "獨立套房"
                 case 3: housetypeString = "分租套房"
@@ -60,11 +61,11 @@ class NotificationItemTableViewCell: UITableViewCell
             }
 
             switch item.purposeType{
-            case 1: purpose = "公寓"
-            case 2: purpose = "電梯大樓"
-            case 3: purpose = "透天厝"
-            case 4: purpose = "別墅"
-            default: break
+                case 1: purpose = "公寓"
+                case 2: purpose = "電梯大樓"
+                case 3: purpose = "透天厝"
+                case 4: purpose = "別墅"
+                default: break
             }
             houseTypeLabel?.text = "\(housetypeString)/\(purpose)"
             houseSizeLabel?.text = "\(item.size)坪"
