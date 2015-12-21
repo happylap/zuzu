@@ -21,6 +21,7 @@ class HouseItemDaoTemplate: NSObject
     }
     
     // MARK: - Read Function
+    
     func isExist(id: String) -> Bool {
         let fetchRequest = NSFetchRequest(entityName: self.entityName)
         let findByIdPredicate = NSPredicate(format: "id = %@", id)
@@ -30,6 +31,7 @@ class HouseItemDaoTemplate: NSObject
     }
     
     // MARK: - Get Function
+    
     func get(id: String) -> AbstractHouseItem? {
         NSLog("%@ get: \(id)", self)
         // Create request on House entity
@@ -98,6 +100,19 @@ class HouseItemDaoTemplate: NSObject
     
     func deleteAll() {
         CoreDataManager.shared.deleteTable(self.entityName)
+    }
+
+    // MARK: Update Function
+    
+    func updateByObjectId(objectId: NSManagedObjectID, dataToUpdate: [String: AnyObject]) {
+        if let item = CoreDataManager.shared.get(objectId) {
+            for (key, value) in dataToUpdate {
+                if let _ = item.valueForKey(key) {
+                    item.setValue(value, forKey: key)
+                }
+            }
+            CoreDataManager.shared.save()
+        }
     }
     
     // MARK: Commit Function
