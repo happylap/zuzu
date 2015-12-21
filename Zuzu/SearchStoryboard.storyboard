@@ -534,6 +534,9 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" id="6YQ-kr-34O">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="onNotificationBarItemClick:" destination="avK-Pq-NJf" id="Whj-k2-vrh"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -543,6 +546,7 @@
                         <outlet property="cityRegionLabel" destination="FCR-lF-Oap" id="B8M-A6-p4O"/>
                         <outlet property="clearCriteriaButton" destination="Cmt-TC-vyL" id="Gen-W2-7ET"/>
                         <outlet property="fastItemCountLabel" destination="xyz-ye-gDa" id="mUv-vQ-Zh8"/>
+                        <outlet property="notificationBarItem" destination="6YQ-kr-34O" id="bb9-LS-E66"/>
                         <outlet property="priceLabel" destination="JtX-7c-kdz" id="6LR-6F-Yln"/>
                         <outlet property="pricePicker" destination="x5j-6v-vLD" id="SE4-pj-mX3"/>
                         <outlet property="searchBar" destination="1hN-63-3Vs" id="BQk-5d-Yhw"/>

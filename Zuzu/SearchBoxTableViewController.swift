@@ -217,6 +217,13 @@
             }
         }
         
+        @IBOutlet weak var notificationBarItem: UIBarButtonItem!{
+            didSet{
+                notificationBarItem.title = "Notification"
+                notificationBarItem.enabled = true
+            }
+        }
+        
         @IBOutlet weak var fastItemCountLabel: UILabel!
         @IBOutlet weak var cityRegionLabel: UILabel!
         @IBOutlet weak var sizeLabel: UILabel!
@@ -686,6 +693,12 @@
         
         
         //The UI control event handler Should not be private
+        
+        @IBAction func onNotificationBarItemClick(sender: UIBarButtonItem) {
+            let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier("NotificationItemsTableViewController") as UIViewController
+            self.showViewController(vc, sender: self)
+        }
         
         @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
             
