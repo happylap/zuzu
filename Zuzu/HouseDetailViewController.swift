@@ -1004,6 +1004,9 @@ class HouseDetailViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
+        ///Display tab bar
+        self.tabBarController!.tabBarHidden = false
+        
         LoadingSpinner.shared.stop()
     }
     
