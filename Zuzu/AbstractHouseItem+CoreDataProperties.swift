@@ -58,8 +58,9 @@ extension AbstractHouseItem {
     @NSManaged var surrounding: NSObject?
     @NSManaged var title: String?
     @NSManaged var totalFloor: NSNumber?
-    @NSManaged var type: NSNumber?
+    @NSManaged var houseType: NSNumber?
     @NSManaged var usage: NSNumber?
     @NSManaged var wallMtl: String?
+    @NSManaged var purposeType: NSNumber?
 
 }
