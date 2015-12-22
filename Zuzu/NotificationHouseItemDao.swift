@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class NotificationHouseItemDao: HouseItemDaoTemplate
+class NotificationHouseItemDao: AbstractHouseItemDao
 {
     class var sharedInstance: NotificationHouseItemDao {
         struct Singleton {
@@ -19,12 +19,13 @@ class NotificationHouseItemDao: HouseItemDaoTemplate
         return Singleton.instance
     }
     
-    // MARK: - Override HouseItemDaoTemplate
+    // MARK: - AbstractHouseItemDao overriding function
 
     override var entityName: String{
         return EntityTypes.NotificationHouseItem.rawValue
     }
     
+    // Only add item, but not commit to DB
     override func add(jsonObj: AnyObject) {
         if let id = jsonObj.valueForKey("id") as? String {
             if self.isExist(id) {
@@ -41,6 +42,7 @@ class NotificationHouseItemDao: HouseItemDaoTemplate
             
             if model != nil {
                 notificationItem.fromJSON(jsonObj)
+                notificationItem.isRead = false
                 notificationItem.notificationTime = NSDate()
             }
         }

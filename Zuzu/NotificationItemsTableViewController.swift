@@ -15,14 +15,18 @@ struct NotificationItemsTableConst {
 class NotificationItemsTableViewController: UITableViewController {
 
     var notificationItems = [NotificationHouseItem]()
+    let notificationService = NotificationItemService.sharedInstance
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        doMockData()
+        refresh()
+        NSLog("isRead:\(notificationItems[0].isRead)")
         //tableView.estimatedRowHeight = tableView.rowHeight
         //tableView.rowHeight = UITableViewAutomaticDimension
-        refresh()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -58,21 +62,49 @@ class NotificationItemsTableViewController: UITableViewController {
         return cell
     }
     
-
+    // MARK: - Data manipulation Function
+    
     func refresh(){
-        doMockData()
-        if let result = NotificationHouseItemDao.sharedInstance.getAll(){
-            self.notificationItems = result as! [NotificationHouseItem]
+        if let result = self.notificationService.getAll(){
+            self.notificationItems = result
             NSLog("data count: \(notificationItems.count)")
             self.tableView.reloadData()
         }
         tableView.reloadData()
     }
     
+    func deleteRow(indexPath: NSIndexPath){
+        let item = notificationItems[indexPath.row]
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        self.notificationService.deleteItem(item)
+    }
+    
+    
+    // MARK: - swipe-left-to-delete
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if(editingStyle == .Delete) {
+            deleteRow(indexPath)
+        }
+    }
+
+    // MARK: - select item action
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+
+        let item = notificationItems[indexPath.row]
+        item.isRead = true
+        var data = Dictionary<String, AnyObject>()
+        data["isRead"] = item.isRead
+        self.notificationService.updateItem(item, dataToUpdate: data)
+
+    }
+    
     func doMockData(){
         var data = Dictionary<String, AnyObject>()
         data["source"] = 1
-        data["id"] = "aaa"
+        data["id"] = "bbc"
         data["link"] = ""
         data["mobile_link"] = ""
         data["title"] = "中山馥臨捷運美宅"
@@ -82,8 +114,12 @@ class NotificationItemsTableViewController: UITableViewController {
         data["purpose_type"] = 1
         data["house_type"] = 1
         data["price"] = 10000
-        data["size"] = 20
-        NotificationHouseItemDao.sharedInstance.add(data, isCommit: true)
+        data["size"] = 2000
+        let item = self.notificationService.getItem("12345678")
+        if item == nil{
+            print("item is nil")
+        }
+        //self.notificationService.addItem(data)
     }
 
     /*

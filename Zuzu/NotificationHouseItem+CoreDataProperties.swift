@@ -14,7 +14,7 @@ import CoreData
 
 extension NotificationHouseItem {
 
-    @NSManaged var isRead: NSNumber?
+    @NSManaged var isRead: Bool
     @NSManaged var notificationTime: NSDate?
 
 }

@@ -1,5 +1,5 @@
 //
-//  HouseItemDaoTemplate
+//  AbstractHouseItemDao
 //  Zuzu
 //
 //  Created by Ted on 2015/12/21.
@@ -9,13 +9,14 @@
 import Foundation
 import CoreData
 
-class HouseItemDaoTemplate: NSObject
+class AbstractHouseItemDao: NSObject
 {
     // MARK: - Requird Override Function
     var entityName: String{
         preconditionFailure("entityName property must be overridden")
     }
     
+    // Only add item, but not commit to DB
     func add(jsonObj: AnyObject) {
         preconditionFailure("This method must be overridden")
     }
@@ -85,11 +86,7 @@ class HouseItemDaoTemplate: NSObject
         }
     }
     
-    // MARK: Delete Function
-    func deleteItem(item: AbstractHouseItem) {
-        self.delete(item.id)
-    }
-    
+    // MARK: Delete Function    
     func deleteByID(id: String) {
         NSLog("%@ deleteByID: \(id)", self)
         if let item = self.get(id) {

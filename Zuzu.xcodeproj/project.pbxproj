@@ -16,9 +16,9 @@
 		14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FA31C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift */; };
 		14914FA61C27D26D00025AC1 /* AbstractHouseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FA41C27D26D00025AC1 /* AbstractHouseItem.swift */; };
 		14914FA81C27D7E800025AC1 /* NotificationHouseItemDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FA71C27D7E800025AC1 /* NotificationHouseItemDao.swift */; };
-		14914FAA1C27F7B400025AC1 /* HouseItemDaoTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FA91C27F7B400025AC1 /* HouseItemDaoTemplate.swift */; };
+		14914FAA1C27F7B400025AC1 /* AbstractHouseItemDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FA91C27F7B400025AC1 /* AbstractHouseItemDao.swift */; };
 		14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */; };
-		14914FB21C2836DB00025AC1 /* NotificationFacadeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FB11C2836DB00025AC1 /* NotificationFacadeService.swift */; };
+		14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FB11C2836DB00025AC1 /* NotificationItemService.swift */; };
 		2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */; };
 		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; };
 		2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */; };
@@ -140,9 +140,9 @@
 		14914FA31C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AbstractHouseItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		14914FA41C27D26D00025AC1 /* AbstractHouseItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractHouseItem.swift; sourceTree = "<group>"; };
 		14914FA71C27D7E800025AC1 /* NotificationHouseItemDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHouseItemDao.swift; sourceTree = "<group>"; };
-		14914FA91C27F7B400025AC1 /* HouseItemDaoTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemDaoTemplate.swift; sourceTree = "<group>"; };
+		14914FA91C27F7B400025AC1 /* AbstractHouseItemDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractHouseItemDao.swift; sourceTree = "<group>"; };
 		14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionHouseItemDao.swift; sourceTree = "<group>"; };
-		14914FB11C2836DB00025AC1 /* NotificationFacadeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationFacadeService.swift; sourceTree = "<group>"; };
+		14914FB11C2836DB00025AC1 /* NotificationItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemService.swift; sourceTree = "<group>"; };
 		2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayLabelMaker.swift; sourceTree = "<group>"; };
 		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentTableDataSource.swift; sourceTree = "<group>"; };
@@ -284,14 +284,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		14914FB31C2836E600025AC1 /* Facade */ = {
-			isa = PBXGroup;
-			children = (
-				14914FB11C2836DB00025AC1 /* NotificationFacadeService.swift */,
-			);
-			name = Facade;
-			sourceTree = "<group>";
-		};
 		2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,7 +367,6 @@
 		2F482DF41BAFE09100C68670 /* Zuzu */ = {
 			isa = PBXGroup;
 			children = (
-				14914FB31C2836E600025AC1 /* Facade */,
 				2FBC054F1BDE6E0E0035652D /* Application */,
 				2FBC05531BDE6F0A0035652D /* Controller */,
 				2F276B361BBED52200A41306 /* Collection */,
@@ -445,6 +436,7 @@
 		2FBC054E1BDE6D860035652D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				14914FB11C2836DB00025AC1 /* NotificationItemService.swift */,
 				81FA281D1BDA39C20038DD19 /* Router.swift */,
 				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
 			);
@@ -478,7 +470,7 @@
 				2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */,
 				81FA28081BDA397B0038DD19 /* HouseDao.swift */,
 				14914FA71C27D7E800025AC1 /* NotificationHouseItemDao.swift */,
-				14914FA91C27F7B400025AC1 /* HouseItemDaoTemplate.swift */,
+				14914FA91C27F7B400025AC1 /* AbstractHouseItemDao.swift */,
 				81FA28121BDA39B10038DD19 /* NoteDao.swift */,
 			);
 			name = Dao;
@@ -789,7 +781,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14914FAA1C27F7B400025AC1 /* HouseItemDaoTemplate.swift in Sources */,
+				14914FAA1C27F7B400025AC1 /* AbstractHouseItemDao.swift in Sources */,
 				2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */,
 				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,
 				2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */,
@@ -822,7 +814,7 @@
 				81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */,
 				81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
-				14914FB21C2836DB00025AC1 /* NotificationFacadeService.swift in Sources */,
+				14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */,
 				81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */,
 				81FA28091BDA397B0038DD19 /* House.swift in Sources */,
 				14632AAD1C27B608008C9A2D /* NotificationItemTableViewCell.swift in Sources */,

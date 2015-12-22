@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class CollectionHouseItemDao: HouseItemDaoTemplate
+class CollectionHouseItemDao: AbstractHouseItemDao
 {
     class var sharedInstance: CollectionHouseItemDao {
         struct Singleton {
@@ -19,12 +19,13 @@ class CollectionHouseItemDao: HouseItemDaoTemplate
         return Singleton.instance
     }
     
-    // MARK: - HouseItemDaoTemplate overriding function
+    // MARK: - AbstractHouseItemDao overriding function
     
     override var entityName: String{
         return EntityTypes.CollectionHouseItem.rawValue
     }
     
+    // Only add item, but not commit to DB
     override func add(jsonObj: AnyObject) {
         if let id = jsonObj.valueForKey("id") as? String {
             if self.isExist(id) {
