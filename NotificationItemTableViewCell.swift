@@ -67,10 +67,18 @@ class NotificationItemTableViewCell: UITableViewCell
                 case 4: purpose = "別墅"
                 default: break
             }
+            
             houseTypeLabel?.text = "\(housetypeString)/\(purpose)"
             houseSizeLabel?.text = "\(item.size)坪"
             housePriceLabel?.text = "\(item.price)元"
             houseImage?.image = UIImage(named:"591")
+            
+            if item.isRead == false{
+                //self.backgroundColor = UIColor(red: 0, green: 200, blue: 50, alpha: 0.2)
+                self.backgroundColor = UIColor.colorWithRGB(0xE7F9F8, alpha: 1)
+            }
+            
+            
         }
     }
 }

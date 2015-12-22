@@ -73,9 +73,9 @@ class NotificationItemsTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    func deleteRow(indexPath: NSIndexPath){
-        let item = notificationItems[indexPath.row]
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    func deleteRow(row: Int){
+        let item = notificationItems[row]
+        notificationItems.removeAtIndex(row)
         self.notificationService.deleteItem(item)
     }
     
@@ -83,9 +83,9 @@ class NotificationItemsTableViewController: UITableViewController {
     // MARK: - swipe-left-to-delete
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
         if(editingStyle == .Delete) {
-            deleteRow(indexPath)
+            deleteRow(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
 
@@ -104,7 +104,7 @@ class NotificationItemsTableViewController: UITableViewController {
     func doMockData(){
         var data = Dictionary<String, AnyObject>()
         data["source"] = 1
-        data["id"] = "bbc"
+        data["id"] = "12"
         data["link"] = ""
         data["mobile_link"] = ""
         data["title"] = "中山馥臨捷運美宅"
@@ -115,11 +115,7 @@ class NotificationItemsTableViewController: UITableViewController {
         data["house_type"] = 1
         data["price"] = 10000
         data["size"] = 2000
-        let item = self.notificationService.getItem("12345678")
-        if item == nil{
-            print("item is nil")
-        }
-        //self.notificationService.addItem(data)
+        self.notificationService.addItem(data)
     }
 
     /*
