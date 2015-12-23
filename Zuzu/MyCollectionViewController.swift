@@ -179,6 +179,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
     }
     
+    // This can be delete, use AbstractHouseItem.toHouseItem() instead
     private func convertToHouseItem(house: House) -> HouseItem {
         let houseItem:HouseItem = HouseItem.Builder(id: house.id)
             .addTitle(house.title)

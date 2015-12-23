@@ -83,7 +83,6 @@
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fsa-yX-UKW">
                                             <rect key="frame" x="0.0" y="0.0" width="86" height="116.5"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Fsa-yX-UKW" secondAttribute="height" multiplier="80:109" id="AXa-qn-8X2"/>
                                                 <constraint firstAttribute="width" secondItem="Fsa-yX-UKW" secondAttribute="height" multiplier="4:5" id="F9x-lz-i6F"/>

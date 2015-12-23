@@ -143,4 +143,17 @@ class AbstractHouseItem: NSManagedObject {
         houseItem.source = source
     }
 
+    func toHouseItem() -> HouseItem {
+        let houseItem:HouseItem = HouseItem.Builder(id: self.id)
+            .addTitle(self.title)
+            .addAddr(self.addr)
+            .addHouseType(Int(self.houseType))
+            .addPurposeType(Int(self.purposeType))
+            .addPrice(Int(self.price))
+            .addSize(Int(self.size))
+            .addSource(Int(self.source))
+            .addImageList(self.img)
+            .build()
+        return houseItem
+    }
 }

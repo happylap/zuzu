@@ -74,11 +74,20 @@ class NotificationItemTableViewCell: UITableViewCell
             houseImage?.image = UIImage(named:"591")
             
             if item.isRead == false{
-                //self.backgroundColor = UIColor(red: 0, green: 200, blue: 50, alpha: 0.2)
-                self.backgroundColor = UIColor.colorWithRGB(0xE7F9F8, alpha: 1)
+                self.contentView.backgroundColor = UIColor.colorWithRGB(0xE7F9F8, alpha: 1)
             }
             
             
+            let placeholderImg = UIImage(named: "house_img")
+            
+            if let imgString = item.img?.first,
+                let imgUrl = NSURL(string: imgString){
+                    
+                    self.houseImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
+                        NSLog("Img loading done, status = \(response?.statusCode)")
+                    }
+                    
+            }
         }
     }
 }
