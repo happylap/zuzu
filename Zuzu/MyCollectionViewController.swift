@@ -29,6 +29,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBOutlet weak var tableView: UITableView!
     
+    // UILabel for empty collection list
+    let noCollectionLabel = UILabel()
+    
     // MARK: - Private Utils
     
     private func configureTableView() {
@@ -37,7 +40,35 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         tableView.rowHeight = UITableViewAutomaticDimension
         
+        //Remove extra cells when the table height is smaller than the screen
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        
         self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+        
+        if let contentView = tableView.superview {
+            noCollectionLabel.translatesAutoresizingMaskIntoConstraints = false
+            noCollectionLabel.textAlignment = NSTextAlignment.Center
+            noCollectionLabel.numberOfLines = -1
+            noCollectionLabel.font = UIFont.systemFontOfSize(14)
+            noCollectionLabel.textColor = UIColor.grayColor()
+            noCollectionLabel.hidden = true
+            contentView.addSubview(noCollectionLabel)
+            
+            let xConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+            
+            let leftConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            leftConstraint.priority = UILayoutPriorityDefaultLow
+            
+            let rightConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            rightConstraint.priority = UILayoutPriorityDefaultLow
+            
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+            
+        }
     }
     
     private func configureSortingButtons() {
@@ -252,14 +283,15 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         NSLog("%@ viewDidLoad", self)
         
+        // Load the first page of data
+        self.loadData()
+        
         //Configure cell height
         configureTableView()
         
         //Configure Sorting Status
         configureSortingButtons()
         
-        // Load the first page of data
-        self.loadData()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -312,8 +344,20 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
-        return sectionInfo.numberOfObjects
+        var count = 0
+        
+        if let sectionInfo: NSFetchedResultsSectionInfo = fetchedResultsController.sections![section] {
+            count = sectionInfo.numberOfObjects
+        }
+        
+        noCollectionLabel.hidden = true
+        if count == 0 {
+            noCollectionLabel.text = "尚無任何儲存的收藏物件\n\n不妨嘗試在搜尋結果頁，把有興趣的租屋物件儲存起來"
+            noCollectionLabel.sizeToFit()
+            noCollectionLabel.hidden = false
+        }
+        
+        return count
     }
     
     
