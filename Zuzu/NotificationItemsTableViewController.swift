@@ -110,10 +110,8 @@ class NotificationItemsTableViewController: UITableViewController {
         if let item = self.notificationItems?[indexPath.row]{
             if item.isRead == false{
                 setRead(item)
+                tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
             }
-
-            let selectedCell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-            selectedCell.contentView.backgroundColor = UIColor.whiteColor()
             
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier("HouseDetailView") as! HouseDetailViewController
