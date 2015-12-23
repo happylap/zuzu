@@ -27,7 +27,7 @@ class CollectionHouseItemDao: AbstractHouseItemDao
     
     override func add(jsonObj: AnyObject, isCommit: Bool) -> CollectionHouseItem? {
         if let collectItem = super.add(jsonObj, isCommit: false) as? CollectionHouseItem{
-            //collectItem.contacted = false
+            collectItem.contacted = false
             collectItem.collectTime = NSDate()
             
             if (isCommit == true) {
@@ -38,5 +38,15 @@ class CollectionHouseItemDao: AbstractHouseItemDao
         }
         
         return nil
+    }
+    
+    func getCollectionIdList() -> [String]? {
+        var result: [String] = []
+        if let allItems = self.getAll() {
+            for item: AbstractHouseItem in allItems {
+                result.append(item.id)
+            }
+        }
+        return result
     }
 }
