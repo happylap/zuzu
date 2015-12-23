@@ -58,7 +58,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(view)
         
-        let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
+        let fetchRequest = NSFetchRequest(entityName: EntityTypes.CollectionHouseItem.rawValue)
         
         var _sortingField = "title"
         var _ascending = true
@@ -179,20 +179,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
     }
     
-    // This can be delete, use AbstractHouseItem.toHouseItem() instead
-    private func convertToHouseItem(house: House) -> HouseItem {
-        let houseItem:HouseItem = HouseItem.Builder(id: house.id)
-            .addTitle(house.title)
-            .addAddr(house.addr)
-            .addHouseType(Int(house.type))
-            .addPurposeType(Int(house.usage))
-            .addPrice(Int(house.price))
-            .addSize(Int(house.size))
-            .addSource(Int(house.source))
-            .addImageList(house.img)
-            .build()
-        return houseItem
-    }
     
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
         NSLog("%@ onShowNoteEditorTouched", self)
@@ -302,10 +288,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                         if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                             let indexPath = cell.indexPath
                             NSLog("%@ segue to showNotes: \(indexPath)", self)
-                            if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
+                            if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                                 
-                                NSLog("%@ segue to showNotes: house title: \(houseItem.title)", self)
-                                destController.houseItem = houseItem
+                                NSLog("%@ segue to showNotes: house title: \(collectionHouseItem.title)", self)
+                                destController.collectionHouseItem = collectionHouseItem
                             }
                         }
                     }
@@ -340,8 +326,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         cell.parentTableView = tableView
         cell.indexPath = indexPath
         
-        if let house: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-            cell.houseItemForCollection = house
+        if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+            cell.houseItemForCollection = collectionHouseItem
         }
         
         /// Enable add to collection button
@@ -357,8 +343,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
             if let indexPath = tableView.indexPathForSelectedRow {
-                if let house: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-                    if let houseItem: HouseItem = self.convertToHouseItem(house) {
+                if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+                    if let houseItem: HouseItem = collectionHouseItem.toHouseItem() {
                         vc.houseItem = houseItem
                         
                         ///GA Tracker
@@ -388,8 +374,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            if let houseItem: House = self.fetchedResultsController.objectAtIndexPath(indexPath) as? House {
-                HouseDao.sharedInstance.deleteByObjectId(houseItem.objectID)
+            if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+                CollectionHouseItemDao.sharedInstance.deleteByID(collectionHouseItem.id)
             }
         }
     }
@@ -411,7 +397,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! SearchResultTableViewCell
             cell.parentTableView = self.tableView
             cell.indexPath = indexPath
-            cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? House
+            cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? CollectionHouseItem
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
             self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)

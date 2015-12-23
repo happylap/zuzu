@@ -14,14 +14,14 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     
     let cellReuseIdentifier = "NoteCell"
     
-    var houseItem: House?
+    var collectionHouseItem: CollectionHouseItem?
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         // Initialize Fetch Request
         let fetchRequest = NSFetchRequest(entityName: "Note")
         
         // Add Predicates
-        if let house = self.houseItem {
+        if let house = self.collectionHouseItem {
             let findByIdPredicate = NSPredicate(format: "houseId == %@", house.id)
             fetchRequest.predicate = findByIdPredicate
         }
@@ -40,7 +40,7 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     }()
     
     private func addNote(title: String) {
-        if let house = self.houseItem {
+        if let house = self.collectionHouseItem {
             let context = CoreDataManager.shared.managedObjectContext
             
             if let model = NSEntityDescription.entityForName(EntityTypes.Note.rawValue, inManagedObjectContext: context) {

@@ -39,7 +39,7 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     
-    var houseItemForCollection: House? {
+    var houseItemForCollection: CollectionHouseItem? {
         didSet {
             updateUIForCollection()
         }
@@ -195,7 +195,7 @@ class SearchResultTableViewCell: UITableViewCell {
     func updateUIForCollection() {
         
         // load new information (if any)
-        if let house = self.houseItemForCollection {
+        if let collectionHouseItem = self.houseItemForCollection {
             /*
             for constraintWithItem: NSLayoutConstraint in self.contentView.constraints {
                 if constraintWithItem.firstItem.restorationIdentifier == "SearchResultTableViewCell_houseTitle" {
@@ -210,10 +210,10 @@ class SearchResultTableViewCell: UITableViewCell {
             
             self.houseTitleForCollection.hidden = false
             self.prefixedButton.hidden = false
-            self.contactedView.hidden = !(house.contacted)
+            self.contactedView.hidden = !(collectionHouseItem.contacted)
             
             
-            if house.contacted == true {
+            if collectionHouseItem.contacted == true {
                 prefixedButton.image = UIImage(named: "checked_green")
             } else {
                 prefixedButton.image = UIImage(named: "uncheck")
@@ -224,22 +224,22 @@ class SearchResultTableViewCell: UITableViewCell {
             
             self.addToCollectionButton.image = UIImage(named: "note_n")
             
-            self.houseTitleForCollection.text = house.title
+            self.houseTitleForCollection.text = collectionHouseItem.title
             //self.houseTitle.text = "    \(house.title)"
-            self.housePrice.text = house.price.description
-            self.houseAddr.text = house.addr
-            self.houseSize.text = "\(house.size) 坪"
+            self.housePrice.text = collectionHouseItem.price.description
+            self.houseAddr.text = collectionHouseItem.addr
+            self.houseSize.text = "\(collectionHouseItem.size) 坪"
             
-            let houseTypeStr = self.getTypeString(Int(house.type)) ?? ""
-            let purposeTypeStr = self.getUsageString(Int(house.usage)) ?? ""
+            let houseTypeStr = self.getTypeString(Int(collectionHouseItem.houseType)) ?? ""
+            let purposeTypeStr = self.getUsageString(Int(collectionHouseItem.purposeType)) ?? ""
             self.houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
             
-            prpcessSourceString(houseSourceLabel, source: Int(house.source))
+            prpcessSourceString(houseSourceLabel, source: Int(collectionHouseItem.source))
             
             self.houseImg.image = placeholderImg
             
-            if house.img?.count > 0 {
-                if let imgUrl = house.img?[0] {
+            if collectionHouseItem.img?.count > 0 {
+                if let imgUrl = collectionHouseItem.img?[0] {
                     let size = self.houseImg.frame.size
                     
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
@@ -255,11 +255,11 @@ class SearchResultTableViewCell: UITableViewCell {
         
         Log.debug("\(self) onCalledTouched")
         
-        if let house: House = houseItemForCollection {
-            if house.contacted == false {
-                HouseDao.sharedInstance.updateByObjectId(house.objectID, dataToUpdate: ["contacted": true])
+        if let collectionHouseItem: CollectionHouseItem = houseItemForCollection {
+            if collectionHouseItem.contacted == false {
+                CollectionHouseItemDao.sharedInstance.updateByID(collectionHouseItem.id, dataToUpdate: ["contacted": true])
             } else {
-                HouseDao.sharedInstance.updateByObjectId(house.objectID, dataToUpdate: ["contacted": false])
+                CollectionHouseItemDao.sharedInstance.updateByID(collectionHouseItem.id, dataToUpdate: ["contacted": false])
             }
             parentTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
         }

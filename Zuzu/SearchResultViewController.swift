@@ -555,11 +555,11 @@ class SearchResultViewController: UIViewController {
                 
                 if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
                     
-                    let houseDao = HouseDao.sharedInstance
-                    houseDao.deleteById(houseItem.id)
+                    let collectionDao = CollectionHouseItemDao.sharedInstance
+                    collectionDao.deleteByID(houseItem.id)
                     
                     // Reload collection list
-                    self.collectionIdList = houseDao.getHouseIdList()
+                    self.collectionIdList = collectionDao.getCollectionIdList()
                     
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     
@@ -572,12 +572,12 @@ class SearchResultViewController: UIViewController {
                         }
                         
                         if let result = result {
-                            let houseDao = HouseDao.sharedInstance
-                            houseDao.addHouse(result, save: true)
+                            let collectionDao = CollectionHouseItemDao.sharedInstance
+                            collectionDao.add(result, isCommit: true)
                             self.alertAddingToCollectionSuccess()
                             
                             // Reload collection list
-                            self.collectionIdList = houseDao.getHouseIdList()
+                            self.collectionIdList = collectionDao.getCollectionIdList()
                             
                             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                         }
@@ -624,7 +624,7 @@ class SearchResultViewController: UIViewController {
         configureFilterButtons()
         
         //Load list my collections
-        collectionIdList = HouseDao.sharedInstance.getHouseIdList()
+        collectionIdList = CollectionHouseItemDao.sharedInstance.getCollectionIdList()
         
         //Setup remote data source
         self.dataSource.setDataLoadedHandler(onDataLoaded)

@@ -33,7 +33,7 @@ class NotificationItemService: NSObject
     }
     
     func updateItem(item: NotificationHouseItem, dataToUpdate: [String: AnyObject]){
-        self.dao.updateByObjectId(item.objectID, dataToUpdate: dataToUpdate)
+        self.dao.updateByID(item.id, dataToUpdate: dataToUpdate)
     }
 
     func getItem(id:String) -> NotificationHouseItem?{
