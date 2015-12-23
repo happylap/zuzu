@@ -181,7 +181,7 @@ class NotificationItemsTableViewController: UITableViewController {
         data["purpose_type"] = 1
         data["house_type"] = 3
         data["price"] = 15000
-        data["size"] = 22
+        data["size"] = 22.5
         data["img"] = [
             "http://cp2.591.com.tw/house/active/2015/12/19/145053190841130908_600x600x579519.jpg",
             "http://cp2.591.com.tw/house/active/2015/12/19/145053280315500503_600x600x579519.jpg",

@@ -42,7 +42,7 @@
         <attribute name="restrProfile" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="restrSex" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="shortestLease" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="size" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="surrounding" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -115,7 +115,7 @@
         <attribute name="notificationTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AbstractHouseItem" positionX="-36" positionY="-2430" width="128" height="748"/>
+        <element name="AbstractHouseItem" positionX="-36" positionY="-2430" width="128" height="750"/>
         <element name="CollectionHouseItem" positionX="196" positionY="-2043" width="128" height="73"/>
         <element name="House" positionX="-180" positionY="-2602" width="128" height="780"/>
         <element name="Note" positionX="-18" positionY="-2574" width="128" height="105"/>

@@ -26,7 +26,7 @@ extension AbstractHouseItem {
     @NSManaged var purposeType: Int32
     @NSManaged var houseType: Int32
     @NSManaged var price: Int32
-    @NSManaged var size: Int32
+    @NSManaged var size: Float
 
     /* Optional Fields */
     @NSManaged var community: String?

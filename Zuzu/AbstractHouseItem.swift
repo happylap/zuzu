@@ -37,7 +37,7 @@ class AbstractHouseItem: NSManagedObject {
         let houseType = data["house_type"].int32Value
         let price = data["price"].int32Value
         let region = data["region"].int32Value
-        let size = data["size"].int32Value
+        let size = data["size"].floatValue
         let source = data["source"].int32Value
         
         /* Optional Fields */
@@ -150,7 +150,7 @@ class AbstractHouseItem: NSManagedObject {
             .addHouseType(Int(self.houseType))
             .addPurposeType(Int(self.purposeType))
             .addPrice(Int(self.price))
-            .addSize(Int(self.size))
+            .addSize(Int(self.size)) // TODO - Should be set size as float
             .addSource(Int(self.source))
             .addImageList(self.img)
             .build()
