@@ -7,31 +7,25 @@
 //
 
 import UIKit
-import CoreData
 
 struct NotificationItemsTableConst {
     static let SECTION_NUM:Int = 1
 }
 
-class NotificationItemsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate {
 
     var notificationService: NotificationItemService!
-    var resultController: NSFetchedResultsController!
+    var resultController: TableResultsController!
     
     private struct Storyboard{
         static let CellReuseIdentifier = "NotificationItemCell"
     }
 
-    func getDefaultFetchedResultsController() -> NSFetchedResultsController{
-        let fetchRequest = NSFetchRequest(entityName: self.notificationService.entityName)
-        
-        let _sortingField = "title"
-        let _ascending = true
-        
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: _sortingField, ascending: _ascending)]
-        
-        
-        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+    func getResultsController() -> TableResultsController{
+        let entityName = self.notificationService.entityName
+        let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("notificationTime", ascending: false).build()
+        controller.setDelegate(self)
+        return controller
     }
     
     // MARK: - View Life Cycle
@@ -39,10 +33,9 @@ class NotificationItemsTableViewController: UITableViewController, NSFetchedResu
     override func viewDidLoad() {
         super.viewDidLoad()
         self.notificationService = NotificationItemService.sharedInstance
-        self.resultController = self.getDefaultFetchedResultsController()
-        self.resultController.delegate = self
+        self.resultController = self.getResultsController()
         
-        doMockData()
+        //doMockData()
         refresh()
         
         //tableView.estimatedRowHeight = tableView.rowHeight
@@ -67,8 +60,7 @@ class NotificationItemsTableViewController: UITableViewController, NSFetchedResu
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = self.resultController.sections![section] as NSFetchedResultsSectionInfo
-        return sectionInfo.numberOfObjects
+        return self.resultController.getNumberOfRowInSection(section)
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -83,12 +75,7 @@ class NotificationItemsTableViewController: UITableViewController, NSFetchedResu
     // MARK: - Data manipulation Function
 
     func refresh(){
-        do {
-            try self.resultController.performFetch()
-        } catch {
-            let fetchError = error as NSError
-            NSLog("\(fetchError), \(fetchError.userInfo)", self)
-        }
+        self.resultController.refreshData()
         self.tableView.reloadData()
     }
     
@@ -139,11 +126,11 @@ class NotificationItemsTableViewController: UITableViewController, NSFetchedResu
     
     // MARK: - NSFetchedResultsControllerDelegate Function
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(controller: TableResultsController) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(controller: TableResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: TableResultsChangeType, newIndexPath: NSIndexPath?) {
         
         NSLog("%@ didChangeObject: \(type.rawValue)", self)
         
@@ -163,7 +150,7 @@ class NotificationItemsTableViewController: UITableViewController, NSFetchedResu
         }
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(controller: TableResultsController) {
         self.tableView.endUpdates()
     }
     

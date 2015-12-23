@@ -20,7 +20,6 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
     var itemType: SearchType = .SavedSearch {
         
         didSet {
-            
             self.searchData = searchItemService.getSearchItemsByType(itemType)
             tableViewController.searchItemTable.reloadData()
         }
