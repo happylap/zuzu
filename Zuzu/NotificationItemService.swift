@@ -12,6 +12,10 @@ class NotificationItemService: NSObject
 {
     let dao = NotificationHouseItemDao.sharedInstance
     
+    var entityName: String{
+        return self.dao.entityName
+    }
+    
     class var sharedInstance: NotificationItemService {
         struct Singleton {
             static let instance = NotificationItemService()
@@ -19,7 +23,7 @@ class NotificationItemService: NSObject
         
         return Singleton.instance
     }
-    
+
     func addItem(jsonObj: AnyObject){
         self.dao.add(jsonObj, isCommit: true)
     }

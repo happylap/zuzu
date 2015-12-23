@@ -7,20 +7,41 @@
 //
 
 import UIKit
+import CoreData
 
 struct NotificationItemsTableConst {
     static let SECTION_NUM:Int = 1
 }
 
-class NotificationItemsTableViewController: UITableViewController {
+class NotificationItemsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
-    var notificationItems: [NotificationHouseItem]?
-    let notificationService = NotificationItemService.sharedInstance
+    var notificationService: NotificationItemService!
+    var resultController: NSFetchedResultsController!
+    
+    private struct Storyboard{
+        static let CellReuseIdentifier = "NotificationItemCell"
+    }
+
+    func getDefaultFetchedResultsController() -> NSFetchedResultsController{
+        let fetchRequest = NSFetchRequest(entityName: self.notificationService.entityName)
+        
+        let _sortingField = "title"
+        let _ascending = true
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: _sortingField, ascending: _ascending)]
+        
+        
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+    }
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.notificationService = NotificationItemService.sharedInstance
+        self.resultController = self.getDefaultFetchedResultsController()
+        self.resultController.delegate = self
+        
         doMockData()
         refresh()
         
@@ -46,60 +67,39 @@ class NotificationItemsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let items = self.notificationItems{
-            return items.count
-        }
-        
-        return 0
-    }
-
-
-    private struct Storyboard{
-        static let CellReuseIdentifier = "NotificationItemCell"
+        let sectionInfo = self.resultController.sections![section] as NSFetchedResultsSectionInfo
+        return sectionInfo.numberOfObjects
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath) as! NotificationItemTableViewCell
         
         // Configure the cell...
-        cell.notificationItem = notificationItems![indexPath.row]
+        cell.notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem
+
         return cell
     }
     
     // MARK: - Data manipulation Function
-    
+
     func refresh(){
-        if let result = self.notificationService.getAll(){
-            self.notificationItems = result
-            NSLog("data count: \(notificationItems!.count)")
+        do {
+            try self.resultController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            NSLog("\(fetchError), \(fetchError.userInfo)", self)
         }
         self.tableView.reloadData()
     }
     
-    func deleteRow(row: Int){
-        if self.notificationItems != nil{
-            let item = notificationItems![row]
-            notificationItems!.removeAtIndex(row)
-            self.notificationService.deleteItem(item)
-        }
-    }
-
-    func setRead(item: NotificationHouseItem){
-        if item.isRead == true{
-            return
-        }
-        item.isRead = true
-        var updateData = Dictionary<String, AnyObject>()
-        updateData["isRead"] = true
-        self.notificationService.updateItem(item, dataToUpdate: updateData)
-    }
     
     // MARK: - swipe-left-to-delete
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if(editingStyle == .Delete) {
-            deleteRow(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            if let notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
+                self.notificationService.deleteItem(notificationItem)
+            }
         }
     }
 
@@ -107,10 +107,12 @@ class NotificationItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let item = self.notificationItems?[indexPath.row]{
+        if let item = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
             if item.isRead == false{
-                setRead(item)
-                tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                item.isRead = true
+                var updateData = Dictionary<String, AnyObject>()
+                updateData["isRead"] = true
+                self.notificationService.updateItem(item, dataToUpdate: updateData)
             }
             
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
@@ -133,6 +135,36 @@ class NotificationItemsTableViewController: UITableViewController {
             
             self.showViewController(vc, sender: self)
         }
+    }
+    
+    // MARK: - NSFetchedResultsControllerDelegate Function
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
+        NSLog("%@ didChangeObject: \(type.rawValue)", self)
+        
+        switch type {
+        case .Insert:
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Delete:
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Update:
+            //let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! NotificationItemTableViewCell
+            //cell.notificationItem = self.resultController.objectAtIndexPath(indexPath!) as? NotificationHouseItem
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.None)
+
+        case .Move:
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        }
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.endUpdates()
     }
     
     func doMockData(){
@@ -163,7 +195,15 @@ class NotificationItemsTableViewController: UITableViewController {
             "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A0012014000080917323611.jpg?t=2011",
             "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A0012014000080917323612.jpg?t=2011"
         ]
-        if self.notificationItems?.count < 1{
+
+        var currentNum = 0
+        //let sectionInfo = self.resultController.sections![0] as NSFetchedResultsSectionInfo
+        //let currentNum = sectionInfo.numberOfObjects
+        let totalItems = self.notificationService.getAll()
+        if totalItems != nil{
+            currentNum = totalItems!.count
+        }
+        if currentNum < 1{
             self.notificationService.addItem(data)
         }
         
@@ -189,10 +229,10 @@ class NotificationItemsTableViewController: UITableViewController {
             "http://cp2.591.com.tw/house/active/2015/12/19/145053284620772901_600x600x579519.jpg",
             "http://cp2.591.com.tw/house/active/2015/12/19/145053285239617402_600x600x579519.jpg"
         ]
-        if self.notificationItems?.count < 2{
+
+        if currentNum < 1{
             self.notificationService.addItem(data)
         }
-        
     }
 
     /*
