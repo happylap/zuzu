@@ -114,14 +114,14 @@ class AbstractHouseItemDao: NSObject
 
     // MARK: Update Function
     
-    func updateByObjectId(objectId: NSManagedObjectID, dataToUpdate: [String: AnyObject]) {
-        if let item = CoreDataManager.shared.get(objectId) {
+    func updateByID(id: String, dataToUpdate: [String: AnyObject]) {
+        if let item = self.get(id) {
             for (key, value) in dataToUpdate {
                 if let _ = item.valueForKey(key) {
                     item.setValue(value, forKey: key)
                 }
             }
-            CoreDataManager.shared.save()
+            self.commit()
         }
     }
     
