@@ -25,26 +25,18 @@ class NotificationHouseItemDao: AbstractHouseItemDao
         return EntityTypes.NotificationHouseItem.rawValue
     }
     
-    // Only add item, but not commit to DB
-    override func add(jsonObj: AnyObject) {
-        if let id = jsonObj.valueForKey("id") as? String {
-            if self.isExist(id) {
-                return
+    override func add(jsonObj: AnyObject, isCommit: Bool) -> AbstractHouseItem? {
+        if let notificationItem = super.add(jsonObj, isCommit: false) as? NotificationHouseItem{
+            notificationItem.isRead = false
+            notificationItem.notificationTime = NSDate()
+            
+            if (isCommit == true) {
+                self.commit()
             }
             
-            NSLog("%@ add notification item", self)
-            
-            let context=CoreDataManager.shared.managedObjectContext
-            
-            let model = NSEntityDescription.entityForName(self.entityName, inManagedObjectContext: context)
-            
-            let notificationItem = NotificationHouseItem(entity: model!, insertIntoManagedObjectContext: context)
-            
-            if model != nil {
-                notificationItem.fromJSON(jsonObj)
-                notificationItem.isRead = false
-                notificationItem.notificationTime = NSDate()
-            }
+            return notificationItem
         }
+        
+        return nil
     }
 }

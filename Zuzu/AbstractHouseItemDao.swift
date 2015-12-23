@@ -17,9 +17,9 @@ class AbstractHouseItemDao: NSObject
     }
     
     // Only add item, but not commit to DB
-    func add(jsonObj: AnyObject) {
-        preconditionFailure("This method must be overridden")
-    }
+    //func add(jsonObj: AnyObject) {
+        //preconditionFailure("This method must be overridden")
+    //}
     
     // MARK: - Read Function
     
@@ -72,19 +72,32 @@ class AbstractHouseItemDao: NSObject
         self.commit()
     }
     
-    func add(jsonObj: AnyObject, isCommit: Bool) {
+    func add(jsonObj: AnyObject, isCommit: Bool) -> AbstractHouseItem?{
         if let id = jsonObj.valueForKey("id") as? String {
             if self.isExist(id) {
-                return
+                return nil
             }
             
-            self.add(jsonObj)
+            NSLog("%@ add notification item", self)
             
-            if (isCommit == true) {
-                self.commit()
+            let context=CoreDataManager.shared.managedObjectContext
+            
+            let model = NSEntityDescription.entityForName(self.entityName, inManagedObjectContext: context)
+            
+            let item = AbstractHouseItem(entity: model!, insertIntoManagedObjectContext: context)
+            
+            if model != nil {
+                item.fromJSON(jsonObj)
+                if (isCommit == true) {
+                    self.commit()
+                }
+                return item
             }
         }
+        
+        return nil
     }
+    
     
     // MARK: Delete Function    
     func deleteByID(id: String) {
@@ -113,8 +126,7 @@ class AbstractHouseItemDao: NSObject
     }
     
     // MARK: Commit Function
-    
-    private func commit(){
+    func commit(){
         CoreDataManager.shared.save()
     }
 }

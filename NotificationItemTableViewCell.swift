@@ -71,10 +71,11 @@ class NotificationItemTableViewCell: UITableViewCell
             houseTypeLabel?.text = "\(housetypeString)/\(purpose)"
             houseSizeLabel?.text = "\(item.size)坪"
             housePriceLabel?.text = "\(item.price)元"
-            houseImage?.image = UIImage(named:"591")
             
             if item.isRead == false{
                 self.contentView.backgroundColor = UIColor.colorWithRGB(0xE7F9F8, alpha: 1)
+            }else{
+                self.contentView.backgroundColor = UIColor.whiteColor()
             }
             
             
