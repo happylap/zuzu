@@ -1065,6 +1065,7 @@ class HouseDetailViewController: UIViewController {
                         let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String
                         
                         bvc.sourceLink = sourceLink
+                        bvc.viewTitle = "原始房源網頁"
                         
                         ///GA Tracker
                         if let houseItem = houseItem {

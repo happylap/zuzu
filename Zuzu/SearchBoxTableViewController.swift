@@ -749,16 +749,30 @@
             }
             
             ///FB failed, Open by Browser
+//            if(!result) {
+//                if let url = NSURL(string: fbUrl) {
+//                    
+//                    if (UIApplication.sharedApplication().canOpenURL(url)) {
+//                        
+//                        result = UIApplication.sharedApplication().openURL(url)
+//                        if(result) {
+//                            gaLabel = url.absoluteString
+//                        }
+//                    }
+//                }
+//            }
+            
             if(!result) {
-                if let url = NSURL(string: fbUrl) {
+                let browserViewController = self.storyboard?.instantiateViewControllerWithIdentifier("browserView") as? BrowserViewController
+                
+                if let browserViewController = browserViewController {
+                    browserViewController.enableToolBar = false
+                    browserViewController.sourceLink = fbUrl
+                    browserViewController.viewTitle = "豬豬快租"
+                    //self.modalPresentationStyle = .CurrentContext
+                    self.navigationController?.pushViewController(browserViewController, animated: true)
                     
-                    if (UIApplication.sharedApplication().canOpenURL(url)) {
-                        
-                        result = UIApplication.sharedApplication().openURL(url)
-                        if(result) {
-                            gaLabel = url.absoluteString
-                        }
-                    }
+                    gaLabel = fbUrl
                 }
             }
             
