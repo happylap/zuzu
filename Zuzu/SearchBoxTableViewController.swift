@@ -8,6 +8,7 @@
     
     import UIKit
     import SwiftyJSON
+    import SCLAlertView
     
     private let FileLog = Logger.fileLogger
     private let Log = Logger.defaultLogger
@@ -52,6 +53,9 @@
             static let searchHistory = 8
         }
         
+        //The current position detected by GPS
+        private var placeMark: CLPlacemark?
+        
         // Price & Size Picker Vars
         struct PickerConst {
             static let anyLower:(label:String, value:Int) = ("0",CriteriaConst.Bound.LOWER_ANY)
@@ -64,6 +68,8 @@
         
         // UILabel for empty search lisy
         let noSearchHistoryLabel = UILabel()
+        
+        var alertViewResponder: SCLAlertViewResponder?
         
         var locationManagerActive = false {
             didSet {
@@ -247,22 +253,44 @@
         
         // MARK: - Private Utils
         
-        private func alertInvalidRegionSelection() {
-            // Initialize Alert View
+        private func alertChoosingRegion(currentCity: City?) {
             
-            let alertView = UIAlertView(
-                title: "請選擇地區",
-                message: "請選擇地區以進行搜尋",
-                delegate: self,
-                cancelButtonTitle: "知道了")
+            let regionChoiceAlertView = SCLAlertView()
             
-            // Show Alert View
-            alertView.show()
+            var subTitle = "請選擇地區以進行租屋搜尋"
             
-            // Delay the dismissal
-            self.runOnMainThreadAfter(2.0) {
-                alertView.dismissWithClickedButtonIndex(-1, animated: true)
+            if let currentCity = currentCity {
+                var regionName = "\(currentCity.name)"
+                
+                if let cityRegion = currentCity.regions.first {
+                    regionName = "\(regionName) \(cityRegion.name)"
+                }
+                
+                subTitle = "豬豬成功定位您的當前位置！\n\n\(regionName)"
+                
+                regionChoiceAlertView.addButton("使用當前位置") {
+                    self.setRegionToCriteria(currentCity)
+                    self.performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
+                }
+                
+                regionChoiceAlertView.addButton("自行選擇地區") {
+                    self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
+                }
+                
+            } else {
+                
+                regionChoiceAlertView.addButton("選擇地區") {
+                    self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
+                }
+                
+                regionChoiceAlertView.addButton("關閉") {
+                }
             }
+            
+            regionChoiceAlertView.showCloseButton = false
+            
+            self.alertViewResponder = regionChoiceAlertView.showTitle("尚未選擇欲搜尋地區", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+            
         }
         
         private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
@@ -799,7 +827,18 @@
             
             //Validate field
             if(currentCriteria.region?.count <= 0) {
-                alertInvalidRegionSelection()
+                
+                if let placeMark = self.placeMark {
+                    let currentCity = self.getDefaultLocation(placeMark)
+                    
+                    alertChoosingRegion(currentCity)
+                    
+                } else {
+                    
+                    alertChoosingRegion(nil)
+                    
+                }
+                
                 return
             }
             
@@ -895,18 +934,6 @@
                 }
             }
             
-            //Configure location manager
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.requestWhenInUseAuthorization()
-            
-            //Try to start monitoring location
-            if let regionList = currentCriteria.region where !regionList.isEmpty {
-                locationManagerActive = false
-            } else {
-                locationManagerActive = true
-            }
-            
             NSLog("End viewDidLoad: %@", self)
         }
         
@@ -932,6 +959,18 @@
             //Restore hidden tab bar before apeearing
             self.tabBarController!.tabBarHidden = false
             
+            //Configure location manager
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestWhenInUseAuthorization()
+            
+            //Try to start monitoring location
+            if let regionList = currentCriteria.region where !regionList.isEmpty {
+                locationManagerActive = false
+            } else {
+                locationManagerActive = true
+            }
+            
             //Google Analytics Tracker
             self.trackScreen()
         }
@@ -944,6 +983,10 @@
         
         override func viewDidDisappear(animated: Bool) {
             super.viewDidDisappear(animated)
+            
+            //Disable location monitoring
+            locationManagerActive = false
+            
             NSLog("viewDidDisappear: %@", self)
         }
         
@@ -1393,11 +1436,14 @@
     
     extension SearchBoxTableViewController : CityRegionContainerControllerDelegate {
         func onCitySelectionDone(regions:[City]) {
-            regionSelectionState = regions
             
-            if(!regions.isEmpty) {
+            if(regions.isEmpty) {
+                locationManagerActive = true
+            } else {
                 locationManagerActive = false
             }
+            
+            regionSelectionState = regions
             
             currentCriteria = self.stateToSearhCriteria()
             
@@ -1449,7 +1495,7 @@
         private func setRegionToCriteria(city:City) {
             
             //stop updating location to save battery life
-            locationManager.stopUpdatingLocation()
+            locationManagerActive = false
             
             if (currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
                 currentCriteria.region = [city]
@@ -1457,6 +1503,7 @@
                 ///Update Region (self.populateViewFromSearchCriteria cause some abnormal behavior for size/city picker)
                 regionSelectionState = currentCriteria.region
                 
+                currentCriteria = self.stateToSearhCriteria()
             }
         }
         
@@ -1475,13 +1522,11 @@
                         
                         FileLog.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
                         
-                        let currentCity = self.getDefaultLocation(pm)
-                        self.setRegionToCriteria(currentCity)
+                        self.placeMark = pm
+                        
                     }
                 } else {
                     FileLog.debug("Problem with the data received from geocoder")
-                    let currentCity = self.getDefaultLocation(nil)
-                    self.setRegionToCriteria(currentCity)
                 }
             })
         }
@@ -1489,9 +1534,5 @@
         
         func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
             FileLog.debug("Updating location failed error = \(error.localizedDescription)")
-            
-            let currentCity = self.getDefaultLocation(nil)
-            self.setRegionToCriteria(currentCity)
-            
         }
     }
