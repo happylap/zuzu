@@ -20,6 +20,7 @@ pod 'Google/AdMob'
 pod 'GoogleIDFASupport'
 pod 'AwesomeCache', '~> 2.0'
 pod 'XCGLogger', '~> 3.1'
+pod 'SCLAlertView'
 end
 
 target 'ZuzuTests' do
