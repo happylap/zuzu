@@ -754,8 +754,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         if(FeatureOption.Collection.enableMain) {
             
-            /// Enable add to collection button        
-            cell.addToCollectionButton.image = UIImage(named: "Heart_n")
+            /// Enable add to collection button
             cell.addToCollectionButton.hidden = false
             cell.addToCollectionButton.userInteractionEnabled = true
             cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))

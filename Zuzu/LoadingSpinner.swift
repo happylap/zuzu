@@ -18,6 +18,7 @@ public class LoadingSpinner{
     private var opacity = LoadingSpinner.defaultOpacity
     private var dimBackground = false
     private var immediateAppear = false
+    private var text:String?
     
     class var shared: LoadingSpinner {
         struct Static {
@@ -38,6 +39,10 @@ public class LoadingSpinner{
         self.opacity = opacity
     }
     
+    public func setText(text:String) {
+        self.text = text
+    }
+    
     public func startOnView(view: UIView) {
         
         dialog = MBProgressHUD(view: view)
@@ -48,6 +53,11 @@ public class LoadingSpinner{
             dialog.opacity = opacity
             dialog.animationType = .Fade
             dialog.taskInProgress = true
+            
+            if let text = self.text {
+                dialog.labelText = text
+            }
+            
             if(immediateAppear) {
                 dialog.graceTime = 0
             } else {
@@ -68,6 +78,7 @@ public class LoadingSpinner{
     }
     
     private func resetParams() {
+        text = nil
         dimBackground = false
         immediateAppear = false
         opacity = LoadingSpinner.defaultOpacity

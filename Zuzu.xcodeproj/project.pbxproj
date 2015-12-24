@@ -19,6 +19,8 @@
 		14914FAA1C27F7B400025AC1 /* AbstractHouseItemDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FA91C27F7B400025AC1 /* AbstractHouseItemDao.swift */; };
 		14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */; };
 		14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FB11C2836DB00025AC1 /* NotificationItemService.swift */; };
+		14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CBABB11C2A908500EF2E13 /* TableResultsController.swift */; };
+		14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */; };
 		2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */; };
 		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; };
 		2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */; };
@@ -142,6 +144,8 @@
 		14914FA91C27F7B400025AC1 /* AbstractHouseItemDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractHouseItemDao.swift; sourceTree = "<group>"; };
 		14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionHouseItemDao.swift; sourceTree = "<group>"; };
 		14914FB11C2836DB00025AC1 /* NotificationItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemService.swift; sourceTree = "<group>"; };
+		14CBABB11C2A908500EF2E13 /* TableResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableResultsController.swift; sourceTree = "<group>"; };
+		14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataResultsController.swift; sourceTree = "<group>"; };
 		2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayLabelMaker.swift; sourceTree = "<group>"; };
 		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		2F05C6291BBA6E3A00100D5F /* PersistentTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentTableDataSource.swift; sourceTree = "<group>"; };
@@ -436,6 +440,8 @@
 				14914FB11C2836DB00025AC1 /* NotificationItemService.swift */,
 				81FA281D1BDA39C20038DD19 /* Router.swift */,
 				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
+				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
+				14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -817,6 +823,8 @@
 				2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */,
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				14914FA21C27D09800025AC1 /* CollectionHouseItem.swift in Sources */,
+				14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */,
+				14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */,
 				2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */,
 				81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */,
 				2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */,

@@ -11,7 +11,9 @@ import MBProgressHUD
 
 class BrowserViewController: UIViewController {
     
-    let viewTitle = "原始房源網頁"
+    var enableToolBar:Bool = true
+    
+    var viewTitle:String?
     
     var sourceLink: String?
     
@@ -23,23 +25,24 @@ class BrowserViewController: UIViewController {
     var webView: WKWebView?
     
     private func configureNavigationBarItems() {
-        
-        ///Prepare custom UIButton for UIBarButtonItem
-        let copyLinkButton: UIButton = UIButton(type: UIButtonType.Custom)
-        copyLinkButton.setImage(UIImage(named: "copy_link")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-        copyLinkButton.addTarget(self, action: "copyLinkButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-        copyLinkButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        copyLinkButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-        
-        pesudoAnchor.customView = copyLinkButton
-        pesudoAnchor.tintColor = UIColor.whiteColor()
-        
-        /// From right to left
-        self.navigationItem.setRightBarButtonItems(
-            [
-                pesudoAnchor
-            ],
-            animated: false)
+        if(enableToolBar) {
+            ///Prepare custom UIButton for UIBarButtonItem
+            let copyLinkButton: UIButton = UIButton(type: UIButtonType.Custom)
+            copyLinkButton.setImage(UIImage(named: "copy_link")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            copyLinkButton.addTarget(self, action: "copyLinkButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+            copyLinkButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            copyLinkButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+            
+            pesudoAnchor.customView = copyLinkButton
+            pesudoAnchor.tintColor = UIColor.whiteColor()
+            
+            /// From right to left
+            self.navigationItem.setRightBarButtonItems(
+                [
+                    pesudoAnchor
+                ],
+                animated: false)
+        }
     }
     
     func copyLinkButtonTouched(sender:UIButton) {
@@ -180,7 +183,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 if(UIApplication.sharedApplication().canOpenURL(targetUrl)) {
                     
                     if let phoneNum = targetUrl.absoluteString.characters.split(":").last {
-                    
+                        
                         makePhoneCallConfirmation(targetUrl, phoneNum: String(phoneNum))
                         
                     }

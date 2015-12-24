@@ -1330,12 +1330,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VAa-Ns-oxa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2552" y="2482"/>
+            <point key="canvasLocation" x="1006" y="2480"/>
         </scene>
         <!--House Source-->
         <scene sceneID="KPq-L4-VJt">
             <objects>
-                <viewController title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="browserView" title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
@@ -1359,7 +1359,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1836" y="2636"/>
+            <point key="canvasLocation" x="760" y="1811"/>
         </scene>
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
