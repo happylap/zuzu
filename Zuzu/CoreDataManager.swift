@@ -86,6 +86,12 @@ class CoreDataManager: NSObject {
             let storeURL=self.applicationDocumentsDirectory.URLByAppendingPathComponent(storeName)
             //var error:NSError?=nil
             _persistentStoreCoordinator=NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+
+            do{
+                try NSFileManager.defaultManager().removeItemAtPath(storeURL.path!)
+            }catch{
+                NSLog("remove store file error")
+            }
             
             do {
                 try _persistentStoreCoordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: self.databaseOptions())
