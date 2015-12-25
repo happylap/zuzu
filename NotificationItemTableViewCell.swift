@@ -37,7 +37,7 @@ class NotificationItemTableViewCell: UITableViewCell
             //houseImage.layer.borderColor = UIColor.whiteColor().CGColor
             //houseImage.layer.cornerRadius = houseImage.frame.size.width/2
             houseImage.clipsToBounds = true
-            houseImage.contentMode = .Left
+            houseImage.contentMode = .ScaleAspectFill
         }
     }
     
@@ -78,13 +78,14 @@ class NotificationItemTableViewCell: UITableViewCell
                 self.contentView.backgroundColor = UIColor.whiteColor()
             }
             
-            
             let placeholderImg = UIImage(named: "house_img")
             
+            self.houseImage.image = placeholderImg
             if let imgString = item.img?.first,
                 let imgUrl = NSURL(string: imgString){
                     
                     self.houseImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
+                        //self.houseImage.contentMode = .Left
                         NSLog("Img loading done, status = \(response?.statusCode)")
                     }
                     
