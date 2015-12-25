@@ -17,7 +17,7 @@ struct SystemMessage {
         static let EMPTY_HISTORICAL_SEARCH = "尚無任何\"搜尋紀錄\"\n\n日後任何的搜尋紀錄，都會記錄在這邊，方便查找"
     }
  
-    struct WARN{
+    struct ALERT{
     }
     
     struct ERROR{

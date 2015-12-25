@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1446FA5C1C2D3AA90073A8A7 /* CommonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */; };
-		1446FA601C2D3C200073A8A7 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5F1C2D3C200073A8A7 /* System.swift */; };
+		1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */; };
 		14632AAD1C27B608008C9A2D /* NotificationItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14632AAC1C27B608008C9A2D /* NotificationItemTableViewCell.swift */; };
 		14632AAF1C27B614008C9A2D /* NotificationItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14632AAE1C27B614008C9A2D /* NotificationItemsTableViewController.swift */; };
 		14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914F991C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift */; };
@@ -136,7 +136,7 @@
 /* Begin PBXFileReference section */
 		1446FA581C2D0C2C0073A8A7 /* Model20151225.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model20151225.xcdatamodel; sourceTree = "<group>"; };
 		1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonUtils.swift; sourceTree = "<group>"; };
-		1446FA5F1C2D3C200073A8A7 /* System.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		14632AAC1C27B608008C9A2D /* NotificationItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemTableViewCell.swift; sourceTree = "<group>"; };
 		14632AAE1C27B614008C9A2D /* NotificationItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemsTableViewController.swift; sourceTree = "<group>"; };
 		14914F991C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationHouseItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -428,7 +428,7 @@
 				2FBDAB0E1C0D7FC700B45E5B /* Logger.swift */,
 				2FBDAB121C0E988300B45E5B /* ConfigLoader.swift */,
 				1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */,
-				1446FA5F1C2D3C200073A8A7 /* System.swift */,
+				1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -819,7 +819,7 @@
 				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
 				2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
-				1446FA601C2D3C200073A8A7 /* System.swift in Sources */,
+				1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
 				81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */,
