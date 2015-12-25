@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="14F1509" minimumToolsVersion="Xcode 7.0">
+    <entity name="AbstractHouseItem" representedClassName="AbstractHouseItem" isAbstract="YES" syncable="YES">
+        <attribute name="addr" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="agent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="agentType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="allowCooking" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="allowPet" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="city" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="community" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coordinate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deposit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facility" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="floor" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="furniture" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="hasMgmtFee" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="houseType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="img" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgmtFee" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="mobileLink" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyBus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyMrt" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyThsr" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyTrain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numBedroom" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="numPatio" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="numTing" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="orientation" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="otherExpense" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="parkingLot" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="parkingType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="phone" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="postTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="priceIncl" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="purposeType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="readyDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="region" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="restrProfile" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="restrSex" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="shortestLease" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="source" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="surrounding" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalFloor" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="wallMtl" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="CollectionHouseItem" representedClassName=".CollectionHouseItem" parentEntity="AbstractHouseItem" syncable="YES">
+        <attribute name="collectTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="contacted" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="House" representedClassName="House" syncable="YES">
+        <attribute name="addr" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="agent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="agentType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="allowCooking" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="allowPet" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="city" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="collectTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="community" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contacted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="coordinate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deposit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facility" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="floor" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="furniture" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="hasMgmtFee" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="img" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgmtFee" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="mobileLink" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyBus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyMrt" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyThsr" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nearbyTrain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numBedroom" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="numPatio" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="numTing" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="orientation" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="otherExpense" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="parkingLot" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="parkingType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="phone" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="postTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="priceIncl" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="readyDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="region" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="restrProfile" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="restrSex" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="shortestLease" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="source" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="surrounding" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalFloor" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="usage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="wallMtl" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Note" representedClassName=".Note" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="houseId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="NotificationHouseItem" representedClassName="NotificationHouseItem" parentEntity="AbstractHouseItem" syncable="YES">
+        <attribute name="isRead" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="notificationTime" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AbstractHouseItem" positionX="-36" positionY="-2430" width="128" height="750"/>
+        <element name="CollectionHouseItem" positionX="196" positionY="-2043" width="128" height="73"/>
+        <element name="House" positionX="-180" positionY="-2602" width="128" height="780"/>
+        <element name="Note" positionX="-18" positionY="-2574" width="128" height="105"/>
+        <element name="NotificationHouseItem" positionX="196" positionY="-2187" width="128" height="73"/>
+    </elements>
+</model>
