@@ -16,7 +16,9 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
-    
+    // UILabel for empty collection list
+    let emptyLabel = UILabel()
+
     private struct Storyboard{
         static let CellReuseIdentifier = "NotificationItemCell"
     }
@@ -34,10 +36,8 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         super.viewDidLoad()
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
-        
-        //doMockData()
         refresh()
-        
+        configureTableView()
         //tableView.estimatedRowHeight = tableView.rowHeight
         //tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -53,6 +53,45 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - Confiure View
+    func configureTableView(){
+        //Remove extra cells when the table height is smaller than the screen
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        // configure empty label
+        if let contentView = tableView {
+            emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+            emptyLabel.textAlignment = NSTextAlignment.Center
+            emptyLabel.numberOfLines = -1
+            emptyLabel.font = UIFont.systemFontOfSize(14)
+            emptyLabel.textColor = UIColor.grayColor()
+            emptyLabel.hidden = true
+            contentView.addSubview(emptyLabel)
+            
+            let xConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+            
+            let leftConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            leftConstraint.priority = UILayoutPriorityDefaultLow
+            
+            let rightConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            rightConstraint.priority = UILayoutPriorityDefaultLow
+            
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+            
+        }
+
+    }
+    
+    func showEmpty(){
+        emptyLabel.hidden = true
+        emptyLabel.text = "尚無任何通知物件\n\n不妨嘗試在租屋雷達頁，設定符合需求的通知條件"
+        emptyLabel.sizeToFit()
+        emptyLabel.hidden = false
+    }
+    
     // MARK: - UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -60,7 +99,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.resultController.getNumberOfRowInSection(section)
+        let rowNum = self.resultController.getNumberOfRowInSection(section)
+        if rowNum == 0{
+            showEmpty()
+        }
+        return rowNum
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -124,7 +167,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         }
     }
     
-    // MARK: - NSFetchedResultsControllerDelegate Function
+    // MARK: - TableResultsControllerDelegate Function
     
     func controllerWillChangeContent(controller: TableResultsController) {
         self.tableView.beginUpdates()
@@ -154,91 +197,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.tableView.endUpdates()
     }
     
-    func doMockData(){
-        var data = Dictionary<String, AnyObject>()
-        data["source"] = 2
-        data["id"] = "aHR0cDovL3JlbnQuaG91c2VmdW4uY29tLnR3L3JlbnQvaG91c2UvODg1NDgwLw=="
-        data["link"] = "http://rent.housefun.com.tw/rent/house/885480/"
-        data["mobile_link"] = "http://rent.housefun.com.tw/mobile/rent/house/885480"
-        data["title"] = "稀有小帝寶精品電梯套房@可炊流理臺~耗資百萬裝潢˙"
-        data["city"] = 400
-        data["region"] = 404
-        data["purpose_type"] = 1
-        data["house_type"] = 1
-        data["price"] = 8300
-        data["size"] = 8
-        data["img"] = [
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A00120140000809173235a33480.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732351.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732352.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732353.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732364.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732365.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732366.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732367.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732368.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A001201400008091732369.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A0012014000080917323610.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A0012014000080917323611.jpg?t=2011",
-            "https://pic.hfcdn.com/res/DrawImage/ShowPic/600/0/HFRENT04/Z999/09d5524b-ce5c-44e4-8f0e-bf5be791e332/Z999A0012014000080917323612.jpg?t=2011"
-        ]
-
-        var currentNum = 0
-        //let sectionInfo = self.resultController.sections![0] as NSFetchedResultsSectionInfo
-        //let currentNum = sectionInfo.numberOfObjects
-        let totalItems = self.notificationService.getAll()
-        if totalItems != nil{
-            currentNum = totalItems!.count
-        }
-        if currentNum < 1{
-            self.notificationService.addItem(data)
-        }
-        
-        
-        data = Dictionary<String, AnyObject>()
-        data["source"] = 2
-        data["id"] = "aHR0cDovL3JlbnQuNTkxLmNvbS50dy9yZW50LWRldGFpbC0zODI5NjU1Lmh0bWw="
-        data["link"] = "http://rent.591.com.tw/rent-detail-3829655.html"
-        data["mobile_link"] = "http://m.591.com.tw/mobile-detail.html?houseId=R3829655"
-        data["title"] = "近中山北路民權東路口透天二樓整層出租"
-        data["city"] = 100
-        data["region"] = 104
-        data["purpose_type"] = 1
-        data["house_type"] = 3
-        data["price"] = 15000
-        data["size"] = 22.5
-        data["img"] = [
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053190841130908_600x600x579519.jpg",
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053280315500503_600x600x579519.jpg",
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053282033236000_600x600x579519.jpg",
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053283321717807_600x600x579519.jpg",
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053284171791107_600x600x579519.jpg",
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053284620772901_600x600x579519.jpg",
-            "http://cp2.591.com.tw/house/active/2015/12/19/145053285239617402_600x600x579519.jpg"
-        ]
-
-        if currentNum < 1{
-            self.notificationService.addItem(data)
-        }
-    }
-
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
     }
     */
 
