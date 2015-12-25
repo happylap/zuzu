@@ -44,33 +44,18 @@ class NotificationItemTableViewCell: UITableViewCell
     func updateUI()
     {
         houseTitleLabel?.text = nil
+        let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
         
         if let item = self.notificationItem{
+            let housetypeString = houseTypeLabelMaker.fromCodeForField(SolrConst.Filed.HOUSE_TYPE, code: Int(item.houseType), defaultValue: "")
+            let purpose = houseTypeLabelMaker.fromCodeForField(SolrConst.Filed.PURPOSE_TYPE, code: Int(item.purposeType), defaultValue: "")
+
             houseTitleLabel?.text = item.title
             addressLabel?.text = item.addr
-            postTimeLabel?.text = "2015/12/17"
-            var housetypeString = ""
-            var purpose = ""
-            switch item.houseType {
-                case 1: housetypeString = "整層住家"
-                case 2: housetypeString = "獨立套房"
-                case 3: housetypeString = "分租套房"
-                case 4: housetypeString = "雅房"
-                case 8: housetypeString = "住辦"
-                default: break
-            }
-
-            switch item.purposeType{
-                case 1: purpose = "公寓"
-                case 2: purpose = "電梯大樓"
-                case 3: purpose = "透天厝"
-                case 4: purpose = "別墅"
-                default: break
-            }
-            
             houseTypeLabel?.text = "\(housetypeString)/\(purpose)"
             houseSizeLabel?.text = "\(item.size)坪"
             housePriceLabel?.text = "\(item.price)元"
+            postTimeLabel?.text = CommonUtils.getStandardDateString(item.postTime!)
             
             if item.isRead == false{
                 self.contentView.backgroundColor = UIColor.colorWithRGB(0xE7F9F8, alpha: 1)

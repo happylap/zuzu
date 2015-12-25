@@ -225,8 +225,13 @@
         
         @IBOutlet weak var notificationBarItem: UIBarButtonItem!{
             didSet{
-                notificationBarItem.image = UIImage(named: "notification_p")
-                notificationBarItem.enabled = true
+                if(FeatureOption.Radar.enableMain){
+                    notificationBarItem.image = UIImage(named: "notification_p")
+                    notificationBarItem.enabled = true
+                }
+                else{
+                    notificationBarItem.enabled = true
+                }
             }
         }
         

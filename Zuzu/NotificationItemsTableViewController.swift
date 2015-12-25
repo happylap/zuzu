@@ -87,7 +87,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func showEmpty(){
         emptyLabel.hidden = true
-        emptyLabel.text = "尚無任何通知物件\n\n不妨嘗試在租屋雷達頁，設定符合需求的通知條件"
+        emptyLabel.text = SystemMessage.INFO.EMPTY_NOTIFICATIONS
         emptyLabel.sizeToFit()
         emptyLabel.hidden = false
     }

@@ -352,7 +352,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         noCollectionLabel.hidden = true
         if count == 0 {
-            noCollectionLabel.text = "尚無任何儲存的收藏物件\n\n不妨嘗試在搜尋結果頁，把有興趣的租屋物件儲存起來"
+            noCollectionLabel.text = SystemMessage.INFO.EMPTY_COLLECTTIONS
             noCollectionLabel.sizeToFit()
             noCollectionLabel.hidden = false
         }

@@ -85,13 +85,13 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
         if (itemSize == 0) {
             
             if(itemType == .SavedSearch) {
-                noSearchHistoryLabel.text = "尚無任何儲存的\"常用搜尋\"\n\n不妨嘗試在搜尋結果頁，把當前搜尋條件儲存起來"
+                noSearchHistoryLabel.text = SystemMessage.INFO.EMPTY_SAVED_SEARCH
                 noSearchHistoryLabel.sizeToFit()
                 noSearchHistoryLabel.hidden = false
             }
             
             if(itemType == .HistoricalSearch) {
-                noSearchHistoryLabel.text = "尚無任何\"搜尋紀錄\"\n\n日後任何的搜尋紀錄，都會記錄在這邊，方便查找"
+                noSearchHistoryLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_SEARCH
                 noSearchHistoryLabel.sizeToFit()
                 noSearchHistoryLabel.hidden = false
             }

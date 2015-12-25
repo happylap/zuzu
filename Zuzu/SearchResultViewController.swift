@@ -574,6 +574,7 @@ class SearchResultViewController: UIViewController {
                         if let result = result {
                             let collectionDao = CollectionHouseItemDao.sharedInstance
                             collectionDao.add(result, isCommit: true)
+                            NotificationItemService.sharedInstance.addItem(result)
                             self.alertAddingToCollectionSuccess()
                             
                             // Reload collection list
