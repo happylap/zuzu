@@ -93,6 +93,10 @@ class CoreDataManager: NSObject {
                 
                 do{
                     try NSFileManager.defaultManager().removeItemAtPath(storeURL.path!)
+                    let journalSHMURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent("\(storeName)-shm")
+                    try NSFileManager.defaultManager().removeItemAtPath(journalSHMURL.path!)
+                    let journalWALURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent("\(storeName)-wal")
+                    try NSFileManager.defaultManager().removeItemAtPath(journalWALURL.path!)
                 }catch{
                     NSLog("remove store file error")
                 }
