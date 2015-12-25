@@ -14,7 +14,13 @@ import Social
 import MBProgressHUD
 import AwesomeCache
 
+protocol HouseDetailViewDelegate {
+    func onHouseItemStateChanged()
+}
+
 class HouseDetailViewController: UIViewController {
+    
+    var delegate:HouseDetailViewDelegate?
     
     let cacheName = "houseDetailCache"
     let cacheTime:Double = 3 * 60 * 60 //3 hours
@@ -937,6 +943,9 @@ class HouseDetailViewController: UIViewController {
                         barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
                     }
                 }
+                
+                ///Notify the search result table to refresh the slected row
+                delegate?.onHouseItemStateChanged()
         }
     }
     

@@ -702,7 +702,8 @@ class SearchResultViewController: UIViewController {
                         let houseItem = dataSource.getItemForRow(row)
                         
                         hdvc.houseItem = houseItem
-                        
+                        hdvc.delegate = self
+                            
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                             action: GAConst.Action.Activity.ViewItemPrice,
@@ -915,5 +916,21 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
         }
         
         reloadDataWithNewCriteria(self.searchCriteria)
+    }
+}
+
+// MARK: - HouseDetailViewDelegate
+// TODO: A better solution. A delegate for doing "my collecion" operations
+extension SearchResultViewController: HouseDetailViewDelegate {
+    func onHouseItemStateChanged() {
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            
+            // Reload collection list
+            self.collectionIdList =
+                CollectionHouseItemDao.sharedInstance.getCollectionIdList()
+            
+            // Refresh the row
+            tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: UITableViewRowAnimation.None)
+        }
     }
 }
