@@ -225,7 +225,7 @@
         
         @IBOutlet weak var notificationBarItem: UIBarButtonItem!{
             didSet{
-                notificationBarItem.title = "Notification"
+                notificationBarItem.image = UIImage(named: "notification_p")
                 notificationBarItem.enabled = true
             }
         }
