@@ -150,7 +150,7 @@ class AbstractHouseItem: NSManagedObject {
             .addHouseType(Int(self.houseType))
             .addPurposeType(Int(self.purposeType))
             .addPrice(Int(self.price))
-            .addSize(Int(self.size)) // TODO - Should be set size as float
+            .addSize(self.size) // TODO - Should be set size as float
             .addSource(Int(self.source))
             .addImageList(self.img)
             .build()

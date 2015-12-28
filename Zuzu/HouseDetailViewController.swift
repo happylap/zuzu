@@ -227,9 +227,12 @@ class HouseDetailViewController: UIViewController {
                             cell.leftInfoText.text = "\(price) 月/元"
                         }
                         
-                        if let size = houseItemDetail.valueForKey("size") as? Int {
+                        if let size = houseItemDetail.valueForKey("size") as? Float {
                             cell.rightInfoText.font = UIFont.boldSystemFontOfSize(cell.rightInfoText.font.pointSize)
-                            cell.rightInfoText.text = "\(size) 坪"
+                            
+                            /// Round the size to the second place
+                            let multiplier:Float = pow(10.0, 2)
+                            cell.rightInfoText.text = "\(round(size * multiplier)/multiplier) 坪"
                         }
                     } else {
                         ///Before data is loaded

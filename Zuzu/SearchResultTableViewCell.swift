@@ -169,7 +169,10 @@ class SearchResultTableViewCell: UITableViewCell {
             
             prpcessSourceString(houseSourceLabel, source: houseItem.source)
 
-            houseSize.text = String(format: "%d 坪", houseItem.size)
+            /// Round the size to the second place
+            let multiplier:Float = pow(10.0, 2)
+            houseSize.text = "\(round(houseItem.size * multiplier)/multiplier) 坪"
+ 
             housePrice.text = String(houseItem.price)
             houseImg.image = placeholderImg
             

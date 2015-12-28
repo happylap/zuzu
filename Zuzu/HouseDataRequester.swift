@@ -67,7 +67,7 @@ class HouseItem:NSObject, NSCoding {
         private var houseType: Int?
         private var purposeType: Int?
         private var price: Int?
-        private var size: Int?
+        private var size: Float?
         private var source: Int?
         private var desc: String?
         private var imgList: [String]?
@@ -106,7 +106,7 @@ class HouseItem:NSObject, NSCoding {
             return self
         }
         
-        func addSize(size:Int) -> Builder {
+        func addSize(size:Float) -> Builder {
             self.size = size
             return self
         }
@@ -140,7 +140,7 @@ class HouseItem:NSObject, NSCoding {
     let purposeType: Int
     let price: Int
     let source: Int
-    let size: Int
+    let size: Float
     let desc: String?
     let imgList: [String]?
     
@@ -170,7 +170,7 @@ class HouseItem:NSObject, NSCoding {
         let houseType = decoder.decodeIntegerForKey("houseType") as Int
         let purposeType = decoder.decodeIntegerForKey("purposeType") as Int
         let price = decoder.decodeIntegerForKey("price") as Int
-        let size = decoder.decodeIntegerForKey("size") as Int
+        let size = decoder.decodeFloatForKey("size") as Float
         let source = decoder.decodeIntegerForKey("source") as Int
         let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
         let imgList = decoder.decodeObjectForKey("imgList") as? [String] ?? [String]()
@@ -196,7 +196,7 @@ class HouseItem:NSObject, NSCoding {
         aCoder.encodeInteger(houseType, forKey:"houseType")
         aCoder.encodeInteger(purposeType, forKey:"purposeType")
         aCoder.encodeInteger(price, forKey:"price")
-        aCoder.encodeInteger(size, forKey:"size")
+        aCoder.encodeFloat(size, forKey:"size")
         aCoder.encodeInteger(source, forKey:"source")
         aCoder.encodeObject(desc, forKey:"desc")
         aCoder.encodeObject(imgList, forKey:"imgList")
@@ -434,7 +434,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let houseType = house["house_type"].int ?? 0
                                     let purpose = house["purpose_type"].int ?? 0
                                     let price = house["price"].int ?? 0
-                                    let size = house["size"].int ?? 0
+                                    let size = house["size"].float ?? 0
                                     let source = house["source"].int  ?? 1
                                     let imgList = house["img"].array?.map({ (jsonObj) -> String in
                                         return jsonObj.stringValue
