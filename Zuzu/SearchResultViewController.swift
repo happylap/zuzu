@@ -564,6 +564,13 @@ class SearchResultViewController: UIViewController {
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     
                 } else {
+                    
+                    // Append the houseId immediately to make the UI more responsive
+                    // TBD: Need to discuss whether we need to retrive the data from remote again
+                    self.collectionIdList?.append(houseItem.id)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    self.alertAddingToCollectionSuccess()
+                    
                     HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                         
                         if let error = error {
@@ -575,12 +582,9 @@ class SearchResultViewController: UIViewController {
                             let collectionDao = CollectionHouseItemDao.sharedInstance
                             collectionDao.add(result, isCommit: true)
                             NotificationItemService.sharedInstance.addItem(result)
-                            self.alertAddingToCollectionSuccess()
                             
                             // Reload collection list
                             self.collectionIdList = collectionDao.getCollectionIdList()
-                            
-                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                         }
                     }
                 }
