@@ -3,9 +3,33 @@ PODS:
   - AlamofireImage (1.1.2):
     - Alamofire (~> 2.0)
   - AwesomeCache (2.0)
+  - AWSCognito (2.3.2):
+    - AWSCore (= 2.3.2)
+  - AWSCore (2.3.2)
+  - AWSS3 (2.3.2):
+    - AWSCore (= 2.3.2)
+  - Bolts (1.5.0):
+    - Bolts/AppLinks (= 1.5.0)
+    - Bolts/Tasks (= 1.5.0)
+  - Bolts/AppLinks (1.5.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.5.0)
   - DACircularProgress (2.3.1)
   - Device (0.0.4)
   - Dollar (4.0.1)
+  - FBSDKCoreKit (4.8.0):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc (= 4.8.0)
+    - FBSDKCoreKit/no-arc (= 4.8.0)
+  - FBSDKCoreKit/arc (4.8.0):
+    - Bolts (~> 1.1)
+  - FBSDKCoreKit/no-arc (4.8.0):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc
+  - FBSDKLoginKit (4.8.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.8.0):
+    - FBSDKCoreKit
   - Google/AdMob (1.2.1):
     - Google/Core
     - GoogleMobileAds (~> 7.3)
@@ -58,8 +82,13 @@ DEPENDENCIES:
   - Alamofire (~> 2.0)
   - AlamofireImage (~> 1.0)
   - AwesomeCache (~> 2.0)
+  - AWSCognito
+  - AWSS3
   - Device (~> 0.0.4)
   - Dollar (~> 4.0)
+  - FBSDKCoreKit
+  - FBSDKLoginKit
+  - FBSDKShareKit
   - Google/AdMob
   - Google/Analytics
   - Google/SignIn
@@ -76,9 +105,16 @@ SPEC CHECKSUMS:
   Alamofire: 8edbab00802a752bb5240cc2abe70e7e881488ad
   AlamofireImage: dc3d3de5d095fd9545b144ba8f6da5bfc539512a
   AwesomeCache: 5d6839ad139cdcee3c3a067f6fc1849523867dd9
+  AWSCognito: af9cd756ab300f0a86582a11fbe1777d7fa81696
+  AWSCore: c2f69975fd2caf38a10736961de28a0105cdb00c
+  AWSS3: 9ac201e7a4ad8be0b68348c77acfd100027b97af
+  Bolts: 722ab9a4f8b50fc4ed1b9998a5a7a2b3f16d80b4
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
   Dollar: a058e2659e0d3261307c12630dbc2fd8e32f80bf
+  FBSDKCoreKit: 66a935d17b6e00b6b64e604f2eb9b72c9ab7deb8
+  FBSDKLoginKit: d893fcbb98d854496925e9ff73c67b896982d3c4
+  FBSDKShareKit: e7577ee3adf80fc04fb656dd133fbb522250672b
   Google: fd33b5fa40fa3aaee5176de49c873a74e3d11dce
   GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699

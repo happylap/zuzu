@@ -10,7 +10,7 @@
         <!--租屋雷達-->
         <scene sceneID="siC-n1-MI9">
             <objects>
-                <viewController id="OaS-ny-kO8" sceneMemberID="viewController">
+                <viewController id="OaS-ny-kO8" customClass="RadarViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3MF-we-hIY"/>
                         <viewControllerLayoutGuide type="bottom" id="Wm7-aH-seM"/>

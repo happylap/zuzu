@@ -84,6 +84,7 @@
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
 		2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* resultFilters.json */; };
+		2FE1326A1C312081008F5E68 /* RadarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE132691C312081008F5E68 /* RadarViewController.swift */; };
 		2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */; };
 		2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */; };
 		2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */; };
@@ -222,6 +223,7 @@
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
 		2FDCA0D41BE0721800498FC0 /* resultFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = resultFilters.json; sourceTree = "<group>"; };
+		2FE132691C312081008F5E68 /* RadarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarViewController.swift; sourceTree = "<group>"; };
 		2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterTableViewController.swift; sourceTree = "<group>"; };
 		2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
 		2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlPopoverViewController.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				14632AAE1C27B614008C9A2D /* NotificationItemsTableViewController.swift */,
+				2FE132691C312081008F5E68 /* RadarViewController.swift */,
 				14632AAB1C27B5E0008C9A2D /* View */,
 				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
 			);
@@ -856,6 +859,7 @@
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				14632AAF1C27B614008C9A2D /* NotificationItemsTableViewController.swift in Sources */,
 				2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */,
+				2FE1326A1C312081008F5E68 /* RadarViewController.swift in Sources */,
 				81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */,
 				81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */,
 				2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */,
