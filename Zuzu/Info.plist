@@ -102,6 +102,7 @@
         <string>fb-messenger-api</string>
         <string>fbauth2</string>
         <string>fbshareextension</string>
+        <string>fb</string>
     </array>
 </dict>
 </plist>
