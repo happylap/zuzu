@@ -96,6 +96,9 @@
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
+		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
+		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
+		81924E341C33AB4C00976EC7 /* FBUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* FBUserData.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
 		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
@@ -236,6 +239,9 @@
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyNoteViewCell.swift; path = Collection/MyNoteViewCell.swift; sourceTree = "<group>"; };
+		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLoginViewController.swift; path = Collection/FBLoginViewController.swift; sourceTree = "<group>"; };
+		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLoginService.swift; path = Service/FBLoginService.swift; sourceTree = "<group>"; };
+		81924E331C33AB4C00976EC7 /* FBUserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBUserData.swift; path = Model/FBUserData.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
 		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
@@ -334,6 +340,7 @@
 				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
 				8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */,
 				816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */,
+				81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */,
 			);
 			name = Collection;
 			sourceTree = "<group>";
@@ -452,6 +459,7 @@
 				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */,
+				81924E311C32D95100976EC7 /* FBLoginService.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -501,6 +509,7 @@
 				81FA28071BDA397B0038DD19 /* House.swift */,
 				81FA28111BDA39B10038DD19 /* Note.swift */,
 				81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */,
+				81924E331C33AB4C00976EC7 /* FBUserData.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -808,6 +817,7 @@
 				1446FA5C1C2D3AA90073A8A7 /* CommonUtils.swift in Sources */,
 				2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */,
 				2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */,
+				81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */,
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
 				14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
@@ -837,6 +847,7 @@
 				14914FA21C27D09800025AC1 /* CollectionHouseItem.swift in Sources */,
 				14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */,
 				14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */,
+				81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */,
 				2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */,
 				81FA28241BDA3A0F0038DD19 /* MyCollectionCell.swift in Sources */,
 				2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */,
@@ -880,6 +891,7 @@
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
 				2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */,
 				14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */,
+				81924E341C33AB4C00976EC7 /* FBUserData.swift in Sources */,
 				81FA281A1BDA39BB0038DD19 /* RefreshConst.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

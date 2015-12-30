@@ -8,11 +8,16 @@
 
 import UIKit
 import GoogleMaps
+import AWSCore
+import FBSDKCoreKit
+import FBSDKLoginKit
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
+    let cognitoIdentityPoolId = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
     
     var window: UIWindow?
     
@@ -32,6 +37,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gai.trackUncaughtExceptions = true  // report uncaught exceptions
             gai.logger.logLevel = GAILogLevel.Error  // remove before app release
         #endif
+        
+        let credentialsProvider = AWSCognitoCredentialsProvider(
+            regionType: AWSRegionType.APNortheast1, identityPoolId: cognitoIdentityPoolId)
+        
+        let defaultServiceConfiguration = AWSServiceConfiguration(
+            region: AWSRegionType.APSoutheast1, credentialsProvider: credentialsProvider)
+        
+        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
     }
     
     private func customUISetup() {
@@ -68,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print(url)
 
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -95,6 +108,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Filter data is not cached across App instance
         filterDataStore.clearFilterSetting()
         
+        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+        loginManager.logOut()
     }
     
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
@@ -102,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
 

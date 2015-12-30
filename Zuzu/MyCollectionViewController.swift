@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import CoreData
+import FBSDKLoginKit
 
 class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
@@ -283,20 +284,23 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         NSLog("%@ viewDidLoad", self)
         
-        // Load the first page of data
-        self.loadData()
+            // Load the first page of data
+            self.loadData()
+            
+            //Configure cell height
+            configureTableView()
+            
+            //Configure Sorting Status
+            configureSortingButtons()
         
-        //Configure cell height
-        configureTableView()
-        
-        //Configure Sorting Status
-        configureSortingButtons()
         
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
+        
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -417,9 +421,14 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-                CollectionHouseItemDao.sharedInstance.deleteByID(collectionHouseItem.id)
+        
+        if !FBLoginService.sharedInstance.hasActiveSession() {
+            FBLoginService.sharedInstance.confirmAndLogin(self)
+        } else {
+            if editingStyle == .Delete {
+                if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+                    CollectionHouseItemDao.sharedInstance.deleteByID(collectionHouseItem.id)
+                }
             }
         }
     }

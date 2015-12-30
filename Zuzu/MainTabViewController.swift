@@ -48,6 +48,24 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         self.tabBar.hidden = true
     }
     
+    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
+        NSLog("%@ tabBarController", self)
+        
+        if let sb = viewController.storyboard {
+            if let name: String = sb.valueForKey("name") as? String {
+                switch name {
+                case "MyCollectionStoryboard":
+                    if !FBLoginService.sharedInstance.hasActiveSession() {
+                        FBLoginService.sharedInstance.confirmAndLogin(viewController)
+                        return false
+                    }
+                default: break
+                }
+            }
+        }
+        return true
+    }
+    
 }
 
 extension UITabBarController {

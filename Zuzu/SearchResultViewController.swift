@@ -545,46 +545,51 @@ class SearchResultViewController: UIViewController {
     
     func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
         
-        if let imgView = sender.view {
+        if !FBLoginService.sharedInstance.hasActiveSession() {
+            FBLoginService.sharedInstance.confirmAndLogin(self)
+        } else {
             
-            if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
+            if let imgView = sender.view {
                 
-                ///Get current house ID
-                let indexPath = cell.indexPath
-                let houseItem = self.dataSource.getItemForRow(indexPath.row)
-                
-                if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
+                if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                     
-                    let collectionDao = CollectionHouseItemDao.sharedInstance
-                    collectionDao.deleteByID(houseItem.id)
+                    ///Get current house ID
+                    let indexPath = cell.indexPath
+                    let houseItem = self.dataSource.getItemForRow(indexPath.row)
                     
-                    // Reload collection list
-                    self.collectionIdList = collectionDao.getCollectionIdList()
-                    
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                    
-                } else {
-                    
-                    // Append the houseId immediately to make the UI more responsive
-                    // TBD: Need to discuss whether we need to retrive the data from remote again
-                    self.collectionIdList?.append(houseItem.id)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                    self.alertAddingToCollectionSuccess()
-                    
-                    HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+                    if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
                         
-                        if let error = error {
-                            NSLog("Cannot get remote data %@", error.localizedDescription)
-                            return
-                        }
+                        let collectionDao = CollectionHouseItemDao.sharedInstance
+                        collectionDao.deleteByID(houseItem.id)
                         
-                        if let result = result {
-                            let collectionDao = CollectionHouseItemDao.sharedInstance
-                            collectionDao.add(result, isCommit: true)
-                            NotificationItemService.sharedInstance.addItem(result)
+                        // Reload collection list
+                        self.collectionIdList = collectionDao.getCollectionIdList()
+                        
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        
+                    } else {
+                        
+                        // Append the houseId immediately to make the UI more responsive
+                        // TBD: Need to discuss whether we need to retrive the data from remote again
+                        self.collectionIdList?.append(houseItem.id)
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        self.alertAddingToCollectionSuccess()
+                        
+                        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                             
-                            // Reload collection list
-                            self.collectionIdList = collectionDao.getCollectionIdList()
+                            if let error = error {
+                                NSLog("Cannot get remote data %@", error.localizedDescription)
+                                return
+                            }
+                            
+                            if let result = result {
+                                let collectionDao = CollectionHouseItemDao.sharedInstance
+                                collectionDao.add(result, isCommit: true)
+                                NotificationItemService.sharedInstance.addItem(result)
+                                
+                                // Reload collection list
+                                self.collectionIdList = collectionDao.getCollectionIdList()
+                            }
                         }
                     }
                 }

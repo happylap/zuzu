@@ -922,33 +922,37 @@ class HouseDetailViewController: UIViewController {
     }
     
     func collectButtonTouched(sender: UIButton){
-        if let houseItemDetail = self.houseItemDetail,
-            let houseId = houseItemDetail.valueForKey("id") as? String {
-                
-                let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
-                
-                let collectionDao = CollectionHouseItemDao.sharedInstance
-                
-                ///Determine action based on whether the house item is already in "My Collection"
-                if(collectionDao.isExist(houseId)) {
+        if !FBLoginService.sharedInstance.hasActiveSession() {
+            FBLoginService.sharedInstance.confirmAndLogin(self)
+        } else {
+            if let houseItemDetail = self.houseItemDetail,
+                let houseId = houseItemDetail.valueForKey("id") as? String {
                     
-                    collectionDao.deleteByID(houseId)
+                    let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
                     
-                    if let barItem = barItem {
-                        barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                    let collectionDao = CollectionHouseItemDao.sharedInstance
+                    
+                    ///Determine action based on whether the house item is already in "My Collection"
+                    if(collectionDao.isExist(houseId)) {
+                        
+                        collectionDao.deleteByID(houseId)
+                        
+                        if let barItem = barItem {
+                            barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                        }
+                        
+                    } else {
+                        collectionDao.add(houseItemDetail, isCommit: true)
+                        self.alertAddingToCollectionSuccess()
+                        
+                        if let barItem = barItem {
+                            barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+                        }
                     }
                     
-                } else {
-                    collectionDao.add(houseItemDetail, isCommit: true)
-                    self.alertAddingToCollectionSuccess()
-                    
-                    if let barItem = barItem {
-                        barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
-                    }
-                }
-                
-                ///Notify the search result table to refresh the slected row
-                delegate?.onHouseItemStateChanged()
+                    ///Notify the search result table to refresh the slected row
+                    delegate?.onHouseItemStateChanged()
+            }
         }
     }
     
