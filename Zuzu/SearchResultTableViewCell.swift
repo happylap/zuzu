@@ -264,7 +264,7 @@ class SearchResultTableViewCell: UITableViewCell {
             } else {
                 CollectionHouseItemDao.sharedInstance.updateByID(collectionHouseItem.id, dataToUpdate: ["contacted": false])
             }
-            parentTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+            //parentTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
         }
     }
     

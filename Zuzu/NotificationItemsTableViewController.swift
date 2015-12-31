@@ -179,7 +179,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         
         switch type {
         case .Insert:
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            //FIXME: iOS 8 Bug!
+            if indexPath != newIndexPath {
+                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            }
         case .Delete:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Update:
