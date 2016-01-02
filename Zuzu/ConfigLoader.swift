@@ -14,13 +14,17 @@ public struct ConfigLoader {
     static private var regionDic : [Int : City]?
     static private var cityList : [City]?
     
-    static let RegionList:[Int : City] =  {
-        ConfigLoader.initCityData()
+    static let CodeToCityMap:[Int : City] =  {
+        if(regionDic == nil) {
+            ConfigLoader.initCityData()
+        }
         return regionDic!
     }()
     
     static let SortedCityList:[City] = {
-        ConfigLoader.initCityData()
+        if(cityList == nil) {
+            ConfigLoader.initCityData()
+        }
         return cityList!
     }()
     
@@ -28,8 +32,8 @@ public struct ConfigLoader {
     
     private static func initCityData() {
         
-        regionDic = regionDic ?? [Int : City]()
-        cityList = cityList ?? [City]()
+        regionDic = [Int : City]()
+        cityList = [City]()
         
         if let path = NSBundle.mainBundle().pathForResource("areasInTaiwan", ofType: "json") {
             

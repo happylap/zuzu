@@ -24,7 +24,7 @@ class CityRegionContainerController: UIViewController {
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var regionSelectionState: [City] = [City]()
     
-    var cityRegions = ConfigLoader.RegionList //City dictionary by city code
+    var codeToCityMap = ConfigLoader.CodeToCityMap //City dictionary by city code
     var cityList = ConfigLoader.SortedCityList //Sorted City list
     
     struct ViewTransConst {
@@ -50,7 +50,7 @@ class CityRegionContainerController: UIViewController {
             let selectedRegions = city.regions
             
             for region in selectedRegions {
-                if let regionList = cityRegions[city.code]?.regions {
+                if let regionList = codeToCityMap[city.code]?.regions {
                     
                     if let index = regionList.indexOf(region) { ///Region needs to be Equatable
                         checkedRegions[city.code]?[index] = true
@@ -153,7 +153,7 @@ class CityRegionContainerController: UIViewController {
                 
                 if let vc = segue.destinationViewController as? CityPickerViewController {
                     cityPicker = vc
-                    vc.cityRegions  = cityList
+                    vc.allCities  = cityList
                     vc.regionSelectionState = regionSelectionState
                 }
                 
@@ -162,7 +162,7 @@ class CityRegionContainerController: UIViewController {
                 if let vc = segue.destinationViewController as? RegionTableViewController {
                     regionTable = vc
                     vc.checkedRegions = checkedRegions
-                    vc.cityRegions = cityRegions
+                    vc.codeToCityMap = codeToCityMap
                 }
             default: break
             }
