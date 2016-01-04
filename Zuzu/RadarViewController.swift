@@ -16,7 +16,7 @@ class RadarViewController: UIViewController {
         
 
         /// 1.Initialize the Amazon Cognito credentials provider
-        let poolId = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
+        /*let poolId = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
         let credentialsProvider = AWSCognitoCredentialsProvider(regionType:.APNortheast1,
             identityPoolId: poolId)
         
@@ -57,7 +57,7 @@ class RadarViewController: UIViewController {
             }
             return nil
         })
-
+        */
 
     }
 

@@ -91,15 +91,7 @@ class CollectionItemService: NSObject
     }
     
     func synchronize(dataset: AWSCognitoDataset?) {
-        if let dateset = self.getDataset() {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronize().continueWithBlock {
-                (task) -> AnyObject! in
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                return nil
-            }
-        }
-        /*
+        
         if dataset != nil {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             dataset!.synchronize().continueWithBlock {
@@ -116,7 +108,7 @@ class CollectionItemService: NSObject
                 return nil
             }
         } 
-        */
+        
     }
     
     func syncFromCloud() {

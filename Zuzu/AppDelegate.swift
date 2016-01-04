@@ -38,13 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gai.logger.logLevel = GAILogLevel.Error  // remove before app release
         #endif
         
-        let credentialsProvider = AWSCognitoCredentialsProvider(
+        /*let credentialsProvider = AWSCognitoCredentialsProvider(
             regionType: AWSRegionType.APNortheast1, identityPoolId: cognitoIdentityPoolId)
         
         let defaultServiceConfiguration = AWSServiceConfiguration(
             region: AWSRegionType.APNortheast1, credentialsProvider: credentialsProvider)
         
-        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
+        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration*/
     }
     
     private func customUISetup() {

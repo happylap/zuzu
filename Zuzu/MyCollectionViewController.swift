@@ -311,7 +311,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                 
                 for object: AWSCognitoRecord in objects {
                     
-                    NSLog("%@ : %@", object.recordId, object.data.string())
+                    //NSLog("%@ : %@", object.recordId, object.data.string())
                 }
             }
             
