@@ -1487,12 +1487,12 @@
             
             var currentCity = City(code: 100, name: "台北市", regions: [Region.allRegions])
             
-            let regionlist = ConfigLoader.RegionList
+            let codeToCityMap = ConfigLoader.CodeToCityMap
             
             if let placemark = placemark {
                 let postalCode = placemark.postalCode
                 
-                for (_, city) in regionlist {
+                for (_, city) in codeToCityMap {
                     
                     if let region = city.regions.filter({ (region) -> Bool in
                         return String(region.code) == postalCode

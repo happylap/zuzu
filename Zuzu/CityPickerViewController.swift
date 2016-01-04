@@ -23,7 +23,7 @@ class CityPickerViewController:UIViewController {
     
     weak var delegate: CitySelectionViewControllerDelegate?
     
-    var cityRegions = [City]()//Array of Cities
+    var allCities = [City]()//Array of Cities
     
     private func configurePricePicker() {
         cityPicker.dataSource = self
@@ -32,7 +32,7 @@ class CityPickerViewController:UIViewController {
     
     private func getFirstSelectedCityIndex() -> Int?{
         
-        for (index, city) in cityRegions.enumerate() {
+        for (index, city) in allCities.enumerate() {
             if let regionSelectionState = regionSelectionState {
                 if(regionSelectionState.contains(city)) {
                     return index
@@ -83,7 +83,7 @@ class CityPickerViewController:UIViewController {
         
         ///Notify the slected city
         let row = cityPicker.selectedRowInComponent(0)
-        let selectedCity = cityRegions[row].code // cityItems[0][row].value
+        let selectedCity = allCities[row].code // cityItems[0][row].value
         delegate?.onCitySelected(selectedCity)
     }
     
@@ -117,7 +117,7 @@ extension CityPickerViewController: UIPickerViewDelegate {
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
-        let city = cityRegions[row]
+        let city = allCities[row]
         
         if let regionSelectionState = regionSelectionState {
             if let index = regionSelectionState.indexOf(city){
@@ -128,24 +128,24 @@ extension CityPickerViewController: UIPickerViewDelegate {
                     
                     if(numberOfSelection == 1) {
                         if(selectedRegions[0] == Region.allRegions) {
-                            return ("\(cityRegions[row].name) (\(Region.allRegions.name))")
+                            return ("\(allCities[row].name) (\(Region.allRegions.name))")
                         }
                     }
                     
-                    return ("\(cityRegions[row].name) (\(numberOfSelection))")
+                    return ("\(allCities[row].name) (\(numberOfSelection))")
                 }
             }
         }
         
-        return cityRegions[row].name
+        return allCities[row].name
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return cityRegions.count
+        return allCities.count
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedCity = cityRegions[row].code
+        let selectedCity = allCities[row].code
         
         delegate?.onCitySelected(selectedCity)
     }

@@ -17,7 +17,7 @@ class RegionTableViewController: UITableViewController {
     
     var citySelected:Int = 100 //Default value
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
-    var cityRegions = [Int : City]()//City dictionary by city code
+    var codeToCityMap = [Int : City]()//City dictionary by city code
     
     // MARK: - Private Utils
 
@@ -80,7 +80,7 @@ class RegionTableViewController: UITableViewController {
         /// Send back selected city regions
         var result: City?
         
-        if let city = cityRegions[cityCode] {
+        if let city = codeToCityMap[cityCode] {
             
             result = City(code: city.code, name: city.name, regions: [Region]())
             
@@ -189,7 +189,7 @@ class RegionTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityRegions[citySelected]?.regions.count ?? 0
+        return codeToCityMap[citySelected]?.regions.count ?? 0
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -216,7 +216,7 @@ class RegionTableViewController: UITableViewController {
         
         cell.simpleFilterLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline).fontWithSize(20)
         
-        if let city = cityRegions[citySelected] {
+        if let city = codeToCityMap[citySelected] {
             cell.simpleFilterLabel?.text = city.regions[indexPath.row].name
         }
         
