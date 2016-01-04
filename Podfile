@@ -21,11 +21,15 @@ pod 'GoogleIDFASupport'
 pod 'AwesomeCache', '~> 2.0'
 pod 'XCGLogger', '~> 3.1'
 pod 'SCLAlertView'
+pod 'UICKeyChainStore'
+pod 'AWSCore'
 pod 'AWSS3'
 pod 'AWSCognito'
 pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
+
+
 end
 
 target 'ZuzuTests' do

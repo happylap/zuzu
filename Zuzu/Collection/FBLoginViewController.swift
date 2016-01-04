@@ -37,7 +37,9 @@ class FBLoginViewController: UIViewController, FBSDKLoginButtonDelegate
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!)
     {
+        
         if FBLoginService.sharedInstance.hasActiveSession() {
+            AmazonClientManager.sharedInstance.fbLogin()
             dismissViewControllerAnimated(true, completion: nil)
         } else {
             

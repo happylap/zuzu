@@ -95,6 +95,12 @@
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
+		81390C751C365F2600450761 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C741C365F2600450761 /* Contants.swift */; };
+		81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C761C365F9A00450761 /* AmazonClientManager.swift */; };
+		81390C831C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */; };
+		81390C841C36AB6100450761 /* DeveloperAuthenticationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */; };
+		81390C891C36AC0700450761 /* Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C881C36AC0700450761 /* Crypto.m */; };
+		81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C8A1C37B0E800450761 /* CollectionItemService.swift */; };
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
 		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
 		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
@@ -238,6 +244,15 @@
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
+		81390C741C365F2600450761 /* Contants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
+		81390C761C365F9A00450761 /* AmazonClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AmazonClientManager.swift; path = Service/AmazonClientManager.swift; sourceTree = "<group>"; };
+		81390C7E1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeveloperAuthenticatedIdentityProvider.h; sourceTree = "<group>"; };
+		81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeveloperAuthenticatedIdentityProvider.m; sourceTree = "<group>"; };
+		81390C801C36AB6100450761 /* DeveloperAuthenticationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeveloperAuthenticationClient.h; sourceTree = "<group>"; };
+		81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeveloperAuthenticationClient.m; sourceTree = "<group>"; };
+		81390C871C36AC0700450761 /* Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crypto.h; sourceTree = "<group>"; };
+		81390C881C36AC0700450761 /* Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crypto.m; sourceTree = "<group>"; };
+		81390C8A1C37B0E800450761 /* CollectionItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionItemService.swift; path = Service/CollectionItemService.swift; sourceTree = "<group>"; };
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyNoteViewCell.swift; path = Collection/MyNoteViewCell.swift; sourceTree = "<group>"; };
 		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLoginViewController.swift; path = Collection/FBLoginViewController.swift; sourceTree = "<group>"; };
 		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLoginService.swift; path = Service/FBLoginService.swift; sourceTree = "<group>"; };
@@ -388,6 +403,7 @@
 				2F276B361BBED52200A41306 /* Collection */,
 				2FBC05511BDE6E9C0035652D /* Dao */,
 				2FBC05501BDE6E290035652D /* Database */,
+				81390C7B1C36AADE00450761 /* DeveloperAuthenticated */,
 				2FBC05521BDE6EEB0035652D /* Model */,
 				2F276B371BBED53500A41306 /* Radar */,
 				2FBC05561BDE769B0035652D /* Resource */,
@@ -395,6 +411,7 @@
 				2F276B351BBED50300A41306 /* Search */,
 				2F5854D01BB3CBA9007FF85B /* Util */,
 				2FBC05541BDE6F600035652D /* View */,
+				81390C741C365F2600450761 /* Contants.swift */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				2F9B25E51C08C251004CECAA /* FeatureOptions.swift */,
@@ -454,6 +471,8 @@
 		2FBC054E1BDE6D860035652D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				81390C761C365F9A00450761 /* AmazonClientManager.swift */,
+				81390C8A1C37B0E800450761 /* CollectionItemService.swift */,
 				14914FB11C2836DB00025AC1 /* NotificationItemService.swift */,
 				81FA281D1BDA39C20038DD19 /* Router.swift */,
 				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
@@ -581,6 +600,19 @@
 				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81390C7B1C36AADE00450761 /* DeveloperAuthenticated */ = {
+			isa = PBXGroup;
+			children = (
+				81390C871C36AC0700450761 /* Crypto.h */,
+				81390C881C36AC0700450761 /* Crypto.m */,
+				81390C7E1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.h */,
+				81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */,
+				81390C801C36AB6100450761 /* DeveloperAuthenticationClient.h */,
+				81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */,
+			);
+			name = DeveloperAuthenticated;
 			sourceTree = "<group>";
 		};
 		81F05D631BF0E73600441A84 /* ZuzuTests */ = {
@@ -824,9 +856,11 @@
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */,
 				14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */,
+				81390C831C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
+				81390C891C36AC0700450761 /* Crypto.m in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
 				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
 				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
@@ -855,6 +889,7 @@
 				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
 				2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */,
+				81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */,
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
@@ -862,9 +897,11 @@
 				2F6155591BD888660024145E /* SearchItemService.swift in Sources */,
 				14914FA11C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift in Sources */,
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
+				81390C751C365F2600450761 /* Contants.swift in Sources */,
 				2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */,
 				2FE912741BFF796C00019053 /* LoadingSpinner.swift in Sources */,
 				2F94105F1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift in Sources */,
+				81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */,
 				14914FA81C27D7E800025AC1 /* NotificationHouseItemDao.swift in Sources */,
 				81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
@@ -878,6 +915,7 @@
 				2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */,
+				81390C841C36AB6100450761 /* DeveloperAuthenticationClient.m in Sources */,
 				2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,

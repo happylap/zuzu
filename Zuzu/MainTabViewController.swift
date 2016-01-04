@@ -10,8 +10,29 @@ import UIKit
 
 class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     
+    func configureAmazon() {
+        if AmazonClientManager.sharedInstance.isConfigured() {
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
+            AmazonClientManager.sharedInstance.resumeSession {
+                (task) -> AnyObject! in
+                dispatch_async(dispatch_get_main_queue()) {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                }
+                return nil
+            }
+        } else {
+            let missingConfigAlert = UIAlertController(title: "Missing Configuration", message: "Please check Constants.swift and set appropriate values", preferredStyle: .Alert)
+            missingConfigAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
+            self.presentViewController(missingConfigAlert, animated: true, completion: nil)
+        }
+
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.configureAmazon()
         
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!
@@ -55,10 +76,21 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
             if let name: String = sb.valueForKey("name") as? String {
                 switch name {
                 case "MyCollectionStoryboard":
-                    if !FBLoginService.sharedInstance.hasActiveSession() {
-                        FBLoginService.sharedInstance.confirmAndLogin(viewController)
-                        return false
+                    
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                    
+                    if !AmazonClientManager.sharedInstance.isLoggedIn() {
+                        
+                        AmazonClientManager.sharedInstance.loginFromView(self) {
+                            (task: AWSTask!) -> AnyObject! in
+                            dispatch_async(dispatch_get_main_queue()) {
+                                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            }
+                            return nil
+                        }
+                        
                     }
+                    
                 default: break
                 }
             }

@@ -9,9 +9,9 @@
 import UIKit
 import GoogleMaps
 import AWSCore
+import AWSCognito
 import FBSDKCoreKit
 import FBSDKLoginKit
-
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             regionType: AWSRegionType.APNortheast1, identityPoolId: cognitoIdentityPoolId)
         
         let defaultServiceConfiguration = AWSServiceConfiguration(
-            region: AWSRegionType.APSoutheast1, credentialsProvider: credentialsProvider)
+            region: AWSRegionType.APNortheast1, credentialsProvider: credentialsProvider)
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
     }
@@ -71,8 +71,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return urls[urls.count-1] as NSURL
     }()
     
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return AmazonClientManager.sharedInstance.application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+    }
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        if AWSCognito.cognitoDeviceId() != nil {
+            let canRegisterApp : UIApplication? = application
+            canRegisterApp?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: nil))
+        }
         
         commonServiceSetup()
         
@@ -81,9 +90,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print(url)
 
-        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        return AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-
+    
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        application.registerForRemoteNotifications()
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(deviceToken, forKey: Constants.DEVICE_TOKEN_KEY)
+        userDefaults.synchronize()
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("Error in registering for remote notifications: " + error.localizedDescription)
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        NSNotificationCenter.defaultCenter().postNotificationName(Constants.COGNITO_PUSH_NOTIF, object: userInfo)
+    }
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        return true
+    }
+    
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -107,18 +139,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Filter data is not cached across App instance
         filterDataStore.clearFilterSetting()
-        
-        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
-        loginManager.logOut()
     }
-    
-    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
-        return true
-    }
-    
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
-    }
+  
 
 
 }

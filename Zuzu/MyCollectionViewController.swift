@@ -10,6 +10,8 @@ import UIKit
 import SwiftyJSON
 import CoreData
 import FBSDKLoginKit
+import AWSCore
+import AWSCognito
 
 class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
@@ -19,6 +21,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
     
+    var datasets: [AnyObject] = []
     
     // MARK: - Member Fields
     
@@ -221,9 +224,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     
-    
-    
-    
     // MARK: - Control Action Handlers
     
     @IBAction func onSortingButtonTouched(sender: UIButton) {
@@ -277,6 +277,19 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting, action: sortingField, label: sortingOrder)
     }
     
+    @IBAction func onLoginButtonTouched(sender: UIButton) {
+        NSLog("%@ onLoginButtonTouched", self)
+        
+        AmazonClientManager.sharedInstance.loginFromView(self) {
+            (task: AWSTask!) -> AnyObject! in
+            dispatch_async(dispatch_get_main_queue()) {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            }
+            return nil
+        }
+        
+    }
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
@@ -284,14 +297,34 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         NSLog("%@ viewDidLoad", self)
         
-            // Load the first page of data
-            self.loadData()
+        datasets = AWSCognito.defaultCognito().listDatasets()
+        
+        for metadata in datasets {
+            let datasetMetadata: AWSCognitoDatasetMetadata = metadata as! AWSCognitoDatasetMetadata
+            let dataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetMetadata.name)
+            NSLog("%@", dataset)
+            if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
+                var objects = temp.filter {
+                    return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
+                }
+
+                
+                for object: AWSCognitoRecord in objects {
+                    
+                    NSLog("%@ : %@", object.recordId, object.data.string())
+                }
+            }
             
-            //Configure cell height
-            configureTableView()
+        }
+        
+        // Load the first page of data
+        self.loadData()
             
-            //Configure Sorting Status
-            configureSortingButtons()
+        //Configure cell height
+        configureTableView()
+        
+        //Configure Sorting Status
+        configureSortingButtons()
         
         
     }
@@ -427,7 +460,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         } else {
             if editingStyle == .Delete {
                 if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-                    CollectionHouseItemDao.sharedInstance.deleteByID(collectionHouseItem.id)
+                    CollectionItemService.sharedInstance.deleteItemById(collectionHouseItem.id)
+                    //CollectionHouseItemDao.sharedInstance.deleteByID(collectionHouseItem.id)
                 }
             }
         }

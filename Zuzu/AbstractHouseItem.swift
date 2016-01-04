@@ -14,6 +14,25 @@ import SwiftyJSON
 class AbstractHouseItem: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
+
+    func toCognitoRecordValue() -> String {
+        return "{\"title\":\"\(self.title)\",\"addr\":\"\(self.addr)\",\"size\":\(self.size)}"
+    }
+    
+    func toJSON() -> JSON {
+
+        var keys = Array<String>()
+        for attributeName in self.entity.attributesByName.keys
+        {
+            keys.append(attributeName)
+        }
+        
+        let dict = self.dictionaryWithValuesForKeys(keys)
+        
+        let json = JSON(dict)
+        
+        return json
+    }
     
     func fromJSON(obj: AnyObject)
     {
@@ -142,7 +161,7 @@ class AbstractHouseItem: NSManagedObject {
         houseItem.coordinate = coordinate
         houseItem.source = source
     }
-
+    
     func toHouseItem() -> HouseItem {
         let houseItem:HouseItem = HouseItem.Builder(id: self.id)
             .addTitle(self.title)

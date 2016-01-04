@@ -102,6 +102,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button" image="facebook_fan"/>
                                 <connections>
+                                    <action selector="onLoginButtonTouched:" destination="JEf-c3-Mui" eventType="touchUpInside" id="56T-a5-sgo"/>
                                     <segue destination="0un-xc-vAB" kind="presentation" identifier="displayFBLoginView" id="jla-2Y-BGC"/>
                                 </connections>
                             </button>
