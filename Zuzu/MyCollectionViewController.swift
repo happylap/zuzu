@@ -297,6 +297,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         NSLog("%@ viewDidLoad", self)
         
+        
+        /*
         datasets = AWSCognito.defaultCognito().listDatasets()
         
         for metadata in datasets {
@@ -316,6 +318,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             }
             
         }
+        */
         
         // Load the first page of data
         self.loadData()
@@ -333,6 +336,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
         
+        
+        CollectionItemService.sharedInstance.syncFromCloud()
         
     }
     
@@ -461,7 +466,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             if editingStyle == .Delete {
                 if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                     CollectionItemService.sharedInstance.deleteItemById(collectionHouseItem.id)
-                    //CollectionHouseItemDao.sharedInstance.deleteByID(collectionHouseItem.id)
                 }
             }
         }

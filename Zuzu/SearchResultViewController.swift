@@ -558,14 +558,6 @@ class SearchResultViewController: UIViewController {
                     let houseItem = self.dataSource.getItemForRow(indexPath.row)
                     
                     if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
-                        /*
-                        let collectionDao = CollectionHouseItemDao.sharedInstance
-                        collectionDao.deleteByID(houseItem.id)
-                        
-                        // Reload collection list
-                        self.collectionIdList = collectionDao.getCollectionIdList()
-                        */
-                        
                         CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
                         // Reload collection list
                         self.collectionIdList = CollectionItemService.sharedInstance.getIds()
@@ -591,14 +583,6 @@ class SearchResultViewController: UIViewController {
                                 let collectionService = CollectionItemService.sharedInstance
                                 collectionService.addItem(result)
                                 self.collectionIdList = collectionService.getIds()
-
-                                /*
-                                let collectionDao = CollectionHouseItemDao.sharedInstance
-                                collectionDao.add(result, isCommit: true)
-                                
-                                // Reload collection list
-                                self.collectionIdList = collectionDao.getCollectionIdList()
-                                */
                             }
                         }
                     }
@@ -644,7 +628,6 @@ class SearchResultViewController: UIViewController {
         configureFilterButtons()
         
         //Load list my collections
-        //collectionIdList = CollectionHouseItemDao.sharedInstance.getCollectionIdList()
         collectionIdList = CollectionItemService.sharedInstance.getIds()
         
         //Setup remote data source
@@ -947,7 +930,6 @@ extension SearchResultViewController: HouseDetailViewDelegate {
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
             
             // Reload collection list
-            //self.collectionIdList = CollectionHouseItemDao.sharedInstance.getCollectionIdList()
             self.collectionIdList = CollectionItemService.sharedInstance.getIds()
             
             // Refresh the row

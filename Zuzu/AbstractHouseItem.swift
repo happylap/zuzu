@@ -19,20 +19,6 @@ class AbstractHouseItem: NSManagedObject {
         return "{\"title\":\"\(self.title)\",\"addr\":\"\(self.addr)\",\"size\":\(self.size)}"
     }
     
-    func toJSON() -> JSON {
-
-        var keys = Array<String>()
-        for attributeName in self.entity.attributesByName.keys
-        {
-            keys.append(attributeName)
-        }
-        
-        let dict = self.dictionaryWithValuesForKeys(keys)
-        
-        let json = JSON(dict)
-        
-        return json
-    }
     
     func fromJSON(obj: AnyObject)
     {

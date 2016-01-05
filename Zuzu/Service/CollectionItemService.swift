@@ -9,12 +9,13 @@
 import AWSCore
 import AWSCognito
 import SwiftyJSON
+import ObjectMapper
 
 class CollectionItemService: NSObject
 {
     let dao = CollectionHouseItemDao.sharedInstance
     
-    let datasetName = "MyCollection2"
+    let datasetName = "MyCollection"
     
     var dataset: AWSCognitoDataset?
     
@@ -90,70 +91,66 @@ class CollectionItemService: NSObject
         return self.dataset
     }
     
-    func synchronize(dataset: AWSCognitoDataset?) {
-        
-        if dataset != nil {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset!.synchronize().continueWithBlock {
-                (task) -> AnyObject! in
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                return nil
-            }
-        }
-        else if let dataset: AWSCognitoDataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetName) {
+    func synchronize() {
+        if let dataset = self.getDataset() {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             dataset.synchronize().continueWithBlock {
                 (task) -> AnyObject! in
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return nil
             }
-        } 
-        
+        }
     }
     
     func syncFromCloud() {
-        let dataset: AWSCognitoDataset? = AWSCognito.defaultCognito().openOrCreateDataset(datasetName)
-        if let temp = dataset?.getAllRecords() as? [AWSCognitoRecord] {
-            var records: [AWSCognitoRecord] = temp.filter {
-                return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
-            }
-            
-            var items: [AnyObject] = []
-            for record: AWSCognitoRecord in records {
-                
-                //items.append(JSON(data: record.data))
-                
-            }
-            self.dao.addAll(items)
-        }
+//        synchronize()
+//        
+//        if let dataset = self.getDataset() {
+//            if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
+//                dao.deleteAll()
+//                self.dao.commit()
+//                
+//                let records: [AWSCognitoRecord] = temp.filter {
+//                    return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
+//                }
+//                for record: AWSCognitoRecord in records {
+//                    let JSONString = record.data.string()
+//                    print("\(JSONString)")
+//                    print("isDeleted: \(record.isDeleted())")
+//                    if let item: CollectionHouseItem = Mapper<CollectionHouseItem>().map(JSONString) {
+//                        print("\(item)")
+//                        //self.dao.add(item, isCommit: true)
+//                    }
+//                }
+//                self.dao.commit()
+//            }
+//        }
     }
     
     func syncAddOrUpdateToCloud(id: String) {
         if let item: CollectionHouseItem = self.getItem(id) {
-//            if let dataset: AWSCognitoDataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetName) {
-//                dataset.setString(" harry test ", forKey: item.id)
-//                synchronize(dataset)
-//            }
-            let value: String = item.toCognitoRecordValue()
-            
-            //let value = "harry test 333"
-            if let dataset: AWSCognitoDataset = self.getDataset() {
-                dataset.setString(value, forKey: item.id)
-                synchronize(dataset)
-                
+            /*
+            if let jsonString = Mapper().toJSONString(item) {
+                NSLog("%@ jsonString: \(jsonString)", self)
+                if let dataset: AWSCognitoDataset = self.getDataset() {
+                    //dataset.setString(value, forKey: item.id)
+                    dataset.setString(jsonString, forKey: item.id)
+                    synchronize()
+                }
             }
+            */
+            if let dataset: AWSCognitoDataset = self.getDataset() {
+                dataset.setString(Mapper().toJSONString(item), forKey: item.id)
+                synchronize()
+            }
+            
         }
     }
     
     func syncDeleteToCloud(id: String) {
-//        if let dataset: AWSCognitoDataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetName) {
-//            dataset.removeObjectForKey(id)
-//            synchronize(dataset)
-//        }
-        
         if let dataset: AWSCognitoDataset = self.getDataset() {
             dataset.removeObjectForKey(id)
-            synchronize(dataset)
+            synchronize()
         }
     }
     

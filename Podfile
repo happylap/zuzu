@@ -28,6 +28,7 @@ pod 'AWSCognito'
 pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
+pod 'ObjectMapper', '~> 1.1'
 
 
 end

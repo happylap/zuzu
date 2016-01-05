@@ -225,6 +225,7 @@ class AmazonClientManager : NSObject {
         self.keyChain[FB_PROVIDER] = "YES"
         //self.completeLogin(["graph2.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
         let token = FBSDKAccessToken.currentAccessToken().tokenString
+        print("Facebook token: \(token)")
         self.completeLogin([AWSCognitoLoginProviderKey.Facebook.rawValue : token])
     }
     

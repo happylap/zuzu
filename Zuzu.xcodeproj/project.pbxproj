@@ -403,7 +403,6 @@
 				2F276B361BBED52200A41306 /* Collection */,
 				2FBC05511BDE6E9C0035652D /* Dao */,
 				2FBC05501BDE6E290035652D /* Database */,
-				81390C7B1C36AADE00450761 /* DeveloperAuthenticated */,
 				2FBC05521BDE6EEB0035652D /* Model */,
 				2F276B371BBED53500A41306 /* Radar */,
 				2FBC05561BDE769B0035652D /* Resource */,
@@ -437,6 +436,7 @@
 		2F5854D01BB3CBA9007FF85B /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				81390C7B1C36AADE00450761 /* DeveloperAuthenticated */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
 				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
 				2FBC05551BDE701F0035652D /* Refresh */,

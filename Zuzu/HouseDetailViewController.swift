@@ -655,7 +655,7 @@ class HouseDetailViewController: UIViewController {
         let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
         
         if let houseItem = self.houseItem {
-            if(CollectionHouseItemDao.sharedInstance.isExist(houseItem.id)) {
+            if(CollectionItemService.sharedInstance.isExist(houseItem.id)) {
                 
                 collectButton.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
                 
@@ -931,19 +931,19 @@ class HouseDetailViewController: UIViewController {
                     
                     let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
                     
-                    let collectionDao = CollectionHouseItemDao.sharedInstance
+                    let collectionService = CollectionItemService.sharedInstance
                     
                     ///Determine action based on whether the house item is already in "My Collection"
-                    if(collectionDao.isExist(houseId)) {
+                    if(collectionService.isExist(houseId)) {
                         
-                        collectionDao.deleteByID(houseId)
+                        collectionService.deleteItemById(houseId)
                         
                         if let barItem = barItem {
                             barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
                         }
                         
                     } else {
-                        collectionDao.add(houseItemDetail, isCommit: true)
+                        collectionService.addItem(houseItemDetail)
                         self.alertAddingToCollectionSuccess()
                         
                         if let barItem = barItem {

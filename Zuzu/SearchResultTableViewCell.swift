@@ -260,9 +260,9 @@ class SearchResultTableViewCell: UITableViewCell {
         
         if let collectionHouseItem: CollectionHouseItem = houseItemForCollection {
             if collectionHouseItem.contacted == false {
-                CollectionHouseItemDao.sharedInstance.updateByID(collectionHouseItem.id, dataToUpdate: ["contacted": true])
+                CollectionItemService.sharedInstance.updateItem(collectionHouseItem, dataToUpdate: ["contacted": true])
             } else {
-                CollectionHouseItemDao.sharedInstance.updateByID(collectionHouseItem.id, dataToUpdate: ["contacted": false])
+                CollectionItemService.sharedInstance.updateItem(collectionHouseItem, dataToUpdate: ["contacted": false])
             }
             //parentTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
         }
