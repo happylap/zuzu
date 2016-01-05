@@ -39,6 +39,6 @@ class CollectionHouseItem: AbstractHouseItem, Mappable
         source      <- (map["source"],      TransformOf<Int32, Int>(fromJSON: { Int32($0!) }, toJSON: { $0.map { Int($0) } }))
         img         <-  map["img"]
         contacted   <-  map["contacted"]
-        collectTime <-  map["collectTime"]
+        collectTime <- (map["collectTime"], DateTransform())
     }    
 }
