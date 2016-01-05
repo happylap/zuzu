@@ -10,29 +10,10 @@ import UIKit
 
 class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     
-    func configureAmazon() {
-        if AmazonClientManager.sharedInstance.isConfigured() {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            
-            AmazonClientManager.sharedInstance.resumeSession {
-                (task) -> AnyObject! in
-                dispatch_async(dispatch_get_main_queue()) {
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                }
-                return nil
-            }
-        } else {
-            let missingConfigAlert = UIAlertController(title: "Missing Configuration", message: "Please check Constants.swift and set appropriate values", preferredStyle: .Alert)
-            missingConfigAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
-            self.presentViewController(missingConfigAlert, animated: true, completion: nil)
-        }
-
-    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.configureAmazon()
         
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!

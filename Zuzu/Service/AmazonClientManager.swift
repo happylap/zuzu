@@ -72,10 +72,11 @@ class AmazonClientManager : NSObject {
     }
     
     func completeLogin(logins: [NSObject : AnyObject]?) {
+        
         var task: AWSTask?
         
         if self.credentialsProvider == nil {
-            task = self.initializeClients(logins)
+            task = self.initializeCredentialsProvider()
         } else {
             var merge = [NSObject : AnyObject]()
             
@@ -94,6 +95,7 @@ class AmazonClientManager : NSObject {
             //Force a refresh of credentials to see if merge is necessary
             task = self.credentialsProvider?.refresh()
         }
+
         task?.continueWithBlock {
             (task: AWSTask!) -> AnyObject! in
             if (task.error != nil) {
@@ -126,12 +128,11 @@ class AmazonClientManager : NSObject {
             }.continueWithBlock(self.completionHandler!)
     }
     
-    func initializeClients(logins: [NSObject : AnyObject]?) -> AWSTask? {
-        print("Initializing Clients...")
+    func initializeCredentialsProvider() -> AWSTask? {
+        print("Initializing Credentials Provider...")
         
         AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
         
-//        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: Constants.COGNITO_REGIONTYPE, identityProvider: nil, unauthRoleArn: nil, authRoleArn: nil)
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: Constants.COGNITO_REGIONTYPE, identityPoolId: Constants.COGNITO_IDENTITY_POOL_ID)
         
         let configuration = AWSServiceConfiguration(region: Constants.COGNITO_REGIONTYPE, credentialsProvider: self.credentialsProvider)

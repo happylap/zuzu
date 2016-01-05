@@ -167,7 +167,8 @@ class CollectionItemService: NSObject
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
                 if task.error != nil {
-                    
+                    let errorMsg = task.error!.description
+                    NSLog("%@ Synchronize error: \(errorMsg)", self)
                 } else {
                     if let dataset = self._openOrCreateDataset() {
                         

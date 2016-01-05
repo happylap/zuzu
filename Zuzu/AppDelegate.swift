@@ -38,13 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gai.logger.logLevel = GAILogLevel.Error  // remove before app release
         #endif
         
-        /*let credentialsProvider = AWSCognitoCredentialsProvider(
-            regionType: AWSRegionType.APNortheast1, identityPoolId: cognitoIdentityPoolId)
-        
-        let defaultServiceConfiguration = AWSServiceConfiguration(
-            region: AWSRegionType.APNortheast1, credentialsProvider: credentialsProvider)
-        
-        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration*/
     }
     
     private func customUISetup() {
@@ -78,19 +71,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        /*
         if AWSCognito.cognitoDeviceId() != nil {
             let canRegisterApp : UIApplication? = application
             canRegisterApp?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: nil))
+        }
+        */
+        
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
+            return nil
         }
         
         commonServiceSetup()
         
         customUISetup()
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         
+        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         print(url)
-
-        return AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        return true
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
