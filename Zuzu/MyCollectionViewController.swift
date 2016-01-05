@@ -462,18 +462,18 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         case .Insert:
             //FIXME: iOS 8 Bug!
             if indexPath != newIndexPath {
-                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
             }
         case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
         case .Update:
             let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! SearchResultTableViewCell
             cell.parentTableView = self.tableView
             cell.indexPath = indexPath
             cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? CollectionHouseItem
         case .Move:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
         }
     }
     
