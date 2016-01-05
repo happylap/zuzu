@@ -306,12 +306,18 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         //Configure Sorting Status
         configureSortingButtons()
         
-        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
+        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(view)
+        
+        // Synchronize core data from Cognito
+        CollectionItemService.sharedInstance.synchronize()
     }
     
     override func didReceiveMemoryWarning() {

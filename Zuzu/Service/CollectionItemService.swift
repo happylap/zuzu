@@ -164,7 +164,6 @@ class CollectionItemService: NSObject
             return AWSCognito.defaultCognito().refreshDatasetMetadata()
         }.continueWithBlock { (task) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
                 if task.error != nil {
                     let errorMsg = task.error!.description
@@ -186,6 +185,9 @@ class CollectionItemService: NSObject
                         }
                     }
                 }
+                
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                LoadingSpinner.shared.stop()
             }
             return nil
         }
