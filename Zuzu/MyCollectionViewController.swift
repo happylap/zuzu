@@ -297,29 +297,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         NSLog("%@ viewDidLoad", self)
         
-        
-        /*
-        datasets = AWSCognito.defaultCognito().listDatasets()
-        
-        for metadata in datasets {
-            let datasetMetadata: AWSCognitoDatasetMetadata = metadata as! AWSCognitoDatasetMetadata
-            let dataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetMetadata.name)
-            NSLog("%@", dataset)
-            if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
-                var objects = temp.filter {
-                    return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
-                }
-
-                
-                for object: AWSCognitoRecord in objects {
-                    
-                    //NSLog("%@ : %@", object.recordId, object.data.string())
-                }
-            }
-            
-        }
-        */
-        
         // Load the first page of data
         self.loadData()
             
@@ -335,10 +312,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
-        
-        
-        CollectionItemService.sharedInstance.synchronize()
-        
     }
     
     override func didReceiveMemoryWarning() {

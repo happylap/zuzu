@@ -118,6 +118,10 @@ class AmazonClientManager : NSObject {
                     }
                 }
             }
+            
+            // Synchronize core data from Cognito
+            CollectionItemService.sharedInstance.synchronize()
+            
             return task
             }.continueWithBlock(self.completionHandler!)
     }
