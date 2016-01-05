@@ -337,7 +337,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         NSLog("%@ viewWillAppear", self)
         
         
-        CollectionItemService.sharedInstance.syncFromCloud()
+        CollectionItemService.sharedInstance.synchronize()
         
     }
     

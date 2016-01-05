@@ -14,9 +14,6 @@ import ObjectMapper
 
 class CollectionHouseItem: AbstractHouseItem, Mappable
 {
-//    required convenience init?(_ map: Map) {
-//        self.init()
-//    }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: CoreDataManager.shared.managedObjectContext)
@@ -41,5 +38,7 @@ class CollectionHouseItem: AbstractHouseItem, Mappable
         size        <-  map["size"]
         source      <- (map["source"],      TransformOf<Int32, Int>(fromJSON: { Int32($0!) }, toJSON: { $0.map { Int($0) } }))
         img         <-  map["img"]
+        contacted   <-  map["contacted"]
+        collectTime <-  map["collectTime"]
     }    
 }
