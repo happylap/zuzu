@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import SCLAlertView
 
 struct Const {
     static let SECTION_NUM:Int = 1
 }
 
 class SearchResultViewController: UIViewController {
+    
+    let myCollectionAlertUserDefaultKey = "myCollectionAlert"
     
     let cellIdentifier = "houseItemCell"
     
@@ -79,6 +82,17 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - Private Utils
     
+    func setMyCollectionAlerted() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(true, forKey: myCollectionAlertUserDefaultKey)
+    }
+    
+    func isNeedMyCollectionAlert() -> Bool {
+        //Load selection from user defaults
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return !userDefaults.boolForKey(myCollectionAlertUserDefaultKey)
+    }
+    
     private func configureTableView() {
         
         tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
@@ -116,63 +130,53 @@ class SearchResultViewController: UIViewController {
     }
     
     private func alertSavingCurrentSearchSuccess() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "儲存常用搜尋條件",
-            message: "當前的搜尋條件已經被儲存!",
-            delegate: self,
-            cancelButtonTitle: "知道了")
+        let regionChoiceAlertView = SCLAlertView()
         
-        // Configure Alert View
-        alertView.tag = 2
+        let subTitle = "當前的搜尋條件已經被儲存，\n之後可以在\"常用搜尋\"看到"
         
-        // Show Alert View
-        alertView.show()
+        regionChoiceAlertView.showCloseButton = true
         
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
-        }
+        regionChoiceAlertView.showInfo("當前搜尋條件儲存成功", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+
     }
     
     private func alertSavingCurrentSearchFailure() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "常用搜尋條件已滿",
-            message: "常用搜尋條件儲存已達上限，請先刪除不需要的條件",
-            delegate: self,
-            cancelButtonTitle: "知道了")
+        let regionChoiceAlertView = SCLAlertView()
         
-        // Configure Alert View
-        alertView.tag = 2
+        let subTitle = "常用搜尋儲存已達上限，\n請先刪除不需要的條件"
         
-        // Show Alert View
-        alertView.show()
+        regionChoiceAlertView.showCloseButton = true
         
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
-        }
+        regionChoiceAlertView.showInfo("常用搜尋儲存空間已滿", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        //0xFF4981
     }
     
     private func alertAddingToCollectionSuccess() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "新增我的收藏",
-            message: "新增了一筆物件到我的收藏",
-            delegate: self,
-            cancelButtonTitle: "知道了")
-        
-        // Show Alert View
-        alertView.show()
-        
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
+        if(!self.isNeedMyCollectionAlert()) {
+                return
         }
+        
+        let regionChoiceAlertView = SCLAlertView()
+        
+        let subTitle = "成功加入一筆租屋到\"我的收藏\"\n現在去看看收藏項目嗎？"
+        
+        regionChoiceAlertView.addButton("馬上去看看") {
+            self.setMyCollectionAlerted()
+            
+            let parentViewController = self.navigationController?.popViewControllerAnimated(true)
+            parentViewController?.tabBarController?.selectedIndex = 1
+        }
+        
+        regionChoiceAlertView.addButton("不需要") {
+            self.setMyCollectionAlerted()
+        }
+        
+        regionChoiceAlertView.showCloseButton = false
+        
+        regionChoiceAlertView.showTitle("新增租屋到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Info, colorStyle: 0x1CD4C6)
     }
     
     private func startSpinner() {

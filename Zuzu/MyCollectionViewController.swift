@@ -344,6 +344,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         // Synchronize core data from Cognito
         CollectionItemService.sharedInstance.synchronize()
+        
+        ///Show tab bar
+        self.tabBarController!.tabBarHidden = false
     }
     
     override func didReceiveMemoryWarning() {
