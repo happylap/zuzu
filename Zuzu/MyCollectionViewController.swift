@@ -279,7 +279,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBAction func onLogoutButtonTouched(sender: UIButton) {
         NSLog("%@ onLogoutButtonTouched", self)
-        
+
         AmazonClientManager.sharedInstance.logOut() {
             (task: AWSTask!) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
@@ -507,6 +507,20 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        
+        var count = 0
+        if fetchedResultsController.sections != nil {
+            for sectionInfo: NSFetchedResultsSectionInfo in fetchedResultsController.sections! {
+                count += sectionInfo.numberOfObjects
+            }
+        }
+        
+        if count > 0 {
+            self.navigationItem.title = "共\(count)筆收藏"
+        } else {
+            self.navigationItem.title = "我的收藏"
+        }
+        
         self.tableView.endUpdates()
     }
     
