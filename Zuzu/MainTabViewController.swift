@@ -41,13 +41,13 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
-        self.tabBar.hidden = true
+        initTabBar()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tabBar.hidden = true
+        //self.tabBar.hidden = true
     }
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
@@ -65,7 +65,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
                             dispatch_async(dispatch_get_main_queue()) {
-                                tabBarController.tabBarHidden = false
                                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                             }
                             return nil
@@ -87,15 +86,27 @@ extension UITabBarController {
     var tabBarHidden: Bool {
         
         set {
-            if(FeatureOption.Collection.enableMain || FeatureOption.Radar.enableMain) {
+            if(newValue) {
                 tabBar.hidden = newValue
             } else {
-                tabBar.hidden = true
+                if(FeatureOption.Collection.enableMain || FeatureOption.Radar.enableMain) {
+                    tabBar.hidden = newValue
+                }
             }
         }
         
         get {
             return tabBar.hidden
         }
+    }
+    
+    func initTabBar() -> Void {
+        
+        if(FeatureOption.Collection.enableMain || FeatureOption.Radar.enableMain) {
+            tabBar.hidden = false
+        } else {
+            tabBar.hidden = true
+        }
+        
     }
 }
