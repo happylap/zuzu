@@ -255,16 +255,15 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     func onContactTouched(sender: UITapGestureRecognizer) {
-        
         Log.debug("\(self) onCalledTouched")
         
-        if let collectionHouseItem: CollectionHouseItem = houseItemForCollection {
-            if collectionHouseItem.contacted == false {
-                CollectionItemService.sharedInstance.updateItem(collectionHouseItem, dataToUpdate: ["contacted": true])
+        if let item: CollectionHouseItem = houseItemForCollection {
+            let collectionService = CollectionItemService.sharedInstance
+            if collectionService.isContacted(item.id) {
+                collectionService.updateContacted(item.id, contacted: false)
             } else {
-                CollectionItemService.sharedInstance.updateItem(collectionHouseItem, dataToUpdate: ["contacted": false])
+                collectionService.updateContacted(item.id, contacted: true)
             }
-            //parentTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
         }
     }
     

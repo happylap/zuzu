@@ -270,4 +270,16 @@ class CollectionItemService: NSObject
         return self.dao.isExist(id)
     }
     
+    func updateContacted(id: String, contacted: Bool) {
+        if let item = self.getItem(id) {
+            CollectionItemService.sharedInstance.updateItem(item, dataToUpdate: ["contacted": contacted])
+        }
+    }
+    
+    func isContacted(id: String) -> Bool {
+        if let item = self.getItem(id) {
+            return item.contacted
+        }
+        return false
+    }
 }
