@@ -95,9 +95,9 @@
                         </constraints>
                     </imageView>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="hPJ-o1-WHC" userLabel="Prefixed Button">
-                        <rect key="frame" x="0.0" y="-1" width="40" height="40"/>
+                        <rect key="frame" x="0.0" y="3" width="32" height="32"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="40" id="07F-hH-ZRb"/>
+                            <constraint firstAttribute="width" constant="32" id="07F-hH-ZRb"/>
                             <constraint firstAttribute="width" secondItem="hPJ-o1-WHC" secondAttribute="height" multiplier="1:1" id="QY4-5H-ABZ"/>
                             <constraint firstAttribute="height" constant="30" id="VQh-bW-E02"/>
                         </constraints>
