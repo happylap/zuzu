@@ -207,7 +207,6 @@ class AmazonClientManager : NSObject {
             if self.fbLoginManager == nil {
                 self.fbLoginManager = FBSDKLoginManager()
             }
-            self.fbLoginManager?.loginBehavior = FBSDKLoginBehavior.SystemAccount
             
             self.fbLoginManager?.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
                 if (error != nil) {
@@ -241,8 +240,6 @@ class AmazonClientManager : NSObject {
         if self.fbLoginManager == nil {
             self.fbLoginManager = FBSDKLoginManager()
         }
-        self.fbLoginManager?.loginBehavior = FBSDKLoginBehavior.SystemAccount
-        
         self.fbLoginManager?.logOut()
         self.keyChain[FB_PROVIDER] = nil
     }
