@@ -63,6 +63,8 @@ struct GAConst {
             static let ResetCriteria = "resetCriteria"
             
             static let ResetFilters = "resetFilters"
+            
+            static let CurrentLocation = "currentLocation"
         }
         
         struct MyCollection {

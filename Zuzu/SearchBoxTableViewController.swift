@@ -55,6 +55,7 @@
         
         //The current position detected by GPS
         private var placeMark: CLPlacemark?
+        private var locationTracked: Bool = false
         
         // Price & Size Picker Vars
         struct PickerConst {
@@ -74,6 +75,8 @@
         var locationManagerActive = false {
             didSet {
                 if(locationManagerActive) {
+                    ///Allow tracking current location again
+                    locationTracked = false
                     locationManager.startUpdatingLocation()
                 } else {
                     locationManager.stopUpdatingLocation()
@@ -754,18 +757,18 @@
             }
             
             ///FB failed, Open by Browser
-//            if(!result) {
-//                if let url = NSURL(string: fbUrl) {
-//                    
-//                    if (UIApplication.sharedApplication().canOpenURL(url)) {
-//                        
-//                        result = UIApplication.sharedApplication().openURL(url)
-//                        if(result) {
-//                            gaLabel = url.absoluteString
-//                        }
-//                    }
-//                }
-//            }
+            //            if(!result) {
+            //                if let url = NSURL(string: fbUrl) {
+            //
+            //                    if (UIApplication.sharedApplication().canOpenURL(url)) {
+            //
+            //                        result = UIApplication.sharedApplication().openURL(url)
+            //                        if(result) {
+            //                            gaLabel = url.absoluteString
+            //                        }
+            //                    }
+            //                }
+            //            }
             
             if(!result) {
                 let browserViewController = self.storyboard?.instantiateViewControllerWithIdentifier("browserView") as? BrowserViewController
@@ -1542,6 +1545,14 @@
                         FileLog.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
                         
                         self.placeMark = pm
+                        
+                        if(!self.locationTracked) {
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                                action: GAConst.Action.Activity.CurrentLocation, label: pm.postalCode)
+                            
+                            self.locationTracked = true
+                        }
                         
                     }
                 } else {
