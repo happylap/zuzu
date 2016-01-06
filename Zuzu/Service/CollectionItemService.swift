@@ -50,7 +50,7 @@ class CollectionItemService: NSObject
             
             // Synchronize to AWS
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronize().continueWithBlock { (task) -> AnyObject! in
+            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return nil
             }
@@ -69,7 +69,7 @@ class CollectionItemService: NSObject
             
             // Synchronize to AWS
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronize().continueWithBlock { (task) -> AnyObject! in
+            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return nil
             }
@@ -85,7 +85,7 @@ class CollectionItemService: NSObject
         
             // Synchronize to AWS
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronize().continueWithBlock { (task) -> AnyObject! in
+            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return nil
             }
@@ -103,7 +103,7 @@ class CollectionItemService: NSObject
         var tasks: [AWSTask] = []
         
         for dataset in datasets {
-            tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronize())
+            tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronizeOnConnectivity())
         }
         
         AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
