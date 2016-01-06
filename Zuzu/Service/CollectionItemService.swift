@@ -90,6 +90,45 @@ class CollectionItemService: NSObject
         }
     }
     
+    func _initMyCollectionDataSet(){
+        
+        var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
+        
+        datasets.append(AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName))
+        
+        var tasks: [AWSTask] = []
+        
+        for dataset in datasets {
+            tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronize())
+        }
+        
+        AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
+            return AWSCognito.defaultCognito().refreshDatasetMetadata()
+            }.continueWithBlock { (task) -> AnyObject! in
+                dispatch_async(dispatch_get_main_queue()) {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    
+                    if task.error != nil {
+                        //self.errorAlert(task.error.description)
+                    } else {
+                        datasets = AWSCognito.defaultCognito().listDatasets()
+                        
+                        for dataset: AnyObject in datasets {
+                            let datasetMetadata: AWSCognitoDatasetMetadata = dataset as! AWSCognitoDatasetMetadata
+                            if datasetMetadata.name == self.datasetName {
+                                if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetMetadata.name) {
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                    self.dataset = dataset
+                                }
+                            }
+                        }
+                    }
+                }
+                return nil
+        }
+        
+    }
+    
     func _openOrCreateDataset() -> AWSCognitoDataset? {
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -106,41 +145,8 @@ class CollectionItemService: NSObject
             }
         }
         
-        if self.dataset != nil {
-            return self.dataset
-        }
-        
-        datasets.append(AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName))
-        
-        var tasks: [AWSTask] = []
-        
-        for dataset in datasets {
-            tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronize())
-        }
-        
-        AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
-            return AWSCognito.defaultCognito().refreshDatasetMetadata()
-        }.continueWithBlock { (task) -> AnyObject! in
-            dispatch_async(dispatch_get_main_queue()) {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                if task.error != nil {
-                    //self.errorAlert(task.error.description)
-                } else {
-                    datasets = AWSCognito.defaultCognito().listDatasets()
-                    
-                    for dataset: AnyObject in datasets {
-                        let datasetMetadata: AWSCognitoDatasetMetadata = dataset as! AWSCognitoDatasetMetadata
-                        if datasetMetadata.name == self.datasetName {
-                            if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetMetadata.name) {
-                                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                                self.dataset = dataset
-                            }
-                        }
-                    }
-                }
-            }
-            return nil
+        if self.dataset == nil {
+            self._initMyCollectionDataSet()
         }
         
         return self.dataset
@@ -174,6 +180,11 @@ class CollectionItemService: NSObject
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(theViewController.view)
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        
+        if self.dataset == nil {
+            self._initMyCollectionDataSet()
+        }
         
         var tasks: [AWSTask] = []
         
