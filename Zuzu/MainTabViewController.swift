@@ -51,7 +51,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-        NSLog("%@ tabBarController", self)
+        //NSLog("%@ tabBarController", self)
         
         if let sb = viewController.storyboard {
             if let name: String = sb.valueForKey("name") as? String {

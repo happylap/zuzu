@@ -341,12 +341,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
         
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(view)
         
         // Synchronize core data from Cognito
-        CollectionItemService.sharedInstance.synchronize()
+        CollectionItemService.sharedInstance.synchronize(self)
     }
     
     override func didReceiveMemoryWarning() {

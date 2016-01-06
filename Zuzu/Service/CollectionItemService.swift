@@ -6,6 +6,7 @@
 //  Copyright © 2016 Jung-Shuo Pai. All rights reserved.
 //
 
+import Foundation
 import AWSCore
 import AWSCognito
 import SwiftyJSON
@@ -145,11 +146,33 @@ class CollectionItemService: NSObject
         return self.dataset
     }
     
+    // MARK: Timer
+    
+    var timer: NSTimer?
+    var allowSynchronize = true
+    
+    func _resetTimer() {
+        timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "_timeUp", userInfo: nil, repeats: true)
+        self.allowSynchronize = false
+    }
+    
+    func _timeUp() {
+        self.timer?.invalidate()
+        self.allowSynchronize = true
+    }
     
     // MARK: Public methods
     
-    func synchronize() {
+    func synchronize(theViewController: UIViewController) {
+        if !allowSynchronize {
+            return
+        }
         
+        self._resetTimer()
+        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(theViewController.view)
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         var tasks: [AWSTask] = []
