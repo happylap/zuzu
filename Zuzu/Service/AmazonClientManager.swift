@@ -148,7 +148,8 @@ class AmazonClientManager : NSObject {
             // create the alert
             let alert = UIAlertController(title: "提醒", message: "請先登入", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "確定", style: UIAlertActionStyle.Default, handler: { action in
-                self.displayLoginView(theViewController)
+                //self.displayLoginView(theViewController)
+                self.fbLogin()
             }))
             alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil))
             
@@ -196,18 +197,18 @@ class AmazonClientManager : NSObject {
         } else {
             if self.fbLoginManager == nil {
                 self.fbLoginManager = FBSDKLoginManager()
-                self.fbLoginManager?.logInWithReadPermissions(nil) {
-                    (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
-                    
-                    if (error != nil) {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.errorAlert("Error logging in with FB: " + error.localizedDescription)
-                        }
-                    } else if result.isCancelled {
-                        //Do nothing
-                    } else {
-                        self.completeFBLogin()
+            }
+            self.fbLoginManager?.logInWithReadPermissions(nil) {
+                (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
+                
+                if (error != nil) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.errorAlert("Error logging in with FB: " + error.localizedDescription)
                     }
+                } else if result.isCancelled {
+                    //Do nothing
+                } else {
+                    self.completeFBLogin()
                 }
             }
         }

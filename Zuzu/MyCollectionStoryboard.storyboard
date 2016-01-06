@@ -96,14 +96,13 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="我的收藏" id="7PK-Td-XoL">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="l18-2P-uAV">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9Yw-8z-BdX">
-                                <rect key="frame" x="920" y="7" width="84" height="30"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ENn-dk-taI">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6bE-YE-Su1">
+                                <rect key="frame" x="964" y="7" width="40" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button" image="facebook_fan"/>
+                                <state key="normal" title="登出"/>
                                 <connections>
-                                    <action selector="onLoginButtonTouched:" destination="JEf-c3-Mui" eventType="touchUpInside" id="56T-a5-sgo"/>
-                                    <segue destination="0un-xc-vAB" kind="presentation" identifier="displayFBLoginView" id="jla-2Y-BGC"/>
+                                    <action selector="onLogoutButtonTouched:" destination="JEf-c3-Mui" eventType="touchUpInside" id="sl0-vi-pYH"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -352,7 +351,6 @@
     </scenes>
     <resources>
         <image name="cancel" width="32" height="32"/>
-        <image name="facebook_fan" width="30" height="30"/>
         <image name="launchingImage" width="1500" height="2668"/>
         <image name="main_collection_n" width="38" height="38"/>
     </resources>

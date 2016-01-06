@@ -171,9 +171,10 @@ class CollectionItemService: NSObject
                 } else {
                     if let dataset = self._openOrCreateDataset() {
                         
-                        self.dao.deleteAll()
                         
                         if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
+                            self.dao.deleteAll()
+                            
                             let records: [AWSCognitoRecord] = temp.filter {
                                 return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
                             }

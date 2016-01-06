@@ -65,11 +65,12 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
                             dispatch_async(dispatch_get_main_queue()) {
+                                tabBarController.tabBarHidden = false
                                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                             }
                             return nil
                         }
-                        
+                        return false
                     }
                     
                 default: break

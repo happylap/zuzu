@@ -277,6 +277,35 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting, action: sortingField, label: sortingOrder)
     }
     
+    @IBAction func onLogoutButtonTouched(sender: UIButton) {
+        NSLog("%@ onLogoutButtonTouched", self)
+        
+        AmazonClientManager.sharedInstance.logOut() {
+            (task: AWSTask!) -> AnyObject! in
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                let alertView = UIAlertView(
+                    title: "提醒",
+                    message: "已登出Facebook",
+                    delegate: self,
+                    cancelButtonTitle: "知道了")
+                
+                // Configure Alert View
+                alertView.tag = 2
+                
+                // Show Alert View
+                alertView.show()
+                
+                // Delay the dismissal
+                self.runOnMainThreadAfter(2.0) {
+                    alertView.dismissWithClickedButtonIndex(-1, animated: true)
+                }
+            }
+            return nil
+        }
+    }
+    
+    /*
     @IBAction func onLoginButtonTouched(sender: UIButton) {
         NSLog("%@ onLoginButtonTouched", self)
         
@@ -288,7 +317,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             return nil
         }
         
-    }
+    }*/
     
     // MARK: - View Life Cycle
     

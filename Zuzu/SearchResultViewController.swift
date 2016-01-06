@@ -545,8 +545,12 @@ class SearchResultViewController: UIViewController {
     
     func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
         
-        if !FBLoginService.sharedInstance.hasActiveSession() {
-            FBLoginService.sharedInstance.confirmAndLogin(self)
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
+            AmazonClientManager.sharedInstance.loginFromView(self) {
+                (task: AWSTask!) -> AnyObject! in
+                return nil
+            }
+            
         } else {
             
             if let imgView = sender.view {
