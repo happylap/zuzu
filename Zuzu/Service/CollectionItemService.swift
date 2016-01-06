@@ -20,6 +20,8 @@ class CollectionItemService: NSObject
     
     var dataset: AWSCognitoDataset?
     
+    var isSpin = false
+    
     var entityName: String{
         return self.dao.entityName
     }
@@ -94,7 +96,9 @@ class CollectionItemService: NSObject
         
         var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
         
-        datasets.append(AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName))
+        if self.dataset == nil{
+            datasets.append(AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName))
+        }
         
         var tasks: [AWSTask] = []
         
@@ -119,9 +123,30 @@ class CollectionItemService: NSObject
                                 if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(datasetMetadata.name) {
                                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                                     self.dataset = dataset
+                                    if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
+                                        self.dao.deleteAll()
+                                        
+                                        let records: [AWSCognitoRecord] = temp.filter {
+                                            return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
+                                        }
+                                        for record: AWSCognitoRecord in records {
+                                            let JSONString = record.data.string()
+                                            Mapper<CollectionHouseItem>().map(JSONString)
+                                        }
+                                        self.dao.commit()
+                                    }
                                 }
                             }
                         }
+                    }
+                    
+                    if UIApplication.sharedApplication().networkActivityIndicatorVisible == true{
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible == false
+                    }
+                    
+                    if self.isSpin == true{
+                        self.isSpin = false
+                        LoadingSpinner.shared.stop()
                     }
                 }
                 return nil
@@ -133,7 +158,7 @@ class CollectionItemService: NSObject
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
+        let datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
         
         for dataset: AnyObject in datasets {
             let datasetMetadata: AWSCognitoDatasetMetadata = dataset as! AWSCognitoDatasetMetadata
@@ -170,62 +195,19 @@ class CollectionItemService: NSObject
     // MARK: Public methods
     
     func synchronize(theViewController: UIViewController) {
-        if !allowSynchronize {
+        /*if !allowSynchronize {
             return
         }
         
-        self._resetTimer()
+        self._resetTimer()*/
         
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(theViewController.view)
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        self.isSpin = true
         
-        
-        if self.dataset == nil {
-            self._initMyCollectionDataSet()
-        }
-        
-        var tasks: [AWSTask] = []
-        
-        let datasets : [AnyObject] = AWSCognito.defaultCognito().listDatasets()
-        
-        for dataset in datasets {
-            tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronize())
-        }
-        
-        AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
-            return AWSCognito.defaultCognito().refreshDatasetMetadata()
-        }.continueWithBlock { (task) -> AnyObject! in
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                if task.error != nil {
-                    let errorMsg = task.error!.description
-                    NSLog("%@ Synchronize error: \(errorMsg)", self)
-                } else {
-                    if let dataset = self._openOrCreateDataset() {
-                        
-                        
-                        if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
-                            self.dao.deleteAll()
-                            
-                            let records: [AWSCognitoRecord] = temp.filter {
-                                return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
-                            }
-                            for record: AWSCognitoRecord in records {
-                                let JSONString = record.data.string()
-                                Mapper<CollectionHouseItem>().map(JSONString)
-                            }
-                            self.dao.commit()
-                        }
-                    }
-                }
-                
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                LoadingSpinner.shared.stop()
-            }
-            return nil
-        }
+        self._initMyCollectionDataSet()
     }
     
     func addItem(item: AnyObject) {
