@@ -149,9 +149,18 @@ class AmazonClientManager : NSObject {
             let alert = UIAlertController(title: "提醒", message: "請先登入", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "確定", style: UIAlertActionStyle.Default, handler: { action in
                 //self.displayLoginView(theViewController)
-                self.fbLogin()
+                self.fbLogin(theViewController)
             }))
-            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil))
+            
+            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { action in
+
+                
+                ///GA Tracker: Login cancelled
+                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                    action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+                
+                
+            }))
             
             // show the alert
             theViewController.presentViewController(alert, animated: true, completion: nil)
@@ -191,26 +200,39 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    func fbLogin() {
+    func fbLogin(theViewController: UIViewController) {
         if FBSDKAccessToken.currentAccessToken() != nil {
             self.completeFBLogin()
         } else {
             if self.fbLoginManager == nil {
                 self.fbLoginManager = FBSDKLoginManager()
             }
-            self.fbLoginManager?.logInWithReadPermissions(nil) {
-                (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
-                
+            self.fbLoginManager?.loginBehavior = FBSDKLoginBehavior.SystemAccount
+            
+            self.fbLoginManager?.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
                 if (error != nil) {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.errorAlert("Error logging in with FB: " + error.localizedDescription)
                     }
+                    
+                    ///GA Tracker: Login failed
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginError, label: GAConst.Label.LoginType.Facebook)
+                    
                 } else if result.isCancelled {
-                    //Do nothing
+                    
+                    ///GA Tracker: Login cancelled
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+                    
                 } else {
                     self.completeFBLogin()
+                    
+                    ///GA Tracker: Login successful
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                        action: GAConst.Action.MyCollection.Login, label: GAConst.Label.LoginType.Facebook)
                 }
-            }
+            })
         }
         
     }
@@ -219,6 +241,8 @@ class AmazonClientManager : NSObject {
         if self.fbLoginManager == nil {
             self.fbLoginManager = FBSDKLoginManager()
         }
+        self.fbLoginManager?.loginBehavior = FBSDKLoginBehavior.SystemAccount
+        
         self.fbLoginManager?.logOut()
         self.keyChain[FB_PROVIDER] = nil
     }

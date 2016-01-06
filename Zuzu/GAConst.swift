@@ -14,6 +14,9 @@ struct GAConst {
         ///Common UI event
         static let Activity = "activity"
         
+        ///MyCollection event
+        static let MyCollection = "myCollection"
+        
         ///SearchHouse event
         static let SearchHouse = "searchHouse"
         
@@ -61,6 +64,26 @@ struct GAConst {
             
             static let ResetFilters = "resetFilters"
             
+            static let CurrentLocation = "currentLocation"
+        }
+        
+        struct MyCollection {
+            
+            static let Login = "login"
+            
+            static let ViewItemPrice = "viewItemPrice"
+            
+            static let ViewItemSize = "viewItemSize"
+            
+            static let ViewItemType = "viewItemType"
+            
+            static let AddItemPrice = "addItemPrice"
+            
+            static let AddItemSize = "addItemSize"
+            
+            static let AddItemType = "addItemType"
+            
+            static let Delete = "delete"
         }
         
         struct SearchHouse {
@@ -85,7 +108,11 @@ struct GAConst {
         
         struct Blocking {
             
-            static let NoSearchResult = "NoSearchResult"
+            static let NoSearchResult = "noSearchResult"
+            
+            static let LoginError = "loginError"
+            
+            static let LoginCancel = "loginCancel"
             
         }
         
@@ -110,6 +137,11 @@ struct GAConst {
         
         struct SearchResult {
             static let Number = "number"
+        }
+        
+        struct LoginType {
+            static let Facebook = "facebook"
+            static let Google = "google"
         }
     }
     

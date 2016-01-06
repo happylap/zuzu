@@ -272,9 +272,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
         
         sortByField(sortingField, sortingOrder: sortingOrder)
-        
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting, action: sortingField, label: sortingOrder)
     }
     
     @IBAction func onLogoutButtonTouched(sender: UIButton) {
@@ -344,6 +341,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         // Synchronize core data from Cognito
         CollectionItemService.sharedInstance.synchronize(self)
+
+        ///Show tab bar
+        self.tabBarController!.tabBarHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -439,16 +439,16 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                         vc.houseItem = houseItem
                         
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItemPrice,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                            action: GAConst.Action.MyCollection.ViewItemPrice,
                             label: String(houseItem.price))
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItemSize,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                            action: GAConst.Action.MyCollection.ViewItemSize,
                             label: String(houseItem.size))
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItemType,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                            action: GAConst.Action.MyCollection.ViewItemType,
                             label: String(houseItem.purposeType))
                     }
                 }
@@ -471,6 +471,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             if editingStyle == .Delete {
                 if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                     CollectionItemService.sharedInstance.deleteItemById(collectionHouseItem.id)
+                    
+                    ///GA Tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                        action: GAConst.Action.MyCollection.Delete)
                 }
             }
         }

@@ -11,7 +11,7 @@ import FBSDKLoginKit
 
 class FBLoginService: NSObject
 {
-
+    
     class var sharedInstance: FBLoginService {
         struct Singleton {
             static let instance = FBLoginService()
@@ -43,7 +43,7 @@ class FBLoginService: NSObject
                     fbUserData.facebookPictureUrl = strPictureURL
                     
                     onCompletion(fbUserData, nil)
-    
+                    
                 } else {
                     onCompletion(nil, error)
                 }
@@ -61,17 +61,23 @@ class FBLoginService: NSObject
     
     
     func confirmAndLogin(sender: UIViewController) {
-            // create the alert
-            let alert = UIAlertController(title: "提醒", message: "請先登入Facebook", preferredStyle: UIAlertControllerStyle.Alert)
+        // create the alert
+        let alert = UIAlertController(title: "提醒", message: "請先登入Facebook", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // add the actions (buttons)
+        alert.addAction(UIAlertAction(title: "確定", style: UIAlertActionStyle.Default, handler: { action in
+            self.login(sender)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { action in
             
-            // add the actions (buttons)
-            alert.addAction(UIAlertAction(title: "確定", style: UIAlertActionStyle.Default, handler: { action in
-                self.login(sender)
-            }))
-            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil))
-            
-            // show the alert
-            sender.presentViewController(alert, animated: true, completion: nil)
+            ///GA Tracker
+            sender.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+        }))
+        
+        // show the alert
+        sender.presentViewController(alert, animated: true, completion: nil)
     }
     
     func login(sender: UIViewController) {

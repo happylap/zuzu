@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import SCLAlertView
 
 struct Const {
     static let SECTION_NUM:Int = 1
 }
 
 class SearchResultViewController: UIViewController {
+    
+    let myCollectionAlertUserDefaultKey = "myCollectionAlert"
     
     let cellIdentifier = "houseItemCell"
     
@@ -79,6 +82,17 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - Private Utils
     
+    func setMyCollectionAlerted() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(true, forKey: myCollectionAlertUserDefaultKey)
+    }
+    
+    func isNeedMyCollectionAlert() -> Bool {
+        //Load selection from user defaults
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return !userDefaults.boolForKey(myCollectionAlertUserDefaultKey)
+    }
+    
     private func configureTableView() {
         
         tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
@@ -116,63 +130,53 @@ class SearchResultViewController: UIViewController {
     }
     
     private func alertSavingCurrentSearchSuccess() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "儲存常用搜尋條件",
-            message: "當前的搜尋條件已經被儲存!",
-            delegate: self,
-            cancelButtonTitle: "知道了")
+        let regionChoiceAlertView = SCLAlertView()
         
-        // Configure Alert View
-        alertView.tag = 2
+        let subTitle = "當前的搜尋條件已經被儲存，\n之後可以在\"常用搜尋\"看到"
         
-        // Show Alert View
-        alertView.show()
+        regionChoiceAlertView.showCloseButton = true
         
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
-        }
+        regionChoiceAlertView.showInfo("當前搜尋條件儲存成功", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+
     }
     
     private func alertSavingCurrentSearchFailure() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "常用搜尋條件已滿",
-            message: "常用搜尋條件儲存已達上限，請先刪除不需要的條件",
-            delegate: self,
-            cancelButtonTitle: "知道了")
+        let regionChoiceAlertView = SCLAlertView()
         
-        // Configure Alert View
-        alertView.tag = 2
+        let subTitle = "常用搜尋儲存已達上限，\n請先刪除不需要的條件"
         
-        // Show Alert View
-        alertView.show()
+        regionChoiceAlertView.showCloseButton = true
         
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
-        }
+        regionChoiceAlertView.showInfo("常用搜尋儲存空間已滿", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        //0xFF4981
     }
     
     private func alertAddingToCollectionSuccess() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "新增我的收藏",
-            message: "新增了一筆物件到我的收藏",
-            delegate: self,
-            cancelButtonTitle: "知道了")
-        
-        // Show Alert View
-        alertView.show()
-        
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
+        if(!self.isNeedMyCollectionAlert()) {
+                return
         }
+        
+        let regionChoiceAlertView = SCLAlertView()
+        
+        let subTitle = "成功加入一筆租屋到\"我的收藏\"\n現在去看看收藏項目嗎？"
+        
+        regionChoiceAlertView.addButton("馬上去看看") {
+            self.setMyCollectionAlerted()
+            
+            let parentViewController = self.navigationController?.popViewControllerAnimated(true)
+            parentViewController?.tabBarController?.selectedIndex = 1
+        }
+        
+        regionChoiceAlertView.addButton("不需要") {
+            self.setMyCollectionAlerted()
+        }
+        
+        regionChoiceAlertView.showCloseButton = false
+        
+        regionChoiceAlertView.showTitle("新增租屋到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Info, colorStyle: 0x1CD4C6)
     }
     
     private func startSpinner() {
@@ -235,7 +239,7 @@ class SearchResultViewController: UIViewController {
             self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
         } else {
             self.navigationItem.title = "查無資料"
-
+            
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                 action: GAConst.Action.Blocking.NoSearchResult,
@@ -551,43 +555,60 @@ class SearchResultViewController: UIViewController {
                 return nil
             }
             
-        } else {
+            return
+        }
+        
+        if let imgView = sender.view {
             
-            if let imgView = sender.view {
+            if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                 
-                if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
+                ///Get current house ID
+                let indexPath = cell.indexPath
+                let houseItem = self.dataSource.getItemForRow(indexPath.row)
+                
+                if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
+                    CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
+                    // Reload collection list
+                    self.collectionIdList = CollectionItemService.sharedInstance.getIds()
                     
-                    ///Get current house ID
-                    let indexPath = cell.indexPath
-                    let houseItem = self.dataSource.getItemForRow(indexPath.row)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     
-                    if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
-                        CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
-                        // Reload collection list
-                        self.collectionIdList = CollectionItemService.sharedInstance.getIds()
+                    ///GA Tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                        action: GAConst.Action.MyCollection.Delete)
+                    
+                } else {
+                    
+                    // Append the houseId immediately to make the UI more responsive
+                    // TBD: Need to discuss whether we need to retrive the data from remote again
+                    self.collectionIdList?.append(houseItem.id)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    self.alertAddingToCollectionSuccess()
+                    
+                    HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                         
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        if let error = error {
+                            NSLog("Cannot get remote data %@", error.localizedDescription)
+                            return
+                        }
                         
-                    } else {
-                        
-                        // Append the houseId immediately to make the UI more responsive
-                        // TBD: Need to discuss whether we need to retrive the data from remote again
-                        self.collectionIdList?.append(houseItem.id)
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                        self.alertAddingToCollectionSuccess()
-                        
-                        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+                        if let result = result {
+                            let collectionService = CollectionItemService.sharedInstance
+                            collectionService.addItem(result)
+                            self.collectionIdList = collectionService.getIds()
                             
-                            if let error = error {
-                                NSLog("Cannot get remote data %@", error.localizedDescription)
-                                return
-                            }
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.AddItemPrice,
+                                label: String(houseItem.price))
                             
-                            if let result = result {
-                                let collectionService = CollectionItemService.sharedInstance
-                                collectionService.addItem(result)
-                                self.collectionIdList = collectionService.getIds()
-                            }
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.AddItemSize,
+                                label: String(houseItem.size))
+                            
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.AddItemType,
+                                label: String(houseItem.purposeType))
                         }
                     }
                 }
@@ -711,7 +732,7 @@ class SearchResultViewController: UIViewController {
                         
                         hdvc.houseItem = houseItem
                         hdvc.delegate = self
-                            
+                        
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                             action: GAConst.Action.Activity.ViewItemPrice,
