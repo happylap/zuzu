@@ -151,7 +151,16 @@ class AmazonClientManager : NSObject {
                 //self.displayLoginView(theViewController)
                 self.fbLogin(theViewController)
             }))
-            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil))
+            
+            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { action in
+
+                
+                ///GA Tracker: Login cancelled
+                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                    action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+                
+                
+            }))
             
             // show the alert
             theViewController.presentViewController(alert, animated: true, completion: nil)
@@ -205,10 +214,23 @@ class AmazonClientManager : NSObject {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.errorAlert("Error logging in with FB: " + error.localizedDescription)
                     }
+                    
+                    ///GA Tracker: Login failed
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginError, label: GAConst.Label.LoginType.Facebook)
+                    
                 } else if result.isCancelled {
-                    //Do nothing
+                    
+                    ///GA Tracker: Login cancelled
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+                    
                 } else {
                     self.completeFBLogin()
+                    
+                    ///GA Tracker: Login successful
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                        action: GAConst.Action.MyCollection.Login, label: GAConst.Label.LoginType.Facebook)
                 }
             })
         }

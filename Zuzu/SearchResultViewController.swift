@@ -235,7 +235,7 @@ class SearchResultViewController: UIViewController {
             self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
         } else {
             self.navigationItem.title = "查無資料"
-
+            
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                 action: GAConst.Action.Blocking.NoSearchResult,
@@ -551,43 +551,60 @@ class SearchResultViewController: UIViewController {
                 return nil
             }
             
-        } else {
+            return
+        }
+        
+        if let imgView = sender.view {
             
-            if let imgView = sender.view {
+            if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                 
-                if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
+                ///Get current house ID
+                let indexPath = cell.indexPath
+                let houseItem = self.dataSource.getItemForRow(indexPath.row)
+                
+                if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
+                    CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
+                    // Reload collection list
+                    self.collectionIdList = CollectionItemService.sharedInstance.getIds()
                     
-                    ///Get current house ID
-                    let indexPath = cell.indexPath
-                    let houseItem = self.dataSource.getItemForRow(indexPath.row)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     
-                    if (self.collectionIdList == nil || self.collectionIdList!.contains(houseItem.id)){
-                        CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
-                        // Reload collection list
-                        self.collectionIdList = CollectionItemService.sharedInstance.getIds()
+                    ///GA Tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                        action: GAConst.Action.MyCollection.Delete)
+                    
+                } else {
+                    
+                    // Append the houseId immediately to make the UI more responsive
+                    // TBD: Need to discuss whether we need to retrive the data from remote again
+                    self.collectionIdList?.append(houseItem.id)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    self.alertAddingToCollectionSuccess()
+                    
+                    HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                         
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        if let error = error {
+                            NSLog("Cannot get remote data %@", error.localizedDescription)
+                            return
+                        }
                         
-                    } else {
-                        
-                        // Append the houseId immediately to make the UI more responsive
-                        // TBD: Need to discuss whether we need to retrive the data from remote again
-                        self.collectionIdList?.append(houseItem.id)
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                        self.alertAddingToCollectionSuccess()
-                        
-                        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+                        if let result = result {
+                            let collectionService = CollectionItemService.sharedInstance
+                            collectionService.addItem(result)
+                            self.collectionIdList = collectionService.getIds()
                             
-                            if let error = error {
-                                NSLog("Cannot get remote data %@", error.localizedDescription)
-                                return
-                            }
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.AddItemPrice,
+                                label: String(houseItem.price))
                             
-                            if let result = result {
-                                let collectionService = CollectionItemService.sharedInstance
-                                collectionService.addItem(result)
-                                self.collectionIdList = collectionService.getIds()
-                            }
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.AddItemSize,
+                                label: String(houseItem.size))
+                            
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.AddItemType,
+                                label: String(houseItem.purposeType))
                         }
                     }
                 }
@@ -711,7 +728,7 @@ class SearchResultViewController: UIViewController {
                         
                         hdvc.houseItem = houseItem
                         hdvc.delegate = self
-                            
+                        
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                             action: GAConst.Action.Activity.ViewItemPrice,
