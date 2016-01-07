@@ -13,6 +13,8 @@ struct SolrConst {
     
     static let DefaultPhraseSlope = 2
     
+    static let SolrSecret = ""
+    
     struct Server {
         static let SCHEME = "http"
         static let HOST = "solr.zuzu.com.tw"
@@ -402,6 +404,16 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 request.timeoutInterval = HouseDataRequester.requestTimeout
                 
                 request.HTTPMethod = SolrConst.Server.HTTP_METHOD
+
+                let plainLoginString = (SolrConst.SolrSecret as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                
+                if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
+                    
+                    request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
+                    
+                } else {
+                    NSLog("Unable to do Basic Authorization")
+                }
                 
                 NSURLConnection.sendAsynchronousRequest(
                     request, queue: NSOperationQueue.mainQueue()){
@@ -481,6 +493,16 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             request.timeoutInterval = HouseDataRequester.requestTimeout
             
             request.HTTPMethod = SolrConst.Server.HTTP_METHOD
+            
+            let plainLoginString = (SolrConst.SolrSecret as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+            
+            if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
+                
+                request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
+                
+            } else {
+                NSLog("Unable to do Basic Authorization")
+            }
             
             NSURLConnection.sendAsynchronousRequest(
                 request, queue: NSOperationQueue.mainQueue()){
