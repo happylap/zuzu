@@ -790,6 +790,10 @@ class HouseDetailViewController: UIViewController {
                         //self.navigationController?.pushViewController(mc, animated: true)
                         
                     }
+                    
+                    if let houseId = houseDetail.valueForKey("id") as? String {
+                        CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                    }
                 } else {
                     alertMailAppNotReady()
                 }
@@ -837,6 +841,10 @@ class HouseDetailViewController: UIViewController {
                         
                         if let phoneStr = alert.title, let url = NSURL(string: "tel://\(phoneStr)") {
                             success = UIApplication.sharedApplication().openURL(url)
+                            
+                            if let houseId = houseDetail.valueForKey("id") as? String {
+                                CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                            }
                         }
                         
                         ///GA Tracker

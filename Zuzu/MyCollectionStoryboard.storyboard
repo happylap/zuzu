@@ -96,6 +96,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="我的收藏" id="7PK-Td-XoL">
+                        <barButtonItem key="backBarButtonItem" title="我的收藏" id="ubr-4i-7IU"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="ENn-dk-taI">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6bE-YE-Su1">
                                 <rect key="frame" x="964" y="7" width="40" height="30"/>
