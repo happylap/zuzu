@@ -18,8 +18,6 @@ class CollectionItemService: NSObject
     
     let datasetName = "MyCollection"
     
-    var dataset: AWSCognitoDataset?
-    
     var isSpin = false
     
     var entityName: String{
@@ -39,7 +37,7 @@ class CollectionItemService: NSObject
         self.dao.addAll(items)
         
         // Add item to Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
             for obj in items {
                 let id = obj.valueForKey("id") as! String
                 if let item: CollectionHouseItem = self.getItem(id) {
@@ -61,7 +59,7 @@ class CollectionItemService: NSObject
         self.dao.updateByID(id, dataToUpdate: dataToUpdate)
         
         // Update item to Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
             if let item: CollectionHouseItem = self.getItem(id) {
                 let JSONString = Mapper().toJSONString(item)
                 dataset.setString(JSONString, forKey: id)
@@ -80,7 +78,7 @@ class CollectionItemService: NSObject
         self.dao.deleteByID(id)
         
         // Delete item from Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
             dataset.removeObjectForKey(id)
         
             // Synchronize to AWS
@@ -92,19 +90,11 @@ class CollectionItemService: NSObject
         }
     }
     
-    func _initMyCollectionDataSet(){
-        
+    func _reloadMyCollectionDataSet(dataset: AWSCognitoDataset){
         var tasks: [AWSTask] = []
         
-        if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName){
-            if self.dataset == nil{
-                self.dataset = dataset
-                AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName)
-            }
-            
-            tasks.append(dataset.synchronizeOnConnectivity())
-        }
-        
+        tasks.append(dataset.synchronizeOnConnectivity())
+
         AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
             return AWSCognito.defaultCognito().refreshDatasetMetadata()
             }.continueWithBlock { (task) -> AnyObject! in
@@ -140,23 +130,40 @@ class CollectionItemService: NSObject
                 }
                 return nil
         }
-        
+
     }
     
-    func _openOrCreateDataset() -> AWSCognitoDataset? {
-        
+    func _getDataSet() -> AWSCognitoDataset?{
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        
-        if let _dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName) {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            self.dataset = _dataset
+        let datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
+        for dataset in datasets {
+            if dataset.name == self.datasetName {
+                if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName) {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    return dataset
+                }
+            }
         }
         
-        if self.dataset == nil {
-            self._initMyCollectionDataSet()
+        return nil
+    }
+    
+    func _openOrCreateDataset(forceReload: Bool) -> AWSCognitoDataset {
+                var dataset = self._getDataSet()
+        if dataset == nil{
+            dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName)
+            var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
+            datasets.append(dataset!)
+            if forceReload != true{
+                return dataset!
+            }
+        }
+
+        if forceReload == true{
+            self._reloadMyCollectionDataSet(dataset!)
         }
         
-        return self.dataset
+        return dataset!
     }
     
     // MARK: Synchronize Timer
@@ -193,8 +200,7 @@ class CollectionItemService: NSObject
         LoadingSpinner.shared.startOnView(theViewController.view)
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         self.isSpin = true
-        
-        self._initMyCollectionDataSet()
+        self._openOrCreateDataset(true)
     }
     
     func addItem(item: AnyObject) {
