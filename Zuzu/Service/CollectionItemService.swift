@@ -85,39 +85,31 @@ class CollectionItemService: NSObject
         tasks.append(dataset.synchronizeOnConnectivity())
 
         AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
-            return AWSCognito.defaultCognito().refreshDatasetMetadata()
-            }.continueWithBlock { (task) -> AnyObject! in
-                dispatch_async(dispatch_get_main_queue()) {
-                    
-                    if task.error != nil {
-                        //self.errorAlert(task.error.description)
-                    } else {
-                        if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName){
-                            if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
-                                self.dao.deleteAll()
-                                
-                                let records: [AWSCognitoRecord] = temp.filter {
-                                    return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
-                                }
-                                for record: AWSCognitoRecord in records {
-                                    let JSONString = record.data.string()
-                                    Mapper<CollectionHouseItem>().map(JSONString)
-                                }
-                                self.dao.commit()
-                            }
-                        }
-                     }
-                    
-                    if UIApplication.sharedApplication().networkActivityIndicatorVisible == true{
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            dispatch_async(dispatch_get_main_queue()) {
+                if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
+                    self.dao.deleteAll()
+                    self.dao.commit()
+                    let records: [AWSCognitoRecord] = temp.filter {
+                    return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
                     }
-                    
-                    if self.isSpin == true{
-                        self.isSpin = false
-                        LoadingSpinner.shared.stop()
+                    for record: AWSCognitoRecord in records {
+                    let JSONString = record.data.string()
+                    Mapper<CollectionHouseItem>().map(JSONString)
                     }
+                    self.dao.commit()
                 }
-                return nil
+                
+                if UIApplication.sharedApplication().networkActivityIndicatorVisible == true{
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                }
+                
+                if self.isSpin == true{
+                    self.isSpin = false
+                    LoadingSpinner.shared.stop()
+                }
+            }
+
+            return nil
         }
 
     }
