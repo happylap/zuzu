@@ -344,6 +344,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
 
         ///Show tab bar
         self.tabBarController!.tabBarHidden = false
+        
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func didReceiveMemoryWarning() {
