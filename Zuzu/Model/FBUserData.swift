@@ -16,5 +16,6 @@ public class FBUserData: NSObject {
     var facebookPictureUrl: String?
     var facebookFirstName: String?
     var facebookLastName: String?
-    
+    var facebookGender: String?
+    var facebookBirthday: String?
 }
