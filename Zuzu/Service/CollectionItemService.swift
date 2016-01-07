@@ -33,7 +33,7 @@ class CollectionItemService: NSObject
     
     // MARK: Private methods for modify items
     
-    func _add(items: [AnyObject]) {
+    private func _add(items: [AnyObject]) {
         self.dao.addAll(items)
         
         // Add item to Cognito
@@ -49,7 +49,7 @@ class CollectionItemService: NSObject
         }
     }
     
-    func _update(id: String, dataToUpdate: [String: AnyObject]) {
+    private func _update(id: String, dataToUpdate: [String: AnyObject]) {
         self.dao.updateByID(id, dataToUpdate: dataToUpdate)
         
         // Update item to Cognito
@@ -62,7 +62,7 @@ class CollectionItemService: NSObject
         }
     }
     
-    func _delete(id: String) {
+    private func _delete(id: String) {
         self.dao.deleteByID(id)
         // Delete item from Cognito
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
@@ -73,7 +73,7 @@ class CollectionItemService: NSObject
     
     // MARK: Dataset methods
     
-    func _syncDataset(dataset: AWSCognitoDataset){
+    private func _syncDataset(dataset: AWSCognitoDataset){
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -81,7 +81,7 @@ class CollectionItemService: NSObject
         }
     }
     
-    func _resyncMyCollectionDataSet(dataset: AWSCognitoDataset){
+    private func _resyncMyCollectionDataSet(dataset: AWSCognitoDataset){
         var tasks: [AWSTask] = []
         
         tasks.append(dataset.synchronizeOnConnectivity())
@@ -120,7 +120,7 @@ class CollectionItemService: NSObject
 
     }
     
-    func _getDataSet() -> AWSCognitoDataset?{
+    private func _getDataSet() -> AWSCognitoDataset?{
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         let datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
         for dataset in datasets {
@@ -135,7 +135,7 @@ class CollectionItemService: NSObject
         return nil
     }
     
-    func _openOrCreateDataset(forceResync: Bool) -> AWSCognitoDataset {
+    private func _openOrCreateDataset(forceResync: Bool) -> AWSCognitoDataset {
         var dataset = self._getDataSet()
         var resync = forceResync
         if dataset == nil{
@@ -160,18 +160,19 @@ class CollectionItemService: NSObject
     var _timer: NSTimer?
     var _flag = true
     var _isStillSync = false
-    
-    func _timeUp() {
-        self._timer?.invalidate()
-        self._flag = true
-    }
-    
+
     func resetSynchronizeTimer() {
         self._timer?.invalidate()
         self._flag = false
-        _timer = NSTimer.scheduledTimerWithTimeInterval(Constants.MYCOLLECTION_SYNCHRONIZE_INTERVAL_TIME, target: self, selector: "_timeUp", userInfo: nil, repeats: true)
+        _timer = NSTimer.scheduledTimerWithTimeInterval(Constants.MYCOLLECTION_SYNCHRONIZE_INTERVAL_TIME, target: self, selector: "timeUp", userInfo: nil, repeats: true)
     }
     
+    // timer selector method should not be private
+    func timeUp() {
+        self._timer?.invalidate()
+        self._flag = true
+    }
+
     func canSynchronize() -> Bool {
         return self._flag
     }
@@ -180,7 +181,8 @@ class CollectionItemService: NSObject
     var _timeoutInterval: NSTimer?
     var _timeoutFlag = false
     
-    func _timeout() {
+    // timer selector method should not be private
+    func timeout() {
         self._timeoutInterval?.invalidate()
         self._timeoutFlag = true
         self._stopLoading()
@@ -189,7 +191,7 @@ class CollectionItemService: NSObject
     func _setTimeout(){
         self._timeoutFlag = false
         self._timeoutInterval?.invalidate()
-        _timeoutInterval = NSTimer.scheduledTimerWithTimeInterval(Constants.MYCOLLECTION_SYNCHRONIZE_TIMEOUT_INTERVAL_TIME, target: self, selector: "_timeout", userInfo: nil, repeats: false)
+        _timeoutInterval = NSTimer.scheduledTimerWithTimeInterval(Constants.MYCOLLECTION_SYNCHRONIZE_TIMEOUT_INTERVAL_TIME, target: self, selector: "timeout", userInfo: nil, repeats: true)
     }
     
     func _isTimeout() -> Bool {
@@ -198,7 +200,7 @@ class CollectionItemService: NSObject
     
     // MARK: Loading methods
     
-    func _startLoading(theViewController: UIViewController){
+    private func _startLoading(theViewController: UIViewController){
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(theViewController.view)
@@ -206,7 +208,7 @@ class CollectionItemService: NSObject
         self.isSpin = true
     }
     
-    func _stopLoading(){
+    private func _stopLoading(){
         if UIApplication.sharedApplication().networkActivityIndicatorVisible == true{
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         }
