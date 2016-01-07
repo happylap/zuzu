@@ -45,13 +45,7 @@ class CollectionItemService: NSObject
                     dataset.setString(JSONString, forKey: id)
                 }
             }
-            
-            // Synchronize to AWS
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                return nil
-            }
+            self._syncDataset(dataset)
         }
     }
     
@@ -64,29 +58,24 @@ class CollectionItemService: NSObject
                 let JSONString = Mapper().toJSONString(item)
                 dataset.setString(JSONString, forKey: id)
             }
-            
-            // Synchronize to AWS
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                return nil
-            }
+            self._syncDataset(dataset)
         }
     }
     
     func _delete(id: String) {
         self.dao.deleteByID(id)
-        
         // Delete item from Cognito
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
             dataset.removeObjectForKey(id)
-        
-            // Synchronize to AWS
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                return nil
-            }
+            self._syncDataset(dataset)
+        }
+    }
+    
+    func _syncDataset(dataset: AWSCognitoDataset){
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            return nil
         }
     }
     
@@ -149,7 +138,8 @@ class CollectionItemService: NSObject
     }
     
     func _openOrCreateDataset(forceReload: Bool) -> AWSCognitoDataset {
-                var dataset = self._getDataSet()
+        var dataset = self._getDataSet()
+        var reload = forceReload
         if dataset == nil{
             dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName)
             var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
@@ -157,9 +147,10 @@ class CollectionItemService: NSObject
             if forceReload != true{
                 return dataset!
             }
+            reload = true
         }
 
-        if forceReload == true{
+        if reload == true{
             self._reloadMyCollectionDataSet(dataset!)
         }
         
@@ -189,11 +180,11 @@ class CollectionItemService: NSObject
     // MARK: Public methods
     
     func synchronize(theViewController: UIViewController) {
-        /*if !self.canSynchronize() {
+        if !self.canSynchronize() {
             return
         }
         
-        self.resetSynchronizeTimer()*/
+        self.resetSynchronizeTimer()
         
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
