@@ -10,18 +10,24 @@ import UIKit
 
 class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     
-    
+    let SearchSBName = "SearchStoryboard"
+    let CollectionSBName = "MyCollectionStoryboard"
+    let RadarSBName = "RadarStoryboard"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+        AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
+            return nil
+        }
+        
+        let searchStoryboard:UIStoryboard = UIStoryboard(name: SearchSBName, bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!
         
-        let collectionStoryboard:UIStoryboard = UIStoryboard(name: "MyCollectionStoryboard", bundle: nil)
+        let collectionStoryboard:UIStoryboard = UIStoryboard(name: CollectionSBName, bundle: nil)
         let collectionViewController:UIViewController = collectionStoryboard.instantiateInitialViewController()!
         
-        let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        let radarStoryboard:UIStoryboard = UIStoryboard(name: RadarSBName, bundle: nil)
         let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
         
         
@@ -51,22 +57,14 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-        //NSLog("%@ tabBarController", self)
         
         if let sb = viewController.storyboard {
             if let name: String = sb.valueForKey("name") as? String {
                 switch name {
-                case "MyCollectionStoryboard":
-                    
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                    
+                case CollectionSBName:
                     if !AmazonClientManager.sharedInstance.isLoggedIn() {
-                        
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
-                            dispatch_async(dispatch_get_main_queue()) {
-                                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            }
                             return nil
                         }
                         return false

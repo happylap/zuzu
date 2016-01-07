@@ -39,10 +39,6 @@ class AmazonClientManager : NSObject {
         super.init()
     }
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-    }
-    
     
     // MARK: General Login
     
@@ -60,16 +56,6 @@ class AmazonClientManager : NSObject {
         if self.credentialsProvider == nil {
             self.completeLogin(nil)
         }
-    }
-    
-    //Sends the appropriate URL based on login provider
-    func application(application: UIApplication,
-        openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-            
-            if FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation) {
-                return true
-            }
-            return false
     }
     
     func completeLogin(logins: [NSObject : AnyObject]?) {
@@ -241,10 +227,8 @@ class AmazonClientManager : NSObject {
         self.keyChain[FB_PROVIDER] = nil
     }
     
-    
     func completeFBLogin() {
         self.keyChain[FB_PROVIDER] = "YES"
-        //self.completeLogin(["graph2.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
         let token = FBSDKAccessToken.currentAccessToken().tokenString
         print("Facebook token: \(token)")
         self.completeLogin([AWSCognitoLoginProviderKey.Facebook.rawValue : token])
