@@ -931,37 +931,41 @@ class HouseDetailViewController: UIViewController {
     }
     
     func collectButtonTouched(sender: UIButton){
-        if !FBLoginService.sharedInstance.hasActiveSession() {
-            FBLoginService.sharedInstance.confirmAndLogin(self)
-        } else {
-            if let houseItemDetail = self.houseItemDetail,
-                let houseId = houseItemDetail.valueForKey("id") as? String {
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
+            AmazonClientManager.sharedInstance.loginFromView(self) {
+                (task: AWSTask!) -> AnyObject! in
+                return nil
+            }
+            return
+        }
+        
+        if let houseItemDetail = self.houseItemDetail,
+            let houseId = houseItemDetail.valueForKey("id") as? String {
+                
+                let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
+                
+                let collectionService = CollectionItemService.sharedInstance
+                
+                ///Determine action based on whether the house item is already in "My Collection"
+                if(collectionService.isExist(houseId)) {
                     
-                    let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
+                    collectionService.deleteItemById(houseId)
                     
-                    let collectionService = CollectionItemService.sharedInstance
-                    
-                    ///Determine action based on whether the house item is already in "My Collection"
-                    if(collectionService.isExist(houseId)) {
-                        
-                        collectionService.deleteItemById(houseId)
-                        
-                        if let barItem = barItem {
-                            barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
-                        }
-                        
-                    } else {
-                        collectionService.addItem(houseItemDetail)
-                        self.alertAddingToCollectionSuccess()
-                        
-                        if let barItem = barItem {
-                            barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
-                        }
+                    if let barItem = barItem {
+                        barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
                     }
                     
-                    ///Notify the search result table to refresh the slected row
-                    delegate?.onHouseItemStateChanged()
-            }
+                } else {
+                    collectionService.addItem(houseItemDetail)
+                    self.alertAddingToCollectionSuccess()
+                    
+                    if let barItem = barItem {
+                        barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+                    }
+                }
+                
+                ///Notify the search result table to refresh the slected row
+                delegate?.onHouseItemStateChanged()
         }
     }
     

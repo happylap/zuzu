@@ -14,6 +14,7 @@ import AWSCognito
 import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
+import SCLAlertView
 
 class AmazonClientManager : NSObject {
     static let sharedInstance = AmazonClientManager()
@@ -145,25 +146,21 @@ class AmazonClientManager : NSObject {
         if self.isLoggedIn() {
             self.displayLoginView(theViewController)
         } else {
-            // create the alert
-            let alert = UIAlertController(title: "提醒", message: "請先登入", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "確定", style: UIAlertActionStyle.Default, handler: { action in
-                //self.displayLoginView(theViewController)
-                self.fbLogin(theViewController)
-            }))
             
-            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { action in
-
-                
+            let loginAlertView = SCLAlertView()
+            loginAlertView.showCloseButton = false
+            
+            loginAlertView.addButton("立即登入 Facebook") {
+                self.fbLogin(theViewController)
+            }
+            
+            loginAlertView.addButton("取消") {
                 ///GA Tracker: Login cancelled
                 theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                     action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
-                
-                
-            }))
+            }
             
-            // show the alert
-            theViewController.presentViewController(alert, animated: true, completion: nil)
+            loginAlertView.showNotice("提醒您", subTitle: "此功能需登入Facebook才能使用喔!", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         }
         
     }
