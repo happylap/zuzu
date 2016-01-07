@@ -103,9 +103,7 @@ class CollectionItemService: NSObject
         var tasks: [AWSTask] = []
         
         for dataset in datasets {
-            if dataset.name == self.datasetName {
-                tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronizeOnConnectivity())
-            }
+            tasks.append(AWSCognito.defaultCognito().openOrCreateDataset(dataset.name).synchronizeOnConnectivity())
         }
         
         AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
@@ -143,7 +141,7 @@ class CollectionItemService: NSObject
                     }
                     
                     if UIApplication.sharedApplication().networkActivityIndicatorVisible == true{
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible == false
                     }
                     
                     if self.isSpin == true{
