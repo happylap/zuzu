@@ -14,6 +14,18 @@ import AWSCore
 import AWSCognito
 import SCLAlertView
 
+struct CollectionHouseItemDocument {
+    
+    struct Sorting {
+        static let sortAsc = "asc"
+        static let sortDesc = "desc"
+    }
+    
+    static let price:String = "price"
+    static let size:String = "size"
+    static let collectTime:String = "collectTime"
+}
+
 class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     let cellReuseIdentifier = "houseItemCell"
@@ -83,9 +95,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.sortByCollectTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
     }
     
-    private func loadData() {
-        self.loadDataBy(nil, ascending: nil)
-    }
     
     private func loadDataBy(sortingField: String?, ascending: Bool?) {
         NSLog("%@ loadData", self)
@@ -108,7 +117,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
         
         print("loadData by \(_sortingField) \(_ascending)")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: _sortingField, ascending: _ascending)]
+        let firstSort = NSSortDescriptor(key: _sortingField, ascending: _ascending)
+        let secondarySort = NSSortDescriptor(key: CollectionHouseItemDocument.collectTime, ascending: false)
+        fetchRequest.sortDescriptors = [firstSort, secondarySort]
         
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -127,10 +138,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.tableView.reloadData()
     }
     
-    private func loadHouseListPage(pageNo: Int) {
-        
-    }
-
     private func imageWithColor(color: UIColor) -> UIImage {
         
         let rect:CGRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
@@ -154,7 +161,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.sortingStatus[sortingField] = sortingOrder
         
         //self.loadData()
-        if sortingOrder == HouseItemDocument.Sorting.sortAsc {
+        if sortingOrder == CollectionHouseItemDocument.Sorting.sortAsc {
             self.loadDataBy(sortingField, ascending: true)
         } else {
             self.loadDataBy(sortingField, ascending: false)
@@ -168,11 +175,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         var targetButton: UIButton!
         
         switch field {
-        case HouseItemDocument.price:
+        case CollectionHouseItemDocument.price:
             targetButton = sortByPriceButton
-        case  HouseItemDocument.size:
+        case  CollectionHouseItemDocument.size:
             targetButton = sortBySizeButton
-        case "collectTime":
+        case CollectionHouseItemDocument.collectTime:
             targetButton = sortByCollectTimeButton
         default: break
         }
@@ -198,13 +205,13 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         
         ///Set image for selected state
-        if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
+        if(sortingOrder == CollectionHouseItemDocument.Sorting.sortAsc) {
             targetButton.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Selected)
             targetButton.setImage(UIImage(named: "arrow_up_n"),
                 forState: UIControlState.Normal)
             
-        } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
+        } else if(sortingOrder == CollectionHouseItemDocument.Sorting.sortDesc) {
             targetButton.setImage(UIImage(named: "arrow_down_n"),
                 forState: UIControlState.Selected)
             targetButton.setImage(UIImage(named: "arrow_down_n"),
@@ -234,11 +241,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         switch sender {
         case sortByPriceButton:
-            sortingField = HouseItemDocument.price
+            sortingField = CollectionHouseItemDocument.price
         case sortBySizeButton:
-            sortingField = HouseItemDocument.size
+            sortingField = CollectionHouseItemDocument.size
         case sortByCollectTimeButton:
-            sortingField = "collectTime"
+            sortingField = CollectionHouseItemDocument.collectTime
         default:
             assert(false, "Unknown sorting type")
             break
@@ -249,8 +256,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             if let status = sortingStatus[sortingField] {
                 
                 ///Reverse the previous sorting order
-                
-                sortingOrder = ((status == HouseItemDocument.Sorting.sortAsc) ? HouseItemDocument.Sorting.sortDesc : HouseItemDocument.Sorting.sortAsc)
+                if status == CollectionHouseItemDocument.Sorting.sortAsc {
+                    sortingOrder = CollectionHouseItemDocument.Sorting.sortDesc
+                } else {
+                    sortingOrder = CollectionHouseItemDocument.Sorting.sortAsc
+                }
                 
             } else {
                 
@@ -268,7 +278,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             } else {
                 
                 ///Use Default Ordering Asc
-                sortingOrder = HouseItemDocument.Sorting.sortAsc
+                sortingOrder = CollectionHouseItemDocument.Sorting.sortAsc
             }
         }
         
@@ -308,8 +318,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         NSLog("%@ viewDidLoad", self)
         
-        // Load the first page of data
-        self.loadData()
+        // Load data sort by collectTime
+        self.sortByField(CollectionHouseItemDocument.collectTime, sortingOrder: CollectionHouseItemDocument.Sorting.sortDesc)
             
         //Configure cell height
         configureTableView()
@@ -480,18 +490,18 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         case .Insert:
             //FIXME: iOS 8 Bug!
             if indexPath != newIndexPath {
-                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
+                self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
             }
         case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Update:
             let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! SearchResultTableViewCell
             cell.parentTableView = self.tableView
             cell.indexPath = indexPath
             cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? CollectionHouseItem
         case .Move:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .None)
+            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         }
     }
     
