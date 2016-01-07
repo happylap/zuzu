@@ -12,6 +12,7 @@ import CoreData
 import FBSDKLoginKit
 import AWSCore
 import AWSCognito
+import SCLAlertView
 
 class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
@@ -280,23 +281,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         AmazonClientManager.sharedInstance.logOut() {
             (task: AWSTask!) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
-                
-                let alertView = UIAlertView(
-                    title: "提醒",
-                    message: "已登出Facebook",
-                    delegate: self,
-                    cancelButtonTitle: "知道了")
-                
-                // Configure Alert View
-                alertView.tag = 2
-                
-                // Show Alert View
-                alertView.show()
-                
-                // Delay the dismissal
-                self.runOnMainThreadAfter(2.0) {
-                    alertView.dismissWithClickedButtonIndex(-1, animated: true)
-                }
+                SCLAlertView().showWarning("提醒您", subTitle: "您已登出Facebook", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             }
             return nil
         }
