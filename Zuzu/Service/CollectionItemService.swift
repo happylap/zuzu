@@ -179,29 +179,34 @@ class CollectionItemService: NSObject
         return self.dataset
     }
     
-    // MARK: Timer
+    // MARK: Synchronize Timer
     
-    var timer: NSTimer?
-    var allowSynchronize = true
-    
-    func _resetTimer() {
-        timer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "_timeUp", userInfo: nil, repeats: true)
-        self.allowSynchronize = false
-    }
+    var _timer: NSTimer?
+    var _flag = true
     
     func _timeUp() {
-        self.timer?.invalidate()
-        self.allowSynchronize = true
+        self._timer?.invalidate()
+        self._flag = true
+    }
+    
+    func resetSynchronizeTimer() {
+        self._timer?.invalidate()
+        self._flag = false
+        _timer = NSTimer.scheduledTimerWithTimeInterval(Constants.COGNITO_SYNCHRONIZE_INTERVAL_TIME, target: self, selector: "_timeUp", userInfo: nil, repeats: true)
+    }
+    
+    func canSynchronize() -> Bool {
+        return self._flag
     }
     
     // MARK: Public methods
     
     func synchronize(theViewController: UIViewController) {
-        /*if !allowSynchronize {
+        if !self.canSynchronize() {
             return
         }
         
-        self._resetTimer()*/
+        self.resetSynchronizeTimer()
         
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)

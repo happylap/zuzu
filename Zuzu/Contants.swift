@@ -16,7 +16,10 @@ struct Constants {
     
     static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
     static let COGNITO_IDENTITY_POOL_ID = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
+
+    static let COGNITO_SYNCHRONIZE_INTERVAL_TIME = 5.0  // Unit: second
     
+
     // MARK: Optional: Enable Facebook Login
     
     /**
