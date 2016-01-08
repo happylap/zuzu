@@ -10,6 +10,8 @@ import Foundation
 
 struct UserDefaultsUtils{
     
+    // MARK: My Collection
+    
     static let myCollectionAlertUserDefaultKey = "myCollectionAlert"
     
     static func disableMyCollectionPrompt() {
@@ -21,5 +23,19 @@ struct UserDefaultsUtils{
         //Load selection from user defaults
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return !userDefaults.boolForKey(myCollectionAlertUserDefaultKey)
+    }
+    
+    // MARK: SNS Push Notifications
+    
+    static let APN_DEVICE_TOKEN_KEY = "deviceToken"
+    
+    static func setAPNDevicetoken(deviceToken: String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(deviceToken, forKey: APN_DEVICE_TOKEN_KEY)
+    }
+
+    static func getAPNDevicetoken() -> String?{
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.stringForKey(APN_DEVICE_TOKEN_KEY)
     }
 }

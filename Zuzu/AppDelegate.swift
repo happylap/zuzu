@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import AWSCore
 import AWSCognito
+import AWSSNS
 import FBSDKCoreKit
 import FBSDKLoginKit
 
@@ -17,7 +18,6 @@ import FBSDKLoginKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
-    let cognitoIdentityPoolId = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
     
     var window: UIWindow?
     
@@ -58,6 +58,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
+    private func pushNotificationsSetup(){
+        // Sets up Mobile Push Notification
+        let readAction = UIMutableUserNotificationAction()
+        readAction.identifier = "READ_IDENTIFIER"
+        readAction.title = "Read"
+        readAction.activationMode = UIUserNotificationActivationMode.Foreground
+        readAction.destructive = false
+        readAction.authenticationRequired = true
+        
+        let deleteAction = UIMutableUserNotificationAction()
+        deleteAction.identifier = "DELETE_IDENTIFIER"
+        deleteAction.title = "Delete"
+        deleteAction.activationMode = UIUserNotificationActivationMode.Foreground
+        deleteAction.destructive = true
+        deleteAction.authenticationRequired = true
+        
+        let ignoreAction = UIMutableUserNotificationAction()
+        ignoreAction.identifier = "IGNORE_IDENTIFIER"
+        ignoreAction.title = "Ignore"
+        ignoreAction.activationMode = UIUserNotificationActivationMode.Foreground
+        ignoreAction.destructive = false
+        ignoreAction.authenticationRequired = false
+        
+        let messageCategory = UIMutableUserNotificationCategory()
+        messageCategory.identifier = "MESSAGE_CATEGORY"
+        messageCategory.setActions([readAction, deleteAction], forContext: UIUserNotificationActionContext.Minimal)
+        messageCategory.setActions([readAction, deleteAction, ignoreAction], forContext: UIUserNotificationActionContext.Default)
+        
+        let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Badge, UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: (NSSet(array: [messageCategory])) as? Set<UIUserNotificationCategory>)
+        
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+    }
+    
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "RLopez.BORRAME" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
@@ -70,18 +104,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        /*
-        if AWSCognito.cognitoDeviceId() != nil {
-            let canRegisterApp : UIApplication? = application
-            canRegisterApp?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: nil))
-        }
-        */
-        
+
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
             return nil
+        }
+        
+        if FeatureOption.Radar.enableMain == true{
+            pushNotificationsSetup()
         }
         
         commonServiceSetup()
@@ -94,22 +125,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        application.registerForRemoteNotifications()
-    }
-    
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(deviceToken, forKey: Constants.DEVICE_TOKEN_KEY)
-        userDefaults.synchronize()
+        let deviceTokenString = "\(deviceToken)"
+            .stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString:"<>"))
+            .stringByReplacingOccurrencesOfString(" ", withString: "")
+        print("deviceTokenString: \(deviceTokenString)")
+        UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         print("Error in registering for remote notifications: " + error.localizedDescription)
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        NSNotificationCenter.defaultCenter().postNotificationName(Constants.COGNITO_PUSH_NOTIF, object: userInfo)
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        print("userInfo: \(userInfo)")
     }
     
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
