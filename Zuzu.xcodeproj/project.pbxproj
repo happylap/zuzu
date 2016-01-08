@@ -81,6 +81,7 @@
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */; };
+		2FD8EA9C1C3FA9CC00C920D3 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */; };
 		2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */; };
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
@@ -230,6 +231,7 @@
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsUtils.swift; sourceTree = "<group>"; };
+		2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterOptionTableViewController.swift; sourceTree = "<group>"; };
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 				2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */,
 				2F05C6271BBA2FBB00100D5F /* StringUtils.swift */,
 				2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */,
+				2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */,
 				2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */,
 				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
 				2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */,
@@ -917,6 +920,7 @@
 				2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */,
 				2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */,
 				2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */,
+				2FD8EA9C1C3FA9CC00C920D3 /* Secrets.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */,
 				81390C841C36AB6100450761 /* DeveloperAuthenticationClient.m in Sources */,

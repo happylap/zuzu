@@ -13,8 +13,6 @@ struct SolrConst {
     
     static let DefaultPhraseSlope = 2
     
-    static let SolrSecret = ""
-    
     struct Server {
         static let SCHEME = "http"
         static let HOST = "solr.zuzu.com.tw"
@@ -405,7 +403,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 
                 request.HTTPMethod = SolrConst.Server.HTTP_METHOD
 
-                let plainLoginString = (SolrConst.SolrSecret as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                let plainLoginString = (SecretConst.SolrQuery as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                 
                 if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
                     
