@@ -1054,6 +1054,8 @@ class HouseDetailViewController: UIViewController {
         ///Display tab bar
         self.tabBarController!.tabBarHidden = false
         
+        CollectionItemService.sharedInstance.resetEnterTimer()
+        
         LoadingSpinner.shared.stop()
     }
     

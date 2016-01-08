@@ -25,8 +25,9 @@ class CollectionItemService: NSObject
     }
     
     struct CollectionItemConstants {
-        static let LONG_SYNCHRONIZE_DELAY = 10.0  // Unit: second
-        static let SHORT_SYNCHRONIZE_DELAY = 10.0  // Unit: second
+        static let ENTER_TIMER_INTERVAL = 300.0  // Unit: second
+        static let SYNCHRONIZE_DELAY_FOR_ADD = 3.0  // Unit: second
+        static let SYNCHRONIZE_DELAY = 1.0  // Unit: second
     }
     
     class var sharedInstance: CollectionItemService {
@@ -53,7 +54,7 @@ class CollectionItemService: NSObject
                     dataset.setString(JSONString, forKey: id)
                 }
             }
-            self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
+            self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY_FOR_ADD)
         }
     }
     
@@ -66,7 +67,7 @@ class CollectionItemService: NSObject
                 let JSONString = Mapper().toJSONString(item)
                 dataset.setString(JSONString, forKey: id)
             }
-            self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
+            self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY)
         }
     }
     
@@ -75,7 +76,7 @@ class CollectionItemService: NSObject
         // Delete item from Cognito
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
             dataset.removeObjectForKey(id)
-            self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
+            self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY)
         }
     }
     
@@ -233,14 +234,14 @@ class CollectionItemService: NSObject
         }
     }
 
-    
     // MARK: Private Synchronize Methods
+    
     var _delay: Double?
     var _sycQueue = [Int]()
-    var _timer: NSTimer?
+    var _syncTimer: NSTimer?
     
-    func timeUp() { //The timeUp function is a selector, which must be a public function
-        self._timer?.invalidate()
+    func syncTimeUp() { //The timeUp function is a selector, which must be a public function
+        self._syncTimer?.invalidate()
         self._sync()
     }
     
@@ -257,7 +258,7 @@ class CollectionItemService: NSObject
             dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
                 if !self._sycQueue.isEmpty {
                     self._sycQueue.removeAll()
-                    self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
+                    self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY)
                 }
                 return nil
             }
@@ -265,17 +266,36 @@ class CollectionItemService: NSObject
     }
 
     func _syncDataset(delay:Double) {
-        self._timer?.invalidate()
-        _timer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: "timeUp", userInfo: nil, repeats: true)
+        self._syncTimer?.invalidate()
+        _syncTimer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: "syncTimeUp", userInfo: nil, repeats: true)
+    }
+
+    // MARK: Enter mycollection timer Methods
+    
+    var _enterTimer: NSTimer?
+    var _canEnter = true
+    
+    func enterTimeUp() { //The timeUp function is a selector, which must be a public function
+        self._enterTimer?.invalidate()
+        self._canEnter = true
+    }
+    
+    func resetEnterTimer() {
+        self._enterTimer?.invalidate()
+        self._canEnter = false
+        self._enterTimer = NSTimer.scheduledTimerWithTimeInterval(CollectionItemConstants.ENTER_TIMER_INTERVAL, target: self, selector: "enterTimeUp", userInfo: nil, repeats: true)
+    }
+    
+    func canSyncWhenEnter() -> Bool{
+        return self._canEnter
     }
     
     // MARK: Public Sync methods
     func sync(){
-        self._syncDataset(0)
-    }
-    
-    func syncWithLongDelay(){
-        self._syncDataset(CollectionItemConstants.LONG_SYNCHRONIZE_DELAY)
+        if self.canSyncWhenEnter(){
+            self._syncDataset(0)
+        }
+        self.resetEnterTimer()
     }
     
     // MARK: Public Modify methods

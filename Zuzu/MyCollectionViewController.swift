@@ -344,7 +344,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         configureSortingButtons()
         
         CollectionItemService.sharedInstance.parentViewController = self
-        CollectionItemService.sharedInstance.sync() // sync right away
+        CollectionItemService.sharedInstance.sync()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -352,7 +352,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         super.viewWillAppear(animated)
         
         // Synchronize core data from Cognito
-        CollectionItemService.sharedInstance.syncWithLongDelay()
+        CollectionItemService.sharedInstance.sync()
 
         ///Show tab bar
         self.tabBarController!.tabBarHidden = false
