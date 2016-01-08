@@ -184,6 +184,10 @@ class CollectionItemService: NSObject
                 if modifyingKeys.count > 0 {
                     
                     if let dataset: AWSCognitoDataset = aNotification.object as? AWSCognitoDataset {
+                        if dataset.name != self.datasetName{
+                            return
+                        }
+                        
                         if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
                             let dirtyRecords: [AWSCognitoRecord] = temp.filter {
                                 return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
@@ -262,11 +266,7 @@ class CollectionItemService: NSObject
         self.resetSynchronizeTimer()
         
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
-            var tasks: [AWSTask] = []
-            tasks.append(dataset.synchronizeOnConnectivity())
-            AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
-                return nil
-            }
+            self._syncDataset(dataset)
         }
     }
     
