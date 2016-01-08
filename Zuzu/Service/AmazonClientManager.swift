@@ -18,6 +18,12 @@ import SCLAlertView
 
 class AmazonClientManager : NSObject {
     static let sharedInstance = AmazonClientManager()
+
+    struct AWSConstants {
+        static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
+        static let COGNITO_IDENTITY_POOL_ID = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
+    }
+    
     
     enum Provider: String {
         case FB
@@ -48,7 +54,7 @@ class AmazonClientManager : NSObject {
     // MARK: General Login
     
     func isConfigured() -> Bool {
-        return !(Constants.COGNITO_IDENTITY_POOL_ID == "YourCognitoIdentityPoolId" || Constants.COGNITO_REGIONTYPE == AWSRegionType.Unknown)
+        return !(AWSConstants.COGNITO_IDENTITY_POOL_ID == "YourCognitoIdentityPoolId" || AWSConstants.COGNITO_REGIONTYPE == AWSRegionType.Unknown)
     }
     
     func resumeSession(completionHandler: AWSContinuationBlock) {
@@ -132,11 +138,12 @@ class AmazonClientManager : NSObject {
         
         AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
         
-        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: Constants.COGNITO_REGIONTYPE, identityPoolId: Constants.COGNITO_IDENTITY_POOL_ID)
+        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
         
-        let configuration = AWSServiceConfiguration(region: Constants.COGNITO_REGIONTYPE, credentialsProvider: self.credentialsProvider)
+        let configuration = AWSServiceConfiguration(region: AWSConstants.COGNITO_REGIONTYPE, credentialsProvider: self.credentialsProvider)
+        
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
-        
+                
         return self.credentialsProvider?.getIdentityId()
     }
     
@@ -280,6 +287,7 @@ class AmazonClientManager : NSObject {
             }
         }
     }
+    
     
     // MARK: UI Helpers
     
