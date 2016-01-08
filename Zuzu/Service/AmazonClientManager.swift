@@ -11,6 +11,7 @@ import Foundation
 import UICKeyChainStore
 import AWSCore
 import AWSCognito
+import AWSSNS
 import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
@@ -22,6 +23,7 @@ class AmazonClientManager : NSObject {
     struct AWSConstants {
         static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_IDENTITY_POOL_ID = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
+        static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
     }
     
     
@@ -107,6 +109,8 @@ class AmazonClientManager : NSObject {
         task?.continueWithBlock {
             (task: AWSTask!) -> AnyObject! in
             if (task.error != nil) {
+                self.registerSNSEndpoint()
+                
                 let userDefaults = NSUserDefaults.standardUserDefaults()
                 let currentDeviceToken: NSData? = userDefaults.objectForKey(Constants.DEVICE_TOKEN_KEY) as? NSData
                 var currentDeviceTokenString : String
@@ -126,7 +130,7 @@ class AmazonClientManager : NSObject {
                         }
                         return nil
                     }
-                }
+                }                
             }
             
             return task
@@ -305,5 +309,27 @@ class AmazonClientManager : NSObject {
         errorAlert.addAction(okAction)
         
         self.loginViewController?.presentViewController(errorAlert, animated: true, completion: nil)
+    }
+    
+    // MARK: SNS Push Notifications
+    
+    func registerSNSEndpoint(){
+        if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
+            let sns = AWSSNS.defaultSNS()
+            let request = AWSSNSCreatePlatformEndpointInput()
+            request.token = deviceTokenString
+            request.platformApplicationArn = AWSConstants.PLATFORM_APPLICATION_ARN
+            sns.createPlatformEndpoint(request).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task: AWSTask!) -> AnyObject! in
+                if task.error != nil {
+                    print("Error: \(task.error)")
+                } else {
+                    let createEndpointResponse = task.result as! AWSSNSCreateEndpointResponse
+                    print("endpointArn: \(createEndpointResponse.endpointArn)")
+                    NSUserDefaults.standardUserDefaults().setObject(createEndpointResponse.endpointArn, forKey: "endpointArn")
+                }
+                
+                return nil
+            })
+        }
     }
 }
