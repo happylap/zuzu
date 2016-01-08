@@ -30,7 +30,7 @@ pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
 pod 'ObjectMapper', '~> 1.1'
-
+pod 'FLAnimatedImage', '~> 1.0'
 
 end
 

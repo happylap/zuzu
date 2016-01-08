@@ -8,6 +8,8 @@ PODS:
   - AWSCore (2.3.2)
   - AWSS3 (2.3.2):
     - AWSCore (= 2.3.2)
+  - AWSSNS (2.3.2):
+    - AWSCore (= 2.3.2)
   - Bolts (1.5.0):
     - Bolts/AppLinks (= 1.5.0)
     - Bolts/Tasks (= 1.5.0)
@@ -30,6 +32,7 @@ PODS:
     - FBSDKCoreKit
   - FBSDKShareKit (4.8.0):
     - FBSDKCoreKit
+  - FLAnimatedImage (1.0.10)
   - Google/AdMob (1.2.1):
     - Google/Core
     - GoogleMobileAds (~> 7.3)
@@ -87,11 +90,13 @@ DEPENDENCIES:
   - AWSCognito
   - AWSCore
   - AWSS3
+  - AWSSNS
   - Device (~> 0.0.4)
   - Dollar (~> 4.0)
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
+  - FLAnimatedImage (~> 1.0)
   - Google/AdMob
   - Google/Analytics
   - Google/SignIn
@@ -113,6 +118,7 @@ SPEC CHECKSUMS:
   AWSCognito: af9cd756ab300f0a86582a11fbe1777d7fa81696
   AWSCore: c2f69975fd2caf38a10736961de28a0105cdb00c
   AWSS3: 9ac201e7a4ad8be0b68348c77acfd100027b97af
+  AWSSNS: c61e8296d6d48596b92ceb84b859809dadcecd8d
   Bolts: 722ab9a4f8b50fc4ed1b9998a5a7a2b3f16d80b4
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
@@ -120,6 +126,7 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: 66a935d17b6e00b6b64e604f2eb9b72c9ab7deb8
   FBSDKLoginKit: d893fcbb98d854496925e9ff73c67b896982d3c4
   FBSDKShareKit: e7577ee3adf80fc04fb656dd133fbb522250672b
+  FLAnimatedImage: e16a1e1cef08e4c509b47e4acbe3923f65c16135
   Google: fd33b5fa40fa3aaee5176de49c873a74e3d11dce
   GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699

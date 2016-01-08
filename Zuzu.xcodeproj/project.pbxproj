@@ -82,6 +82,7 @@
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */; };
 		2FD8EA9C1C3FA9CC00C920D3 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */; };
+		2FD8EA9E1C3FB63500C920D3 /* ic_loginLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2FD8EA9D1C3FB63500C920D3 /* ic_loginLoading.gif */; };
 		2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */; };
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
@@ -232,6 +233,7 @@
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsUtils.swift; sourceTree = "<group>"; };
 		2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		2FD8EA9D1C3FB63500C920D3 /* ic_loginLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ic_loginLoading.gif; sourceTree = "<group>"; };
 		2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterOptionTableViewController.swift; sourceTree = "<group>"; };
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 		2FBC05561BDE769B0035652D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2FD8EA9D1C3FB63500C920D3 /* ic_loginLoading.gif */,
 				2F31F5281BC3C34600054355 /* Localizable.strings */,
 				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
 				2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */,
@@ -763,6 +766,7 @@
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
 				2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */,
+				2FD8EA9E1C3FB63500C920D3 /* ic_loginLoading.gif in Resources */,
 				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F482DFF1BAFE09100C68670 /* Assets.xcassets in Resources */,
