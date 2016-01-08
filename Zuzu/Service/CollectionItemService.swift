@@ -18,7 +18,7 @@ class CollectionItemService: NSObject
     
     let datasetName = "MyCollection"
     
-    var isSpin = false
+    var parentViewController: UIViewController?
     
     var entityName: String{
         return self.dao.entityName
@@ -28,6 +28,9 @@ class CollectionItemService: NSObject
         struct Singleton {
             static let instance = CollectionItemService()
         }
+        
+        Singleton.instance.registerAWSCognitoNotifications()
+        
         return Singleton.instance
     }
     
@@ -37,7 +40,7 @@ class CollectionItemService: NSObject
         self.dao.addAll(items)
         
         // Add item to Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
             for obj in items {
                 let id = obj.valueForKey("id") as! String
                 if let item: CollectionHouseItem = self.getItem(id) {
@@ -53,7 +56,7 @@ class CollectionItemService: NSObject
         self.dao.updateByID(id, dataToUpdate: dataToUpdate)
         
         // Update item to Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
             if let item: CollectionHouseItem = self.getItem(id) {
                 let JSONString = Mapper().toJSONString(item)
                 dataset.setString(JSONString, forKey: id)
@@ -63,9 +66,9 @@ class CollectionItemService: NSObject
     }
     
     func _delete(id: String) {
-        self.dao.deleteByID(id)
+        self.dao.safeDeleteByID(id)
         // Delete item from Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset(false) {
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
             dataset.removeObjectForKey(id)
             self._syncDataset(dataset)
         }
@@ -73,88 +76,160 @@ class CollectionItemService: NSObject
     
     // MARK: Dataset methods
     
-    func _syncDataset(dataset: AWSCognitoDataset){
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    func _syncDataset(dataset: AWSCognitoDataset) {
         dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             return nil
         }
     }
     
-    func _resyncMyCollectionDataSet(dataset: AWSCognitoDataset){
-        var tasks: [AWSTask] = []
-        
-        tasks.append(dataset.synchronizeOnConnectivity())
-
-        AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
-            
-            self._isStillSync = false
-            
-            if self._isTimeout() == true{
-                return nil
-            }
-            
-            if task.error != nil{
-                return nil
-            }
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
-                    self.dao.deleteAll()
-                    self.dao.commit()
-                    let records: [AWSCognitoRecord] = temp.filter {
-                    return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
-                    }
-                    for record: AWSCognitoRecord in records {
-                    let JSONString = record.data.string()
-                    Mapper<CollectionHouseItem>().map(JSONString)
-                    }
-                    self.dao.commit()
-                }
-                
-                self._stopLoading()
-            }
-
-            return nil
-        }
-
-    }
-    
-    func _getDataSet() -> AWSCognitoDataset?{
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    func _getDataSet() -> AWSCognitoDataset? {
         let datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
         for dataset in datasets {
             if dataset.name == self.datasetName {
                 if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName) {
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     return dataset
                 }
             }
         }
-        
         return nil
     }
     
-    func _openOrCreateDataset(forceResync: Bool) -> AWSCognitoDataset {
+    func _openOrCreateDataset() -> AWSCognitoDataset {
         var dataset = self._getDataSet()
-        var resync = forceResync
+        
         if dataset == nil{
             dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName)
             var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
             datasets.append(dataset!)
-            if forceResync != true{
-                return dataset!
-            }
-            resync = true
-        }
-
-        if resync == true{
-            self._setTimeout()
-            self._resyncMyCollectionDataSet(dataset!)
         }
         
         return dataset!
     }
+    
+    
+    // MARK: AWSCognito Notifications
+    
+    var registerAWSCognitoNotification = false
+    
+    func registerAWSCognitoNotifications() {
+        
+        if registerAWSCognitoNotification == true {
+            return
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "startSynchronizeNotification:",
+            name: AWSCognitoDidStartSynchronizeNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "endSynchronizeNotification:",
+            name: AWSCognitoDidEndSynchronizeNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "failToSynchronizeNotification:",
+            name: AWSCognitoDidFailToSynchronizeNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "changeRemoteValueNotification:",
+            name: AWSCognitoDidChangeRemoteValueNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "changeLocalValueFromRemoteNotification:",
+            name: AWSCognitoDidChangeLocalValueFromRemoteNotification,
+            object:nil)
+        
+        registerAWSCognitoNotification = true
+    }
+    
+    func startSynchronizeNotification(aNotification: NSNotification) {
+        NSLog("%@ AWSCognito startSynchronizeNotification", self)
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func endSynchronizeNotification(aNotification: NSNotification) {
+        NSLog("%@ AWSCognito endSynchronizeNotification", self)
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
+    func failToSynchronizeNotification(aNotification: NSNotification) {
+        NSLog("%@ AWSCognito failToSynchronizeNotification", self)
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
+    func changeRemoteValueNotification(aNotification: NSNotification) {
+        NSLog("%@ AWSCognito changeRemoteValueNotification", self)
+        
+    }
+    
+    func changeLocalValueFromRemoteNotification(aNotification: NSNotification) {
+        NSLog("%@ AWSCognito changeRemoteValueNotification", self)
+ 
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            if self.parentViewController != nil {
+                LoadingSpinner.shared.setImmediateAppear(true)
+                LoadingSpinner.shared.setOpacity(0.3)
+                LoadingSpinner.shared.startOnView(self.parentViewController!.view)
+            }
+            
+            if let modifyingKeys: [String] = aNotification.userInfo?["keys"] as? [String] {
+                if modifyingKeys.count > 0 {
+                    
+                    if let dataset: AWSCognitoDataset = aNotification.object as? AWSCognitoDataset {
+                        if let temp = dataset.getAllRecords() as? [AWSCognitoRecord] {
+                            let dirtyRecords: [AWSCognitoRecord] = temp.filter {
+                                return $0.dirty || ($0.data.string() != nil && $0.data.string().characters.count != 0)
+                            }
+                            
+                            var dirtyKeys: [String] = []
+                            for dirtyRecord: AWSCognitoRecord in dirtyRecords {
+                                dirtyKeys.append(dirtyRecord.recordId)
+                            }
+                            
+                            // Delete collectionItem, if its id isn't exist dirtyKeys
+                            if let collectionItems = self.getAll() {
+                                for collectionItem: CollectionHouseItem in collectionItems {
+                                    NSLog("%@ collectionItem title: \(collectionItem.title)", self)
+                                    let id = collectionItem.id
+                                    if !dirtyKeys.contains(id) {
+                                        self.dao.safeDeleteByID(id)
+                                    }
+                                }
+                            }
+                            
+                            // Delete collectionItem by modifyingKey
+                            for modifyingKey: String in modifyingKeys {
+                                self.dao.safeDeleteByID(modifyingKey)
+                            }
+                            
+                            
+                            // Add collectionItem if dirtyKey in modifyingKeys
+                            for dirtyRecord: AWSCognitoRecord in dirtyRecords {
+                                let dirtyKey = dirtyRecord.recordId
+                                if modifyingKeys.contains(dirtyKey) {
+                                    //NSLog("%@ dirtyRecord: \(dirtyRecord)", self)
+                                    let JSONString = dirtyRecord.data.string()
+                                    Mapper<CollectionHouseItem>().map(JSONString)
+                                }
+                            }
+                            
+                            self.dao.commit()
+                        }
+                    }
+                }
+            }
+            LoadingSpinner.shared.stop()
+        }
+    }
+
     
     // MARK: Synchronize Timer
     var _timer: NSTimer?
@@ -175,47 +250,7 @@ class CollectionItemService: NSObject
     func canSynchronize() -> Bool {
         return self._flag
     }
-
-    // MARK: Synchronize Timeout
-    var _timeoutInterval: NSTimer?
-    var _timeoutFlag = false
     
-    func _timeout() {
-        self._timeoutInterval?.invalidate()
-        self._timeoutFlag = true
-        self._stopLoading()
-    }
-    
-    func _setTimeout(){
-        self._timeoutFlag = false
-        self._timeoutInterval?.invalidate()
-        _timeoutInterval = NSTimer.scheduledTimerWithTimeInterval(Constants.MYCOLLECTION_SYNCHRONIZE_TIMEOUT_INTERVAL_TIME, target: self, selector: "_timeout", userInfo: nil, repeats: false)
-    }
-    
-    func _isTimeout() -> Bool {
-        return self._timeoutFlag
-    }
-    
-    // MARK: Loading methods
-    
-    func _startLoading(theViewController: UIViewController){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(theViewController.view)
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        self.isSpin = true
-    }
-    
-    func _stopLoading(){
-        if UIApplication.sharedApplication().networkActivityIndicatorVisible == true{
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-        }
-        
-        if self.isSpin == true{
-            self.isSpin = false
-            LoadingSpinner.shared.stop()
-        }
-    }
     
     // MARK: Public methods
     
@@ -223,16 +258,16 @@ class CollectionItemService: NSObject
         if !self.canSynchronize() {
             return
         }
-        
-        if self._isStillSync == true{
-            //return
-        }
-        
-        self._isStillSync = true
+        self.parentViewController = theViewController
         self.resetSynchronizeTimer()
         
-        self._startLoading(theViewController)
-        self._openOrCreateDataset(true)
+        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
+            var tasks: [AWSTask] = []
+            tasks.append(dataset.synchronizeOnConnectivity())
+            AWSTask(forCompletionOfAllTasks: tasks).continueWithBlock { (task) -> AnyObject! in
+                return nil
+            }
+        }
     }
     
     func addItem(item: AnyObject) {

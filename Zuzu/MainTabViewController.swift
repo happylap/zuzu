@@ -57,16 +57,9 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
             if let name: String = sb.valueForKey("name") as? String {
                 switch name {
                 case "MyCollectionStoryboard":
-                    
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                    
                     if !AmazonClientManager.sharedInstance.isLoggedIn() {
-                        
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
-                            dispatch_async(dispatch_get_main_queue()) {
-                                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            }
                             return nil
                         }
                         return false

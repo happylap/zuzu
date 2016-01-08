@@ -49,4 +49,10 @@ class CollectionHouseItemDao: AbstractHouseItemDao
         }
         return result
     }
+    
+    func safeDeleteByID(id: String) {
+        if self.isExist(id) {
+            self.deleteByID(id)
+        }
+    }
 }

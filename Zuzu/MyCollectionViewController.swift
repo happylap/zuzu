@@ -222,6 +222,21 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
     }
     
+    private func updateNavigationTitle() {
+        var count = 0
+        if fetchedResultsController.sections != nil {
+            for sectionInfo: NSFetchedResultsSectionInfo in fetchedResultsController.sections! {
+                count += sectionInfo.numberOfObjects
+            }
+        }
+        
+        if count > 0 {
+            self.navigationItem.title = "共\(count)筆收藏"
+        } else {
+            self.navigationItem.title = "我的收藏"
+        }
+    }
+    
     
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
         NSLog("%@ onShowNoteEditorTouched", self)
@@ -330,15 +345,16 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
         NSLog("%@ viewWillAppear", self)
-        
+        super.viewWillAppear(animated)
         
         // Synchronize core data from Cognito
         CollectionItemService.sharedInstance.synchronize(self)
 
         ///Show tab bar
         self.tabBarController!.tabBarHidden = false
+        
+        self.updateNavigationTitle()
         
         //Google Analytics Tracker
         self.trackScreen()
@@ -506,22 +522,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        
-        var count = 0
-        if fetchedResultsController.sections != nil {
-            for sectionInfo: NSFetchedResultsSectionInfo in fetchedResultsController.sections! {
-                count += sectionInfo.numberOfObjects
-            }
-        }
-        
-        if count > 0 {
-            self.navigationItem.title = "共\(count)筆收藏"
-        } else {
-            self.navigationItem.title = "我的收藏"
-        }
-        
+        self.updateNavigationTitle()
         self.tableView.endUpdates()
     }
+    
+    
     
 }
 
