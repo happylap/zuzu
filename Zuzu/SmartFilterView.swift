@@ -62,7 +62,7 @@ class SmartFilterView: UIView {
                 
                 NSLog("\(criteriaLabel) = %d", items.count)
                 
-                for itemJsonObj in items {
+                for (index, itemJsonObj) in items.enumerate() {
                     let groupId = itemJsonObj["id"].stringValue
                     let type = itemJsonObj["type"].intValue
                     let label = itemJsonObj["label"].stringValue
@@ -71,7 +71,7 @@ class SmartFilterView: UIView {
                     
                     let filterGroup = FilterGroup(id: groupId, label: label,
                         type: DisplayType(rawValue: type)!,
-                        filters: [Filter(label: label, key: key, value: value)])
+                        filters: [Filter(label: label, key: key, value: value, order: index)])
 
                     resultItems.append(filterGroup)
                 }

@@ -70,7 +70,8 @@
                 "id": "layout",
                 "label": "格局",
                 "displayType": 1,
-                "choiceType": "single",
+                "choiceType": "multi",
+                "logicType" : "OR",
                 "filterKey": "num_bedroom",
                 "filters": [
                            {

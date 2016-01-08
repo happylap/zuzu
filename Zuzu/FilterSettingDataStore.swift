@@ -27,27 +27,31 @@ enum LogicType: String {
 class FilterIdentifier: NSObject {
     let key: String
     let value: String
+    let order: Int
     
-    init(key:String, value:String) {
+    init(key:String, value:String, order:Int) {
         self.key = key
         self.value = value
+        self.order = order
     }
     
     convenience required init?(coder decoder: NSCoder) {
         let key = decoder.decodeObjectForKey("key") as? String ?? ""
         let value = decoder.decodeObjectForKey("value") as? String ?? ""
+        let order = decoder.decodeObjectForKey("order") as? Int ?? 0
         
-        self.init(key: key, value: value)
+        self.init(key: key, value: value, order: order)
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(key, forKey:"key")
         aCoder.encodeObject(value, forKey:"value")
+        aCoder.encodeObject(order, forKey:"order")
     }
     
+    /// We only use key & value to determine if two filterIdentifiers are the equal
     override func isEqual(object: AnyObject?) -> Bool {
         if let identifier = (object as? FilterIdentifier) {
-            //NSLog("isEqual %@", identifier.key == key && identifier.value == value)
             return identifier.key == key && identifier.value == value
         }
         
@@ -158,7 +162,7 @@ class Filter: NSObject, NSCopying {
     
     var identifier: FilterIdentifier {
         get {
-            return FilterIdentifier(key: key, value: value)
+            return FilterIdentifier(key: key, value: value, order: order)
         }
     }
     
@@ -166,19 +170,23 @@ class Filter: NSObject, NSCopying {
     let key:String
     let value:String
     
-    init(label:String, key: String, value: String) {
+    ///The order is currently defined by the order in the config file
+    let order:Int
+    
+    init(label:String, key: String, value: String, order: Int = 0) {
         self.label = label
         self.key = key
         self.value = value
+        self.order = order
     }
     
     override var description: String {
-        let string = "Filter: label = \(label), key = \(key), value = \(value)"
+        let string = "Filter: label = \(label), key = \(key), value = \(value), order = \(order)"
         return string
     }
     
     func copyWithZone(zone: NSZone) -> AnyObject {
-        let filterCopy = Filter(label: self.label, key: self.key, value: self.value)
+        let filterCopy = Filter(label: self.label, key: self.key, value: self.value, order: self.order)
         return filterCopy
     }
 }

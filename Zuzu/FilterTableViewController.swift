@@ -111,14 +111,14 @@ class FilterTableViewController: UITableViewController {
                             if let filters = itemJson["filters"].array {
                                 ///DetailView
                                 
-                                let filters = filters.map({ (filterJson) -> Filter in
+                                let filters = filters.enumerate().map({ (index, filterJson) -> Filter in
                                     let label = filterJson["label"].stringValue
                                     let value = filterJson["filterValue"].stringValue
                                     
                                     if let key = filterJson["filterKey"].string {
-                                        return Filter(label: label, key: key, value: value)
+                                        return Filter(label: label, key: key, value: value, order: index)
                                     } else {
-                                        return Filter(label: label, key: commonKey, value: value)
+                                        return Filter(label: label, key: commonKey, value: value, order: index)
                                     }
                                 })
                                 
@@ -291,10 +291,16 @@ class FilterTableViewController: UITableViewController {
             if let filterIdSetForGroup = filterIdSetForGroup {
                 
                 ///Get list of filter labels for a FilterGroup
+                let sortedFilterIdSetForGroup = filterIdSetForGroup.sort({ (first, second) -> Bool in
+                    return first.order < second.order
+                })
+                
                 var labelList = [String]()
-                for filterIdentifier in filterIdSetForGroup {
+                
+                for filterIdentifier in sortedFilterIdSetForGroup {
                     if let filterLabel = getFilterLabel(filterIdentifier) {
                         labelList.append(filterLabel)
+                        print(filterLabel)
                     }
                 }
                 
