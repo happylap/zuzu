@@ -16,6 +16,7 @@ public class LoadingSpinner{
     private static let defaultOpacity:Float = 0.3
     
     private var opacity = LoadingSpinner.defaultOpacity
+    private var minShowTime:Float?
     private var dimBackground = false
     private var immediateAppear = false
     private var text:String?
@@ -39,6 +40,10 @@ public class LoadingSpinner{
         self.opacity = opacity
     }
     
+    public func setMinShowTime(second:Float) {
+        self.minShowTime = second
+    }
+    
     public func setText(text:String) {
         self.text = text
     }
@@ -51,6 +56,9 @@ public class LoadingSpinner{
             dialog.removeFromSuperViewOnHide = true
             dialog.dimBackground = dimBackground
             dialog.opacity = opacity
+            if let minShowTime = self.minShowTime {
+                dialog.minShowTime = minShowTime
+            }
             dialog.animationType = .Fade
             dialog.taskInProgress = true
             
@@ -82,5 +90,6 @@ public class LoadingSpinner{
         dimBackground = false
         immediateAppear = false
         opacity = LoadingSpinner.defaultOpacity
+        minShowTime = nil
     }
 }

@@ -100,7 +100,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         NSLog("%@ loadData", self)
         
         LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.setMinShowTime(0.6)
+        LoadingSpinner.shared.setOpacity(0.5)
         LoadingSpinner.shared.startOnView(view)
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.CollectionHouseItem.rawValue)
