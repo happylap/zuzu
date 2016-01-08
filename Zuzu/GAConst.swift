@@ -48,6 +48,8 @@ struct GAConst {
             
             static let FanPage = "fanPage"
             
+            static let RateUs = "rateUs"
+            
             static let ShareItemPrice = "shareItemPrice"
             
             static let ShareItemSize = "shareItemSize"

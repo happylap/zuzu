@@ -736,6 +736,47 @@
             self.showViewController(vc, sender: self)
         }
         
+        @IBAction func onAppRatingButtonTouched(sender: UIBarButtonItem) {
+            
+            let appId = "id1064374526"
+            let appWeburl = "https://itunes.apple.com/tw/app/zhu-zhu-kuai-zu-yi-ci-sou/\(appId)?l=zh&mt=8"
+            let appUrl = "itms-apps://itunes.apple.com/app/\(appId)"
+            
+            var gaLabel:String?
+            var result = false
+            
+            if let url = NSURL(string: appUrl) {
+                if (UIApplication.sharedApplication().canOpenURL(url)) {
+                    
+                    result = UIApplication.sharedApplication().openURL(NSURL(string : appUrl)!)
+                    if(result) {
+                        gaLabel = url.absoluteString
+                    }
+                }
+            }
+            
+            ///iTunes App failed, Open by Browser
+            if(!result) {
+                if let url = NSURL(string: appWeburl) {
+                    
+                    if (UIApplication.sharedApplication().canOpenURL(url)) {
+                        
+                        result = UIApplication.sharedApplication().openURL(url)
+                        if(result) {
+                            gaLabel = url.absoluteString
+                        }
+                    }
+                }
+            }
+            
+            ///GA Tracker
+            
+            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                action: GAConst.Action.Activity.RateUs,
+                label: gaLabel ?? "failed")
+
+        }
+        
         @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
             
             let fbUrl = "https://www.facebook.com/zuzutw"
@@ -757,19 +798,20 @@
             }
             
             ///FB failed, Open by Browser
-            //            if(!result) {
-            //                if let url = NSURL(string: fbUrl) {
-            //
-            //                    if (UIApplication.sharedApplication().canOpenURL(url)) {
-            //
-            //                        result = UIApplication.sharedApplication().openURL(url)
-            //                        if(result) {
-            //                            gaLabel = url.absoluteString
-            //                        }
-            //                    }
-            //                }
-            //            }
+            if(!result) {
+                if let url = NSURL(string: fbUrl) {
+                    
+                    if (UIApplication.sharedApplication().canOpenURL(url)) {
+                        
+                        result = UIApplication.sharedApplication().openURL(url)
+                        if(result) {
+                            gaLabel = url.absoluteString
+                        }
+                    }
+                }
+            }
             
+            ///Browser failed, Open by Embedded Browser
             if(!result) {
                 let browserViewController = self.storyboard?.instantiateViewControllerWithIdentifier("browserView") as? BrowserViewController
                 
@@ -787,7 +829,7 @@
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                 action: GAConst.Action.Activity.FanPage,
-                label: gaLabel ?? "Open fan page failed")
+                label: gaLabel ?? "failed")
             
             
         }

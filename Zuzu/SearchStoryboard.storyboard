@@ -526,12 +526,20 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="租屋快搜" id="izc-kA-Us3">
-                        <barButtonItem key="leftBarButtonItem" image="facebook_fan" id="a4z-Kk-iW8">
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="onOpenFanPage:" destination="avK-Pq-NJf" id="YCr-Tu-zQy"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem image="facebook_fan" id="a4z-Kk-iW8">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="onOpenFanPage:" destination="avK-Pq-NJf" id="YCr-Tu-zQy"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="rateus" id="tcQ-Rg-7Vo">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="onAppRatingButtonTouched:" destination="avK-Pq-NJf" id="Oow-Th-EjE"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" id="6YQ-kr-34O">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -1502,6 +1510,7 @@
         <image name="list_icon_n" width="30" height="30"/>
         <image name="location" width="30" height="30"/>
         <image name="main_search_n" width="38" height="38"/>
+        <image name="rateus" width="33" height="33"/>
         <image name="search item_01" width="30" height="30"/>
         <image name="search item_02" width="30" height="30"/>
         <image name="search item_03" width="30" height="30"/>
