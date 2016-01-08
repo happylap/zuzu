@@ -13,6 +13,7 @@ import MarqueeLabel
 import Social
 import MBProgressHUD
 import AwesomeCache
+import SCLAlertView
 
 protocol HouseDetailViewDelegate {
     func onHouseItemStateChanged()
@@ -588,33 +589,26 @@ class HouseDetailViewController: UIViewController {
     }
     
     private func alertMailAppNotReady() {
-        // Initialize Alert View
-        let alertView = UIAlertView(
-            title: "找不到預設的郵件應用",
-            message: "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成",
-            delegate: self,
-            cancelButtonTitle: "知道了")
         
-        // Show Alert View
-        alertView.show()
+        let regionChoiceAlertView = SCLAlertView()
+        
+        let subTitle = "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成"
+        
+        regionChoiceAlertView.showCloseButton = true
+        
+        regionChoiceAlertView.showTitle("找不到預設的郵件應用", subTitle: subTitle, style: SCLAlertViewStyle.Info, closeButtonTitle: "知道了",colorStyle: 0x1CD4C6)
     }
     
+    
     private func alertAddingToCollectionSuccess() {
-        // Initialize Alert View
         
-        let alertView = UIAlertView(
-            title: "新增我的收藏",
-            message: "新增了一筆物件到我的收藏",
-            delegate: self,
-            cancelButtonTitle: "知道了")
+        let regionChoiceAlertView = SCLAlertView()
         
-        // Show Alert View
-        alertView.show()
+        let subTitle = "已成功將本物件加入 \"我的收藏\"!"
         
-        // Delay the dismissal
-        self.runOnMainThreadAfter(2.0) {
-            alertView.dismissWithClickedButtonIndex(-1, animated: true)
-        }
+        regionChoiceAlertView.showCloseButton = true
+        
+        regionChoiceAlertView.showTitle("加入我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Info, closeButtonTitle: "知道了", duration: 1.5, colorStyle: 0x1CD4C6)
     }
     
     private func configureViewsOnDataLoaded() {
@@ -796,6 +790,7 @@ class HouseDetailViewController: UIViewController {
                     }
                 } else {
                     alertMailAppNotReady()
+                    LoadingSpinner.shared.stop()
                 }
                 
             } else {
