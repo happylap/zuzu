@@ -24,6 +24,11 @@ class CollectionItemService: NSObject
         return self.dao.entityName
     }
     
+    struct CollectionItemConstants {
+        static let LONG_SYNCHRONIZE_DELAY = 10.0  // Unit: second
+        static let SHORT_SYNCHRONIZE_DELAY = 10.0  // Unit: second
+    }
+    
     class var sharedInstance: CollectionItemService {
         struct Singleton {
             static let instance = CollectionItemService()
@@ -48,7 +53,7 @@ class CollectionItemService: NSObject
                     dataset.setString(JSONString, forKey: id)
                 }
             }
-            self._syncDataset(dataset)
+            self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
         }
     }
     
@@ -61,7 +66,7 @@ class CollectionItemService: NSObject
                 let JSONString = Mapper().toJSONString(item)
                 dataset.setString(JSONString, forKey: id)
             }
-            self._syncDataset(dataset)
+            self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
         }
     }
     
@@ -70,17 +75,11 @@ class CollectionItemService: NSObject
         // Delete item from Cognito
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
             dataset.removeObjectForKey(id)
-            self._syncDataset(dataset)
+            self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
         }
     }
     
     // MARK: Dataset methods
-    
-    func _syncDataset(dataset: AWSCognitoDataset) {
-        dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
-            return nil
-        }
-    }
     
     func _getDataSet() -> AWSCognitoDataset? {
         let datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
@@ -235,41 +234,51 @@ class CollectionItemService: NSObject
     }
 
     
-    // MARK: Synchronize Timer
+    // MARK: Private Synchronize Methods
+    var _delay: Double?
+    var _sycQueue = [Int]()
     var _timer: NSTimer?
-    var _flag = true
-    var _isStillSync = false
     
-    func _timeUp() {
+    func timeUp() { //The timeUp function is a selector, which must be a public function
         self._timer?.invalidate()
-        self._flag = true
+        self._sync()
     }
     
-    func resetSynchronizeTimer() {
-        self._timer?.invalidate()
-        self._flag = false
-        _timer = NSTimer.scheduledTimerWithTimeInterval(Constants.MYCOLLECTION_SYNCHRONIZE_INTERVAL_TIME, target: self, selector: "_timeUp", userInfo: nil, repeats: true)
-    }
-    
-    func canSynchronize() -> Bool {
-        return self._flag
-    }
-    
-    
-    // MARK: Public methods
-    
-    func synchronize(theViewController: UIViewController) {
-        if !self.canSynchronize() {
-            return
+    func _sync(){
+        if self._sycQueue.isEmpty{
+            self._doSync()
+        }else{
+            self._sycQueue[0] = 1
         }
-        self.parentViewController = theViewController
-        self.resetSynchronizeTimer()
-        
+    }
+    
+    private func _doSync(){
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
-            self._syncDataset(dataset)
+            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
+                if !self._sycQueue.isEmpty {
+                    self._sycQueue.removeAll()
+                    self._syncDataset(CollectionItemConstants.SHORT_SYNCHRONIZE_DELAY)
+                }
+                return nil
+            }
         }
     }
+
+    func _syncDataset(delay:Double) {
+        self._timer?.invalidate()
+        _timer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: "timeUp", userInfo: nil, repeats: true)
+    }
     
+    // MARK: Public Sync methods
+    func sync(){
+        self._syncDataset(0)
+    }
+    
+    func syncWithLongDelay(){
+        self._syncDataset(CollectionItemConstants.LONG_SYNCHRONIZE_DELAY)
+    }
+    
+    // MARK: Public Modify methods
     func addItem(item: AnyObject) {
         self._add([item])
     }

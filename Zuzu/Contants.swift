@@ -11,10 +11,7 @@ import AWSCore
 
 
 struct Constants {
-    
-    static let MYCOLLECTION_SYNCHRONIZE_INTERVAL_TIME = 300.0  // Unit: second
-    static let MYCOLLECTION_SYNCHRONIZE_TIMEOUT_INTERVAL_TIME = 30.0  // Unit: second
-    
+        
     // MARK: Optional: Enable Facebook Login
     
     /**
