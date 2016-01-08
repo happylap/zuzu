@@ -15,8 +15,6 @@ struct Const {
 
 class SearchResultViewController: UIViewController {
     
-    let myCollectionAlertUserDefaultKey = "myCollectionAlert"
-    
     let cellIdentifier = "houseItemCell"
     
     struct ViewTransConst {
@@ -82,17 +80,6 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - Private Utils
     
-    func setMyCollectionAlerted() {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setBool(true, forKey: myCollectionAlertUserDefaultKey)
-    }
-    
-    func isNeedMyCollectionAlert() -> Bool {
-        //Load selection from user defaults
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return !userDefaults.boolForKey(myCollectionAlertUserDefaultKey)
-    }
-    
     private func configureTableView() {
         
         tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
@@ -155,7 +142,7 @@ class SearchResultViewController: UIViewController {
     
     private func alertAddingToCollectionSuccess() {
         
-        if(!self.isNeedMyCollectionAlert()) {
+        if(!UserDefaultsUtils.needsMyCollectionPrompt()) {
                 return
         }
         
@@ -164,14 +151,14 @@ class SearchResultViewController: UIViewController {
         let subTitle = "成功加入一筆租屋到\"我的收藏\"\n現在去看看收藏項目嗎？"
         
         regionChoiceAlertView.addButton("馬上去看看") {
-            self.setMyCollectionAlerted()
+            UserDefaultsUtils.disableMyCollectionPrompt()
             
             let parentViewController = self.navigationController?.popViewControllerAnimated(true)
             parentViewController?.tabBarController?.selectedIndex = 1
         }
         
         regionChoiceAlertView.addButton("不需要") {
-            self.setMyCollectionAlerted()
+            UserDefaultsUtils.disableMyCollectionPrompt()
         }
         
         regionChoiceAlertView.showCloseButton = false
