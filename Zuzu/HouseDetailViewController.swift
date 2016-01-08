@@ -21,6 +21,11 @@ protocol HouseDetailViewDelegate {
 
 class HouseDetailViewController: UIViewController {
     
+    let PhoneExtensionChar = ","
+    let DisplayPhoneExtensionChar = "轉"
+    
+    var phoneNumberDic = [String:String]() /// display string : original number
+    
     var delegate:HouseDetailViewDelegate?
     
     let cacheName = "houseDetailCache"
@@ -829,16 +834,35 @@ class HouseDetailViewController: UIViewController {
                 
                 ///Add only first 3 numbers
                 for phoneNumber in phoneNumbers.prefix(3) {
-                    let numberAction = UIAlertAction(title: String(phoneNumber), style: .Default, handler: {
+                    
+                    var phoneDisplayString = phoneNumber
+                    let phoneComponents = phoneNumber.componentsSeparatedByString(PhoneExtensionChar)
+                    
+                    /// Convert to human-redable display format for phone number with extension
+                    if(phoneComponents.count == 2) {
+                        phoneDisplayString = phoneComponents.joinWithSeparator(DisplayPhoneExtensionChar)
+                    } else if (phoneComponents.count > 2){
+                        assert(false, "Incorrect phone number format \(phoneNumber)")
+                    }
+                    
+                    /// Bind phone number & display string
+                    phoneNumberDic[phoneDisplayString] = phoneNumber
+                    
+                    let numberAction = UIAlertAction(title: phoneDisplayString, style: .Default, handler: {
                         (alert: UIAlertAction!) -> Void in
                         
                         var success = false
                         
-                        if let phoneStr = alert.title, let url = NSURL(string: "tel://\(phoneStr)") {
-                            success = UIApplication.sharedApplication().openURL(url)
+                        if let phoneDisplayStr = alert.title {
                             
-                            if let houseId = houseDetail.valueForKey("id") as? String {
-                                CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                            if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
+                                let url = NSURL(string: "tel://\(phoneStr)") {
+                                    
+                                success = UIApplication.sharedApplication().openURL(url)
+                                
+                                if let houseId = houseDetail.valueForKey("id") as? String {
+                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                                }
                             }
                         }
                         
