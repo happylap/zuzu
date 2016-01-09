@@ -790,9 +790,6 @@ class HouseDetailViewController: UIViewController {
                         
                     }
                     
-                    if let houseId = houseDetail.valueForKey("id") as? String {
-                        CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
-                    }
                 } else {
                     alertMailAppNotReady()
                     LoadingSpinner.shared.stop()
@@ -1146,6 +1143,9 @@ extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
         case MFMailComposeResultSent:
             success = true
             print("Mail sent")
+            if let houseId = self.houseItem?.id {
+                CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+            }
         case MFMailComposeResultFailed:
             print("Mail sent failure: %@", error?.localizedDescription)
         default:
