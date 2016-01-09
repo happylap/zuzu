@@ -445,32 +445,49 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         return cell
     }
     
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
-            if let indexPath = tableView.indexPathForSelectedRow {
-                if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-                    if let houseItem: HouseItem = collectionHouseItem.toHouseItem() {
-                        vc.houseItem = houseItem
+       
+        if let indexPath = tableView.indexPathForSelectedRow {
+            if let collectionItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+
+                CollectionItemService.sharedInstance.isExistInSolr(collectionItem.id, theViewController: self) {
+                    (isExist) -> Void in
+                    
+                    if !isExist {
+                        let loginAlertView = SCLAlertView()
+                        loginAlertView.addButton("移除收藏物件") {
+                            CollectionItemService.sharedInstance.deleteItemById(collectionItem.id)
+                        }
+                        let subTitle = "該收藏物件，目前的狀態可能是『已出租』或『已下架』囉！"
+                        loginAlertView.showNotice("提醒您", subTitle: subTitle, closeButtonTitle: "我知道了", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                         
-                        ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                            action: GAConst.Action.MyCollection.ViewItemPrice,
-                            label: String(houseItem.price))
-                        
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                            action: GAConst.Action.MyCollection.ViewItemSize,
-                            label: String(houseItem.size))
-                        
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                            action: GAConst.Action.MyCollection.ViewItemType,
-                            label: String(houseItem.purposeType))
+                        return
                     }
+                    
+                    let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+                    if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
+                        
+                        if let houseItem: HouseItem = collectionItem.toHouseItem() {
+                            houseDetailVC.houseItem = houseItem
+                            
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.ViewItemPrice,
+                                label: String(houseItem.price))
+                            
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.ViewItemSize,
+                                label: String(houseItem.size))
+                            
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                action: GAConst.Action.MyCollection.ViewItemType,
+                                label: String(houseItem.purposeType))
+                        }
+                        self.showViewController(houseDetailVC, sender: self)
+                    }
+                    
                 }
             }
-            self.showViewController(vc, sender: self)
         }
     }
     

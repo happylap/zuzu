@@ -353,4 +353,28 @@ class CollectionItemService: NSObject
         }
         return false
     }
+    
+    func isExistInSolr(id: String, theViewController: UIViewController?, handler: (isExist: Bool) -> Void) {
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        if theViewController != nil {
+            LoadingSpinner.shared.setImmediateAppear(true)
+            LoadingSpinner.shared.setOpacity(0.3)
+            LoadingSpinner.shared.startOnView(theViewController!.view)
+        }
+        
+        HouseDataRequester.getInstance().searchById(id) {
+            (result, error) -> Void in
+            
+            var isExist = true
+            if result == nil && error == nil {
+                isExist = false
+            }
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            LoadingSpinner.shared.stop()
+            handler(isExist: isExist)
+        }
+    }
+    
 }
