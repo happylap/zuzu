@@ -108,8 +108,13 @@ class AmazonClientManager : NSObject {
 
         task?.continueWithBlock {
             (task: AWSTask!) -> AnyObject! in
-            if (task.error != nil) {
+            
+            if FeatureOption.Radar.enableMain == true{
                 self.registerSNSEndpoint()
+            }
+            
+            if (task.error != nil) {
+                
                 
                 let userDefaults = NSUserDefaults.standardUserDefaults()
                 let currentDeviceToken: NSData? = userDefaults.objectForKey(Constants.DEVICE_TOKEN_KEY) as? NSData
