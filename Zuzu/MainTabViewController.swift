@@ -15,6 +15,12 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
+            dispatch_async(dispatch_get_main_queue()) {
+            }
+            return nil
+        }
+        
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!
         
@@ -41,7 +47,10 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
-        initTabBar()
+        self.initTabBar()
+        
+        
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -52,6 +61,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
         //NSLog("%@ tabBarController", self)
+        
         
         if let sb = viewController.storyboard {
             if let name: String = sb.valueForKey("name") as? String {

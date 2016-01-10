@@ -107,10 +107,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
-            return nil
-        }
-        
         if FeatureOption.Radar.enableMain == true{
             pushNotificationsSetup()
         }

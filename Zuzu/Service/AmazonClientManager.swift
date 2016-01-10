@@ -12,20 +12,24 @@ import UICKeyChainStore
 import AWSCore
 import AWSCognito
 import AWSSNS
+import AWSS3
 import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
 import SCLAlertView
+import ObjectMapper
 
 class AmazonClientManager : NSObject {
     static let sharedInstance = AmazonClientManager()
 
     struct AWSConstants {
+        static let DEFAULT_SERVICE_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_IDENTITY_POOL_ID = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
         static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
+        static let S3_SERVICE_REGIONTYPE = AWSRegionType.APSoutheast1
+        static let S3_BUCKETNAME = "zuzu.mycollection"
     }
-    
     
     enum Provider: String {
         case FB
@@ -38,9 +42,18 @@ class AmazonClientManager : NSObject {
     var keyChain: UICKeyChainStore
     var completionHandler: AWSContinuationBlock?
     var fbLoginManager: FBSDKLoginManager?
-    var fbLoginData: FBUserData?
     var credentialsProvider: AWSCognitoCredentialsProvider?
     var loginViewController: UIViewController?
+    
+    var fbLoginData: FBUserData? {
+        didSet {
+            if let userData = self.fbLoginData {
+                self.uploadFBUserDataToS3(userData)
+            }
+        }
+    }
+    
+    var transferManager: AWSS3TransferManager?
     
     override init() {
         keyChain = UICKeyChainStore(service: NSBundle.mainBundle().bundleIdentifier!)
@@ -149,10 +162,14 @@ class AmazonClientManager : NSObject {
         
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
         
-        let configuration = AWSServiceConfiguration(region: AWSConstants.COGNITO_REGIONTYPE, credentialsProvider: self.credentialsProvider)
+        let configuration = AWSServiceConfiguration(region: AWSConstants.DEFAULT_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
-                
+        
+        let configurationForS3 = AWSServiceConfiguration(region: AWSConstants.S3_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
+        
+        self.transferManager = AWSS3TransferManager(configuration: configurationForS3, identifier: "S3")
+        
         return self.credentialsProvider?.getIdentityId()
     }
     
@@ -256,10 +273,14 @@ class AmazonClientManager : NSObject {
         }
         self.fbLoginManager?.logOut()
         self.keyChain[FB_PROVIDER] = nil
+        self.fbLoginData = nil
     }
     
     
     func completeFBLogin() {
+        
+        self.keyChain[self.FB_PROVIDER] = "YES"
+        self.completeLogin([AWSCognitoLoginProviderKey.Facebook.rawValue : FBSDKAccessToken.currentAccessToken().tokenString])
         
         FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields":"id, email, birthday, gender, name, first_name, last_name, bio, picture.type(large)"]).startWithCompletionHandler { (connection, result, error) -> Void in
             if error == nil {
@@ -291,8 +312,6 @@ class AmazonClientManager : NSObject {
                 }
                 
                 self.fbLoginData = fbLoginData
-                self.keyChain[self.FB_PROVIDER] = "YES"
-                self.completeLogin([AWSCognitoLoginProviderKey.Facebook.rawValue : FBSDKAccessToken.currentAccessToken().tokenString])
             }
         }
     }
@@ -337,4 +356,56 @@ class AmazonClientManager : NSObject {
             })
         }
     }
+    
+    // MARK: S3
+    
+    //func uploadFBUserDataToS3(transferManager: AWSS3TransferManager, fbLoginData: FBUserData) {
+        
+    func uploadFBUserDataToS3(userData: FBUserData) {
+        NSLog("%@ uploadFBUserDataToS3", self)
+        
+        let S3UploadKeyName = userData.facebookId! + ".json"
+        
+        //Create a test file in the temporary directory
+        let uploadFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory() + S3UploadKeyName)
+        let JSONString = Mapper().toJSONString(userData)
+        
+        
+        var error: NSError? = nil
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(uploadFileURL.path!) {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(uploadFileURL.path!)
+            } catch let error1 as NSError {
+                error = error1
+            }
+        }
+        
+        do {
+            try JSONString!.writeToURL(uploadFileURL, atomically: true, encoding: NSUTF8StringEncoding)
+        } catch let error1 as NSError {
+            error = error1
+        }
+        
+        if (error) != nil {
+            NSLog("Error: %@",error!);
+        }
+        
+        let uploadRequest = AWSS3TransferManagerUploadRequest()
+        uploadRequest.body = uploadFileURL
+        uploadRequest.key = S3UploadKeyName
+        uploadRequest.bucket = AWSConstants.S3_BUCKETNAME
+        
+        if let S3Client = self.transferManager {
+            S3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
+                if task.result != nil {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        NSLog("%@ uploadFBUserDataToS3 sucess!", self)
+                    })
+                }
+                return nil
+            }
+        }
+    }
+    
 }

@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import ObjectMapper
 
-public class FBUserData: NSObject {
+class FBUserData: NSObject, Mappable {
     
     var facebookId: String?
     var facebookName: String?
@@ -18,4 +19,23 @@ public class FBUserData: NSObject {
     var facebookLastName: String?
     var facebookGender: String?
     var facebookBirthday: String?
+    
+    override init() {
+        
+    }
+    
+    required init?(_ map: Map) {
+        
+    }
+    
+    // Mappable
+    func mapping(map: Map) {
+        facebookId          <- map["facebookId"]
+        facebookName        <- map["facebookName"]
+        facebookEmail       <- map["facebookEmail"]
+        facebookFirstName   <- map["facebookFirstName"]
+        facebookLastName    <- map["facebookLastName"]
+        facebookGender      <- map["facebookGender"]
+        facebookBirthday    <- (map["facebookBirthday"])
+    }
 }
