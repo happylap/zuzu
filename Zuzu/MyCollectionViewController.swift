@@ -46,6 +46,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var logoutButton: UIButton!
+    
     // UILabel for empty collection list
     let noCollectionLabel = UILabel()
     
@@ -358,6 +360,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.tabBarController!.tabBarHidden = false
         
         self.updateNavigationTitle()
+        
+        self.logoutButton.hidden = !FeatureOption.Collection.enableLogout
         
         //Google Analytics Tracker
         self.trackScreen()
