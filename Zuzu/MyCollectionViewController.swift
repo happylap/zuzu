@@ -463,7 +463,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                             CollectionItemService.sharedInstance.deleteItemById(collectionItem.id)
                         }
                         let subTitle = "此物件已被下架或租出，建議從\"我的收藏\"中移除"
-                        loginAlertView.showNotice("物件已下架", subTitle: subTitle, closeButtonTitle: "知道了", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        loginAlertView.showNotice("物件已下架", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                         
                         return
                     }
