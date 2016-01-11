@@ -104,7 +104,11 @@ struct GAConst {
             
             static let SizeMin = "sizeMin"
             
-            static let SearchResult = "SearchResult"
+            static let SearchResult = "searchResult"
+            
+            static let FilteredResult = "filteredResult"
+            
+            static let LoadPage = "loadPage"
         }
 
         

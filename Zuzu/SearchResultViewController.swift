@@ -125,7 +125,7 @@ class SearchResultViewController: UIViewController {
         alertView.showCloseButton = true
         
         alertView.showInfo("當前搜尋條件儲存成功", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-
+        
     }
     
     private func alertSavingCurrentSearchFailure() {
@@ -142,7 +142,7 @@ class SearchResultViewController: UIViewController {
     private func alertAddingToCollectionSuccess() {
         
         if(!UserDefaultsUtils.needsMyCollectionPrompt()) {
-                return
+            return
         }
         
         let alertView = SCLAlertView()
@@ -215,18 +215,40 @@ class SearchResultViewController: UIViewController {
         LoadingSpinner.shared.stop()
         self.stopSpinner()
         
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-            action: GAConst.Action.SearchHouse.SearchResult,
-            label: GAConst.Label.SearchResult.Number,
-            value: dataSource.estimatedTotalResults)
+        /// Track the total result only for the first request
+        if(pageNo == 1) {
+            
+            var isFiltesOn = false
+            var searchAction:String?
+            if let filters = self.searchCriteria?.filters {
+                isFiltesOn = filters.count > 0
+            }
+            
+            /// GA Tracker
+            searchAction = isFiltesOn ?
+                GAConst.Action.SearchHouse.FilteredResult : GAConst.Action.SearchHouse.SearchResult
+            
+            if let searchAction = searchAction {
+                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                    action: searchAction,
+                    label: GAConst.Label.SearchResult.Number,
+                    value: dataSource.estimatedTotalResults)
+            }
+        }
         
+        /// GA Tracker: Record each result page loaded by the users
+        self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+            action: GAConst.Action.SearchHouse.LoadPage,
+            label: String(pageNo))
+        
+        
+        ///  Set navigation bar title according to the number of result
         if(dataSource.estimatedTotalResults > 0) {
             self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
         } else {
             self.navigationItem.title = "查無資料"
             
-            ///GA Tracker
+            /// GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                 action: GAConst.Action.Blocking.NoSearchResult,
                 label: HouseDataRequester.getInstance().urlComp.URL?.query)
