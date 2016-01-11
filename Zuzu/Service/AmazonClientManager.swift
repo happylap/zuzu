@@ -184,7 +184,7 @@ class AmazonClientManager : NSObject {
             let loginAlertView = SCLAlertView()
             loginAlertView.showCloseButton = false
             
-            loginAlertView.addButton("立即登入 Facebook") {
+            loginAlertView.addButton("立即登入") {
                 self.fbLogin(theViewController)
             }
             
@@ -195,7 +195,7 @@ class AmazonClientManager : NSObject {
             }
             
             loginAlertView.showNotice("請登入Facebook",
-                subTitle: "使用我的收藏功能，需要您使用Facebook帳戶登入\n\n登入僅為了讓收藏的物件綁定您的帳號，我們並不會張貼任何資訊到您的Facebook動態牆", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                subTitle: "使用我的收藏功能，需要您使用Facebook帳戶登入\n\n日後更換裝置，收藏的物件也不會消失。豬豬快租不會張貼任何資訊到您的Facebook動態牆", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         }
         
     }
