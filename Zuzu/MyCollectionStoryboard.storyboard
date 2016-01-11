@@ -111,6 +111,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="1024" height="800"/>
                     <connections>
+                        <outlet property="logoutButton" destination="6bE-YE-Su1" id="pf1-0F-5Yr"/>
                         <outlet property="sortByCollectTimeButton" destination="pK7-Cq-xWf" id="kh2-oz-KVT"/>
                         <outlet property="sortByPriceButton" destination="SKl-Yc-iBw" id="5Uf-8q-Xdg"/>
                         <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
