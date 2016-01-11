@@ -595,25 +595,40 @@ class HouseDetailViewController: UIViewController {
     
     private func alertMailAppNotReady() {
         
-        let regionChoiceAlertView = SCLAlertView()
+        let alertView = SCLAlertView()
         
         let subTitle = "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成"
         
-        regionChoiceAlertView.showCloseButton = true
+        alertView.showCloseButton = true
         
-        regionChoiceAlertView.showTitle("找不到預設的郵件應用", subTitle: subTitle, style: SCLAlertViewStyle.Info, closeButtonTitle: "知道了",colorStyle: 0x1CD4C6)
+        alertView.showInfo("找不到預設的郵件應用", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     
     private func alertAddingToCollectionSuccess() {
         
-        let regionChoiceAlertView = SCLAlertView()
+        if(!UserDefaultsUtils.needsMyCollectionPrompt()) {
+            return
+        }
         
-        let subTitle = "已成功將本物件加入 \"我的收藏\"!"
+        let alertView = SCLAlertView()
         
-        regionChoiceAlertView.showCloseButton = true
+        let subTitle = "成功加入一筆租屋到\"我的收藏\"\n現在去看看收藏項目嗎？"
         
-        regionChoiceAlertView.showTitle("加入我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Info, closeButtonTitle: "知道了", duration: 1.5, colorStyle: 0x1CD4C6)
+        alertView.addButton("馬上去看看") {
+            UserDefaultsUtils.disableMyCollectionPrompt()
+            
+            let parentViewController = self.navigationController?.popViewControllerAnimated(true)
+            parentViewController?.tabBarController?.selectedIndex = 1
+        }
+        
+        alertView.addButton("不需要") {
+            UserDefaultsUtils.disableMyCollectionPrompt()
+        }
+        
+        alertView.showCloseButton = false
+        
+        alertView.showTitle("新增到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
     }
     
     private func configureViewsOnDataLoaded() {
