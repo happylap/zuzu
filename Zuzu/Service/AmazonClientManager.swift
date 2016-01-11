@@ -194,7 +194,8 @@ class AmazonClientManager : NSObject {
                     action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
             }
             
-            loginAlertView.showNotice("提醒您", subTitle: "此功能需登入Facebook才能使用喔!", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            loginAlertView.showNotice("請登入Facebook",
+                subTitle: "使用我的收藏功能，需要您使用Facebook帳戶登入\n\n登入僅為了讓收藏的物件綁定您的帳號，我們並不會張貼任何資訊到您的Facebook動態牆", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         }
         
     }

@@ -459,11 +459,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                     
                     if !isExist {
                         let loginAlertView = SCLAlertView()
-                        loginAlertView.addButton("移除收藏物件") {
+                        loginAlertView.addButton("移除物件") {
                             CollectionItemService.sharedInstance.deleteItemById(collectionItem.id)
                         }
-                        let subTitle = "該收藏物件，目前的狀態可能是『已出租』或『已下架』囉！"
-                        loginAlertView.showNotice("提醒您", subTitle: subTitle, closeButtonTitle: "我知道了", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        let subTitle = "此物件已被下架或租出，建議從\"我的收藏\"中移除"
+                        loginAlertView.showNotice("物件已下架", subTitle: subTitle, closeButtonTitle: "知道了", duration: 5.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                         
                         return
                     }
