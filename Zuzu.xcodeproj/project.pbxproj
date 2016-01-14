@@ -69,6 +69,8 @@
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
+		2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */; };
+		2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */; };
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
 		2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */; };
 		2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */; };
@@ -217,6 +219,8 @@
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
+		2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCityPickerView.xib; sourceTree = "<group>"; };
+		2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCityPickerView.swift; sourceTree = "<group>"; };
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadUtils.swift; sourceTree = "<group>"; };
 		2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -598,6 +602,8 @@
 				2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */,
 				2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */,
 				2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */,
+				2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */,
+				2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -756,6 +762,7 @@
 				2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */,
 				2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */,
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
+				2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */,
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
 				2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */,
@@ -918,6 +925,7 @@
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				14632AAF1C27B614008C9A2D /* NotificationItemsTableViewController.swift in Sources */,
 				2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */,
+				2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */,
 				2FE1326A1C312081008F5E68 /* RadarViewController.swift in Sources */,
 				81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */,
 				81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */,
