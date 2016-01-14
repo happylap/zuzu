@@ -115,9 +115,35 @@ extension CityPickerViewController: UIPickerViewDelegate {
     
     // MARK: - PickerView Delegate
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
         
         let city = allCities[row]
+        
+        /// Determin part title
+        
+        var partOfTaiwan:String?
+        
+        switch(city.code) {
+            
+        case 100:
+            partOfTaiwan = "北部"
+        case 400:
+            partOfTaiwan = "中部"
+        case 700:
+            partOfTaiwan = "南部"
+        case 900:
+            partOfTaiwan = "東部及離島"
+        case 880:
+            partOfTaiwan = ""
+        default: break
+        }
+        
+        let pickerView = CustomCityPickerView()
+        
+        pickerView.partLabel.text = (partOfTaiwan == nil ? "" : partOfTaiwan!)
+        
+        /// Determin city title
+        var cityTitle = city.name
         
         if let regionSelectionState = regionSelectionState {
             if let index = regionSelectionState.indexOf(city){
@@ -126,18 +152,22 @@ extension CityPickerViewController: UIPickerViewDelegate {
                 
                 if(numberOfSelection > 0) {
                     
-                    if(numberOfSelection == 1) {
-                        if(selectedRegions[0] == Region.allRegions) {
-                            return ("\(allCities[row].name) (\(Region.allRegions.name))")
-                        }
+                    if(numberOfSelection == 1
+                        && selectedRegions[0] == Region.allRegions) {
+                        
+                            cityTitle = ("\(allCities[row].name) (\(Region.allRegions.name))")
+                    } else {
+                        
+                        cityTitle = ("\(allCities[row].name) (\(numberOfSelection))")
                     }
-                    
-                    return ("\(allCities[row].name) (\(numberOfSelection))")
                 }
             }
         }
         
-        return allCities[row].name
+        pickerView.cityLabel.text = cityTitle
+        
+        
+        return pickerView
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
