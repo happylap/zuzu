@@ -25,6 +25,7 @@ class CollectionItemService: NSObject
     }
     
     struct CollectionItemConstants {
+        static let MYCOLLECTION_MAX_SIZE = 60
         static let ENTER_TIMER_INTERVAL = 300.0  // Unit: second
         static let SYNCHRONIZE_DELAY_FOR_ADD = 3.0  // Unit: second
         static let SYNCHRONIZE_DELAY = 1.0  // Unit: second
@@ -299,12 +300,20 @@ class CollectionItemService: NSObject
     }
     
     // MARK: Public Modify methods
+    func canAdd() -> Bool {
+        return self.getAllCount() < CollectionItemConstants.MYCOLLECTION_MAX_SIZE
+    }
+    
     func addItem(item: AnyObject) {
-        self._add([item])
+        if self.canAdd() {
+            self._add([item])
+        }
     }
     
     func addAll(items: [AnyObject]) {
-        self._add(items)
+        if self.canAdd() {
+            self._add(items)
+        }
     }
     
     func updateItem(item: CollectionHouseItem, dataToUpdate: [String: AnyObject]) {
@@ -325,6 +334,14 @@ class CollectionItemService: NSObject
     
     func getAll() -> [CollectionHouseItem]?{
         return self.dao.getAll() as? [CollectionHouseItem]
+    }
+    
+    func getAllCount() -> Int {
+        var count = 0
+        if let items = self.getAll() {
+            count = items.count
+        }
+        return count
     }
     
     func getIds() -> [String]? {

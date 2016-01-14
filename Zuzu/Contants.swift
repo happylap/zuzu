@@ -11,7 +11,10 @@ import AWSCore
 
 
 struct Constants {
-        
+    
+    // MARK: My Collection
+    static let MYCOLLECTION_MAX_SIZE = 60
+    
     // MARK: Optional: Enable Facebook Login
     
     /**

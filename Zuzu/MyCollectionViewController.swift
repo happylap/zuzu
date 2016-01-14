@@ -234,7 +234,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
         
         if count > 0 {
-            self.navigationItem.title = "共\(count)筆收藏"
+            self.navigationItem.title = "共\(count)/\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆收藏"
         } else {
             self.navigationItem.title = "我的收藏"
         }

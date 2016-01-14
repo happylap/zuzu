@@ -587,6 +587,12 @@ class SearchResultViewController: UIViewController {
                     
                 } else {
                     
+                    if !CollectionItemService.sharedInstance.canAdd() {
+                        let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
+                        SCLAlertView().showWarning("提醒您", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        return
+                    }
+                    
                     // Append the houseId immediately to make the UI more responsive
                     // TBD: Need to discuss whether we need to retrive the data from remote again
                     self.collectionIdList?.append(houseItem.id)

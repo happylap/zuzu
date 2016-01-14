@@ -987,6 +987,13 @@ class HouseDetailViewController: UIViewController {
                     }
                     
                 } else {
+                    
+                    if !CollectionItemService.sharedInstance.canAdd() {
+                        let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
+                        SCLAlertView().showWarning("提醒您", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        return
+                    }
+                    
                     collectionService.addItem(houseItemDetail)
                     self.alertAddingToCollectionSuccess()
                     
@@ -1259,7 +1266,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if var cellInfo = tableRows[indexPath.row] {
+        if let cellInfo = tableRows[indexPath.row] {
             
             switch(cellInfo.cellIdentifier) {
             case .AddressCell:
