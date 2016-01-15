@@ -131,7 +131,7 @@ extension CityPickerViewController: UIPickerViewDelegate {
             partOfTaiwan = "中部"
         case 700:
             partOfTaiwan = "南部"
-        case 900:
+        case 950:
             partOfTaiwan = "東部及離島"
         case 880:
             partOfTaiwan = ""
