@@ -144,6 +144,7 @@ extension CityPickerViewController: UIPickerViewDelegate {
         
         /// Determin city title
         var cityTitle = city.name
+        var selectionStatus = ""
         
         if let regionSelectionState = regionSelectionState {
             if let index = regionSelectionState.indexOf(city){
@@ -154,18 +155,19 @@ extension CityPickerViewController: UIPickerViewDelegate {
                     
                     if(numberOfSelection == 1
                         && selectedRegions[0] == Region.allRegions) {
-                        
-                            cityTitle = ("\(allCities[row].name) (\(Region.allRegions.name))")
+                            
+                            selectionStatus = "✓\(Region.allRegions.name)"
+                            
                     } else {
                         
-                        cityTitle = ("\(allCities[row].name) (\(numberOfSelection))")
+                        selectionStatus = "✓\(numberOfSelection)"
                     }
                 }
             }
         }
         
         pickerView.cityLabel.text = cityTitle
-        
+        pickerView.selectionLabel.text = selectionStatus
         
         return pickerView
     }
