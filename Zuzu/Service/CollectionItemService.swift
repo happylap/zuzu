@@ -11,6 +11,7 @@ import AWSCore
 import AWSCognito
 import SwiftyJSON
 import ObjectMapper
+import SwiftDate
 
 class CollectionItemService: NSObject
 {
@@ -394,4 +395,63 @@ class CollectionItemService: NSObject
         }
     }
     
+    func isOffShelf(id: String, handler: (offShelf: Bool) -> Void) {
+        if let collectionItem = self.getItem(id), let collectTime = collectionItem.collectTime {
+            if collectTime.isToday() {
+                handler(offShelf: false)
+                return
+            }
+            
+            self.getOffShelfIds() { (result) -> Void in
+                var offShelf = false
+                if let offShelfIds = result {
+                    offShelf = !offShelfIds.contains(collectionItem.id)
+                }
+                handler(offShelf: offShelf)
+            }
+        }
+    }
+    
+    let IDS_FOR_OFF_SHELF_CHECK = "IdsForOffShelfCheck"
+    let UPDATE_DATE_FOR_OFF_SHELF_CHECK = "UpdateDtForOffShelfCheck"
+    let userDefault = NSUserDefaults.standardUserDefaults()
+    
+    func getOffShelfIds(handler: (result: [String]?) -> Void) {
+        if let ids = self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String],
+            let updateDt = self.userDefault.objectForKey(self.UPDATE_DATE_FOR_OFF_SHELF_CHECK) as? NSDate {
+            if updateDt.isToday() {
+                handler(result: ids)
+                return
+            }
+        }
+        
+        if let collectionIds: [String] = self.getIds() {
+            HouseDataRequester.getInstance().searchByIds(collectionIds) { (totalNum, result, error) -> Void in
+                
+                if let remoteHouseItems = result {
+                    var remoteHouseIds = [String]()
+                    for remoteHouseItem in remoteHouseItems as [HouseItem] {
+                        remoteHouseIds.append(remoteHouseItem.id)
+                    }
+                    
+                    let nsArray: NSArray = NSArray(array: remoteHouseIds)
+                    self.userDefault.setObject(nsArray, forKey: self.IDS_FOR_OFF_SHELF_CHECK)
+                    self.userDefault.setObject(NSDate(), forKey: self.UPDATE_DATE_FOR_OFF_SHELF_CHECK)
+                    self.userDefault.synchronize()
+                    
+                    handler(result: remoteHouseIds)
+                }
+                else {
+                    if let offShelfIds = self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String] {
+                        handler(result: offShelfIds)
+                    } else {
+                        handler(result: nil)
+                    }
+                }
+            }
+            return
+        }
+        
+        handler(result: self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String])
+    }
 }

@@ -438,8 +438,16 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         cell.parentTableView = tableView
         cell.indexPath = indexPath
         
-        if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-            cell.houseItemForCollection = collectionHouseItem
+        if let collectionItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+            cell.houseItemForCollection = collectionItem
+            
+            CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+                if offShelf == true {
+                    cell.offShelfView.hidden = false
+                } else {
+                    cell.offShelfView.hidden = true
+                }
+            }
         }
         
         /// Enable add to collection button
@@ -453,11 +461,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
        
         if let indexPath = tableView.indexPathForSelectedRow {
             if let collectionItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-
-                CollectionItemService.sharedInstance.isExistInSolr(collectionItem.id, theViewController: self) {
-                    (isExist) -> Void in
+                
+                CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
                     
-                    if !isExist {
+                    if offShelf == true {
                         let loginAlertView = SCLAlertView()
                         loginAlertView.addButton("移除物件") {
                             CollectionItemService.sharedInstance.deleteItemById(collectionItem.id)
@@ -465,31 +472,29 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                         let subTitle = "此物件已被下架或租出，建議從\"我的收藏\"中移除"
                         loginAlertView.showNotice("物件已下架", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                         
-                        return
-                    }
-                    
-                    let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
-                    if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
+                    } else {
                         
-                        if let houseItem: HouseItem = collectionItem.toHouseItem() {
-                            houseDetailVC.houseItem = houseItem
-                            
-                            ///GA Tracker
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                                action: GAConst.Action.MyCollection.ViewItemPrice,
-                                label: String(houseItem.price))
-                            
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                                action: GAConst.Action.MyCollection.ViewItemSize,
-                                label: String(houseItem.size))
-                            
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                                action: GAConst.Action.MyCollection.ViewItemType,
-                                label: String(houseItem.purposeType))
+                        let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+                        if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
+                            if let houseItem: HouseItem = collectionItem.toHouseItem() {
+                                houseDetailVC.houseItem = houseItem
+                                
+                                ///GA Tracker
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                    action: GAConst.Action.MyCollection.ViewItemPrice,
+                                    label: String(houseItem.price))
+                                
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                    action: GAConst.Action.MyCollection.ViewItemSize,
+                                    label: String(houseItem.size))
+                                
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                    action: GAConst.Action.MyCollection.ViewItemType,
+                                    label: String(houseItem.purposeType))
+                            }
+                            self.showViewController(houseDetailVC, sender: self)
                         }
-                        self.showViewController(houseDetailVC, sender: self)
                     }
-                    
                 }
             }
         }

@@ -240,6 +240,35 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         performSearch(urlComp, handler: handler)
     }
     
+    func searchByIds(houseIds: [String], handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
+        
+        var queryitems:[NSURLQueryItem] = []
+        
+        // Main Query String (Keyword)
+        var mainQuery:[String] = [String]()
+        
+        mainQuery.appendContentsOf(
+            houseIds.map({ (houseId) -> String in
+                return "id:\(houseId)"
+            })
+        )
+        
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value:mainQuery.joinWithSeparator(" \(SolrConst.Operator.OR) ")))
+        
+        // Field List
+        let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.PRICE]
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: fieldList.joinWithSeparator(",")))
+        
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.INDENT, value: "true"))
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.START, value: "0"))
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: String(houseIds.count)))
+        //queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: "20")) // for test
+        
+        urlComp.queryItems = queryitems
+        performSearch(urlComp, handler: handler)
+    }
+    
     func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int,
         handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
             

@@ -25,6 +25,9 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var prefixedButton: UIImageView!
     @IBOutlet weak var contactedView: UIView!
     @IBOutlet weak var houseSourceLabel: UILabel!
+    @IBOutlet weak var offShelfView: UIView!
+    @IBOutlet weak var offShelfImg: UIImageView!
+    
     
     let placeholderImg = UIImage(named: "house_img")
     
@@ -141,6 +144,7 @@ class SearchResultTableViewCell: UITableViewCell {
         houseTitle.hidden = true
         houseTitleForCollection.hidden = true
         contactedView.hidden = true
+        offShelfView.hidden = true
         
         Log.debug("\n- Cell Instance [\(self)] Reset Data For Current Row[\(indexPath.row)]")
         
@@ -199,22 +203,16 @@ class SearchResultTableViewCell: UITableViewCell {
         
         // load new information (if any)
         if let collectionHouseItem = self.houseItemForCollection {
-            /*
-            for constraintWithItem: NSLayoutConstraint in self.contentView.constraints {
-                if constraintWithItem.firstItem.restorationIdentifier == "SearchResultTableViewCell_houseTitle" {
-                    if constraintWithItem.firstAttribute == .Leading {
-                        self.contentView.removeConstraint(constraintWithItem)
-                        self.contentView.addConstraint(NSLayoutConstraint(item: self.houseTitle, attribute: .Leading, relatedBy: .Equal, toItem: self.prefixedButton, attribute: .Trailing , multiplier: 1.0, constant: 4.0))
-                    }
-                }
-            }
-            */
             self.addToCollectionButton.hidden = !FeatureOption.Collection.enableNote
             
             self.houseTitleForCollection.hidden = false
             self.prefixedButton.hidden = false
             self.contactedView.hidden = !(collectionHouseItem.contacted)
             
+            if let origImage = self.offShelfImg?.image {
+                self.offShelfImg.image = origImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+                self.offShelfImg.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
+            }
             
             if collectionHouseItem.contacted == true {
                 prefixedButton.image = UIImage(named: "checked_green")

@@ -79,6 +79,7 @@ PODS:
   - SDWebImage (3.7.3):
     - SDWebImage/Core (= 3.7.3)
   - SDWebImage/Core (3.7.3)
+  - SwiftDate (2.0.2)
   - SwiftyJSON (2.3.0)
   - UICKeyChainStore (2.0.7)
   - XCGLogger (3.1.1)
@@ -107,6 +108,7 @@ DEPENDENCIES:
   - MWPhotoBrowser
   - ObjectMapper (~> 1.1)
   - SCLAlertView
+  - SwiftDate (~> 2.0)
   - SwiftyJSON (~> 2.3)
   - UICKeyChainStore
   - XCGLogger (~> 3.1)
@@ -145,6 +147,7 @@ SPEC CHECKSUMS:
   ObjectMapper: 365eac5aac06ae9298978fb2482b3d4c5ef4bb5d
   SCLAlertView: a5c726a80a938fd3127edd7dbc19da33fb936ca3
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
+  SwiftDate: b4f4d0962afe48365ad2800c9850a6626deb9359
   SwiftyJSON: 8d6b61a70277ef2a5d710d372e06e7e2d87fb9e4
   UICKeyChainStore: 696cd35083f7c8fb5e201d909b7e6aea6b478575
   XCGLogger: e111a313f609432394c3ae378d99511634fd2e3c
