@@ -13,6 +13,7 @@ class CustomCityPickerView: UIView {
     
     @IBOutlet weak var cityLabel: UILabel!
     
+    @IBOutlet weak var selectionLabel: UILabel!
     
     var view:UIView!
     

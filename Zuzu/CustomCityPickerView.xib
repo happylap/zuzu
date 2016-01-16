@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -11,6 +10,7 @@
             <connections>
                 <outlet property="cityLabel" destination="Am9-As-WVx" id="5ts-wl-hCp"/>
                 <outlet property="partLabel" destination="EnZ-rp-hOu" id="5R3-td-Fm7"/>
+                <outlet property="selectionLabel" destination="FBh-Rb-Y6d" id="7zn-ga-8Er"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -21,7 +21,7 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北部" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EnZ-rp-hOu">
                     <rect key="frame" x="8" y="32.5" width="202.5" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
-                    <color key="textColor" red="0.43137254899999999" green="0.43137254899999999" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
@@ -36,27 +36,37 @@
                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                     </userDefinedRuntimeAttributes>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="全區" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBh-Rb-Y6d">
+                    <rect key="frame" x="385" y="32.5" width="101" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="Am9-As-WVx" secondAttribute="trailing" constant="8" id="4S9-gh-SQ0"/>
+                <constraint firstItem="FBh-Rb-Y6d" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="7m6-Hc-cfw"/>
                 <constraint firstItem="Am9-As-WVx" firstAttribute="leading" secondItem="EnZ-rp-hOu" secondAttribute="trailing" constant="8" id="FMd-uS-ctM"/>
-                <constraint firstItem="EnZ-rp-hOu" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="100:40" id="HsM-Vd-fJX"/>
+                <constraint firstItem="FBh-Rb-Y6d" firstAttribute="leading" secondItem="Am9-As-WVx" secondAttribute="trailing" constant="8" symbolic="YES" id="HOW-Vx-42M"/>
                 <constraint firstItem="EnZ-rp-hOu" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Lue-Ew-Fll"/>
-                <constraint firstItem="EnZ-rp-hOu" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RV3-X9-1Bf"/>
+                <constraint firstItem="EnZ-rp-hOu" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RV3-X9-1Bf">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </constraint>
+                <constraint firstAttribute="trailing" secondItem="FBh-Rb-Y6d" secondAttribute="trailing" constant="20" symbolic="YES" id="cZM-k7-fgf"/>
                 <constraint firstItem="Am9-As-WVx" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="f6H-e5-UBB"/>
-                <constraint firstItem="Am9-As-WVx" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="pez-gb-jrW"/>
-                <constraint firstItem="EnZ-rp-hOu" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="2:5" id="qam-kc-4Ud"/>
-                <constraint firstItem="Am9-As-WVx" firstAttribute="leading" secondItem="EnZ-rp-hOu" secondAttribute="trailing" constant="8" id="t3h-CX-dOw"/>
+                <constraint firstItem="EnZ-rp-hOu" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="4:10" id="qam-kc-4Ud"/>
+                <constraint firstItem="FBh-Rb-Y6d" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="2:10" id="uYs-Ly-B8g"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <variation key="default">
                 <mask key="constraints">
-                    <exclude reference="HsM-Vd-fJX"/>
-                    <exclude reference="4S9-gh-SQ0"/>
-                    <exclude reference="pez-gb-jrW"/>
-                    <exclude reference="t3h-CX-dOw"/>
+                    <exclude reference="HOW-Vx-42M"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="449" y="60.5"/>

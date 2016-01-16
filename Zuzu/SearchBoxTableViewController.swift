@@ -190,6 +190,22 @@
         
         var selectAllButton:ToggleButton!
         
+        let downArrowImage = UIImage(named: "arrow_down_n")!.imageWithRenderingMode(.AlwaysTemplate)
+        let upArrowImage = UIImage(named: "arrow_up_n")!.imageWithRenderingMode(.AlwaysTemplate)
+        
+        @IBOutlet weak var priceArrow: UIImageView! {
+            didSet {
+                priceArrow.image = downArrowImage
+                priceArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
+            }
+        }
+        
+        @IBOutlet weak var sizeArrow: UIImageView! {
+            didSet {
+                sizeArrow.image = downArrowImage
+                sizeArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
+            }
+        }
         
         @IBOutlet weak var clearCriteriaButton: UIButton! {
             didSet {
@@ -454,18 +470,30 @@
             case CellConst.priceLabel: // Price Picker
                 picker = pricePicker
                 if(hiddenCells.contains(CellConst.pricePicker)) {
+                    /// Hide Size Picker, Display Price Picker
+                    sizeArrow.image = downArrowImage
                     hiddenCells.insert(CellConst.sizePicker)
+                    
+                    priceArrow.image = upArrowImage
                     hiddenCells.remove(CellConst.pricePicker)
-                } else { //Hide
+                } else {
+                    /// Hide Price Picker
+                    priceArrow.image = downArrowImage
                     hiddenCells.insert(CellConst.pricePicker)
                 }
                 
             case CellConst.sizeLabel: // Size Picker
                 picker = sizePicker
                 if(hiddenCells.contains(CellConst.sizePicker)) {
+                    /// Hide Price Picker, Display Size Picker
+                    priceArrow.image = downArrowImage
                     hiddenCells.insert(CellConst.pricePicker)
+                    
+                    sizeArrow.image = upArrowImage
                     hiddenCells.remove(CellConst.sizePicker)
-                } else { //Hide
+                } else {
+                    /// Hide Size Picker
+                    sizeArrow.image = downArrowImage
                     hiddenCells.insert(CellConst.sizePicker)
                 }
             default: break
