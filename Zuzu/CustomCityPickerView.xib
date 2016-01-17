@@ -19,8 +19,8 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北部" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EnZ-rp-hOu">
-                    <rect key="frame" x="8" y="32.5" width="202.5" height="20.5"/>
-                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                    <rect key="frame" x="8" y="32.5" width="202.5" height="21.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
@@ -28,17 +28,17 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Am9-As-WVx">
-                    <rect key="frame" x="218.5" y="30.5" width="60" height="24"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <rect key="frame" x="218.5" y="30.5" width="63" height="25.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="全區" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBh-Rb-Y6d">
-                    <rect key="frame" x="385" y="32.5" width="101" height="20.5"/>
-                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                    <rect key="frame" x="385" y="32.5" width="101" height="21.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
@@ -50,13 +50,8 @@
             <constraints>
                 <constraint firstItem="FBh-Rb-Y6d" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="7m6-Hc-cfw"/>
                 <constraint firstItem="Am9-As-WVx" firstAttribute="leading" secondItem="EnZ-rp-hOu" secondAttribute="trailing" constant="8" id="FMd-uS-ctM"/>
-                <constraint firstItem="FBh-Rb-Y6d" firstAttribute="leading" secondItem="Am9-As-WVx" secondAttribute="trailing" constant="8" symbolic="YES" id="HOW-Vx-42M"/>
                 <constraint firstItem="EnZ-rp-hOu" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Lue-Ew-Fll"/>
-                <constraint firstItem="EnZ-rp-hOu" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RV3-X9-1Bf">
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                    </userDefinedRuntimeAttributes>
-                </constraint>
+                <constraint firstItem="EnZ-rp-hOu" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RV3-X9-1Bf"/>
                 <constraint firstAttribute="trailing" secondItem="FBh-Rb-Y6d" secondAttribute="trailing" constant="20" symbolic="YES" id="cZM-k7-fgf"/>
                 <constraint firstItem="Am9-As-WVx" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="f6H-e5-UBB"/>
                 <constraint firstItem="EnZ-rp-hOu" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="4:10" id="qam-kc-4Ud"/>
@@ -64,11 +59,6 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="HOW-Vx-42M"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="449" y="60.5"/>
         </view>
     </objects>

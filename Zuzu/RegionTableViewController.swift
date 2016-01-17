@@ -214,7 +214,8 @@ class RegionTableViewController: UITableViewController {
             cell.filterCheckMark.hidden = true
         }
         
-        cell.simpleFilterLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline).fontWithSize(20)
+        cell.simpleFilterLabel?.font = UIFont.systemFontOfSize(18)
+        cell.simpleFilterLabel.autoScaleFontSize = true
         
         if let city = codeToCityMap[citySelected] {
             cell.simpleFilterLabel?.text = city.regions[indexPath.row].name
