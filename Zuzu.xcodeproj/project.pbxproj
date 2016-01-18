@@ -85,6 +85,7 @@
 		2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */; };
 		2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */; };
 		2FC54C401C4CD51D0052FD6F /* DuplicateHouseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC54C3F1C4CD51D0052FD6F /* DuplicateHouseViewController.swift */; };
+		2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC54C411C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift */; };
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */; };
@@ -243,6 +244,7 @@
 		2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
 		2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleFilterTableViewCell.xib; sourceTree = "<group>"; };
 		2FC54C3F1C4CD51D0052FD6F /* DuplicateHouseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DuplicateHouseViewController.swift; sourceTree = "<group>"; };
+		2FC54C411C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailPriceSizeCell.swift; sourceTree = "<group>"; };
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsUtils.swift; sourceTree = "<group>"; };
@@ -626,6 +628,7 @@
 				2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */,
 				2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */,
 				2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */,
+				2FC54C411C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift */,
 				2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */,
 				2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */,
 				2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */,
@@ -920,6 +923,7 @@
 				1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
+				2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */,
 				81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */,
 				81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,

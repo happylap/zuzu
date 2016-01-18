@@ -89,6 +89,7 @@ class HouseDetailViewController: UIViewController {
     
     enum CellIdentifier: String {
         case HouseDetailTitleCell = "houseDetailTitleCell"
+        case PriceSizeCell = "priceSizeCell"
         case RightDetailCell = "rightDetailCell"
         case AddressCell = "addressCell"
         case ExpandableHeaderCell = "expandableHeaderCell"
@@ -197,11 +198,21 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            1:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
-                if let cell = cell as? HouseDetailBasicInfoCell {
+            1:CellInfo(cellIdentifier: .PriceSizeCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+                if let cell = cell as? HouseDetailPriceSizeCell {
                     
                     var priceDetail:String?
                     if let houseItemDetail = self.houseItemDetail {
+                        
+                        let attributes = [
+                            NSBackgroundColorAttributeName: UIColor.colorWithRGB(0xFFFFFF),
+                            NSForegroundColorAttributeName: UIColor.colorWithRGB(0xFF6666),
+                            NSStrikethroughStyleAttributeName : 2,
+                            NSFontAttributeName: UIFont.systemFontOfSize(15),
+                        ]
+                        
+                        let prevPrice = "10000"
+                        cell.previousPriceLabel.attributedText = NSAttributedString(string: prevPrice, attributes: attributes)
                         
                         if let priceIncl = houseItemDetail.valueForKey("price_incl") as? [Int] {
                             
@@ -221,29 +232,29 @@ class HouseDetailViewController: UIViewController {
                         }
                         
                         if let priceDetail = priceDetail {
-                            cell.leftInfoSub.text = "( \(priceDetail) )"
+                            cell.priceDetailLabel.text = "( \(priceDetail) )"
                         } else {
-                            cell.leftInfoSub.text = " " //To reserve the height
+                            cell.priceDetailLabel.text = " " //To reserve the height
                         }
-                        cell.leftInfoSub.hidden = false
+                        cell.priceDetailLabel.hidden = false
                         
                         if let price = houseItemDetail.valueForKey("price") as? Int {
                             
-                            cell.leftInfoText.font = UIFont.boldSystemFontOfSize(cell.leftInfoText.font.pointSize)
-                            cell.leftInfoText.text = "\(price) 月/元"
+                            cell.priceLabel.font = UIFont.boldSystemFontOfSize(cell.priceLabel.font.pointSize)
+                            cell.priceLabel.text = "\(price) 月/元"
                         }
                         
                         if let size = houseItemDetail.valueForKey("size") as? Float {
-                            cell.rightInfoText.font = UIFont.boldSystemFontOfSize(cell.rightInfoText.font.pointSize)
+                            cell.sizeLabel.font = UIFont.boldSystemFontOfSize(cell.sizeLabel.font.pointSize)
                             
                             /// Round the size to the second place
                             let multiplier:Float = pow(10.0, 2)
-                            cell.rightInfoText.text = "\(round(size * multiplier)/multiplier) 坪"
+                            cell.sizeLabel.text = "\(round(size * multiplier)/multiplier) 坪"
                         }
                     } else {
                         ///Before data is loaded
-                        cell.leftInfoSub.text = " " //To reserve the height
-                        cell.leftInfoSub.hidden = false
+                        cell.priceDetailLabel.text = " " //To reserve the height
+                        cell.priceDetailLabel.hidden = false
                     }
                 }
             }),
@@ -870,11 +881,11 @@ class HouseDetailViewController: UIViewController {
                             if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
                                 let url = NSURL(string: "tel://\(phoneStr)") {
                                     
-                                success = UIApplication.sharedApplication().openURL(url)
-                                
-                                if let houseId = houseDetail.valueForKey("id") as? String {
-                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
-                                }
+                                    success = UIApplication.sharedApplication().openURL(url)
+                                    
+                                    if let houseId = houseDetail.valueForKey("id") as? String {
+                                        CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                                    }
                             }
                         }
                         

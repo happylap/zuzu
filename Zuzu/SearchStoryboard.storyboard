@@ -1092,15 +1092,23 @@
                                             <outlet property="titleImage" destination="zKm-Lp-uz6" id="QGa-vF-tpJ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightDetailCell" rowHeight="88" id="YtO-1w-zYw" customClass="HouseDetailBasicInfoCell" customModule="Zuzu" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="priceSizeCell" rowHeight="88" id="HsS-WD-77U" customClass="HouseDetailPriceSizeCell" customModule="Zuzu" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="241" width="650" height="88"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YtO-1w-zYw" id="5qm-sc-lWa">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HsS-WD-77U" id="ScC-8c-B61">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="87.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4D-1D-Qb8">
-                                                    <rect key="frame" x="20" y="33.5" width="325" height="20.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g11-cY-62F" userLabel="Previous Price">
+                                                    <rect key="frame" x="20" y="42" width="325" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24p-Gd-2R0" userLabel="Price Text">
+                                                    <rect key="frame" x="20" y="44" width="325" height="0.0"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1108,8 +1116,8 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNZ-F4-u67" userLabel="Left Info Sub">
-                                                    <rect key="frame" x="20" y="62" width="0.0" height="17.5"/>
+                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GlA-IW-kKg" userLabel="Price Info Sub">
+                                                    <rect key="frame" x="20" y="52" width="622" height="27.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -1117,7 +1125,7 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgt-HK-naS">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J10-PP-Htj" userLabel="Size Text">
                                                     <rect key="frame" x="418.5" y="33.5" width="216.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1128,33 +1136,82 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="width" secondItem="r4D-1D-Qb8" secondAttribute="width" multiplier="2:1" id="8Ua-OM-MVc"/>
-                                                <constraint firstItem="vgt-HK-naS" firstAttribute="centerY" secondItem="r4D-1D-Qb8" secondAttribute="centerY" id="CPg-SB-hET"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="vgt-HK-naS" secondAttribute="trailing" constant="15" id="MKS-6Y-A5Q"/>
-                                                <constraint firstAttribute="width" secondItem="vgt-HK-naS" secondAttribute="width" multiplier="3:1" id="UTX-MV-Cbj"/>
-                                                <constraint firstItem="nNZ-F4-u67" firstAttribute="leading" secondItem="r4D-1D-Qb8" secondAttribute="trailing" id="cvJ-En-Kdv"/>
-                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="centerY" secondItem="5qm-sc-lWa" secondAttribute="centerY" id="dIt-Gi-CsK"/>
-                                                <constraint firstItem="nNZ-F4-u67" firstAttribute="leading" secondItem="r4D-1D-Qb8" secondAttribute="leading" id="fHB-Ty-YXH"/>
-                                                <constraint firstItem="nNZ-F4-u67" firstAttribute="top" secondItem="r4D-1D-Qb8" secondAttribute="bottom" constant="8" id="fj7-Aq-Lb1"/>
-                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="leading" secondItem="5qm-sc-lWa" secondAttribute="leading" constant="20" symbolic="YES" id="mQo-b9-psD"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="nNZ-F4-u67" secondAttribute="bottom" constant="8" id="sm4-LU-Emp"/>
+                                                <constraint firstItem="g11-cY-62F" firstAttribute="width" secondItem="24p-Gd-2R0" secondAttribute="width" id="7Px-sc-itT"/>
+                                                <constraint firstAttribute="width" secondItem="24p-Gd-2R0" secondAttribute="width" multiplier="2:1" id="AEc-eP-rbp"/>
+                                                <constraint firstItem="24p-Gd-2R0" firstAttribute="top" secondItem="g11-cY-62F" secondAttribute="bottom" constant="2" id="G16-Gd-Hhq"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="J10-PP-Htj" secondAttribute="trailing" constant="15" id="H3l-bb-rCD"/>
+                                                <constraint firstItem="g11-cY-62F" firstAttribute="leading" secondItem="24p-Gd-2R0" secondAttribute="leading" id="Qdg-wY-xGk"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="GlA-IW-kKg" secondAttribute="trailing" constant="8" id="V3q-T7-Cgk"/>
+                                                <constraint firstItem="GlA-IW-kKg" firstAttribute="width" secondItem="24p-Gd-2R0" secondAttribute="width" id="XeJ-nq-h4r"/>
+                                                <constraint firstItem="GlA-IW-kKg" firstAttribute="leading" secondItem="24p-Gd-2R0" secondAttribute="leading" id="Ybf-rY-Clc"/>
+                                                <constraint firstItem="24p-Gd-2R0" firstAttribute="leading" secondItem="ScC-8c-B61" secondAttribute="leading" constant="20" symbolic="YES" id="eTO-0F-K5T"/>
+                                                <constraint firstItem="GlA-IW-kKg" firstAttribute="top" secondItem="24p-Gd-2R0" secondAttribute="bottom" constant="8" id="ebn-v3-Uvc"/>
+                                                <constraint firstAttribute="width" secondItem="J10-PP-Htj" secondAttribute="width" multiplier="3:1" id="hdt-nx-R26"/>
+                                                <constraint firstItem="24p-Gd-2R0" firstAttribute="centerY" secondItem="ScC-8c-B61" secondAttribute="centerY" id="kAB-4u-uGy"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="GlA-IW-kKg" secondAttribute="bottom" constant="8" id="mEu-kK-pnS"/>
+                                                <constraint firstItem="J10-PP-Htj" firstAttribute="centerY" secondItem="24p-Gd-2R0" secondAttribute="centerY" id="oT0-7s-Fbm"/>
                                             </constraints>
                                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="cvJ-En-Kdv"/>
+                                                    <exclude reference="XeJ-nq-h4r"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                         <connections>
-                                            <outlet property="leftInfoSub" destination="nNZ-F4-u67" id="p0g-0D-q9U"/>
+                                            <outlet property="previousPriceLabel" destination="g11-cY-62F" id="aon-R8-ci5"/>
+                                            <outlet property="priceDetailLabel" destination="GlA-IW-kKg" id="cZE-dt-jiF"/>
+                                            <outlet property="priceLabel" destination="24p-Gd-2R0" id="euJ-6q-mc7"/>
+                                            <outlet property="sizeLabel" destination="J10-PP-Htj" id="IF6-92-YGb"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightDetailCell" rowHeight="88" id="YtO-1w-zYw" customClass="HouseDetailBasicInfoCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="329" width="650" height="88"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YtO-1w-zYw" id="5qm-sc-lWa">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="87.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4D-1D-Qb8">
+                                                    <rect key="frame" x="20" y="16" width="325" height="55.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgt-HK-naS">
+                                                    <rect key="frame" x="418.5" y="34" width="216.5" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="r4D-1D-Qb8" secondAttribute="bottom" constant="16" id="8AO-mM-Zh4"/>
+                                                <constraint firstAttribute="width" secondItem="r4D-1D-Qb8" secondAttribute="width" multiplier="2:1" id="8Ua-OM-MVc"/>
+                                                <constraint firstItem="vgt-HK-naS" firstAttribute="centerY" secondItem="r4D-1D-Qb8" secondAttribute="centerY" id="CPg-SB-hET"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="vgt-HK-naS" secondAttribute="trailing" constant="15" id="MKS-6Y-A5Q"/>
+                                                <constraint firstAttribute="width" secondItem="vgt-HK-naS" secondAttribute="width" multiplier="3:1" id="UTX-MV-Cbj"/>
+                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="centerY" secondItem="5qm-sc-lWa" secondAttribute="centerY" id="dIt-Gi-CsK"/>
+                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="leading" secondItem="5qm-sc-lWa" secondAttribute="leading" constant="20" symbolic="YES" id="mQo-b9-psD"/>
+                                                <constraint firstItem="r4D-1D-Qb8" firstAttribute="top" secondItem="5qm-sc-lWa" secondAttribute="topMargin" constant="16" id="pEl-9F-1zW"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
                                             <outlet property="leftInfoText" destination="r4D-1D-Qb8" id="W40-z4-mxE"/>
                                             <outlet property="rightInfoText" destination="vgt-HK-naS" id="2sg-ol-ax2"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addressCell" rowHeight="55" id="KRN-bB-aZY" customClass="HouseDetailAddressCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="329" width="650" height="55"/>
+                                        <rect key="frame" x="0.0" y="417" width="650" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KRN-bB-aZY" id="K7j-yJ-GZE">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
@@ -1194,7 +1251,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableHeaderCell" rowHeight="55" id="Dbo-7a-fKS" customClass="HouseDetailExpandableHeaderCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="384" width="650" height="55"/>
+                                        <rect key="frame" x="0.0" y="472" width="650" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dbo-7a-fKS" id="V9N-G1-Fvz">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
@@ -1245,7 +1302,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentCell" rowHeight="55" id="94S-Ko-yrz" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="439" width="650" height="55"/>
+                                        <rect key="frame" x="0.0" y="527" width="650" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="94S-Ko-yrz" id="hMY-Ey-K1Q">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
