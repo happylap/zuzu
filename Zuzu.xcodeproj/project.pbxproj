@@ -84,6 +84,7 @@
 		2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */; };
 		2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */; };
 		2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */; };
+		2FC54C401C4CD51D0052FD6F /* DuplicateHouseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC54C3F1C4CD51D0052FD6F /* DuplicateHouseViewController.swift */; };
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */; };
@@ -241,6 +242,7 @@
 		2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleExtensions.swift; sourceTree = "<group>"; };
 		2FBF52691C06E64D00B3F47B /* FilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
 		2FBF526B1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleFilterTableViewCell.xib; sourceTree = "<group>"; };
+		2FC54C3F1C4CD51D0052FD6F /* DuplicateHouseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DuplicateHouseViewController.swift; sourceTree = "<group>"; };
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsUtils.swift; sourceTree = "<group>"; };
@@ -356,6 +358,7 @@
 				2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */,
 				2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */,
 				2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */,
+				2FC54C3F1C4CD51D0052FD6F /* DuplicateHouseViewController.swift */,
 				2F94105C1BF48D2F00BA12B5 /* MapViewController.swift */,
 				2F9791BF1BF59C4D0056B721 /* BrowserViewController.swift */,
 				2FE9126F1BFEE8B600019053 /* UrlPopoverViewController.swift */,
@@ -887,6 +890,7 @@
 				2F05C62A1BBA6E3A00100D5F /* PersistentTableDataSource.swift in Sources */,
 				2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
+				2FC54C401C4CD51D0052FD6F /* DuplicateHouseViewController.swift in Sources */,
 				2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */,
 				14914FA61C27D26D00025AC1 /* AbstractHouseItem.swift in Sources */,
 				2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */,

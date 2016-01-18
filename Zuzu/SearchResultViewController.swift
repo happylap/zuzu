@@ -21,6 +21,7 @@ class SearchResultViewController: UIViewController {
         static let showDebugInfo:String = "showDebugInfo"
         static let showAdvancedFilter:String = "showAdvancedFilter"
         static let displayHouseDetail:String = "displayHouseDetail"
+        static let displayDuplicateHouse:String = "displayDuplicateHouse"
     }
     
     enum ScrollDirection {
@@ -762,6 +763,16 @@ class SearchResultViewController: UIViewController {
                     }
                 }
                 
+            case ViewTransConst.displayDuplicateHouse:
+                
+                if let dhvc = segue.destinationViewController as? DuplicateHouseViewController {
+                    if let row = tableView.indexPathForSelectedRow?.row {
+                        
+                        let houseItem = dataSource.getItemForRow(row)
+                        
+                        dhvc.childrenText = houseItem.children?.joinWithSeparator(",\n")
+                    }
+                }
             default: break
             }
         }
@@ -815,7 +826,16 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+        
+        let houseItem = dataSource.getItemForRow(indexPath.row)
+        
+        print("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
+        
+        if let duplicates = houseItem.children {
+            self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
+        } else {
+            self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+        }
     }
     
 }

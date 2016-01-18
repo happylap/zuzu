@@ -49,6 +49,8 @@ struct SolrConst {
         static let CITY = "city"
         static let REGION = "region"
         static let IMG_LIST = "img"
+        static let PARENT = "parent"
+        static let CHILDREN = "children"
     }
     
     struct Format {
@@ -71,6 +73,7 @@ class HouseItem:NSObject, NSCoding {
         private var source: Int?
         private var desc: String?
         private var imgList: [String]?
+        private var children: [String]?
         
         private func validateParams() -> Bool{
             return (self.id != nil) && (self.title != nil)
@@ -126,13 +129,18 @@ class HouseItem:NSObject, NSCoding {
             return self
         }
         
+        func addChildren(children: [String]?) -> Builder {
+            self.children = children
+            return self
+        }
+        
         func build() -> HouseItem {
             assert(validateParams(), "Incorrect HouseItem building params")
             return HouseItem(builder: self)
         }
     }
     
-    /// House Item Members
+    /// HouseItem Members
     let id: String
     let title: String
     let addr: String
@@ -143,7 +151,7 @@ class HouseItem:NSObject, NSCoding {
     let size: Float
     let desc: String?
     let imgList: [String]?
-    
+    let children: [String]?
     
     private init(builder: Builder){
         /// Assign default value for mandatory fields
@@ -158,6 +166,7 @@ class HouseItem:NSObject, NSCoding {
         self.source = builder.source ?? 0
         self.desc = builder.desc
         self.imgList = builder.imgList
+        self.children = builder.children
         
         super.init()
     }
@@ -174,6 +183,7 @@ class HouseItem:NSObject, NSCoding {
         let source = decoder.decodeIntegerForKey("source") as Int
         let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
         let imgList = decoder.decodeObjectForKey("imgList") as? [String] ?? [String]()
+        let children = decoder.decodeObjectForKey("children") as? [String] ?? [String]()
         
         let builder: Builder = Builder(id: id)
             .addTitle(title)
@@ -185,6 +195,7 @@ class HouseItem:NSObject, NSCoding {
             .addSource(source)
             .addDesc(desc)
             .addImageList(imgList)
+            .addChildren(children)
         
         self.init(builder: builder)
     }
@@ -200,13 +211,14 @@ class HouseItem:NSObject, NSCoding {
         aCoder.encodeInteger(source, forKey:"source")
         aCoder.encodeObject(desc, forKey:"desc")
         aCoder.encodeObject(imgList, forKey:"imgList")
+        aCoder.encodeObject(children, forKey:"children")
     }
     
 }
 
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
-    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE,SolrConst.Filed.SOURCE, SolrConst.Filed.IMG_LIST]
+    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE,SolrConst.Filed.SOURCE, SolrConst.Filed.IMG_LIST, SolrConst.Filed.CHILDREN]
     
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
@@ -269,7 +281,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         performSearch(urlComp, handler: handler)
     }
     
-    func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int,
+    func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int, allowDuplicate: Bool = false,
         handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
             
             let keyword: String? = criteria.keyword
@@ -400,6 +412,13 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 }
             }
             
+            // Remove Duplicate
+            
+            if (!allowDuplicate) {
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "-\(SolrConst.Filed.PARENT):*"))
+            }
+            
             // Sorting
             if let sorting = sorting {
                 queryitems.append(NSURLQueryItem(name: SolrConst.Query.SORTING, value: sorting))
@@ -431,7 +450,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 request.timeoutInterval = HouseDataRequester.requestTimeout
                 
                 request.HTTPMethod = SolrConst.Server.HTTP_METHOD
-
+                
                 let plainLoginString = (SecretConst.SolrQuery as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                 
                 if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
@@ -475,7 +494,12 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let price = house["price"].int ?? 0
                                     let size = house["size"].float ?? 0
                                     let source = house["source"].int  ?? 1
+                                    
                                     let imgList = house["img"].array?.map({ (jsonObj) -> String in
+                                        return jsonObj.stringValue
+                                    })
+                                    
+                                    let children = house["children"].array?.map({ (jsonObj) -> String in
                                         return jsonObj.stringValue
                                     })
                                     
@@ -490,6 +514,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                         .addSize(size)
                                         .addSource(source)
                                         .addImageList(imgList)
+                                        .addChildren(children)
                                         .build()
                                     
                                     houseList.append(house)

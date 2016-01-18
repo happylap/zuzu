@@ -984,11 +984,47 @@
                         <outlet property="sortBySizeButton" destination="RkJ-yY-SbF" id="Zzj-xd-YKt"/>
                         <outlet property="tableView" destination="AVs-la-x6f" id="W6l-uj-pjW"/>
                         <segue destination="RI5-UG-EkB" kind="show" identifier="displayHouseDetail" id="HGk-Tx-AhT"/>
+                        <segue destination="Q02-Ft-dmr" kind="show" identifier="displayDuplicateHouse" id="xK1-uL-WB3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t8e-H4-Hw1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1725" y="552"/>
+        </scene>
+        <!--Duplicate House View-->
+        <scene sceneID="Hsg-ak-4KD">
+            <objects>
+                <viewController title="Duplicate House View" id="Q02-Ft-dmr" customClass="DuplicateHouseViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="glO-Mm-WzR"/>
+                        <viewControllerLayoutGuide type="bottom" id="FvC-wr-opB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LHp-tL-Pl8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVl-n4-yhH">
+                                <rect key="frame" x="0.0" y="72" width="414" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="KVl-n4-yhH" firstAttribute="top" secondItem="glO-Mm-WzR" secondAttribute="bottom" constant="8" symbolic="YES" id="eeZ-3M-Low"/>
+                            <constraint firstItem="KVl-n4-yhH" firstAttribute="centerX" secondItem="LHp-tL-Pl8" secondAttribute="centerX" id="fUC-fU-BBQ"/>
+                            <constraint firstItem="KVl-n4-yhH" firstAttribute="width" secondItem="LHp-tL-Pl8" secondAttribute="width" id="pay-bb-Q8k"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="childrenIdList" destination="KVl-n4-yhH" id="gdV-WX-TMS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AhO-ge-HuG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1076" y="1771"/>
         </scene>
         <!--House Detail-->
         <scene sceneID="r06-4y-ETW">
@@ -1303,7 +1339,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mKA-j6-Knx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2752" y="1573"/>
+            <point key="canvasLocation" x="2752" y="1803"/>
         </scene>
         <!--House Url Popover -->
         <scene sceneID="yrg-vl-0v0">
@@ -1364,7 +1400,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VAa-Ns-oxa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1006" y="2480"/>
+            <point key="canvasLocation" x="2506" y="2747"/>
         </scene>
         <!--House Source-->
         <scene sceneID="KPq-L4-VJt">
@@ -1393,7 +1429,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="760" y="1811"/>
+            <point key="canvasLocation" x="1725" y="2747"/>
         </scene>
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
