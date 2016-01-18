@@ -7,23 +7,22 @@
 
 import Foundation
 
-// Use enum as a simple namespace.  (It has no cases so you can't instantiate it.)
-public enum ZuzuProducts {
+// Define the product for Zuzu In-App Purchase
+public struct ZuzuProducts {
     
-    /// TODO:  Change this to whatever you set on iTunes connect
     private static let Prefix = "com.lap.zuzurentals."
     
     /// MARK: - Supported Product Identifiers
-    public static let ProductRadar = Prefix + "radar"
+    public static let ProductRadar1Month = Prefix + "radar"
+    
+    public static let ProductRadar3Month = Prefix + "radar2"
     
     // All of the products assembled into a set of product identifiers.
-    private static let productIdentifiers: Set<ProductIdentifier> = [ZuzuProducts.ProductRadar]
+    public static let productIdentifiers: Set<ProductIdentifier> =
+    [ZuzuProducts.ProductRadar1Month, ZuzuProducts.ProductRadar3Month]
     
-    /// Static instance of IAPHelper that for rage products.
-    public static let store = IAPHelper(productIdentifiers: ZuzuProducts.productIdentifiers)
-}
-
-/// Return the resourcename for the product identifier.
-func resourceNameForProductIdentifier(productIdentifier: String) -> String? {
-    return productIdentifier.componentsSeparatedByString(".").last
+    /// Return the resourcename for the product identifier.
+    internal static func resourceNameForProductIdentifier(productIdentifier: String) -> String? {
+        return productIdentifier.componentsSeparatedByString(".").last
+    }
 }

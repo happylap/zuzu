@@ -71,7 +71,7 @@
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */; };
 		2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */; };
-		2FB16C541C48BDEC009738AC /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C521C48BDEC009738AC /* IAPHelper.swift */; };
+		2FB16C541C48BDEC009738AC /* ZuzuStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C521C48BDEC009738AC /* ZuzuStore.swift */; };
 		2FB16C551C48BDEC009738AC /* ZuzuProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */; };
 		2FB16C591C48BF4C009738AC /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C571C48BF4C009738AC /* MasterViewController.swift */; };
 		2FB16C5A1C48BF4C009738AC /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C581C48BF4C009738AC /* DetailViewController.swift */; };
@@ -225,7 +225,7 @@
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCityPickerView.xib; sourceTree = "<group>"; };
 		2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCityPickerView.swift; sourceTree = "<group>"; };
-		2FB16C521C48BDEC009738AC /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
+		2FB16C521C48BDEC009738AC /* ZuzuStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuStore.swift; sourceTree = "<group>"; };
 		2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuProducts.swift; sourceTree = "<group>"; };
 		2FB16C571C48BF4C009738AC /* MasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 		2FB16C581C48BF4C009738AC /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -493,7 +493,7 @@
 		2FB16C511C48BDCF009738AC /* InAppPurchase */ = {
 			isa = PBXGroup;
 			children = (
-				2FB16C521C48BDEC009738AC /* IAPHelper.swift */,
+				2FB16C521C48BDEC009738AC /* ZuzuStore.swift */,
 				2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */,
 			);
 			name = InAppPurchase;
@@ -950,7 +950,7 @@
 				2FE912741BFF796C00019053 /* LoadingSpinner.swift in Sources */,
 				2F94105F1BF4E98500BA12B5 /* LoadingSpinnerOverlay.swift in Sources */,
 				81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */,
-				2FB16C541C48BDEC009738AC /* IAPHelper.swift in Sources */,
+				2FB16C541C48BDEC009738AC /* ZuzuStore.swift in Sources */,
 				14914FA81C27D7E800025AC1 /* NotificationHouseItemDao.swift in Sources */,
 				81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,

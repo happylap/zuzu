@@ -29,7 +29,7 @@ class MasterViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "In App Rage"
+        title = "In App Purchase"
         
         // Set up a refresh control, call reload to start things up
         refreshControl = UIRefreshControl()
@@ -42,7 +42,7 @@ class MasterViewController: UITableViewController {
         navigationItem.rightBarButtonItem = restoreButton
         
         // Subscribe to a notification that fires when a product is purchased.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "productPurchased:", name: IAPHelperProductPurchasedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "productPurchased:", name: ProductPurchasedNotification, object: nil)
     }
     
     
@@ -50,7 +50,7 @@ class MasterViewController: UITableViewController {
     func reload() {
         products = []
         tableView.reloadData()
-        ZuzuProducts.store.requestProductsWithCompletionHandler { success, products in
+        ZuzuStore.sharedInstance.requestProducts { success, products in
             if success {
                 self.products = products
                 self.tableView.reloadData()
@@ -61,13 +61,13 @@ class MasterViewController: UITableViewController {
     
     // Restore purchases to this device.
     func restoreTapped(sender: AnyObject) {
-        ZuzuProducts.store.restoreCompletedTransactions()
+        ZuzuStore.sharedInstance.restorePreviousPurchase()
     }
     
     // Purchase the product
     func buyButtonTapped(button: UIButton) {
         let product = products[button.tag]
-        ZuzuProducts.store.purchaseProduct(product)
+        ZuzuStore.sharedInstance.makePurchase(product)
     }
     
     // When a product is purchased, this notification fires, redraw the correct row
@@ -89,7 +89,7 @@ class MasterViewController: UITableViewController {
             let shouldTransition: Bool
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 let product = products[indexPath.row]
-                shouldTransition = ZuzuProducts.store.isProductPurchased(product.productIdentifier)
+                shouldTransition = ZuzuStore.sharedInstance.isProductPurchased(product.productIdentifier)
             }
             else {
                 shouldTransition = false
@@ -105,7 +105,7 @@ class MasterViewController: UITableViewController {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 let content: String
                 let product = products[indexPath.row]
-                if let name = resourceNameForProductIdentifier(product.productIdentifier),
+                if let name = ZuzuProducts.resourceNameForProductIdentifier(product.productIdentifier),
                     detailViewController = segue.destinationViewController as? DetailViewController {
                         let image = UIImage(named: name)
                         detailViewController.image = image
@@ -130,12 +130,12 @@ class MasterViewController: UITableViewController {
         let product = products[indexPath.row]
         cell.textLabel?.text = product.localizedTitle
         
-        if ZuzuProducts.store.isProductPurchased(product.productIdentifier) {
+        if ZuzuStore.sharedInstance.isProductPurchased(product.productIdentifier) {
             cell.accessoryType = .Checkmark
             cell.accessoryView = nil
             cell.detailTextLabel?.text = ""
         }
-        else if IAPHelper.canMakePayments() {
+        else if ZuzuStore.canMakePayments() {
             priceFormatter.locale = product.priceLocale
             cell.detailTextLabel?.text = priceFormatter.stringFromNumber(product.price)
             
