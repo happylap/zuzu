@@ -1052,7 +1052,7 @@ class HouseDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         ///Hide tab bar
-        self.tabBarController!.tabBarHidden = true
+        self.tabBarController?.tabBarHidden = true
         
         ///Google Analytics Tracker
         self.trackScreen()
