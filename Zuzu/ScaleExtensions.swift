@@ -13,7 +13,7 @@ private let Log = Logger.defaultLogger
 
 /// Definitions of all layout diementions for the base setting (iPhone 6)
 struct BaseLayoutConst {
-    static let houseImageWidth:CGFloat = 174
+    static let houseImageHeight:CGFloat = 174
 }
 
 /// Definitions of the scale ratio for devices with larger or smaller screens

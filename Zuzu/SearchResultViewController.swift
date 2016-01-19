@@ -83,7 +83,7 @@ class SearchResultViewController: UIViewController {
     
     private func configureTableView() {
         
-        tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
+        tableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
         
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -772,7 +772,7 @@ class SearchResultViewController: UIViewController {
                         
                         dhvc.houseItem = houseItem
                         dhvc.delegate = self
-                        dhvc.childrenText = houseItem.children?.joinWithSeparator(",\n")
+                        dhvc.duplicateList = houseItem.children
                     }
                 }
             default: break

@@ -55,7 +55,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     private func configureTableView() {
         
-        tableView.estimatedRowHeight = BaseLayoutConst.houseImageWidth * getCurrentScale()
+        tableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
         
         tableView.rowHeight = UITableViewAutomaticDimension
         
