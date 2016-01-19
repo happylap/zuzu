@@ -770,6 +770,8 @@ class SearchResultViewController: UIViewController {
                         
                         let houseItem = dataSource.getItemForRow(row)
                         
+                        dhvc.houseItem = houseItem
+                        dhvc.delegate = self
                         dhvc.childrenText = houseItem.children?.joinWithSeparator(",\n")
                     }
                 }
@@ -840,7 +842,9 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         print("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
         
         if let duplicates = houseItem.children {
-            self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
+            self.runOnMainThreadAfter(0.1, block: { () -> Void in
+                self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
+            })
         } else {
             self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
         }
@@ -1002,5 +1006,16 @@ extension SearchResultViewController: HouseDetailViewDelegate {
             // Refresh the row
             tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: UITableViewRowAnimation.None)
         }
+    }
+}
+
+extension SearchResultViewController: DuplicateHouseViewControllerDelegate {
+    
+    internal func onDismiss() {
+        /// Do nothing
+    }
+    
+    internal func onContinue() {
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
     }
 }
