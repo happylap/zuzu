@@ -1006,8 +1006,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RRW-7J-eUD" userLabel="Header View">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="偵測到重複物件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVl-n4-yhH" userLabel="Title">
-                                        <rect key="frame" x="137" y="40" width="140" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="存在重複物件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVl-n4-yhH" userLabel="Title">
+                                        <rect key="frame" x="147" y="40" width="120" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -1044,7 +1044,7 @@
                                 <color key="textColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您可以往下查看重複物件，或是繼續前往觀看您所點選的租屋物件。" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-Ae-t2J" userLabel="SubTitle2">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬為您過濾出一些重複物件。您可以往下查看重複物件列表，或是繼續觀看您所點選的租屋物件。" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-Ae-t2J" userLabel="SubTitle2">
                                 <rect key="frame" x="36" y="136.5" width="342" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
@@ -1055,7 +1055,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="oJk-pp-Hmy"/>
                                 </constraints>
-                                <state key="normal" title="繼續(10)">
+                                <state key="normal" title="繼續">
                                     <color key="titleColor" red="0.10980392156862745" green="0.83137254901960778" blue="0.77647058823529413" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                             </button>

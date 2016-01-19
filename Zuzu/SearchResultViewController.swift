@@ -81,6 +81,14 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - Private Utils
     
+    private func setSubviewsVisible(visible: Bool) {
+        let subviews = self.view.subviews
+        
+        for view in subviews{
+            view.hidden = !visible
+        }
+    }
+    
     private func configureTableView() {
         
         tableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
@@ -694,6 +702,7 @@ class SearchResultViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         NSLog("%@ [[viewDidAppear]]", self)
     }
     
@@ -766,6 +775,7 @@ class SearchResultViewController: UIViewController {
             case ViewTransConst.displayDuplicateHouse:
                 
                 if let dhvc = segue.destinationViewController as? DuplicateHouseViewController {
+                    
                     if let row = tableView.indexPathForSelectedRow?.row {
                         
                         let houseItem = dataSource.getItemForRow(row)
@@ -1016,6 +1026,7 @@ extension SearchResultViewController: DuplicateHouseViewControllerDelegate {
     }
     
     internal func onContinue() {
+        
         self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
     }
 }

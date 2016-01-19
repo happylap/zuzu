@@ -14,6 +14,8 @@ protocol DuplicateHouseViewControllerDelegate: class {
 
 class DuplicateHouseViewController: UIViewController {
     
+    let enableAutoForward = false
+    
     struct TableConst {
         static let sectionNum:Int = 1
         static let houseCellIdentifier = "houseItemCell"
@@ -34,7 +36,7 @@ class DuplicateHouseViewController: UIViewController {
                 duplicateCount = duplicateList.count
             }
             
-            firstSubtitleLabel.text = String(format: "豬豬為您點選的物件找到 %d 筆可能的重複物件", duplicateCount)
+            firstSubtitleLabel.text = String(format: "您點選的物件存在 %d 筆重複的物件", duplicateCount)
         }
     }
     
@@ -44,9 +46,16 @@ class DuplicateHouseViewController: UIViewController {
         didSet {
             continueButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
             
-            let title = String(format: "繼續(\(countDown-1))")
+            var title = String(format: "繼續")
+            
+            if(enableAutoForward) {
+                title = String(format: "繼續(\(countDown))")
+            }
+            
             continueButton.setTitle(title,
                 forState: [.Normal])
+            
+            
         }
     }
     
@@ -72,9 +81,10 @@ class DuplicateHouseViewController: UIViewController {
     private var countDown = 10
     
     func onContinueButtonTouched(sender: UIButton) {
-        self.dismissViewControllerAnimated(false) { () -> Void in
-            self.delegate?.onContinue()
-        }
+        
+        self.delegate?.onContinue()
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func onCancelButtonTouched(sender: UIButton) {
@@ -85,18 +95,17 @@ class DuplicateHouseViewController: UIViewController {
     
     func onCheckForwardTriggered() {
         
+        countDown--
+        
         if(countDown <= 0) {
             currentTimer?.invalidate()
             
-            self.dismissViewControllerAnimated(false) { () -> Void in
-                self.delegate?.onContinue()
-            }
+            self.delegate?.onContinue()
+            
+            self.dismissViewControllerAnimated(true, completion: nil)
             
         } else {
-            countDown--
             
-            print("Count Down: \(countDown)")
-
             let title = String(format: "繼續(%d)", self.countDown)
             continueButton.setTitle(title,
                 forState: [.Normal])
@@ -135,7 +144,9 @@ class DuplicateHouseViewController: UIViewController {
         
         /// Setup Timer for auto forwarding
         
-        currentTimer = NSTimer.scheduledTimerWithTimeInterval(countDownInterval, target: self, selector: "onCheckForwardTriggered", userInfo: nil, repeats: true)
+        if(enableAutoForward) {
+            currentTimer = NSTimer.scheduledTimerWithTimeInterval(countDownInterval, target: self, selector: "onCheckForwardTriggered", userInfo: nil, repeats: true)
+        }
     }
     
     override func didReceiveMemoryWarning() {
