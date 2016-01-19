@@ -204,16 +204,27 @@ class HouseDetailViewController: UIViewController {
                     var priceDetail:String?
                     if let houseItemDetail = self.houseItemDetail {
                         
+                        
+
+                        
                         let attributes = [
                             NSBackgroundColorAttributeName: UIColor.colorWithRGB(0xFFFFFF),
                             NSForegroundColorAttributeName: UIColor.colorWithRGB(0xFF6666),
-                            NSStrikethroughStyleAttributeName : 2,
-                            NSFontAttributeName: UIFont.systemFontOfSize(15),
+                            NSFontAttributeName: UIFont.systemFontOfSize(15)
                         ]
                         
-                        let prevPrice = "10000"
-                        cell.previousPriceLabel.attributedText = NSAttributedString(string: prevPrice, attributes: attributes)
+                        /// Show previous price
+                        if let prevPrice = houseItemDetail.valueForKey("previous_price") as? Int {
+                            
+                            let myMutableString = NSMutableAttributedString(string: "\(prevPrice)↯", attributes: attributes)
+                            
+                            myMutableString.addAttribute(NSStrikethroughStyleAttributeName, value: 1, range: NSRange(location:0,length:myMutableString.string.characters.count-1))
+                            
+                            cell.previousPriceLabel.attributedText = myMutableString
+                            
+                        }
                         
+                        /// Show price detailed info
                         if let priceIncl = houseItemDetail.valueForKey("price_incl") as? [Int] {
                             
                             let priceStringList = priceIncl.map { (code) -> String in
