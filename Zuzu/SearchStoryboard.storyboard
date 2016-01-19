@@ -1026,26 +1026,24 @@
                                     <constraint firstItem="pa4-3H-Bgo" firstAttribute="leading" secondItem="RRW-7J-eUD" secondAttribute="leading" constant="16" id="0R0-2B-y8s"/>
                                     <constraint firstItem="KVl-n4-yhH" firstAttribute="leading" relation="lessThanOrEqual" secondItem="pa4-3H-Bgo" secondAttribute="trailing" constant="16" id="ATW-vZ-wou"/>
                                     <constraint firstItem="KVl-n4-yhH" firstAttribute="centerX" secondItem="RRW-7J-eUD" secondAttribute="centerX" id="AxF-0F-83G"/>
-                                    <constraint firstItem="KVl-n4-yhH" firstAttribute="leading" secondItem="RRW-7J-eUD" secondAttribute="leading" constant="16" id="QAo-fn-fHE"/>
                                     <constraint firstItem="pa4-3H-Bgo" firstAttribute="centerY" secondItem="KVl-n4-yhH" secondAttribute="centerY" id="e1d-1C-JJf"/>
                                     <constraint firstItem="pa4-3H-Bgo" firstAttribute="centerY" secondItem="RRW-7J-eUD" secondAttribute="centerY" id="tcX-RM-VAQ"/>
                                     <constraint firstItem="KVl-n4-yhH" firstAttribute="centerY" secondItem="RRW-7J-eUD" secondAttribute="centerY" constant="10" id="wPI-Us-PlY"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="QAo-fn-fHE"/>
                                         <exclude reference="tcX-RM-VAQ"/>
                                     </mask>
                                 </variation>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬為您點選的物件找到 3 筆可能的重複物件" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBV-Hl-mDw" userLabel="SubTitle1">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬為您點選的物件找到 3 筆可能的重複物件" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBV-Hl-mDw" userLabel="SubTitle1">
                                 <rect key="frame" x="28" y="100" width="358" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬已經為您過濾了數筆重複的資料！您可以往下查看豬豬過濾掉的重複物件，或直接繼續觀看您所點選的租屋物件。" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-Ae-t2J" userLabel="SubTitle2">
-                                <rect key="frame" x="36" y="136.5" width="342" height="54"/>
+                                <rect key="frame" x="28" y="136.5" width="350" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1095,42 +1093,26 @@
                             <constraint firstItem="uBV-Hl-mDw" firstAttribute="leading" secondItem="LHp-tL-Pl8" secondAttribute="leadingMargin" constant="8" id="03L-5N-RwZ"/>
                             <constraint firstItem="uBV-Hl-mDw" firstAttribute="top" secondItem="RRW-7J-eUD" secondAttribute="bottom" constant="16" id="0eW-po-Ybp"/>
                             <constraint firstItem="MkW-Ae-t2J" firstAttribute="top" secondItem="uBV-Hl-mDw" secondAttribute="bottom" constant="16" id="1qV-vs-WcC"/>
-                            <constraint firstItem="xyU-Rn-u5G" firstAttribute="top" secondItem="nLi-jA-WKn" secondAttribute="bottom" constant="8" id="2rN-K8-PrQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="uBV-Hl-mDw" secondAttribute="trailing" constant="8" id="5Hk-tH-Mni"/>
                             <constraint firstItem="RRW-7J-eUD" firstAttribute="width" secondItem="LHp-tL-Pl8" secondAttribute="width" id="5KO-8y-XxZ"/>
                             <constraint firstItem="gMy-UU-W7e" firstAttribute="centerX" secondItem="LHp-tL-Pl8" secondAttribute="centerX" id="Ame-p9-HQm"/>
-                            <constraint firstItem="nLi-jA-WKn" firstAttribute="width" secondItem="RRW-7J-eUD" secondAttribute="width" id="BzO-if-fBG"/>
                             <constraint firstItem="RRW-7J-eUD" firstAttribute="top" secondItem="glO-Mm-WzR" secondAttribute="bottom" constant="-20" id="GgT-EJ-DEJ"/>
+                            <constraint firstItem="MkW-Ae-t2J" firstAttribute="leading" secondItem="uBV-Hl-mDw" secondAttribute="leading" id="NIV-5i-C7d"/>
                             <constraint firstItem="xyU-Rn-u5G" firstAttribute="centerX" secondItem="LHp-tL-Pl8" secondAttribute="centerX" id="Oys-lA-rQb"/>
-                            <constraint firstItem="MkW-Ae-t2J" firstAttribute="leading" secondItem="uBV-Hl-mDw" secondAttribute="leading" id="RI0-Ub-03f"/>
                             <constraint firstItem="RRW-7J-eUD" firstAttribute="height" secondItem="LHp-tL-Pl8" secondAttribute="height" multiplier="84:736" id="Tva-WT-Add"/>
                             <constraint firstItem="nLi-jA-WKn" firstAttribute="top" secondItem="54X-ed-zjk" secondAttribute="bottom" constant="15" id="YEJ-S0-wEt"/>
                             <constraint firstItem="RRW-7J-eUD" firstAttribute="centerX" secondItem="LHp-tL-Pl8" secondAttribute="centerX" id="YIa-qt-K7L"/>
                             <constraint firstItem="xyU-Rn-u5G" firstAttribute="width" secondItem="LHp-tL-Pl8" secondAttribute="width" id="YhH-XX-Gbw"/>
                             <constraint firstItem="54X-ed-zjk" firstAttribute="top" secondItem="MkW-Ae-t2J" secondAttribute="bottom" constant="16" id="ZXe-SX-IDC"/>
                             <constraint firstItem="nLi-jA-WKn" firstAttribute="centerX" secondItem="LHp-tL-Pl8" secondAttribute="centerX" id="adO-Bu-hh7"/>
-                            <constraint firstItem="MkW-Ae-t2J" firstAttribute="leading" secondItem="LHp-tL-Pl8" secondAttribute="leadingMargin" constant="16" id="cbG-He-Pbm"/>
                             <constraint firstItem="nLi-jA-WKn" firstAttribute="width" secondItem="LHp-tL-Pl8" secondAttribute="width" id="ev1-9U-tmP"/>
                             <constraint firstItem="gMy-UU-W7e" firstAttribute="width" secondItem="LHp-tL-Pl8" secondAttribute="width" id="faV-ja-5UU"/>
-                            <constraint firstItem="54X-ed-zjk" firstAttribute="leading" secondItem="MkW-Ae-t2J" secondAttribute="trailing" constant="16" id="hNS-0v-SB3"/>
-                            <constraint firstItem="54X-ed-zjk" firstAttribute="centerY" secondItem="MkW-Ae-t2J" secondAttribute="centerY" id="kEY-Q5-APO"/>
                             <constraint firstItem="gMy-UU-W7e" firstAttribute="top" secondItem="nLi-jA-WKn" secondAttribute="bottom" constant="8" id="lTn-65-EpQ"/>
                             <constraint firstItem="xyU-Rn-u5G" firstAttribute="top" secondItem="gMy-UU-W7e" secondAttribute="bottom" id="oVe-s8-I9k"/>
                             <constraint firstAttribute="trailingMargin" secondItem="MkW-Ae-t2J" secondAttribute="trailing" constant="16" id="pjf-Fi-AsG"/>
                             <constraint firstItem="54X-ed-zjk" firstAttribute="centerX" secondItem="LHp-tL-Pl8" secondAttribute="centerX" id="wCN-bW-9cm"/>
-                            <constraint firstItem="54X-ed-zjk" firstAttribute="leading" secondItem="MkW-Ae-t2J" secondAttribute="trailing" constant="16" id="y08-HD-7J4"/>
                             <constraint firstItem="FvC-wr-opB" firstAttribute="top" secondItem="xyU-Rn-u5G" secondAttribute="bottom" constant="8" id="zWA-2d-W0u"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="RI0-Ub-03f"/>
-                                <exclude reference="BzO-if-fBG"/>
-                                <exclude reference="hNS-0v-SB3"/>
-                                <exclude reference="kEY-Q5-APO"/>
-                                <exclude reference="y08-HD-7J4"/>
-                                <exclude reference="2rN-K8-PrQ"/>
-                            </mask>
-                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
