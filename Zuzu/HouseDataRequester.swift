@@ -43,6 +43,7 @@ struct SolrConst {
         static let ADDR = "addr"
         static let PURPOSE_TYPE = "purpose_type"
         static let HOUSE_TYPE = "house_type"
+        static let PREVIOUS_PRICE = "previous_price"
         static let PRICE = "price"
         static let SIZE = "size"
         static let SOURCE = "source"
@@ -68,6 +69,7 @@ class HouseItem:NSObject, NSCoding {
         private var addr: String?
         private var houseType: Int?
         private var purposeType: Int?
+        private var previousPrice: Int?
         private var price: Int?
         private var size: Float?
         private var source: Int?
@@ -101,6 +103,11 @@ class HouseItem:NSObject, NSCoding {
         
         func addPurposeType(usage:Int) -> Builder {
             self.purposeType = usage
+            return self
+        }
+        
+        func addPreviousPrice(previousPrice:Int?) -> Builder {
+            self.previousPrice = previousPrice
             return self
         }
         
@@ -146,6 +153,7 @@ class HouseItem:NSObject, NSCoding {
     let addr: String
     let houseType: Int
     let purposeType: Int
+    let previousPrice: Int?
     let price: Int
     let source: Int
     let size: Float
@@ -161,6 +169,7 @@ class HouseItem:NSObject, NSCoding {
         self.addr = builder.addr ?? ""
         self.houseType = builder.houseType ?? 0
         self.purposeType = builder.purposeType ?? 0
+        self.previousPrice = builder.previousPrice
         self.price = builder.price ?? 0
         self.size = builder.size ?? 0
         self.source = builder.source ?? 0
@@ -185,11 +194,17 @@ class HouseItem:NSObject, NSCoding {
         let imgList = decoder.decodeObjectForKey("imgList") as? [String] ?? [String]()
         let children = decoder.decodeObjectForKey("children") as? [String] ?? [String]()
         
+        var previousPrice: Int?
+        if decoder.decodeObjectForKey("previousPrice") != nil {
+            previousPrice = decoder.decodeIntegerForKey("previous_price") as Int
+        }
+        
         let builder: Builder = Builder(id: id)
             .addTitle(title)
             .addAddr(addr)
             .addHouseType(houseType)
             .addPurposeType(purposeType)
+            .addPreviousPrice(previousPrice)
             .addPrice(price)
             .addSize(size)
             .addSource(source)
@@ -212,13 +227,16 @@ class HouseItem:NSObject, NSCoding {
         aCoder.encodeObject(desc, forKey:"desc")
         aCoder.encodeObject(imgList, forKey:"imgList")
         aCoder.encodeObject(children, forKey:"children")
+        if let pPrice = previousPrice {
+            aCoder.encodeInteger(pPrice, forKey: "previousPrice")
+        }
     }
     
 }
 
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
-    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE,SolrConst.Filed.SOURCE, SolrConst.Filed.IMG_LIST, SolrConst.Filed.CHILDREN]
+    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PREVIOUS_PRICE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE,SolrConst.Filed.SOURCE, SolrConst.Filed.IMG_LIST, SolrConst.Filed.CHILDREN]
     
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
@@ -268,7 +286,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value:mainQuery.joinWithSeparator(" \(SolrConst.Operator.OR) ")))
         
         // Field List
-        let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.PRICE]
+        let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.PREVIOUS_PRICE, SolrConst.Filed.PRICE]
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: fieldList.joinWithSeparator(",")))
         
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
@@ -491,6 +509,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     let addr = house["addr"].string ?? ""
                                     let houseType = house["house_type"].int ?? 0
                                     let purpose = house["purpose_type"].int ?? 0
+                                    let previousPrice = house["previous_price"].int
                                     let price = house["price"].int ?? 0
                                     let size = house["size"].float ?? 0
                                     let source = house["source"].int  ?? 1
@@ -510,6 +529,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                         .addAddr(addr)
                                         .addHouseType(houseType)
                                         .addPurposeType(purpose)
+                                        .addPreviousPrice(previousPrice)
                                         .addPrice(price)
                                         .addSize(size)
                                         .addSource(source)

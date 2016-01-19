@@ -58,6 +58,8 @@ class CollectionItemService: NSObject
             }
             self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY_FOR_ADD)
         }
+        
+        self.addPriceCutIds(items)
     }
     
     func _update(id: String, dataToUpdate: [String: AnyObject]) {
@@ -395,6 +397,13 @@ class CollectionItemService: NSObject
         }
     }
     
+    let userDefault = NSUserDefaults.standardUserDefaults()
+    
+    // MARK: Check Off Shelf
+    
+    let IDS_FOR_OFF_SHELF_CHECK = "IdsForOffShelfCheck"
+    let UPDATE_DATE_FOR_OFF_SHELF_CHECK = "UpdateDtForOffShelfCheck"
+    
     func isOffShelf(id: String, handler: (offShelf: Bool) -> Void) {
         if let collectionItem = self.getItem(id), let collectTime = collectionItem.collectTime {
             if collectTime.isToday() {
@@ -411,10 +420,6 @@ class CollectionItemService: NSObject
             }
         }
     }
-    
-    let IDS_FOR_OFF_SHELF_CHECK = "IdsForOffShelfCheck"
-    let UPDATE_DATE_FOR_OFF_SHELF_CHECK = "UpdateDtForOffShelfCheck"
-    let userDefault = NSUserDefaults.standardUserDefaults()
     
     func getOffShelfIds(handler: (result: [String]?) -> Void) {
         if let ids = self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String],
@@ -454,4 +459,93 @@ class CollectionItemService: NSObject
         
         handler(result: self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String])
     }
+    
+    // MARK: Check Off Shelf
+    
+    let IDS_FOR_PRICE_CUT_CHECK = "IdsForPriceCutCheck"
+    let UPDATE_DATE_FOR_PRICE_CUT_CHECK = "UpdateDtForPriceCutCheck"
+    
+    func isPriceCut(id: String, handler: (priceCut: Bool) -> Void) {
+        if let collectionItem = self.getItem(id) {
+            self.getPriceCutIds() { (result) -> Void in
+                var priceCut = false
+                if let priceCutIds = result {
+                    priceCut = priceCutIds.contains(collectionItem.id)
+                }
+                handler(priceCut: priceCut)
+            }
+        }
+    }
+    
+    func getPriceCutIds(handler: (result: [String]?) -> Void) {
+        self._getPriceCutIds(false, handler: handler)
+    }
+    
+    func addPriceCutIds(items: [AnyObject]) {
+        for item in items {
+            if let id = item.valueForKey("id") as? String,
+                let price = item.valueForKey("price") as? Int,
+                let previousPrice = item.valueForKey("previous_price") as? Int {
+                if previousPrice > price {
+                        self.addPriceCutId(id)
+                }
+            }
+        }
+    }
+    
+    func updatePriceCutIds(handler: (result: [String]?) -> Void) {
+        self._getPriceCutIds(true, handler: handler)
+    }
+    
+    func addPriceCutId(newId: String) {
+        if var priceCutIds: [String] = self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String] {
+            if !priceCutIds.contains(newId) {
+                priceCutIds.append(newId)
+                
+                let nsArray: NSArray = NSArray(array: priceCutIds)
+                self.userDefault.setObject(nsArray, forKey: self.IDS_FOR_PRICE_CUT_CHECK)
+                self.userDefault.setObject(NSDate(), forKey: self.UPDATE_DATE_FOR_PRICE_CUT_CHECK)
+                self.userDefault.synchronize()
+            }
+        }
+    }
+    
+    private func _getPriceCutIds(ignoreInterval: Bool, handler: (result: [String]?) -> Void) {
+        if !ignoreInterval {
+            if let ids = self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String],
+                let updateDt = self.userDefault.objectForKey(self.UPDATE_DATE_FOR_PRICE_CUT_CHECK) as? NSDate {
+                if updateDt.isToday() {
+                    handler(result: ids)
+                    return
+                }
+            }
+        }
+        
+        if let collectionIds: [String] = self.getIds() {
+            HouseDataRequester.getInstance().searchByIds(collectionIds) { (totalNum, result, error) -> Void in
+                if let remoteHouseItems = result {
+                    var priceCutIds = [String]()
+                    
+                    for remoteHouseItem in remoteHouseItems as [HouseItem] {
+                        if let previousPrice = remoteHouseItem.previousPrice {
+                            if (previousPrice > remoteHouseItem.price) {
+                                priceCutIds.append(remoteHouseItem.id)
+                            }
+                        }
+                    }
+                    
+                    let nsArray: NSArray = NSArray(array: priceCutIds)
+                    self.userDefault.setObject(nsArray, forKey: self.IDS_FOR_PRICE_CUT_CHECK)
+                    self.userDefault.setObject(NSDate(), forKey: self.UPDATE_DATE_FOR_PRICE_CUT_CHECK)
+                    self.userDefault.synchronize()
+                }
+                
+                handler(result: self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String])
+            }
+            return
+        }
+        
+        handler(result: self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String])
+    }
+    
 }

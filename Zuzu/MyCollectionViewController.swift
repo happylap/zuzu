@@ -441,13 +441,21 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let collectionItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
             cell.houseItemForCollection = collectionItem
             
+            var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
+            
             CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
                 if offShelf == true {
-                    cell.offShelfView.hidden = false
-                } else {
-                    cell.offShelfView.hidden = true
+                    houseFlags.append(SearchResultTableViewCell.HouseFlag.OFF_SHELF)
                 }
             }
+            
+            CollectionItemService.sharedInstance.isPriceCut(collectionItem.id) { (priceCut) -> Void in
+                if priceCut == true {
+                    houseFlags.append(SearchResultTableViewCell.HouseFlag.PRICE_CUT)
+                }
+            }
+            
+            cell.houseFlags = houseFlags
         }
         
         /// Enable add to collection button

@@ -9,6 +9,7 @@ import Alamofire
 import AlamofireImage
 import UIKit
 import Foundation
+import Dollar
 
 private let Log = Logger.defaultLogger
 
@@ -27,6 +28,7 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var houseSourceLabel: UILabel!
     @IBOutlet weak var offShelfView: UIView!
     @IBOutlet weak var offShelfImg: UIImageView!
+    @IBOutlet weak var offShelfLabel: UILabel!
     
     
     let placeholderImg = UIImage(named: "house_img")
@@ -41,6 +43,18 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
+    enum HouseFlag: Int {
+        case OFF_SHELF = 1  // 已下架
+        case PRICE_CUT = 2  // 已降價
+        case PET       = 3  // 可養寵物
+        case MANY_IMG  = 4  // 多張圖
+    }
+    
+    var houseFlags: [HouseFlag]? {
+        didSet {
+            tagHouseFlag()
+        }
+    }
     
     var houseItemForCollection: CollectionHouseItem? {
         didSet {
@@ -197,8 +211,6 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    
-    
     func updateUIForCollection() {
         
         // load new information (if any)
@@ -208,11 +220,6 @@ class SearchResultTableViewCell: UITableViewCell {
             self.houseTitleForCollection.hidden = false
             self.prefixedButton.hidden = false
             self.contactedView.hidden = !(collectionHouseItem.contacted)
-            
-            if let origImage = self.offShelfImg?.image {
-                self.offShelfImg.image = origImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-                self.offShelfImg.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
-            }
             
             if collectionHouseItem.contacted == true {
                 prefixedButton.image = UIImage(named: "checked_green")
@@ -265,4 +272,43 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
+    func tagHouseFlag() {
+        
+        if let flags = self.houseFlags{
+            if flags.count > 0 {
+                var majorFlag: HouseFlag = flags[0]
+                
+                for flag in flags {
+                    if majorFlag.rawValue > flag.rawValue {
+                        majorFlag = flag
+                    }
+                }
+            
+                if let origImage = self.offShelfImg?.image {
+                    self.offShelfImg.image = origImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+                    
+                    switch majorFlag {
+                    case .OFF_SHELF:
+                        self.offShelfImg.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
+                        self.offShelfLabel.text = "已下架"
+                    case .PRICE_CUT:
+                        self.offShelfImg.tintColor = UIColor.colorWithRGB(0xFF6347, alpha: 1)
+                        self.offShelfLabel.text = "已降價"
+                    case .PET:
+                        self.offShelfImg.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
+                        self.offShelfLabel.text = "可養寵物"
+                    case .MANY_IMG:
+                        self.offShelfImg.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
+                        self.offShelfLabel.text = "多張圖"
+                    }
+                }
+            
+                self.offShelfView.hidden = false
+                return
+            }
+        }
+        
+        self.offShelfView.hidden = true
+        
+    }
 }

@@ -809,6 +809,14 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         cell.houseItem = houseItem
         
+        var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
+        if let previousPrice = houseItem.previousPrice {
+            if previousPrice > houseItem.price {
+                houseFlags.append(SearchResultTableViewCell.HouseFlag.PRICE_CUT)
+            }
+        }
+        cell.houseFlags = houseFlags
+        
         if(FeatureOption.Collection.enableMain) {
             
             /// Enable add to collection button

@@ -247,6 +247,7 @@
                 <outlet property="houseTitleForCollection" destination="UBI-K0-9Hv" id="zys-6f-KW6"/>
                 <outlet property="houseTypeAndUsage" destination="Sa0-Cs-laH" id="MmL-ba-y1k"/>
                 <outlet property="offShelfImg" destination="GZo-gi-Sgh" id="tKS-Gf-Uli"/>
+                <outlet property="offShelfLabel" destination="K4B-5b-Rku" id="SGu-9Z-1PZ"/>
                 <outlet property="offShelfView" destination="9Vu-St-5FI" id="keR-YP-niF"/>
                 <outlet property="prefixedButton" destination="hPJ-o1-WHC" id="27q-w4-Bud"/>
             </connections>
