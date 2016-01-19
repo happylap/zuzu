@@ -159,6 +159,8 @@ class HouseDetailViewController: UIViewController {
                     return
                 }
                 
+                
+                
                 if let result = result {
                     
                     ///Try to cache the house detail response
