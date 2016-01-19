@@ -1006,14 +1006,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RRW-7J-eUD" userLabel="Header View">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="存在重複物件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVl-n4-yhH" userLabel="Title">
-                                        <rect key="frame" x="147" y="40" width="120" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="存在重複物件" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVl-n4-yhH" userLabel="Title">
+                                        <rect key="frame" x="57" y="40" width="300" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pa4-3H-Bgo" userLabel="Close Button">
-                                        <rect key="frame" x="373" y="39" width="25" height="25"/>
+                                        <rect key="frame" x="16" y="39" width="25" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="9FM-zr-DIs"/>
                                             <constraint firstAttribute="width" secondItem="pa4-3H-Bgo" secondAttribute="height" multiplier="1:1" id="GhC-nN-T4V"/>
@@ -1023,8 +1023,8 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.10980392156862745" green="0.83137254901960778" blue="0.77647058823529413" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="pa4-3H-Bgo" secondAttribute="trailing" constant="16" id="0R0-2B-y8s"/>
-                                    <constraint firstItem="pa4-3H-Bgo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KVl-n4-yhH" secondAttribute="trailing" constant="16" id="ATW-vZ-wou"/>
+                                    <constraint firstItem="pa4-3H-Bgo" firstAttribute="leading" secondItem="RRW-7J-eUD" secondAttribute="leading" constant="16" id="0R0-2B-y8s"/>
+                                    <constraint firstItem="KVl-n4-yhH" firstAttribute="leading" relation="lessThanOrEqual" secondItem="pa4-3H-Bgo" secondAttribute="trailing" constant="16" id="ATW-vZ-wou"/>
                                     <constraint firstItem="KVl-n4-yhH" firstAttribute="centerX" secondItem="RRW-7J-eUD" secondAttribute="centerX" id="AxF-0F-83G"/>
                                     <constraint firstItem="KVl-n4-yhH" firstAttribute="leading" secondItem="RRW-7J-eUD" secondAttribute="leading" constant="16" id="QAo-fn-fHE"/>
                                     <constraint firstItem="pa4-3H-Bgo" firstAttribute="centerY" secondItem="KVl-n4-yhH" secondAttribute="centerY" id="e1d-1C-JJf"/>
@@ -1044,14 +1044,14 @@
                                 <color key="textColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬為您過濾出一些重複物件。您可以往下查看重複物件列表，或是繼續觀看您所點選的租屋物件。" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-Ae-t2J" userLabel="SubTitle2">
-                                <rect key="frame" x="36" y="136.5" width="342" height="36"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬已經為您過濾了數筆重複的資料！您可以往下查看豬豬過濾掉的重複物件，或直接繼續觀看您所點選的租屋物件。" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-Ae-t2J" userLabel="SubTitle2">
+                                <rect key="frame" x="36" y="136.5" width="342" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54X-ed-zjk">
-                                <rect key="frame" x="167" y="188.5" width="80" height="34"/>
+                                <rect key="frame" x="167" y="206.5" width="80" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="oJk-pp-Hmy"/>
                                 </constraints>
@@ -1060,13 +1060,13 @@
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nLi-jA-WKn" userLabel="Main House View">
-                                <rect key="frame" x="0.0" y="237.5" width="414" height="0.5"/>
+                                <rect key="frame" x="0.0" y="255.5" width="414" height="0.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="nLi-jA-WKn" secondAttribute="height" multiplier="1440:1" id="jlH-iG-pFT"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gMy-UU-W7e" userLabel="Table Header View">
-                                <rect key="frame" x="0.0" y="246" width="414" height="48.5"/>
+                                <rect key="frame" x="0.0" y="264" width="414" height="48.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重複物件列表" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3MW-9S-7R3">
                                         <rect key="frame" x="8" y="24.5" width="78" height="16"/>
@@ -1078,7 +1078,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="gMy-UU-W7e" secondAttribute="height" multiplier="375:44" id="GG8-zQ-BM5"/>
                                     <constraint firstAttribute="bottom" secondItem="3MW-9S-7R3" secondAttribute="bottom" constant="8" id="Wh0-Rv-zeO"/>
@@ -1086,7 +1086,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xyU-Rn-u5G" userLabel="Duplicate Table View">
-                                <rect key="frame" x="0.0" y="294.5" width="414" height="433.5"/>
+                                <rect key="frame" x="0.0" y="312.5" width="414" height="415.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
@@ -1123,12 +1123,12 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="RI0-Ub-03f"/>
                                 <exclude reference="BzO-if-fBG"/>
                                 <exclude reference="hNS-0v-SB3"/>
                                 <exclude reference="kEY-Q5-APO"/>
                                 <exclude reference="y08-HD-7J4"/>
                                 <exclude reference="2rN-K8-PrQ"/>
-                                <exclude reference="RI0-Ub-03f"/>
                             </mask>
                         </variation>
                     </view>
