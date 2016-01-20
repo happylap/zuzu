@@ -831,6 +831,9 @@ class SearchResultViewController: UIViewController {
                         
                         targetHouseItem = duplicateHouseItem
                         
+                        /// Clear the duplicate house item after displaying it
+                        self.duplicateHouseItem = nil
+                        
                     } else if let row = tableView.indexPathForSelectedRow?.row {
                         
                         targetHouseItem = dataSource.getItemForRow(row)
