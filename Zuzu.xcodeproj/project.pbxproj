@@ -447,23 +447,12 @@
 			path = Zuzu;
 			sourceTree = "<group>";
 		};
-		2F5854CD1BB3A9B5007FF85B /* CustomControl */ = {
-			isa = PBXGroup;
-			children = (
-				2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */,
-				2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */,
-				2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */,
-			);
-			name = CustomControl;
-			sourceTree = "<group>";
-		};
 		2F5854D01BB3CBA9007FF85B /* Util */ = {
 			isa = PBXGroup;
 			children = (
 				2FB16C511C48BDCF009738AC /* InAppPurchase */,
 				81390C7B1C36AADE00450761 /* DeveloperAuthenticated */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
-				2F5854CD1BB3A9B5007FF85B /* CustomControl */,
 				2FBC05551BDE701F0035652D /* Refresh */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */,
@@ -589,6 +578,9 @@
 		2FBC05541BDE6F600035652D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */,
+				2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */,
+				2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */,
 				2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */,
 				2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */,
 			);
