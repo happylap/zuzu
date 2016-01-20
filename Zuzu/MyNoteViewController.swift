@@ -14,6 +14,10 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     
     let cellReuseIdentifier = "NoteCell"
     
+    struct TableConst {
+        static let sectionNum:Int = 1
+    }
+    
     var collectionHouseItem: CollectionHouseItem?
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -127,7 +131,7 @@ extension MyNoteViewController {
     
     // MARK: - Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Const.SECTION_NUM
+        return TableConst.sectionNum
         //return fetchedResultsController.sections!.count
     }
 
