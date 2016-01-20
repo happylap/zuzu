@@ -284,8 +284,29 @@ class SearchResultTableViewCell: UITableViewCell {
         
     }
     
+    private func continueCollectionCallback() {
+        if let houseItem = self.houseItem {
+            
+            if (self.isCollected){
+                Log.debug("Delete continueCollectionCallback: \(houseItem.id)")
+                self.collectionButtonTouchEventCallback?(event: CollectionEvent.DELETE, houseItem: houseItem)
+                
+            } else {
+                Log.debug("Add continueCollectionCallback: \(houseItem.id)")
+                self.collectionButtonTouchEventCallback?(event: CollectionEvent.ADD, houseItem: houseItem)
+            }
+            
+            self.parentTableView.reloadRowsAtIndexPaths([self.indexPath], withRowAnimation: UITableViewRowAnimation.None)
+            
+        } else {
+            assert(false, "The house item for the cell should not be nil")
+        }
+    }
+    
     // MARK: - Public APIs
     func enableCollection(isCollected: Bool, eventCallback: CollectionEventCallback) {
+        
+        Log.debug("enableCollection")
         
         self.collectionButtonTouchEventCallback = eventCallback
         
@@ -309,6 +330,8 @@ class SearchResultTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        Log.debug("prepareForReuse")
+        
         self.selectionStyle = UITableViewCellSelectionStyle.None
         
         // Reset any existing information
@@ -330,13 +353,15 @@ class SearchResultTableViewCell: UITableViewCell {
         contactedView.hidden = true
         offShelfView.hidden = true
         
+        self.isCollected = false
+        
         Log.debug("\n- Cell Instance [\(self)] Reset Data For Current Row[\(indexPath.row)]")
         
     }
     
     // MARK: - Action Handlers
     func onContactTouched(sender: UITapGestureRecognizer) {
-        Log.debug("\(self) onCalledTouched")
+        Log.debug("\(self) onContactTouched")
         
         if let item: CollectionHouseItem = houseItemForCollection {
             let collectionService = CollectionItemService.sharedInstance
@@ -345,24 +370,6 @@ class SearchResultTableViewCell: UITableViewCell {
             } else {
                 collectionService.updateContacted(item.id, contacted: true)
             }
-        }
-    }
-    
-    private func continueCollectionCallback() {
-        if let houseItem = self.houseItem {
-            if (self.isCollected){
-                
-                self.collectionButtonTouchEventCallback?(event: CollectionEvent.DELETE, houseItem: houseItem)
-                
-            } else {
-                
-                self.collectionButtonTouchEventCallback?(event: CollectionEvent.ADD, houseItem: houseItem)
-            }
-            
-            self.parentTableView.reloadRowsAtIndexPaths([self.indexPath], withRowAnimation: UITableViewRowAnimation.None)
-            
-        } else {
-            assert(false, "The house item for the cell should not be nil")
         }
     }
     
