@@ -6,15 +6,17 @@
 //
 
 import UIKit
+import SCLAlertView
 
 protocol DuplicateHouseViewControllerDelegate: class {
     func onDismiss()
     func onContinue()
+    func onViewDuplicate(houseItme: HouseItem)
 }
 
 class DuplicateHouseViewController: UIViewController {
     
-    let enableAutoForward = false
+    private let enableAutoForward = false
     
     struct TableConst {
         static let sectionNum:Int = 1
@@ -26,6 +28,12 @@ class DuplicateHouseViewController: UIViewController {
     }
     
     private let countDownInterval = 1.0
+    
+    private var duplicateHouses:[HouseItem]?
+    
+    private var currentTimer:NSTimer?
+    
+    private var countDown = 10
     
     @IBOutlet weak var firstSubtitleLabel: UILabel! {
         didSet {
@@ -74,11 +82,133 @@ class DuplicateHouseViewController: UIViewController {
     
     internal var duplicateList:[String]?
     
-    private var duplicateHouses:[HouseItem]?
+    internal var collectionIdList:[String]?
     
-    private var currentTimer:NSTimer?
+    private func configureTableView() {
+        
+        duplicateTableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
+        
+        duplicateTableView.rowHeight = UITableViewAutomaticDimension
+        
+        //Configure table DataSource & Delegate
+        duplicateTableView.dataSource = self
+        duplicateTableView.delegate = self
+        duplicateTableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+    }
     
-    private var countDown = 10
+    private func fetchDuplicateHouses(houseIdList:[String]) {
+        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+        
+        HouseDataRequester.getInstance().searchByIds(houseIdList) { (totalNum, result, error) -> Void in
+            self.duplicateHouses = result
+            self.duplicateTableView.reloadData()
+            
+            LoadingSpinner.shared.stop()
+        }
+    }
+    
+    // MARK: - Private Utils
+    
+    private func alertMaxCollection() {
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
+        
+        alertView.showInfo("我的收藏滿了", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
+    }
+    
+    private func tryAlertAddingToCollectionSuccess() {
+        
+        if(!UserDefaultsUtils.needsMyCollectionPrompt()) {
+            return
+        }
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "成功加入一筆租屋到\"我的收藏\"\n現在去看看收藏項目嗎？"
+        
+        alertView.addButton("馬上去看看") {
+            UserDefaultsUtils.disableMyCollectionPrompt()
+            
+            let parentViewController = self.navigationController?.popViewControllerAnimated(true)
+            parentViewController?.tabBarController?.selectedIndex = 1
+        }
+        
+        alertView.addButton("不需要") {
+            UserDefaultsUtils.disableMyCollectionPrompt()
+        }
+        
+        alertView.showCloseButton = false
+        
+        alertView.showTitle("新增到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+    }
+    
+    private func handleAddToCollection(houseItem: HouseItem) {
+        
+        /// Check if maximum collection is reached
+        if (!CollectionItemService.sharedInstance.canAdd()) {
+            self.alertMaxCollection()
+            return
+        }
+        
+        // Append the houseId immediately to make the UI more responsive
+        // TBD: Need to discuss whether we need to retrive the data from remote again
+        
+        /// Update cached data
+        self.collectionIdList?.append(houseItem.id)
+        
+        /// Prompt the user if needed
+        self.tryAlertAddingToCollectionSuccess()
+        
+        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+            
+            if let error = error {
+                NSLog("Cannot get remote data %@", error.localizedDescription)
+                return
+            }
+            
+            if let result = result {
+                
+                /// Add data to CoreData
+                let collectionService = CollectionItemService.sharedInstance
+                collectionService.addItem(result)
+                
+                /// Reload collection list
+                self.collectionIdList = collectionService.getIds()
+                
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.AddItemPrice,
+                    label: String(houseItem.price))
+                
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.AddItemSize,
+                    label: String(houseItem.size))
+                
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.AddItemType,
+                    label: String(houseItem.purposeType))
+            }
+        }
+    }
+    
+    private func handleDeleteFromCollection(houseItem: HouseItem) {
+        
+        /// Update Collection data in CoreData
+        CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
+        
+        /// Reload cached data
+        self.collectionIdList = CollectionItemService.sharedInstance.getIds()
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+            action: GAConst.Action.MyCollection.Delete)
+    }
     
     func onContinueButtonTouched(sender: UIButton) {
         
@@ -113,31 +243,7 @@ class DuplicateHouseViewController: UIViewController {
         
     }
     
-    private func configureTableView() {
-        
-        duplicateTableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
-        
-        duplicateTableView.rowHeight = UITableViewAutomaticDimension
-        
-        //Configure table DataSource & Delegate
-        duplicateTableView.dataSource = self
-        duplicateTableView.delegate = self
-        duplicateTableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
-    }
-    
-    private func fetchDuplicateHouses(houseIdList:[String]) {
-        
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.view)
-        
-        HouseDataRequester.getInstance().searchByIds(houseIdList) { (totalNum, result, error) -> Void in
-            self.duplicateHouses = result
-            self.duplicateTableView.reloadData()
-            
-            LoadingSpinner.shared.stop()
-        }
-    }
+    // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,6 +253,9 @@ class DuplicateHouseViewController: UIViewController {
         if let duplicateIdList = self.duplicateList {
             fetchDuplicateHouses(duplicateIdList)
         }
+        
+        /// Load list my collections
+        collectionIdList = CollectionItemService.sharedInstance.getIds()
         
         /// Setup Timer for auto forwarding
         
@@ -158,41 +267,6 @@ class DuplicateHouseViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        //        if let identifier = segue.identifier{
-        //
-        //            NSLog("prepareForSegue: %@", identifier)
-        //
-        //            switch identifier{
-        //            case ViewTransConst.displayHouseDetail:
-        //                if let hdvc = segue.destinationViewController as? HouseDetailViewController {
-        //
-        //                    if let houseItem = self.houseItem {
-        //                        hdvc.houseItem = houseItem
-        //                        //hdvc.delegate = self
-        //
-        //                        ///GA Tracker
-        //                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-        //                            action: GAConst.Action.Activity.ViewItemPrice,
-        //                            label: String(houseItem.price))
-        //
-        //                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-        //                            action: GAConst.Action.Activity.ViewItemSize,
-        //                            label: String(houseItem.size))
-        //
-        //                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-        //                            action: GAConst.Action.Activity.ViewItemType,
-        //                            label: String(houseItem.purposeType))
-        //                    }
-        //                }
-        //            default: break
-        //            }
-        //        }
     }
 }
 
@@ -232,6 +306,26 @@ extension DuplicateHouseViewController: UITableViewDataSource, UITableViewDelega
             
             cell.houseItem = houseItem
             
+            
+            if(FeatureOption.Collection.enableMain) {
+                
+                var isCollected = false
+                
+                /// Check if an item is already collected by the user
+                if let collectionIdList = self.collectionIdList {
+                    isCollected = collectionIdList.contains(houseItem.id)
+                }
+                
+                cell.enableCollection(isCollected, eventCallback: { (event, houseItem) -> Void in
+                    switch(event) {
+                    case .ADD:
+                        self.handleAddToCollection(houseItem)
+                    case .DELETE:
+                        self.handleDeleteFromCollection(houseItem)
+                    }
+                })
+            }
+            
         } else {
             
             assert(false, "This should not happen when there is no duplicate houses")
@@ -244,17 +338,15 @@ extension DuplicateHouseViewController: UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        //        let houseItem = dataSource.getItemForRow(indexPath.row)
-        //
-        //        print("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
-        //
-        //        if let duplicates = houseItem.children {
-        //            self.runOnMainThreadAfter(0.1, block: { () -> Void in
-        //                self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
-        //            })
-        //        } else {
-        //            self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
-        //        }
+        if let duplicateHouses = self.duplicateHouses {
+            
+            let houseItem = duplicateHouses[indexPath.row]
+            
+            self.delegate?.onViewDuplicate(houseItem)
+            
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
+        }
     }
     
 }

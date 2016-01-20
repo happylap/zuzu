@@ -75,6 +75,8 @@ class SearchResultViewController: UIViewController {
     private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
     private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
     
+    private var duplicateHouseItem: HouseItem?
+    
     var searchCriteria: SearchCriteria?
     
     var collectionIdList:[String]?
@@ -148,7 +150,17 @@ class SearchResultViewController: UIViewController {
         alertView.showInfo("常用搜尋儲存空間已滿", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
-    private func alertAddingToCollectionSuccess() {
+    private func alertMaxCollection() {
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
+        
+        alertView.showInfo("我的收藏滿了", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
+    }
+    
+    private func tryAlertAddingToCollectionSuccess() {
         
         if(!UserDefaultsUtils.needsMyCollectionPrompt()) {
             return
@@ -445,6 +457,68 @@ class SearchResultViewController: UIViewController {
         self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
     }
     
+    private func handleAddToCollection(houseItem: HouseItem) {
+        
+        /// Check if maximum collection is reached
+        if (!CollectionItemService.sharedInstance.canAdd()) {
+            self.alertMaxCollection()
+            return
+        }
+        
+        // Append the houseId immediately to make the UI more responsive
+        // TBD: Need to discuss whether we need to retrive the data from remote again
+        
+        /// Update cached data
+        self.collectionIdList?.append(houseItem.id)
+        
+        /// Prompt the user if needed
+        self.tryAlertAddingToCollectionSuccess()
+        
+        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+            
+            if let error = error {
+                NSLog("Cannot get remote data %@", error.localizedDescription)
+                return
+            }
+            
+            if let result = result {
+                
+                /// Add data to CoreData
+                let collectionService = CollectionItemService.sharedInstance
+                collectionService.addItem(result)
+                
+                /// Reload collection list
+                self.collectionIdList = collectionService.getIds()
+                
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.AddItemPrice,
+                    label: String(houseItem.price))
+                
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.AddItemSize,
+                    label: String(houseItem.size))
+                
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.AddItemType,
+                    label: String(houseItem.purposeType))
+            }
+        }
+    }
+    
+    private func handleDeleteFromCollection(houseItem: HouseItem) {
+        
+        /// Update Collection data in CoreData
+        CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
+        
+        /// Reload cached data
+        self.collectionIdList = CollectionItemService.sharedInstance.getIds()
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+            action: GAConst.Action.MyCollection.Delete)
+    }
+    
     // MARK: - Control Action Handlers
     @IBAction func onSaveSearchButtonClicked(sender: UIBarButtonItem) {
         
@@ -606,7 +680,7 @@ class SearchResultViewController: UIViewController {
                     // TBD: Need to discuss whether we need to retrive the data from remote again
                     self.collectionIdList?.append(houseItem.id)
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                    self.alertAddingToCollectionSuccess()
+                    self.tryAlertAddingToCollectionSuccess()
                     
                     HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                         
@@ -750,25 +824,35 @@ class SearchResultViewController: UIViewController {
             case ViewTransConst.displayHouseDetail:
                 
                 if let hdvc = segue.destinationViewController as? HouseDetailViewController {
-                    if let row = tableView.indexPathForSelectedRow?.row {
+                    
+                    var targetHouseItem: HouseItem?
+                    
+                    if let duplicateHouseItem = self.duplicateHouseItem {
                         
-                        let houseItem = dataSource.getItemForRow(row)
+                        targetHouseItem = duplicateHouseItem
                         
-                        hdvc.houseItem = houseItem
-                        hdvc.delegate = self
+                    } else if let row = tableView.indexPathForSelectedRow?.row {
                         
+                        targetHouseItem = dataSource.getItemForRow(row)
+                        
+                    }
+                    
+                    hdvc.houseItem = targetHouseItem
+                    hdvc.delegate = self
+                    
+                    if let targetHouseItem = targetHouseItem {
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                             action: GAConst.Action.Activity.ViewItemPrice,
-                            label: String(houseItem.price))
+                            label: String(targetHouseItem.price))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                             action: GAConst.Action.Activity.ViewItemSize,
-                            label: String(houseItem.size))
+                            label: String(targetHouseItem.size))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
                             action: GAConst.Action.Activity.ViewItemType,
-                            label: String(houseItem.purposeType))
+                            label: String(targetHouseItem.purposeType))
                     }
                 }
                 
@@ -829,17 +913,21 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         if(FeatureOption.Collection.enableMain) {
             
-            /// Enable add to collection button
-            cell.addToCollectionButton.hidden = false
-            cell.addToCollectionButton.userInteractionEnabled = true
-            cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
+            var isCollected = false
             
-            /// Init icon type
+            /// Check if an item is already collected by the user
             if let collectionIdList = self.collectionIdList {
-                if(collectionIdList.contains(houseItem.id)) {
-                    cell.addToCollectionButton.image = UIImage(named: "heart_pink")
-                }
+                isCollected = collectionIdList.contains(houseItem.id)
             }
+            
+            cell.enableCollection(isCollected, eventCallback: { (event, houseItem) -> Void in
+                switch(event) {
+                case .ADD:
+                    self.handleAddToCollection(houseItem)
+                case .DELETE:
+                    self.handleDeleteFromCollection(houseItem)
+                }
+            })
         }
         
         return cell
@@ -1027,6 +1115,12 @@ extension SearchResultViewController: DuplicateHouseViewControllerDelegate {
     
     internal func onContinue() {
         
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+    }
+    
+    internal func onViewDuplicate(houseItem: HouseItem) {
+        
+        self.duplicateHouseItem = houseItem
         self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
     }
 }

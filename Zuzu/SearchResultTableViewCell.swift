@@ -15,6 +15,32 @@ private let Log = Logger.defaultLogger
 
 class SearchResultTableViewCell: UITableViewCell {
     
+    private let placeholderImg = UIImage(named: "house_img")
+    
+    private let collectedImg = UIImage(named: "heart_pink")
+    
+    private var isCollected = false
+    
+    private var collectionButtonTouchEventCallback: CollectionEventCallback? = nil
+    
+    enum CollectionEvent: Int {
+        case ADD = 1
+        case DELETE = 2
+    }
+    
+    typealias CollectionEventCallback = (event: CollectionEvent, houseItem: HouseItem)-> Void
+    
+    enum HouseFlag: Int {
+        case OFF_SHELF = 1  // 已下架
+        case PRICE_CUT = 2  // 已降價
+        case PET       = 3  // 可養寵物
+        case MANY_IMG  = 4  // 多張圖
+    }
+    
+    let titleBackground = CAGradientLayer()
+    
+    let infoBackground = CALayer()
+    
     @IBOutlet weak var houseImg: UIImageView!
     @IBOutlet weak var houseTitle: UILabel!
     @IBOutlet weak var houseTitleForCollection: UILabel!
@@ -30,9 +56,6 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var offShelfImg: UIImageView!
     @IBOutlet weak var offShelfLabel: UILabel!
     
-    
-    let placeholderImg = UIImage(named: "house_img")
-    
     weak var parentTableView: UITableView!
     
     var indexPath: NSIndexPath!
@@ -41,13 +64,6 @@ class SearchResultTableViewCell: UITableViewCell {
         didSet {
             updateUI()
         }
-    }
-    
-    enum HouseFlag: Int {
-        case OFF_SHELF = 1  // 已下架
-        case PRICE_CUT = 2  // 已降價
-        case PET       = 3  // 可養寵物
-        case MANY_IMG  = 4  // 多張圖
     }
     
     var houseFlags: [HouseFlag]? {
@@ -62,9 +78,7 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    //let textLayer = CATextLayer()
-    let titleBackground = CAGradientLayer()
-    let infoBackground = CALayer()
+    // MARK: - Private Utils
     
     private func getTypeString(type: Int) -> String? {
         
@@ -90,7 +104,7 @@ class SearchResultTableViewCell: UITableViewCell {
             return nil
         }
     }
-   
+    
     private func prpcessSourceString(label:UILabel, source:Int) {
         switch source {
         case 1:
@@ -136,36 +150,7 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        self.selectionStyle = UITableViewCellSelectionStyle.None
-        
-        // Reset any existing information
-        houseTitle.text = nil
-        houseAddr.text = nil
-        houseTypeAndUsage.text = nil
-        houseSize.text = nil
-        housePrice.text = nil
-        addToCollectionButton.image = UIImage(named: "heart_n")
-        prefixedButton.image = UIImage(named: "uncheck")
-        
-        // Cancel image loading operation
-        houseImg.af_cancelImageRequest()
-        houseImg.layer.removeAllAnimations()
-        houseImg.image = nil
-        
-        houseTitle.hidden = true
-        houseTitleForCollection.hidden = true
-        contactedView.hidden = true
-        offShelfView.hidden = true
-        
-        Log.debug("\n- Cell Instance [\(self)] Reset Data For Current Row[\(indexPath.row)]")
-        
-    }
-    
-    
-    func updateUI() {
+    private func updateUI() {
         
         // load new information (if any)
         if let houseItem = self.houseItem {
@@ -186,11 +171,11 @@ class SearchResultTableViewCell: UITableViewCell {
             }
             
             prpcessSourceString(houseSourceLabel, source: houseItem.source)
-
+            
             /// Round the size to the second place
             let multiplier:Float = pow(10.0, 2)
             houseSize.text = "\(round(houseItem.size * multiplier)/multiplier) 坪"
- 
+            
             housePrice.text = String(houseItem.price)
             houseImg.image = placeholderImg
             
@@ -211,7 +196,7 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    func updateUIForCollection() {
+    private func updateUIForCollection() {
         
         // load new information (if any)
         if let collectionHouseItem = self.houseItemForCollection {
@@ -259,20 +244,7 @@ class SearchResultTableViewCell: UITableViewCell {
         }
     }
     
-    func onContactTouched(sender: UITapGestureRecognizer) {
-        Log.debug("\(self) onCalledTouched")
-        
-        if let item: CollectionHouseItem = houseItemForCollection {
-            let collectionService = CollectionItemService.sharedInstance
-            if collectionService.isContacted(item.id) {
-                collectionService.updateContacted(item.id, contacted: false)
-            } else {
-                collectionService.updateContacted(item.id, contacted: true)
-            }
-        }
-    }
-    
-    func tagHouseFlag() {
+    private func tagHouseFlag() {
         
         if let flags = self.houseFlags{
             if flags.count > 0 {
@@ -283,7 +255,7 @@ class SearchResultTableViewCell: UITableViewCell {
                         majorFlag = flag
                     }
                 }
-            
+                
                 if let origImage = self.offShelfImg?.image {
                     self.offShelfImg.image = origImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
                     
@@ -302,7 +274,7 @@ class SearchResultTableViewCell: UITableViewCell {
                         self.offShelfLabel.text = "多張圖"
                     }
                 }
-            
+                
                 self.offShelfView.hidden = false
                 return
             }
@@ -310,5 +282,109 @@ class SearchResultTableViewCell: UITableViewCell {
         
         self.offShelfView.hidden = true
         
+    }
+    
+    // MARK: - Public APIs
+    func enableCollection(isCollected: Bool, eventCallback: CollectionEventCallback) {
+        
+        self.collectionButtonTouchEventCallback = eventCallback
+        
+        /// Enable add to collection button
+        self.addToCollectionButton.hidden = false
+        self.addToCollectionButton.userInteractionEnabled = true
+        
+        /// Add default touch event handler
+        self.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
+        
+        /// Set to collected state
+        self.isCollected = isCollected
+        
+        if(isCollected) {
+            self.addToCollectionButton.image = collectedImg
+        }
+    }
+    
+    // MARK: - Inherited Methods
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        // Reset any existing information
+        houseTitle.text = nil
+        houseAddr.text = nil
+        houseTypeAndUsage.text = nil
+        houseSize.text = nil
+        housePrice.text = nil
+        addToCollectionButton.image = UIImage(named: "heart_n")
+        prefixedButton.image = UIImage(named: "uncheck")
+        
+        // Cancel image loading operation
+        houseImg.af_cancelImageRequest()
+        houseImg.layer.removeAllAnimations()
+        houseImg.image = nil
+        
+        houseTitle.hidden = true
+        houseTitleForCollection.hidden = true
+        contactedView.hidden = true
+        offShelfView.hidden = true
+        
+        Log.debug("\n- Cell Instance [\(self)] Reset Data For Current Row[\(indexPath.row)]")
+        
+    }
+    
+    // MARK: - Action Handlers
+    func onContactTouched(sender: UITapGestureRecognizer) {
+        Log.debug("\(self) onCalledTouched")
+        
+        if let item: CollectionHouseItem = houseItemForCollection {
+            let collectionService = CollectionItemService.sharedInstance
+            if collectionService.isContacted(item.id) {
+                collectionService.updateContacted(item.id, contacted: false)
+            } else {
+                collectionService.updateContacted(item.id, contacted: true)
+            }
+        }
+    }
+    
+    private func continueCollectionCallback() {
+        if let houseItem = self.houseItem {
+            if (self.isCollected){
+                
+                self.collectionButtonTouchEventCallback?(event: CollectionEvent.DELETE, houseItem: houseItem)
+                
+            } else {
+                
+                self.collectionButtonTouchEventCallback?(event: CollectionEvent.ADD, houseItem: houseItem)
+            }
+            
+            self.parentTableView.reloadRowsAtIndexPaths([self.indexPath], withRowAnimation: UITableViewRowAnimation.None)
+            
+        } else {
+            assert(false, "The house item for the cell should not be nil")
+        }
+    }
+    
+    func onAddToCollectionTouched(sender: UITapGestureRecognizer) {
+        
+        if(self.window?.rootViewController == nil) {
+            return
+        }
+        
+        let viewController:UIViewController! = self.window?.rootViewController
+        
+        if (!AmazonClientManager.sharedInstance.isLoggedIn()) {
+            AmazonClientManager.sharedInstance.loginFromView(viewController) {
+                (task: AWSTask!) -> AnyObject! in
+                
+                self.continueCollectionCallback()
+                
+                return nil
+            }
+            
+        }
+        
+        self.continueCollectionCallback()
     }
 }
