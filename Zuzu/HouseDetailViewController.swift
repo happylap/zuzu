@@ -66,6 +66,10 @@ class HouseDetailViewController: UIViewController {
         }
     }
     
+    struct TableConst {
+        static let sectionNum:Int = 1
+    }
+    
     struct ViewTransConst {
         static let displayHouseOnMap:String = "displayHouseOnMap"
         static let displayHouseSource:String = "displayHouseSource"
@@ -82,11 +86,7 @@ class HouseDetailViewController: UIViewController {
     
     ///The full house detail in AnyObject
     var houseItemDetail: AnyObject?
-    
-    struct Const {
-        static let SECTION_NUM:Int = 1
-    }
-    
+
     enum CellIdentifier: String {
         case HouseDetailTitleCell = "houseDetailTitleCell"
         case PriceSizeCell = "priceSizeCell"
@@ -1214,7 +1214,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     // MARK: - Table View Data Source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Const.SECTION_NUM
+        return TableConst.sectionNum
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

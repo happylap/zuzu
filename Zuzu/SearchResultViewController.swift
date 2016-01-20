@@ -9,13 +9,13 @@
 import UIKit
 import SCLAlertView
 
-struct Const {
-    static let SECTION_NUM:Int = 1
-}
-
 class SearchResultViewController: UIViewController {
     
     let cellIdentifier = "houseItemCell"
+    
+    struct TableConst {
+        static let sectionNum:Int = 1
+    }
     
     struct ViewTransConst {
         static let showDebugInfo:String = "showDebugInfo"
@@ -795,7 +795,7 @@ class SearchResultViewController: UIViewController {
 extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Const.SECTION_NUM
+        return TableConst.sectionNum
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -30,6 +30,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     let cellReuseIdentifier = "houseItemCell"
     
+    struct TableConst {
+        static let sectionNum:Int = 1
+    }
+    
     var fetchedResultsController: NSFetchedResultsController!
     
     private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
@@ -407,7 +411,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     // MARK: - Table View Data Source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Const.SECTION_NUM
+        return TableConst.sectionNum
         //return fetchedResultsController.sections!.count
     }
     
