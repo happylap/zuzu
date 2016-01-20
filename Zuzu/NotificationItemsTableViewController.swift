@@ -8,10 +8,6 @@
 
 import UIKit
 
-struct NotificationItemsTableConst {
-    static let SECTION_NUM:Int = 1
-}
-
 class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate {
 
     var notificationService: NotificationItemService!
@@ -23,6 +19,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         static let CellReuseIdentifier = "NotificationItemCell"
     }
 
+    struct TableConst {
+        static let sectionNum:Int = 1
+    }
+    
     func getResultsController() -> TableResultsController{
         let entityName = self.notificationService.entityName
         let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("notificationTime", ascending: false).build()
@@ -95,7 +95,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return NotificationItemsTableConst.SECTION_NUM
+        return TableConst.sectionNum
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
