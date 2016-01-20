@@ -36,7 +36,7 @@ class DuplicateHouseViewController: UIViewController {
                 duplicateCount = duplicateList.count
             }
             
-            firstSubtitleLabel.text = String(format: "您點選的物件存在 %d 筆重複的物件", duplicateCount)
+            firstSubtitleLabel.text = String(format: "豬豬為您過濾了 %d 筆重複的物件", duplicateCount)
         }
     }
     
