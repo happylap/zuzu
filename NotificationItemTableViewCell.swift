@@ -47,8 +47,8 @@ class NotificationItemTableViewCell: UITableViewCell
         let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
         
         if let item = self.notificationItem{
-            let housetypeString = houseTypeLabelMaker.fromCodeForField(SolrConst.Filed.HOUSE_TYPE, code: Int(item.houseType), defaultValue: "")
-            let purpose = houseTypeLabelMaker.fromCodeForField(SolrConst.Filed.PURPOSE_TYPE, code: Int(item.purposeType), defaultValue: "")
+            let housetypeString = houseTypeLabelMaker.fromCodeForField(SolrConst.Field.HOUSE_TYPE, code: Int(item.houseType), defaultValue: "")
+            let purpose = houseTypeLabelMaker.fromCodeForField(SolrConst.Field.PURPOSE_TYPE, code: Int(item.purposeType), defaultValue: "")
 
             houseTitleLabel?.text = item.title
             addressLabel?.text = item.addr

@@ -19,6 +19,8 @@ class CollectionItemService: NSObject
     
     let datasetName = "MyCollection"
     
+    let fieldList = [SolrConst.Field.ID, SolrConst.Field.ADDR, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE]
+    
     var parentViewController: UIViewController?
     
     var entityName: String{
@@ -431,7 +433,7 @@ class CollectionItemService: NSObject
         }
         
         if let collectionIds: [String] = self.getIds() {
-            HouseDataRequester.getInstance().searchByIds(collectionIds) { (totalNum, result, error) -> Void in
+            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, error) -> Void in
                 
                 if let remoteHouseItems = result {
                     var remoteHouseIds = [String]()
@@ -522,7 +524,7 @@ class CollectionItemService: NSObject
         }
         
         if let collectionIds: [String] = self.getIds() {
-            HouseDataRequester.getInstance().searchByIds(collectionIds) { (totalNum, result, error) -> Void in
+            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, error) -> Void in
                 if let remoteHouseItems = result {
                     var priceCutIds = [String]()
                     

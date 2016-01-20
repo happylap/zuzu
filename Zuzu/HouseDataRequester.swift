@@ -37,7 +37,7 @@ struct SolrConst {
         static let AND = "AND"
     }
     
-    struct Filed {
+    struct Field {
         static let ID = "id"
         static let TITLE = "title"
         static let ADDR = "addr"
@@ -236,7 +236,7 @@ class HouseItem:NSObject, NSCoding {
 
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
-    private static let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.TITLE, SolrConst.Filed.ADDR, SolrConst.Filed.HOUSE_TYPE, SolrConst.Filed.PURPOSE_TYPE, SolrConst.Filed.PREVIOUS_PRICE, SolrConst.Filed.PRICE, SolrConst.Filed.SIZE,SolrConst.Filed.SOURCE, SolrConst.Filed.IMG_LIST, SolrConst.Filed.CHILDREN]
+    private static let defaultFieldList = [SolrConst.Field.ID, SolrConst.Field.TITLE, SolrConst.Field.ADDR, SolrConst.Field.HOUSE_TYPE, SolrConst.Field.PURPOSE_TYPE, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE, SolrConst.Field.SIZE,SolrConst.Field.SOURCE, SolrConst.Field.IMG_LIST, SolrConst.Field.CHILDREN]
     
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequester()
@@ -261,7 +261,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         
         var queryitems:[NSURLQueryItem] = []
         
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: "\(SolrConst.Filed.ID):\(houseId)"))
+        queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value: "\(SolrConst.Field.ID):\(houseId)"))
         
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.INDENT, value: "true"))
@@ -270,7 +270,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         performSearch(urlComp, handler: handler)
     }
     
-    func searchByIds(houseIds: [String], handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
+    func searchByIds(houseIds: [String], fieldList: [String] = defaultFieldList, handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
         
         var queryitems:[NSURLQueryItem] = []
         
@@ -286,7 +286,6 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value:mainQuery.joinWithSeparator(" \(SolrConst.Operator.OR) ")))
         
         // Field List
-        let fieldList = [SolrConst.Filed.ID, SolrConst.Filed.PREVIOUS_PRICE, SolrConst.Filed.PRICE]
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: fieldList.joinWithSeparator(",")))
         
         queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
@@ -299,7 +298,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         performSearch(urlComp, handler: handler)
     }
     
-    func searchByCriteria(criteria: SearchCriteria, start: Int, row: Int, allowDuplicate: Bool = false,
+    func searchByCriteria(criteria: SearchCriteria, fieldList: [String] = defaultFieldList, start: Int, row: Int, allowDuplicate: Bool = false,
         handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
             
             let keyword: String? = criteria.keyword
@@ -342,7 +341,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                         return "\(city.code)"
                     }).joinWithSeparator(" \(SolrConst.Operator.OR) ")
                     
-                    areaConditionStr.append("\(SolrConst.Filed.CITY):(\(allCitiesStr))")
+                    areaConditionStr.append("\(SolrConst.Field.CITY):(\(allCitiesStr))")
                 }
                 
                 //Handle Regions
@@ -362,7 +361,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 
                 if(allRegions.count > 0) {
                     let allRegionsStr = allRegions.joinWithSeparator(" \(SolrConst.Operator.OR) ")
-                    areaConditionStr.append("\(SolrConst.Filed.REGION):(\(allRegionsStr))")
+                    areaConditionStr.append("\(SolrConst.Field.REGION):(\(allRegionsStr))")
                 }
                 
                 //Compose whole area condition string
@@ -381,7 +380,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     String(type)
                 })
                 
-                let key = SolrConst.Filed.PURPOSE_TYPE
+                let key = SolrConst.Field.PURPOSE_TYPE
                 let value = typeStrList.joinWithSeparator(" \(SolrConst.Operator.OR) ")
                 
                 queryitems.append( NSURLQueryItem(
@@ -403,7 +402,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 }
                 
                 queryitems.append(
-                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.PRICE):[\(priceFrom) TO \(priceTo)]"))
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Field.PRICE):[\(priceFrom) TO \(priceTo)]"))
             }
             
             // Size
@@ -419,7 +418,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 }
                 
                 queryitems.append(
-                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Filed.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "\(SolrConst.Field.SIZE):[\(sizeFrom) TO \(sizeTo)]"))
             }
             
             // Filters
@@ -434,7 +433,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             
             if (!allowDuplicate) {
                 queryitems.append(
-                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "-\(SolrConst.Filed.PARENT):*"))
+                    NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "-\(SolrConst.Field.PARENT):*"))
             }
             
             // Sorting
@@ -443,7 +442,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             }
             
             // Field List
-            queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: HouseDataRequester.fieldList.joinWithSeparator(",")))
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: fieldList.joinWithSeparator(",")))
             
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
             queryitems.append(NSURLQueryItem(name: SolrConst.Query.INDENT, value: "true"))

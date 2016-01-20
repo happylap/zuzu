@@ -127,9 +127,15 @@ class DuplicateHouseViewController: UIViewController {
     
     private func fetchDuplicateHouses(houseIdList:[String]) {
         
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+        
         HouseDataRequester.getInstance().searchByIds(houseIdList) { (totalNum, result, error) -> Void in
             self.duplicateHouses = result
             self.duplicateTableView.reloadData()
+            
+            LoadingSpinner.shared.stop()
         }
     }
     
