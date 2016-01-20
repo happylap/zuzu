@@ -17,17 +17,45 @@
      },
      {
      "id": "parking_lot",
-     "label": "要車位",
+     "label": "有車位",
      "displayType": 0,
      "filterKey": "parking_lot",
      "filterValue": "true"
      },
      {
-     "id": "user_sex",
-     "label": "限女生",
+     "id": "allow_cooking",
+     "label": "可開伙",
      "displayType": 0,
-     "filterKey": "restr_sex",
-     "filterValue": "0"
+     "filterKey": "allow_cooking",
+     "filterValue": "true"
+     },
+     {
+     "id": "not_rooftop_addition",
+     "label": "非頂加",
+     "displayType": 0,
+     "filterKey": "rooftop_addition",
+     "filterValue": "false"
+     },
+     {
+     "id": "not_basement",
+     "label": "非地下室",
+     "displayType": 0,
+     "filterKey": "floor",
+     "filterValue": "{0 TO *}"
+     },
+     {
+     "id": "num_bedroom",
+     "label": "有三房",
+     "displayType": 0,
+     "filterKey": "num_bedroom",
+     "filterValue": "3"
+     },
+     {
+     "id": "nearby_bus",
+     "label": "近巴士",
+     "displayType": 0,
+     "filterKey": "nearby_bus",
+     "filterValue": "*"
      }
      ],
     
@@ -138,7 +166,7 @@
                 "label": "不要地下室",
                 "displayType": 0,
                 "filterKey": "floor",
-                "filterValue": "[ 0 TO *]"
+                "filterValue": "{0 TO *}"
                },
                {
                 "id": "not_rooftop",
