@@ -382,7 +382,7 @@ class SearchResultTableViewCell: UITableViewCell {
                 
                 return nil
             }
-            
+            return
         }
         
         self.continueCollectionCallback()
