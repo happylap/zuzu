@@ -208,10 +208,13 @@ extension MyNoteViewController {
         case .Delete:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Update:
-            let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! MyNoteViewCell
-            if let note: Note = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Note {
-                //cell.textLabel?.text = note.title
-                cell.noteItem = note
+            if let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as? MyNoteViewCell {
+                if let note: Note = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Note {
+                    //cell.textLabel?.text = note.title
+                    cell.noteItem = note
+                }
+            } else {
+                assert(false, "MyNote Cell at row: \(indexPath?.row) is nil")
             }
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)

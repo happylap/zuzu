@@ -552,10 +552,14 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         case .Delete:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Update:
-            let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! SearchResultTableViewCell
-            cell.parentTableView = self.tableView
-            cell.indexPath = indexPath
-            cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? CollectionHouseItem
+            if let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as? SearchResultTableViewCell {
+                cell.parentTableView = self.tableView
+                cell.indexPath = indexPath
+                cell.houseItemForCollection = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? CollectionHouseItem
+            } else {
+                assert(false, "MyCollection Cell at row: \(indexPath?.row) is nil")
+            }
+
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
             self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
