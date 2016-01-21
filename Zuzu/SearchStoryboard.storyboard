@@ -918,18 +918,9 @@
                             </tableView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
                                 <rect key="frame" x="0.0" y="1277" width="600" height="79"/>
-                                <subviews>
-                                    <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wba-eS-Vmr" userLabel="SmartFilterView" customClass="SmartFilterView" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="79"/>
-                                    </view>
-                                </subviews>
+                                <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="leading" secondItem="6D9-oo-jIk" secondAttribute="leading" id="0ty-7H-Hw1"/>
-                                    <constraint firstAttribute="bottom" secondItem="Wba-eS-Vmr" secondAttribute="bottom" id="Cen-8l-QAd"/>
                                     <constraint firstAttribute="width" secondItem="6D9-oo-jIk" secondAttribute="height" multiplier="1500:197" id="IFc-rH-chm"/>
-                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="top" secondItem="6D9-oo-jIk" secondAttribute="top" id="hnX-9C-E4H"/>
-                                    <constraint firstItem="Wba-eS-Vmr" firstAttribute="centerY" secondItem="6D9-oo-jIk" secondAttribute="centerY" id="mHL-zg-1gX"/>
-                                    <constraint firstAttribute="trailing" secondItem="Wba-eS-Vmr" secondAttribute="trailing" id="md2-Es-7bT"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -943,7 +934,6 @@
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="aqf-sG-kqs"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="leading" secondItem="c7O-nv-MtJ" secondAttribute="leading" id="fE7-1Y-hmX"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="top" secondItem="yxI-Jr-QgG" secondAttribute="bottom" id="gHV-ef-pgY"/>
-                            <constraint firstItem="Wba-eS-Vmr" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="kHQ-m4-qph"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="top" secondItem="E2g-hk-g5r" secondAttribute="bottom" id="tj6-Vf-3b9"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="woB-Tr-yKD"/>
                             <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="yzU-ZC-uYR"/>
