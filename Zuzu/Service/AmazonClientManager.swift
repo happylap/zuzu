@@ -281,7 +281,7 @@ class AmazonClientManager : NSObject {
     func completeFBLogin() {
         
         self.keyChain[self.FB_PROVIDER] = "YES"
-        self.completeLogin([AWSCognitoLoginProviderKey.Facebook.rawValue : FBSDKAccessToken.currentAccessToken().tokenString])
+        self.completeLogin(["graph.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
         
         FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields":"id, email, birthday, gender, name, first_name, last_name, bio, picture.type(large)"]).startWithCompletionHandler { (connection, result, error) -> Void in
             if error == nil {
