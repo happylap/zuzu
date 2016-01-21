@@ -54,7 +54,7 @@ class SmartFilterContainerView: UIView {
             print("SmartFilterContainerView Frame = \(self.frame)")
             
             /// Add SmartFilterViews
-            loadSmartFilterViews()
+            positionSmartFilterViews()
             
             /// Load Control Button
             loadControlButton()
@@ -138,7 +138,7 @@ class SmartFilterContainerView: UIView {
         self.controlButtonView.addSubview(controlButtonImage)
     }
     
-    private func loadSmartFilterViews() {
+    private func positionSmartFilterViews() {
         
         let visibleRect = self.bounds
         let contentWidth = visibleRect.size.width
@@ -146,12 +146,18 @@ class SmartFilterContainerView: UIView {
         let x = visibleRect.origin.x
         let y = visibleRect.origin.y
         
-        for page in (1...numOfPage) {
-            let smartFilterFrame = CGRect(x: x, y: y + CGFloat(page - 1) * contentHeight + controlTopBorderHeight, width: contentWidth, height: contentHeight)
-            
-            print("smartFilterFrame = \(smartFilterFrame)")
-            let smartFilterView = SmartFilterView(frame: smartFilterFrame, page: page)
-            self.addSubview(smartFilterView)
+        
+        let smartFilterViews = self.subviews.filter { (view) -> Bool in
+            return (view as? SmartFilterView) != nil
+        }
+        
+        for subView in smartFilterViews {
+            if let smartFilterView = subView as? SmartFilterView {
+                
+                let page = smartFilterView.filterPage
+                let smartFilterFrame = CGRect(x: x, y: y + CGFloat(page - 1) * contentHeight + controlTopBorderHeight, width: contentWidth, height: contentHeight)
+                smartFilterView.frame = smartFilterFrame
+            }
         }
         
     }
@@ -164,5 +170,13 @@ class SmartFilterContainerView: UIView {
         let tapGuesture = UITapGestureRecognizer(target: self, action: "onSmartFilterControlButtonTouched:")
         self.controlButtonView.addGestureRecognizer(tapGuesture)
         self.addGestureRecognizer(tapGuesture)
+        
+        /// Setup SmartFilterViews
+        for page in (1...numOfPage) {
+            let smartFilterFrame = self.bounds
+            
+            let smartFilterView = SmartFilterView(frame: smartFilterFrame, page: page)
+            self.addSubview(smartFilterView)
+        }
     }
 }

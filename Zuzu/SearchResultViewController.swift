@@ -118,23 +118,35 @@ class SearchResultViewController: UIViewController {
             self.view.addSubview(smartFilterContainerView!)
         }
         
-        //        let tapGuesture = UITapGestureRecognizer(target: self, action: "onSmartFilterTouched:")
-        //        smartFilterScrollView.addGestureRecognizer(tapGuesture)
-        //
-        //        if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
-        //
-        //            for button in smartFilterView.filterButtons {
-        //                button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
-        //
-        //                ///Check selection state
-        //                if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
-        //
-        //                    button.setToggleState(getStateForSmartFilterButton(filterGroup))
-        //
-        //                }
-        //            }
-        //        }
+        updateSmartFilterState()
     }
+    
+    private func updateSmartFilterState() {
+        
+        if let smartFilterContainerView = self.smartFilterContainerView {
+            
+            let smartFilterViews = smartFilterContainerView.subviews.filter { (view) -> Bool in
+                return (view as? SmartFilterView) != nil
+            }
+            
+            for subView in smartFilterViews {
+                if let smartFilterView = subView as? SmartFilterView {
+                    for button in smartFilterView.filterButtons {
+                        button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+                        
+                        ///Check selection state
+                        if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
+                            
+                            button.setToggleState(getStateForSmartFilterButton(filterGroup))
+                            
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    
     
     private func configureSortingButtons() {
         let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
@@ -563,40 +575,46 @@ class SearchResultViewController: UIViewController {
             
             let isToggleOn = toogleButton.getToggleState()
             
-//            if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
-//                
-//                if let filterGroup = smartFilterView.filtersByButton[toogleButton] {
-//                    
-//                    var filterIdSet = [String: Set<FilterIdentifier>]()
-//                    
-//                    for smartFilter in filterGroup.filters {
-//                        if(isToggleOn) {
-//                            ///Replaced with Smart Filter Setting
-//                            filterIdSet[filterGroup.id] = [smartFilter.identifier]
-//                            self.appendSlectedFilterIdSet(filterIdSet)
-//                            
-//                            
-//                            ///GA Tracker
-//                            self.trackEventForCurrentScreen(GAConst.Catrgory.SmartFilter,
-//                                action: smartFilter.key,
-//                                label: smartFilter.value)
-//                            
-//                        } else {
-//                            ///Clear filters under this group
-//                            removeSlectedFilterIdSet(filterGroup.id)
-//                        }
-//                    }
-//                    
-//                    
-//                    if let searchCriteria = self.searchCriteria {
-//                        
-//                        searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
-//                        
-//                    }
-//                    
-//                    reloadDataWithNewCriteria(self.searchCriteria)
-//                }
-//            }
+            if let subViews = self.smartFilterContainerView?.subviews {
+                
+                for subView in subViews {
+                    if let smartFilterView = subView as? SmartFilterView {
+                        
+                        if let filterGroup = smartFilterView.filtersByButton[toogleButton] {
+                            
+                            var filterIdSet = [String: Set<FilterIdentifier>]()
+                            
+                            for smartFilter in filterGroup.filters {
+                                if(isToggleOn) {
+                                    ///Replaced with Smart Filter Setting
+                                    filterIdSet[filterGroup.id] = [smartFilter.identifier]
+                                    self.appendSlectedFilterIdSet(filterIdSet)
+                                    
+                                    
+                                    ///GA Tracker
+                                    self.trackEventForCurrentScreen(GAConst.Catrgory.SmartFilter,
+                                        action: smartFilter.key,
+                                        label: smartFilter.value)
+                                    
+                                } else {
+                                    ///Clear filters under this group
+                                    removeSlectedFilterIdSet(filterGroup.id)
+                                }
+                            }
+                            
+                            
+                            if let searchCriteria = self.searchCriteria {
+                                
+                                searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
+                                
+                            }
+                            
+                            reloadDataWithNewCriteria(self.searchCriteria)
+                        }
+                    }
+                }
+                
+            }
         }
     }
     
@@ -707,8 +725,8 @@ class SearchResultViewController: UIViewController {
         ///Hide tab bar
         self.tabBarController!.tabBarHidden = true
         
-        //Configure Filter Buttons
-        //configureFilterButtons()
+        //Update Smart Filter State to sync with the setting in Advanced setting UI
+        updateSmartFilterState()
         
         //Google Analytics Tracker
         self.trackScreen()
