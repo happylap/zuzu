@@ -30,7 +30,7 @@
      "filterValue": "true"
      },
      {
-     "id": "not_rooftop_addition",
+     "id": "not_rooftop",
      "label": "非頂加",
      "displayType": 0,
      "filterKey": "rooftop_addition",
@@ -44,17 +44,17 @@
      "filterValue": "{0 TO *}"
      },
      {
-     "id": "num_bedroom",
+     "id": "layout",
      "label": "有三房",
      "displayType": 0,
      "filterKey": "num_bedroom",
      "filterValue": "3"
      },
      {
-     "id": "nearby_bus",
-     "label": "近巴士",
+     "id": "public_trans",
+     "label": "近捷運",
      "displayType": 0,
-     "filterKey": "nearby_bus",
+     "filterKey": "nearby_mrt",
      "filterValue": "*"
      }
      ],
@@ -433,17 +433,17 @@
                            },
                            {
                            "label": "捷運",
-                           "filterKey": "nearby_bus",
+                           "filterKey": "nearby_mrt",
                            "filterValue": "*"
                            },
                            {
                            "label": "公車",
-                           "filterKey": "nearby_train",
+                           "filterKey": "nearby_bus",
                            "filterValue": "*"
                            },
                            {
                            "label": "火車",
-                           "filterKey": "nearby_mrt",
+                           "filterKey": "nearby_train",
                            "filterValue": "*"
                            },
                            {
