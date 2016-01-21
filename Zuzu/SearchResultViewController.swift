@@ -105,19 +105,56 @@ class SearchResultViewController: UIViewController {
     
     private func configureFilterButtons() {
         
-        if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
+        let smartFilterViews = smartFilterScrollView.subviews.filter { (view) -> Bool in
+            return (view as? SmartFilterView) != nil
+        }
+        
+        if (smartFilterViews.count > 0) {
+            return
+        }
+        
+        smartFilterScrollView.pagingEnabled = true
+        let numOfPage = 2
+        let visibleFrame = smartFilterScrollView.bounds
+        let contentWidth = visibleFrame.size.width
+        let contentHeight = visibleFrame.size.height
+        let xOffset = visibleFrame.origin.x
+        
+        for page in (1...numOfPage) {
+            let frame = CGRect(x: xOffset + CGFloat(page-1) * contentWidth, y: 0, width: contentWidth, height: contentHeight)
+            let smartFilterView = SmartFilterView(frame: frame, page: page)
+            smartFilterScrollView.addSubview(smartFilterView)
             
-            for button in smartFilterView.filterButtons {
-                button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
-                
-                ///Check selection state
-                if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
+            print("smartFilterView (\(page)): \(smartFilterView.frame)")
+        }
+        
+        smartFilterScrollView.contentSize = CGSize(width: contentWidth * 2, height: contentHeight)
+        print("contentSize: \(smartFilterScrollView.contentSize)")
+        
+        updateSmartFilterState()
+    }
+    
+    private func updateSmartFilterState() {
+
+        let smartFilterViews = smartFilterScrollView.subviews.filter { (view) -> Bool in
+            return (view as? SmartFilterView) != nil
+        }
+        
+        for subView in smartFilterViews {
+            if let smartFilterView = subView as? SmartFilterView {
+                for button in smartFilterView.filterButtons {
+                    button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
                     
-                    button.setToggleState(getStateForSmartFilterButton(filterGroup))
-                    
+                    ///Check selection state
+                    if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
+                        
+                        button.setToggleState(getStateForSmartFilterButton(filterGroup))
+                        
+                    }
                 }
             }
         }
+        
     }
     
     private func configureSortingButtons() {
@@ -547,38 +584,43 @@ class SearchResultViewController: UIViewController {
             
             let isToggleOn = toogleButton.getToggleState()
             
-            if let smartFilterView = smartFilterScrollView.viewWithTag(100) as? SmartFilterView {
-                
-                if let filterGroup = smartFilterView.filtersByButton[toogleButton] {
+            let subViews = smartFilterScrollView.subviews
+            
+            for subView in subViews {
+                if let smartFilterView = subView as? SmartFilterView {
                     
-                    var filterIdSet = [String: Set<FilterIdentifier>]()
-                    
-                    for smartFilter in filterGroup.filters {
-                        if(isToggleOn) {
-                            ///Replaced with Smart Filter Setting
-                            filterIdSet[filterGroup.id] = [smartFilter.identifier]
-                            self.appendSlectedFilterIdSet(filterIdSet)
-                            
-                            
-                            ///GA Tracker
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.SmartFilter,
-                                action: smartFilter.key,
-                                label: smartFilter.value)
-                            
-                        } else {
-                            ///Clear filters under this group
-                            removeSlectedFilterIdSet(filterGroup.id)
+                    if let filterGroup = smartFilterView.filtersByButton[toogleButton] {
+                        
+                        var filterIdSet = [String: Set<FilterIdentifier>]()
+                        
+                        for smartFilter in filterGroup.filters {
+                            if(isToggleOn) {
+                                ///Replaced with Smart Filter Setting
+                                filterIdSet[filterGroup.id] = [smartFilter.identifier]
+                                self.appendSlectedFilterIdSet(filterIdSet)
+                                
+                                
+                                ///GA Tracker
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.SmartFilter,
+                                    action: smartFilter.key,
+                                    label: smartFilter.value)
+                                
+                            } else {
+                                ///Clear filters under this group
+                                removeSlectedFilterIdSet(filterGroup.id)
+                            }
                         }
+                        
+                        
+                        if let searchCriteria = self.searchCriteria {
+                            
+                            searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
+                            
+                        }
+                        
+                        reloadDataWithNewCriteria(self.searchCriteria)
                     }
                     
-                    
-                    if let searchCriteria = self.searchCriteria {
-                        
-                        searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
-                        
-                    }
-                    
-                    reloadDataWithNewCriteria(self.searchCriteria)
                 }
             }
         }
@@ -644,6 +686,12 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - View Life Cycle
     
+    override func viewDidLayoutSubviews() {
+        NSLog("%@ [[viewDidLayoutSubviews]]", self)
+        //Configure Filter Buttons
+        configureFilterButtons()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -670,9 +718,6 @@ class SearchResultViewController: UIViewController {
         //Configure Sorting Status
         configureSortingButtons()
         
-        //Configure Filter Buttons
-        configureFilterButtons()
-        
         //Load list my collections
         collectionIdList = CollectionItemService.sharedInstance.getIds()
         
@@ -691,8 +736,8 @@ class SearchResultViewController: UIViewController {
         ///Hide tab bar
         self.tabBarController!.tabBarHidden = true
         
-        //Configure Filter Buttons
-        configureFilterButtons()
+        //Update SmartFilter Buttons State (in order to sync the state set in the advanced filter setting)
+        self.updateSmartFilterState()
         
         //Google Analytics Tracker
         self.trackScreen()
