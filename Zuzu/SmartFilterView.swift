@@ -10,14 +10,19 @@ import UIKit
 import SwiftyJSON
 
 class SmartFilterView: UIView {
-    
+
+    private let filtersPerPage = 4
+    var filterPage = 1
+
     var filterButtons = [ToggleButton]()
     var filtersByButton = [ToggleButton:FilterGroup]()
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, page: Int = 1) {
         super.init(frame: frame)
+        self.filterPage = page
         self.setup()
     }
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -30,7 +35,7 @@ class SmartFilterView: UIView {
         
         var buttonSpace:CGFloat = 8.0
         var buttonWidth:CGFloat = 80.0
-        let buttonHeight:CGFloat = buttonWidth * 115/320
+        var buttonHeight:CGFloat = buttonWidth * 115/320
         
         let widthNeeded = 4 * buttonWidth + 5 * buttonSpace //including leading & trailing to the superview
         
@@ -45,7 +50,12 @@ class SmartFilterView: UIView {
         
         for (index, button) in filterButtons.enumerate() {
             let newXOffset = xOffset + CGFloat(index) * (buttonWidth + buttonSpace)
-            button.frame = CGRect(x: newXOffset, y: yOffset, width: buttonWidth, height: buttonHeight) // X, Y, width, height
+            
+            let buttonFrame = CGRect(x: newXOffset, y: yOffset, width: buttonWidth, height: buttonHeight) // X, Y, width, height
+            
+            print("SmartFilterView buttonFrame = \(buttonFrame)")
+            
+            button.frame = buttonFrame
         }
     }
     
@@ -88,11 +98,19 @@ class SmartFilterView: UIView {
     
     private func setup() {
         self.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        
         //Load filters
         let filters = SmartFilterView.loadFilterData("resultFilters", criteriaLabel: "smartFilters")
         
-        for filter in filters {
+        for (index, filter) in filters.enumerate() {
+            
+            if(index < (filterPage-1) * filtersPerPage) {
+                continue
+            }
+            
+            if(index >= filterPage * filtersPerPage) {
+                break
+            }
+
             let button : ToggleButton = ToggleButton()
             button.setTitle(filter.label, forState: .Normal)
             button.titleLabel!.font =  UIFont.systemFontOfSize(14)

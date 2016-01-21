@@ -750,7 +750,7 @@
                         <viewControllerLayoutGuide type="bottom" id="hmg-sM-QSC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="c7O-nv-MtJ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="1400"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="1500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E2g-hk-g5r" userLabel="HeaderView">
@@ -844,7 +844,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="njk-V3-8Pl" userLabel="Filter Setting">
-                                        <rect key="frame" x="513.5" y="0.0" width="86.5" height="64"/>
+                                        <rect key="frame" x="513" y="0.0" width="86.5" height="64"/>
                                         <color key="backgroundColor" red="0.13725490200000001" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="GSF-0c-DHR"/>
@@ -894,7 +894,7 @@
                                 </variation>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="272" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="AVs-la-x6f">
-                                <rect key="frame" x="0.0" y="128" width="600" height="1228"/>
+                                <rect key="frame" x="0.0" y="128" width="600" height="1328"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="yrM-0D-fhP" userLabel="hiddenSpinnerView">
@@ -916,21 +916,10 @@
                                     <rect key="frame" x="0.0" y="111" width="1024" height="645"/>
                                 </variation>
                             </tableView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6D9-oo-jIk">
-                                <rect key="frame" x="0.0" y="1277" width="600" height="79"/>
-                                <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="6D9-oo-jIk" secondAttribute="height" multiplier="1500:197" id="IFc-rH-chm"/>
-                                </constraints>
-                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6D9-oo-jIk" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="5f7-iu-gl4"/>
                             <constraint firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="KW5-Iq-4pg"/>
-                            <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="6D9-oo-jIk" secondAttribute="bottom" id="TTZ-hY-ESQ"/>
-                            <constraint firstItem="6D9-oo-jIk" firstAttribute="height" secondItem="E2g-hk-g5r" secondAttribute="width" multiplier="1:7" id="UTc-Ui-gCj"/>
-                            <constraint firstItem="6D9-oo-jIk" firstAttribute="width" secondItem="E2g-hk-g5r" secondAttribute="width" id="Uhf-uq-P2m"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="leading" secondItem="AVs-la-x6f" secondAttribute="leading" id="aqf-sG-kqs"/>
                             <constraint firstItem="AVs-la-x6f" firstAttribute="leading" secondItem="c7O-nv-MtJ" secondAttribute="leading" id="fE7-1Y-hmX"/>
                             <constraint firstItem="E2g-hk-g5r" firstAttribute="top" secondItem="yxI-Jr-QgG" secondAttribute="bottom" id="gHV-ef-pgY"/>
@@ -938,11 +927,6 @@
                             <constraint firstItem="AVs-la-x6f" firstAttribute="trailing" secondItem="E2g-hk-g5r" secondAttribute="trailing" id="woB-Tr-yKD"/>
                             <constraint firstItem="hmg-sM-QSC" firstAttribute="top" secondItem="AVs-la-x6f" secondAttribute="bottom" id="yzU-ZC-uYR"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="UTc-Ui-gCj"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="搜尋結果" id="NBD-dJ-SqW">
                         <barButtonItem key="backBarButtonItem" title="返回結果" id="9qK-pP-zMQ"/>
@@ -964,11 +948,10 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="1400"/>
+                    <size key="freeformSize" width="600" height="1500"/>
                     <connections>
                         <outlet property="debugBarButton" destination="9Py-vk-BeN" id="BpY-q0-oeK"/>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
-                        <outlet property="smartFilterScrollView" destination="6D9-oo-jIk" id="MNX-Np-2pg"/>
                         <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>
                         <outlet property="sortByPriceButton" destination="JTH-Sz-NIS" id="9Ko-U1-rVX"/>
                         <outlet property="sortBySizeButton" destination="RkJ-yY-SbF" id="Zzj-xd-YKt"/>
@@ -1455,7 +1438,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RrS-e7-IQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1725" y="1803"/>
+            <point key="canvasLocation" x="1725" y="1987"/>
         </scene>
         <!--House Map-->
         <scene sceneID="LeV-xK-fi9">
