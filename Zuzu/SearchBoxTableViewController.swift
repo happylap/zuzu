@@ -911,7 +911,7 @@
         }
         
         func onSearchButtonClicked(sender: UIButton) {
-            Log.debug("onSearchButtonClicked: \(self)")
+            Log.info("onSearchButtonClicked")
             
             //Hide size & price pickers
             self.setRowVisible(CellConst.pricePicker, visible: false)
@@ -991,7 +991,8 @@
         override func viewDidLoad() {
             super.viewDidLoad()
             
-            Log.debug("Begin viewDidLoad: \(self)")
+            Log.debug("Enter")
+            
             self.configureButton()
             
             self.configureSearchHistoryTable()
@@ -1026,11 +1027,11 @@
                 }
             }
             
-            Log.debug("End viewDidLoad: \(self)")
+            Log.debug("Exit")
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
-            Log.debug("handleTap: view = \(sender.view)")
+            Log.info("handleTap: view = \(sender.view)")
             searchBar.resignFirstResponder()
         }
         
@@ -1069,28 +1070,32 @@
         
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
-            Log.debug("viewDidAppear: \(self)")
+            Log.debug("Enter")
+            
             self.stateObserver.start()
+            
+            Log.debug("Exit")
         }
         
         override func viewDidDisappear(animated: Bool) {
             super.viewDidDisappear(animated)
+            Log.debug("Enter")
             
             //Disable location monitoring
             locationManagerActive = false
             
-            Log.debug("viewDidDisappear: \(self)")
+            Log.debug("Exit")
         }
         
         // MARK: - Navigation
         override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             
-            Log.debug("prepareForSegue: \(self)")
-            
             if let identifier = segue.identifier{
+                
+                Log.info("prepareForSegue : \(identifier)")
+                
                 switch identifier{
                 case ViewTransConst.showSearchResult:
-                    Log.debug("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
                         
                         ///GA Tracker
@@ -1154,12 +1159,11 @@
                         do{
                             try searchItemService.addNewSearchItem(SearchItem(criteria: currentCriteria, type: .HistoricalSearch))
                         } catch {
-                            Log.debug("Fail to save search history")
+                            Log.error("Fail to save search history")
                         }
                         
                     }
                 case ViewTransConst.showAreaSelector:
-                    Log.debug("showAreaSlector")
                     
                     ///Setup delegat to receive result
                     if let vc = segue.destinationViewController as? CityRegionContainerController {
@@ -1490,16 +1494,16 @@
         
         // MARK: - UISearchBarDelegate
         func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-            Log.debug("textDidChange: \(self), \(searchText)")
+            Log.debug("textDidChange: \(searchText)")
             keywordTextChanged = true
         }
         func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-            Log.debug("searchBarSearchButtonClicked: \(self)")
+            Log.debug("searchBarSearchButtonClicked")
             searchBar.resignFirstResponder()
         }
         
         func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-            Log.debug("searchBarTextDidEndEditing: \(self)")
+            Log.debug("searchBarTextDidEndEditing")
             searchBar.resignFirstResponder()
             
             if(keywordTextChanged) {

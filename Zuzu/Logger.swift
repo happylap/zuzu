@@ -11,9 +11,13 @@ import XCGLogger
 
 public struct Logger {
     
-    static let defaultLogger = Logger.createDefaultlogger()
+    static let defaultLogger = Logger.createLogger()
     
     static let fileLogger = Logger.createFilelogger()
+    
+    struct Tag {
+        static let Default = "default"
+    }
     
     private static let logFileIdentifier = "com.lap.zuzu"
     
@@ -23,14 +27,23 @@ public struct Logger {
         return formatter
     }()
     
-    private static func createDefaultlogger() -> XCGLogger{
+    internal static func createLogger(identifier:String = Tag.Default) -> XCGLogger{
         
-        let logger = XCGLogger.defaultInstance()
+        let logger = XCGLogger(identifier: identifier)
+        logger.xcodeColorsEnabled = true
+        logger.xcodeColors = [
+            .Verbose: .darkGrey,
+            .Debug: .darkGreen,
+            .Info: .blue,
+            .Warning: .orange,
+            .Error: .red,
+            .Severe: .whiteOnRed
+        ]
         
         #if DEBUG
-            logger.setup(.Debug, showThreadName: true, showLogLevel: false, showFileNames: true, showLineNumbers: true)
+            logger.setup(.Debug, showLogIdentifier: false, showThreadName: true, showLogLevel: true, showFileNames: true, showLineNumbers: true)
         #else
-            logger.setup(.Severe, showThreadName: true, showLogLevel: false, showFileNames: true, showLineNumbers: false)
+            logger.setup(.Error, showLogIdentifier: false, showThreadName: true, showLogLevel: true, showFileNames: true, showLineNumbers: true)
         #endif
         
         return logger
@@ -42,9 +55,9 @@ public struct Logger {
         let logger = XCGLogger()
         
         #if DEBUG
-            logger.setup(.Debug, showThreadName: true, showLogLevel: false, showFileNames: true, showLineNumbers: true)
+            logger.setup(.Debug, showLogIdentifier: true, showThreadName: true, showLogLevel: true, showFileNames: true, showLineNumbers: true)
         #else
-            logger.setup(.Severe, showThreadName: true, showLogLevel: false, showFileNames: true, showLineNumbers: false)
+            logger.setup(.Error, showLogIdentifier: true, showThreadName: true, showLogLevel: true, showFileNames: true, showLineNumbers: true)
         #endif
         
         if let dirPath = getLogDirPath() {
