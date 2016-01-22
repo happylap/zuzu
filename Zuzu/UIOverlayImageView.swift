@@ -25,13 +25,14 @@ class UIOverlayImageView: UIImageView {
         let gradientColors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
         let gradientLocations = [0.0, 1.0] //Evenly distributed
         
-        let titleRect = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y, width: self.bounds.width, height: self.bounds.width * 188/1441)
+        let titleRect = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y, width: self.bounds.width, height: self.bounds.width * 220/1441)
         
         print("addImageOverlay: titleRect = \(titleRect)")
         
         titleBackground.frame = titleRect
         titleBackground.colors = gradientColors
         titleBackground.locations = gradientLocations
+        titleBackground.opacity = 0.7
         
         self.layer.addSublayer(titleBackground)
         
