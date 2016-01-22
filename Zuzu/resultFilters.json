@@ -405,17 +405,17 @@
                            },
                            {
                            "label": "捷運",
-                           "filterKey": "nearby_bus",
+                           "filterKey": "nearby_mrt",
                            "filterValue": "*"
                            },
                            {
                            "label": "公車",
-                           "filterKey": "nearby_train",
+                           "filterKey": "nearby_bus",
                            "filterValue": "*"
                            },
                            {
                            "label": "火車",
-                           "filterKey": "nearby_mrt",
+                           "filterKey": "nearby_train",
                            "filterValue": "*"
                            },
                            {
