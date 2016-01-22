@@ -11,6 +11,8 @@ import CoreData
 import SwiftyJSON
 import Dollar
 
+private let Log = Logger.defaultLogger
+
 extension Optional {
     
     func valueOrDefault(defaultValue: Wrapped) -> Wrapped {
@@ -52,7 +54,7 @@ class HouseDao: NSObject {
                 return
             }
             
-            NSLog("%@ addHouse", self)
+            Log.debug("\(self) addHouse")
             
             let context=CoreDataManager.shared.managedObjectContext
             
@@ -83,7 +85,7 @@ class HouseDao: NSObject {
     }
     
     func getHouseList() -> [House]? {
-        NSLog("%@ getHouseList", self)
+        Log.debug("\(self) getHouseList")
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         //let sort1 = NSSortDescriptor(key: "lastCommentTime", ascending: false)
@@ -96,7 +98,7 @@ class HouseDao: NSObject {
     }
     
     func getHouseById(id: String) -> House? {
-        NSLog("%@ getHouseById: \(id)", self)
+        Log.debug("\(self) getHouseById: \(id)")
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.House.rawValue)
         
@@ -143,13 +145,13 @@ class HouseDao: NSObject {
     // MARK: Delete
     
     func deleteByObjectId(objectId: NSManagedObjectID) {
-        NSLog("%@ deleteByObjectId: \(objectId)", self)
+        Log.debug("\(self) deleteByObjectId: \(objectId)")
         CoreDataManager.shared.delete(objectId)
         CoreDataManager.shared.save()
     }
     
     func deleteById(id: String) {
-        NSLog("%@ deleteById: \(id)", self)
+        Log.debug("\(self) deleteById: \(id)")
         if let house = self.getHouseById(id) {
             CoreDataManager.shared.deleteEntity(house)
             CoreDataManager.shared.save()

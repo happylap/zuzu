@@ -26,6 +26,8 @@ import Foundation
  2) It might block UI a little bit when loading data from storage
  */
 
+private let Log = Logger.defaultLogger
+
 public class HouseItemTableDataSource {
     
     struct Const {
@@ -120,7 +122,7 @@ public class HouseItemTableDataSource {
     
     func loadDataForPage(pageNo: Int) {
         if(isLoadingData) {
-            NSLog("loadDataForPage: Duplicate page request for [\(pageNo)]")
+            Log.debug("loadDataForPage: Duplicate page request for [\(pageNo)]")
             return
         }
         
@@ -153,7 +155,7 @@ public class HouseItemTableDataSource {
         
         isLoadingData = true
         
-        NSLog("loadRemoteData: pageNo = \(pageNo)")
+        Log.debug("loadRemoteData: pageNo = \(pageNo)")
         
         requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, error) -> Void in
             

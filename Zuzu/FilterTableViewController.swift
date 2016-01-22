@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 protocol FilterTableViewControllerDelegate {
     
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>])
@@ -92,7 +94,7 @@ class FilterTableViewController: UITableViewController {
                 let json = JSON(data: jsonData)
                 let groupList = json[criteriaLabel].arrayValue
                 
-                NSLog("\(criteriaLabel) = %d", groupList.count)
+                Log.debug("\(criteriaLabel) = \(groupList.count)")
                 
                 for groupJson in groupList {
                     let section = groupJson["section"].stringValue
@@ -154,7 +156,7 @@ class FilterTableViewController: UITableViewController {
                 
             } catch let error as NSError{
                 
-                NSLog("Cannot load json file %@", error)
+                Log.debug("Cannot load json file \(error.localizedDescription)")
                 
             }
         }
@@ -165,7 +167,7 @@ class FilterTableViewController: UITableViewController {
     // MARK: - Action Handlers
     
     func resetAllFilters(sender: UIButton) {
-        NSLog("resetAllFilters")
+        Log.debug("resetAllFilters")
         
         self.filterDelegate?.onFiltersReset()
         
@@ -201,7 +203,7 @@ class FilterTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSLog("%@ [[viewWillAppear]]", self)
+        Log.debug("\(self) [[viewWillAppear]]")
         
         //Google Analytics Tracker
         self.trackScreen()
@@ -235,10 +237,10 @@ class FilterTableViewController: UITableViewController {
                 if let filterIdSet = filterIdSet {
                     if (filterIdSet.contains(currentFilter.identifier)) {
                         selectedFilterIdSet[filterGroup.id]?.remove(currentFilter.identifier)
-                        NSLog("Remove: %@", currentFilter.identifier.key)
+                        Log.debug("Remove: \(currentFilter.identifier.key)")
                     } else {
                         selectedFilterIdSet[filterGroup.id]?.insert(currentFilter.identifier)
-                        NSLog("Insert: %@", currentFilter.identifier.key)
+                        Log.debug("Insert: \(currentFilter.identifier.key)")
                     }
                 } else {
                     selectedFilterIdSet[filterGroup.id] = [currentFilter.identifier]
@@ -300,7 +302,7 @@ class FilterTableViewController: UITableViewController {
                 for filterIdentifier in sortedFilterIdSetForGroup {
                     if let filterLabel = getFilterLabel(filterIdentifier) {
                         labelList.append(filterLabel)
-                        print(filterLabel)
+                        Log.debug(filterLabel)
                     }
                 }
                 
@@ -343,11 +345,11 @@ class FilterTableViewController: UITableViewController {
         
         if let identifier = segue.identifier{
             
-            NSLog("prepareForSegue: %@", identifier)
+            Log.debug("prepareForSegue: \(identifier)")
             
             switch identifier{
             case ViewTransConst.displayFilterOptions:
-                NSLog(ViewTransConst.displayFilterOptions)
+                Log.debug(ViewTransConst.displayFilterOptions)
                 
                 if let fotvc = segue.destinationViewController as? FilterOptionTableViewController {
                     
@@ -376,7 +378,7 @@ class FilterTableViewController: UITableViewController {
 extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
     
     func onFiltersSelected(groupId: String, filterIdSet: Set<FilterIdentifier>) {
-        NSLog("onFiltersSelected: %@", filterIdSet)
+        Log.debug("onFiltersSelected: \(filterIdSet)")
         
         ///Update selection for a FilterGroup
         selectedFilterIdSet[groupId] = filterIdSet

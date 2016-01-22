@@ -9,6 +9,8 @@
 import UIKit
 import SCLAlertView
 
+private let Log = Logger.defaultLogger
+
 class SearchResultViewController: UIViewController {
     
     let cellIdentifier = "houseItemCell"
@@ -225,7 +227,7 @@ class SearchResultViewController: UIViewController {
     private func loadHouseListPage(pageNo: Int) {
         
         if(pageNo > dataSource.estimatedTotalResults){
-            NSLog("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedTotalResults)]")
+            Log.debug("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedTotalResults)]")
             return
         }
         
@@ -305,14 +307,14 @@ class SearchResultViewController: UIViewController {
         
         self.tableView.reloadData()
         
-        NSLog("%@ onDataLoaded: Total #Item in Table: \(dataSource.getSize())", self)
+        Log.debug("\(self) onDataLoaded: Total #Item in Table: \(dataSource.getSize())")
         
         self.debugTextStr = self.dataSource.debugStr
     }
     
     private func sortByField(sortingField:String, sortingOrder:String) {
         
-        NSLog("Sorting = %@ %@", sortingField, sortingOrder)
+        Log.debug("Sorting = \(sortingField) \(sortingOrder)")
         self.searchCriteria?.sorting = "\(sortingField) \(sortingOrder)"
         self.sortingStatus[sortingField] = sortingOrder
         
@@ -505,7 +507,7 @@ class SearchResultViewController: UIViewController {
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
             
             if let error = error {
-                NSLog("Cannot get remote data %@", error.localizedDescription)
+                Log.debug("Cannot get remote data \(error.localizedDescription)")
                 return
             }
             
@@ -681,7 +683,7 @@ class SearchResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSLog("%@ [[viewDidLoad]]", self)
+        Log.debug("\(self) [[viewDidLoad]]")
         
         // Config navigation left bar
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"search_toolbar_n"), style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
@@ -720,7 +722,7 @@ class SearchResultViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSLog("%@ [[viewWillAppear]]", self)
+        Log.debug("\(self) [[viewWillAppear]]")
         
         ///Hide tab bar
         self.tabBarController!.tabBarHidden = true
@@ -735,12 +737,12 @@ class SearchResultViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        NSLog("%@ [[viewDidAppear]]", self)
+        Log.debug("\(self) [[viewDidAppear]]")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        NSLog("%@ [[viewWillDisappear]]", self)
+        Log.debug("\(self) [[viewWillDisappear]]")
     }
     
     override func didReceiveMemoryWarning() {
@@ -753,7 +755,7 @@ class SearchResultViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
             
-            NSLog("prepareForSegue: %@", identifier)
+            Log.debug("prepareForSegue: \(identifier)")
             
             switch identifier{
             case ViewTransConst.showDebugInfo:
@@ -844,7 +846,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NSLog("%@ tableView Count: \(dataSource.getSize())", self)
+        Log.debug("\(self) tableView Count: \(dataSource.getSize())")
         
         return dataSource.getSize()
     }
@@ -854,7 +856,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         
         cell.parentTableView = tableView
@@ -898,7 +900,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         let houseItem = dataSource.getItemForRow(indexPath.row)
         
-        print("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
+        Log.debug("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
         
         if let duplicates = houseItem.children {
             self.runOnMainThreadAfter(0.1, block: { () -> Void in
@@ -916,10 +918,10 @@ extension SearchResultViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
-        //NSLog("==scrollViewDidEndDecelerating==")
-        //NSLog("Content Height: \(scrollView.contentSize.height)")
-        //NSLog("Content Y-offset: \(scrollView.contentOffset.y)")
-        //NSLog("ScrollView Height: \(scrollView.frame.size.height)")
+        //Log.debug("==scrollViewDidEndDecelerating==")
+        //Log.debug("Content Height: \(scrollView.contentSize.height)")
+        //Log.debug("Content Y-offset: \(scrollView.contentOffset.y)")
+        //Log.debug("ScrollView Height: \(scrollView.frame.size.height)")
         
         
         let yOffsetForTop:CGFloat = 0
@@ -927,23 +929,23 @@ extension SearchResultViewController: UIScrollViewDelegate {
         let currentContentOffset = floor(scrollView.contentOffset.y)
         
         if (currentContentOffset >= yOffsetForBottom){
-            NSLog("%@ Bounced, Scrolled To Bottom", self)
+            Log.debug("\(self) Bounced, Scrolled To Bottom")
             
             let nextPage = self.dataSource.currentPage + 1
             
             loadHouseListPage(nextPage)
             
         }else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
-            NSLog("%@ Bounced, Scrolled To Top", self)
+            Log.debug("\(self) Bounced, Scrolled To Top")
         }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        //NSLog("==scrollViewDidScroll==")
-        //NSLog("Content Height: \(scrollView.contentSize.height)")
-        //NSLog("Content Y-offset: \(scrollView.contentOffset.y)")
-        //NSLog("ScrollView Height: \(scrollView.frame.size.height)")
+        //Log.debug("==scrollViewDidScroll==")
+        //Log.debug("Content Height: \(scrollView.contentSize.height)")
+        //Log.debug("Content Y-offset: \(scrollView.contentOffset.y)")
+        //Log.debug("ScrollView Height: \(scrollView.frame.size.height)")
         
         //Check for scroll direction
         if (self.lastContentOffset > scrollView.contentOffset.y){
@@ -961,7 +963,7 @@ extension SearchResultViewController: UIScrollViewDelegate {
         
         if(yOffsetForBottom >= 0) {
             if (scrollView.contentOffset.y >= yOffsetForBottom){
-                NSLog("%@ Scrolled To Bottom", self)
+                Log.debug("\(self) Scrolled To Bottom")
                 
                 let nextPage = self.dataSource.currentPage + 1
                 
@@ -971,7 +973,7 @@ extension SearchResultViewController: UIScrollViewDelegate {
                 }
                 
             } else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
-                //NSLog("Scrolled To Top")
+                //Log.debug("Scrolled To Top")
             }
         }
     }
@@ -994,7 +996,7 @@ extension SearchResultViewController: UIAdaptivePresentationControllerDelegate {
 extension SearchResultViewController: UIAlertViewDelegate {
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        NSLog("Alert Dialog Button [%d] Clicked", buttonIndex)
+        Log.debug("Alert Dialog Button [\(buttonIndex)] Clicked")
     }
     
 }
@@ -1025,7 +1027,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
     
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
-        NSLog("onFiltersSelected: %@", selectedFilterIdSet)
+        Log.debug("onFiltersSelected: \(selectedFilterIdSet)")
         
         
         self.updateSlectedFilterIdSet(selectedFilterIdSet)

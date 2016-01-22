@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 protocol CityRegionContainerControllerDelegate: class {
     func onCitySelectionDone(regions:[City])
 }
@@ -70,7 +72,7 @@ class CityRegionContainerController: UIViewController {
     // MARK: - UI Control Actions
     @IBAction func onSelectionDone(sender: UIBarButtonItem) {
         
-        NSLog("onSelectionDone")
+        Log.debug("onSelectionDone")
         
         //Save selection to user defaults only when the user presses "Done" button
         
@@ -110,14 +112,14 @@ class CityRegionContainerController: UIViewController {
     // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSLog("viewDidLoad: %@", self)
+        Log.debug("viewDidLoad: \(self)")
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSLog("viewWillAppear: %@", self)
+        Log.debug("viewWillAppear: \(self)")
         
         ///Hide tab bar
         self.tabBarController!.tabBarHidden = true
@@ -128,7 +130,7 @@ class CityRegionContainerController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        NSLog("viewWillDisappear: %@", self)
+        Log.debug("viewWillDisappear: \(self)")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -146,7 +148,7 @@ class CityRegionContainerController: UIViewController {
         
         if let identifier = segue.identifier{
             
-            NSLog("prepareForSegue: %@ %@",identifier, self)
+            Log.debug("prepareForSegue: \(identifier) \(self)")
             
             switch identifier{
             case ViewTransConst.showCityPicker:

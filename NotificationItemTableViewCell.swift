@@ -8,6 +8,7 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
 
 class NotificationItemTableViewCell: UITableViewCell
 {
@@ -71,7 +72,7 @@ class NotificationItemTableViewCell: UITableViewCell
                     
                     self.houseImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                         //self.houseImage.contentMode = .Left
-                        NSLog("Img loading done, status = \(response?.statusCode)")
+                        Log.debug("Img loading done, status = \(response?.statusCode)")
                     }
                     
             }

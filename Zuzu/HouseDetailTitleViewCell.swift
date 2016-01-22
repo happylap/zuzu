@@ -8,6 +8,8 @@
 import UIKit
 import MarqueeLabel
 
+private let Log = Logger.defaultLogger
+
 class HouseDetailTitleViewCell: UITableViewCell {
 
     @IBOutlet weak var titleImage: UIImageView!
@@ -31,13 +33,13 @@ class HouseDetailTitleViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        NSLog("prepareForReuse %@", self)
+        Log.debug("prepareForReuse \(self)")
         houseTitleLabel.text = nil
     }
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        NSLog("awakeFromNib %@", self)
+        Log.debug("awakeFromNib \(self)")
         
         // Initialization code
         let label:MarqueeLabel =  houseTitleLabel as! MarqueeLabel

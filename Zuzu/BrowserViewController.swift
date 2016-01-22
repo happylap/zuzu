@@ -9,6 +9,8 @@ import UIKit
 import WebKit
 import MBProgressHUD
 
+private let Log = Logger.defaultLogger
+
 class BrowserViewController: UIViewController {
     
     var enableToolBar:Bool = true
@@ -100,7 +102,7 @@ class BrowserViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
             
-            NSLog("prepareForSegue: %@", identifier)
+            Log.debug("prepareForSegue: \(identifier)")
             
             switch identifier{
             case ViewTransConst.displayHouseUrl:

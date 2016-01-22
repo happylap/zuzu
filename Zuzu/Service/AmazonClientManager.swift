@@ -19,6 +19,8 @@ import FBSDKShareKit
 import SCLAlertView
 import ObjectMapper
 
+private let Log = Logger.defaultLogger
+
 class AmazonClientManager : NSObject {
     static let sharedInstance = AmazonClientManager()
 
@@ -156,7 +158,7 @@ class AmazonClientManager : NSObject {
     }
     
     func initializeCredentialsProvider() -> AWSTask? {
-        print("Initializing Credentials Provider...")
+        Log.debug("Initializing Credentials Provider...")
         
         AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
         
@@ -227,7 +229,7 @@ class AmazonClientManager : NSObject {
     
     func reloadFBSession() {
         if FBSDKAccessToken.currentAccessToken() != nil {
-            print("Reloading Facebook Session")
+            Log.debug("Reloading Facebook Session")
             self.completeFBLogin()
         }
     }
@@ -346,10 +348,10 @@ class AmazonClientManager : NSObject {
             request.platformApplicationArn = AWSConstants.PLATFORM_APPLICATION_ARN
             sns.createPlatformEndpoint(request).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task: AWSTask!) -> AnyObject! in
                 if task.error != nil {
-                    print("Error: \(task.error)")
+                    Log.debug("Error: \(task.error)")
                 } else {
                     let createEndpointResponse = task.result as! AWSSNSCreateEndpointResponse
-                    print("endpointArn: \(createEndpointResponse.endpointArn)")
+                    Log.debug("endpointArn: \(createEndpointResponse.endpointArn)")
                     NSUserDefaults.standardUserDefaults().setObject(createEndpointResponse.endpointArn, forKey: "endpointArn")
                 }
                 
@@ -363,7 +365,7 @@ class AmazonClientManager : NSObject {
     //func uploadFBUserDataToS3(transferManager: AWSS3TransferManager, fbLoginData: FBUserData) {
         
     func uploadFBUserDataToS3(userData: FBUserData) {
-        NSLog("%@ uploadFBUserDataToS3", self)
+        Log.debug("\(self) uploadFBUserDataToS3")
         
         let S3UploadKeyName = userData.facebookId! + ".json"
         
@@ -389,7 +391,7 @@ class AmazonClientManager : NSObject {
         }
         
         if (error) != nil {
-            NSLog("Error: %@",error!);
+            Log.debug("Error: \(error!.code), \(error!.localizedDescription)");
         }
         
         let uploadRequest = AWSS3TransferManagerUploadRequest()
@@ -401,7 +403,7 @@ class AmazonClientManager : NSObject {
             S3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
                 if task.result != nil {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        NSLog("%@ uploadFBUserDataToS3 sucess!", self)
+                        Log.debug("\(self) uploadFBUserDataToS3 sucess!")
                     })
                 }
                 return nil

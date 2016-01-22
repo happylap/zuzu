@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 class SmartFilterContainerView: UIView {
     
     enum PanelState:Int {
@@ -38,7 +40,7 @@ class SmartFilterContainerView: UIView {
     
     ///The correct place to layout subviews (with correct frame & bounds info)
     override func layoutSubviews() {
-        NSLog("layoutSubviews")
+        Log.debug("layoutSubviews")
         
         if let superView = self.superview {
             
@@ -51,7 +53,7 @@ class SmartFilterContainerView: UIView {
             
             self.frame = CGRect(x: 0, y: y, width: width, height: height + controlTopBorderHeight)
             
-            print("SmartFilterContainerView Frame = \(self.frame)")
+            Log.debug("SmartFilterContainerView Frame = \(self.frame)")
             
             /// Add SmartFilterViews
             positionSmartFilterViews()

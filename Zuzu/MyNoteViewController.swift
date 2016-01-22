@@ -10,6 +10,8 @@
 import UIKit
 import CoreData
 
+private let Log = Logger.defaultLogger
+
 class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     let cellReuseIdentifier = "NoteCell"
@@ -63,7 +65,7 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     
     // MARK: Actions
     @IBAction func addNoteItem(sender: UIButton) {
-        NSLog("%@ addNoteItem", self)
+        Log.debug("\(self) addNoteItem")
         if self.noteItemForCreate.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
             self.addNote(self.noteItemForCreate.text!)
             self.noteItemForCreate.text = ""
@@ -72,7 +74,7 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     }
     
     @IBAction func returnMainTable(sender: UIButton) {
-        NSLog("%@ returnMainTable", self)
+        Log.debug("\(self) returnMainTable")
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -80,14 +82,14 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSLog("%@ viewDidLoad", self)
+        Log.debug("\(self) viewDidLoad")
         noteItemForCreate.delegate = self
         
         do {
             try self.fetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("\(fetchError), \(fetchError.userInfo)")
+            Log.debug("\(fetchError), \(fetchError.userInfo)")
         }
         
         //Remove extra cells when the table height is smaller than the screen
@@ -119,11 +121,11 @@ extension MyNoteViewController: UITextFieldDelegate {
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        NSLog("%@ keyboardWillShow", self)
+        Log.debug("\(self) keyboardWillShow")
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        NSLog("%@ keyboardWillHide", self)
+        Log.debug("\(self) keyboardWillHide")
     }
 }
 
@@ -145,7 +147,7 @@ extension MyNoteViewController {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(self.cellReuseIdentifier, forIndexPath: indexPath) as! MyNoteViewCell
         
-        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
             //cell.textLabel?.text = note.title
@@ -165,7 +167,7 @@ extension MyNoteViewController {
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         
         let deleteButton = UITableViewRowAction(style: .Default, title: "", handler: { (action, indexPath) in
-            print("Delete pressed!")
+            Log.debug("Delete pressed!")
             self.tableView(tableView, commitEditingStyle: UITableViewCellEditingStyle.Delete, forRowAtIndexPath: indexPath)
         })
         
@@ -200,7 +202,7 @@ extension MyNoteViewController {
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        NSLog("%@ didChangeObject: \(type.rawValue)", self)
+        Log.debug("\(self) didChangeObject: \(type.rawValue)")
         
         switch type {
         case .Insert:

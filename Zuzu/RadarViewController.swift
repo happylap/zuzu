@@ -10,6 +10,8 @@ import AWSCore
 import AWSS3
 import FLAnimatedImage
 
+private let Log = Logger.defaultLogger
+
 class RadarViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -62,7 +64,7 @@ class RadarViewController: UIViewController {
                 
                 self.view.addSubview(imgView)
             } else {
-                NSLog("Error: %@", task.error!)
+                Log.debug("Error: %@", task.error!)
             }
             return nil
         })

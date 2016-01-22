@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
+private let Log = Logger.defaultLogger
+
 class CoreDataManager: NSObject {
     
     let storeName="dev-zuzu01.sqlite"
@@ -59,7 +61,7 @@ class CoreDataManager: NSObject {
                 
             }
             else{
-                print("using old context")
+                Log.debug("using old context")
             }
             return threadContext!;
             
@@ -98,7 +100,7 @@ class CoreDataManager: NSObject {
                     let journalWALURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent("\(storeName)-wal")
                     try NSFileManager.defaultManager().removeItemAtPath(journalWALURL.path!)
                 }catch{
-                    NSLog("remove store file error")
+                    Log.debug("remove store file error")
                 }
                 
                 do {
@@ -108,7 +110,7 @@ class CoreDataManager: NSObject {
                     if(FeatureOption.Collection.enableMain) {
                         abort()
                     } else {
-                        NSLog("%@ [Core Data] persistentStoreCoordinator error", self)
+                        Log.debug("\(self) [Core Data] persistentStoreCoordinator error")
                     }
                 }
             }
@@ -125,7 +127,7 @@ class CoreDataManager: NSObject {
             var fetchError:NSError?
             count = self.managedObjectContext.countForFetchRequest(request, error: &fetchError)
             if let error = fetchError {
-                print("Warning!! \(error.description)")
+                Log.debug("Warning!! \(error.description)")
             }
         }
         return count
@@ -145,7 +147,7 @@ class CoreDataManager: NSObject {
                 fatalError()
             };
             if let error=fetchError{
-                print("Warning!! \(error.description)")
+                Log.debug("Warning!! \(error.description)")
             }
         }
         return results;
@@ -166,7 +168,7 @@ class CoreDataManager: NSObject {
                 fatalError()
             }
             if let error=fetchError {
-                print("Warning!! \(error.description)")
+                Log.debug("Warning!! \(error.description)")
             }
             
             completionHandler(results: results)
@@ -192,7 +194,7 @@ class CoreDataManager: NSObject {
                 };
                 if !saved {
                     if let error = saveError{
-                        print("Warning!! Saving error \(error.description)")
+                        Log.debug("Warning!! Saving error \(error.description)")
                     }
                 }
                 
@@ -212,7 +214,7 @@ class CoreDataManager: NSObject {
                         
                         if !saved{
                             if let error = saveError{
-                                print("Warning!! Saving parent error \(error.description)")
+                                Log.debug("Warning!! Saving parent error \(error.description)")
                             }
                         }
                     }
@@ -241,7 +243,7 @@ class CoreDataManager: NSObject {
             }
             
             if let error = obtainError {
-                print("Warning!! obtaining ids error \(error.description)")
+                Log.debug("Warning!! obtaining ids error \(error.description)")
             }
         }
     }

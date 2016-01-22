@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate {
 
     var notificationService: NotificationItemService!
@@ -175,7 +177,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func controller(controller: TableResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: TableResultsChangeType, newIndexPath: NSIndexPath?) {
         
-        NSLog("%@ didChangeObject: \(type.rawValue)", self)
+        Log.debug("\(self) didChangeObject: \(type.rawValue)")
         
         switch type {
         case .Insert:

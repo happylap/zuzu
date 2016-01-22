@@ -8,6 +8,8 @@
 import UIKit
 import SCLAlertView
 
+private let Log = Logger.defaultLogger
+
 protocol DuplicateHouseViewControllerDelegate: class {
     func onDismiss()
     func onContinue()
@@ -168,7 +170,7 @@ class DuplicateHouseViewController: UIViewController {
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
             
             if let error = error {
-                NSLog("Cannot get remote data %@", error.localizedDescription)
+                Log.debug("Cannot get remote data \(error.localizedDescription)")
                 return
             }
             
@@ -295,7 +297,7 @@ extension DuplicateHouseViewController: UITableViewDataSource, UITableViewDelega
         
         let cell = tableView.dequeueReusableCellWithIdentifier(TableConst.houseCellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         if let duplicateHouses = self.duplicateHouses {
             

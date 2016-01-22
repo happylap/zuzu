@@ -15,6 +15,8 @@ import MBProgressHUD
 import AwesomeCache
 import SCLAlertView
 
+private let Log = Logger.defaultLogger
+
 protocol HouseDetailViewDelegate {
     func onHouseItemStateChanged()
 }
@@ -133,7 +135,7 @@ class HouseDetailViewController: UIViewController {
             if let cachedData = cache.objectForKey(houseItem.id),
                 let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) {
                     
-                    NSLog("Hit Cache for item: Id: %@, Title: %@", houseItem.id, houseItem.title)
+                    Log.debug("Hit Cache for item: Id: \(houseItem.id), Title: \(houseItem.title)")
                     
                     hitCache = true
                     
@@ -143,7 +145,7 @@ class HouseDetailViewController: UIViewController {
             }
             
         } catch _ {
-            print("Something went wrong with the cache")
+            Log.debug("Something went wrong with the cache")
         }
         
         
@@ -155,7 +157,7 @@ class HouseDetailViewController: UIViewController {
                 
                 
                 if let error = error {
-                    NSLog("Cannot get remote data %@", error.localizedDescription)
+                    Log.debug("Cannot get remote data \(error.localizedDescription)")
                     return
                 }
                 
@@ -170,7 +172,7 @@ class HouseDetailViewController: UIViewController {
                         cache.setObject(cachedData, forKey: houseItem.id, expires: CacheExpiry.Seconds(self.cacheTime))
                         
                     } catch _ {
-                        print("Something went wrong with the cache")
+                        Log.debug("Something went wrong with the cache")
                     }
                     
                     self.handleHouseDetailResponse(result)
@@ -194,7 +196,7 @@ class HouseDetailViewController: UIViewController {
                         let imgUrl = NSURL(string: imgString){
                             
                             cell.titleImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
-                                NSLog("Img loading done, status = \(response?.statusCode)")
+                                Log.debug("Img loading done, status = \(response?.statusCode)")
                             }
                             
                     }
@@ -595,7 +597,7 @@ class HouseDetailViewController: UIViewController {
                             
                             resultString = desc
                         }
-                        NSLog("Desc Set: %@", resultString)
+                        Log.debug("Desc Set: \(resultString)")
                         
                         
                         if(resultString.characters.count > 0) {
@@ -608,7 +610,7 @@ class HouseDetailViewController: UIViewController {
                         //cell.setNeedsLayout()
                         // cell.layoutIfNeeded()
                         
-                        NSLog("Frame Height: %f", cell.contentLabel.frame.height)
+                        Log.debug("Frame Height: \(cell.contentLabel.frame.height)")
                     } else {
                         cell.contentLabel.text = "無資訊\n"
                     }
@@ -835,7 +837,7 @@ class HouseDetailViewController: UIViewController {
                 }
                 
             } else {
-                NSLog("No emails available")
+                Log.debug("No emails available")
             }
         }
     }
@@ -965,7 +967,7 @@ class HouseDetailViewController: UIViewController {
                 }
                 
         } else {
-            NSLog("No data to share now")
+            Log.debug("No data to share now")
         }
         
         ///GA Tracker
@@ -1081,13 +1083,13 @@ class HouseDetailViewController: UIViewController {
         //            controller.addImage(UIImage(named: "Safari"))
         //            controller.addURL(NSURL(string: "http://www.apple.com/safari/"))
         //            controller.completionHandler = {(result: SLComposeViewControllerResult) in
-        //                print("Completed")
+        //                Log.debug("Completed")
         //            }
         //
         //            presentViewController(controller, animated: true, completion: nil)
         //
         //        }else{
-        //            print("The Twitter service is not available")
+        //            Log.debug("The Twitter service is not available")
         //        }
     }
     
@@ -1114,7 +1116,7 @@ class HouseDetailViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
             
-            NSLog("prepareForSegue: %@", identifier)
+            Log.debug("prepareForSegue: \(identifier)")
             
             switch identifier{
                 
@@ -1134,7 +1136,7 @@ class HouseDetailViewController: UIViewController {
                             }
                         })
                         
-                        NSLog("Coordinate: %@", coordinateArray!)
+                        Log.debug("Coordinate: \(coordinateArray!)")
                         
                         if let coordinate = coordinateArray {
                             
@@ -1183,17 +1185,17 @@ extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
         
         switch result {
         case MFMailComposeResultCancelled:
-            print("Mail cancelled")
+            Log.debug("Mail cancelled")
         case MFMailComposeResultSaved:
-            print("Mail saved")
+            Log.debug("Mail saved")
         case MFMailComposeResultSent:
             success = true
-            print("Mail sent")
+            Log.debug("Mail sent")
             if let houseId = self.houseItem?.id {
                 CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
             }
         case MFMailComposeResultFailed:
-            print("Mail sent failure: %@", error?.localizedDescription)
+            Log.debug("Mail sent failure: \(error?.localizedDescription)")
         default:
             break
         }
@@ -1224,7 +1226,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     
     //    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
     //        if var cellInfo = tableRows[indexPath.row] {
-    //            NSLog("heightForRowAtIndexPath> Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
+    //            Log.debug("heightForRowAtIndexPath> Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
     //
     //            if(cellInfo.hidden) {
     //                return 0
@@ -1256,20 +1258,20 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 let contentHeight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
                 let labelHeight = cell.contentLabel.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
                 
-                NSLog("Content Layout Height: %f", contentHeight)
-                NSLog("Label Layout Height: %f", labelHeight)
+                Log.debug("Content Layout Height: \(contentHeight)")
+                Log.debug("Label Layout Height: \(labelHeight)")
                 
                 cellInfo.cellHeight = max(cellInfo.cellHeight, contentHeight)
                 cellInfo.cellHeight = max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
                 
                 tableRows[indexPath.row] = cellInfo
                 
-                NSLog("IntrinsicContentSize Height: %f for Row: %d", cell.contentLabel.intrinsicContentSize().height, indexPath.row)
+                Log.debug("IntrinsicContentSize Height: \(cell.contentLabel.intrinsicContentSize().height) for Row: \(indexPath.row)")
                 
-                NSLog("Updated Cell Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
+                Log.debug("Updated Cell Height: \(cellInfo.cellHeight) for Row: \(indexPath.row)")
             }
             
-            NSLog("- Cell Instance [%p] Prepare Cell For Row[%d]", cell, indexPath.row)
+            Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
             
             return cell
             
@@ -1282,7 +1284,9 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if let cell = cell as? HouseDetailTitleViewCell {
-            NSLog("willDisplayCell %@", cell)
+            
+            Log.debug("willDisplayCell: \(cell)")
+            
             let label:MarqueeLabel =  cell.houseTitleLabel as! MarqueeLabel
             label.restartLabel()
         }
@@ -1344,10 +1348,10 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 
                 
                 if nextCellInfo?.hidden == true {
-                    NSLog("Set Show for Row %d", nextRow)
+                    Log.debug("Set Show for Row \(nextRow)")
                     nextCellInfo?.hidden = false
                 } else {
-                    NSLog("Set Hide for Row %d", nextRow)
+                    Log.debug("Set Hide for Row \(nextRow)")
                     nextCellInfo?.hidden = true
                 }
                 tableRows[nextRow] = nextCellInfo

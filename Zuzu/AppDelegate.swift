@@ -14,6 +14,8 @@ import AWSSNS
 import FBSDKCoreKit
 import FBSDKLoginKit
 
+private let Log = Logger.defaultLogger
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -116,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         customUISetup()
         
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
-        print(url)
+        Log.debug(url.absoluteString)
         
         return true
     }
@@ -125,16 +127,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let deviceTokenString = "\(deviceToken)"
             .stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString:"<>"))
             .stringByReplacingOccurrencesOfString(" ", withString: "")
-        print("deviceTokenString: \(deviceTokenString)")
+        Log.debug("deviceTokenString: \(deviceTokenString)")
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        print("Error in registering for remote notifications: " + error.localizedDescription)
+        Log.debug("Error in registering for remote notifications: \(error.localizedDescription)")
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        print("userInfo: \(userInfo)")
+        Log.debug("userInfo: \(userInfo)")
     }
     
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {

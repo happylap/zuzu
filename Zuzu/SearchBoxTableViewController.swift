@@ -964,7 +964,7 @@
         
         override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
             
-            Log.debug("heightForRowAtIndexPath\(indexPath)")
+            Log.debug("heightForRowAtIndexPath = \(indexPath)")
             
             if(hiddenCells.contains(indexPath.row)) {
                 return 0
@@ -991,7 +991,7 @@
         override func viewDidLoad() {
             super.viewDidLoad()
             
-            NSLog("Begin viewDidLoad: %@", self)
+            Log.debug("Begin viewDidLoad: \(self)")
             self.configureButton()
             
             self.configureSearchHistoryTable()
@@ -1026,7 +1026,7 @@
                 }
             }
             
-            NSLog("End viewDidLoad: %@", self)
+            Log.debug("End viewDidLoad: \(self)")
         }
         
         func handleTap(sender:UITapGestureRecognizer) {
@@ -1069,7 +1069,7 @@
         
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
-            NSLog("viewDidAppear: %@", self)
+            Log.debug("viewDidAppear: \(self)")
             self.stateObserver.start()
         }
         
@@ -1079,18 +1079,18 @@
             //Disable location monitoring
             locationManagerActive = false
             
-            NSLog("viewDidDisappear: %@", self)
+            Log.debug("viewDidDisappear: \(self)")
         }
         
         // MARK: - Navigation
         override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
             
-            NSLog("prepareForSegue: %@", self)
+            Log.debug("prepareForSegue: \(self)")
             
             if let identifier = segue.identifier{
                 switch identifier{
                 case ViewTransConst.showSearchResult:
-                    NSLog("showSearchResult")
+                    Log.debug("showSearchResult")
                     if let srtvc = segue.destinationViewController as? SearchResultViewController {
                         
                         ///GA Tracker
@@ -1154,12 +1154,12 @@
                         do{
                             try searchItemService.addNewSearchItem(SearchItem(criteria: currentCriteria, type: .HistoricalSearch))
                         } catch {
-                            NSLog("Fail to save search history")
+                            Log.debug("Fail to save search history")
                         }
                         
                     }
                 case ViewTransConst.showAreaSelector:
-                    NSLog("showAreaSlector")
+                    Log.debug("showAreaSlector")
                     
                     ///Setup delegat to receive result
                     if let vc = segue.destinationViewController as? CityRegionContainerController {
@@ -1516,7 +1516,7 @@
             
             //            if let view = touch.view {
             //
-            //                NSLog("gestureRecognizer: %@", view)
+            //                Log.debug("gestureRecognizer: %@", view)
             //                if (view.isDescendantOfView(self.tableView)) {
             //                    return false
             //                }

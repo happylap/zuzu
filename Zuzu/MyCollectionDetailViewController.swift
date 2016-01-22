@@ -11,6 +11,8 @@ import UIKit
 import Alamofire
 import AlamofireImage
 
+private let Log = Logger.defaultLogger
+
 class MyCollectionDetailViewController: UIViewController {
     
     @IBOutlet weak var houseImg: UIImageView!
@@ -27,7 +29,7 @@ class MyCollectionDetailViewController: UIViewController {
     var houseItem: House?
     
     override func viewDidLoad() {
-        NSLog("%@ viewDidLoad", self)
+        Log.debug("\(self) viewDidLoad")
         super.viewDidLoad()
         
         if houseItem != nil {
@@ -37,7 +39,7 @@ class MyCollectionDetailViewController: UIViewController {
     
     
     func updateUI() {
-        NSLog("%@ updateUI", self)
+        Log.debug("\(self) updateUI")
         
         if let house: House = houseItem {
             
@@ -59,7 +61,7 @@ class MyCollectionDetailViewController: UIViewController {
                     
                     self.houseImg.af_setImageWithURL(NSURL(string: img)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                         
-                        //NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
+                        //Log.debug("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                         
                     }
                 }

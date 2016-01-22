@@ -11,6 +11,8 @@ import CoreData
 import SwiftyJSON
 import Dollar
 
+private let Log = Logger.defaultLogger
+
 class NoteDao: NSObject {
     
     // Utilize Singleton pattern by instanciating NoteDao only once.
@@ -26,7 +28,7 @@ class NoteDao: NSObject {
     
     func addNote(house: House, noteDesc: String) {
         
-        NSLog("%@ addNote", self)
+        Log.debug("\(self) addNote")
         
         let context = CoreDataManager.shared.managedObjectContext
         
@@ -46,7 +48,7 @@ class NoteDao: NSObject {
     // MARK: Read
     
     func getNoteListByHouseId(houseId: String) -> [Note]? {
-        NSLog("%@ getNoteListByHouseId: \(houseId)", self)
+        Log.debug("\(self) getNoteListByHouseId: \(houseId)")
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.Note.rawValue)
         
@@ -59,7 +61,7 @@ class NoteDao: NSObject {
     }
     
     func getNoteById(id: String) -> AnyObject? {
-        NSLog("%@ getNoteById: \(id)", self)
+        Log.debug("\(self) getNoteById: \(id)")
         
         let fetchRequest = NSFetchRequest(entityName: EntityTypes.Note.rawValue)
         
@@ -79,7 +81,7 @@ class NoteDao: NSObject {
     // MARK: Delete
     
     func deleteById(id: String) {
-        NSLog("%@ deleteById: \(id)", self)
+        Log.debug("\(self) deleteById: \(id)")
         
         if let entity = self.getNoteById(id) {
             if let obj: NSManagedObject = entity as? NSManagedObject {
@@ -90,7 +92,7 @@ class NoteDao: NSObject {
     }
     
     func deleteByHouseId(houseId: String) {
-        NSLog("%@ deleteByHouseId: \(houseId)", self)
+        Log.debug("\(self) deleteByHouseId: \(houseId)")
         
         if let result = self.getNoteListByHouseId(houseId) {
             for item in result {

@@ -7,6 +7,8 @@
 
 import StoreKit
 
+private let Log = Logger.defaultLogger
+
 /// Notification that is generated when a product is purchased.
 public let ProductPurchasedNotification = "ProductPurchasedNotification"
 
@@ -54,10 +56,10 @@ public class ZuzuStore: NSObject  {
             let purchased = NSUserDefaults.standardUserDefaults().boolForKey(productIdentifier)
             if purchased {
                 purchasedProductIdentifiers.insert(productIdentifier)
-                print("Previously purchased: \(productIdentifier)")
+                Log.debug("Previously purchased: \(productIdentifier)")
             }
             else {
-                print("Not purchased: \(productIdentifier)")
+                Log.debug("Not purchased: \(productIdentifier)")
             }
         }
         super.init()
@@ -75,7 +77,7 @@ public class ZuzuStore: NSObject  {
         /// Cancel previous request if a request is alreay in progress
         if(completionHandler != nil) {
             
-            print("Cancel previous request")
+            Log.debug("Cancel previous request")
             productsRequest?.cancel()
             
         }
@@ -87,7 +89,7 @@ public class ZuzuStore: NSObject  {
     
     /// Make purchase of a product.
     public func makePurchase(product: SKProduct) {
-        print("Buying \(product.productIdentifier)...")
+        Log.debug("Buying \(product.productIdentifier)...")
         let payment = SKPayment(product: product)
         SKPaymentQueue.defaultQueue().addPayment(payment)
     }
@@ -115,20 +117,20 @@ public class ZuzuStore: NSObject  {
 // SKProductsRequestDelegate: to get a list of products, their titles, descriptions, and prices from the Apple server
 extension ZuzuStore: SKProductsRequestDelegate {
     public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
-        print("Loaded list of products...")
+        Log.debug("Loaded list of products...")
         let products = response.products
         completionHandler?(success: true, products: products)
         clearRequest()
         
         // debug printing
         for p in products {
-            print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
+            Log.debug("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
         }
     }
     
     public func request(request: SKRequest, didFailWithError error: NSError) {
-        print("Failed to load list of products.")
-        print("Error: \(error)")
+        Log.debug("Failed to load list of products.")
+        Log.debug("Error: \(error)")
         clearRequest()
     }
     
@@ -164,22 +166,22 @@ extension ZuzuStore: SKPaymentTransactionObserver {
     }
     
     private func completeTransaction(transaction: SKPaymentTransaction) {
-        print("completeTransaction...")
+        Log.debug("completeTransaction...")
         provideContentForProductIdentifier(transaction.payment.productIdentifier)
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     
     private func failedTransaction(transaction: SKPaymentTransaction) {
-        print("failedTransaction...")
+        Log.debug("failedTransaction...")
         if transaction.error!.code != SKErrorPaymentCancelled {
-            print("Transaction error: \(transaction.error!.localizedDescription)")
+            Log.debug("Transaction error: \(transaction.error!.localizedDescription)")
         }
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     
     private func restoreTransaction(transaction: SKPaymentTransaction) {
         let productIdentifier = transaction.originalTransaction!.payment.productIdentifier
-        print("restoreTransaction... \(productIdentifier)")
+        Log.debug("restoreTransaction... \(productIdentifier)")
         provideContentForProductIdentifier(productIdentifier)
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }

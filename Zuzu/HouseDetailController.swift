@@ -8,12 +8,14 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 class HouseDetailController: UIViewController {
 
     var house:AnyObject?
     
     override func viewDidLoad() {
-        NSLog("%@ [[viewDidLoad]]", self)
+        Log.debug("\(self) [[viewDidLoad]]")
         
     }
 

@@ -13,6 +13,8 @@ import SwiftyJSON
 import ObjectMapper
 import SwiftDate
 
+private let Log = Logger.defaultLogger
+
 class CollectionItemService: NSObject
 {
     let dao = CollectionHouseItemDao.sharedInstance
@@ -156,27 +158,27 @@ class CollectionItemService: NSObject
     }
     
     func startSynchronizeNotification(aNotification: NSNotification) {
-        NSLog("%@ AWSCognito startSynchronizeNotification", self)
+        Log.debug("\(self) AWSCognito startSynchronizeNotification")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
     }
     
     func endSynchronizeNotification(aNotification: NSNotification) {
-        NSLog("%@ AWSCognito endSynchronizeNotification", self)
+        Log.debug("\(self) AWSCognito endSynchronizeNotification")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
     
     func failToSynchronizeNotification(aNotification: NSNotification) {
-        NSLog("%@ AWSCognito failToSynchronizeNotification", self)
+        Log.debug("\(self) AWSCognito failToSynchronizeNotification")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
     
     func changeRemoteValueNotification(aNotification: NSNotification) {
-        NSLog("%@ AWSCognito changeRemoteValueNotification", self)
+        Log.debug("\(self) AWSCognito changeRemoteValueNotification")
         
     }
     
     func changeLocalValueFromRemoteNotification(aNotification: NSNotification) {
-        NSLog("%@ AWSCognito changeRemoteValueNotification", self)
+        Log.debug("\(self) AWSCognito changeRemoteValueNotification")
  
         dispatch_async(dispatch_get_main_queue()) {
             
@@ -207,7 +209,7 @@ class CollectionItemService: NSObject
                             // Delete collectionItem, if its id isn't exist dirtyKeys
                             if let collectionItems = self.getAll() {
                                 for collectionItem: CollectionHouseItem in collectionItems {
-                                    NSLog("%@ collectionItem title: \(collectionItem.title)", self)
+                                    Log.debug("\(self) collectionItem title: \(collectionItem.title)")
                                     let id = collectionItem.id
                                     if !dirtyKeys.contains(id) {
                                         self.dao.safeDeleteByID(id)
@@ -225,7 +227,7 @@ class CollectionItemService: NSObject
                             for dirtyRecord: AWSCognitoRecord in dirtyRecords {
                                 let dirtyKey = dirtyRecord.recordId
                                 if modifyingKeys.contains(dirtyKey) {
-                                    //NSLog("%@ dirtyRecord: \(dirtyRecord)", self)
+                                    //Log.debug("%@ dirtyRecord: \(dirtyRecord)", self)
                                     let JSONString = dirtyRecord.data.string()
                                     Mapper<CollectionHouseItem>().map(JSONString)
                                 }

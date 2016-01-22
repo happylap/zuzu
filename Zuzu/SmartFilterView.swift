@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 class SmartFilterView: UIView {
 
     private let filtersPerPage = 4
@@ -31,7 +33,7 @@ class SmartFilterView: UIView {
     
     ///The correct place to layout subviews (with correct frame & bounds info)
     override func layoutSubviews() {
-        NSLog("layoutSubviews")
+        Log.debug("layoutSubviews")
         
         var buttonSpace:CGFloat = 8.0
         var buttonWidth:CGFloat = 80.0
@@ -53,7 +55,7 @@ class SmartFilterView: UIView {
             
             let buttonFrame = CGRect(x: newXOffset, y: yOffset, width: buttonWidth, height: buttonHeight) // X, Y, width, height
             
-            print("SmartFilterView buttonFrame = \(buttonFrame)")
+            Log.debug("SmartFilterView buttonFrame = \(buttonFrame)")
             
             button.frame = buttonFrame
         }
@@ -70,7 +72,7 @@ class SmartFilterView: UIView {
                 let json = JSON(data: jsonData)
                 let items = json[criteriaLabel].arrayValue
                 
-                NSLog("\(criteriaLabel) = %d", items.count)
+                Log.debug("\(criteriaLabel) = \(items.count)")
                 
                 for (index, itemJsonObj) in items.enumerate() {
                     let groupId = itemJsonObj["id"].stringValue
@@ -88,7 +90,7 @@ class SmartFilterView: UIView {
                 
             } catch let error as NSError{
                 
-                NSLog("Cannot load json file %@", error)
+                Log.debug("Cannot load json file \(error.localizedDescription)")
                 
             }
         }

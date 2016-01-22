@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
+private let Log = Logger.defaultLogger
+
 class AbstractHouseItemDao: NSObject
 {
     // MARK: - Requird Override Function
@@ -34,7 +36,7 @@ class AbstractHouseItemDao: NSObject
     // MARK: - Get Function
     
     func get(id: String) -> AbstractHouseItem? {
-        NSLog("%@ get: \(id)", self)
+        Log.debug("\(self) get: \(id)")
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: self.entityName)
         
@@ -55,7 +57,7 @@ class AbstractHouseItemDao: NSObject
     }
     
     func getAll() -> [AbstractHouseItem]? {
-        NSLog("%@ getAll", self)
+        Log.debug("\(self) getAll")
         
         let fetchRequest = NSFetchRequest(entityName: self.entityName)
 
@@ -78,7 +80,7 @@ class AbstractHouseItemDao: NSObject
                 return nil
             }
             
-            NSLog("%@ add notification item", self)
+            Log.debug("\(self) add notification item")
             
             let context=CoreDataManager.shared.managedObjectContext
             
@@ -101,7 +103,7 @@ class AbstractHouseItemDao: NSObject
     
     // MARK: Delete Function    
     func deleteByID(id: String) {
-        NSLog("%@ deleteByID: \(id)", self)
+        Log.debug("\(self) deleteByID: \(id)")
         if let item = self.get(id) {
             CoreDataManager.shared.deleteEntity(item)
             self.commit()

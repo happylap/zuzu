@@ -14,6 +14,8 @@ import AWSCore
 import AWSCognito
 import SCLAlertView
 
+private let Log = Logger.defaultLogger
+
 struct CollectionHouseItemDocument {
     
     struct Sorting {
@@ -103,7 +105,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     
     private func loadDataBy(sortingField: String?, ascending: Bool?) {
-        NSLog("%@ loadData", self)
+        Log.debug("\(self) loadData")
         
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setMinShowTime(0.6)
@@ -123,7 +125,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             _ascending = ascending!
         }
         
-        print("loadData by \(_sortingField) \(_ascending)")
+        Log.debug("loadData by \(_sortingField) \(_ascending)")
         let firstSort = NSSortDescriptor(key: _sortingField, ascending: _ascending)
         let secondarySort = NSSortDescriptor(key: CollectionHouseItemDocument.collectTime, ascending: false)
         fetchRequest.sortDescriptors = [firstSort, secondarySort]
@@ -138,7 +140,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             try self.fetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("\(fetchError), \(fetchError.userInfo)")
+            Log.debug("\(fetchError), \(fetchError.userInfo)")
         }
         
         LoadingSpinner.shared.stop()
@@ -163,7 +165,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
 
     private func sortByField(sortingField:String, sortingOrder:String) {
         
-        NSLog("Sorting = %@ %@", sortingField, sortingOrder)
+        Log.debug("Sorting = \(sortingField) \(sortingOrder)")
 
         self.sortingStatus[sortingField] = sortingOrder
         
@@ -246,7 +248,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
-        NSLog("%@ onShowNoteEditorTouched", self)
+        Log.debug("\(self) onShowNoteEditorTouched")
         
         if FeatureOption.Collection.enableNote {
             self.performSegueWithIdentifier("showNotes", sender: sender)
@@ -308,7 +310,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     @IBAction func onLogoutButtonTouched(sender: UIButton) {
-        NSLog("%@ onLogoutButtonTouched", self)
+        Log.debug("\(self) onLogoutButtonTouched")
 
         AmazonClientManager.sharedInstance.logOut() {
             (task: AWSTask!) -> AnyObject! in
@@ -321,7 +323,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     /*
     @IBAction func onLoginButtonTouched(sender: UIButton) {
-        NSLog("%@ onLoginButtonTouched", self)
+        Log.debug("%@ onLoginButtonTouched", self)
         
         AmazonClientManager.sharedInstance.loginFromView(self) {
             (task: AWSTask!) -> AnyObject! in
@@ -338,7 +340,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSLog("%@ viewDidLoad", self)
+        Log.debug("\(self) viewDidLoad")
         
         // Load data sort by collectTime
         self.sortByField(CollectionHouseItemDocument.collectTime, sortingOrder: CollectionHouseItemDocument.Sorting.sortDesc)
@@ -354,7 +356,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     }
     
     override func viewWillAppear(animated: Bool) {
-        NSLog("%@ viewWillAppear", self)
+        Log.debug("\(self) viewWillAppear")
         super.viewWillAppear(animated)
         
         // Synchronize core data from Cognito
@@ -382,7 +384,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         if let identifier = segue.identifier {
             
-            NSLog("%@ prepareForSegue", self)
+            Log.debug("\(self) prepareForSegue")
             
             switch identifier {
             case "showNotes":
@@ -391,10 +393,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                     if let imgView = sender.view {
                         if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
                             let indexPath = cell.indexPath
-                            NSLog("%@ segue to showNotes: \(indexPath)", self)
+                            Log.debug("\(self) segue to showNotes: \(indexPath)")
                             if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                                 
-                                NSLog("%@ segue to showNotes: house title: \(collectionHouseItem.title)", self)
+                                Log.debug("\(self) segue to showNotes: house title: \(collectionHouseItem.title)")
                                 destController.collectionHouseItem = collectionHouseItem
                             }
                         }
@@ -437,7 +439,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         let cell = tableView.dequeueReusableCellWithIdentifier(self.cellReuseIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
@@ -541,7 +543,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         
-        NSLog("%@ didChangeObject: \(type.rawValue)", self)
+        Log.debug("\(self) didChangeObject: \(type.rawValue)")
         
         switch type {
         case .Insert:

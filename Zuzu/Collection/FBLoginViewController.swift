@@ -9,6 +9,8 @@
 import UIKit
 import FBSDKLoginKit
 
+private let Log = Logger.defaultLogger
+
 class FBLoginViewController: UIViewController, FBSDKLoginButtonDelegate
 {
     
@@ -20,7 +22,7 @@ class FBLoginViewController: UIViewController, FBSDKLoginButtonDelegate
     // MARK: - Control Action Handlers
     
     @IBAction func onCancelButtonTouched(sender: UIButton) {
-        NSLog("%@ onCancelButtonTouched", self)
+        Log.debug("\(self) onCancelButtonTouched")
         dismissViewControllerAnimated(true, completion: nil)
     }
     

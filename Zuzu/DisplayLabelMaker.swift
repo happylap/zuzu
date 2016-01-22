@@ -9,6 +9,8 @@
 import Foundation
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 class DisplayLabelMakerFactory: NSObject {
     
     enum Type {
@@ -47,7 +49,7 @@ class HouseLabelMaker: LabelMaker{
                 let json = JSON(data: jsonData)
                 let items = json[root].dictionaryValue
                 
-                NSLog("\(root) = %d", items.count)
+                Log.debug("\(root) = \(items.count)")
                 
                 for itemJsonObj in items {
                     
@@ -64,7 +66,7 @@ class HouseLabelMaker: LabelMaker{
                 
             } catch let error as NSError{
                 
-                NSLog("Cannot load json file %@", error)
+                Log.debug("Cannot load json file \(error.localizedDescription)")
                 
             }
         }

@@ -10,8 +10,9 @@ import UIKit
 import Alamofire
 import AlamofireImage
 
+private let Log = Logger.defaultLogger
+
 class MyCollectionCell: UITableViewCell {
-    
     
     @IBOutlet weak var houseImg: UIImageView!
     @IBOutlet weak var houseTitle: UILabel!
@@ -144,8 +145,8 @@ class MyCollectionCell: UITableViewCell {
         houseImg.layer.removeAllAnimations()
         houseImg.image = nil
         
-        NSLog("\n")
-        NSLog("- Cell Instance [%p] Reset Data For Current Row[\(indexPath.row)]", self)
+        Log.debug("\n")
+        Log.debug("- Cell Instance [\(self)] Reset Data For Current Row[\(indexPath.row)]")
         
     }
     
@@ -170,7 +171,7 @@ class MyCollectionCell: UITableViewCell {
                     
                     self.houseImg.af_setImageWithURL(NSURL(string: imgUrl)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
                         
-                        NSLog("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
+                        Log.debug("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
                         
                         //self.contentView.updateConstraintsIfNeeded()
                         //self.contentView.setNeedsLayout()

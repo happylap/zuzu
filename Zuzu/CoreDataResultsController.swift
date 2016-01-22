@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
+private let Log = Logger.defaultLogger
+
 class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResultsControllerDelegate{
  
     class Builder: NSObject {
@@ -77,7 +79,7 @@ class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResu
             try self.resultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            NSLog("\(fetchError), \(fetchError.userInfo)", self)
+            Log.debug("\(fetchError), \(fetchError.userInfo)")
         }
     }
     

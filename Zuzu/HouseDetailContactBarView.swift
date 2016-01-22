@@ -8,6 +8,8 @@
 import UIKit
 import MarqueeLabel
 
+private let Log = Logger.defaultLogger
+
 class HouseDetailContactBarView: UIView {
 
     @IBOutlet weak var contactName: UILabel!
@@ -50,7 +52,7 @@ class HouseDetailContactBarView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        NSLog("awakeFromNib %@", self)
+        Log.debug("awakeFromNib \(self)")
         
         // Initialization code
         let label:MarqueeLabel =  contactName as! MarqueeLabel

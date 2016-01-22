@@ -9,6 +9,8 @@
 import Foundation
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 public struct ConfigLoader {
     
     static private var regionDic : [Int : City]?
@@ -43,7 +45,7 @@ public struct ConfigLoader {
                 let json = JSON(data: jsonData)
                 let cities = json["cities"].arrayValue
                 
-                NSLog("Cities = %d", cities.count)
+                Log.debug("Cities = \(cities.count)")
                 
                 for cityJsonObj in cities {
                     let name = cityJsonObj["name"].stringValue
@@ -71,7 +73,7 @@ public struct ConfigLoader {
                 
             } catch let error as NSError{
                 
-                NSLog("Cannot load area json file %@", error)
+                Log.debug("Cannot load area json file \(error.localizedDescription)")
                 
             }
             
@@ -90,7 +92,7 @@ public struct ConfigLoader {
                 let json = JSON(data: jsonData)
                 let cities = json["cities"].arrayValue
                 
-                NSLog("Cities = %d", cities.count)
+                Log.debug("Cities = \(cities.count)")
                 
                 for cityJsonObj in cities {
                     let name = cityJsonObj["name"].stringValue
@@ -117,7 +119,7 @@ public struct ConfigLoader {
                 
             } catch let error as NSError{
                 
-                NSLog("Cannot load area json file %@", error)
+                Log.debug("Cannot load area json file \(error.localizedDescription)")
                 
             }
             

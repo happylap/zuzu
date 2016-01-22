@@ -8,6 +8,8 @@
 
 import Foundation
 
+private let Log = Logger.defaultLogger
+
 class SearchCriteriaObserver:NSObject {
     
     //If the criteria is not changed for allowedIdleSeconds, the system will fetch the number of houses before the user actually presses the search button
@@ -34,7 +36,7 @@ class SearchCriteriaObserver:NSObject {
     
     private func validateCriteria(criteria: SearchCriteria) -> Bool {
         
-        NSLog("validateCriteria")
+        Log.debug("validateCriteria")
         
         if(criteria.region == nil || criteria.region!.count <= 0) {
             return false
@@ -54,7 +56,7 @@ class SearchCriteriaObserver:NSObject {
             return
         }
         
-        NSLog("onCriteriaChanged")
+        Log.debug("onCriteriaChanged")
         
         currentCriteria = criteria
         
@@ -71,11 +73,11 @@ class SearchCriteriaObserver:NSObject {
     }
     
     func fetchNumberOfItems() {
-        NSLog("Start fetchNumberOfItems!")
+        Log.debug("Start fetchNumberOfItems!")
         
         houseReq.searchByCriteria(currentCriteria, start: 0, row: 0) { (totalNum, result, error) -> Void in
                 
-            NSLog("End fetchNumberOfItems = \(totalNum)")
+            Log.debug("End fetchNumberOfItems = \(totalNum)")
             
             if(totalNum != 0) {
                 self.viewController.fastItemCountLabel.text = "立即觀看 \(totalNum) 筆出租物件"

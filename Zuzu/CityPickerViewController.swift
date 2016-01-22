@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 protocol CitySelectionViewControllerDelegate: class {
     func onCitySelected(value: Int)
 }
@@ -65,7 +67,7 @@ class CityPickerViewController:UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSLog("viewDidLoad: %@", self)
+        Log.debug("viewDidLoad: \(self)")
         
         self.configurePricePicker()
         
@@ -74,7 +76,7 @@ class CityPickerViewController:UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSLog("viewWillAppear: %@", self)
+        Log.debug("viewWillAppear: \(self)")
         
         ///Auto-pick the fisrt city with selected region
         if let index = getFirstSelectedCityIndex() {
@@ -89,12 +91,12 @@ class CityPickerViewController:UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        NSLog("viewDidAppear: %@", self)
+        Log.debug("viewDidAppear: \(self)")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        NSLog("viewWillDisappear: %@", self)
+        Log.debug("viewWillDisappear: \(self)")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     

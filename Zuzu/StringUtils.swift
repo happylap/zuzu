@@ -8,6 +8,7 @@
 
 import Foundation
 
+private let Log = Logger.defaultLogger
 
 struct StringUtils{
     
@@ -22,7 +23,7 @@ struct StringUtils{
             
             if(resultStr.containsString(char)) {
                 let escapedChar = "\\\(char)"
-                print(escapedChar)
+                Log.debug(escapedChar)
                 resultStr = resultStr.stringByReplacingOccurrencesOfString(char, withString: escapedChar)
             }
         }

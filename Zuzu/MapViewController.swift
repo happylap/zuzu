@@ -8,6 +8,8 @@
 import UIKit
 import GoogleMaps
 
+private let Log = Logger.defaultLogger
+
 class MapViewController: UIViewController {
     var houseAddres: String?
     var houseTitle: String?
@@ -31,7 +33,7 @@ class MapViewController: UIViewController {
         let status = CLLocationManager.locationServicesEnabled()
         let authStatus = CLLocationManager.authorizationStatus()
         
-        NSLog("%@, %d", status, authStatus.rawValue)
+        Log.debug("LocationServices Status: \(status), \(authStatus.rawValue)")
         
         if status {
             if authStatus == CLAuthorizationStatus.AuthorizedWhenInUse {

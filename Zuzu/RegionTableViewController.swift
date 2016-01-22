@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 class RegionTableViewController: UITableViewController {
     
     static let maxNumOfCitiesAllowed = 3
@@ -113,7 +115,7 @@ class RegionTableViewController: UITableViewController {
     
     // MARK: - UI Control Actions
     @IBAction func onSelectionCleared(sender: UIButton) {
-        NSLog("onSelectionCleared")
+        Log.debug("onSelectionCleared")
         
         for key in checkedRegions.keys {
             
@@ -138,7 +140,7 @@ class RegionTableViewController: UITableViewController {
         let row = indexPath.row
         
         if(!validateCityRegionSelection(checkedRegions, selectedCity: citySelected)) {
-            NSLog("Max City Number")
+            Log.debug("Max City Number")
             alertMaxRegionSelection()
             return
         }
@@ -201,7 +203,7 @@ class RegionTableViewController: UITableViewController {
         
         let row = indexPath.row
         
-        NSLog("- Cell Instance [%p] Prepare Cell For Row[\(indexPath.row)]", cell)
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         if let statusForCity = checkedRegions[citySelected]{
             if(statusForCity[row]) {
@@ -229,7 +231,7 @@ class RegionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSLog("viewDidLoad: %@", self)
+        Log.debug("viewDidLoad: \(self)")
         
         self.tableView.registerNib(UINib(nibName: "SimpleFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "simpleFilterTableCell")
     }
@@ -237,7 +239,7 @@ class RegionTableViewController: UITableViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        NSLog("viewWillDisappear: %@", self)
+        Log.debug("viewWillDisappear: \(self)")
     }
     
     override func didReceiveMemoryWarning() {

@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 protocol FilterOptionTableViewControllerDelegate {
     
     func onFiltersSelected(group: String, filterIdSet: Set<FilterIdentifier>)
@@ -46,7 +48,7 @@ class FilterOptionTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSLog("%@ [[viewWillAppear]]", self)
+        Log.debug("\(self) [[viewWillAppear]]")
         
         //Google Analytics Tracker
         self.trackScreen()
@@ -79,7 +81,7 @@ class FilterOptionTableViewController: UITableViewController {
         let currentFilterIdentifier = filterOptions.filters[indexPath.row].identifier
         let choiceType:ChoiceType! = filterOptions.choiceType
         
-        NSLog("didSelectRowAtIndexPath %@", indexPath)
+        Log.debug("didSelectRowAtIndexPath \(indexPath)")
         
         ///The user selects unlimited option
         if(nolimitCell == indexPath.row) {

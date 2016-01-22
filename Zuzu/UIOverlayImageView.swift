@@ -7,6 +7,8 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 class UIOverlayImageView: UIImageView {
     
     let titleBackground = CAGradientLayer()
@@ -16,7 +18,7 @@ class UIOverlayImageView: UIImageView {
         
         if let sublayers = layer.sublayers {
             if (sublayers.contains(infoBackground) && sublayers.contains(infoBackground)) {
-                print("addImageOverlay: overlays already exist")
+                Log.debug("addImageOverlay: overlays already exist")
                 return
             }
         }
@@ -27,7 +29,7 @@ class UIOverlayImageView: UIImageView {
         
         let titleRect = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y, width: self.bounds.width, height: self.bounds.width * 220/1441)
         
-        print("addImageOverlay: titleRect = \(titleRect)")
+        Log.debug("addImageOverlay: titleRect = \(titleRect)")
         
         titleBackground.frame = titleRect
         titleBackground.colors = gradientColors
@@ -45,7 +47,7 @@ class UIOverlayImageView: UIImageView {
         let infoRect = CGRect(origin: newOrigin,
             size: CGSize(width: self.bounds.width, height: infoHeight))
 
-        print("addImageOverlay: infoRect = \(infoRect)")
+        Log.debug("addImageOverlay: infoRect = \(infoRect)")
         
         infoBackground.frame = infoRect
         infoBackground.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.3).CGColor

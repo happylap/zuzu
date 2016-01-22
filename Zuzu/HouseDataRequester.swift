@@ -9,6 +9,8 @@
 import Foundation
 import SwiftyJSON
 
+private let Log = Logger.defaultLogger
+
 struct SolrConst {
     
     static let DefaultPhraseSlope = 2
@@ -461,7 +463,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             
             if let fullURL = urlComp.URL {
                 
-                print("fullURL: \(fullURL.absoluteString)")
+                Log.debug("fullURL: \(fullURL.absoluteString)")
                 
                 let request = NSMutableURLRequest(URL: fullURL)
                 request.timeoutInterval = HouseDataRequester.requestTimeout
@@ -475,21 +477,21 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                     request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
                     
                 } else {
-                    NSLog("Unable to do Basic Authorization")
+                    Log.debug("Unable to do Basic Authorization")
                 }
                 
                 NSURLConnection.sendAsynchronousRequest(
                     request, queue: NSOperationQueue.mainQueue()){
                         (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                         
-                        if(error != nil){
-                            NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
+                        if let error = error{
+                            Log.debug("HTTP request error = \(error.code), desc = \(error.localizedDescription)")
                             handler(totalNum: 0, result: nil, error: error)
                             return
                         }
                         
                         if(data == nil) {
-                            NSLog("HTTP no data")
+                            Log.debug("HTTP no data")
                             handler(totalNum: 0, result: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
                             return
                         }
@@ -521,7 +523,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                         return jsonObj.stringValue
                                     })
                                     
-                                    NSLog("houseItem: \(id)")
+                                    Log.debug("houseItem: \(id)")
                                     
                                     let house:HouseItem = HouseItem.Builder(id: id)
                                         .addTitle(title)
@@ -558,7 +560,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         
         if let fullURL = urlComp.URL {
             
-            print("fullURL: \(fullURL.absoluteString)")
+            Log.debug("fullURL: \(fullURL.absoluteString)")
             
             let request = NSMutableURLRequest(URL: fullURL)
             request.timeoutInterval = HouseDataRequester.requestTimeout
@@ -572,21 +574,21 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
                 
             } else {
-                NSLog("Unable to do Basic Authorization")
+                Log.debug("Unable to do Basic Authorization")
             }
             
             NSURLConnection.sendAsynchronousRequest(
                 request, queue: NSOperationQueue.mainQueue()){
                     (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                     
-                    if(error != nil){
-                        NSLog("HTTP request error = %ld, desc = %@", error!.code, error!.localizedDescription)
+                    if let error = error{
+                        Log.debug("HTTP request error = \(error.code), desc = \(error.localizedDescription)")
                         handler(result: nil, error: error)
                         return
                     }
                     
                     if(data == nil) {
-                        NSLog("HTTP no data")
+                        Log.debug("HTTP no data")
                         handler(result: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
                         return
                     }
