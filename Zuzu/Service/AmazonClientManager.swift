@@ -23,7 +23,7 @@ private let Log = Logger.defaultLogger
 
 class AmazonClientManager : NSObject {
     static let sharedInstance = AmazonClientManager()
-
+    
     struct AWSConstants {
         static let DEFAULT_SERVICE_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
@@ -57,10 +57,23 @@ class AmazonClientManager : NSObject {
     
     var transferManager: AWSS3TransferManager?
     
+    private func dumpCredentialProviderInfo() {
+        
+        Log.info("identityId: \(self.credentialsProvider?.identityId)")
+        Log.info("identityPoolId: \(self.credentialsProvider?.identityPoolId)")
+        Log.info("logins: \(self.credentialsProvider?.logins)")
+        Log.info("accessKey: \(self.credentialsProvider?.accessKey)")
+        Log.info("secretKey: \(self.credentialsProvider?.secretKey)")
+        Log.info("sessionKey: \(self.credentialsProvider?.sessionKey)")
+        Log.info("expiration: \(self.credentialsProvider?.expiration)")
+        
+    }
+    
     override init() {
         keyChain = UICKeyChainStore(service: NSBundle.mainBundle().bundleIdentifier!)
-        
         super.init()
+        
+        Log.info("\(keyChain.debugDescription)")
     }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -97,11 +110,14 @@ class AmazonClientManager : NSObject {
     }
     
     func completeLogin(logins: [NSObject : AnyObject]?) {
+        Log.info("\(logins)")
         
         var task: AWSTask?
         
         if self.credentialsProvider == nil {
-            task = self.initializeCredentialsProvider()
+            task = self.initializeCredentialsProvider(logins)
+            
+            Log.info("Task = \(task)")
         } else {
             var merge = [NSObject : AnyObject]()
             
@@ -115,15 +131,20 @@ class AmazonClientManager : NSObject {
                 for (key, value) in unwrappedLogins {
                     merge[key] = value
                 }
+                
+                Log.info("Add new logins = \(merge)")
                 self.credentialsProvider?.logins = merge
             }
             //Force a refresh of credentials to see if merge is necessary
             task = self.credentialsProvider?.refresh()
         }
-
+        
         task?.continueWithBlock {
             (task: AWSTask!) -> AnyObject! in
             
+            Log.info("Credential Provider Status (After FB Login):")
+            self.dumpCredentialProviderInfo()
+
             if FeatureOption.Radar.enableMain == true{
                 self.registerSNSEndpoint()
             }
@@ -150,19 +171,23 @@ class AmazonClientManager : NSObject {
                         }
                         return nil
                     }
-                }                
+                }
             }
             
             return task
             }.continueWithBlock(self.completionHandler!)
     }
     
-    func initializeCredentialsProvider() -> AWSTask? {
-        Log.debug("Initializing Credentials Provider...")
+    func initializeCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
+        Log.info("Initializing Credentials Provider...")
         
         AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
         
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
+        self.credentialsProvider?.logins = logins
+        
+        Log.info("Credential Provider Status (Initial):")
+        self.dumpCredentialProviderInfo()
         
         let configuration = AWSServiceConfiguration(region: AWSConstants.DEFAULT_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
         
@@ -229,7 +254,7 @@ class AmazonClientManager : NSObject {
     
     func reloadFBSession() {
         if FBSDKAccessToken.currentAccessToken() != nil {
-            Log.debug("Reloading Facebook Session")
+            Log.info("Reloading Facebook Session")
             self.completeFBLogin()
         }
     }
@@ -363,7 +388,7 @@ class AmazonClientManager : NSObject {
     // MARK: S3
     
     //func uploadFBUserDataToS3(transferManager: AWSS3TransferManager, fbLoginData: FBUserData) {
-        
+    
     func uploadFBUserDataToS3(userData: FBUserData) {
         Log.debug("\(self) uploadFBUserDataToS3")
         
