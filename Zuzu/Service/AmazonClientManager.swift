@@ -99,7 +99,7 @@ class AmazonClientManager : NSObject {
         var task: AWSTask?
         
         if self.credentialsProvider == nil {
-            task = self.initializeCredentialsProvider()
+            task = self.initializeCredentialsProvider(logins)
         } else {
             var merge = [NSObject : AnyObject]()
             
@@ -155,12 +155,15 @@ class AmazonClientManager : NSObject {
             }.continueWithBlock(self.completionHandler!)
     }
     
-    func initializeCredentialsProvider() -> AWSTask? {
+    func initializeCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
         print("Initializing Credentials Provider...")
         
         AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
         
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
+        
+        /// Save logins (teokens for authentication service providers e.g. Facebook)
+        self.credentialsProvider?.logins = logins
         
         let configuration = AWSServiceConfiguration(region: AWSConstants.DEFAULT_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
         
@@ -281,8 +284,8 @@ class AmazonClientManager : NSObject {
     func completeFBLogin() {
         
         self.keyChain[self.FB_PROVIDER] = "YES"
-        self.completeLogin([AWSCognitoLoginProviderKey.Facebook.rawValue : FBSDKAccessToken.currentAccessToken().tokenString])
-        
+        self.completeLogin(["graph.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
+
         FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields":"id, email, birthday, gender, name, first_name, last_name, bio, picture.type(large)"]).startWithCompletionHandler { (connection, result, error) -> Void in
             if error == nil {
                 
