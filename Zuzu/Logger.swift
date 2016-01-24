@@ -9,7 +9,6 @@
 import Foundation
 import XCGLogger
 import NSLogger
-import XCGLoggerNSLoggerConnector
 
 private let colorsConfig: [XCGLogger.LogLevel:XCGLogger.XcodeColor] = [
     .Verbose: .darkGrey,
