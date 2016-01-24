@@ -10,6 +10,7 @@
     import SwiftyJSON
     import SCLAlertView
     
+    private let ActionLabel = "UIAction"
     private let FileLog = Logger.fileLogger
     private let Log = Logger.defaultLogger
     
@@ -383,7 +384,7 @@
         }
         
         private func configureGestureRecognizer() {
-            let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
+            let tap = UITapGestureRecognizer(target: self, action: "onTableViewTapped:")
             /// Setting this property to false will enable forward the touch event
             /// to the original UI after handled by UITapGestureRecognizer
             tap.cancelsTouchesInView = false
@@ -759,12 +760,15 @@
         //The UI control event handler Should not be private
         
         @IBAction func onNotificationBarItemClick(sender: UIBarButtonItem) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
+            
             let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier("NotificationItemsTableViewController") as UIViewController
             self.showViewController(vc, sender: self)
         }
         
         @IBAction func onAppRatingButtonTouched(sender: UIBarButtonItem) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
             
             let appId = "id1064374526"
             let appWeburl = "https://itunes.apple.com/tw/app/zhu-zhu-kuai-zu-yi-ci-sou/\(appId)?l=zh&mt=8"
@@ -806,6 +810,7 @@
         }
         
         @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
             
             let fbUrl = "https://www.facebook.com/zuzutw"
             let fbAppUrl = "fb://profile/1675724006047703"
@@ -863,6 +868,7 @@
         }
         
         @IBAction func onSegmentClicked(sender: UISegmentedControl) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
             
             loadSearchItemsForSegment(sender.selectedSegmentIndex)
             
@@ -871,6 +877,8 @@
         }
         
         func onClearCriteriaButtonTouched(sender: UIButton) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
+            
             self.criteriaDataStore.clear()
             self.currentCriteria = SearchCriteria()
             
@@ -882,6 +890,8 @@
         }
         
         func onTypeButtonTouched(sender: UIButton) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
+            
             if let toogleButton = sender as? ToggleButton {
                 
                 if(toogleButton.tag == UIControlTag.NOT_LIMITED_BUTTON_TAG) {
@@ -911,7 +921,7 @@
         }
         
         func onSearchButtonClicked(sender: UIButton) {
-            Log.info("onSearchButtonClicked")
+            Log.info("Sender: \(sender)", label: ActionLabel)
             
             //Hide size & price pickers
             self.setRowVisible(CellConst.pricePicker, visible: false)
@@ -938,8 +948,14 @@
             performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
         }
         
-        func dismissCurrentView(sender: UIBarButtonItem) {
+        func onDismissCurrentView(sender: UIBarButtonItem) {
+            Log.info("Sender: \(sender)", label: ActionLabel)
             navigationController?.popToRootViewControllerAnimated(true)
+        }
+        
+        func onTableViewTapped(sender:UITapGestureRecognizer) {
+            Log.info("Associated View = \(sender.view)", label: ActionLabel)
+            searchBar.resignFirstResponder()
         }
         
         // MARK: - Table Delegate
@@ -964,7 +980,7 @@
         
         override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
             
-            Log.debug("heightForRowAtIndexPath = \(indexPath)")
+            Log.debug("IndexPath = \(indexPath)")
             
             if(hiddenCells.contains(indexPath.row)) {
                 return 0
@@ -990,8 +1006,7 @@
         // MARK: - View Life Cycle
         override func viewDidLoad() {
             super.viewDidLoad()
-            
-            Log.debug("Enter")
+            Log.enter()
             
             self.configureButton()
             
@@ -1027,16 +1042,12 @@
                 }
             }
             
-            Log.debug("Exit")
-        }
-        
-        func handleTap(sender:UITapGestureRecognizer) {
-            Log.info("handleTap: view = \(sender.view)")
-            searchBar.resignFirstResponder()
+            Log.exit()
         }
         
         override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
+            Log.enter()
             
             //Scroll main table to the Search Bar
             self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
@@ -1066,25 +1077,27 @@
             
             //Google Analytics Tracker
             self.trackScreen()
+            
+            Log.exit()
         }
         
         override func viewDidAppear(animated: Bool) {
             super.viewDidAppear(animated)
-            Log.debug("Enter")
+            Log.enter()
             
             self.stateObserver.start()
             
-            Log.debug("Exit")
+            Log.exit()
         }
         
         override func viewDidDisappear(animated: Bool) {
             super.viewDidDisappear(animated)
-            Log.debug("Enter")
+            Log.enter()
             
             //Disable location monitoring
             locationManagerActive = false
             
-            Log.debug("Exit")
+            Log.exit()
         }
         
         // MARK: - Navigation
@@ -1092,7 +1105,7 @@
             
             if let identifier = segue.identifier{
                 
-                Log.info("prepareForSegue : \(identifier)")
+                Log.info("Segue : \(identifier)")
                 
                 switch identifier{
                 case ViewTransConst.showSearchResult:
@@ -1174,7 +1187,7 @@
                         }
                     }
                     
-                    navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
+                    navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "onDismissCurrentView:")
                     
                 default: break
                 }
@@ -1200,7 +1213,7 @@
                     let json = JSON(data: jsonData)
                     let items = json[criteriaLabel].arrayValue
                     
-                    Log.debug("\(criteriaLabel) = \(items.count)")
+                    Log.debug("JSON Config: \(criteriaLabel) = \(items.count)")
                     
                     for itemJsonObj in items {
                         let label = itemJsonObj["label"].stringValue
@@ -1494,16 +1507,16 @@
         
         // MARK: - UISearchBarDelegate
         func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-            Log.debug("textDidChange: \(searchText)")
+            Log.debug("New Text: \(searchText)")
             keywordTextChanged = true
         }
         func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-            Log.debug("searchBarSearchButtonClicked")
+            Log.enter()
             searchBar.resignFirstResponder()
         }
         
         func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-            Log.debug("searchBarTextDidEndEditing")
+            Log.enter()
             searchBar.resignFirstResponder()
             
             if(keywordTextChanged) {
@@ -1637,6 +1650,6 @@
         
         
         func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-            FileLog.debug("Updating location failed error = \(error.localizedDescription)")
+            FileLog.error("Updating location failed error = \(error.localizedDescription)")
         }
     }
