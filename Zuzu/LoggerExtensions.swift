@@ -122,13 +122,13 @@ public extension XCGLogger {
     
     // MARK: * Warning
     
-    public func warn(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func warning(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
         let level = LogLevel.Warning
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func warn(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func warning(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Warning
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
