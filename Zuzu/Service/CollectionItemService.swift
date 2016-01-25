@@ -435,7 +435,7 @@ class CollectionItemService: NSObject
         }
         
         if let collectionIds: [String] = self.getIds() {
-            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, error) -> Void in
+            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, facetResult,  error) -> Void in
                 
                 if let remoteHouseItems = result {
                     var remoteHouseIds = [String]()
@@ -526,7 +526,7 @@ class CollectionItemService: NSObject
         }
         
         if let collectionIds: [String] = self.getIds() {
-            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, error) -> Void in
+            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, facetResult, error) -> Void in
                 if let remoteHouseItems = result {
                     var priceCutIds = [String]()
                     

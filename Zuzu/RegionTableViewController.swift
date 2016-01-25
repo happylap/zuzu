@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import AwesomeCache
 
 private let Log = Logger.defaultLogger
 
@@ -17,12 +18,38 @@ class RegionTableViewController: UITableViewController {
     static let numberOfSections = 1
     static let cellHeight = 45 * getCurrentScale()
     
-    var citySelected:Int = 100 //Default value
+    //Cache Configs
+    let cacheName = "itemCountCache"
+    let cacheKey = "itemCountByRegion"
+    
+    var cityCodeSelected:Int = 100 //Default value
+    var citySelected: City?
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var codeToCityMap = [Int : City]()//City dictionary by city code
     
+    var itemCountByRegion: [String: Int]?
+    
     // MARK: - Private Utils
-
+    
+    private func getItemCountByRegion() -> [String: Int]? {
+        
+        do {
+            let cache = try Cache<NSData>(name: cacheName)
+            
+            ///Return cached data if there is cached data
+            if let cachedData = cache.objectForKey(cacheKey),
+                let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) as? [String: Int] {
+                    
+                    return result
+                    
+            }
+            
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
+        }
+        
+        return nil
+    }
     
     private func validateCityRegionSelection(cityRegionStatus: [Int:[Bool]], selectedCity: Int) -> Bool {
         
@@ -139,25 +166,25 @@ class RegionTableViewController: UITableViewController {
         
         let row = indexPath.row
         
-        if(!validateCityRegionSelection(checkedRegions, selectedCity: citySelected)) {
+        if(!validateCityRegionSelection(checkedRegions, selectedCity: cityCodeSelected)) {
             Log.debug("Max City Number")
             alertMaxRegionSelection()
             return
         }
         
-        if let statusForCity = checkedRegions[citySelected]{
+        if let statusForCity = checkedRegions[cityCodeSelected]{
             if(statusForCity[row]) {
-                checkedRegions[citySelected]![row] = false
+                checkedRegions[cityCodeSelected]![row] = false
                 
             } else {
-                checkedRegions[citySelected]![row] = true
+                checkedRegions[cityCodeSelected]![row] = true
                 
                 if(row == 0){ //Click on "all region"
                     
                     //Clear other selection
                     var indexPaths = [NSIndexPath]()
-                    for var index = row + 1; index < checkedRegions[citySelected]?.count; ++index {
-                        checkedRegions[citySelected]![index] = false
+                    for var index = row + 1; index < checkedRegions[cityCodeSelected]?.count; ++index {
+                        checkedRegions[cityCodeSelected]![index] = false
                         indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
                     }
                     
@@ -167,8 +194,8 @@ class RegionTableViewController: UITableViewController {
                 } else { //Click on other region
                     
                     //Clear "All Region" selection
-                    if(checkedRegions[citySelected]![0]) {
-                        checkedRegions[citySelected]![0] = false
+                    if(checkedRegions[cityCodeSelected]![0]) {
+                        checkedRegions[cityCodeSelected]![0] = false
                     }
                     
                     tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
@@ -177,7 +204,7 @@ class RegionTableViewController: UITableViewController {
         }
         
         /// Notify selection changed
-        let cityStatus = self.convertStatusToCity(citySelected)!
+        let cityStatus = self.convertStatusToCity(cityCodeSelected)!
         NSNotificationCenter.defaultCenter().postNotificationName("regionSelectionChanged", object: self, userInfo: ["status" : cityStatus])
         
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -191,7 +218,7 @@ class RegionTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return codeToCityMap[citySelected]?.regions.count ?? 0
+        return citySelected?.regions.count ?? 0
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -205,7 +232,7 @@ class RegionTableViewController: UITableViewController {
         
         Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
-        if let statusForCity = checkedRegions[citySelected]{
+        if let statusForCity = checkedRegions[cityCodeSelected]{
             if(statusForCity[row]) {
                 cell.filterCheckMark.hidden = false
                 cell.filterCheckMark.image = UIImage(named: "checked_green")
@@ -219,8 +246,24 @@ class RegionTableViewController: UITableViewController {
         cell.simpleFilterLabel?.font = UIFont.systemFontOfSize(18)
         cell.simpleFilterLabel.autoScaleFontSize = true
         
-        if let city = codeToCityMap[citySelected] {
-            cell.simpleFilterLabel?.text = city.regions[indexPath.row].name
+        
+        if let region = citySelected?.regions[indexPath.row] {
+            cell.simpleFilterLabel?.text = region.name
+            
+            /// Try to make text lighter for individual regions
+            if let itemCountByRegion = self.itemCountByRegion {
+                if(region != Region.allRegions) {
+                    if let itemCount = itemCountByRegion[String(region.code)] {
+                        if(itemCount <= 0) {
+                            Log.debug("Region with no item, region code: \(region.code)")
+                            cell.simpleFilterLabel.textColor = UIColor.lightGrayColor()
+                        }
+                    } else {
+                        Log.debug("Region with no item, region code: \(region.code)")
+                        cell.simpleFilterLabel.textColor = UIColor.lightGrayColor()
+                    }
+                }
+            }
         }
         
         return cell
@@ -230,10 +273,16 @@ class RegionTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         Log.debug("viewDidLoad: \(self)")
         
+        Log.debug("codeToCityMap \(self.codeToCityMap)")
+        
+        self.citySelected = codeToCityMap[cityCodeSelected]
+        
         self.tableView.registerNib(UINib(nibName: "SimpleFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "simpleFilterTableCell")
+        
+        self.itemCountByRegion = self.getItemCountByRegion()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -253,7 +302,8 @@ extension RegionTableViewController: CitySelectionViewControllerDelegate {
     
     // MARK: - CitySelectionViewControllerDelegate
     func onCitySelected(value: Int) {
-        citySelected = value
+        cityCodeSelected = value
+        citySelected = codeToCityMap[value]
         
         tableView.reloadData()
     }

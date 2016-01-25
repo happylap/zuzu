@@ -10,15 +10,35 @@ import Foundation
 
 private let Log = Logger.defaultLogger
 
-protocol SearchCriteriaObserverDelegate:class {
+// MARK: - Protocols
+
+protocol FastCountCriteriaObserverDelegate:class {
     
-    func onBeforeCriteriaQuery()
+    func onBeforeQueryItemCount()
     
-    func onAfterCriteriaQuery(itemCount: Int)
+    func onAfterQueryItemCount(totalNum: Int)
     
 }
 
-class SearchCriteriaObserver:NSObject {
+protocol RegionItemCountCriteriaObserverDelegate:class {
+    
+    func onBeforeQueryRegionItemCount()
+    
+    func onAfterQueryRegionItemCount(facetResult: [String: Int]?)
+    
+}
+
+protocol SearchCriteriaObserver:class {
+    
+    func start()
+    
+    func notifyCriteriaChange(criteria: SearchCriteria)
+    
+}
+
+// MARK: - Observers
+
+class FastCountCriteriaObserver: NSObject, SearchCriteriaObserver {
     
     //If the criteria is not changed for allowedIdleSeconds, the system will fetch the number of houses before the user actually presses the search button
     private let allowedIdleTime = 2.0
@@ -29,7 +49,7 @@ class SearchCriteriaObserver:NSObject {
     
     private var enabled = false
     
-    var delegate: SearchCriteriaObserverDelegate?
+    var delegate: FastCountCriteriaObserverDelegate?
     
     var currentTimer:NSTimer?
     
@@ -48,8 +68,7 @@ class SearchCriteriaObserver:NSObject {
         return true
     }
     
-    func onCriteriaChanged(criteria: SearchCriteria) {
-        
+    func notifyCriteriaChange(criteria: SearchCriteria) {
         
         if(!enabled ) {
             return
@@ -61,25 +80,92 @@ class SearchCriteriaObserver:NSObject {
         
         Log.debug("onCriteriaChanged")
         
-        currentCriteria = criteria
+        ///Make a copy of the current SearchCriteria
+        currentCriteria = criteria.copy() as! SearchCriteria
         
         ///Reset the timer for query remote item numbers
         
         currentTimer?.invalidate()
         
-        delegate?.onBeforeCriteriaQuery()
+        delegate?.onBeforeQueryItemCount()
         
-        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "onNumberOfItemsFetched", userInfo: nil, repeats: false)
+        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "onFetchNumberOfItems", userInfo: nil, repeats: false)
     }
     
-    func onNumberOfItemsFetched() {
-        Log.debug("Start fetchNumberOfItems!")
-        
-        houseReq.searchByCriteria(currentCriteria, start: 0, row: 0) { (totalNum, result, error) -> Void in
-                
-            Log.debug("End fetchNumberOfItems = \(totalNum)")
+    func onFetchNumberOfItems() {
+        Log.enter()
+
+        houseReq.searchByCriteria(currentCriteria, start: 0, row: 0) { (totalNum, result, facetResult, error) -> Void in
             
-            self.delegate?.onAfterCriteriaQuery(totalNum)
+            Log.debug("Result: totalNum = \(totalNum)")
+            
+            self.delegate?.onAfterQueryItemCount(totalNum)
+            
+        }
+    }
+}
+
+
+class RegionItemCountCriteriaObserver: NSObject, SearchCriteriaObserver {
+    
+    private let allowedIdleTime = 2.0
+    
+    private var currentCriteria: SearchCriteria = SearchCriteria()
+    
+    private let houseReq = HouseDataRequester.getInstance()
+    
+    private var enabled = false
+    
+    var delegate: RegionItemCountCriteriaObserverDelegate?
+    
+    var currentTimer:NSTimer?
+    
+    func start() {
+        enabled = true
+    }
+    
+    private func validateCriteria(criteria: SearchCriteria) -> Bool {
+        
+        Log.debug("validateCriteria")
+        
+        return true
+    }
+    
+    func notifyCriteriaChange(criteria: SearchCriteria) {
+        
+        if(!enabled ) {
+            return
+        }
+        
+        if(!validateCriteria(criteria) ) {
+            return
+        }
+        
+        Log.debug("onCriteriaChanged")
+        
+        ///Make a copy of the current SearchCriteria
+        currentCriteria = criteria.copy() as! SearchCriteria
+        
+        ///Ignore region selection
+        currentCriteria.region = nil
+        
+        ///Reset the timer for query remote item numbers
+        
+        currentTimer?.invalidate()
+        
+        delegate?.onBeforeQueryRegionItemCount()
+        
+        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "onFetchNumberOfItems", userInfo: nil, repeats: false)
+    }
+    
+    func onFetchNumberOfItems() {
+        Log.enter()
+        
+        houseReq.searchByCriteria(currentCriteria, start: 0, row: 0, facetField: SolrConst.Field.REGION) { (totalNum, result, facetResult, error) -> Void in
+            
+            Log.debug("Result: Facet = \(facetResult)")
+            
+            self.delegate?.onAfterQueryRegionItemCount(facetResult)
             
         }
     }

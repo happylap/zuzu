@@ -157,7 +157,7 @@ public class HouseItemTableDataSource {
         
         Log.debug("loadRemoteData: pageNo = \(pageNo)")
         
-        requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, error) -> Void in
+        requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, facetResult, error) -> Void in
             
             self.estimatedTotalResults = totalNum
             

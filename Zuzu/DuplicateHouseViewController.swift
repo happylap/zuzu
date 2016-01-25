@@ -104,7 +104,7 @@ class DuplicateHouseViewController: UIViewController {
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(self.view)
         
-        HouseDataRequester.getInstance().searchByIds(houseIdList) { (totalNum, result, error) -> Void in
+        HouseDataRequester.getInstance().searchByIds(houseIdList) { (totalNum, result, facetResult, error) -> Void in
             self.duplicateHouses = result
             self.duplicateTableView.reloadData()
             

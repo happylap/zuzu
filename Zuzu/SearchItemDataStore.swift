@@ -115,26 +115,26 @@ class SearchCriteria: NSObject, NSCoding {
             
             if let region1 = self.region, let region2 = targetObj.region {
                 
-                    if region1.count != region2.count {
-                        
-                         isEqual = isEqual && false
-                        
-                    } else {
-                        
-                        for city1 in region1 {
-                            if let index = region2.indexOf(city1) {
-                                let city2 = region2[index]
-                                
-                                isEqual = isEqual && (city1.regions == city2.regions)
-                                
-                            } else {
-                                
-                                isEqual = isEqual && false
-                            }
+                if region1.count != region2.count {
+                    
+                    isEqual = isEqual && false
+                    
+                } else {
+                    
+                    for city1 in region1 {
+                        if let index = region2.indexOf(city1) {
+                            let city2 = region2[index]
+                            
+                            isEqual = isEqual && (city1.regions == city2.regions)
+                            
+                        } else {
+                            
+                            isEqual = isEqual && false
                         }
-                        
                     }
                     
+                }
+                
             } else {
                 isEqual = isEqual && (self.region == nil && targetObj.region == nil)
             }
@@ -149,6 +149,20 @@ class SearchCriteria: NSObject, NSCoding {
             return isEqual
         }
         return false
+    }
+    
+    func copyWithZone(zone: NSZone) -> AnyObject {
+        
+        let criteria = SearchCriteria()
+        
+        criteria.keyword = self.keyword
+        criteria.region = self.region
+        criteria.price = self.price
+        criteria.size = self.size
+        criteria.types = self.types
+        criteria.sorting = self.sorting
+        
+        return criteria
     }
 }
 

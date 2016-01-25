@@ -13,6 +13,7 @@ private let Log = Logger.defaultLogger
 
 struct SolrConst {
     
+    static let DefaultFacetLimit = 400
     static let DefaultPhraseSlope = 2
     
     struct Server {
@@ -32,6 +33,10 @@ struct SolrConst {
         static let START = "start"
         static let ROW = "rows"
         static let SORTING = "sort"
+        static let FACET = "facet"
+        static let FACET_FIELD = "facet.field"
+        static let FACET_LIMIT = "facet.limit"
+        static let FACET_SORT = "facet.sort"
     }
     
     struct Operator {
@@ -236,6 +241,8 @@ class HouseItem:NSObject, NSCoding {
     
 }
 
+typealias onQueryComplete = (totalNum: Int, result: [HouseItem]?, facetResult: [String: Int]? ,error: NSError?) -> Void
+
 public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
     
     private static let defaultFieldList = [SolrConst.Field.ID, SolrConst.Field.TITLE, SolrConst.Field.ADDR, SolrConst.Field.HOUSE_TYPE, SolrConst.Field.PURPOSE_TYPE, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE, SolrConst.Field.SIZE,SolrConst.Field.SOURCE, SolrConst.Field.IMG_LIST, SolrConst.Field.CHILDREN]
@@ -249,8 +256,8 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         return instance
     }
     
-    // designated initializer
-    public override init() {
+    // Designated initializer
+    private override init() {
         super.init()
         
         urlComp.scheme = SolrConst.Server.SCHEME
@@ -259,6 +266,9 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         urlComp.path = SolrConst.Server.PATH
     }
     
+    // MARK: - Public House Item Query APIs
+    
+    // Search house items by an item Id
     func searchById(houseId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
         
         var queryitems:[NSURLQueryItem] = []
@@ -272,36 +282,40 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
         performSearch(urlComp, handler: handler)
     }
     
-    func searchByIds(houseIds: [String], fieldList: [String] = defaultFieldList, handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
-        
-        var queryitems:[NSURLQueryItem] = []
-        
-        // Main Query String (Keyword)
-        var mainQuery:[String] = [String]()
-        
-        mainQuery.appendContentsOf(
-            houseIds.map({ (houseId) -> String in
-                return "id:\(houseId)"
-            })
-        )
-        
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value:mainQuery.joinWithSeparator(" \(SolrConst.Operator.OR) ")))
-        
-        // Field List
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: fieldList.joinWithSeparator(",")))
-        
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.INDENT, value: "true"))
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.START, value: "0"))
-        queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: String(houseIds.count)))
-        //queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: "20")) // for test
-        
-        urlComp.queryItems = queryitems
-        performSearch(urlComp, handler: handler)
+    // Search house items by an list of item Ids
+    func searchByIds(houseIds: [String], fieldList: [String] = defaultFieldList,
+        onCompleteHandler: onQueryComplete) {
+            
+            var queryitems:[NSURLQueryItem] = []
+            
+            // Main Query String (Keyword)
+            var mainQuery:[String] = [String]()
+            
+            mainQuery.appendContentsOf(
+                houseIds.map({ (houseId) -> String in
+                    return "id:\(houseId)"
+                })
+            )
+            
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.MAIN_QUERY, value:mainQuery.joinWithSeparator(" \(SolrConst.Operator.OR) ")))
+            
+            // Field List
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.FILTER_LIST, value: fieldList.joinWithSeparator(",")))
+            
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.WRITER_TYPE, value: SolrConst.Format.JSON))
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.INDENT, value: "true"))
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.START, value: "0"))
+            queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: String(houseIds.count)))
+            //queryitems.append(NSURLQueryItem(name: SolrConst.Query.ROW, value: "20")) // for test
+            
+            urlComp.queryItems = queryitems
+            performSearch(urlComp, onCompleteHandler: onCompleteHandler)
     }
     
-    func searchByCriteria(criteria: SearchCriteria, fieldList: [String] = defaultFieldList, start: Int, row: Int, allowDuplicate: Bool = false,
-        handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void) {
+    // Search house items by an set of criteria
+    func searchByCriteria(criteria: SearchCriteria, fieldList: [String] = defaultFieldList,
+        start: Int, row: Int, allowDuplicate: Bool = false, facetField: String? = nil,
+        onCompleteHandler: onQueryComplete) {
             
             let keyword: String? = criteria.keyword
             let area: [City]? = criteria.region
@@ -432,10 +446,22 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             }
             
             // Remove Duplicate
-            
-            if (!allowDuplicate) {
+            if(!allowDuplicate) {
                 queryitems.append(
                     NSURLQueryItem(name: SolrConst.Query.FILTER_QUERY, value: "-\(SolrConst.Field.PARENT):*"))
+            }
+            
+            // Facet Setting
+            if let facetField = facetField {
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FACET, value: "true"))
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FACET_LIMIT, value: String(SolrConst.DefaultFacetLimit)))
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FACET_SORT, value: "count"))
+                queryitems.append(
+                    NSURLQueryItem(name: SolrConst.Query.FACET_FIELD, value: facetField))
+                
             }
             
             // Sorting
@@ -453,13 +479,15 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             
             urlComp.queryItems = queryitems
             
-            performSearch(urlComp, handler: handler)
+            performSearch(urlComp, onCompleteHandler: onCompleteHandler)
     }
     
     private func performSearch(urlComp: NSURLComponents,
-        handler: (totalNum: Int, result: [HouseItem]?, error: NSError?) -> Void){
+        onCompleteHandler: onQueryComplete){
             
             var houseList = [HouseItem]()
+            var numOfRecord: Int = 0
+            var facetFieldResult: [String: Int]?
             
             if let fullURL = urlComp.URL {
                 
@@ -486,23 +514,24 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                         
                         if let error = error{
                             Log.debug("HTTP request error = \(error.code), desc = \(error.localizedDescription)")
-                            handler(totalNum: 0, result: nil, error: error)
+                            onCompleteHandler(totalNum: 0, result: nil, facetResult: nil, error: error)
                             return
                         }
                         
                         if(data == nil) {
                             Log.debug("HTTP no data")
-                            handler(totalNum: 0, result: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
+                            onCompleteHandler(totalNum: 0, result: nil,facetResult: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
                             return
                         }
                         
                         let jsonResult = JSON(data: data!)
                         
-                        if let response = jsonResult["response"].dictionary {
-                            
-                            let numOfRecord = response["numFound"]?.intValue ?? 0
-                            
-                            if let itemList = response["docs"]?.arrayValue {
+                        if let response = jsonResult["response"].dictionary,
+                            let numFound = response["numFound"]?.int,
+                            let itemList = response["docs"]?.array {
+                                
+                                // Update number of items
+                                numOfRecord = numFound
                                 
                                 for house in itemList {
                                     let id = house["id"].string ?? ""
@@ -541,15 +570,36 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                                     houseList.append(house)
                                 }
                                 
-                                handler(totalNum: numOfRecord, result: houseList, error: nil)
-                            } else {
-                                assert(false, "Solr response error:\n \(jsonResult)")
-                                handler(totalNum: 0, result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
-                            }
                         } else {
                             assert(false, "Solr response error:\n \(jsonResult)")
-                            handler(totalNum: 0, result: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
+                            onCompleteHandler(totalNum: 0, result: nil, facetResult: nil, error: NSError(domain: "Solr response error", code: 1, userInfo: nil))
                         }
+                        
+                        /// Check facet
+                        if let facetCounts = jsonResult["facet_counts"].dictionary {
+                            if let facetFields = facetCounts["facet_fields"]?.dictionary {
+                                
+                                if let queryItem = urlComp.queryItems?.filter({ (queryItem) -> Bool in
+                                    return (queryItem.name == SolrConst.Query.FACET_FIELD)
+                                }).first {
+                                    
+                                    if let facetFieldName = queryItem.value,
+                                        let facetCountArray = facetFields[facetFieldName]?.arrayValue {
+                                            
+                                            facetFieldResult = [String: Int]()
+                                            
+                                            for (index, item) in facetCountArray.enumerate() {
+                                                if(index % 2 == 0) {
+                                                    facetFieldResult![item.stringValue] = facetCountArray[index + 1].intValue
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        /// Invoke onCompleteHandler as final response
+                        onCompleteHandler(totalNum: numOfRecord, result: houseList, facetResult: facetFieldResult, error: nil)
                 }
                 
             }
