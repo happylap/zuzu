@@ -53,7 +53,7 @@ private func getScaledFontSize(baseFont: UIFont) -> CGFloat{
     
     scaledSize = round(baseSize * scale)
     
-    Log.debug("base = \(baseSize), scale = \(scale), scaledSize = \(scaledSize)")
+    Log.verbose("base = \(baseSize), scale = \(scale), scaledSize = \(scaledSize)")
     
     return scaledSize
     

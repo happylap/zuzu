@@ -40,7 +40,7 @@ class SmartFilterContainerView: UIView {
     
     ///The correct place to layout subviews (with correct frame & bounds info)
     override func layoutSubviews() {
-        Log.debug("layoutSubviews")
+        Log.verbose("layoutSubviews")
         
         if let superView = self.superview {
             
@@ -53,7 +53,7 @@ class SmartFilterContainerView: UIView {
             
             self.frame = CGRect(x: 0, y: y, width: width, height: height + controlTopBorderHeight)
             
-            Log.debug("SmartFilterContainerView Frame = \(self.frame)")
+            Log.verbose("SmartFilterContainerView Frame = \(self.frame)")
             
             /// Add SmartFilterViews
             positionSmartFilterViews()

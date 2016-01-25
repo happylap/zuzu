@@ -33,7 +33,7 @@ class SmartFilterView: UIView {
     
     ///The correct place to layout subviews (with correct frame & bounds info)
     override func layoutSubviews() {
-        Log.debug("layoutSubviews")
+        Log.verbose("layoutSubviews")
         
         var buttonSpace:CGFloat = 8.0
         var buttonWidth:CGFloat = 80.0
@@ -55,7 +55,7 @@ class SmartFilterView: UIView {
             
             let buttonFrame = CGRect(x: newXOffset, y: yOffset, width: buttonWidth, height: buttonHeight) // X, Y, width, height
             
-            Log.debug("SmartFilterView buttonFrame = \(buttonFrame)")
+            Log.verbose("SmartFilterView buttonFrame = \(buttonFrame)")
             
             button.frame = buttonFrame
         }
