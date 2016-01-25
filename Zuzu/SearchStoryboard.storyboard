@@ -951,6 +951,7 @@
                     <size key="freeformSize" width="600" height="1500"/>
                     <connections>
                         <outlet property="debugBarButton" destination="9Py-vk-BeN" id="BpY-q0-oeK"/>
+                        <outlet property="filterSettingButton" destination="njk-V3-8Pl" id="N08-EB-vmC"/>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
                         <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>
                         <outlet property="sortByPriceButton" destination="JTH-Sz-NIS" id="9Ko-U1-rVX"/>

@@ -35,7 +35,14 @@ class SearchResultViewController: UIViewController {
         case ScrollDirectionCrazy
     }
     
+    private let filterSettingOnImage = UIImage(named: "filter_on_n")
+    
+    private let filterSettingNormalImage = UIImage(named: "filter_n")
+    
     // MARK: - Member Fields
+    
+    @IBOutlet weak var filterSettingButton: UIButton!
+    
     @IBOutlet weak var loadingSpinner: UIActivityIndicatorView! {
         didSet{
             stopSpinner()
@@ -84,6 +91,21 @@ class SearchResultViewController: UIViewController {
     var collectionIdList:[String]?
     
     // MARK: - Private Utils
+    
+    //Update Advanced Filtet Icon Status
+    private func updateFilterSettingButtonStatus() {
+        
+        if let filters = self.searchCriteria?.filters {
+            if(filters.count > 0) {
+                self.filterSettingButton.imageView?.image = self.filterSettingOnImage
+            } else {
+                self.filterSettingButton.imageView?.image = self.filterSettingNormalImage
+            }
+        } else {
+            self.filterSettingButton.imageView?.image = self.filterSettingNormalImage
+        }
+        
+    }
     
     private func setSubviewsVisible(visible: Bool) {
         let subviews = self.view.subviews
@@ -134,7 +156,7 @@ class SearchResultViewController: UIViewController {
             for subView in smartFilterViews {
                 if let smartFilterView = subView as? SmartFilterView {
                     for button in smartFilterView.filterButtons {
-                        button.addTarget(self, action: "onFilterButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+                        button.addTarget(self, action: "onSmartFilterButtonToggled:", forControlEvents: UIControlEvents.TouchDown)
                         
                         ///Check selection state
                         if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
@@ -400,6 +422,9 @@ class SearchResultViewController: UIViewController {
         
         self.dataSource.initData()
         self.tableView.reloadData()//To reflect the latest table data
+        
+        //Update Advanced Filtet Icon Status
+        updateFilterSettingButtonStatus()
     }
     
     private func getStateForSmartFilterButton(filterGroup : FilterGroup) -> Bool {
@@ -571,7 +596,7 @@ class SearchResultViewController: UIViewController {
         }
     }
     
-    func onFilterButtonTouched(sender: UIButton) {
+    func onSmartFilterButtonToggled(sender: UIButton) {
         if let toogleButton = sender as? ToggleButton {
             toogleButton.toggleButtonState()
             
@@ -674,7 +699,7 @@ class SearchResultViewController: UIViewController {
             label: sortingOrder)
     }
     
-    func dismissCurrentView(sender: UIBarButtonItem) {
+    func onSearchButtonTouched(sender: UIBarButtonItem) {
         navigationController?.popViewControllerAnimated(true)
     }
     
@@ -686,7 +711,7 @@ class SearchResultViewController: UIViewController {
         Log.debug("\(self) [[viewDidLoad]]")
         
         // Config navigation left bar
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"search_toolbar_n"), style: UIBarButtonItemStyle.Plain, target: self, action: "dismissCurrentView:")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"search_toolbar_n"), style: UIBarButtonItemStyle.Plain, target: self, action: "onSearchButtonTouched:")
         
         // Load Selected filters
         if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {
@@ -729,6 +754,9 @@ class SearchResultViewController: UIViewController {
         
         //Update Smart Filter State to sync with the setting in Advanced setting UI
         updateSmartFilterState()
+        
+        //Update Advanced Filtet Icon Status
+        updateFilterSettingButtonStatus()
         
         //Google Analytics Tracker
         self.trackScreen()
