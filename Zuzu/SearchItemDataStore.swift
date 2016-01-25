@@ -176,6 +176,8 @@ func == <T:Equatable> (tuple1:(T,T)?,tuple2:(T,T)?) -> Bool {
 
 class SearchItem: NSObject, NSCoding {
     
+    static let labelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+    
     let criteria:SearchCriteria
     
     let type:SearchType
@@ -228,21 +230,13 @@ class SearchItem: NSObject, NSCoding {
             var titleStr = [String]()
             var typeStr = [String]()
             
-            if let usageType = criteria.types {
-                for type in usageType.sort() {
-                    switch type {
-                    case CriteriaConst.PrimaryType.FULL_FLOOR:
-                        typeStr.append("整層住家")
-                    case CriteriaConst.PrimaryType.HOME_OFFICE:
-                        typeStr.append("住辦")
-                    case CriteriaConst.PrimaryType.ROOM_NO_TOILET:
-                        typeStr.append("雅房")
-                    case CriteriaConst.PrimaryType.SUITE_COMMON_AREA:
-                        typeStr.append("分租套房")
-                    case CriteriaConst.PrimaryType.SUITE_INDEPENDENT:
-                        typeStr.append("獨立套房")
-                    default: break
+            if let purposeType = criteria.types {
+                for type in purposeType.sort() {
+                    
+                    if let typeString = SearchItem.labelMaker.fromCodeForField("purpose_type", code: type) {
+                        typeStr.append(typeString)
                     }
+                    
                 }
                 
                 result = typeStr.joinWithSeparator("/ ")

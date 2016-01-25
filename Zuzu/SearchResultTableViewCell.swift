@@ -15,6 +15,8 @@ private let Log = Logger.defaultLogger
 
 class SearchResultTableViewCell: UITableViewCell {
     
+    static let labelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+    
     private let placeholderImg = UIImage(named: "house_img")
     
     private let collectedImg = UIImage(named: "heart_pink")
@@ -81,72 +83,42 @@ class SearchResultTableViewCell: UITableViewCell {
     // MARK: - Private Utils
     
     private func getTypeString(type: Int) -> String? {
-        
-        let typeStr:String?
-        
-        switch type {
-        case CriteriaConst.HouseType.BUILDING_WITHOUT_ELEVATOR:
-            typeStr = "公寓"
-        case CriteriaConst.HouseType.BUILDING_WITH_ELEVATOR:
-            typeStr = "電梯大樓"
-        case CriteriaConst.HouseType.INDEPENDENT_HOUSE:
-            typeStr = "透天厝"
-        case CriteriaConst.HouseType.INDEPENDENT_HOUSE_WITH_GARDEN:
-            typeStr = "別墅"
-        default:
-            typeStr = ""
-            break
-        }
-        
-        if(typeStr != nil) {
-            return typeStr!
-        } else {
-            return nil
-        }
+        return SearchResultTableViewCell.labelMaker.fromCodeForField("house_type", code: type)
+    }
+    
+    private func getPurposeString(purpose:Int) -> String? {
+        return SearchResultTableViewCell.labelMaker.fromCodeForField("purpose_type", code: purpose)
     }
     
     private func prpcessSourceString(label:UILabel, source:Int) {
+        var labelColor: UIColor?
+        var sourceText: String?
+        
+        // Get source label
+        sourceText = SearchResultTableViewCell.labelMaker.fromCodeForField("source", code: source)
+        
+        // Determin label color
         switch source {
         case 1:
-            label.textColor = UIColor.colorWithRGB(0xFF9500)
-            label.text = "591"
+            labelColor = UIColor.colorWithRGB(0xFF9500)
         case 2:
-            label.textColor = UIColor.colorWithRGB(0x55EFCB)
-            label.text = "好房網"
+            labelColor = UIColor.colorWithRGB(0x55EFCB)
         case 3:
-            label.textColor = UIColor.colorWithRGB(0xFFCD02)
-            label.text = "樂屋網"
+            labelColor = UIColor.colorWithRGB(0xFFCD02)
         default:
-            label.text = nil
-            break
-        }
-    }
-    
-    
-    private func getUsageString(usage:Int) -> String? {
-        
-        let usageStr:String?
-        
-        switch usage {
-        case CriteriaConst.PrimaryType.FULL_FLOOR:
-            usageStr = "整層住家"
-        case CriteriaConst.PrimaryType.HOME_OFFICE:
-            usageStr = "住辦"
-        case CriteriaConst.PrimaryType.ROOM_NO_TOILET:
-            usageStr = "雅房"
-        case CriteriaConst.PrimaryType.SUITE_COMMON_AREA:
-            usageStr = "分租套房"
-        case CriteriaConst.PrimaryType.SUITE_INDEPENDENT:
-            usageStr = "獨立套房"
-        default:
-            usageStr = ""
             break
         }
         
-        if(usageStr != nil) {
-            return usageStr!
+        if let sourceText = sourceText, let labelColor = labelColor {
+            
+            label.textColor = labelColor
+            label.text = sourceText
+            
         } else {
-            return nil
+            assert(false, " Cannot find source label for: \(source)")
+            
+            label.textColor = UIColor.colorWithRGB(0xFF9500)
+            label.text = "未知來源"
         }
     }
     
@@ -159,13 +131,13 @@ class SearchResultTableViewCell: UITableViewCell {
             houseAddr.text = houseItem.addr
             
             if let houseTypeStr = self.getTypeString(houseItem.houseType) {
-                if let purposeTypeStr = self.getUsageString(houseItem.purposeType) {
+                if let purposeTypeStr = self.getPurposeString(houseItem.purposeType) {
                     houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
                 } else {
                     houseTypeAndUsage.text = "\(houseTypeStr)"
                 }
             } else {
-                if let purposeTypeStr = self.getUsageString(houseItem.purposeType) {
+                if let purposeTypeStr = self.getPurposeString(houseItem.purposeType) {
                     houseTypeAndUsage.text = "\(purposeTypeStr)"
                 }
             }
@@ -224,7 +196,7 @@ class SearchResultTableViewCell: UITableViewCell {
             self.houseSize.text = "\(collectionHouseItem.size) 坪"
             
             let houseTypeStr = self.getTypeString(Int(collectionHouseItem.houseType)) ?? ""
-            let purposeTypeStr = self.getUsageString(Int(collectionHouseItem.purposeType)) ?? ""
+            let purposeTypeStr = self.getPurposeString(Int(collectionHouseItem.purposeType)) ?? ""
             self.houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
             
             prpcessSourceString(houseSourceLabel, source: Int(collectionHouseItem.source))
