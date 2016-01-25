@@ -1106,6 +1106,13 @@ class SearchBoxTableViewController: UITableViewController {
         /// Start all SearchCriteriaObservers
         for observer in stateObservers {
             observer.start()
+            
+            /// Try to trigger 1st facet query if there is no cache data
+            if let regionObserver = observer as? RegionItemCountCriteriaObserver{
+                if (getItemCountByRegion() == nil) {
+                    regionObserver.notifyCriteriaChange(currentCriteria)
+                }
+            }
         }
         
         Log.exit()
@@ -1221,6 +1228,26 @@ class SearchBoxTableViewController: UITableViewController {
 extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // MARK: - Private Utils
+    /// Should create a common util for managing cached data
+    private func getItemCountByRegion() -> [String: Int]? {
+        
+        do {
+            let cache = try Cache<NSData>(name: cacheName)
+            
+            ///Return cached data if there is cached data
+            if let cachedData = cache.objectForKey(cacheKey),
+                let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) as? [String: Int] {
+                    
+                    return result
+                    
+            }
+            
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
+        }
+        
+        return nil
+    }
     
     private static func loadPickerData(resourceName: String, criteriaLabel: String) ->  [[(label:String, value:Int)]]{
         
