@@ -94,15 +94,16 @@ class SearchResultViewController: UIViewController {
     
     //Update Advanced Filtet Icon Status
     private func updateFilterSettingButtonStatus() {
-        
+        Log.enter()
         if let filters = self.searchCriteria?.filters {
+            Log.debug("\(filters)")
             if(filters.count > 0) {
-                self.filterSettingButton.imageView?.image = self.filterSettingOnImage
+                self.filterSettingButton.setImage(self.filterSettingOnImage, forState: UIControlState.Normal)
             } else {
-                self.filterSettingButton.imageView?.image = self.filterSettingNormalImage
+                self.filterSettingButton.setImage(self.filterSettingNormalImage, forState: UIControlState.Normal)
             }
         } else {
-            self.filterSettingButton.imageView?.image = self.filterSettingNormalImage
+            self.filterSettingButton.setImage(self.filterSettingNormalImage, forState: UIControlState.Normal)
         }
         
     }
