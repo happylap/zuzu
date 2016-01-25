@@ -10,12 +10,18 @@ import Foundation
 
 private let Log = Logger.defaultLogger
 
+protocol SearchCriteriaObserverDelegate:class {
+    
+    func onBeforeCriteriaQuery()
+    
+    func onAfterCriteriaQuery(itemCount: Int)
+    
+}
+
 class SearchCriteriaObserver:NSObject {
     
     //If the criteria is not changed for allowedIdleSeconds, the system will fetch the number of houses before the user actually presses the search button
     private let allowedIdleTime = 2.0
-    
-    private let viewController: SearchBoxTableViewController
     
     private var currentCriteria: SearchCriteria = SearchCriteria()
     
@@ -23,12 +29,9 @@ class SearchCriteriaObserver:NSObject {
     
     private var enabled = false
     
-    var currentTimer:NSTimer?
+    var delegate: SearchCriteriaObserverDelegate?
     
-    init(viewController: SearchBoxTableViewController) {
-        self.viewController = viewController
-        super.init()
-    }
+    var currentTimer:NSTimer?
     
     func start() {
         enabled = true
@@ -64,28 +67,20 @@ class SearchCriteriaObserver:NSObject {
         
         currentTimer?.invalidate()
         
-        //Reset fast house count label
-        self.viewController.fastItemCountLabel.hidden = false
-        self.viewController.fastItemCountLabel.alpha = 0
-        self.viewController.fastItemCountLabel.text = nil
+        delegate?.onBeforeCriteriaQuery()
         
-        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "fetchNumberOfItems", userInfo: nil, repeats: false)
+        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "onNumberOfItemsFetched", userInfo: nil, repeats: false)
     }
     
-    func fetchNumberOfItems() {
+    func onNumberOfItemsFetched() {
         Log.debug("Start fetchNumberOfItems!")
         
         houseReq.searchByCriteria(currentCriteria, start: 0, row: 0) { (totalNum, result, error) -> Void in
                 
             Log.debug("End fetchNumberOfItems = \(totalNum)")
             
-            if(totalNum != 0) {
-                self.viewController.fastItemCountLabel.text = "立即觀看 \(totalNum) 筆出租物件"
-                self.viewController.fastItemCountLabel.fadeIn(0.5, delay: 0)
-                
-            } else {
-                self.viewController.fastItemCountLabel.text = nil
-            }
+            self.delegate?.onAfterCriteriaQuery(totalNum)
+            
         }
     }
 }

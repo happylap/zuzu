@@ -102,7 +102,7 @@
         let priceItems:[[(label:String, value:Int)]] = SearchBoxTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
         
         // Trigger the fetching of total number of items that meet the current criteria
-        lazy var stateObserver: SearchCriteriaObserver = SearchCriteriaObserver(viewController: self)
+        let stateObserver: SearchCriteriaObserver = SearchCriteriaObserver()
         
         // Data Store Insatance
         private let criteriaDataStore = UserDefaultsSearchCriteriaDataStore.getInstance()
@@ -1085,6 +1085,7 @@
             super.viewDidAppear(animated)
             Log.enter()
             
+            self.stateObserver.delegate = self
             self.stateObserver.start()
             
             Log.exit()
@@ -1543,6 +1544,7 @@
         }
     }
     
+    // MARK: - CityRegionContainerControllerDelegate
     extension SearchBoxTableViewController : CityRegionContainerControllerDelegate {
         func onCitySelectionDone(regions:[City]) {
             
@@ -1571,6 +1573,7 @@
         }
     }
     
+    // MARK: - CLLocationManagerDelegate
     extension SearchBoxTableViewController : CLLocationManagerDelegate {
         
         private func getDefaultLocation(placemark: CLPlacemark?) -> City {
@@ -1651,5 +1654,28 @@
         
         func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
             FileLog.error("Updating location failed error = \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - SearchCriteriaObserverDelegate
+    extension SearchBoxTableViewController : SearchCriteriaObserverDelegate {
+        
+        func onBeforeCriteriaQuery() {
+            
+            //Reset fast house count label
+            self.fastItemCountLabel.hidden = false
+            self.fastItemCountLabel.alpha = 0
+            self.fastItemCountLabel.text = nil
+            
+        }
+        
+        func onAfterCriteriaQuery(itemCount: Int) {
+            if(itemCount != 0) {
+                self.fastItemCountLabel.text = "立即觀看 \(itemCount) 筆出租物件"
+                self.fastItemCountLabel.fadeIn(0.5, delay: 0)
+                
+            } else {
+                self.fastItemCountLabel.text = nil
+            }
         }
     }
