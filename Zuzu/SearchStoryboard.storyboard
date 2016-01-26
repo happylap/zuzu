@@ -1575,11 +1575,11 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="JBT-Ez-hRO">
-                            <rect key="frame" x="0.0" y="64" width="800" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="800" height="84"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czk-Se-eDg">
-                                    <rect key="frame" x="332" y="5.5" width="136" height="33"/>
+                                    <rect key="frame" x="332" y="40.5" width="136" height="33"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="重設所有過濾條件"/>
                                     <userDefinedRuntimeAttributes>
@@ -1590,7 +1590,7 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="czk-Se-eDg" firstAttribute="centerX" secondItem="JBT-Ez-hRO" secondAttribute="centerX" id="Xo0-p7-gnD"/>
-                                <constraint firstItem="czk-Se-eDg" firstAttribute="centerY" secondItem="JBT-Ez-hRO" secondAttribute="centerY" id="kNi-LH-dse"/>
+                                <constraint firstItem="czk-Se-eDg" firstAttribute="centerY" secondItem="JBT-Ez-hRO" secondAttribute="centerY" constant="15" id="kNi-LH-dse"/>
                             </constraints>
                         </view>
                         <sections/>
