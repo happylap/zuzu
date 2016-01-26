@@ -108,8 +108,6 @@
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		8130344C1C52367E00EF7FAB /* RadarPurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */; };
 		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
-		813384CD1C55C6730093622E /* RadarPurchaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813384CC1C55C6730093622E /* RadarPurchaseTableViewCell.swift */; };
-		813507401C54CDBE000D5F78 /* RadarPurchaseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8135073F1C54CDBE000D5F78 /* RadarPurchaseTableViewCell.xib */; };
 		81390C751C365F2600450761 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C741C365F2600450761 /* Contants.swift */; };
 		81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C761C365F9A00450761 /* AmazonClientManager.swift */; };
 		81390C831C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */; };
@@ -271,8 +269,6 @@
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarPurchaseViewController.swift; path = Radar/RadarPurchaseViewController.swift; sourceTree = "<group>"; };
 		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
-		813384CC1C55C6730093622E /* RadarPurchaseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarPurchaseTableViewCell.swift; path = Zuzu/Radar/View/RadarPurchaseTableViewCell.swift; sourceTree = "<group>"; };
-		8135073F1C54CDBE000D5F78 /* RadarPurchaseTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RadarPurchaseTableViewCell.xib; path = Zuzu/Radar/View/RadarPurchaseTableViewCell.xib; sourceTree = "<group>"; };
 		81390C741C365F2600450761 /* Contants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		81390C761C365F9A00450761 /* AmazonClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AmazonClientManager.swift; path = Service/AmazonClientManager.swift; sourceTree = "<group>"; };
 		81390C7E1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeveloperAuthenticatedIdentityProvider.h; sourceTree = "<group>"; };
@@ -337,8 +333,6 @@
 			isa = PBXGroup;
 			children = (
 				14632AAC1C27B608008C9A2D /* NotificationItemTableViewCell.swift */,
-				8135073F1C54CDBE000D5F78 /* RadarPurchaseTableViewCell.xib */,
-				813384CC1C55C6730093622E /* RadarPurchaseTableViewCell.swift */,
 			);
 			name = View;
 			path = ..;
@@ -818,7 +812,6 @@
 				2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
-				813507401C54CDBE000D5F78 /* RadarPurchaseTableViewCell.xib in Resources */,
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
 				2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */,
@@ -1002,7 +995,6 @@
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
 				2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */,
-				813384CD1C55C6730093622E /* RadarPurchaseTableViewCell.swift in Sources */,
 				14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */,
 				2FCD15FF1C54906F00A9C1E2 /* LoggerExtensions.swift in Sources */,
 				81924E341C33AB4C00976EC7 /* FBUserData.swift in Sources */,

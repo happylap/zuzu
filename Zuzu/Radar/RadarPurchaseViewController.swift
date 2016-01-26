@@ -8,44 +8,47 @@
 
 import Foundation
 import UIKit
+import SCLAlertView
+import StoreKit
 
 private let Log = Logger.defaultLogger
 
-struct MySKProduct {
-    var localizedTitle: String
-    var localizedDescription: String
-}
 
 class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var productIDs: Array<String!> = []
+    // This list of available in-app purchases
+    var products = [SKProduct]()
     
-    var productsArray: Array<MySKProduct!> = []
+    deinit {
+        // NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
-    var selectedProductIndex: Int!
-    
-    var transactionInProgress = false
+    // priceFormatter is used to show proper, localized currency
+    lazy var priceFormatter: NSNumberFormatter = {
+        let pf = NSNumberFormatter()
+        pf.formatterBehavior = .Behavior10_4
+        pf.numberStyle = .CurrencyStyle
+        return pf
+    }()
     
     @IBOutlet weak var tableView: UITableView!
-    
-    // MARK: - Private methods
-    
-    func requestProductInfo() {
-        productsArray.append(MySKProduct(localizedTitle: "A方案: 15天", localizedDescription: "NT$30.00"))
-        productsArray.append(MySKProduct(localizedTitle: "B方案: 30天", localizedDescription: "NT$50.00"))
-        productsArray.append(MySKProduct(localizedTitle: "C方案: 90天", localizedDescription: "NT$100.00"))
+    @IBOutlet weak var cancelButton: UIButton!{
+        didSet {
+            cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            cancelButton.tintColor = UIColor.whiteColor()
+            
+            cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+        }
     }
+
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.productIDs.append("zuzu_radar_col1")
-        self.productIDs.append("zuzu_radar_col2")
-        self.productIDs.append("zuzu_radar_col3")
-        
-        self.requestProductInfo()
+        //Remove extra cells when the table height is smaller than the screen
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
         
         //Configure table DataSource & Delegate
         self.tableView.dataSource = self
@@ -54,14 +57,66 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         self.tableView.scrollEnabled = false
         self.tableView.allowsSelection = false
         
-        self.tableView.registerNib(UINib(nibName: "RadarPurchaseTableViewCell", bundle: nil), forCellReuseIdentifier: "radarPurchaseTableViewCell")
-        
+        // Subscribe to a notification that fires when a product is purchased.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "productPurchased:", name: ProductPurchasedNotification, object: nil)
     }
     
-    // MARK: Actions
-    @IBAction func cancelButtonTouched(sender: UIButton) {
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        reload()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    
+    // MARK: - Private Util
+    
+    func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) cancelButtonTouched")
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    // Fetch the products from iTunes connect, redisplay the table on successful completion
+    func reload() {
+        products = []
+        tableView.reloadData()
+        ZuzuStore.sharedInstance.requestProducts { success, products in
+            if success {
+                self.products = products
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    // Purchase the product
+    func onBuyButtonTapped(button: UIButton) {
+        let product = products[button.tag]
+        
+        Log.info("productIdentifier: \(product.productIdentifier)")
+        
+        priceFormatter.locale = product.priceLocale
+        let price = priceFormatter.stringFromNumber(product.price)
+        
+        let loginAlertView = SCLAlertView()
+        loginAlertView.addButton("購買") {
+            ZuzuStore.sharedInstance.makePurchase(product)
+        }
+        let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
+        loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
+    
+    // When a product is purchased, this notification fires, redraw the correct row
+    func productPurchased(notification: NSNotification) {
+        let productIdentifier = notification.object as! String
+        for (index, product) in products.enumerate() {
+            if product.productIdentifier == productIdentifier {
+                tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Fade)
+                break
+            }
+        }
     }
     
     // MARK: - Table View Data Source
@@ -73,7 +128,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return productsArray.count
+        return products.count
     }
     
     
@@ -83,19 +138,38 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("radarPurchaseTableViewCell", forIndexPath: indexPath)
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("radarPurchaseTableViewCell", forIndexPath: indexPath) as! RadarPurchaseTableViewCell
+        let product = products[indexPath.row]
+        cell.textLabel?.text = product.localizedTitle
         
-        cell.product = productsArray[indexPath.row]
-        
-//        /// Enable add to collection button
-//        cell.buyButton.userInteractionEnabled = true
-//        cell.buyButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onBuyButtonTouched:")))
-//        
+        if ZuzuStore.sharedInstance.isProductPurchased(product.productIdentifier) {
+            cell.accessoryType = .Checkmark
+            cell.accessoryView = nil
+            cell.detailTextLabel?.text = ""
+        }
+        else if ZuzuStore.canMakePayments() {
+            priceFormatter.locale = product.priceLocale
+            cell.detailTextLabel?.text = priceFormatter.stringFromNumber(product.price)
+            
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 72, height: 36))
+            button.backgroundColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
+            button.setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: .Normal)
+            button.setTitle("購買", forState: .Normal)
+            button.layer.borderWidth = 2.0
+            button.layer.borderColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+            button.layer.cornerRadius = CGFloat(18.0)
+            
+            button.tag = indexPath.row
+            button.addTarget(self, action: "onBuyButtonTapped:", forControlEvents: .TouchUpInside)
+            cell.accessoryType = .None
+            cell.accessoryView = button
+        }
+        else {
+            cell.accessoryType = .None
+            cell.accessoryView = nil
+            cell.detailTextLabel?.text = "Not available"
+        }
         return cell
     }
-    
-    
-
-    
 }
