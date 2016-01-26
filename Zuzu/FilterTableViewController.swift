@@ -27,10 +27,8 @@ class FilterTableViewController: UITableViewController {
     ///The list of all filter options grouped by sections
     static var filterSections:[FilterSection] = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
     
-    var filterSections:[FilterSection] {
-        get {
-            return FilterTableViewController.filterSections
-        }
+    struct ViewTransConst {
+        static let displayFilterOptions:String = "displayFilterOptions"
     }
     
     @IBOutlet weak var resetAllButton: UIButton! {
@@ -40,19 +38,31 @@ class FilterTableViewController: UITableViewController {
             resetAllButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
             resetAllButton.enabled = false
             
-            resetAllButton.addTarget(self, action: "resetAllFilters:", forControlEvents: UIControlEvents.TouchUpInside)
+            resetAllButton.addTarget(self, action: "onFilterResetButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
         }
     }
     
-    struct ViewTransConst {
-        static let displayFilterOptions:String = "displayFilterOptions"
+    var filterSections:[FilterSection] {
+        get {
+            return FilterTableViewController.filterSections
+        }
     }
     
-    var filterDelegate:FilterTableViewControllerDelegate?
+    var filterStatusBarView: FilterStatusBarView?
+    
+    var filterDelegate: FilterTableViewControllerDelegate?
     
     var selectedFilterIdSet = [String : Set<FilterIdentifier>]() ///GroupId : Filter Set
     
     // MARK: - Private Utils
+    ///Try to update any UI related to filter status
+    private func notifyFilterChange() {
+        
+        updateResetFilterButton()
+        
+        updateStatusBar()
+    }
+    
     private func updateResetFilterButton() {
         var filtersCount = 0
         for filterIdSet in selectedFilterIdSet.values {
@@ -63,6 +73,27 @@ class FilterTableViewController: UITableViewController {
             resetAllButton.enabled = true
         } else {
             resetAllButton.enabled = false
+        }
+    }
+    
+    private func updateStatusBar() {
+        var filtersCount = 0
+        for filterIdSet in selectedFilterIdSet.values {
+            filtersCount += filterIdSet.count
+        }
+        
+        if let filterStatusBarView = self.filterStatusBarView {
+            
+            if(filtersCount > 0) {
+                //filterStatusBarView.statusText.alpha = 0.0
+                //filterStatusBarView.statusText.fadeIn(0.5)
+                filterStatusBarView.statusText.text = "已經選擇 \(filtersCount) 個過濾條件"
+            } else {
+                //filterStatusBarView.statusText.alpha = 0.0
+                //filterStatusBarView.statusText.fadeIn(0.5)
+                filterStatusBarView.statusText.text = "尚未選擇任何過濾條件"
+            }
+            
         }
     }
     
@@ -166,15 +197,15 @@ class FilterTableViewController: UITableViewController {
     
     // MARK: - Action Handlers
     
-    func resetAllFilters(sender: UIButton) {
-        Log.debug("resetAllFilters")
+    func onFilterResetButtonTouched(sender: UIButton) {
+        Log.debug("onFilterResetButtonTouched")
         
         self.filterDelegate?.onFiltersReset()
         
         selectedFilterIdSet.removeAll()
         tableView.reloadData()
         
-        resetAllButton.enabled = false
+        self.notifyFilterChange()
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity, action: GAConst.Action.Activity.ResetFilters)
@@ -192,8 +223,6 @@ class FilterTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateResetFilterButton()
-        
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = false
         
@@ -203,10 +232,39 @@ class FilterTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.debug("\(self) [[viewWillAppear]]")
+        Log.enter()
+        
+        //Add Filter Status Bar
+        if let navView = self.navigationController?.view {
+            if let filterStatusBarView = self.filterStatusBarView {
+                
+                filterStatusBarView.showStatusBarOnView(navView)
+                
+            } else {
+                
+                var parentRect = navView.bounds
+                let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+                let navigationBarHeight = self.navigationController?.navigationBar.frame.height ?? 0
+                
+                ///Position the bar below status bar & navigation bar
+                parentRect.origin.y += (navigationBarHeight + statusBarHeight)
+                filterStatusBarView = FilterStatusBarView(frame: parentRect)
+                filterStatusBarView!.showStatusBarOnView(navView)
+            }
+            
+        }
+        
+        notifyFilterChange()
         
         //Google Analytics Tracker
         self.trackScreen()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        Log.enter()
+        
+        filterStatusBarView?.hideStatusBar()
     }
     
     override func didReceiveMemoryWarning() {
@@ -246,7 +304,7 @@ class FilterTableViewController: UITableViewController {
                     selectedFilterIdSet[filterGroup.id] = [currentFilter.identifier]
                 }
                 
-                updateResetFilterButton()
+                notifyFilterChange()
             }
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -372,7 +430,6 @@ class FilterTableViewController: UITableViewController {
             }
         }
     }
-    
 }
 
 extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
@@ -383,7 +440,7 @@ extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
         ///Update selection for a FilterGroup
         selectedFilterIdSet[groupId] = filterIdSet
         
-        updateResetFilterButton()
+        notifyFilterChange()
         
         tableView.reloadData()
     }

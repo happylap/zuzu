@@ -52,6 +52,7 @@
 		2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */; };
 		2F6155591BD888660024145E /* SearchItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6155581BD888660024145E /* SearchItemService.swift */; };
 		2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */; };
+		2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */; };
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
 		2F8DB45B1C50B95F006C4B21 /* SmartFilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */; };
@@ -209,6 +210,7 @@
 		2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CriteriaConst.swift; sourceTree = "<group>"; };
 		2F6155581BD888660024145E /* SearchItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemService.swift; sourceTree = "<group>"; };
 		2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaObserver.swift; sourceTree = "<group>"; };
+		2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterStatusBarView.swift; sourceTree = "<group>"; };
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
 		2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterContainerView.swift; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 			isa = PBXGroup;
 			children = (
 				2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */,
+				2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */,
 				2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */,
 				2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */,
 				2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */,
@@ -960,6 +963,7 @@
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
+				2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */,
 				2F6155591BD888660024145E /* SearchItemService.swift in Sources */,
 				14914FA11C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift in Sources */,
 				2FB16C591C48BF4C009738AC /* MasterViewController.swift in Sources */,

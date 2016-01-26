@@ -48,7 +48,7 @@ class FilterOptionTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.debug("\(self) [[viewWillAppear]]")
+        Log.enter()
         
         //Google Analytics Tracker
         self.trackScreen()
