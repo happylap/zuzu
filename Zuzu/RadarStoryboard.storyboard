@@ -341,9 +341,6 @@
                                                 <exclude reference="ZNa-6O-zmd"/>
                                             </mask>
                                         </variation>
-                                        <connections>
-                                            <action selector="cancelButtonTouched:" destination="f9r-QB-1sI" eventType="touchUpInside" id="WqC-cf-MOu"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>

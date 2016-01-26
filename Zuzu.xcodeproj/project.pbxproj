@@ -105,6 +105,7 @@
 		2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2FEC14CB1C15F41C000E652D /* .travis.yml */; };
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
+		812455341C5768E40085F3A8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812455331C5768E40085F3A8 /* StoreKit.framework */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		8130344C1C52367E00EF7FAB /* RadarPurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */; };
 		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
@@ -266,6 +267,7 @@
 		2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = searchCriteriaOptions.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
+		812455331C5768E40085F3A8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarPurchaseViewController.swift; path = Radar/RadarPurchaseViewController.swift; sourceTree = "<group>"; };
 		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */,
+				812455341C5768E40085F3A8 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +651,7 @@
 		797B8184BE32AA80123C1AB8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				812455331C5768E40085F3A8 /* StoreKit.framework */,
 				2FBDAB101C0E8FAE00B45E5B /* CoreLocation.framework */,
 				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
 			);
@@ -759,7 +763,7 @@
 						DevelopmentTeam = 956DA6WPUM;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};

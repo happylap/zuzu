@@ -49,6 +49,17 @@ public class ZuzuStore: NSObject  {
         
         self.productIdentifiers = productIdentifiers
         
+        super.init()
+        
+        /// Observe the transaction
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+    }
+    
+    /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
+    public func requestProducts(handler: RequestProductsCompletionHandler) {
+        
+        completionHandler = handler
+        
         /// Init SKProductsRequest
         productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
         
@@ -62,27 +73,9 @@ public class ZuzuStore: NSObject  {
                 Log.debug("Not purchased: \(productIdentifier)")
             }
         }
-        super.init()
         
         /// Receive response for product requests
         productsRequest?.delegate = self
-        
-        /// Observe the transaction
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
-    }
-    
-    /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
-    public func requestProducts(handler: RequestProductsCompletionHandler) {
-        
-        /// Cancel previous request if a request is alreay in progress
-        if(completionHandler != nil) {
-            
-            Log.debug("Cancel previous request")
-            productsRequest?.cancel()
-            
-        }
-        
-        completionHandler = handler
         
         productsRequest?.start()
     }
@@ -91,6 +84,7 @@ public class ZuzuStore: NSObject  {
     public func makePurchase(product: SKProduct) {
         Log.debug("Buying \(product.productIdentifier)...")
         let payment = SKPayment(product: product)
+
         SKPaymentQueue.defaultQueue().addPayment(payment)
     }
     

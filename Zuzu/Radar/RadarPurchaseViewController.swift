@@ -74,7 +74,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // MARK: - Private Util
     
     func onCancelButtonTouched(sender: UIButton) {
-        Log.debug("\(self) cancelButtonTouched")
+        Log.debug("\(self) onCancelButtonTouched")
         dismissViewControllerAnimated(true, completion: nil)
     }
     
