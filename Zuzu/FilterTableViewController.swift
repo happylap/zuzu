@@ -85,12 +85,8 @@ class FilterTableViewController: UITableViewController {
         if let filterStatusBarView = self.filterStatusBarView {
             
             if(filtersCount > 0) {
-                //filterStatusBarView.statusText.alpha = 0.0
-                //filterStatusBarView.statusText.fadeIn(0.5)
                 filterStatusBarView.statusText.text = "已經選擇 \(filtersCount) 個過濾條件"
             } else {
-                //filterStatusBarView.statusText.alpha = 0.0
-                //filterStatusBarView.statusText.fadeIn(0.5)
                 filterStatusBarView.statusText.text = "尚未選擇任何過濾條件"
             }
             
@@ -251,6 +247,9 @@ class FilterTableViewController: UITableViewController {
                 filterStatusBarView = FilterStatusBarView(frame: parentRect)
                 filterStatusBarView!.showStatusBarOnView(navView)
             }
+            
+            filterStatusBarView?.alpha = 0.0
+            filterStatusBarView?.fadeIn(0.5)
             
         }
         
