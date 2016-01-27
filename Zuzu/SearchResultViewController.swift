@@ -513,7 +513,7 @@ class SearchResultViewController: UIViewController {
         self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
     }
     
-    private func handleAddToCollection(houseItem: HouseItem) {
+    private func handleAddToCollection(houseItem: HouseItem, indexPath: NSIndexPath) {
         
         /// Check if maximum collection is reached
         if (!CollectionItemService.sharedInstance.canAdd()) {
@@ -523,7 +523,6 @@ class SearchResultViewController: UIViewController {
         
         // Append the houseId immediately to make the UI more responsive
         // TBD: Need to discuss whether we need to retrive the data from remote again
-        
         /// Update cached data
         self.collectionIdList?.append(houseItem.id)
         
@@ -531,8 +530,18 @@ class SearchResultViewController: UIViewController {
         self.tryAlertAddingToCollectionSuccess()
         
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
-            
             if let error = error {
+                let alertView = SCLAlertView()
+                alertView.showCloseButton = false
+                alertView.addButton("知道了") {
+                    /// Reload collection list
+                    self.collectionIdList = CollectionItemService.sharedInstance.getIds()
+                    // Refresh the row
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                }
+                let subTitle = "您目前可能是飛航模式或是無網路的狀況，請稍後再試"
+                alertView.showNotice("連線錯誤", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                
                 Log.debug("Cannot get remote data \(error.localizedDescription)")
                 return
             }
@@ -915,7 +924,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
             cell.enableCollection(isCollected, eventCallback: { (event, houseItem) -> Void in
                 switch(event) {
                 case .ADD:
-                    self.handleAddToCollection(houseItem)
+                    self.handleAddToCollection(houseItem, indexPath: indexPath)
                 case .DELETE:
                     self.handleDeleteFromCollection(houseItem)
                 }
