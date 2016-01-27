@@ -1027,7 +1027,17 @@ class HouseDetailViewController: UIViewController {
                         barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
                     }
                     
+                    LoadingSpinner.shared.stop()
+                    LoadingSpinner.shared.setImmediateAppear(false)
+                    LoadingSpinner.shared.setGraceTime(1.0)
+                    LoadingSpinner.shared.setOpacity(0.3)
+                    LoadingSpinner.shared.startOnView(self.view)
+                    Log.debug("LoadingSpinner startOnView")
+                    
                     HouseDataRequester.getInstance().searchById(houseId) { (result, error) -> Void in
+                        LoadingSpinner.shared.stop()
+                        Log.debug("LoadingSpinner stop")
+                        
                         if let error = error {
                             let alertView = SCLAlertView()
                             alertView.showCloseButton = false

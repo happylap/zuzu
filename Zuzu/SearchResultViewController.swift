@@ -529,7 +529,17 @@ class SearchResultViewController: UIViewController {
         /// Prompt the user if needed
         self.tryAlertAddingToCollectionSuccess()
         
+        LoadingSpinner.shared.stop()
+        LoadingSpinner.shared.setImmediateAppear(false)
+        LoadingSpinner.shared.setGraceTime(1.0)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+        Log.debug("LoadingSpinner startOnView")
+        
         HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+            LoadingSpinner.shared.stop()
+            Log.debug("LoadingSpinner stop")
+            
             if let error = error {
                 let alertView = SCLAlertView()
                 alertView.showCloseButton = false
