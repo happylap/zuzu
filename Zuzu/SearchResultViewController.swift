@@ -8,12 +8,16 @@
 
 import UIKit
 import SCLAlertView
+import GoogleMobileAds
 
 private let Log = Logger.defaultLogger
 
 class SearchResultViewController: UIViewController {
     
-    let cellIdentifier = "houseItemCell"
+    struct CellIdentifier {
+        static let houseItem = "houseItemCell"
+        static let adItem = "standardAdCell"
+    }
     
     struct TableConst {
         static let sectionNum:Int = 1
@@ -125,7 +129,8 @@ class SearchResultViewController: UIViewController {
         //Configure table DataSource & Delegate
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: CellIdentifier.houseItem)
+        self.tableView.registerNib(UINib(nibName: "SearchResultAdCell", bundle: nil), forCellReuseIdentifier: CellIdentifier.adItem)
     }
     
     override func viewDidLayoutSubviews() {
@@ -744,6 +749,11 @@ class SearchResultViewController: UIViewController {
         
         //Load the first page of data
         self.sortByField(HouseItemDocument.postTime, sortingOrder: HouseItemDocument.Sorting.sortDesc)
+        
+        
+        //Try preload Ad
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.adItem) as! SearchResultAdCell
+        cell.loadAdForController(self)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -870,23 +880,10 @@ class SearchResultViewController: UIViewController {
 // MARK: - Table View Data Source
 extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return TableConst.sectionNum
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Log.debug("\(self) tableView Count: \(dataSource.getSize())")
-        
-        return dataSource.getSize()
-    }
-    
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
+    private func handleResultCell(indexPath: NSIndexPath) -> SearchResultTableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.houseItem, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
-        
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
@@ -925,11 +922,58 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         return cell
     }
     
+    private func handleAdCell(indexPath: NSIndexPath) -> SearchResultAdCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.adItem, forIndexPath: indexPath) as! SearchResultAdCell
+        
+        //cell.loadAdForController(self)
+        
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
+        
+        return cell
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return TableConst.sectionNum
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        Log.debug("\(self) tableView Count: \(dataSource.getSize())")
+        
+        return dataSource.getSize()
+        
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if let cell =  cell as? SearchResultAdCell {
+            cell.loadAdForController(self)
+        }
+    }
+    
+    /// Do not do heavy data binding in this function. Postpone until willDisplayCell
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let displayAd = (self.dataSource.getItemForRow(indexPath.row).id == "Ad")
+        
+        if(displayAd) {
+            
+            return handleAdCell(indexPath)
+            
+        } else {
+            
+            return handleResultCell(indexPath)
+        }
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let houseItem = dataSource.getItemForRow(indexPath.row)
         
         Log.debug("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
+        
+        if(houseItem.id == "Ad") {
+            return
+        }
         
         if let duplicates = houseItem.children {
             self.runOnMainThreadAfter(0.1, block: { () -> Void in
@@ -1099,6 +1143,7 @@ extension SearchResultViewController: HouseDetailViewDelegate {
     }
 }
 
+// MARK: - DuplicateHouseViewControllerDelegate
 extension SearchResultViewController: DuplicateHouseViewControllerDelegate {
     
     internal func onDismiss() {

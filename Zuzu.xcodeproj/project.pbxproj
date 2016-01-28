@@ -89,6 +89,8 @@
 		2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */; };
 		2FCD15FC1C548C6E00A9C1E2 /* XCGLoggerNSLoggerConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD15FB1C548C6E00A9C1E2 /* XCGLoggerNSLoggerConnector.swift */; };
 		2FCD15FF1C54906F00A9C1E2 /* LoggerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD15FE1C54906F00A9C1E2 /* LoggerExtensions.swift */; };
+		2FD49B6F1C58AE0F00857EAE /* SearchResultAdCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FD49B6E1C58AE0F00857EAE /* SearchResultAdCell.xib */; };
+		2FD49B711C58AE3700857EAE /* SearchResultAdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD49B701C58AE3700857EAE /* SearchResultAdCell.swift */; };
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */; };
 		2FD8EA9C1C3FA9CC00C920D3 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */; };
@@ -252,6 +254,8 @@
 		2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIOverlayImageView.swift; sourceTree = "<group>"; };
 		2FCD15FB1C548C6E00A9C1E2 /* XCGLoggerNSLoggerConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCGLoggerNSLoggerConnector.swift; sourceTree = "<group>"; };
 		2FCD15FE1C54906F00A9C1E2 /* LoggerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerExtensions.swift; sourceTree = "<group>"; };
+		2FD49B6E1C58AE0F00857EAE /* SearchResultAdCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultAdCell.xib; sourceTree = "<group>"; };
+		2FD49B701C58AE3700857EAE /* SearchResultAdCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultAdCell.swift; sourceTree = "<group>"; };
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsUtils.swift; sourceTree = "<group>"; };
 		2FD8EA9B1C3FA9CC00C920D3 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
@@ -591,6 +595,8 @@
 				2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */,
 				2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */,
 				2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */,
+				2FD49B701C58AE3700857EAE /* SearchResultAdCell.swift */,
+				2FD49B6E1C58AE0F00857EAE /* SearchResultAdCell.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -816,6 +822,7 @@
 				2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */,
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
+				2FD49B6F1C58AE0F00857EAE /* SearchResultAdCell.xib in Resources */,
 				2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */,
 				2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */,
 				2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */,
@@ -951,6 +958,7 @@
 				14632AAD1C27B608008C9A2D /* NotificationItemTableViewCell.swift in Sources */,
 				2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */,
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
+				2FD49B711C58AE3700857EAE /* SearchResultAdCell.swift in Sources */,
 				14914FA21C27D09800025AC1 /* CollectionHouseItem.swift in Sources */,
 				14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */,
 				14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */,

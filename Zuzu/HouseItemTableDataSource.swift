@@ -20,27 +20,28 @@ import Foundation
 import Foundation
 
 /**
- The class is developed in a rush, need to refactor to a more common module
- 
- 1) highly coupled with other modules, can not work as standalone library
- 2) It might block UI a little bit when loading data from storage
- */
+The class is developed in a rush, need to refactor to a more common module
+
+1) highly coupled with other modules, can not work as standalone library
+2) It might block UI a little bit when loading data from storage
+*/
 
 private let Log = Logger.defaultLogger
 
 public class HouseItemTableDataSource {
     
     struct Const {
-        static let SAVE_PAGE_PREFIX = "page"
-        static let START_PAGE = 1
-        static let PAGE_SIZE = 10
+        static let adDisplayPageInterval = 2
+        static let savePagePrefix = "page"
+        static let startPage = 1
+        static let pageSize = 10
     }
     
     var debugStr: String {
         
         get {
             let pageInfo = "Total Result: \(estimatedTotalResults)\n"
-                + "Items Per Page: \(Const.PAGE_SIZE)\n"
+                + "Items Per Page: \(Const.pageSize)\n"
                 + "Last Page No: \(self.currentPage)\n"
                 + "Total Items in Table: \(self.getSize())\n"
             
@@ -51,8 +52,8 @@ public class HouseItemTableDataSource {
                 + "<Type>: \(self.criteria?.types)\n"
                 + "<Price>: \(self.criteria?.price)\n"
                 + "<Size>: \(self.criteria?.size)\n"
-//                + "<City>: \(self.criteria?)\n"
-//                + "<Region>: \(self.criteria?.size)\n"
+            //                + "<City>: \(self.criteria?)\n"
+            //                + "<Region>: \(self.criteria?.size)\n"
             
             
             let host = HouseDataRequester.getInstance().urlComp.host ?? ""
@@ -109,7 +110,7 @@ public class HouseItemTableDataSource {
         cachedData.removeAll()
         
         loadStartTime = NSDate()
-        loadRemoteData(Const.START_PAGE)
+        loadRemoteData(Const.startPage)
     }
     
     func getItemForRow(row:Int) -> HouseItem{
@@ -147,7 +148,12 @@ public class HouseItemTableDataSource {
     private func loadRemoteData(pageNo:Int){
         let requester = HouseDataRequester.getInstance()
         let start = getStartIndexFromPageNo(pageNo)
-        let row = Const.PAGE_SIZE
+        var row = Const.pageSize
+        
+        ///Check if need to add an Ad item
+        if(pageNo % Const.adDisplayPageInterval == 0) {
+            row -= 1 // Leave 1 for Ad
+        }
         
         if criteria == nil {
             return
@@ -159,10 +165,19 @@ public class HouseItemTableDataSource {
         
         requester.searchByCriteria(criteria!, start: start, row: row) { (totalNum, result, facetResult, error) -> Void in
             
-            self.estimatedTotalResults = totalNum
-            
             if let result = result {
                 self.appendDataForPage(pageNo, data: result)
+            }
+            
+            self.estimatedTotalResults = totalNum
+            
+            ///Check if need to add an Ad item
+            if(pageNo % Const.adDisplayPageInterval == 0) {
+                //Time to add one Ad cell
+                let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
+
+                let lastIndex = self.cachedData.endIndex - 1
+                self.cachedData.insert(adItem, atIndex: lastIndex)
             }
             
             if let loadStartTime = self.loadStartTime {
@@ -181,11 +196,11 @@ public class HouseItemTableDataSource {
     private func getStartIndexFromPageNo(pageNo: Int) -> Int{
         assert(pageNo > 0, "pageNo should start at 1")
         
-        return (pageNo - 1) * Const.PAGE_SIZE
+        return (pageNo - 1) * Const.pageSize
     }
     
     private func calculateNumOfPages(numOfItems:Int) -> Int{
-        return Int(ceil(Double(numOfItems) / Double(Const.PAGE_SIZE)))
+        return Int(ceil(Double(numOfItems) / Double(Const.pageSize)))
     }
     
 }
