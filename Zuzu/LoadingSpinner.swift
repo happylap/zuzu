@@ -17,6 +17,7 @@ public class LoadingSpinner{
     
     private var opacity = LoadingSpinner.defaultOpacity
     private var minShowTime:Float?
+    private var graceTime:Float?
     private var dimBackground = false
     private var immediateAppear = false
     private var text:String?
@@ -44,6 +45,10 @@ public class LoadingSpinner{
         self.minShowTime = second
     }
     
+    public func setGraceTime(second:Float) {
+        self.graceTime = second
+    }
+    
     public func setText(text:String) {
         self.text = text
     }
@@ -69,7 +74,11 @@ public class LoadingSpinner{
             if(immediateAppear) {
                 dialog.graceTime = 0
             } else {
-                dialog.graceTime = LoadingSpinner.defaultGraceTime
+                if let graceTime = self.graceTime {
+                    dialog.graceTime = graceTime
+                } else {
+                    dialog.graceTime = LoadingSpinner.defaultGraceTime
+                }
             }
             view.addSubview(dialog)
             dialog.show(true)

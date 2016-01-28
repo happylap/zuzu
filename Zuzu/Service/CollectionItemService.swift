@@ -12,6 +12,7 @@ import AWSCognito
 import SwiftyJSON
 import ObjectMapper
 import SwiftDate
+import AwesomeCache
 
 private let Log = Logger.defaultLogger
 
@@ -62,8 +63,6 @@ class CollectionItemService: NSObject
             }
             self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY_FOR_ADD)
         }
-        
-        self.addPriceCutIds(items)
     }
     
     func _update(id: String, dataToUpdate: [String: AnyObject]) {
@@ -401,155 +400,129 @@ class CollectionItemService: NSObject
         }
     }
     
-    let userDefault = NSUserDefaults.standardUserDefaults()
-    
     // MARK: Check Off Shelf
-    
-    let IDS_FOR_OFF_SHELF_CHECK = "IdsForOffShelfCheck"
-    let UPDATE_DATE_FOR_OFF_SHELF_CHECK = "UpdateDtForOffShelfCheck"
     
     func isOffShelf(id: String, handler: (offShelf: Bool) -> Void) {
-        if let collectionItem = self.getItem(id), let collectTime = collectionItem.collectTime {
-            if collectTime.isToday() {
-                handler(offShelf: false)
-                return
+        
+        let _cacheName:String = "OFF_SHELF_CACHE"
+        let _cacheTime:Double = 3 * 60 * 60 //3 hours
+        var _hitCache:Bool = false
+        
+        do {
+            let cache = try Cache<NSString>(name: _cacheName)
+            
+            ///Return cached data if there is cached data
+            if let result = cache.objectForKey(id) as? String {
+                    
+                Log.debug("Hit Cache for item: Id: \(id), OffShelf: \(result)")
+                
+                _hitCache = true
+                
+                var _offShelf:Bool = false
+                if result == "Y" {
+                    _offShelf = true
+                }
+                
+                handler(offShelf: _offShelf)
             }
             
-            self.getOffShelfIds() { (result) -> Void in
-                var offShelf = false
-                if let offShelfIds = result {
-                    offShelf = !offShelfIds.contains(collectionItem.id)
-                }
-                handler(offShelf: offShelf)
-            }
-        }
-    }
-    
-    func getOffShelfIds(handler: (result: [String]?) -> Void) {
-        if let ids = self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String],
-            let updateDt = self.userDefault.objectForKey(self.UPDATE_DATE_FOR_OFF_SHELF_CHECK) as? NSDate {
-            if updateDt.isToday() {
-                handler(result: ids)
-                return
-            }
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
         }
         
-        if let collectionIds: [String] = self.getIds() {
-            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, facetResult,  error) -> Void in
+        if(!_hitCache) {
+            
+            HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
                 
-                if let remoteHouseItems = result {
-                    var remoteHouseIds = [String]()
-                    for remoteHouseItem in remoteHouseItems as [HouseItem] {
-                        remoteHouseIds.append(remoteHouseItem.id)
-                    }
-                    
-                    let nsArray: NSArray = NSArray(array: remoteHouseIds)
-                    self.userDefault.setObject(nsArray, forKey: self.IDS_FOR_OFF_SHELF_CHECK)
-                    self.userDefault.setObject(NSDate(), forKey: self.UPDATE_DATE_FOR_OFF_SHELF_CHECK)
-                    self.userDefault.synchronize()
-                    
-                    handler(result: remoteHouseIds)
-                }
-                else {
-                    if let offShelfIds = self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String] {
-                        handler(result: offShelfIds)
-                    } else {
-                        handler(result: nil)
-                    }
-                }
-            }
-            return
-        }
-        
-        handler(result: self.userDefault.objectForKey(self.IDS_FOR_OFF_SHELF_CHECK) as? [String])
-    }
-    
-    // MARK: Check Off Shelf
-    
-    let IDS_FOR_PRICE_CUT_CHECK = "IdsForPriceCutCheck"
-    let UPDATE_DATE_FOR_PRICE_CUT_CHECK = "UpdateDtForPriceCutCheck"
-    
-    func isPriceCut(id: String, handler: (priceCut: Bool) -> Void) {
-        if let collectionItem = self.getItem(id) {
-            self.getPriceCutIds() { (result) -> Void in
-                var priceCut = false
-                if let priceCutIds = result {
-                    priceCut = priceCutIds.contains(collectionItem.id)
-                }
-                handler(priceCut: priceCut)
-            }
-        }
-    }
-    
-    func getPriceCutIds(handler: (result: [String]?) -> Void) {
-        self._getPriceCutIds(false, handler: handler)
-    }
-    
-    func addPriceCutIds(items: [AnyObject]) {
-        for item in items {
-            if let id = item.valueForKey("id") as? String,
-                let price = item.valueForKey("price") as? Int,
-                let previousPrice = item.valueForKey("previous_price") as? Int {
-                if previousPrice > price {
-                        self.addPriceCutId(id)
-                }
-            }
-        }
-    }
-    
-    func updatePriceCutIds(handler: (result: [String]?) -> Void) {
-        self._getPriceCutIds(true, handler: handler)
-    }
-    
-    func addPriceCutId(newId: String) {
-        if var priceCutIds: [String] = self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String] {
-            if !priceCutIds.contains(newId) {
-                priceCutIds.append(newId)
-                
-                let nsArray: NSArray = NSArray(array: priceCutIds)
-                self.userDefault.setObject(nsArray, forKey: self.IDS_FOR_PRICE_CUT_CHECK)
-                self.userDefault.setObject(NSDate(), forKey: self.UPDATE_DATE_FOR_PRICE_CUT_CHECK)
-                self.userDefault.synchronize()
-            }
-        }
-    }
-    
-    private func _getPriceCutIds(ignoreInterval: Bool, handler: (result: [String]?) -> Void) {
-        if !ignoreInterval {
-            if let ids = self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String],
-                let updateDt = self.userDefault.objectForKey(self.UPDATE_DATE_FOR_PRICE_CUT_CHECK) as? NSDate {
-                if updateDt.isToday() {
-                    handler(result: ids)
+                if let error = error {
+                    Log.debug("Cannot get remote data \(error.localizedDescription)")
+                    handler(offShelf: false)
                     return
                 }
-            }
-        }
-        
-        if let collectionIds: [String] = self.getIds() {
-            HouseDataRequester.getInstance().searchByIds(collectionIds, fieldList: fieldList) { (totalNum, result, facetResult, error) -> Void in
-                if let remoteHouseItems = result {
-                    var priceCutIds = [String]()
-                    
-                    for remoteHouseItem in remoteHouseItems as [HouseItem] {
-                        if let previousPrice = remoteHouseItem.previousPrice {
-                            if (previousPrice > remoteHouseItem.price) {
-                                priceCutIds.append(remoteHouseItem.id)
-                            }
-                        }
-                    }
-                    
-                    let nsArray: NSArray = NSArray(array: priceCutIds)
-                    self.userDefault.setObject(nsArray, forKey: self.IDS_FOR_PRICE_CUT_CHECK)
-                    self.userDefault.setObject(NSDate(), forKey: self.UPDATE_DATE_FOR_PRICE_CUT_CHECK)
-                    self.userDefault.synchronize()
+                
+                var _offShelf:Bool = false
+                
+                if result == nil {
+                    _offShelf = true
                 }
                 
-                handler(result: self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String])
+                ///Try to cache the house detail response
+                do {
+                    let cache = try Cache<NSString>(name: _cacheName)
+                    let cacheData = _offShelf ? "Y" : "N"
+                    cache.setObject(cacheData, forKey: id, expires: CacheExpiry.Seconds(_cacheTime))
+                    
+                } catch _ {
+                    Log.debug("Something went wrong with the cache")
+                }
+                
+                Log.debug("Remote for item: Id: \(id), OffShelf: \(_offShelf)")
+                handler(offShelf: _offShelf)
             }
-            return
         }
-        
-        handler(result: self.userDefault.objectForKey(self.IDS_FOR_PRICE_CUT_CHECK) as? [String])
     }
     
+    func isPriceCut(id: String, handler: (priceCut: Bool) -> Void) {
+        
+        let _cacheName:String = "PRICE_CUT_CACHE"
+        let _cacheTime:Double = 3 * 60 * 60 //3 hours
+        var _hitCache:Bool = false
+        
+        do {
+            let cache = try Cache<NSString>(name: _cacheName)
+            
+            ///Return cached data if there is cached data
+            if let result = cache.objectForKey(id) as? String {
+                
+                Log.debug("Hit Cache for item: Id: \(id), PriceCut: \(result)")
+                
+                _hitCache = true
+                
+                var _priceCut:Bool = false
+                if result == "Y" {
+                    _priceCut = true
+                }
+                
+                handler(priceCut: _priceCut)
+            }
+            
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
+        }
+        
+        if(!_hitCache) {
+            
+            HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
+                
+                if let error = error {
+                    Log.debug("Cannot get remote data \(error.localizedDescription)")
+                    handler(priceCut: false)
+                    return
+                }
+                
+                var _priceCut:Bool = false
+                
+                if let item = result,
+                    let price = item.valueForKey("price") as? Int,
+                    let previousPrice = item.valueForKey("previous_price") as? Int {
+                        if price < previousPrice {
+                            _priceCut = true
+                        }
+                }
+                
+                ///Try to cache the house detail response
+                do {
+                    let cache = try Cache<NSString>(name: _cacheName)
+                    let cacheData = _priceCut ? "Y" : "N"
+                    cache.setObject(cacheData, forKey: id, expires: CacheExpiry.Seconds(_cacheTime))
+                    
+                } catch _ {
+                    Log.debug("Something went wrong with the cache")
+                }
+                
+                Log.debug("Remote for item: Id: \(id), PriceCut: \(_priceCut)")
+                handler(priceCut: _priceCut)
+            }
+        }
+    }
 }

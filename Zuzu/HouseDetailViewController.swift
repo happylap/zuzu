@@ -1012,6 +1012,9 @@ class HouseDetailViewController: UIViewController {
                         barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
                     }
                     
+                    ///Notify the search result table to refresh the slected row
+                    delegate?.onHouseItemStateChanged()
+                    
                 } else {
                     
                     if !CollectionItemService.sharedInstance.canAdd() {
@@ -1020,16 +1023,44 @@ class HouseDetailViewController: UIViewController {
                         return
                     }
                     
-                    collectionService.addItem(houseItemDetail)
-                    self.alertAddingToCollectionSuccess()
-                    
                     if let barItem = barItem {
                         barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
                     }
+                    
+                    LoadingSpinner.shared.stop()
+                    LoadingSpinner.shared.setImmediateAppear(false)
+                    LoadingSpinner.shared.setGraceTime(1.0)
+                    LoadingSpinner.shared.setOpacity(0.3)
+                    LoadingSpinner.shared.startOnView(self.view)
+                    Log.debug("LoadingSpinner startOnView")
+                    
+                    HouseDataRequester.getInstance().searchById(houseId) { (result, error) -> Void in
+                        LoadingSpinner.shared.stop()
+                        Log.debug("LoadingSpinner stop")
+                        
+                        if let error = error {
+                            let alertView = SCLAlertView()
+                            alertView.showCloseButton = false
+                            alertView.addButton("知道了") {
+                                if let barItem = barItem {
+                                    barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                                }
+                            }
+                            let subTitle = "您目前可能是飛航模式或是無網路的狀況，請稍後再試"
+                            alertView.showNotice("連線錯誤", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                            
+                            Log.debug("Cannot get remote data \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        collectionService.addItem(houseItemDetail)
+                        self.alertAddingToCollectionSuccess()
+                        
+                        ///Notify the search result table to refresh the slected row
+                        self.delegate?.onHouseItemStateChanged()
+                    }
                 }
                 
-                ///Notify the search result table to refresh the slected row
-                delegate?.onHouseItemStateChanged()
         }
     }
     
