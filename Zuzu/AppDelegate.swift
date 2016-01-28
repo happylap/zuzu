@@ -129,6 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .stringByReplacingOccurrencesOfString(" ", withString: "")
         Log.debug("deviceTokenString: \(deviceTokenString)")
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
+        AmazonClientManager.sharedInstance.registerSNSEndpoint()
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
