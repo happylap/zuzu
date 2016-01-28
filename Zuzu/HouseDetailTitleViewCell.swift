@@ -12,24 +12,26 @@ private let Log = Logger.defaultLogger
 
 class HouseDetailTitleViewCell: UITableViewCell {
 
-    @IBOutlet weak var titleImage: UIImageView!
+    //@IBOutlet weak var titleImage: UIImageView!
     
     @IBOutlet weak var houseTitleLabel: UILabel!
     
+    @IBOutlet weak var carouselView: CarouselView!
+    
     let titleBackground = CAGradientLayer()
     
-    private func addImageOverlay(image: UIImageView) {
+    private func addImageOverlay(view: CarouselView) {
         
         ///Gradient layer
         let gradientColors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
         let gradientLocations = [0.0, 1.0]
-        let layerRect = CGRect(x: image.bounds.origin.x, y: image.bounds.origin.y, width: image.bounds.width, height: image.bounds.width * 188/1441)
+        let layerRect = CGRect(x: view.bounds.origin.x, y: view.bounds.origin.y, width: view.bounds.width, height: view.bounds.width * 188/1441)
         titleBackground.frame = layerRect
         titleBackground.colors = gradientColors
         titleBackground.locations = gradientLocations
         titleBackground.opacity = 0.7
         
-        image.layer.addSublayer(titleBackground)
+        view.layer.addSublayer(titleBackground)
     }
     
     override func prepareForReuse() {
@@ -50,7 +52,10 @@ class HouseDetailTitleViewCell: UITableViewCell {
         label.animationDelay = 1.5 //Sec
         label.marqueeType = .MLContinuous
         
-        self.addImageOverlay(titleImage)
-        
+        self.addImageOverlay(carouselView)
     }
+    
 }
+
+
+

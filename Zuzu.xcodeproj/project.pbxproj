@@ -118,6 +118,8 @@
 		81390C841C36AB6100450761 /* DeveloperAuthenticationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */; };
 		81390C891C36AC0700450761 /* Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C881C36AC0700450761 /* Crypto.m */; };
 		81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C8A1C37B0E800450761 /* CollectionItemService.swift */; };
+		816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8166358F1C5A8D64008C0AA3 /* CarouselView.swift */; };
+		816635941C5AA69D008C0AA3 /* CarouselView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635931C5AA69D008C0AA3 /* CarouselView2.swift */; };
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
 		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
 		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
@@ -286,6 +288,8 @@
 		81390C871C36AC0700450761 /* Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crypto.h; sourceTree = "<group>"; };
 		81390C881C36AC0700450761 /* Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crypto.m; sourceTree = "<group>"; };
 		81390C8A1C37B0E800450761 /* CollectionItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionItemService.swift; path = Service/CollectionItemService.swift; sourceTree = "<group>"; };
+		8166358F1C5A8D64008C0AA3 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
+		816635931C5AA69D008C0AA3 /* CarouselView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView2.swift; sourceTree = "<group>"; };
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyNoteViewCell.swift; path = Collection/MyNoteViewCell.swift; sourceTree = "<group>"; };
 		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLoginViewController.swift; path = Collection/FBLoginViewController.swift; sourceTree = "<group>"; };
 		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBLoginService.swift; path = Service/FBLoginService.swift; sourceTree = "<group>"; };
@@ -587,6 +591,7 @@
 		2FBC05541BDE6F600035652D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8166358F1C5A8D64008C0AA3 /* CarouselView.swift */,
 				2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */,
 				2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */,
 				2FC98D701BFC224F00D054B3 /* UIOverlayImageView.swift */,
@@ -594,6 +599,7 @@
 				2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */,
 				2FD49B701C58AE3700857EAE /* SearchResultAdCell.swift */,
 				2FD49B6E1C58AE0F00857EAE /* SearchResultAdCell.xib */,
+				816635931C5AA69D008C0AA3 /* CarouselView2.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -957,6 +963,7 @@
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				2FD49B711C58AE3700857EAE /* SearchResultAdCell.swift in Sources */,
 				14914FA21C27D09800025AC1 /* CollectionHouseItem.swift in Sources */,
+				816635941C5AA69D008C0AA3 /* CarouselView2.swift in Sources */,
 				14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */,
 				14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */,
 				81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */,
@@ -970,6 +977,7 @@
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
+				816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
 				2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */,
 				2F6155591BD888660024145E /* SearchItemService.swift in Sources */,
