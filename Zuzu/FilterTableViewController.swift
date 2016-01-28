@@ -248,8 +248,7 @@ class FilterTableViewController: UITableViewController {
                 filterStatusBarView!.showStatusBarOnView(navView)
             }
             
-            filterStatusBarView?.alpha = 0.0
-            filterStatusBarView?.fadeIn(0.5)
+            filterStatusBarView?.alpha = 0.1
             
         }
         
@@ -257,6 +256,13 @@ class FilterTableViewController: UITableViewController {
         
         //Google Analytics Tracker
         self.trackScreen()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.enter()
+        
+        filterStatusBarView?.fadeIn(0.5)
     }
     
     override func viewWillDisappear(animated: Bool) {
