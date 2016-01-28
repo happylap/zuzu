@@ -194,18 +194,19 @@ class HouseDetailViewController: UIViewController {
             0:CellInfo(cellIdentifier: .HouseDetailTitleCell, hidden: false, cellHeight: 213, handler: { (cell : UITableViewCell) -> () in
                 if let cell = cell as? HouseDetailTitleViewCell {
                     
+                    if let imgList = self.houseItem?.imgList {
+                        cell.carouselView.imageUrls = imgList
+                        cell.carouselView.tapHandler = { () -> Void in
+                            Log.debug("carouselView.tapHandler")
+                            
+                            let rowToSelect:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0);  //slecting 0th row with 0th section
+                            //self.tableView.selectRowAtIndexPath(rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.None);
+                            self.tableView(self.tableView, didSelectRowAtIndexPath: rowToSelect);
+                        }
+                    }
+                    
                     cell.houseTitleLabel.text = self.houseItem?.title
                     
-                    let placeholderImg = UIImage(named: "house_img")
-                    
-                    if let imgString = self.houseItem?.imgList?.first,
-                        let imgUrl = NSURL(string: imgString){
-                            
-                            cell.titleImage.af_setImageWithURL(imgUrl, placeholderImage: placeholderImg, filter: nil, imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
-                                Log.debug("Img loading done, status = \(response?.statusCode)")
-                            }
-                            
-                    }
                 }
             }),
             1:CellInfo(cellIdentifier: .PriceSizeCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
@@ -1457,3 +1458,4 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         }
     }
 }
+
