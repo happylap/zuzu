@@ -164,7 +164,6 @@ class HouseDetailViewController: UIViewController {
                     alertView.showCloseButton = true
                     alertView.showInfo("網路無法連線", subTitle: subTitle, closeButtonTitle: "知道了",colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     
-                    Log.debug("Cannot get remote data \(error.localizedDescription)")
                     return
                 }
                 
@@ -1053,8 +1052,8 @@ class HouseDetailViewController: UIViewController {
                                     barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
                                 }
                             }
-                            let subTitle = "您目前可能是飛航模式或是無網路的狀況，請稍後再試"
-                            alertView.showNotice("連線錯誤", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                            let subTitle = "您目前可能處於飛航模式或是無網路狀態，請稍後再試"
+                            alertView.showInfo("網路無法連線", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                             
                             Log.debug("Cannot get remote data \(error.localizedDescription)")
                             return
