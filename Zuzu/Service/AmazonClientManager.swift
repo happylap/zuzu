@@ -145,10 +145,6 @@ class AmazonClientManager : NSObject {
             Log.info("Credential Provider Status (After FB Login):")
             self.dumpCredentialProviderInfo()
 
-            if FeatureOption.Radar.enableMain == true{
-                self.registerSNSEndpoint()
-            }
-            
             if (task.error != nil) {
                 
                 
