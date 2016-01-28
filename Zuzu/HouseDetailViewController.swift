@@ -88,7 +88,7 @@ class HouseDetailViewController: UIViewController {
     
     ///The full house detail in AnyObject
     var houseItemDetail: AnyObject?
-
+    
     enum CellIdentifier: String {
         case HouseDetailTitleCell = "houseDetailTitleCell"
         case PriceSizeCell = "priceSizeCell"
@@ -158,6 +158,13 @@ class HouseDetailViewController: UIViewController {
                 
                 if let error = error {
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
+                    
+                    let alertView = SCLAlertView()
+                    let subTitle = "您目前可能處於飛航模式或是無網路狀態，暫時無法檢視詳細資訊。"
+                    alertView.showCloseButton = true
+                    alertView.showInfo("網路無法連線", subTitle: subTitle, closeButtonTitle: "知道了",colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                    
+                    Log.debug("Cannot get remote data \(error.localizedDescription)")
                     return
                 }
                 
@@ -209,7 +216,7 @@ class HouseDetailViewController: UIViewController {
                     if let houseItemDetail = self.houseItemDetail {
                         
                         
-
+                        
                         
                         let attributes = [
                             NSBackgroundColorAttributeName: UIColor.colorWithRGB(0xFFFFFF),
