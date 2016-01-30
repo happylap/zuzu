@@ -145,10 +145,6 @@ class AmazonClientManager : NSObject {
             Log.info("Credential Provider Status (After FB Login):")
             self.dumpCredentialProviderInfo()
 
-            if FeatureOption.Radar.enableMain == true{
-                self.registerSNSEndpoint()
-            }
-            
             if (task.error != nil) {
                 
                 
@@ -185,6 +181,9 @@ class AmazonClientManager : NSObject {
         
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
         self.credentialsProvider?.logins = logins
+        if logins == nil{
+            self.credentialsProvider?.clearKeychain()
+        }
         
         Log.info("Credential Provider Status (Initial):")
         self.dumpCredentialProviderInfo()
