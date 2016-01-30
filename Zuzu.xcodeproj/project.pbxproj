@@ -99,6 +99,8 @@
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
 		2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* resultFilters.json */; };
+		2FDF87BE1C5A8D6F00511D11 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF87BD1C5A8D6F00511D11 /* FBAudienceNetwork.framework */; };
+		2FDF87C01C5A8ED700511D11 /* libAdapterFacebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF87BF1C5A8ED700511D11 /* libAdapterFacebook.a */; };
 		2FE1326A1C312081008F5E68 /* RadarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE132691C312081008F5E68 /* RadarViewController.swift */; };
 		2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */; };
 		2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */; };
@@ -263,6 +265,8 @@
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
 		2FDCA0D41BE0721800498FC0 /* resultFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = resultFilters.json; sourceTree = "<group>"; };
+		2FDF87BD1C5A8D6F00511D11 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
+		2FDF87BF1C5A8ED700511D11 /* libAdapterFacebook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterFacebook.a; sourceTree = "<group>"; };
 		2FE132691C312081008F5E68 /* RadarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarViewController.swift; sourceTree = "<group>"; };
 		2FE28A181BE7033000ABBA14 /* FilterTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterTableViewController.swift; sourceTree = "<group>"; };
 		2FE28A1A1BE70B8A00ABBA14 /* FilterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
@@ -316,6 +320,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FDF87BE1C5A8D6F00511D11 /* FBAudienceNetwork.framework in Frameworks */,
+				2FDF87C01C5A8ED700511D11 /* libAdapterFacebook.a in Frameworks */,
 				DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */,
 				812455341C5768E40085F3A8 /* StoreKit.framework in Frameworks */,
 			);
@@ -408,6 +414,7 @@
 		2F482DE91BAFE09100C68670 = {
 			isa = PBXGroup;
 			children = (
+				2FDF87BF1C5A8ED700511D11 /* libAdapterFacebook.a */,
 				2FEC14CB1C15F41C000E652D /* .travis.yml */,
 				2F31F5121BC2BC4400054355 /* .gitignore */,
 				2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */,
@@ -660,6 +667,7 @@
 		797B8184BE32AA80123C1AB8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FDF87BD1C5A8D6F00511D11 /* FBAudienceNetwork.framework */,
 				812455331C5768E40085F3A8 /* StoreKit.framework */,
 				2FBDAB101C0E8FAE00B45E5B /* CoreLocation.framework */,
 				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
@@ -1185,9 +1193,17 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lap.zuzurentals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1207,9 +1223,17 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Zuzu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lap.zuzurentals;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
