@@ -18,23 +18,12 @@ class SearchResultAdCell: UITableViewCell {
     
     private let testDevice = ["a78e7dfcf98d255d2c1d107bb5e96449"]
     
-    @IBOutlet weak var bannerView: GADBannerView! {
-        didSet {
-            //Test adUnit
-            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-            
-            //Real adUnit
-            //bannerView.adUnitID = "ca-app-pub-7083975197863528/3785388890"
-            bannerView.adSize = kGADAdSizeSmartBannerLandscape
-        }
-    }
+    var bannerView: GADBannerView = GADBannerView()
     
     func loadAdForController(controller: SearchResultViewController) {
         
         // Do any additional setup after loading the view, typically from a nib.
         Log.debug("Google Mobile Ads SDK version: \(GADRequest.sdkVersion())")
-        bannerView.rootViewController = controller
-        bannerView.delegate = self
         
         let priority = DISPATCH_QUEUE_PRIORITY_HIGH
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
@@ -49,6 +38,28 @@ class SearchResultAdCell: UITableViewCell {
                 self.bannerView.loadRequest(request)
             }
         }
+    }
+    
+    func setupBanner(controller: SearchResultViewController) {
+        //Test adUnit
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        
+        //Real adUnit
+        //bannerView.adUnitID = "ca-app-pub-7083975197863528/3785388890"
+        
+        bannerView.rootViewController = controller
+        bannerView.delegate = self
+        bannerView.adSize = kGADAdSizeBanner
+        
+        self.addSubview(bannerView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let parentBound = self.contentView.bounds
+        //bannerView.frame = CGRectMake(0.0, 0.0, 320, 50.0)
+        bannerView.center = CGPoint(x: parentBound.width / 2, y: parentBound.height / 2)
     }
     
     // MARK: - Inherited Methods
@@ -68,6 +79,7 @@ extension SearchResultAdCell: GADBannerViewDelegate {
     
     internal func adViewDidReceiveAd(bannerView: GADBannerView!) {
         Log.enter()
+        Log.debug("Banner adapter class name: \(bannerView.adNetworkClassName)")
     }
     internal func adView(bannerView: GADBannerView!, didFailToReceiveAdWithError error: GADRequestError!) {
         Log.enter()

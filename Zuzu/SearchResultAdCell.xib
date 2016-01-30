@@ -17,22 +17,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ljD-m4-Y8t" userLabel="Background">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="200.5"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VXk-N8-Abe" userLabel="Banner" customClass="GADBannerView">
-                                <rect key="frame" x="0.0" y="20.5" width="414" height="179"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoloadEnabled" value="NO"/>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                        </subviews>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="100.5"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="VXk-N8-Abe" firstAttribute="width" secondItem="ljD-m4-Y8t" secondAttribute="width" id="12L-jj-zuE"/>
-                            <constraint firstAttribute="bottom" secondItem="VXk-N8-Abe" secondAttribute="bottom" constant="1" id="IoX-bf-x3u"/>
-                            <constraint firstItem="VXk-N8-Abe" firstAttribute="centerX" secondItem="ljD-m4-Y8t" secondAttribute="centerX" id="LQe-3H-CIO"/>
-                            <constraint firstAttribute="width" secondItem="ljD-m4-Y8t" secondAttribute="height" multiplier="1440:698" id="tya-mo-wf4"/>
+                            <constraint firstAttribute="width" secondItem="ljD-m4-Y8t" secondAttribute="height" multiplier="1440:350" id="tya-mo-wf4"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E9b-m7-uYG" userLabel="Header">
@@ -67,16 +55,12 @@
                     <constraint firstAttribute="leadingMargin" secondItem="E9b-m7-uYG" secondAttribute="leading" id="UDG-8o-i9y"/>
                     <constraint firstAttribute="trailingMargin" secondItem="ljD-m4-Y8t" secondAttribute="trailing" id="afi-BJ-6nL"/>
                     <constraint firstItem="ljD-m4-Y8t" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="mhe-yc-tuC"/>
-                    <constraint firstItem="VXk-N8-Abe" firstAttribute="top" secondItem="E9b-m7-uYG" secondAttribute="bottom" id="pFV-uj-KCz"/>
                 </constraints>
                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
             </tableViewCellContentView>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-            <connections>
-                <outlet property="bannerView" destination="VXk-N8-Abe" id="gli-R3-bf3"/>
-            </connections>
             <point key="canvasLocation" x="298" y="241.5"/>
         </tableViewCell>
     </objects>

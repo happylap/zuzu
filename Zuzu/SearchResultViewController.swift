@@ -945,7 +945,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.adItem, forIndexPath: indexPath) as! SearchResultAdCell
         
-        //cell.loadAdForController(self)
+        cell.setupBanner(self)
         
         Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
