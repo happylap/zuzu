@@ -100,5 +100,6 @@ public class LoadingSpinner{
         immediateAppear = false
         opacity = LoadingSpinner.defaultOpacity
         minShowTime = nil
+        graceTime = nil
     }
 }
