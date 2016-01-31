@@ -22,10 +22,12 @@ class CarouselView: UIView {
     var pageNumberLabel: UILabel!
     
     var tapHandler: (() -> Void)?
+    var showPageNumber: Bool = true
     
     var placeholderImage: UIImage = UIImage(named: "house_img")!
     
     var imageUrls = [String]()
+    var imageViews = [UIImageView]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,6 +41,7 @@ class CarouselView: UIView {
     
     private func setup() {
         Log.enter()
+        
         scrollView = UIScrollView()
         scrollView.pagingEnabled = true
         scrollView.delegate = self
@@ -50,10 +53,12 @@ class CarouselView: UIView {
         pageControl.pageIndicatorTintColor = UIColor.whiteColor()
         pageControl.currentPageIndicatorTintColor = UIColor.yellowColor()
         
-        pageNumberLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 56, height: 28))
-        pageNumberLabel.textColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        pageNumberLabel.textAlignment = .Right
-        pageNumberLabel.font = UIFont.boldSystemFontOfSize(18.0)
+        if self.showPageNumber {
+            pageNumberLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 56, height: 28))
+            pageNumberLabel.textColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
+            pageNumberLabel.textAlignment = .Center
+            pageNumberLabel.font = UIFont.systemFontOfSize(16.0) //.boldSystemFontOfSize(17.0)
+        }
         
         Log.exit()
     }
@@ -65,8 +70,12 @@ class CarouselView: UIView {
         }
         setupScrollView()
         //setupPageControl()
-        setupPageNumber()
+        if self.showPageNumber {
+            setupPageNumber()
+        }
+        
         setupPhotos()
+        
         Log.exit()
     }
     
@@ -86,40 +95,125 @@ class CarouselView: UIView {
     
     func setupPageNumber() {
         Log.enter()
-        pageNumberLabel.frame = CGRect(x: scrollView.frame.size.width - 68, y: scrollView.frame.size.height - 40, width: 56, height: 28)
+        pageNumberLabel.frame = CGRect(x: (scrollView.frame.size.width - 56) / 2, y: scrollView.frame.size.height - 28, width: 56, height: 28)
         self.addSubview(pageNumberLabel)
         Log.exit()
 
     }
     
-    func setupPhotos() {
-        Log.enter()
+    func addPlaceholderImage() {
+        let imageView = UIImageView(frame: scrollView.frame)
+        imageView.clipsToBounds = true
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+        imageView.image = placeholderImage
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        imageView.userInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGestureRecognizer)
         
-        let scrollViewWidth = scrollView.frame.size.width
-        let scrollViewHeight = scrollView.frame.size.height
-        let size = self.scrollView.frame.size
-        
-        for (var i = 0; i < imageUrls.count; i++){
-            
-            let imageView = UIImageView(frame: CGRectMake(CGFloat(i) * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight))
-            imageView.tag = i
-            imageView.clipsToBounds = true
-            imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            imageView.af_setImageWithURL(NSURL(string: imageUrls[i])!, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
-            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
-            imageView.userInteractionEnabled = true
-            imageView.addGestureRecognizer(tapGestureRecognizer)
-            
-            self.scrollView.addSubview(imageView)
-        }
-        
-        self.scrollView.contentSize = CGSizeMake(scrollViewWidth * CGFloat(imageUrls.count), 0)
-        self.pageControl.numberOfPages = imageUrls.count
-        
-        let pageNumber = self.pageControl.currentPage + 1
-        pageNumberLabel.text = "\(pageNumber)/\(pageControl.numberOfPages)"
+        self.scrollView.addSubview(imageView)
     }
     
+    func setupPhotos() {
+        Log.enter()
+        let n = self.imageUrls.count
+        let screenWidth = self.scrollView!.frame.width
+        let screenHeight = self.scrollView!.frame.height
+        
+        // reset
+        self.imageViews = [UIImageView]()
+        
+        if imageUrls.isEmpty {
+            addPlaceholderImageView(CGRectMake(0, 0, screenWidth, screenHeight))
+            self.scrollView.contentSize = CGSizeMake(screenWidth, 0)
+            
+        } else {
+            
+            for i in 0..<n {
+                let imageViewFrame = CGRect(x: screenWidth * CGFloat(i), y: 0, width: screenWidth, height: screenHeight)
+                let imageUrl = self.imageUrls[i]
+                addSubImageView(imageViewFrame, imageURL: imageUrl)
+            }
+            
+            self.scrollView.contentSize = CGSizeMake(screenWidth * CGFloat(imageUrls.count), 0)
+            self.pageControl.numberOfPages = imageUrls.count
+        }
+
+        self.addTitleOverlay(self.scrollView)
+        
+        if self.showPageNumber {
+            self.addPageOverlay(self.scrollView)
+            updatePageNumber()
+        }
+    }
+    
+    func addSubImageView(imageViewFrame: CGRect, imageURL: String) {
+        let url = NSURL(string: imageURL)!
+        let size = imageViewFrame.size
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        let imageView = UIImageView(frame: imageViewFrame)
+        imageView.clipsToBounds = true
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+        imageView.userInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGestureRecognizer)
+        imageView.af_setImageWithURL(url, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
+        
+        self.imageViews.append(imageView)
+        self.scrollView!.addSubview(imageView)
+    }
+    
+    func addPlaceholderImageView(imageViewFrame: CGRect) {
+        let imageView = UIImageView(frame: imageViewFrame)
+        imageView.clipsToBounds = true
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+        imageView.image = placeholderImage
+        
+        self.imageViews.append(imageView)
+        self.scrollView!.addSubview(imageView)
+    }
+    
+    let titleBackground = CAGradientLayer()
+    
+    private func addTitleOverlay(view: UIScrollView) {
+        ///Gradient layer
+        let gradientColors = [UIColor.blackColor().CGColor, UIColor.clearColor().CGColor]
+        let gradientLocations = [0.0, 1.0]
+        
+        let layerRect = CGRect(x: view.bounds.origin.x, y: view.bounds.origin.y, width: view.contentSize.width, height: view.bounds.width * 188/1441)
+        titleBackground.frame = layerRect
+        titleBackground.colors = gradientColors
+        titleBackground.locations = gradientLocations
+        titleBackground.opacity = 0.7
+        
+        view.layer.addSublayer(titleBackground)
+    }
+    
+    let pageBackground = CAGradientLayer()
+    
+    private func addPageOverlay(view: UIScrollView) {
+        ///Gradient layer
+        let gradientColors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
+        let gradientLocations = [0.0, 1.0]
+        
+        let layerRect = CGRect(x: view.bounds.origin.x, y: view.bounds.height - (view.bounds.width * 148/1441), width: view.contentSize.width, height: view.bounds.width * 148/1441)
+        pageBackground.frame = layerRect
+        pageBackground.colors = gradientColors
+        pageBackground.locations = gradientLocations
+        pageBackground.opacity = 0.1
+        
+        view.layer.addSublayer(pageBackground)
+    }
+    
+    func updatePageNumber() {
+        if self.imageUrls.isEmpty {
+            pageNumberLabel.text = ""
+            return
+        }
+        
+        if let pageNumberLabel = self.pageNumberLabel {
+            let pageNumber = self.pageControl.currentPage + 1
+            pageNumberLabel.text = "\(pageNumber)/\(pageControl.numberOfPages)"
+        }
+    }
 }
 
 extension CarouselView  {
@@ -139,8 +233,9 @@ extension CarouselView: UIScrollViewDelegate  {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         self.pageControl.currentPage = Int(scrollView.contentOffset.x / self.scrollView.frame.size.width + 0.5)
         
-        let pageNumber = self.pageControl.currentPage + 1
-        pageNumberLabel.text = "\(pageNumber)/\(pageControl.numberOfPages)"
+        if self.showPageNumber {
+            updatePageNumber()
+        }
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
