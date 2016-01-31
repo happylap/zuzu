@@ -7,5 +7,3 @@
 #import <AWSS3/AWSS3.h>
 #import <AWSSNS/AWSSNS.h>
 #import <AWSCognito/AWSCognito.h>
-#import "DeveloperAuthenticatedIdentityProvider.h"
-#import "DeveloperAuthenticationClient.h"

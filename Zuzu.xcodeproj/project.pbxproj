@@ -112,9 +112,6 @@
 		8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */; };
 		81390C751C365F2600450761 /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C741C365F2600450761 /* Contants.swift */; };
 		81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C761C365F9A00450761 /* AmazonClientManager.swift */; };
-		81390C831C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */; };
-		81390C841C36AB6100450761 /* DeveloperAuthenticationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */; };
-		81390C891C36AC0700450761 /* Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 81390C881C36AC0700450761 /* Crypto.m */; };
 		81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C8A1C37B0E800450761 /* CollectionItemService.swift */; };
 		816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8166358F1C5A8D64008C0AA3 /* CarouselView.swift */; };
 		816635941C5AA69D008C0AA3 /* CarouselView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635931C5AA69D008C0AA3 /* CarouselView2.swift */; };
@@ -277,12 +274,6 @@
 		8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewController.swift; sourceTree = "<group>"; };
 		81390C741C365F2600450761 /* Contants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		81390C761C365F9A00450761 /* AmazonClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AmazonClientManager.swift; path = Service/AmazonClientManager.swift; sourceTree = "<group>"; };
-		81390C7E1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeveloperAuthenticatedIdentityProvider.h; sourceTree = "<group>"; };
-		81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeveloperAuthenticatedIdentityProvider.m; sourceTree = "<group>"; };
-		81390C801C36AB6100450761 /* DeveloperAuthenticationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeveloperAuthenticationClient.h; sourceTree = "<group>"; };
-		81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeveloperAuthenticationClient.m; sourceTree = "<group>"; };
-		81390C871C36AC0700450761 /* Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crypto.h; sourceTree = "<group>"; };
-		81390C881C36AC0700450761 /* Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crypto.m; sourceTree = "<group>"; };
 		81390C8A1C37B0E800450761 /* CollectionItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionItemService.swift; path = Service/CollectionItemService.swift; sourceTree = "<group>"; };
 		8166358F1C5A8D64008C0AA3 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		816635931C5AA69D008C0AA3 /* CarouselView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView2.swift; sourceTree = "<group>"; };
@@ -463,7 +454,6 @@
 			children = (
 				2FCD15FD1C548FD800A9C1E2 /* Logger */,
 				2FB16C511C48BDCF009738AC /* InAppPurchase */,
-				81390C7B1C36AADE00450761 /* DeveloperAuthenticated */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
 				2FBC05551BDE701F0035652D /* Refresh */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
@@ -665,19 +655,6 @@
 				67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		81390C7B1C36AADE00450761 /* DeveloperAuthenticated */ = {
-			isa = PBXGroup;
-			children = (
-				81390C871C36AC0700450761 /* Crypto.h */,
-				81390C881C36AC0700450761 /* Crypto.m */,
-				81390C7E1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.h */,
-				81390C7F1C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m */,
-				81390C801C36AB6100450761 /* DeveloperAuthenticationClient.h */,
-				81390C811C36AB6100450761 /* DeveloperAuthenticationClient.m */,
-			);
-			name = DeveloperAuthenticated;
 			sourceTree = "<group>";
 		};
 		81F05D631BF0E73600441A84 /* ZuzuTests */ = {
@@ -931,11 +908,9 @@
 				2FB16C5A1C48BF4C009738AC /* DetailViewController.swift in Sources */,
 				816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */,
 				14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */,
-				81390C831C36AB6100450761 /* DeveloperAuthenticatedIdentityProvider.m in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
-				81390C891C36AC0700450761 /* Crypto.m in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
 				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
 				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
@@ -998,7 +973,6 @@
 				2FD8EA9C1C3FA9CC00C920D3 /* Secrets.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */,
-				81390C841C36AB6100450761 /* DeveloperAuthenticationClient.m in Sources */,
 				2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */,
 				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
