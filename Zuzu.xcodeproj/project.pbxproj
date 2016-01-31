@@ -129,13 +129,8 @@
 		81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */; };
 		81FA28131BDA39B10038DD19 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28111BDA39B10038DD19 /* Note.swift */; };
 		81FA28141BDA39B10038DD19 /* NoteDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28121BDA39B10038DD19 /* NoteDao.swift */; };
-		81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */; };
-		81FA281A1BDA39BB0038DD19 /* RefreshConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28161BDA39BB0038DD19 /* RefreshConst.swift */; };
-		81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */; };
-		81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */; };
 		81FA281E1BDA39C20038DD19 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281D1BDA39C20038DD19 /* Router.swift */; };
 		81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */; };
-		81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */; };
 		DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */; };
 /* End PBXBuildFile section */
 
@@ -291,13 +286,8 @@
 		81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyCollectionStoryboard.storyboard; sourceTree = "<group>"; };
 		81FA28111BDA39B10038DD19 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		81FA28121BDA39B10038DD19 /* NoteDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDao.swift; sourceTree = "<group>"; };
-		81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshBaseView.swift; sourceTree = "<group>"; };
-		81FA28161BDA39BB0038DD19 /* RefreshConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshConst.swift; sourceTree = "<group>"; };
-		81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshFooterView.swift; sourceTree = "<group>"; };
-		81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshHeaderView.swift; sourceTree = "<group>"; };
 		81FA281D1BDA39C20038DD19 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceApi.swift; sourceTree = "<group>"; };
-		81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Refresh.swift"; sourceTree = "<group>"; };
 		BB78CF8BDE07388F2FD17FDF /* Pods-Zuzu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.debug.xcconfig"; sourceTree = "<group>"; };
 		DEA624876AF8AA4C806320C6 /* Pods-Zuzu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.release.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -455,7 +445,6 @@
 				2FCD15FD1C548FD800A9C1E2 /* Logger */,
 				2FB16C511C48BDCF009738AC /* InAppPurchase */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
-				2FBC05551BDE701F0035652D /* Refresh */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 				2F5854D11BB3CBCF007FF85B /* CriteriaConst.swift */,
@@ -586,18 +575,6 @@
 				816635931C5AA69D008C0AA3 /* CarouselView2.swift */,
 			);
 			name = View;
-			sourceTree = "<group>";
-		};
-		2FBC05551BDE701F0035652D /* Refresh */ = {
-			isa = PBXGroup;
-			children = (
-				81FA28151BDA39BB0038DD19 /* RefreshBaseView.swift */,
-				81FA28161BDA39BB0038DD19 /* RefreshConst.swift */,
-				81FA28171BDA39BB0038DD19 /* RefreshFooterView.swift */,
-				81FA28181BDA39BB0038DD19 /* RefreshHeaderView.swift */,
-				81FA28211BDA39D40038DD19 /* UIScrollView+Refresh.swift */,
-			);
-			name = Refresh;
 			sourceTree = "<group>";
 		};
 		2FBC05561BDE769B0035652D /* Resource */ = {
@@ -920,7 +897,6 @@
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
 				2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */,
-				81FA281B1BDA39BB0038DD19 /* RefreshFooterView.swift in Sources */,
 				81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
 				14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */,
@@ -965,7 +941,6 @@
 				2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */,
 				2FB16C551C48BDEC009738AC /* ZuzuProducts.swift in Sources */,
 				2FE1326A1C312081008F5E68 /* RadarViewController.swift in Sources */,
-				81FA28191BDA39BB0038DD19 /* RefreshBaseView.swift in Sources */,
 				81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */,
 				2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */,
 				2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */,
@@ -974,12 +949,10 @@
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */,
 				2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */,
-				81FA281C1BDA39BB0038DD19 /* RefreshHeaderView.swift in Sources */,
 				2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */,
 				81FA28131BDA39B10038DD19 /* Note.swift in Sources */,
 				2FE912761C045B0400019053 /* SearchCriteriaDataStore.swift in Sources */,
 				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,
-				81FA28221BDA39D40038DD19 /* UIScrollView+Refresh.swift in Sources */,
 				2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */,
 				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
@@ -988,7 +961,6 @@
 				14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */,
 				2FCD15FF1C54906F00A9C1E2 /* LoggerExtensions.swift in Sources */,
 				81924E341C33AB4C00976EC7 /* FBUserData.swift in Sources */,
-				81FA281A1BDA39BB0038DD19 /* RefreshConst.swift in Sources */,
 				8130344C1C52367E00EF7FAB /* RadarPurchaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
