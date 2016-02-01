@@ -25,6 +25,25 @@ class NotificationHouseItemDao: AbstractHouseItemDao
         return EntityTypes.NotificationHouseItem.rawValue
     }
     
+    func add(id: String)-> NotificationHouseItem?{
+        if self.isExist(id) {
+            return nil
+        }
+        
+        let context=CoreDataManager.shared.managedObjectContext
+        
+        let model = NSEntityDescription.entityForName(self.entityName, inManagedObjectContext: context)
+        
+        let item = NotificationHouseItem(entity: model!, insertIntoManagedObjectContext: context)
+        
+        if model != nil {
+            item.id = id
+            return item
+        }
+        
+        return nil
+    }
+    
     override func add(jsonObj: AnyObject, isCommit: Bool) -> AbstractHouseItem? {
         if let notificationItem = super.add(jsonObj, isCommit: false) as? NotificationHouseItem{
             notificationItem.isRead = false

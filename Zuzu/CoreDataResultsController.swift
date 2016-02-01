@@ -88,8 +88,15 @@ class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResu
     }
     
     func getNumberOfRowInSection(section: Int) -> Int{
-        let sectionInfo = self.resultsController.sections![section] as NSFetchedResultsSectionInfo
-        return sectionInfo.numberOfObjects
+        if let sections = self.resultsController.sections{
+            let sectionInfo = sections[section] as NSFetchedResultsSectionInfo
+            return sectionInfo.numberOfObjects
+        }
+
+        return 0
+        
+        //let sectionInfo = self.resultsController.sections![section] as NSFetchedResultsSectionInfo
+        //return sectionInfo.numberOfObjects
     }
     
     func objectAtIndexPath(indexPath: NSIndexPath) -> AnyObject{

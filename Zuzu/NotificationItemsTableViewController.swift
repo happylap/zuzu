@@ -27,7 +27,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func getResultsController() -> TableResultsController{
         let entityName = self.notificationService.entityName
-        let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("notificationTime", ascending: false).build()
+        let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("price", ascending: true).addSorting("postTime", ascending: false).build()
         controller.setDelegate(self)
         return controller
     }
@@ -104,6 +104,8 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         let rowNum = self.resultController.getNumberOfRowInSection(section)
         if rowNum == 0{
             showEmpty()
+        }else if emptyLabel.hidden == false{
+            emptyLabel.hidden = true
         }
         return rowNum
     }
@@ -120,6 +122,20 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - Data manipulation Function
 
     func refresh(){
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.tableView)
+        ZuzuWebService.sharedInstance.getNotificationItemsByUserId("test") { (result, error) -> Void in
+            if let notifyItems: [NotifyItem] = result {
+                for notifyItem: NotifyItem in notifyItems {
+                    self.notificationService.add(notifyItem, isCommit: true)
+                }
+            }
+            
+
+            LoadingSpinner.shared.stop()
+        }
+        
         self.resultController.refreshData()
         self.tableView.reloadData()
     }
@@ -127,13 +143,13 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     // MARK: - swipe-left-to-delete
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    /*override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if(editingStyle == .Delete) {
             if let notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
                 self.notificationService.deleteItem(notificationItem)
             }
         }
-    }
+    }*/
 
     // MARK: - select item action
     
@@ -146,26 +162,28 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 updateData["isRead"] = true
                 self.notificationService.updateItem(item, dataToUpdate: updateData)
             }
-            
-            let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
-            let vc = storyboard.instantiateViewControllerWithIdentifier("HouseDetailView") as! HouseDetailViewController
-            let houseItem = item.toHouseItem()
-            vc.houseItem = houseItem
-            
-            //GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ViewItemPrice,
-                label: String(houseItem.price))
-            
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ViewItemSize,
-                label: String(houseItem.size))
-            
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ViewItemType,
-                label: String(houseItem.purposeType))
-            
-            self.showViewController(vc, sender: self)
+
+            let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+            if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController{
+                if let houseItem: HouseItem = item.toHouseItem() {
+                    houseDetailVC.houseItem = houseItem
+                    
+                    //GA Tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                        action: GAConst.Action.Activity.ViewItemPrice,
+                        label: String(houseItem.price))
+                    
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                        action: GAConst.Action.Activity.ViewItemSize,
+                        label: String(houseItem.size))
+                    
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
+                        action: GAConst.Action.Activity.ViewItemType,
+                        label: String(houseItem.purposeType))
+                }
+                                
+                self.showViewController(houseDetailVC, sender: self)
+            }
         }
     }
     
