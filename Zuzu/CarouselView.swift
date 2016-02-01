@@ -131,7 +131,11 @@ class CarouselView: UIView {
             for i in 0..<n {
                 let imageViewFrame = CGRect(x: screenWidth * CGFloat(i), y: 0, width: screenWidth, height: screenHeight)
                 let imageUrl = self.imageUrls[i]
-                addSubImageView(imageViewFrame, imageURL: imageUrl)
+                if i == 0 {
+                    addFirstImageView(imageViewFrame, imageURL: imageUrl)
+                } else {
+                    addSubImageView(imageViewFrame, imageURL: imageUrl, lazyLoading: true)
+                }
             }
             
             self.scrollView.contentSize = CGSizeMake(screenWidth * CGFloat(imageUrls.count), 0)
@@ -146,7 +150,22 @@ class CarouselView: UIView {
         }
     }
     
-    func addSubImageView(imageViewFrame: CGRect, imageURL: String) {
+    func addFirstImageView(imageViewFrame: CGRect, imageURL: String) {
+        let url = NSURL(string: imageURL)!
+        let size = imageViewFrame.size
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        let firstImageView = UIImageView(frame: imageViewFrame)
+        firstImageView.clipsToBounds = true
+        firstImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        firstImageView.userInteractionEnabled = true
+        firstImageView.addGestureRecognizer(tapGestureRecognizer)
+        firstImageView.af_setImageWithURL(url, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
+        
+        self.imageViews.append(firstImageView)
+        self.scrollView!.addSubview(firstImageView)
+    }
+    
+    func addSubImageView(imageViewFrame: CGRect, imageURL: String, lazyLoading: Bool) {
         let url = NSURL(string: imageURL)!
         let size = imageViewFrame.size
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
@@ -155,7 +174,9 @@ class CarouselView: UIView {
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.userInteractionEnabled = true
         imageView.addGestureRecognizer(tapGestureRecognizer)
-        imageView.af_setImageWithURL(url, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
+        if !lazyLoading {
+            imageView.af_setImageWithURL(url, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
+        }
         
         self.imageViews.append(imageView)
         self.scrollView!.addSubview(imageView)
@@ -236,6 +257,27 @@ extension CarouselView: UIScrollViewDelegate  {
         if self.showPageNumber {
             updatePageNumber()
         }
+        
+        let i = self.pageControl.currentPage
+        
+        if i < self.imageViews.count {
+            let imageView = self.imageViews[i]
+            let imageUrl = self.imageUrls[i]
+            let url = NSURL(string: imageUrl)!
+            let size = imageView.frame.size
+            
+            if imageView.image == nil {
+//                LoadingSpinner.shared.setImmediateAppear(true)
+//                LoadingSpinner.shared.setOpacity(0.3)
+//                LoadingSpinner.shared.startOnView(imageView)
+                
+                imageView.af_setImageWithURL(url, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None) {
+                    (request, response, result) -> Void in
+//                    LoadingSpinner.shared.stop()
+                }
+            }
+        }
+        
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
