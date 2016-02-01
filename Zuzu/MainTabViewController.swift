@@ -29,9 +29,10 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
-        
-        let notificationViewController:UIViewController = radarStoryboard.instantiateViewControllerWithIdentifier("NotificationItemsTableViewController")
-        
+
+        let notificationStoryboard:UIStoryboard = UIStoryboard(name: "NotificationStoryboard", bundle: nil)
+        let notificationViewController:UIViewController = notificationStoryboard.instantiateInitialViewController()!
+ 
         var tabViewControllers = [UIViewController]()
         
         tabViewControllers.append(searchViewController)

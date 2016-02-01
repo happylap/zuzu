@@ -21,6 +21,7 @@
 		14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */; };
 		14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914FB11C2836DB00025AC1 /* NotificationItemService.swift */; };
 		14BACBF61C5F5F52007202CB /* NotificationItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BACBF51C5F5F52007202CB /* NotificationItemTableViewCell.swift */; };
+		14BACBFC1C5F72FF007202CB /* NotificationStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14BACBFB1C5F72FF007202CB /* NotificationStoryboard.storyboard */; };
 		14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CBABB11C2A908500EF2E13 /* TableResultsController.swift */; };
 		14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */; };
 		2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */; };
@@ -169,6 +170,7 @@
 		14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionHouseItemDao.swift; sourceTree = "<group>"; };
 		14914FB11C2836DB00025AC1 /* NotificationItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemService.swift; sourceTree = "<group>"; };
 		14BACBF51C5F5F52007202CB /* NotificationItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemTableViewCell.swift; sourceTree = "<group>"; };
+		14BACBFB1C5F72FF007202CB /* NotificationStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NotificationStoryboard.storyboard; sourceTree = "<group>"; };
 		14CBABB11C2A908500EF2E13 /* TableResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableResultsController.swift; sourceTree = "<group>"; };
 		14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataResultsController.swift; sourceTree = "<group>"; };
 		2F024C771BF97A4B00627B22 /* DisplayLabelMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayLabelMaker.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 			children = (
 				14BACBF51C5F5F52007202CB /* NotificationItemTableViewCell.swift */,
 				14632AAE1C27B614008C9A2D /* NotificationItemsTableViewController.swift */,
+				14BACBFB1C5F72FF007202CB /* NotificationStoryboard.storyboard */,
 			);
 			name = Notification;
 			sourceTree = "<group>";
@@ -776,6 +779,7 @@
 				2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */,
 				2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */,
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
+				14BACBFC1C5F72FF007202CB /* NotificationStoryboard.storyboard in Resources */,
 				2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */,
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
