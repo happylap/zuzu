@@ -7,7 +7,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Notification Items Table View Controller-->
+        <!--即時通知-->
         <scene sceneID="HF1-Z1-MVY">
             <objects>
                 <tableViewController storyboardIdentifier="NotificationItemsTableViewController" id="KHd-16-06A" customClass="NotificationItemsTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
@@ -52,8 +52,8 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="Fec-aQ-tCr"/>
-                                                    <exclude reference="ncH-Th-Xhf"/>
                                                     <exclude reference="mLR-Ff-wGl"/>
+                                                    <exclude reference="ncH-Th-Xhf"/>
                                                 </mask>
                                             </variation>
                                         </imageView>
@@ -118,18 +118,18 @@
                                             <exclude reference="nmo-VC-Hfz"/>
                                             <exclude reference="9Nc-C6-XRt"/>
                                             <exclude reference="epH-13-hdB"/>
-                                            <exclude reference="VVC-09-eak"/>
                                             <exclude reference="9pE-go-vIy"/>
+                                            <exclude reference="VVC-09-eak"/>
                                             <exclude reference="sI6-xr-iAf"/>
                                             <exclude reference="Vaq-qK-dUU"/>
                                             <exclude reference="aor-HJ-TFd"/>
-                                            <exclude reference="cHJ-GJ-uWE"/>
                                             <exclude reference="bbO-Y5-Y2y"/>
+                                            <exclude reference="cHJ-GJ-uWE"/>
                                             <exclude reference="HVQ-jz-78h"/>
                                             <exclude reference="ZBA-RH-aBw"/>
                                             <exclude reference="pTG-fl-dcE"/>
-                                            <exclude reference="yQa-gG-0OU"/>
                                             <exclude reference="ZUd-Po-yNg"/>
+                                            <exclude reference="yQa-gG-0OU"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -149,7 +149,7 @@
                             <outlet property="delegate" destination="KHd-16-06A" id="Xjl-lo-e4W"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="SfS-uJ-oow"/>
+                    <navigationItem key="navigationItem" title="即時通知" id="SfS-uJ-oow"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oBU-wL-k30" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -161,7 +161,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="crD-qe-N3G" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="即時通知" image="notification_n" id="Wsd-Je-2RS"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ihp-oP-yFK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ihp-oP-yFK" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
