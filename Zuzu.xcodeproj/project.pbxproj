@@ -115,6 +115,8 @@
 		81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C8A1C37B0E800450761 /* CollectionItemService.swift */; };
 		816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8166358F1C5A8D64008C0AA3 /* CarouselView.swift */; };
 		816635941C5AA69D008C0AA3 /* CarouselView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635931C5AA69D008C0AA3 /* CarouselView2.swift */; };
+		816635961C5F17F6008C0AA3 /* ZuzuWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */; };
+		816635981C5F2CDA008C0AA3 /* NotifyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635971C5F2CDA008C0AA3 /* NotifyItem.swift */; };
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
 		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
 		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
@@ -272,6 +274,8 @@
 		81390C8A1C37B0E800450761 /* CollectionItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionItemService.swift; sourceTree = "<group>"; };
 		8166358F1C5A8D64008C0AA3 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		816635931C5AA69D008C0AA3 /* CarouselView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView2.swift; sourceTree = "<group>"; };
+		816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuWebService.swift; sourceTree = "<group>"; };
+		816635971C5F2CDA008C0AA3 /* NotifyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotifyItem.swift; sourceTree = "<group>"; };
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewCell.swift; sourceTree = "<group>"; };
 		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginViewController.swift; sourceTree = "<group>"; };
 		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginService.swift; sourceTree = "<group>"; };
@@ -501,6 +505,7 @@
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */,
 				81924E311C32D95100976EC7 /* FBLoginService.swift */,
+				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -551,6 +556,7 @@
 				81FA28111BDA39B10038DD19 /* Note.swift */,
 				81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */,
 				81924E331C33AB4C00976EC7 /* FBUserData.swift */,
+				816635971C5F2CDA008C0AA3 /* NotifyItem.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -863,6 +869,7 @@
 			files = (
 				14914FAA1C27F7B400025AC1 /* AbstractHouseItemDao.swift in Sources */,
 				2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */,
+				816635981C5F2CDA008C0AA3 /* NotifyItem.swift in Sources */,
 				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,
 				2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */,
 				2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */,
@@ -870,6 +877,7 @@
 				2FC54C401C4CD51D0052FD6F /* DuplicateHouseViewController.swift in Sources */,
 				2FCD15FC1C548C6E00A9C1E2 /* XCGLoggerNSLoggerConnector.swift in Sources */,
 				2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */,
+				816635961C5F17F6008C0AA3 /* ZuzuWebService.swift in Sources */,
 				14914FA61C27D26D00025AC1 /* AbstractHouseItem.swift in Sources */,
 				2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */,
 				2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */,
