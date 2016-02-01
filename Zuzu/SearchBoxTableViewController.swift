@@ -252,17 +252,6 @@ class SearchBoxTableViewController: UITableViewController {
         }
     }
     
-    @IBOutlet weak var notificationBarItem: UIBarButtonItem!{
-        didSet{
-            if(FeatureOption.Radar.enableMain){
-                notificationBarItem.image = UIImage(named: "notification_p")
-                notificationBarItem.enabled = true
-            }
-            else{
-                notificationBarItem.enabled = true
-            }
-        }
-    }
     
     @IBOutlet weak var fastItemCountLabel: UILabel!
     @IBOutlet weak var cityRegionLabel: UILabel!
@@ -766,16 +755,7 @@ class SearchBoxTableViewController: UITableViewController {
     // MARK: - UI Control Actions
     
     
-    //The UI control event handler Should not be private
-    
-    @IBAction func onNotificationBarItemClick(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("NotificationItemsTableViewController") as UIViewController
-        self.showViewController(vc, sender: self)
-    }
-    
+    //The UI control event handler Should not be private    
     @IBAction func onAppRatingButtonTouched(sender: UIBarButtonItem) {
         Log.info("Sender: \(sender)", label: ActionLabel)
         
