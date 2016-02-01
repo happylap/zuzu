@@ -13,6 +13,7 @@ import AWSCognito
 import AWSSNS
 import FBSDKCoreKit
 import FBSDKLoginKit
+import Fabric
 
 private let Log = Logger.defaultLogger
 
@@ -117,6 +118,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         customUISetup()
         
+        Fabric.with([MoPub.self, AWSCognito.self])
+
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
         

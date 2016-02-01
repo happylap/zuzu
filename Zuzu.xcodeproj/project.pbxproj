@@ -53,6 +53,7 @@
 		2F6155591BD888660024145E /* SearchItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6155581BD888660024145E /* SearchItemService.swift */; };
 		2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */; };
 		2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */; };
+		2F7181EF1C5F120E00C56B5F /* libAdapterSDKMoPub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */; };
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
 		2F8DB45B1C50B95F006C4B21 /* SmartFilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */; };
@@ -209,6 +210,7 @@
 		2F6155581BD888660024145E /* SearchItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemService.swift; sourceTree = "<group>"; };
 		2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaObserver.swift; sourceTree = "<group>"; };
 		2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterStatusBarView.swift; sourceTree = "<group>"; };
+		2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterSDKMoPub.a; sourceTree = "<group>"; };
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
 		2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterContainerView.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 			files = (
 				2FDF87BE1C5A8D6F00511D11 /* FBAudienceNetwork.framework in Frameworks */,
 				2FDF87C01C5A8ED700511D11 /* libAdapterFacebook.a in Frameworks */,
+				2F7181EF1C5F120E00C56B5F /* libAdapterSDKMoPub.a in Frameworks */,
 				DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */,
 				812455341C5768E40085F3A8 /* StoreKit.framework in Frameworks */,
 			);
@@ -399,6 +402,7 @@
 		2F482DE91BAFE09100C68670 = {
 			isa = PBXGroup;
 			children = (
+				2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */,
 				2FDF87BF1C5A8ED700511D11 /* libAdapterFacebook.a */,
 				2FEC14CB1C15F41C000E652D /* .travis.yml */,
 				2F31F5121BC2BC4400054355 /* .gitignore */,
@@ -678,6 +682,7 @@
 				2F482DF01BAFE09100C68670 /* Resources */,
 				86DEE3DD88DF2D4C0C0F0AB6 /* Embed Pods Frameworks */,
 				D79F9DC567D1E59B35F91683 /* Copy Pods Resources */,
+				2FD9D1D41C5F0BCE0094F9D6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -838,6 +843,19 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		2FD9D1D41C5F0BCE0094F9D6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 619e4f105b7917b969a6affdbd18accbe339b8f3 4d036b9dab23d8f08183514a89689764fb56ca5745050f19e6ca7f3a0dab2690";
 		};
 		86DEE3DD88DF2D4C0C0F0AB6 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1095,6 +1113,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "Pods/**";
 			};
 			name = Debug;
 		};
@@ -1133,6 +1152,7 @@
 				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "Pods/**";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

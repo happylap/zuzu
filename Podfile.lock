@@ -19,6 +19,7 @@ PODS:
   - DACircularProgress (2.3.1)
   - Device (0.0.4)
   - Dollar (4.0.1)
+  - Fabric (1.6.4)
   - FBSDKCoreKit (4.9.1):
     - Bolts (~> 1.5)
   - FBSDKLoginKit (4.9.1):
@@ -63,6 +64,9 @@ PODS:
     - GoogleSymbolUtilities (~> 1.0.0)
   - MarqueeLabel (2.3.5)
   - MBProgressHUD (0.9.1)
+  - mopub-ios-sdk (4.3.0):
+    - mopub-ios-sdk/MoPubSDK (= 4.3.0)
+  - mopub-ios-sdk/MoPubSDK (4.3.0)
   - MWPhotoBrowser (2.1.1):
     - DACircularProgress (~> 2.3)
     - MBProgressHUD (~> 0.9)
@@ -90,6 +94,7 @@ DEPENDENCIES:
   - AWSSNS (= 2.3.2)
   - Device (= 0.0.4)
   - Dollar (= 4.0.1)
+  - Fabric
   - FBSDKCoreKit (= 4.9.1)
   - FBSDKLoginKit (= 4.9.1)
   - FBSDKShareKit (= 4.9.1)
@@ -101,6 +106,7 @@ DEPENDENCIES:
   - GoogleMaps (= 1.10.5)
   - MarqueeLabel (= 2.3.5)
   - MBProgressHUD (= 0.9.1)
+  - mopub-ios-sdk
   - MWPhotoBrowser (= 2.1.1)
   - NSLogger (= 1.5.1)
   - ObjectMapper (= 1.1.0)
@@ -123,6 +129,7 @@ SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
   Dollar: a058e2659e0d3261307c12630dbc2fd8e32f80bf
+  Fabric: ed41fd62173c6bdea24ab02c9d7707161eabb750
   FBSDKCoreKit: aee20b6d9855f15b618d4fddd1a5ad45f5a4a59d
   FBSDKLoginKit: ec22dc49bd372b064e93d6773df4ffefb3a552a2
   FBSDKShareKit: b8c8ef0ed173f9fc1b3c8df384a0202ce53008d4
@@ -141,6 +148,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 8ed9134debe11719097881711464752900668f10
   MarqueeLabel: fd29be3b4cf5f37b01676749409679aac23eb6fa
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
+  mopub-ios-sdk: ef4aa305367b11c3bb465e9771e6622175049b03
   MWPhotoBrowser: ba0d0c09ffda3a7ea10093518738c502c1c7141c
   NSLogger: 5ed223a2436df96244e033be750656dacdeec034
   ObjectMapper: 365eac5aac06ae9298978fb2482b3d4c5ef4bb5d
