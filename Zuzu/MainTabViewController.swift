@@ -30,6 +30,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
         
+        let notificationViewController:UIViewController = radarStoryboard.instantiateViewControllerWithIdentifier("NotificationItemsTableViewController")
         
         var tabViewControllers = [UIViewController]()
         
@@ -41,6 +42,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         if(FeatureOption.Radar.enableMain) {
             tabViewControllers.append(radarViewController)
+            tabViewControllers.append(notificationViewController)
         }
         
         self.viewControllers = tabViewControllers
