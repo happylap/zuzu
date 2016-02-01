@@ -24,10 +24,33 @@ class NotificationItemService: NSObject
         return Singleton.instance
     }
 
+    func add(item:NotifyItem, isCommit: Bool){
+        if let newItem = self.dao.add(item.id){
+            newItem.img = []
+            if let firtImg = item.firstImgUrl{
+                newItem.img!.append(firtImg)
+            }
+            
+            newItem.price = item.price
+            newItem.size = item.size
+            newItem.houseType = item.houseType
+            newItem.purposeType = item.purposeType
+            newItem.title = item.title
+            newItem.addr = item.addr
+            newItem.postTime = item.postTime
+            newItem.isRead = item.isRead
+        }
+        
+        if (isCommit == true) {
+            self.dao.commit()
+        }
+    }
+    
     func addItem(jsonObj: AnyObject){
         self.dao.add(jsonObj, isCommit: true)
     }
     
+
     func addAll(items: [AnyObject]){
         self.dao.addAll(items)
     }

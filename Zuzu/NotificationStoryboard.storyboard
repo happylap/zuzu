@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="crD-qe-N3G">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="63z-bZ-uC8">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -12,7 +12,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="NotificationItemsTableViewController" id="KHd-16-06A" customClass="NotificationItemsTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="117" sectionHeaderHeight="28" sectionFooterHeight="28" id="R94-1S-RTz">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -150,29 +150,30 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="即時通知" id="SfS-uJ-oow"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oBU-wL-k30" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="520" y="1624"/>
+            <point key="canvasLocation" x="1332" y="1624"/>
         </scene>
         <!--即時通知-->
-        <scene sceneID="oFc-j6-7Ev">
+        <scene sceneID="0VE-Ol-2qn">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="crD-qe-N3G" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="即時通知" image="notification_n" id="Wsd-Je-2RS"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="63z-bZ-uC8" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="即時通知" image="notification_n" id="Fyq-gm-h9d"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ihp-oP-yFK" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TL8-qh-Ylp" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="KHd-16-06A" kind="relationship" relationship="rootViewController" id="d3S-DF-X4b"/>
+                        <segue destination="KHd-16-06A" kind="relationship" relationship="rootViewController" id="Qbz-cy-7D6"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FKE-RK-Cni" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JLt-lS-BJE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-292" y="1624"/>
+            <point key="canvasLocation" x="520" y="1624"/>
         </scene>
     </scenes>
     <resources>
