@@ -155,17 +155,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        let rootViewController = self.window?.rootViewController as! UITabBarController!
+        let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+        
         if application.applicationState == UIApplicationState.Active {
-            if let aps = userInfo["aps"] as? NSDictionary {
-                if let badge = aps["badge"] as? Int {
-                    application.applicationIconBadgeNumber = badge
-                    updateTabBarBadge(application)
+            if rootViewController.selectedIndex == notifyTabIndex{
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNofyItems", object: self, userInfo: userInfo)
+            }else{
+                if let aps = userInfo["aps"] as? NSDictionary {
+                    if let badge = aps["badge"] as? Int {
+                        application.applicationIconBadgeNumber = badge
+                        updateTabBarBadge(application)
+                    }
                 }
             }
+
         }else{
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let tabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            rootViewController.selectedIndex = tabIndex
+            rootViewController.selectedIndex = notifyTabIndex
         }
     }
     
@@ -189,11 +195,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         let badgeNumber = application.applicationIconBadgeNumber
         if badgeNumber <= 0{
             let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let tabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            if rootViewController.selectedIndex == tabIndex{
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            if rootViewController.selectedIndex == notifyTabIndex{
                 let tabArray = rootViewController?.tabBar.items as NSArray!
                 application.applicationIconBadgeNumber = 0
-                let tabItem = tabArray.objectAtIndex(tabIndex) as! UITabBarItem
+                let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
                 tabItem.badgeValue = nil
             }
         }
@@ -223,8 +229,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         if badgeNumber > 0{
             let rootViewController = self.window?.rootViewController as! UITabBarController!
             let tabArray = rootViewController?.tabBar.items as NSArray!
-            let tabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let tabItem = tabArray.objectAtIndex(tabIndex) as! UITabBarItem
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
             tabItem.badgeValue = "\(badgeNumber)"
         }
     }
