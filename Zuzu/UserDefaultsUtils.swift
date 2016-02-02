@@ -28,6 +28,7 @@ struct UserDefaultsUtils{
     // MARK: SNS Push Notifications
     
     static let APN_DEVICE_TOKEN_KEY = "deviceToken"
+    static let SNS_ENDPOINT_ARN = "endpointArn"
     
     static func setAPNDevicetoken(deviceToken: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -37,5 +38,15 @@ struct UserDefaultsUtils{
     static func getAPNDevicetoken() -> String?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.stringForKey(APN_DEVICE_TOKEN_KEY)
+    }
+    
+    static func setSNSEndpointArn(endpointArn: String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(endpointArn, forKey: SNS_ENDPOINT_ARN)
+    }
+    
+    static func getSNSEndpointArn() -> String?{
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.stringForKey(SNS_ENDPOINT_ARN)
     }
 }
