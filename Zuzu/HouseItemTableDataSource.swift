@@ -89,6 +89,8 @@ public class HouseItemTableDataSource {
         
     }
     
+    var isDisplayADs: Bool = true
+    
     //Total Number of items
     var estimatedTotalResults:Int = 0
     
@@ -100,6 +102,26 @@ public class HouseItemTableDataSource {
     // Designated initializer
     public init() {
         
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let showADString = tagContainer.stringForKey(TagConst.showADs)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(showADString)")
+            
+            if(showADString == "y") {
+                
+                isDisplayADs = true
+                
+            } else if(showADString == "n"){
+                
+                isDisplayADs = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showADs)")
+            }
+            
+        }
     }
     
     //** MARK: - APIs
@@ -151,8 +173,11 @@ public class HouseItemTableDataSource {
         var row = Const.pageSize
         
         ///Check if need to add an Ad item
-        if(pageNo % Const.adDisplayPageInterval == 0) {
-            row -= 1 // Leave 1 for Ad
+        
+        if(self.isDisplayADs) {
+            if(pageNo % Const.adDisplayPageInterval == 0) {
+                row -= 1 // Leave 1 for Ad
+            }
         }
         
         if criteria == nil {
@@ -172,12 +197,14 @@ public class HouseItemTableDataSource {
             self.estimatedTotalResults = totalNum
             
             ///Check if need to add an Ad item
-            if(pageNo % Const.adDisplayPageInterval == 0) {
-                //Time to add one Ad cell
-                let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
-
-                let lastIndex = self.cachedData.endIndex - 1
-                self.cachedData.insert(adItem, atIndex: lastIndex)
+            if(self.isDisplayADs) {
+                if(pageNo % Const.adDisplayPageInterval == 0) {
+                    //Time to add one Ad cell
+                    let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
+                    
+                    let lastIndex = self.cachedData.endIndex - 1
+                    self.cachedData.insert(adItem, atIndex: lastIndex)
+                }
             }
             
             if let loadStartTime = self.loadStartTime {
