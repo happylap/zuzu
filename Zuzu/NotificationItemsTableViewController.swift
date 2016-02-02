@@ -38,6 +38,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         super.viewDidLoad()
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNofyItems:", name: "receiveNofyItems", object: nil)
         refresh()
         configureTableView()
         //tableView.estimatedRowHeight = tableView.rowHeight
@@ -51,9 +52,17 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
 
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.debug("viewDidAppear: \(self)")
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         self.parentViewController?.tabBarItem.badgeValue = nil
     }
+    
+    /*override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        Log.debug("viewWillDisappear: \(self)")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }*/
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -130,6 +139,12 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(self.tableView)
+        self.refreshData()
+        self.resultController.refreshData()
+        self.tableView.reloadData()
+    }
+
+    func refreshData(){
         ZuzuWebService.sharedInstance.getNotificationItemsByUserId("test") { (result, error) -> Void in
             if let notifyItems: [NotifyItem] = result {
                 for notifyItem: NotifyItem in notifyItems {
@@ -137,14 +152,13 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 }
             }
             
-
             LoadingSpinner.shared.stop()
         }
-        
-        self.resultController.refreshData()
-        self.tableView.reloadData()
     }
     
+    func onReceiveNofyItems(notification:NSNotification) {
+        self.refreshData()
+    }
     
     // MARK: - swipe-left-to-delete
     
