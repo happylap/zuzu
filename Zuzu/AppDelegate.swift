@@ -137,7 +137,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        Log.debug("userInfo: \(userInfo)")
+        if application.applicationState == UIApplicationState.Active {
+            if let aps = userInfo["aps"] as? NSDictionary {
+                if let badge = aps["badge"] as? Int {
+                    application.applicationIconBadgeNumber = badge
+                    updateTabBarBadge(application)
+                }
+            }
+        }else{
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let tabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            rootViewController.selectedIndex = tabIndex
+        }
     }
     
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
@@ -157,10 +168,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        let badgeNumber = application.applicationIconBadgeNumber
+        if badgeNumber <= 0{
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let tabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            if rootViewController.selectedIndex == tabIndex{
+                let tabArray = rootViewController?.tabBar.items as NSArray!
+                application.applicationIconBadgeNumber = 0
+                let tabItem = tabArray.objectAtIndex(tabIndex) as! UITabBarItem
+                tabItem.badgeValue = nil
+            }
+        }
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        updateTabBarBadge(application)
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -172,5 +195,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
 
 
+    
+    func updateTabBarBadge(application: UIApplication){
+        let badgeNumber = application.applicationIconBadgeNumber
+        if badgeNumber > 0{
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let tabArray = rootViewController?.tabBar.items as NSArray!
+            let tabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let tabItem = tabArray.objectAtIndex(tabIndex) as! UITabBarItem
+            tabItem.badgeValue = "\(badgeNumber)"
+        }
+    }
 }
 

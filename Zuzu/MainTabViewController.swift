@@ -10,7 +10,12 @@ import UIKit
 
 class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     
-    
+    struct MainTabConstants {
+        static let SEARCH_TAB_INDEX = 0
+        static let COLLECTION_TAB_INDEX = 1
+        static let RADAR_TAB_INDEX = 2
+        static let NOTIFICATION_TAB_INDEX = 3
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
