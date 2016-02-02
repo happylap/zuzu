@@ -50,6 +50,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    override func viewDidAppear(animated: Bool) {
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        self.parentViewController?.tabBarItem.badgeValue = nil
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
