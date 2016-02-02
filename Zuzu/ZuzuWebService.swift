@@ -15,7 +15,7 @@ struct WebApiConst {
     
     struct Server {
         static let SCHEME = "http"
-        static let HOST = "127.0.0.1" //"192.168.1.241"
+        static let HOST = "127.0.0.1" //"192.168.100.23" //"192.168.1.241"
         static let PORT = 4567
     }
     
@@ -45,34 +45,57 @@ class ZuzuWebService: NSObject
     func getNotificationItemsByUserId(userId: String, handler: (result: [NotifyItem]?, error: ErrorType?) -> Void) {
         Log.enter()
         
-        let urlString = "\(self.hostUrl)/notifyitem/\(userId)"
+        let url = "\(self.hostUrl)/notifyitem/\(userId)"
         
-        Alamofire.request(.GET, urlString, encoding: .JSON)
+        Alamofire.request(.GET, url, encoding: .JSON)
             .responseJSON { (_, _, result) in
-                Log.debug("urlString: \(urlString)")
+                Log.debug("URL: \(url)")
                 
                 switch result {
                 case .Success(let value):
-                    
                     let json = JSON(value)
-                    Log.debug("result: \(json)")
+                    Log.debug("Result: \(json)")
                     
                     var notifyItems: [NotifyItem] = [NotifyItem]()
-                    
                     for (_, subJson): (String, JSON) in json {
                         if let notifyItem = Mapper<NotifyItem>().map(subJson.description) {
                             notifyItems.append(notifyItem)
                         }
                     }
-                    
                     handler(result: notifyItems, error: nil)
                     
                 case .Failure(_, let error):
-                    Log.debug("error: \(error)")
+                    Log.debug("Error: \(error)")
                     handler(result: nil, error: error)
                 }
                 
         }
+        Log.exit()
+    }
+    
+    
+    func setReadNotificationByItemId(itemId: String, userId: String) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/notifyitem/\(itemId)/\(userId)"
+        let payload = [["op": "replace", "path": "/_read", "value": true]]
+        
+        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        })).responseString { (_, _, result) in
+            Log.debug("URL: \(url)")
+            
+            switch result {
+            case .Success: break
+            case .Failure(_, let error):
+                Log.debug("Error: \(error)")
+            }
+        }
+
         Log.exit()
     }
 
