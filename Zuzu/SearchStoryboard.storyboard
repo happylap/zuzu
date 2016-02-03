@@ -661,7 +661,7 @@
         <!--City Region Selector Container-->
         <scene sceneID="clb-jO-Btr">
             <objects>
-                <viewController title="City Region Selector Container" automaticallyAdjustsScrollViewInsets="NO" id="Tna-2J-h7R" customClass="CityRegionContainerController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CityRegionContainer" title="City Region Selector Container" automaticallyAdjustsScrollViewInsets="NO" id="Tna-2J-h7R" customClass="CityRegionContainerController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="v8s-A5-7b4"/>
                         <viewControllerLayoutGuide type="bottom" id="Ukg-Q0-W6T"/>

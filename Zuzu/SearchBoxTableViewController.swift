@@ -113,7 +113,6 @@ class SearchBoxTableViewController: UITableViewController {
     // Data Store Insatance
     private let criteriaDataStore = UserDefaultsSearchCriteriaDataStore.getInstance()
     private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
-    private let cityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
     private let searchItemService = SearchItemService.getInstance()
     private lazy var searchItemTableDataSource: SearchItemTableViewDataSource = SearchItemTableViewDataSource(tableViewController: self)
     
@@ -1002,9 +1001,6 @@ class SearchBoxTableViewController: UITableViewController {
         self.configureSearchHistoryTable()
         
         self.configureSearchBoxTable()
-        
-        //searchItemsDataStore.clearSearchItems()
-        //cityRegionDataStore.clearSelectedCityRegions()
         
         //Confugure Price Picker
         sizeUpperRange = (PickerConst.upperBoundStartZero...self.sizeItems[1].count - 1)

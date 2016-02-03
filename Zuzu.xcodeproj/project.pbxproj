@@ -36,7 +36,7 @@
 		2F31F5131BC2BC4400054355 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5121BC2BC4400054355 /* .gitignore */; };
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
 		2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F33E0451BD918E300A7D6CD /* Extensions.swift */; };
-		2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */; };
+		2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegion.swift */; };
 		2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */; };
 		2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */; };
 		2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F482DF51BAFE09100C68670 /* AppDelegate.swift */; };
@@ -195,7 +195,7 @@
 		2F31F5291BC3C34A00054355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F33E0451BD918E300A7D6CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegionDataStore.swift; sourceTree = "<group>"; };
+		2F3901E11BD4C69A00B806B8 /* CityRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegion.swift; sourceTree = "<group>"; };
 		2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailViewController.swift; sourceTree = "<group>"; };
 		2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailTitleViewCell.swift; sourceTree = "<group>"; };
 		2F482DF21BAFE09100C68670 /* Zuzu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zuzu.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -556,7 +556,6 @@
 			isa = PBXGroup;
 			children = (
 				14914FAD1C28304200025AC1 /* CollectionHouseItemDao.swift */,
-				2F3901E11BD4C69A00B806B8 /* CityRegionDataStore.swift */,
 				2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */,
 				2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */,
 				2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */,
@@ -571,6 +570,7 @@
 		2FBC05521BDE6EEB0035652D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2F3901E11BD4C69A00B806B8 /* CityRegion.swift */,
 				14914FA31C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift */,
 				14914FA41C27D26D00025AC1 /* AbstractHouseItem.swift */,
 				14914F991C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift */,
@@ -972,7 +972,7 @@
 				2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */,
 				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
-				2F3901E21BD4C69A00B806B8 /* CityRegionDataStore.swift in Sources */,
+				2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */,
 				81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */,
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
