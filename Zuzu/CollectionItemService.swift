@@ -405,7 +405,7 @@ class CollectionItemService: NSObject
     func isOffShelf(id: String, handler: (offShelf: Bool) -> Void) {
         
         let _cacheName:String = "OFF_SHELF_CACHE"
-        let _cacheTime:Double = 3 * 60 * 60 //3 hours
+        let _cacheTime:Double = 12 * 60 * 60 //12 hours
         var _hitCache:Bool = false
         
         do {
@@ -465,7 +465,7 @@ class CollectionItemService: NSObject
     func isPriceCut(id: String, handler: (priceCut: Bool) -> Void) {
         
         let _cacheName:String = "PRICE_CUT_CACHE"
-        let _cacheTime:Double = 3 * 60 * 60 //3 hours
+        let _cacheTime:Double = 12 * 60 * 60 // 12 hours
         var _hitCache:Bool = false
         
         do {
