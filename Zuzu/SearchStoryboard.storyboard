@@ -661,7 +661,7 @@
         <!--City Region Selector Container-->
         <scene sceneID="clb-jO-Btr">
             <objects>
-                <viewController title="City Region Selector Container" automaticallyAdjustsScrollViewInsets="NO" id="Tna-2J-h7R" customClass="CityRegionContainerController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CityRegionContainer" title="City Region Selector Container" automaticallyAdjustsScrollViewInsets="NO" id="Tna-2J-h7R" customClass="CityRegionContainerController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="v8s-A5-7b4"/>
                         <viewControllerLayoutGuide type="bottom" id="Ukg-Q0-W6T"/>
@@ -925,7 +925,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="搜尋結果" id="NBD-dJ-SqW">
-                        <barButtonItem key="backBarButtonItem" title="返回結果" id="9qK-pP-zMQ"/>
+                        <barButtonItem key="backBarButtonItem" title="返回結果" id="TBb-Ie-hZp"/>
                         <rightBarButtonItems>
                             <barButtonItem image="list_icon_n" id="8EG-ML-NRj">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1570,7 +1570,7 @@
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
             <objects>
-                <tableViewController title="Filter Table" id="smZ-ZU-g2D" customClass="FilterTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FilterTableView" title="Filter Table" id="smZ-ZU-g2D" customClass="FilterTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="55" sectionHeaderHeight="18" sectionFooterHeight="18" id="cDX-mW-A5x">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1601,13 +1601,7 @@
                             <outlet property="delegate" destination="smZ-ZU-g2D" id="bo6-7u-o15"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="過濾條件" id="Oht-US-RsS">
-                        <barButtonItem key="rightBarButtonItem" title="設定完成" id="foa-6i-9hH">
-                            <connections>
-                                <action selector="onFilterSelectionDone:" destination="smZ-ZU-g2D" id="JTw-wB-IuC"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="過濾條件" id="Oht-US-RsS"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="800" height="800"/>
                     <connections>
