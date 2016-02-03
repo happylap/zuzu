@@ -1570,7 +1570,7 @@
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
             <objects>
-                <tableViewController title="Filter Table" id="smZ-ZU-g2D" customClass="FilterTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FilterTableView" title="Filter Table" id="smZ-ZU-g2D" customClass="FilterTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="55" sectionHeaderHeight="18" sectionFooterHeight="18" id="cDX-mW-A5x">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
