@@ -75,8 +75,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
             if let name: String = sb.valueForKey("name") as? String {
                 switch name {
                 case "MyCollectionStoryboard":
-                    fallthrough
-                case "RadarStoryboard":
                     if !AmazonClientManager.sharedInstance.isLoggedIn() {
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
