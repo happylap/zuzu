@@ -38,7 +38,8 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         super.viewDidLoad()
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNofyItems:", name: "receiveNofyItems", object: nil)
+        self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
+
         refresh()
         configureTableView()
         //tableView.estimatedRowHeight = tableView.rowHeight
@@ -51,6 +52,14 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNofyItems:", name: "receiveNofyItems", object: nil)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear: \(self)")
@@ -158,6 +167,15 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func onReceiveNofyItems(notification:NSNotification) {
         self.refreshData()
+    }
+    
+    func handleRefresh(refreshControl: UIRefreshControl) {
+        // Do some reloading of data and update the table view's data source
+        // Fetch more objects from a web service, for example...
+        
+        self.refreshData()
+        self.tableView.reloadData()
+        self.refreshControl?.endRefreshing()
     }
     
     // MARK: - swipe-left-to-delete
