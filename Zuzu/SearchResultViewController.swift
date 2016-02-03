@@ -475,7 +475,7 @@ class SearchResultViewController: UIViewController {
         return filterGroupResult
     }
     
-    private func updateSlectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
+    private func updateSelectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
         
         ///Remove filters not included in the newFilterIdSet
         for groupId in self.selectedFilterIdSet.keys {
@@ -494,7 +494,7 @@ class SearchResultViewController: UIViewController {
     }
     
     
-    private func appendSlectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
+    private func appendSelectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
         
         ///Update/Add filter value
         for (groupId, valueSet) in newFilterIdSet {
@@ -505,7 +505,7 @@ class SearchResultViewController: UIViewController {
         self.filterDataStore.saveAdvancedFilterSetting(self.selectedFilterIdSet)
     }
     
-    private func removeSlectedFilterIdSet(groupId : String) {
+    private func removeSelectedFilterIdSet(groupId : String) {
         
         selectedFilterIdSet.removeValueForKey(groupId)
         
@@ -635,7 +635,7 @@ class SearchResultViewController: UIViewController {
                                 if(isToggleOn) {
                                     ///Replaced with Smart Filter Setting
                                     filterIdSet[filterGroup.id] = [smartFilter.identifier]
-                                    self.appendSlectedFilterIdSet(filterIdSet)
+                                    self.appendSelectedFilterIdSet(filterIdSet)
                                     
                                     
                                     ///GA Tracker
@@ -645,7 +645,7 @@ class SearchResultViewController: UIViewController {
                                     
                                 } else {
                                     ///Clear filters under this group
-                                    removeSlectedFilterIdSet(filterGroup.id)
+                                    removeSelectedFilterIdSet(filterGroup.id)
                                 }
                             }
                             
@@ -805,6 +805,8 @@ class SearchResultViewController: UIViewController {
             
             Log.debug("prepareForSegue: \(identifier)")
             
+            self.navigationItem.backBarButtonItem?.title = "返回結果"
+            
             switch identifier{
             case ViewTransConst.showDebugInfo:
                 
@@ -823,6 +825,8 @@ class SearchResultViewController: UIViewController {
             case ViewTransConst.showAdvancedFilter:
                 
                 if let ftvc = segue.destinationViewController as? FilterTableViewController {
+                    
+                    self.navigationItem.backBarButtonItem?.title = "設定完成"
                     
                     ftvc.selectedFilterIdSet = self.selectedFilterIdSet
                     
@@ -1073,13 +1077,18 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
         self.filterDataStore.clearFilterSetting()
     }
     
+    
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
         Log.debug("onFiltersSelected: \(selectedFilterIdSet)")
         
+        /// Update & Persist Filter Changes
+        self.updateSelectedFilterIdSet(selectedFilterIdSet)
+    }
+    
+    func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
-        self.updateSlectedFilterIdSet(selectedFilterIdSet)
-        
+        /// Filter Selection is done
         if let searchCriteria = self.searchCriteria {
             
             searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
@@ -1100,6 +1109,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
         }
         
         reloadDataWithNewCriteria(self.searchCriteria)
+        
     }
 }
 

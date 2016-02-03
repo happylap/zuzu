@@ -13,8 +13,8 @@ private let Log = Logger.defaultLogger
 
 protocol FilterTableViewControllerDelegate {
     
-    func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>])
-    
+    func onFiltersSelected(newFilterIdSet: [String : Set<FilterIdentifier>])
+    func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>])
     func onFiltersReset()
     
 }
@@ -61,6 +61,9 @@ class FilterTableViewController: UITableViewController {
         updateResetFilterButton()
         
         updateStatusBar()
+        
+        //Notify the lateset set of criteria
+        self.filterDelegate?.onFiltersSelected(self.selectedFilterIdSet)
     }
     
     private func updateResetFilterButton() {
@@ -207,13 +210,13 @@ class FilterTableViewController: UITableViewController {
         self.trackEventForCurrentScreen(GAConst.Catrgory.Activity, action: GAConst.Action.Activity.ResetFilters)
     }
     
-    @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
-        
-        self.filterDelegate?.onFiltersSelected(self.selectedFilterIdSet)
-        
-        navigationController?.popViewControllerAnimated(true)
-        
-    }
+//    @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
+//        
+//        self.filterDelegate?.onFiltersSelected(self.selectedFilterIdSet)
+//        
+//        navigationController?.popViewControllerAnimated(true)
+//        
+//    }
     
     // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
@@ -270,6 +273,16 @@ class FilterTableViewController: UITableViewController {
         Log.enter()
         
         filterStatusBarView?.hideStatusBar()
+    }
+    
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        super.willMoveToParentViewController(parent)
+        
+        if(parent == nil) {
+            
+            /// Filter Setting Finished
+            self.filterDelegate?.onFiltersSelectionDone(self.selectedFilterIdSet)
+        }
     }
     
     override func didReceiveMemoryWarning() {
