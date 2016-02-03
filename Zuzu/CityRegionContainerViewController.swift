@@ -20,9 +20,7 @@ class CityRegionContainerController: UIViewController {
     var delegate: CityRegionContainerControllerDelegate?
     
     var isDataPrepared = false
-    
-    let dataStore : CityRegionDataStore = UserDefaultsCityRegionDataStore.getInstance()
-    
+
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var regionSelectionState: [City] = [City]()
     
