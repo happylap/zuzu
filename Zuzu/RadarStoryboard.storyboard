@@ -411,6 +411,43 @@
                                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="purchaseHistoryRecord" id="Lf8-PT-6ZU" userLabel="purchaseHistoryRecord">
+                                        <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lf8-PT-6ZU" id="CyX-Oc-2SH">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jbm-x5-DvT" userLabel="purchaseDateLabel">
+                                                    <rect key="frame" x="20" y="11" width="42" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tBo-l1-1gK" userLabel="purchaseDescLabel">
+                                                    <rect key="frame" x="-30" y="11.5" width="42" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m5c-sH-HQw" userLabel="purchaseExpireLabel">
+                                                    <rect key="frame" x="538" y="11" width="42" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="m5c-sH-HQw" secondAttribute="trailing" constant="20" symbolic="YES" id="8eM-Hz-TaK"/>
+                                                <constraint firstItem="Jbm-x5-DvT" firstAttribute="leading" secondItem="CyX-Oc-2SH" secondAttribute="leading" constant="20" symbolic="YES" id="DRj-BT-weC"/>
+                                                <constraint firstItem="Jbm-x5-DvT" firstAttribute="leading" secondItem="tBo-l1-1gK" secondAttribute="trailing" constant="8" symbolic="YES" id="GUm-8m-bFI"/>
+                                                <constraint firstItem="m5c-sH-HQw" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="KuV-35-SVN"/>
+                                                <constraint firstItem="tBo-l1-1gK" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="UcK-SP-PMA"/>
+                                                <constraint firstItem="Jbm-x5-DvT" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="ooD-SI-vEd"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
