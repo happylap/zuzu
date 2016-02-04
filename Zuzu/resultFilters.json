@@ -241,19 +241,19 @@
                            },
                            {
                            "label": "3個月內",
-                           "filterValue": "[0 TO 90]"
+                           "filterValue": "90"
                            },
                            {
                            "label": "6個月內",
-                           "filterValue": "[0 TO 180]"
+                           "filterValue": "180"
                            },
                            {
                            "label": "1年內",
-                           "filterValue": "[0 TO 360]"
+                           "filterValue": "360"
                            },
                            {
                            "label": "2年內",
-                           "filterValue": "[0 TO 720]"
+                           "filterValue": "720"
                            }
                            ]
                },
