@@ -502,6 +502,61 @@
             </objects>
             <point key="canvasLocation" x="466" y="1475"/>
         </scene>
+        <!--無法載入-->
+        <scene sceneID="KQ5-BG-4Am">
+            <objects>
+                <viewController id="PLb-rK-2kd" userLabel="無法載入" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="P0O-aH-OZ3"/>
+                        <viewControllerLayoutGuide type="bottom" id="YRp-Ow-tVS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="d4h-CZ-B2x">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1w7-Y5-xeE">
+                                <rect key="frame" x="200" y="50" width="200" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="1w7-Y5-xeE" secondAttribute="height" multiplier="2:1" id="GJ6-JM-SLl"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="無法載入資料，請輕按重試" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P4b-pJ-WHt">
+                                <rect key="frame" x="202.5" y="162" width="195" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="195" id="I8f-Gw-6Ha"/>
+                                    <constraint firstAttribute="height" constant="100" id="KEq-SD-hz8"/>
+                                    <constraint firstAttribute="width" secondItem="P4b-pJ-WHt" secondAttribute="height" multiplier="1:2" id="RAn-vR-fI5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="RAn-vR-fI5"/>
+                                    </mask>
+                                </variation>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="P4b-pJ-WHt" firstAttribute="top" secondItem="1w7-Y5-xeE" secondAttribute="bottom" constant="12" id="2Li-aJ-kzy"/>
+                            <constraint firstItem="1w7-Y5-xeE" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="8pf-rr-S6b"/>
+                            <constraint firstItem="1w7-Y5-xeE" firstAttribute="width" secondItem="d4h-CZ-B2x" secondAttribute="width" multiplier="1:3" id="B81-hc-w88"/>
+                            <constraint firstItem="1w7-Y5-xeE" firstAttribute="top" secondItem="P0O-aH-OZ3" secondAttribute="bottom" constant="30" id="a2H-2l-7vC"/>
+                            <constraint firstItem="YRp-Ow-tVS" firstAttribute="top" secondItem="1w7-Y5-xeE" secondAttribute="bottom" constant="405" id="eaV-ah-1NX"/>
+                            <constraint firstItem="P4b-pJ-WHt" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="fFS-FI-K7d"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="eaV-ah-1NX"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7zl-9S-4Mb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1108" y="1802"/>
+        </scene>
         <!--Search Box-->
         <scene sceneID="CZW-Zc-zwm">
             <objects>
