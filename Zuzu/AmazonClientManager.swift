@@ -216,7 +216,7 @@ class AmazonClientManager : NSObject {
             loginAlertView.addButton("取消") {
                 ///GA Tracker: Login cancelled
                 theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                    action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+                    action: GAConst.Action.Blocking.loginReject, label: GAConst.Label.LoginType.Facebook)
             }
             
             loginAlertView.showNotice("請登入Facebook",
@@ -273,7 +273,7 @@ class AmazonClientManager : NSObject {
                     
                     ///GA Tracker: Login failed
                     theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                        action: GAConst.Action.Blocking.LoginError, label: GAConst.Label.LoginType.Facebook)
+                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), Error: \(error.code), \(error.localizedDescription)")
                     
                 } else if result.isCancelled {
                     

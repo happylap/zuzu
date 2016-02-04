@@ -120,6 +120,8 @@ struct GAConst {
             
             static let LoginCancel = "loginCancel"
             
+            static let loginReject = "loginReject"
+            
         }
         
         struct Error {
