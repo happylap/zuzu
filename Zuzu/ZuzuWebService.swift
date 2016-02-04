@@ -15,7 +15,7 @@ struct WebApiConst {
     
     struct Server {
         static let SCHEME = "http"
-        static let HOST = "127.0.0.1" // "127.0.0.1" , "192.168.100.23", "192.168.1.241"
+        static let HOST = "192.168.100.23" // "127.0.0.1" , "192.168.100.23", "192.168.1.241"
         static let PORT = 4567
     }
     
@@ -117,6 +117,45 @@ class ZuzuWebService: NSObject
             switch result {
             case .Success(let value):
                 Log.debug("Success.")
+                handler(result: value, error: nil)
+            case .Failure(_, let error):
+                Log.debug("Error: \(error)")
+                handler(result: nil, error: error)
+            }
+        }
+        
+        Log.exit()
+    }
+
+    func createCriteriaByUserId(userId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: String?, error: ErrorType?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/criteria"
+        
+        let zuzuCriteria = ZuzuCriteria()
+        zuzuCriteria.userId = userId
+        zuzuCriteria.enabled = true
+        zuzuCriteria.appleProductId = appleProductId
+        zuzuCriteria.criteria = criteria
+        
+        let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
+        Log.debug("payload: \(payload)")
+        
+        let jsonString = Mapper<ZuzuCriteria>().toJSONString(zuzuCriteria)
+        Log.debug("jsonString: \(jsonString)")
+        
+        Alamofire.request(.POST, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        })).responseString { (_, _, result) in
+            Log.debug("URL: \(url)")
+            
+            switch result {
+            case .Success(let value):
+                Log.debug("Success. \(value)")
                 handler(result: value, error: nil)
             case .Failure(_, let error):
                 Log.debug("Error: \(error)")
