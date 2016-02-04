@@ -37,9 +37,6 @@ class AmazonClientManager : NSObject {
         case FB
     }
     
-    //FB Login Permission
-    let fbPermission = ["public_profile", "email"]
-    
     //KeyChain Constants
     let FB_PROVIDER = Provider.FB.rawValue
     
@@ -268,7 +265,7 @@ class AmazonClientManager : NSObject {
                 self.fbLoginManager = FBSDKLoginManager()
             }
             
-            self.fbLoginManager?.logInWithReadPermissions(fbPermission, fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
+            self.fbLoginManager?.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
                 if (error != nil) {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.errorAlert("Error logging in with FB: " + error.localizedDescription)
