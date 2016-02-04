@@ -249,8 +249,10 @@ class FilterTableViewController: UITableViewController {
             } else {
                 
                 var parentRect = navView.bounds
-                let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+                Log.verbose("parentRect = \(parentRect)")
+                let statusBarHeight:CGFloat = min(UIApplication.sharedApplication().statusBarFrame.size.height, 20.0)
                 let navigationBarHeight = self.navigationController?.navigationBar.frame.height ?? 0
+                Log.verbose("statusBarHeight = \(statusBarHeight), navigationBarHeight = \(navigationBarHeight)")
                 
                 ///Position the bar below status bar & navigation bar
                 parentRect.origin.y += (navigationBarHeight + statusBarHeight)
