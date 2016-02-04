@@ -48,6 +48,7 @@ class SearchCriteria: NSObject, NSCoding {
     
     ///Additional Filters [Field:Value]
     var filters: [String : String]?
+    var filterGroups: [FilterGroup]?
     
     convenience required init?(coder decoder: NSCoder) {
         

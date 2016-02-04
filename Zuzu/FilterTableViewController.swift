@@ -145,7 +145,14 @@ class FilterTableViewController: UITableViewController {
                                 
                                 let filters = filters.enumerate().map({ (index, filterJson) -> Filter in
                                     let label = filterJson["label"].stringValue
-                                    let value = filterJson["filterValue"].stringValue
+                                    var value = filterJson["filterValue"].stringValue
+                                    
+                                    /// TODO: Handle the special case for shortest_lease
+                                    /// We'll define a new json format for range value
+                                    /// Make the filterValue independent of Solr format
+                                    if(commonKey == "shortest_lease") {
+                                        value = "[0 TO \(value)]"
+                                    }
                                     
                                     if let key = filterJson["filterKey"].string {
                                         return Filter(label: label, key: key, value: value, order: index)
