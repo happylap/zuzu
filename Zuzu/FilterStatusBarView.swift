@@ -50,6 +50,8 @@ class FilterStatusBarView: UIView {
         
         self.frame = parentRect
         
+        Log.verbose("\(self) frame = \(self.frame)")
+        
         /// Setup Text, Position in the center
         statusText.translatesAutoresizingMaskIntoConstraints = false
         statusText.textAlignment = NSTextAlignment.Center
