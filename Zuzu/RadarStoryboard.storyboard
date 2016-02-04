@@ -456,6 +456,13 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CQn-wG-8Og">
+                                                    <rect key="frame" x="550" y="7" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="30" id="4AR-yM-3Yx"/>
+                                                        <constraint firstAttribute="width" secondItem="CQn-wG-8Og" secondAttribute="height" multiplier="1:1" id="IE4-Kk-Zaa"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -464,6 +471,8 @@
                                                 <constraint firstItem="Jbm-x5-DvT" firstAttribute="leading" secondItem="tBo-l1-1gK" secondAttribute="trailing" constant="8" symbolic="YES" id="GUm-8m-bFI"/>
                                                 <constraint firstItem="m5c-sH-HQw" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="KuV-35-SVN"/>
                                                 <constraint firstItem="tBo-l1-1gK" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="UcK-SP-PMA"/>
+                                                <constraint firstAttribute="trailing" secondItem="CQn-wG-8Og" secondAttribute="trailing" constant="20" symbolic="YES" id="c7c-lE-p3t"/>
+                                                <constraint firstItem="CQn-wG-8Og" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="nlv-pN-c1w"/>
                                                 <constraint firstItem="Jbm-x5-DvT" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="ooD-SI-vEd"/>
                                             </constraints>
                                         </tableViewCellContentView>
