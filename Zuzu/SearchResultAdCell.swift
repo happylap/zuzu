@@ -58,7 +58,7 @@ class SearchResultAdCell: UITableViewCell {
         super.layoutSubviews()
         
         let parentBound = self.contentView.bounds
-        //bannerView.frame = CGRectMake(0.0, 0.0, 320, 50.0)
+        bannerView.frame = CGRectMake(0.0, 0.0, 320, 50.0)
         bannerView.center = CGPoint(x: parentBound.width / 2, y: parentBound.height / 2)
     }
     
