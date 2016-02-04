@@ -20,6 +20,6 @@ struct FeatureOption {
     }
 
     struct Radar {
-        static let enableMain = true ///The main Radar function
+        static let enableMain = false ///The main Radar function
     }
 }
