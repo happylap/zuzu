@@ -206,10 +206,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="byC-T9-SKw" userLabel="CriteriaView">
-                                <rect key="frame" x="0.0" y="64" width="600" height="150"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="180"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="36N-BY-w6f" userLabel="CriteriaSubView">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="60w-GP-foy">
                                                 <rect key="frame" x="20" y="20" width="560" height="19.5"/>
@@ -220,28 +220,61 @@
                                                 <rect key="frame" x="531" y="8.5" width="51" height="31"/>
                                             </switch>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="60w-GP-foy" firstAttribute="top" secondItem="36N-BY-w6f" secondAttribute="top" constant="20" symbolic="YES" id="7EC-7Y-aRi"/>
                                             <constraint firstItem="60w-GP-foy" firstAttribute="leading" secondItem="36N-BY-w6f" secondAttribute="leading" constant="20" symbolic="YES" id="Fai-qL-jFp"/>
                                             <constraint firstAttribute="trailing" secondItem="23a-c6-f3g" secondAttribute="trailing" constant="20" symbolic="YES" id="hYD-Zu-sxR"/>
                                             <constraint firstItem="23a-c6-f3g" firstAttribute="bottom" secondItem="60w-GP-foy" secondAttribute="bottom" id="jC6-Ho-hze"/>
                                             <constraint firstAttribute="trailing" secondItem="60w-GP-foy" secondAttribute="trailing" constant="20" symbolic="YES" id="mwz-Ay-8C1"/>
+                                            <constraint firstAttribute="height" constant="45" id="xNa-65-AW5"/>
                                         </constraints>
                                     </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wkD-W0-Nni" userLabel="regionLabel">
+                                        <rect key="frame" x="20" y="53" width="560" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="整層住家, 20000 - 25000元, 20 - 30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkN-Xn-yd1" userLabel="houseInfoLabel">
+                                        <rect key="frame" x="20" y="80" width="560" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="其他6個過濾條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zpG-ZY-Ugx" userLabel="otherCriteriaLabel">
+                                        <rect key="frame" x="20" y="104.5" width="560" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
+                                        <rect key="frame" x="270" y="128.5" width="60" height="30"/>
+                                        <state key="normal" title="修改設定"/>
+                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="36N-BY-w6f" firstAttribute="height" secondItem="byC-T9-SKw" secondAttribute="height" multiplier="1:3" id="ZqH-JY-ScO"/>
+                                    <constraint firstAttribute="trailing" secondItem="wkD-W0-Nni" secondAttribute="trailing" constant="20" symbolic="YES" id="1hM-Rg-RYK"/>
+                                    <constraint firstItem="zpG-ZY-Ugx" firstAttribute="top" secondItem="GkN-Xn-yd1" secondAttribute="bottom" constant="8" symbolic="YES" id="1pN-We-1sh"/>
+                                    <constraint firstItem="zpG-ZY-Ugx" firstAttribute="width" secondItem="GkN-Xn-yd1" secondAttribute="width" id="IkR-e2-fPv"/>
+                                    <constraint firstItem="wkD-W0-Nni" firstAttribute="leading" secondItem="byC-T9-SKw" secondAttribute="leading" constant="20" symbolic="YES" id="Ro5-PJ-Qn1"/>
+                                    <constraint firstItem="GkN-Xn-yd1" firstAttribute="leading" secondItem="wkD-W0-Nni" secondAttribute="leading" id="SB7-VB-cCr"/>
+                                    <constraint firstItem="nQm-xW-OQB" firstAttribute="centerX" secondItem="byC-T9-SKw" secondAttribute="centerX" id="YZD-hI-rUi"/>
+                                    <constraint firstItem="wkD-W0-Nni" firstAttribute="top" secondItem="36N-BY-w6f" secondAttribute="bottom" constant="8" id="bOq-Ng-e6F"/>
                                     <constraint firstItem="36N-BY-w6f" firstAttribute="centerX" secondItem="byC-T9-SKw" secondAttribute="centerX" id="fnL-Y4-YZI"/>
+                                    <constraint firstItem="GkN-Xn-yd1" firstAttribute="top" secondItem="wkD-W0-Nni" secondAttribute="bottom" constant="8" symbolic="YES" id="jdi-ry-Nfl"/>
+                                    <constraint firstItem="nQm-xW-OQB" firstAttribute="top" secondItem="zpG-ZY-Ugx" secondAttribute="bottom" constant="8" symbolic="YES" id="qVj-cG-PS7"/>
+                                    <constraint firstItem="GkN-Xn-yd1" firstAttribute="width" secondItem="wkD-W0-Nni" secondAttribute="width" id="quu-Xn-TxT"/>
                                     <constraint firstItem="36N-BY-w6f" firstAttribute="top" secondItem="byC-T9-SKw" secondAttribute="top" id="vEW-Rc-AGV"/>
                                     <constraint firstItem="36N-BY-w6f" firstAttribute="width" secondItem="byC-T9-SKw" secondAttribute="width" id="wus-xV-f4e"/>
+                                    <constraint firstItem="zpG-ZY-Ugx" firstAttribute="leading" secondItem="wkD-W0-Nni" secondAttribute="leading" id="yRh-jI-Ntb"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YN5-O7-pWJ" userLabel="ServiceView">
-                                <rect key="frame" x="0.0" y="222" width="600" height="150"/>
+                                <rect key="frame" x="0.0" y="252" width="600" height="120"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7N5-qc-Jhl" userLabel="ServiceSubView">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="服務狀態" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QMV-ev-uwx" userLabel="服務狀態">
                                                 <rect key="frame" x="20" y="20" width="560" height="19.5"/>
@@ -250,9 +283,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="QMV-ev-uwx" firstAttribute="leading" secondItem="7N5-qc-Jhl" secondAttribute="leading" constant="20" symbolic="YES" id="0N4-nd-ZKQ"/>
+                                            <constraint firstAttribute="height" constant="45" id="6Y8-L8-TqZ"/>
                                             <constraint firstItem="QMV-ev-uwx" firstAttribute="top" secondItem="7N5-qc-Jhl" secondAttribute="top" constant="20" symbolic="YES" id="ZrF-VL-px9"/>
                                             <constraint firstAttribute="trailing" secondItem="QMV-ev-uwx" secondAttribute="trailing" constant="20" symbolic="YES" id="ejz-Ua-V7Z"/>
                                         </constraints>
@@ -262,7 +296,6 @@
                                     <constraint firstItem="7N5-qc-Jhl" firstAttribute="width" secondItem="YN5-O7-pWJ" secondAttribute="width" id="3IB-pd-dxI"/>
                                     <constraint firstItem="7N5-qc-Jhl" firstAttribute="centerX" secondItem="YN5-O7-pWJ" secondAttribute="centerX" id="AA0-FJ-maB"/>
                                     <constraint firstItem="7N5-qc-Jhl" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="top" id="JXJ-PZ-6u9"/>
-                                    <constraint firstItem="7N5-qc-Jhl" firstAttribute="height" secondItem="YN5-O7-pWJ" secondAttribute="height" multiplier="1:3" id="VJK-OC-x8X"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kzV-PJ-lR5" userLabel="PurchaseTableView">
@@ -284,7 +317,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
@@ -292,10 +325,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="byC-T9-SKw" firstAttribute="height" secondItem="tqq-ek-c7l" secondAttribute="height" multiplier="1:4" id="260-wn-nW4"/>
+                            <constraint firstItem="byC-T9-SKw" firstAttribute="height" secondItem="tqq-ek-c7l" secondAttribute="height" multiplier="3:10" id="260-wn-nW4"/>
                             <constraint firstItem="byC-T9-SKw" firstAttribute="top" secondItem="Rg7-dX-Lpg" secondAttribute="bottom" id="FvS-H9-0dx"/>
                             <constraint firstItem="kzV-PJ-lR5" firstAttribute="centerX" secondItem="tqq-ek-c7l" secondAttribute="centerX" id="KQu-dg-yaG"/>
-                            <constraint firstItem="YN5-O7-pWJ" firstAttribute="height" secondItem="tqq-ek-c7l" secondAttribute="height" multiplier="1:4" id="Rt1-SO-x62"/>
+                            <constraint firstItem="YN5-O7-pWJ" firstAttribute="height" secondItem="tqq-ek-c7l" secondAttribute="height" multiplier="2:10" id="Rt1-SO-x62"/>
                             <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="bottom" constant="8" symbolic="YES" id="b2O-ld-wX6"/>
                             <constraint firstItem="YN5-O7-pWJ" firstAttribute="centerX" secondItem="tqq-ek-c7l" secondAttribute="centerX" id="hfE-j1-0th"/>
                             <constraint firstItem="YN5-O7-pWJ" firstAttribute="top" secondItem="byC-T9-SKw" secondAttribute="bottom" constant="8" symbolic="YES" id="hob-Ch-mc8"/>
