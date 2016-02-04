@@ -254,7 +254,9 @@ class SearchResultViewController: UIViewController {
     
     private func loadHouseListPage(pageNo: Int) {
         
-        if(pageNo > dataSource.estimatedTotalResults){
+        let numberOfItems = pageNo * HouseItemTableDataSource.Const.pageSize
+        
+        if(numberOfItems > dataSource.estimatedTotalResults){
             Log.debug("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedTotalResults)]")
             return
         }
@@ -1014,34 +1016,31 @@ extension SearchResultViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
-        //Log.debug("==scrollViewDidEndDecelerating==")
-        //Log.debug("Content Height: \(scrollView.contentSize.height)")
-        //Log.debug("Content Y-offset: \(scrollView.contentOffset.y)")
-        //Log.debug("ScrollView Height: \(scrollView.frame.size.height)")
-        
+        Log.enter()
+        Log.debug("Content H: \(scrollView.contentSize.height), Content Y-offset: \(scrollView.contentOffset.y) ScrollView H: \(scrollView.frame.size.height)")
         
         let yOffsetForTop:CGFloat = 0
         let yOffsetForBottom:CGFloat = floor(scrollView.contentSize.height - scrollView.frame.size.height)
         let currentContentOffset = floor(scrollView.contentOffset.y)
         
         if (currentContentOffset >= yOffsetForBottom){
-            Log.debug("\(self) Bounced, Scrolled To Bottom")
+            Log.debug("Bounced, Scrolled To Bottom")
             
             let nextPage = self.dataSource.currentPage + 1
             
             loadHouseListPage(nextPage)
             
         }else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
-            Log.debug("\(self) Bounced, Scrolled To Top")
+            Log.debug("Bounced, Scrolled To Top")
         }
+        
+        Log.exit()
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        //Log.debug("==scrollViewDidScroll==")
-        //Log.debug("Content Height: \(scrollView.contentSize.height)")
-        //Log.debug("Content Y-offset: \(scrollView.contentOffset.y)")
-        //Log.debug("ScrollView Height: \(scrollView.frame.size.height)")
+        Log.enter()
+        Log.debug("Content H: \(scrollView.contentSize.height), Content Y-offset: \(scrollView.contentOffset.y) ScrollView H: \(scrollView.frame.size.height)")
         
         //Check for scroll direction
         if (self.lastContentOffset > scrollView.contentOffset.y){
@@ -1059,7 +1058,7 @@ extension SearchResultViewController: UIScrollViewDelegate {
         
         if(yOffsetForBottom >= 0) {
             if (scrollView.contentOffset.y >= yOffsetForBottom){
-                Log.debug("\(self) Scrolled To Bottom")
+                Log.debug("Scrolled To Bottom")
                 
                 let nextPage = self.dataSource.currentPage + 1
                 
@@ -1069,9 +1068,11 @@ extension SearchResultViewController: UIScrollViewDelegate {
                 }
                 
             } else if(scrollView.contentOffset.y + scrollView.contentInset.top <= yOffsetForTop) {
-                //Log.debug("Scrolled To Top")
+                Log.debug("Scrolled To Top")
             }
         }
+        
+        Log.exit()
     }
     
     

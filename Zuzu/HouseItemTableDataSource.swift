@@ -192,20 +192,24 @@ public class HouseItemTableDataSource {
             
             if let result = result {
                 self.appendDataForPage(pageNo, data: result)
+                
+                /// Add ADs when there is some data
+                if(result.count > 0) {
+                    ///Check if need to add an Ad item
+                    if(self.isDisplayADs) {
+                        if(pageNo % Const.adDisplayPageInterval == 0) {
+                            //Time to add one Ad cell
+                            let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
+                            
+                            let lastIndex = self.cachedData.endIndex - 1
+                            self.cachedData.insert(adItem, atIndex: lastIndex)
+                        }
+                    }
+                    
+                }
             }
             
             self.estimatedTotalResults = totalNum
-            
-            ///Check if need to add an Ad item
-            if(self.isDisplayADs) {
-                if(pageNo % Const.adDisplayPageInterval == 0) {
-                    //Time to add one Ad cell
-                    let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
-                    
-                    let lastIndex = self.cachedData.endIndex - 1
-                    self.cachedData.insert(adItem, atIndex: lastIndex)
-                }
-            }
             
             if let loadStartTime = self.loadStartTime {
                 let loadEndTime = NSDate()
