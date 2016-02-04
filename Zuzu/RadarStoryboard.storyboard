@@ -9,7 +9,7 @@
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
-        <!--租屋雷達-->
+        <!--設定雷達-->
         <scene sceneID="siC-n1-MI9">
             <objects>
                 <viewController id="OaS-ny-kO8" customClass="RadarViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
@@ -50,7 +50,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="租屋雷達" id="SR1-Hu-UOf"/>
+                    <navigationItem key="navigationItem" title="設定雷達" id="SR1-Hu-UOf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yrf-4n-0Hw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -193,10 +193,10 @@
             </objects>
             <point key="canvasLocation" x="-337" y="1772"/>
         </scene>
-        <!--View Controller-->
+        <!--檢視雷達-->
         <scene sceneID="qDs-hj-oEa">
             <objects>
-                <viewController id="bGU-pi-D72" sceneMemberID="viewController">
+                <viewController id="bGU-pi-D72" userLabel="檢視雷達" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Rg7-dX-Lpg"/>
                         <viewControllerLayoutGuide type="bottom" id="Prs-5K-bGT"/>
@@ -496,7 +496,7 @@
                             <constraint firstItem="YN5-O7-pWJ" firstAttribute="width" secondItem="tqq-ek-c7l" secondAttribute="width" id="uzl-2q-FJy"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="OlE-s0-y7i"/>
+                    <navigationItem key="navigationItem" title="檢視雷達" id="OlE-s0-y7i" userLabel="檢視雷達"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LaE-8c-zRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
