@@ -11,6 +11,7 @@
 		1446FA5C1C2D3AA90073A8A7 /* CommonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */; };
 		1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */; };
 		14632AAF1C27B614008C9A2D /* NotificationItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14632AAE1C27B614008C9A2D /* NotificationItemsTableViewController.swift */; };
+		1486A42A1C630CB800A6F7CA /* RadarDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1486A4291C630CB800A6F7CA /* RadarDisplayViewController.swift */; };
 		14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914F991C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift */; };
 		14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914F9A1C27D09800025AC1 /* NotificationHouseItem.swift */; };
 		14914FA11C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14914F9B1C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift */; };
@@ -170,6 +171,7 @@
 		1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonUtils.swift; sourceTree = "<group>"; };
 		1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		14632AAE1C27B614008C9A2D /* NotificationItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationItemsTableViewController.swift; sourceTree = "<group>"; };
+		1486A4291C630CB800A6F7CA /* RadarDisplayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarDisplayViewController.swift; sourceTree = "<group>"; };
 		14914F991C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationHouseItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		14914F9A1C27D09800025AC1 /* NotificationHouseItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHouseItem.swift; sourceTree = "<group>"; };
 		14914F9B1C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionHouseItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 		2F276B371BBED53500A41306 /* Radar */ = {
 			isa = PBXGroup;
 			children = (
+				1486A4291C630CB800A6F7CA /* RadarDisplayViewController.swift */,
 				144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */,
 				2FE132691C312081008F5E68 /* RadarViewController.swift */,
 				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
@@ -941,6 +944,7 @@
 				2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */,
 				81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */,
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
+				1486A42A1C630CB800A6F7CA /* RadarDisplayViewController.swift in Sources */,
 				14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,

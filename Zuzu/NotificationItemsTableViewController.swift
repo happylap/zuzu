@@ -53,10 +53,12 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
 
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNofyItems:", name: "receiveNofyItems", object: nil)
     }
     
     override func viewDidDisappear(animated: Bool) {
+        super.viewDidAppear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -66,12 +68,6 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         self.parentViewController?.tabBarItem.badgeValue = nil
     }
-    
-    /*override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        Log.debug("viewWillDisappear: \(self)")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }*/
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
