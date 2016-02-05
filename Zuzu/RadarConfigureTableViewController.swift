@@ -69,10 +69,6 @@ class RadarConfigureTableViewController: UITableViewController {
     // Trigger the fetching of total number of items that meet the current criteria
     var stateObservers = [SearchCriteriaObserver]()
     
-    // Data Store Insatance
-    private let criteriaDataStore = UserDefaultsSearchCriteriaDataStore.getInstance()
-    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
-
     private func updateRegionLabel(regionSelection: [City]?) {
         
         var regionLabel = "不限"
@@ -130,7 +126,6 @@ class RadarConfigureTableViewController: UITableViewController {
         didSet{
             
             if !(oldValue == currentCriteria) {
-                filterDataStore.clearFilterSetting()
                 
                 ///Send criteria change notification
                 for observer in stateObservers {
@@ -139,7 +134,6 @@ class RadarConfigureTableViewController: UITableViewController {
 
                 ///Save search criteria and enable reset button
                 if(!currentCriteria.isEmpty()) {
-                    criteriaDataStore.saveSearchCriteria(currentCriteria)
                     clearCriteriaButton.enabled = true
                 }
                 
@@ -655,14 +649,9 @@ class RadarConfigureTableViewController: UITableViewController {
     func onClearCriteriaButtonTouched(sender: UIButton) {
         Log.info("Sender: \(sender)", label: ActionLabel)
         
-        self.criteriaDataStore.clear()
         self.currentCriteria = SearchCriteria()
         
         clearCriteriaButton.enabled = false
-        
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.ResetCriteria)
     }
     
     func onTypeButtonTouched(sender: UIButton) {
@@ -772,22 +761,6 @@ class RadarConfigureTableViewController: UITableViewController {
         priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems[1].count - 1)
         
         self.configurePricePicker()
-        
-        //Load Search Criteria
-        if let criteria = criteriaDataStore.loadSearchCriteria() {
-            
-            if(!criteria.isEmpty()) {
-                currentCriteria.keyword = criteria.keyword
-                currentCriteria.region = criteria.region
-                currentCriteria.price  = criteria.price
-                currentCriteria.size = criteria.size
-                currentCriteria.types = criteria.types
-                
-                self.populateViewFromSearchCriteria(currentCriteria)
-                
-                clearCriteriaButton.enabled = true
-            }
-        }
         
         /// Init SearchCriteriaObservers
         let fastCountCriteriaObserver = FastCountCriteriaObserver()
