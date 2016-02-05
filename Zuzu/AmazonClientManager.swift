@@ -30,7 +30,8 @@ class AmazonClientManager : NSObject {
         static let COGNITO_IDENTITY_POOL_ID = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
         static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
         static let S3_SERVICE_REGIONTYPE = AWSRegionType.APSoutheast1
-        static let S3_BUCKETNAME = "zuzu.mycollection"
+        static let S3_COLLECTION_BUCKET = "zuzu.mycollection"
+        static let S3_ERROR_BUCKET = "zuzu.error"
     }
     
     enum Provider: String {
@@ -145,7 +146,7 @@ class AmazonClientManager : NSObject {
             
             Log.info("Credential Provider Status (After FB Login):")
             self.dumpCredentialProviderInfo()
-
+            
             if (task.error != nil) {
                 let userDefaults = NSUserDefaults.standardUserDefaults()
                 let currentDeviceToken: NSData? = userDefaults.objectForKey(Constants.DEVICE_TOKEN_KEY) as? NSData
@@ -266,14 +267,19 @@ class AmazonClientManager : NSObject {
             }
             
             self.fbLoginManager?.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
+                
                 if (error != nil) {
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.errorAlert("Error logging in with FB: " + error.localizedDescription)
+                        self.errorAlert("Facebook 登入發生錯誤: " + error.localizedDescription)
                     }
                     
                     ///GA Tracker: Login failed
                     theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), Error: \(error.code), \(error.localizedDescription)")
+                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), \(error.userInfo)")
+                    
+                    Log.warning("Error: \(error.userInfo)")
+                    
+                    self.fbLogout()
                     
                 } else if result.isCancelled {
                     
@@ -281,7 +287,12 @@ class AmazonClientManager : NSObject {
                     theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                         action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
                     
+                    Log.warning("Cancelled")
+                    
+                    self.fbLogout()
+                    
                 } else {
+                    
                     self.completeFBLogin()
                     
                     ///GA Tracker: Login successful
@@ -362,7 +373,7 @@ class AmazonClientManager : NSObject {
     }
     
     // MARK: SNS Push Notifications
-
+    
     func registerSNSEndpoint(){
         let userData = self.fbLoginData?.facebookEmail
         let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
@@ -443,7 +454,7 @@ class AmazonClientManager : NSObject {
             
             return nil
         })
-
+        
     }
     
     func createEndpoint(deviceTokenString: String, userData: String?){
@@ -472,53 +483,90 @@ class AmazonClientManager : NSObject {
     
     // MARK: S3
     
-    //func uploadFBUserDataToS3(transferManager: AWSS3TransferManager, fbLoginData: FBUserData) {
-    
-    func uploadFBUserDataToS3(userData: FBUserData) {
-        Log.debug("\(self) uploadFBUserDataToS3")
-
-        let S3UploadKeyName = userData.facebookId! + ".json"
+    private func prepareLocalFile(fileName: String, stringContent: String) -> NSURL? {
+        
+        var tempFileURL: NSURL?
         
         //Create a test file in the temporary directory
-        let uploadFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory() + S3UploadKeyName)
-        let JSONString = Mapper().toJSONString(userData)
-        
-        
-        var error: NSError? = nil
+        let uploadFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory() + fileName)
         
         if NSFileManager.defaultManager().fileExistsAtPath(uploadFileURL.path!) {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(uploadFileURL.path!)
-            } catch let error1 as NSError {
-                error = error1
+            } catch let error as NSError {
+                Log.debug("Error: \(error.code), \(error.localizedDescription)")
             }
         }
         
         do {
-            try JSONString!.writeToURL(uploadFileURL, atomically: true, encoding: NSUTF8StringEncoding)
-        } catch let error1 as NSError {
-            error = error1
+            
+            try stringContent.writeToURL(uploadFileURL, atomically: true, encoding: NSUTF8StringEncoding)
+            
+            tempFileURL = uploadFileURL
+            
+        } catch let error as NSError {
+            Log.debug("Error: \(error.code), \(error.localizedDescription)")
         }
         
-        if (error) != nil {
-            Log.debug("Error: \(error!.code), \(error!.localizedDescription)");
-        }
+        return tempFileURL
+    }
+    
+    private func uploadToS3(key: String, body: NSURL, bucket: String) {
         
         let uploadRequest = AWSS3TransferManagerUploadRequest()
-        uploadRequest.body = uploadFileURL
-        uploadRequest.key = S3UploadKeyName
-        uploadRequest.bucket = AWSConstants.S3_BUCKETNAME
+        uploadRequest.body = body
+        uploadRequest.key = key
+        uploadRequest.bucket = bucket
         
-        if let S3Client = self.transferManager {
-            S3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
+        if let s3Client = self.transferManager {
+            s3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
                 if task.result != nil {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        Log.debug("\(self) uploadFBUserDataToS3 sucess!")
+                        Log.debug("Success!")
                     })
                 }
                 return nil
             }
         }
+        
+    }
+    
+    func logErrorDataToS3(errorString: String) {
+        Log.enter()
+        
+        let randomNumber = arc4random()
+        var s3UploadKeyName = "\(NSDate().timeIntervalSince1970 * 1000)\(randomNumber).txt"
+        
+        if let deviceId = UIDevice.currentDevice().identifierForVendor?.UUIDString {
+            s3UploadKeyName = "\(deviceId).txt"
+        }
+        
+        if let localFile = prepareLocalFile(s3UploadKeyName, stringContent: errorString) {
+            
+            uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_ERROR_BUCKET)
+            
+        }
+    }
+    
+    func uploadFBUserDataToS3(userData: FBUserData) {
+        Log.enter()
+        
+        let randomNumber = arc4random()
+        
+        var s3UploadKeyName = "user\(NSDate().timeIntervalSince1970 * 1000)\(randomNumber).json"
+        
+        if let fbId = userData.facebookId {
+            s3UploadKeyName = fbId + ".json"
+        }
+        
+        if let jsonString = Mapper().toJSONString(userData),
+            let localFile = prepareLocalFile(s3UploadKeyName, stringContent: jsonString) {
+                
+                uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_COLLECTION_BUCKET)
+                
+        }
+        
+        Log.exit()
     }
     
 }
