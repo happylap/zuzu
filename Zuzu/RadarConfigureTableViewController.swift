@@ -35,6 +35,7 @@ class RadarConfigureTableViewController: UITableViewController {
         static let pricePicker = 3
         static let sizeLabel = 4
         static let sizePicker = 5
+        static let moreFilters = 6
     }
     
     //Cache Configs
@@ -708,14 +709,22 @@ class RadarConfigureTableViewController: UITableViewController {
             
         case CellConst.area: //Area Picker
             ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
-            //self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             let cityRegionVC = storyboard.instantiateViewControllerWithIdentifier("CityRegionContainer") as! CityRegionContainerController
-            self.showViewController(cityRegionVC, sender: self)
             cityRegionVC.delegate = self
             if let regionSelectionState = currentCriteria.region {
                 cityRegionVC.regionSelectionState = regionSelectionState
             }
+            self.showViewController(cityRegionVC, sender: self)
+
+        case CellConst.moreFilters: //More Filters
+            let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+            let ftvc = storyboard.instantiateViewControllerWithIdentifier("FilterTableView") as! FilterTableViewController
+            //ftvc.selectedFilterIdSet = self.selectedFilterIdSet
+            
+            ftvc.filterDelegate = self
+            
+            self.showViewController(ftvc, sender: self)
             
         default: break
         }
@@ -1164,6 +1173,68 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
     }
 }
 
+// MARK: - FilterTableViewControllerDelegate
+extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
+    
+    private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
+        
+        /*let filterGroups = self.convertToFilterGroup(filteridSet)
+        
+        var allFiltersDic = [String:String]()
+        
+        for filterGroup in filterGroups {
+            let filterPair = filterGroup.filterDic
+            
+            for (key, value) in filterPair {
+                allFiltersDic[key] = value
+            }
+        }
+        
+        return allFiltersDic*/
+        
+        return [String:String]()
+    }
+    
+    func onFiltersReset() {
+        //self.filterDataStore.clearFilterSetting()
+    }
+    
+    
+    func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        
+        /*Log.debug("onFiltersSelected: \(selectedFilterIdSet)")
+        
+        /// Update & Persist Filter Changes
+        self.updateSelectedFilterIdSet(selectedFilterIdSet)*/
+    }
+    
+    func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        
+        /*
+        /// Filter Selection is done
+        if let searchCriteria = self.searchCriteria {
+            
+            searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
+            
+            ///GA Tracker
+            dispatch_async(GlobalBackgroundQueue) {
+                
+                if let filters = searchCriteria.filters {
+                    for (key, value) in filters {
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Filter,
+                            action: key,
+                            label: value)
+                    }
+                }
+                
+            }
+            
+        }
+        
+        reloadDataWithNewCriteria(self.searchCriteria)*/
+        
+    }
+}
 
 // MARK: - SearchCriteriaObserverDelegate
 extension RadarConfigureTableViewController : RegionItemCountCriteriaObserverDelegate {
