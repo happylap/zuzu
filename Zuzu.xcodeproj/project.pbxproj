@@ -124,7 +124,6 @@
 		81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C761C365F9A00450761 /* AmazonClientManager.swift */; };
 		81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81390C8A1C37B0E800450761 /* CollectionItemService.swift */; };
 		816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8166358F1C5A8D64008C0AA3 /* CarouselView.swift */; };
-		816635941C5AA69D008C0AA3 /* CarouselView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635931C5AA69D008C0AA3 /* CarouselView2.swift */; };
 		816635961C5F17F6008C0AA3 /* ZuzuWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */; };
 		816635981C5F2CDA008C0AA3 /* NotifyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635971C5F2CDA008C0AA3 /* NotifyItem.swift */; };
 		8166359A1C608838008C0AA3 /* ZuzuUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635991C608838008C0AA3 /* ZuzuUser.swift */; };
@@ -295,7 +294,6 @@
 		81390C761C365F9A00450761 /* AmazonClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmazonClientManager.swift; sourceTree = "<group>"; };
 		81390C8A1C37B0E800450761 /* CollectionItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionItemService.swift; sourceTree = "<group>"; };
 		8166358F1C5A8D64008C0AA3 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
-		816635931C5AA69D008C0AA3 /* CarouselView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView2.swift; sourceTree = "<group>"; };
 		816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuWebService.swift; sourceTree = "<group>"; };
 		816635971C5F2CDA008C0AA3 /* NotifyItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotifyItem.swift; sourceTree = "<group>"; };
 		816635991C608838008C0AA3 /* ZuzuUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuUser.swift; sourceTree = "<group>"; };
@@ -615,7 +613,6 @@
 				2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */,
 				2FD49B701C58AE3700857EAE /* SearchResultAdCell.swift */,
 				2FD49B6E1C58AE0F00857EAE /* SearchResultAdCell.xib */,
-				816635931C5AA69D008C0AA3 /* CarouselView2.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -973,7 +970,6 @@
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				2FD49B711C58AE3700857EAE /* SearchResultAdCell.swift in Sources */,
 				14914FA21C27D09800025AC1 /* CollectionHouseItem.swift in Sources */,
-				816635941C5AA69D008C0AA3 /* CarouselView2.swift in Sources */,
 				14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */,
 				14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */,
 				81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */,
