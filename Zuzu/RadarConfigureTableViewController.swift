@@ -23,6 +23,7 @@ protocol RadarConfigureTableViewControllerDelegate: class {
 class RadarConfigureTableViewController: UITableViewController {
     
     var delegate: RadarConfigureTableViewControllerDelegate?
+    var filterGroups: [FilterGroup]?
     
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
@@ -541,6 +542,7 @@ class RadarConfigureTableViewController: UITableViewController {
             }
         }
         
+        searchCriteria.filterGroups = self.filterGroups
         self.delegate?.onCriteriaConfigureDone(searchCriteria)
         return searchCriteria
     }
@@ -1196,43 +1198,40 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     }
     
     func onFiltersReset() {
-        //self.filterDataStore.clearFilterSetting()
     }
     
     
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
-        
-        /*Log.debug("onFiltersSelected: \(selectedFilterIdSet)")
-        
-        /// Update & Persist Filter Changes
-        self.updateSelectedFilterIdSet(selectedFilterIdSet)*/
     }
     
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
-        /*
-        /// Filter Selection is done
-        if let searchCriteria = self.searchCriteria {
-            
-            searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
-            
-            ///GA Tracker
-            dispatch_async(GlobalBackgroundQueue) {
-                
-                if let filters = searchCriteria.filters {
-                    for (key, value) in filters {
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Filter,
-                            action: key,
-                            label: value)
-                    }
+        self.filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
+        self.stateToSearhCriteria()
+    }
+    
+    private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
+        
+        var filterGroupResult = [FilterGroup]()
+        
+        ///Walk through all items to generate the list of selected FilterGroup
+        for section in FilterTableViewController.filterSections {
+            for group in section.filterGroups {
+                if let selectedFilterId = selectedFilterIdSet[group.id] {
+                    let groupCopy = group.copy() as! FilterGroup
+                    
+                    let selectedFilters = group.filters.filter({ (filter) -> Bool in
+                        selectedFilterId.contains(filter.identifier)
+                    })
+                    
+                    groupCopy.filters = selectedFilters
+                    
+                    filterGroupResult.append(groupCopy)
                 }
-                
             }
-            
         }
         
-        reloadDataWithNewCriteria(self.searchCriteria)*/
-        
+        return filterGroupResult
     }
 }
 
