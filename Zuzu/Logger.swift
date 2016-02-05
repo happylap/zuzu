@@ -66,15 +66,16 @@ public struct Logger {
         
         #if DEBUG
             logger.setup(.Debug, showLogIdentifier: false, showThreadName: true, showLogLevel: true, showFileNames: true, showLineNumbers: true)
+            
+            /// Setup for NSLogger
+            LoggerSetOptions(LoggerGetDefaultLogger(), UInt32( kLoggerOption_BufferLogsUntilConnection | kLoggerOption_BrowseBonjour | kLoggerOption_BrowseOnlyLocalDomain ))
+            //LoggerSetupBonjour(LoggerGetDefaultLogger(), nil, "paimac")
+            LoggerStart(LoggerGetDefaultLogger())
+            logger.addLogDestination(XCGNSLoggerLogDestination(owner: logger, identifier: "nslogger.identifier"))
+            
         #else
             logger.setup(.Error, showLogIdentifier: false, showThreadName: true, showLogLevel: true, showFileNames: true, showLineNumbers: true)
         #endif
-        
-        /// Setup for NSLogger
-        LoggerSetOptions(LoggerGetDefaultLogger(), UInt32( kLoggerOption_BufferLogsUntilConnection | kLoggerOption_BrowseBonjour | kLoggerOption_BrowseOnlyLocalDomain ))
-        //LoggerSetupBonjour(LoggerGetDefaultLogger(), nil, "paimac")
-        LoggerStart(LoggerGetDefaultLogger())
-        logger.addLogDestination(XCGNSLoggerLogDestination(owner: logger, identifier: "nslogger.identifier"))
         
         return logger
     }

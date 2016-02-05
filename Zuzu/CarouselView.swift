@@ -101,18 +101,6 @@ class CarouselView: UIView {
 
     }
     
-    func addPlaceholderImage() {
-        let imageView = UIImageView(frame: scrollView.frame)
-        imageView.clipsToBounds = true
-        imageView.contentMode = UIViewContentMode.ScaleAspectFill
-        imageView.image = placeholderImage
-        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
-        imageView.userInteractionEnabled = true
-        imageView.addGestureRecognizer(tapGestureRecognizer)
-        
-        self.scrollView.addSubview(imageView)
-    }
-    
     func setupPhotos() {
         Log.enter()
         let n = self.imageUrls.count
@@ -241,8 +229,6 @@ extension CarouselView  {
     
     @objc private func imageTapped(img: UIImageView) {
         
-        print("imageTapped---")
-        
         if let tapHandler = tapHandler {
             tapHandler()
         }
@@ -267,13 +253,8 @@ extension CarouselView: UIScrollViewDelegate  {
             let size = imageView.frame.size
             
             if imageView.image == nil {
-//                LoadingSpinner.shared.setImmediateAppear(true)
-//                LoadingSpinner.shared.setOpacity(0.3)
-//                LoadingSpinner.shared.startOnView(imageView)
-                
-                imageView.af_setImageWithURL(url, placeholderImage: self.placeholderImage, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None) {
+                imageView.af_setImageWithURL(url, placeholderImage: nil, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None) {
                     (request, response, result) -> Void in
-//                    LoadingSpinner.shared.stop()
                 }
             }
         }
