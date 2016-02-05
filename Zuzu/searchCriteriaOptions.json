@@ -1,12 +1,24 @@
 {
     "priceRange": [
                    {
+                   "label": "2500",
+                   "value": 2500
+                   },
+                   {
                    "label": "5000",
                    "value": 5000
                    },
                    {
+                   "label": "7500",
+                   "value": 7500
+                   },
+                   {
                    "label": "10000",
                    "value": 10000
+                   },
+                   {
+                   "label": "12500",
+                   "value": 12500
                    },
                    {
                    "label": "15000",
@@ -37,8 +49,16 @@
     
     "sizeRange": [
                   {
+                  "label": "5",
+                  "value": 5
+                  },
+                  {
                   "label": "10",
                   "value": 10
+                  },
+                  {
+                  "label": "15",
+                  "value": 15
                   },
                   {
                   "label": "20",
