@@ -15,7 +15,7 @@ struct WebApiConst {
     
     struct Server {
         static let SCHEME = "http"
-        static let HOST = "192.168.100.23" // "127.0.0.1" , "192.168.100.23", "192.168.1.241"
+        static let HOST = "ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com"
         static let PORT = 4567
     }
     
@@ -88,6 +88,7 @@ class ZuzuWebService: NSObject
             return (mutableRequest, nil)
         })).responseString { (_, _, result) in
             Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
             
             switch result {
             case .Success: break
@@ -113,6 +114,7 @@ class ZuzuWebService: NSObject
             return (mutableRequest, nil)
         })).responseString { (_, _, result) in
             Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
             
             switch result {
             case .Success(let value):
@@ -139,10 +141,6 @@ class ZuzuWebService: NSObject
         zuzuCriteria.criteria = criteria
         
         let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
-        Log.debug("payload: \(payload)")
-        
-        let jsonString = Mapper<ZuzuCriteria>().toJSONString(zuzuCriteria)
-        Log.debug("jsonString: \(jsonString)")
         
         Alamofire.request(.POST, url, parameters: [:], encoding: .Custom({
             (convertible, params) in
@@ -152,6 +150,7 @@ class ZuzuWebService: NSObject
             return (mutableRequest, nil)
         })).responseString { (_, _, result) in
             Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
             
             switch result {
             case .Success(let value):
@@ -160,6 +159,96 @@ class ZuzuWebService: NSObject
             case .Failure(_, let error):
                 Log.debug("Error: \(error)")
                 handler(result: nil, error: error)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: ErrorType?) -> Void) {
+        Log.enter()
+        let url = "\(self.hostUrl)/criteria/\(userId)"
+        
+        Alamofire.request(.GET, url, encoding: .JSON)
+            .responseJSON { (_, _, result) in
+                Log.debug("URL: \(url)")
+                
+                switch result {
+                case .Success(let value):
+                    if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
+                        Log.debug("Success.")
+                        handler(result: zuzuCriteria, error: nil)
+                    } else {
+                        Log.debug("Transfor to SearchCriteria Error.")
+                        handler(result: nil, error: nil)
+                    }
+                    
+                case .Failure(_, let error):
+                    Log.debug("Error: \(error)")
+                    handler(result: nil, error: error)
+                }
+                
+        }
+        Log.exit()
+    }
+    
+    func updateCriteriaByUserId(userId: String, criteriaId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: String?, error: ErrorType?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/criteria/update/\(criteriaId)/\(userId)"
+        
+        let zuzuCriteria = ZuzuCriteria()
+        zuzuCriteria.enabled = true
+        zuzuCriteria.appleProductId = appleProductId
+        zuzuCriteria.criteria = criteria
+        
+        let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
+        
+        Alamofire.request(.PUT, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        })).responseString { (_, _, result) in
+            Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
+            
+            switch result {
+            case .Success(let value):
+                Log.debug("Success. \(value)")
+                handler(result: value, error: nil)
+            case .Failure(_, let error):
+                Log.debug("Error: \(error)")
+                handler(result: nil, error: error)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    func updateCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
+        
+        var payload = [[String: AnyObject]]()
+        payload.append(["op": "replace", "path": "/enabled", "value": enabled])
+        
+        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        })).responseString { (_, _, result) in
+            Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
+            
+            switch result {
+            case .Success: break
+            case .Failure(_, let error):
+                Log.debug("Error: \(error)")
             }
         }
         
