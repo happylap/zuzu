@@ -24,7 +24,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HPa-0u-dhH">
                                 <rect key="frame" x="0.0" y="214" width="600" height="386"/>
                                 <connections>
-                                    <segue destination="JCF-a3-JtA" kind="embed" id="c9I-6A-hSi"/>
+                                    <segue destination="JCF-a3-JtA" kind="embed" identifier="showRegionConfigureTable" id="c9I-6A-hSi"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qgH-TH-Bdj" userLabel="DisplayView">

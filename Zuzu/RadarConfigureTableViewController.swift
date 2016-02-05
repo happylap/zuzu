@@ -16,7 +16,13 @@ private let FileLog = Logger.fileLogger
 private let Log = Logger.defaultLogger
 
 
+protocol RadarConfigureTableViewControllerDelegate: class {
+    func onCriteriaConfigureDone(searchCriteria:SearchCriteria)
+}
+
 class RadarConfigureTableViewController: UITableViewController {
+    
+    var delegate: RadarConfigureTableViewControllerDelegate?
     
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
@@ -110,8 +116,6 @@ class RadarConfigureTableViewController: UITableViewController {
                 
                 regionLabel = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
                 
-            } else {
-                //self.fastItemCountLabel.text = nil
             }
         }
         
@@ -204,7 +208,6 @@ class RadarConfigureTableViewController: UITableViewController {
     @IBOutlet weak var pricePicker: UIPickerView!
     
     // MARK: - Private Utils
-    
     
     private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
         
@@ -537,6 +540,7 @@ class RadarConfigureTableViewController: UITableViewController {
             }
         }
         
+        self.delegate?.onCriteriaConfigureDone(searchCriteria)
         return searchCriteria
     }
     
@@ -816,7 +820,6 @@ class RadarConfigureTableViewController: UITableViewController {
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
     }
-    
 }
 
 

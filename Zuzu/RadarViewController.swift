@@ -11,6 +11,8 @@ private let Log = Logger.defaultLogger
 
 class RadarViewController: UIViewController {
     
+    var searchCriteria:SearchCriteria?
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
@@ -114,5 +116,36 @@ class RadarViewController: UIViewController {
     }
 
     */
+    
+    struct ViewTransConst {
+        static let showRegionConfigureTable:String = "showRegionConfigureTable"
+    }
+    
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier) \(self)")
+            
+            switch identifier{
+            case ViewTransConst.showRegionConfigureTable:
+                if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
+                    vc.delegate  = self
+                }
+                
+            default: break
+            }
+        }
+    }
+}
+
+// MARK: - SearchCriteriaObserverDelegate
+extension RadarViewController : RadarConfigureTableViewControllerDelegate {
+    
+    func onCriteriaConfigureDone(searchCriteria:SearchCriteria){
+        Log.debug("onCriteriaConfigureDone")
+        self.searchCriteria = searchCriteria
+    }
+
 }
 
