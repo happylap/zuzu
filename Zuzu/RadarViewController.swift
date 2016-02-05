@@ -35,6 +35,15 @@ class RadarViewController: UIViewController {
     
     @IBOutlet weak var activateButton: UIButton!
     
+    @IBAction func activateButtonClick(sender: UIButton) {
+        if self.searchCriteria != nil{
+            ZuzuWebService.sharedInstance.createCriteriaByUserId("test", appleProductId: "apple123", criteria: self.searchCriteria!) { (result, error) -> Void in
+                Log.debug(result)
+            }
+        }
+    }
+    
+    
     /*
     // MARK: - Navigation
     

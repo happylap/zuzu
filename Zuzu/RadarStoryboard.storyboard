@@ -83,6 +83,9 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYU-YW-y5a" userLabel="activateButton">
                                                         <rect key="frame" x="250" y="59" width="60" height="30"/>
                                                         <state key="normal" title="立即啟用"/>
+                                                        <connections>
+                                                            <action selector="activateButtonClick:" destination="OaS-ny-kO8" eventType="touchUpInside" id="Pc7-4z-RvG"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>
