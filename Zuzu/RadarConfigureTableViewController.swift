@@ -18,11 +18,6 @@ private let Log = Logger.defaultLogger
 
 class RadarConfigureTableViewController: UITableViewController {
     
-    struct ViewTransConst {
-        static let showSearchResult:String = "showSearchResult"
-        static let showAreaSelector:String = "showAreaSelector"
-    }
-    
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
     }
@@ -34,17 +29,12 @@ class RadarConfigureTableViewController: UITableViewController {
         static let pricePicker = 3
         static let sizeLabel = 4
         static let sizePicker = 5
-        static let searchHistory = 8
     }
     
     //Cache Configs
     let cacheName = "itemCountCache"
     let cacheKey = "itemCountByRegion"
     let cacheTime:Double = 12 * 60 * 60 //12 hours
-    
-    //The current position detected by GPS
-    private var placeMark: CLPlacemark?
-    private var locationTracked: Bool = false
     
     // Price & Size Picker Vars
     struct PickerConst {
@@ -55,25 +45,6 @@ class RadarConfigureTableViewController: UITableViewController {
         static let lowerCompIdx = 0
         static let upperCompIdx = 1
     }
-    
-    // UILabel for empty search lisy
-    let noSearchHistoryLabel = UILabel()
-    
-    var alertViewResponder: SCLAlertViewResponder?
-    
-    var locationManagerActive = false {
-        didSet {
-            if(locationManagerActive) {
-                ///Allow tracking current location again
-                locationTracked = false
-                locationManager.startUpdatingLocation()
-            } else {
-                locationManager.stopUpdatingLocation()
-            }
-        }
-    }
-    
-    let locationManager = CLLocationManager()
     
     var regionSelectionState: [City]? {
         didSet {
@@ -234,45 +205,6 @@ class RadarConfigureTableViewController: UITableViewController {
     
     // MARK: - Private Utils
     
-    private func alertChoosingRegion(currentCity: City?) {
-        
-        let regionChoiceAlertView = SCLAlertView()
-        
-        var subTitle = "請選擇地區以進行租屋搜尋"
-        
-        if let currentCity = currentCity {
-            var regionName = "\(currentCity.name)"
-            
-            if let cityRegion = currentCity.regions.first {
-                regionName = "\(regionName) \(cityRegion.name)"
-            }
-            
-            subTitle = "豬豬成功定位您的當前位置！\n\n\(regionName)"
-            
-            regionChoiceAlertView.addButton("使用當前位置") {
-                self.setRegionToCriteria(currentCity)
-                self.performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
-            }
-            
-            regionChoiceAlertView.addButton("自行選擇地區") {
-                self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
-            }
-            
-        } else {
-            
-            regionChoiceAlertView.addButton("選擇地區") {
-                self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
-            }
-            
-            regionChoiceAlertView.addButton("關閉") {
-            }
-        }
-        
-        regionChoiceAlertView.showCloseButton = false
-        
-        self.alertViewResponder = regionChoiceAlertView.showTitle("尚未選擇欲搜尋地區", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
-        
-    }
     
     private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
         
@@ -757,34 +689,6 @@ class RadarConfigureTableViewController: UITableViewController {
         }
     }
     
-    func onSearchButtonClicked(sender: UIButton) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        //Hide size & price pickers
-        self.setRowVisible(CellConst.pricePicker, visible: false)
-        self.setRowVisible(CellConst.sizePicker, visible: false)
-        
-        //Validate field
-        if(currentCriteria.region?.count <= 0) {
-            
-            if let placeMark = self.placeMark {
-                let currentCity = self.getDefaultLocation(placeMark)
-                
-                alertChoosingRegion(currentCity)
-                
-            } else {
-                
-                alertChoosingRegion(nil)
-                
-            }
-            
-            return
-        }
-        
-        //present the view modally (hide the tabbar)
-        performSegueWithIdentifier(ViewTransConst.showSearchResult, sender: nil)
-    }
-    
     func onDismissCurrentView(sender: UIBarButtonItem) {
         Log.info("Sender: \(sender)", label: ActionLabel)
         navigationController?.popToRootViewControllerAnimated(true)
@@ -884,27 +788,10 @@ class RadarConfigureTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.enter()
         
         //Restore hidden tab bar before apeearing
         self.tabBarController!.tabBarHidden = false
         
-        //Configure location manager
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        
-        //Try to start monitoring location
-        if let regionList = currentCriteria.region where !regionList.isEmpty {
-            locationManagerActive = false
-        } else {
-            locationManagerActive = true
-        }
-        
-        //Google Analytics Tracker
-        self.trackScreen()
-        
-        Log.exit()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -928,85 +815,6 @@ class RadarConfigureTableViewController: UITableViewController {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        Log.enter()
-        
-        //Disable location monitoring
-        locationManagerActive = false
-        
-        Log.exit()
-    }
-    
-    // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if let identifier = segue.identifier{
-            
-            Log.info("Segue : \(identifier)")
-            
-            switch identifier{
-            case ViewTransConst.showSearchResult:
-                if let srtvc = segue.destinationViewController as? SearchResultViewController {
-                    
-                    ///GA Tracker
-                    dispatch_async(GlobalBackgroundQueue) {
-                        
-                        if let priceRange = self.currentCriteria.price {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.PriceMin,
-                                label: String(priceRange.0))
-                            
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.PriceMax,
-                                label: String(priceRange.1))
-                        }
-                        
-                        if let sizeRange = self.currentCriteria.size {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.SizeMin,
-                                label: String(sizeRange.0))
-                            
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.SizeMax,
-                                label: String(sizeRange.1))
-                        }
-                        
-                        if let types = self.currentCriteria.types {
-                            for type in types {
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                    action: GAConst.Action.SearchHouse.Type, label: String(type))
-                            }
-                        } else {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse, action:
-                                GAConst.Action.SearchHouse.Type, label: "99")
-                        }
-                        
-                    }
-                    
-                    ///Collect the search criteria set by the user
-                    srtvc.searchCriteria = currentCriteria
-                    
-                    ///Save the final search criteria
-                    if(!currentCriteria.isEmpty()) {
-                        criteriaDataStore.saveSearchCriteria(currentCriteria)
-                    }
-                    
-                }
-            case ViewTransConst.showAreaSelector:
-                
-                ///Setup delegat to receive result
-                if let vc = segue.destinationViewController as? CityRegionContainerController {
-                    vc.delegate = self
-                    
-                    if let regionSelectionState = currentCriteria.region {
-                        vc.regionSelectionState = regionSelectionState
-                    }
-                }
-                
-                navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "onDismissCurrentView:")
-                
-            default: break
-            }
-        }
     }
     
 }
@@ -1334,12 +1142,6 @@ extension RadarConfigureTableViewController: UIPickerViewDelegate, UIPickerViewD
 extension RadarConfigureTableViewController : CityRegionContainerControllerDelegate {
     func onCitySelectionDone(regions:[City]) {
         
-        if(regions.isEmpty) {
-            locationManagerActive = true
-        } else {
-            locationManagerActive = false
-        }
-        
         regionSelectionState = regions
         
         currentCriteria = self.stateToSearhCriteria()
@@ -1359,89 +1161,6 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
     }
 }
 
-// MARK: - CLLocationManagerDelegate
-extension RadarConfigureTableViewController : CLLocationManagerDelegate {
-    
-    private func getDefaultLocation(placemark: CLPlacemark?) -> City {
-        
-        var currentCity = City(code: 100, name: "台北市", regions: [Region.allRegions])
-        
-        let codeToCityMap = ConfigLoader.CodeToCityMap
-        
-        if let placemark = placemark {
-            let postalCode = placemark.postalCode
-            
-            for (_, city) in codeToCityMap {
-                
-                if let region = city.regions.filter({ (region) -> Bool in
-                    return String(region.code) == postalCode
-                }).first {
-                    
-                    currentCity = City(code: city.code, name: city.name, regions: [region])
-                    break
-                }
-                
-            }
-            
-        }
-        
-        FileLog.debug("\(currentCity)")
-        
-        return currentCity
-    }
-    
-    private func setRegionToCriteria(city:City) {
-        
-        //stop updating location to save battery life
-        locationManagerActive = false
-        
-        if (currentCriteria.region == nil ||  currentCriteria.region?.count == 0) {
-            currentCriteria.region = [city]
-            
-            ///Update Region (self.populateViewFromSearchCriteria cause some abnormal behavior for size/city picker)
-            regionSelectionState = currentCriteria.region
-            
-            currentCriteria = self.stateToSearhCriteria()
-        }
-    }
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        FileLog.debug("Location update: \(manager.location?.coordinate)")
-        
-        CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error) -> Void in
-            if let error = error {
-                FileLog.debug("Reverse geocoder failed error = \(error.localizedDescription)")
-                return
-            }
-            
-            if let placemarks = placemarks where placemarks.count > 0 {
-                if let pm = placemarks.first {
-                    
-                    FileLog.debug("Location lookup: \(pm.postalCode ?? "-"), \(pm.name ?? "-"), , \(pm.locality ?? "-")")
-                    
-                    self.placeMark = pm
-                    
-                    if(!self.locationTracked) {
-                        ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.CurrentLocation, label: pm.postalCode)
-                        
-                        self.locationTracked = true
-                    }
-                    
-                }
-            } else {
-                FileLog.debug("Problem with the data received from geocoder")
-            }
-        })
-    }
-    
-    
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        FileLog.error("Updating location failed error = \(error.localizedDescription)")
-    }
-}
 
 // MARK: - SearchCriteriaObserverDelegate
 extension RadarConfigureTableViewController : RegionItemCountCriteriaObserverDelegate {
