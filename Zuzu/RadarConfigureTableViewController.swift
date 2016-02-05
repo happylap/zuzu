@@ -28,13 +28,12 @@ class RadarConfigureTableViewController: UITableViewController {
     }
     
     struct CellConst {
-        static let searchBar = 0
-        static let area = 1
-        static let houseType = 2
-        static let priceLabel = 3
-        static let pricePicker = 4
-        static let sizeLabel = 5
-        static let sizePicker = 6
+        static let area = 0
+        static let houseType = 1
+        static let priceLabel = 2
+        static let pricePicker = 3
+        static let sizeLabel = 4
+        static let sizePicker = 5
         static let searchHistory = 8
     }
     
@@ -801,8 +800,14 @@ class RadarConfigureTableViewController: UITableViewController {
             
         case CellConst.area: //Area Picker
             ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
-            self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
-            
+            //self.performSegueWithIdentifier(ViewTransConst.showAreaSelector, sender: nil)
+            let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
+            let cityRegionVC = storyboard.instantiateViewControllerWithIdentifier("CityRegionContainer") as! CityRegionContainerController
+            self.showViewController(cityRegionVC, sender: self)
+            cityRegionVC.delegate = self
+            if let regionSelectionState = currentCriteria.region {
+                cityRegionVC.regionSelectionState = regionSelectionState
+            }
             
         default: break
         }
@@ -881,9 +886,6 @@ class RadarConfigureTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         Log.enter()
         
-        //Scroll main table to the Search Bar
-        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: CellConst.searchBar, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-
         //Restore hidden tab bar before apeearing
         self.tabBarController!.tabBarHidden = false
         
