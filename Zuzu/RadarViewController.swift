@@ -26,6 +26,13 @@ class RadarViewController: UIViewController {
     }
     
     
+    @IBOutlet weak var regionLabel: UILabel!
+    @IBOutlet weak var houseInfoLabel: UILabel!
+    
+    @IBOutlet weak var otherCriteriaLabel: UILabel!
+    
+    @IBOutlet weak var activateButton: UIButton!
+    
     /*
     // MARK: - Navigation
     
