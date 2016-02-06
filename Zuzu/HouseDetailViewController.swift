@@ -651,8 +651,7 @@ class HouseDetailViewController: UIViewController {
         alertView.addButton("馬上去看看") {
             UserDefaultsUtils.disableMyCollectionPrompt()
             
-            let parentViewController = self.navigationController?.popViewControllerAnimated(true)
-            parentViewController?.tabBarController?.selectedIndex = 1
+            NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : 1])
         }
         
         alertView.addButton("不需要") {
