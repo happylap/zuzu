@@ -754,7 +754,7 @@ class SearchBoxTableViewController: UITableViewController {
     // MARK: - UI Control Actions
     
     
-    //The UI control event handler Should not be private    
+    //The UI control event handler Should not be private
     @IBAction func onAppRatingButtonTouched(sender: UIBarButtonItem) {
         Log.info("Sender: \(sender)", label: ActionLabel)
         
@@ -1349,20 +1349,6 @@ extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSo
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
-            
-            if(pickerView == pricePicker && component == 1) {
-                Log.debug("Upper Price: com = \(component), row = \(row), label = \(rowItem.label)")
-            }
-            
-            return rowItem.label
-        } else {
-            return ""
-        }
-    }
-    
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
         var targetItems:[[(label:String, value:Int)]]
@@ -1515,6 +1501,30 @@ extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSo
         updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
         
         currentCriteria = self.stateToSearhCriteria()
+    }
+    
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        
+        var valueText: String = ""
+        
+        if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
+            
+            if(pickerView == pricePicker && component == 1) {
+                Log.debug("Upper Price: com = \(component), row = \(row), label = \(rowItem.label)")
+            }
+            
+            valueText = rowItem.label
+        }
+        
+        let pickerLabel = (view as? UILabel) ?? UILabel()
+        
+        pickerLabel.text = valueText
+        pickerLabel.font = UIFont.systemFontOfSize(18)
+        pickerLabel.autoScaleFontSize = true
+        pickerLabel.textAlignment = NSTextAlignment.Center
+        
+        return pickerLabel
     }
 }
 
