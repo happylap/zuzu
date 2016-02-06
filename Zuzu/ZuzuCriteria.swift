@@ -118,17 +118,16 @@ class ZuzuCriteria: NSObject, Mappable {
                     for filter: Filter in filters {
                 
                         // Special: 不要地下室
-                        if filter.key == "floor" && json["basement"].stringValue == filter.value {
+                        if filter.key == "floor" && json["basement"].stringValue == "false" {
                             selectedFilters.append(filter)
                             continue
                         }
                         
                         if json[filter.key].stringValue == filter.value {
                             selectedFilters.append(filter)
+                            continue
                         }
                     }
-                    
-                    continue
                 }
                 
                 // Type: 房客性別, 最短租期
@@ -137,10 +136,9 @@ class ZuzuCriteria: NSObject, Mappable {
                     for filter: Filter in filters {
                         if json[filter.key].stringValue == filter.value {
                             selectedFilters.append(filter)
+                            continue
                         }
                     }
-                    
-                    continue
                 }
                 
                 // Special: 交通站點 (捷運, 公車, 火車, 高鐵)
@@ -149,10 +147,9 @@ class ZuzuCriteria: NSObject, Mappable {
                     for filter: Filter in filters {
                         if json[filter.key].stringValue == "true" {
                             selectedFilters.append(filter)
+                            continue
                         }
                     }
-                    
-                    continue
                 }
                 
                 // Type: 型態, 格局, 經辦人, 房客身分, 附傢俱, 附設備, 周邊機能
@@ -171,6 +168,7 @@ class ZuzuCriteria: NSObject, Mappable {
                                 
                                 if jsonValueArray.contains(filter.value) {
                                     selectedFilters.append(filter)
+                                    continue
                                 }
                             }
                         

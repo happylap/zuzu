@@ -227,7 +227,7 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func updateCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool) {
+    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool) {
         Log.enter()
         
         let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
