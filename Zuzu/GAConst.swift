@@ -109,6 +109,10 @@ struct GAConst {
             static let FilteredResult = "filteredResult"
             
             static let LoadPage = "loadPage"
+            
+            static let DuplicateItemContinue = "DuplicateItemContinue"
+            
+            static let DuplicateItemView = "DuplicateItemView"
         }
 
         
