@@ -216,6 +216,11 @@ class DuplicateHouseViewController: UIViewController {
         self.delegate?.onContinue()
         
         self.dismissViewControllerAnimated(true, completion: nil)
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+            action: GAConst.Action.SearchHouse.DuplicateItemContinue,
+            label: houseItem?.id)
     }
     
     func onCancelButtonTouched(sender: UIButton) {
@@ -263,6 +268,13 @@ class DuplicateHouseViewController: UIViewController {
         if(enableAutoForward) {
             currentTimer = NSTimer.scheduledTimerWithTimeInterval(countDownInterval, target: self, selector: "onCheckForwardTriggered", userInfo: nil, repeats: true)
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func didReceiveMemoryWarning() {
@@ -346,6 +358,11 @@ extension DuplicateHouseViewController: UITableViewDataSource, UITableViewDelega
             self.delegate?.onViewDuplicate(houseItem)
             
             self.dismissViewControllerAnimated(true, completion: nil)
+            
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                action: GAConst.Action.SearchHouse.DuplicateItemView,
+                label: houseItem.id)
             
         }
     }
