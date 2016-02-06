@@ -324,7 +324,7 @@ class SearchResultViewController: UIViewController {
         
         ///  Set navigation bar title according to the number of result
         if(dataSource.estimatedTotalResults > 0) {
-            self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆結果"
+            self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆"
         } else {
             self.navigationItem.title = "查無資料"
             
