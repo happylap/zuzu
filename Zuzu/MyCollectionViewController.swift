@@ -373,6 +373,12 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.trackScreen()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        
+        ///Show tab bar
+        self.tabBarController!.tabBarHidden = false
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

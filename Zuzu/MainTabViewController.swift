@@ -20,6 +20,8 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismissAllViewControllers:", name: "switchToTab", object: nil)
+        
         AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
             }
@@ -34,10 +36,10 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
-
+        
         let notificationStoryboard:UIStoryboard = UIStoryboard(name: "NotificationStoryboard", bundle: nil)
         let notificationViewController:UIViewController = notificationStoryboard.instantiateInitialViewController()!
- 
+        
         var tabViewControllers = [UIViewController]()
         
         tabViewControllers.append(searchViewController)
@@ -90,6 +92,22 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         return true
     }
     
+    func dismissAllViewControllers(notification: NSNotification) {
+        
+        if let userInfo = notification.userInfo,
+            let tabIndex = userInfo["targetTab"] as? Int{
+                
+                // dismiss all view controllers in the navigation stack
+                if let viewControllers = self.viewControllers as? [UINavigationController] {
+                    for vc in viewControllers {
+                        vc.dismissViewControllerAnimated(true, completion: nil)
+                        //vc.popToRootViewControllerAnimated(false)
+                    }
+                }
+                
+                self.selectedIndex = tabIndex
+        }
+    }
 }
 
 extension UITabBarController {

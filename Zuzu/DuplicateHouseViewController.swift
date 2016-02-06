@@ -137,8 +137,7 @@ class DuplicateHouseViewController: UIViewController {
         alertView.addButton("馬上去看看") {
             UserDefaultsUtils.disableMyCollectionPrompt()
             
-            let parentViewController = self.navigationController?.popViewControllerAnimated(true)
-            parentViewController?.tabBarController?.selectedIndex = 1
+            NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : 1])
         }
         
         alertView.addButton("不需要") {
@@ -147,7 +146,7 @@ class DuplicateHouseViewController: UIViewController {
         
         alertView.showCloseButton = false
         
-        alertView.showTitle("新增到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+        alertView.showTitle("成功加入收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
     }
     
     private func handleAddToCollection(houseItem: HouseItem) {
