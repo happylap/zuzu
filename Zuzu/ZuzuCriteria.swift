@@ -112,6 +112,17 @@ class ZuzuCriteria: NSObject, Mappable {
                 
                 var selectedFilters = [Filter]()
                 
+                // Special: 交通站點 (捷運, 公車, 火車, 高鐵)
+                if filterGroup.id == "public_trans" {
+                    
+                    for filter: Filter in filters {
+                        if json[filter.key].stringValue == "true" {
+                            selectedFilters.append(filter)
+                            continue
+                        }
+                    }
+                }
+                
                 // Type: 附車位, 不要地下室, 不要頂樓加蓋, 可養寵物, 可開伙
                 if filterGroup.type == DisplayType.SimpleView {
                     
@@ -125,7 +136,6 @@ class ZuzuCriteria: NSObject, Mappable {
                         
                         if json[filter.key].stringValue == filter.value {
                             selectedFilters.append(filter)
-                            continue
                         }
                     }
                 }
@@ -136,18 +146,6 @@ class ZuzuCriteria: NSObject, Mappable {
                     for filter: Filter in filters {
                         if json[filter.key].stringValue == filter.value {
                             selectedFilters.append(filter)
-                            continue
-                        }
-                    }
-                }
-                
-                // Special: 交通站點 (捷運, 公車, 火車, 高鐵)
-                if filterGroup.id == "public_trans" {
-                    
-                    for filter: Filter in filters {
-                        if json[filter.key].stringValue == "true" {
-                            selectedFilters.append(filter)
-                            continue
                         }
                     }
                 }
@@ -156,19 +154,20 @@ class ZuzuCriteria: NSObject, Mappable {
                 if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.MultiChoice {
                     
                     if let filterKey = filters.first?.key,
-                        let jsonValueArray = json[filterKey]["value"].arrayObject as? [String] {
+                        let jsonValueArray = json[filterKey]["value"].arrayObject as? [Int] {
                             
                             for filter: Filter in filters {
                             
                                 // Special: 格局 (5房以上)
-                                if filter.key == "num_bedroom" && filter.value == "[5 TO *]" && jsonValueArray.contains("5") {
+                                if filter.key == "num_bedroom" && filter.value == "[5 TO *]" && jsonValueArray.contains(5) {
                                     selectedFilters.append(filter)
                                     continue
                                 }
                                 
-                                if jsonValueArray.contains(filter.value) {
-                                    selectedFilters.append(filter)
-                                    continue
+                                if let filterValue: Int = Int(filter.value) {
+                                    if jsonValueArray.contains(filterValue) {
+                                        selectedFilters.append(filter)
+                                    }
                                 }
                             }
                         
@@ -245,60 +244,75 @@ class ZuzuCriteria: NSObject, Mappable {
                 
                 for filterGroup: FilterGroup in filterGroups {
                     
-                    if let filterKey: String = filterGroup.filters.first?.key,
-                        let firstValue = filterGroup.filters.first?.value {
-                            
-                            // Type: 附車位, 不要地下室, 不要頂樓加蓋, 可養寵物, 可開伙
-                            if filterGroup.type == DisplayType.SimpleView {
-                                
-                                // Special: 不要地下室
-                                if filterKey == "floor" {
-                                    JSONDict["basement"] = "false"
+                    // Type: 附車位, 不要地下室, 不要頂樓加蓋, 可養寵物, 可開伙
+                    if filterGroup.type == DisplayType.SimpleView {
+                        if let filterKey: String = filterGroup.filters.first?.key {
+                            // Special: 不要地下室
+                            if filterKey == "floor" {
+                                JSONDict["basement"] = false
+                                continue
+                            }
+                        
+                            if let firstValue = filterGroup.filters.first?.value {
+                                if firstValue == "true" {
+                                    JSONDict[filterKey] = true
+                                    continue
+                                } else if firstValue == "false" {
+                                    JSONDict[filterKey] = false
                                     continue
                                 }
+                            }
+                        }
+                    }
+                    
+                    // Type: 房客性別, 最短租期
+                    if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.SingleChoice {
+                        if let filterKey: String = filterGroup.filters.first?.key,
+                            let firstValue = filterGroup.filters.first?.value {
+                                if let value = Int(firstValue) {
+                                    JSONDict[filterKey] = value
+                                    continue
+                                }
+                        }
+                    }
+                    
+                    // Type: 型態, 格局, 經辦人, 房客身分, 附傢俱, 附設備, 周邊機能, 交通站點
+                    if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.MultiChoice {
+                        
+                        if let filterKey: String = filterGroup.filters.first?.key,
+                            let logicType = filterGroup.logicType?.rawValue {
                                 
-                                JSONDict[filterKey] = firstValue
-                            }
-                            
-                            // Type: 房客性別, 最短租期
-                            if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.SingleChoice {
-                                JSONDict[filterKey] = firstValue
-                            }
-                            
-                            // Type: 型態, 格局, 經辦人, 房客身分, 附傢俱, 附設備, 周邊機能, 交通站點
-                            if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.MultiChoice {
-                                if let logicType = filterGroup.logicType?.rawValue {
-                                    var values = [String]()
-                                    for filter: Filter in filterGroup.filters {
-                                        
-                                        // 忽略 "不限" Filter
-                                        if filter.key == "unlimited" {
-                                            continue
-                                        }
-                                        
-                                        // Special: 格局 (5房以上)
-                                        if filter.key == "num_bedroom" && filter.value == "[5 TO *]" {
-                                            values.append("5")
-                                            continue
-                                        }
-                                        
-                                        // Special: 交通站點 (捷運, 公車, 火車, 高鐵)
-                                        if ["nearby_mrt", "nearby_bus", "nearby_train", "nearby_thsr"].contains(filter.key) {
-                                            JSONDict[filter.key] = "true"
-                                            continue
-                                        }
-                                        
-                                        if let value: String = filter.value {
-                                            values.append(value)
-                                        }
+                                var valueArray = [Int]()
+                                
+                                for filter: Filter in filterGroup.filters {
+                                    
+                                    // 忽略 "不限" Filter
+                                    if filter.key == "unlimited" {
+                                        continue
                                     }
                                     
-                                    if values.count > 0 {
-                                        JSONDict[filterKey] = ["operator":  logicType, "value": values]
+                                    // Special: 交通站點 (捷運, 公車, 火車, 高鐵)
+                                    if ["nearby_mrt", "nearby_bus", "nearby_train", "nearby_thsr"].contains(filter.key) {
+                                        JSONDict[filter.key] = true
+                                        continue
+                                    }
+                                    
+                                    // Special: 格局 (5房以上)
+                                    if filter.key == "num_bedroom" && filter.value == "[5 TO *]" {
+                                        valueArray.append(5)
+                                        continue
+                                    }
+                                    
+                                    if let value: Int = Int(filter.value) {
+                                        valueArray.append(value)
                                     }
                                 }
-                            }
+                                
+                                if valueArray.count > 0 {
+                                    JSONDict[filterKey] = ["operator":  logicType, "value": valueArray]
+                                }
                             
+                        }
                     }
                 }
             }
