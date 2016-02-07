@@ -33,6 +33,11 @@ class FilterStatusBarView: UIView {
     ///The correct place to layout subviews (with correct frame & bounds info)
     override func layoutSubviews() {
         Log.verbose("layoutSubviews")
+        
+        /// Adjust View Position
+        self.frame.size.height = statusBarHeight
+        
+        Log.verbose("frame = \(self.frame)")
     }
     
     
@@ -42,15 +47,6 @@ class FilterStatusBarView: UIView {
     
     private func setup() {
         self.backgroundColor = bgColor
-        
-        /// Adjust View Position
-        var parentRect = self.frame
-        
-        parentRect.size.height = statusBarHeight
-        
-        self.frame = parentRect
-        
-        Log.verbose("\(self) frame = \(self.frame)")
         
         /// Setup Text, Position in the center
         statusText.translatesAutoresizingMaskIntoConstraints = false
