@@ -144,6 +144,13 @@ class ZuzuCriteria: NSObject, Mappable {
                 if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.SingleChoice {
                     
                     for filter: Filter in filters {
+                        
+                        // Special: 最短租期
+                        if filter.key == "shortest_lease" && filter.value.rangeOfString(json[filter.key].stringValue) != nil {
+                            selectedFilters.append(filter)
+                            continue
+                        }
+                        
                         if json[filter.key].stringValue == filter.value {
                             selectedFilters.append(filter)
                         }
@@ -269,6 +276,18 @@ class ZuzuCriteria: NSObject, Mappable {
                     if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.SingleChoice {
                         if let filterKey: String = filterGroup.filters.first?.key,
                             let firstValue = filterGroup.filters.first?.value {
+                                
+                                // Special: 最短租期
+                                if filterKey == "shortest_lease" {
+                                    
+                                    if let value = firstValue.stringByReplacingOccurrencesOfString("]", withString: "").stringByReplacingOccurrencesOfString("[", withString: "").componentsSeparatedByString(" ").last {
+                                        if let intValue = Int(value) {
+                                            JSONDict[filterKey] = intValue
+                                            continue
+                                        }
+                                    }
+                                }
+                                
                                 if let value = Int(firstValue) {
                                     JSONDict[filterKey] = value
                                     continue
