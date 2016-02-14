@@ -227,6 +227,47 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
+    func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: String?, error: ErrorType?) -> Void) {
+
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
+        
+        var payload = [[String: AnyObject]]()
+        
+        let zuzuCriteria = ZuzuCriteria()
+        zuzuCriteria.criteria = criteria
+        let JSONDict = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
+        if let filters = JSONDict["filters"] {
+            let jsonData = try! NSJSONSerialization.dataWithJSONObject(filters, options: [])
+            let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
+            payload.append(["op": "replace", "path": "/filters", "value": jsonString])
+        }
+        
+        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        })).responseString { (_, _, result) in
+            Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
+            
+            switch result {
+            case .Success(let value):
+                Log.debug("Success. \(value)")
+                handler(result: value, error: nil)
+            case .Failure(_, let error):
+                Log.debug("Error: \(error)")
+                handler(result: nil, error: error)
+            }
+        }
+        
+        Log.exit()
+    }
+
+    
     func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool) {
         Log.enter()
         
