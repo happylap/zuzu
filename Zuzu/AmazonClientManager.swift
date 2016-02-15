@@ -104,7 +104,7 @@ class AmazonClientManager : NSObject {
             case Provider.FB.rawValue:
                 self.reloadFBSession()
             case Provider.GOOGLE.rawValue:
-                 self.reloadGSession()
+                self.reloadGSession()
             default:
                 assert(false, "Invalid Provider")
             }
@@ -264,6 +264,7 @@ class AmazonClientManager : NSObject {
     }
     
     func logOut(completionHandler: AWSContinuationBlock) {
+        
         if self.isLoggedInWithFacebook() {
             self.fbLogout()
         }
@@ -302,7 +303,7 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    func fbLogin(theViewController: UIViewController?) {
+    func fbLogin(theViewController: UIViewController) {
         if FBSDKAccessToken.currentAccessToken() != nil {
             self.completeFBLogin()
         } else {
@@ -318,9 +319,9 @@ class AmazonClientManager : NSObject {
                     }
                     
                     ///GA Tracker: Login failed
-                    //                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                    //                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), \(error.userInfo)")
-                    //
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), \(error.userInfo)")
+                    
                     Log.warning("Error: \(error.userInfo)")
                     
                     self.fbLogout()
@@ -328,8 +329,8 @@ class AmazonClientManager : NSObject {
                 } else if result.isCancelled {
                     
                     ///GA Tracker: Login cancelled
-                    //                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                    //                        action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginCancel, label: GAConst.Label.LoginType.Facebook)
                     
                     Log.warning("Cancelled")
                     
@@ -340,8 +341,8 @@ class AmazonClientManager : NSObject {
                     self.completeFBLogin()
                     
                     ///GA Tracker: Login successful
-                    //                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                    //                        action: GAConst.Action.MyCollection.Login, label: GAConst.Label.LoginType.Facebook)
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                        action: GAConst.Action.MyCollection.Login, label: GAConst.Label.LoginType.Facebook)
                 }
             })
         }
@@ -358,7 +359,7 @@ class AmazonClientManager : NSObject {
     
     
     func completeFBLogin() {
-
+        
         UserDefaultsUtils.setLoginProvider(Provider.FB.rawValue)
         
         self.completeLogin(["graph.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
@@ -425,12 +426,7 @@ class AmazonClientManager : NSObject {
         }
         
         self.googleSignIn?.delegate = self
-        
-        if let uiDelegate = theViewController as? GIDSignInUIDelegate {
-            self.googleSignIn?.uiDelegate = uiDelegate
-        } else {
-            self.googleSignIn?.allowsSignInWithWebView = false
-        }
+        self.googleSignIn?.uiDelegate = theViewController as! GIDSignInUIDelegate
         
         self.googleSignIn?.signIn()
     }
@@ -676,7 +672,7 @@ extension AmazonClientManager: GIDSignInDelegate {
                 
                 // Perform any operations on signed in user here.
                 let idToken = user.authentication.idToken // Safe to send to the server
-
+                
                 let userId = user.userID // For client-side use only!
                 let name = user.profile.name
                 let email = user.profile.email
@@ -706,4 +702,8 @@ extension AmazonClientManager: GIDSignInDelegate {
                 Log.warning("Error: \(error.userInfo), \(error.localizedDescription)")
             }
     }
+}
+
+extension UIViewController: GIDSignInUIDelegate {
+    
 }
