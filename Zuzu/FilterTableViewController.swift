@@ -25,7 +25,7 @@ class FilterTableViewController: UITableViewController {
     static let headerHeight = 45 * getCurrentScale()
     
     ///The list of all filter options grouped by sections
-    static var filterSections:[FilterSection] = FilterTableViewController.loadFilterData("resultFilters", criteriaLabel: "advancedFilters")
+    static var filterSections:[FilterSection] = ConfigLoader.loadAdvancedFilters()
     
     struct ViewTransConst {
         static let displayFilterOptions:String = "displayFilterOptions"
@@ -111,94 +111,6 @@ class FilterTableViewController: UITableViewController {
         }
         
         return nil
-    }
-    
-    private static func loadFilterData(resourceName: String, criteriaLabel: String) ->  [FilterSection]{
-        
-        var resultSections = [FilterSection]()
-        
-        if let path = NSBundle.mainBundle().pathForResource(resourceName, ofType: "json") {
-            
-            do {
-                let jsonData = try NSData(contentsOfFile: path, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                let json = JSON(data: jsonData)
-                let groupList = json[criteriaLabel].arrayValue
-                
-                Log.debug("\(criteriaLabel) = \(groupList.count)")
-                
-                for groupJson in groupList {
-                    let section = groupJson["section"].stringValue
-                    
-                    if let itemList = groupJson["groups"].array {
-                        
-                        let allFilters = itemList.map({ (itemJson) -> FilterGroup in
-                            let groupId = itemJson["id"].stringValue
-                            let label = itemJson["label"].stringValue
-                            let type = itemJson["displayType"].intValue
-                            let choiceType = ChoiceType(rawValue: itemJson["choiceType"].stringValue)
-                            let logicType = LogicType(rawValue: itemJson["logicType"].stringValue)
-                            let commonKey = itemJson["filterKey"].stringValue
-                            
-                            
-                            if let filters = itemJson["filters"].array {
-                                ///DetailView
-                                
-                                let filters = filters.enumerate().map({ (index, filterJson) -> Filter in
-                                    let label = filterJson["label"].stringValue
-                                    var value = filterJson["filterValue"].stringValue
-                                    
-                                    /// TODO: Handle the special case for shortest_lease
-                                    /// We'll define a new json format for range value
-                                    /// Make the filterValue independent of Solr format
-                                    if(commonKey == "shortest_lease") {
-                                        value = "[0 TO \(value)]"
-                                    }
-                                    
-                                    if let key = filterJson["filterKey"].string {
-                                        return Filter(label: label, key: key, value: value, order: index)
-                                    } else {
-                                        return Filter(label: label, key: commonKey, value: value, order: index)
-                                    }
-                                })
-                                
-                                let filterGroup = FilterGroup(id: groupId, label: label,
-                                    type: DisplayType(rawValue: type)!,
-                                    filters: filters)
-                                
-                                filterGroup.logicType = logicType
-                                filterGroup.choiceType = choiceType
-                                
-                                return filterGroup
-                                
-                            } else {
-                                ///SimpleView
-                                
-                                let value = itemJson["filterValue"].stringValue
-                                
-                                let filterGroup = FilterGroup(id: groupId, label: label,
-                                    type: DisplayType(rawValue: type)!,
-                                    filters: [Filter(label: label, key: commonKey, value: value)])
-                                
-                                return filterGroup
-                                
-                            }
-                        })
-                        
-                        resultSections.append(FilterSection(label: section, filterGroups: allFilters))
-                        
-                    }
-                    
-                    
-                }
-                
-            } catch let error as NSError{
-                
-                Log.debug("Cannot load json file \(error.localizedDescription)")
-                
-            }
-        }
-        
-        return resultSections
     }
     
     // MARK: - Action Handlers

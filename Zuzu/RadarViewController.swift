@@ -9,17 +9,25 @@ import UIKit
 
 private let Log = Logger.defaultLogger
 
+protocol RadarViewControllerDelegate: class {
+    func onCriteriaSettingDone(searchCriteria:SearchCriteria)
+}
+
 class RadarViewController: UIViewController {
     
+    var delegate: RadarViewControllerDelegate?
     var searchCriteria:SearchCriteria?
+    var isUpdateMode = true
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
- 
-        
+        if self.isUpdateMode == true{
+            self.activateButton.hidden = true
+            self.activateButton.enabled = false
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -139,6 +147,9 @@ class RadarViewController: UIViewController {
             switch identifier{
             case ViewTransConst.showRegionConfigureTable:
                 if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
+                    if let searchCriteria = self.searchCriteria{
+                        vc.currentCriteria = searchCriteria
+                    }
                     vc.delegate  = self
                 }
                 
@@ -146,9 +157,21 @@ class RadarViewController: UIViewController {
             }
         }
     }
+    
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        super.willMoveToParentViewController(parent)
+        
+        if(parent == nil) {
+            
+            /// Filter Setting Finished
+            if let searchCriteria = self.searchCriteria{
+                self.delegate?.onCriteriaSettingDone(searchCriteria)
+            }
+        }
+    }
 }
 
-// MARK: - SearchCriteriaObserverDelegate
+// MARK: - RadarConfigureTableViewControllerDelegate
 extension RadarViewController : RadarConfigureTableViewControllerDelegate {
     
     func onCriteriaConfigureDone(searchCriteria:SearchCriteria){

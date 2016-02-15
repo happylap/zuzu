@@ -11,7 +11,7 @@ import SwiftyJSON
 import SCLAlertView
 import AwesomeCache
 
-private let ActionLabel = "UIAction"
+private let ActionLabel = "RadarUIAction"
 private let FileLog = Logger.fileLogger
 private let Log = Logger.defaultLogger
 
@@ -23,7 +23,7 @@ protocol RadarConfigureTableViewControllerDelegate: class {
 class RadarConfigureTableViewController: UITableViewController {
     
     var delegate: RadarConfigureTableViewControllerDelegate?
-    var filterGroups: [FilterGroup]?
+    var populateCriteria = false
     
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
@@ -124,21 +124,23 @@ class RadarConfigureTableViewController: UITableViewController {
     var currentCriteria: SearchCriteria = SearchCriteria() {
         
         didSet{
-            
-            if !(oldValue == currentCriteria) {
-                
-                ///Send criteria change notification
-                for observer in stateObservers {
-                    observer.notifyCriteriaChange(currentCriteria)
+            if (populateCriteria == true){
+                if !(oldValue == currentCriteria) {
+                    
+                    ///Send criteria change notification
+                    for observer in stateObservers {
+                        observer.notifyCriteriaChange(currentCriteria)
+                    }
+                    
+                    ///Save search criteria and enable reset button
+                    if(!currentCriteria.isEmpty()) {
+                        clearCriteriaButton.enabled = true
+                    }
+                    
+                    ///Load the criteria to the Search Box UI
+                    self.populateViewFromSearchCriteria(currentCriteria)
+                    
                 }
-
-                ///Save search criteria and enable reset button
-                if(!currentCriteria.isEmpty()) {
-                    clearCriteriaButton.enabled = true
-                }
-                
-                ///Load the criteria to the Search Box UI
-                self.populateViewFromSearchCriteria(currentCriteria)
             }
         }
     }
@@ -465,7 +467,7 @@ class RadarConfigureTableViewController: UITableViewController {
         
     }
     
-    private func stateToSearhCriteria() -> SearchCriteria {
+    private func stateToSearhCriteria(filterGroups: [FilterGroup]?) -> SearchCriteria {
         
         let searchCriteria = SearchCriteria()
 
@@ -536,115 +538,12 @@ class RadarConfigureTableViewController: UITableViewController {
             }
         }
         
-        searchCriteria.filterGroups = self.filterGroups
+        searchCriteria.filterGroups = filterGroups
         self.delegate?.onCriteriaConfigureDone(searchCriteria)
         return searchCriteria
     }
     
     // MARK: - UI Control Actions
-    
-    
-    //The UI control event handler Should not be private    
-    @IBAction func onAppRatingButtonTouched(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        let appId = "id1064374526"
-        let appWeburl = "https://itunes.apple.com/tw/app/zhu-zhu-kuai-zu-yi-ci-sou/\(appId)?l=zh&mt=8"
-        let appUrl = "itms-apps://itunes.apple.com/app/\(appId)"
-        
-        var gaLabel:String?
-        var result = false
-        
-        if let url = NSURL(string: appUrl) {
-            if (UIApplication.sharedApplication().canOpenURL(url)) {
-                
-                result = UIApplication.sharedApplication().openURL(NSURL(string : appUrl)!)
-                if(result) {
-                    gaLabel = url.absoluteString
-                }
-            }
-        }
-        
-        ///iTunes App failed, Open by Browser
-        if(!result) {
-            if let url = NSURL(string: appWeburl) {
-                
-                if (UIApplication.sharedApplication().canOpenURL(url)) {
-                    
-                    result = UIApplication.sharedApplication().openURL(url)
-                    if(result) {
-                        gaLabel = url.absoluteString
-                    }
-                }
-            }
-        }
-        
-        ///GA Tracker
-        
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.RateUs,
-            label: gaLabel ?? "failed")
-        
-    }
-    
-    @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        let fbUrl = "https://www.facebook.com/zuzutw"
-        let fbAppUrl = "fb://profile/1675724006047703"
-        
-        var gaLabel:String?
-        var result = false
-        
-        ///Open by Facebook App
-        if let url = NSURL(string: fbAppUrl) {
-            
-            if (UIApplication.sharedApplication().canOpenURL(url)) {
-                
-                result = UIApplication.sharedApplication().openURL(url)
-                if(result) {
-                    gaLabel = url.absoluteString
-                }
-            }
-        }
-        
-        ///FB failed, Open by Browser
-        if(!result) {
-            if let url = NSURL(string: fbUrl) {
-                
-                if (UIApplication.sharedApplication().canOpenURL(url)) {
-                    
-                    result = UIApplication.sharedApplication().openURL(url)
-                    if(result) {
-                        gaLabel = url.absoluteString
-                    }
-                }
-            }
-        }
-        
-        ///Browser failed, Open by Embedded Browser
-        if(!result) {
-            let browserViewController = self.storyboard?.instantiateViewControllerWithIdentifier("browserView") as? BrowserViewController
-            
-            if let browserViewController = browserViewController {
-                browserViewController.enableToolBar = false
-                browserViewController.sourceLink = fbUrl
-                browserViewController.viewTitle = "豬豬快租"
-                //self.modalPresentationStyle = .CurrentContext
-                self.navigationController?.pushViewController(browserViewController, animated: true)
-                
-                gaLabel = fbUrl
-            }
-        }
-        
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.FanPage,
-            label: gaLabel ?? "failed")
-        
-        
-    }
-    
     
     func onClearCriteriaButtonTouched(sender: UIButton) {
         Log.info("Sender: \(sender)", label: ActionLabel)
@@ -666,7 +565,7 @@ class RadarConfigureTableViewController: UITableViewController {
                     
                     selectAllButton.setToggleState(true)
                     
-                    currentCriteria = self.stateToSearhCriteria()
+                    currentCriteria = self.stateToSearhCriteria(nil)
                 }
                 
             } else {
@@ -678,16 +577,11 @@ class RadarConfigureTableViewController: UITableViewController {
                     selectAllButton.setToggleState(false)
                 }
                 
-                currentCriteria = self.stateToSearhCriteria()
+                currentCriteria = self.stateToSearhCriteria(nil)
             }
             
             
         }
-    }
-    
-    func onDismissCurrentView(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        navigationController?.popToRootViewControllerAnimated(true)
     }
     
     // MARK: - Table Delegate
@@ -711,8 +605,26 @@ class RadarConfigureTableViewController: UITableViewController {
         case CellConst.moreFilters: //More Filters
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             let ftvc = storyboard.instantiateViewControllerWithIdentifier("FilterTableView") as! FilterTableViewController
-            //ftvc.selectedFilterIdSet = self.selectedFilterIdSet
+        
+            var filterIdSet = [String: Set<FilterIdentifier>]()
+            if let filterGroups = self.currentCriteria.filterGroups{
+                for filterGroup in filterGroups{
+                    //var newFilterIdSet = [String: Set<FilterIdentifier>]()
+                    filterIdSet[filterGroup.id] = []
+                    for filter in filterGroup.filters {
+                        filterIdSet[filterGroup.id]?.insert(filter.identifier)
+                    }
+                    /*var newFilterIdSet = [String: Set<FilterIdentifier>]()
+                    for filter in filterGroup.filters {
+                        newFilterIdSet[filterGroup.id] = [filter.identifier]
+                        for (groupId, valueSet) in newFilterIdSet {
+                            filterIdSet.updateValue(valueSet, forKey: groupId)
+                        }
+                    }*/
+                }
+            }
             
+            ftvc.selectedFilterIdSet = filterIdSet
             ftvc.filterDelegate = self
             
             self.showViewController(ftvc, sender: self)
@@ -770,6 +682,14 @@ class RadarConfigureTableViewController: UITableViewController {
         let regionItemCountCriteriaObserver = RegionItemCountCriteriaObserver()
         regionItemCountCriteriaObserver.delegate = self
         stateObservers.append(regionItemCountCriteriaObserver)
+
+        populateCriteria = true
+        ///Save search criteria and enable reset button
+        if(!self.currentCriteria.isEmpty()) {
+            clearCriteriaButton.enabled = true
+            ///Load the criteria to the Search Box UI
+            self.populateViewFromSearchCriteria(currentCriteria)
+        }
         
         Log.exit()
     }
@@ -1120,7 +1040,7 @@ extension RadarConfigureTableViewController: UIPickerViewDelegate, UIPickerViewD
         //Update selection label
         updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
         
-        currentCriteria = self.stateToSearhCriteria()
+        currentCriteria = self.stateToSearhCriteria(nil)
     }
 }
 
@@ -1131,7 +1051,7 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
         
         regionSelectionState = regions
         
-        currentCriteria = self.stateToSearhCriteria()
+        currentCriteria = self.stateToSearhCriteria(nil)
         
         ///GA Tracker
         dispatch_async(GlobalBackgroundQueue) {
@@ -1152,35 +1072,22 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
 extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     
     private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
-        
-        /*let filterGroups = self.convertToFilterGroup(filteridSet)
-        
-        var allFiltersDic = [String:String]()
-        
-        for filterGroup in filterGroups {
-            let filterPair = filterGroup.filterDic
-            
-            for (key, value) in filterPair {
-                allFiltersDic[key] = value
-            }
-        }
-        
-        return allFiltersDic*/
-        
         return [String:String]()
     }
     
     func onFiltersReset() {
+        // don't do anything
     }
     
     
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        // don't do anything
     }
     
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
-        self.filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
-        self.stateToSearhCriteria()
+        let filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
+        currentCriteria = self.stateToSearhCriteria(filterGroups)
     }
     
     private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {

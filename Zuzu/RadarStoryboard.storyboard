@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HPa-0u-dhH">
+                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPa-0u-dhH">
                                 <rect key="frame" x="0.0" y="214" width="600" height="386"/>
                                 <connections>
                                     <segue destination="JCF-a3-JtA" kind="embed" identifier="showRegionConfigureTable" id="c9I-6A-hSi"/>
@@ -158,7 +158,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="OaS-ny-kO8" kind="relationship" relationship="rootViewController" id="ft4-Nd-11B"/>
+                        <segue destination="bGU-pi-D72" kind="relationship" relationship="rootViewController" id="Opi-0u-wim"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvE-Ro-1Dg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -286,7 +286,7 @@
         <!--檢視雷達-->
         <scene sceneID="qDs-hj-oEa">
             <objects>
-                <viewController id="bGU-pi-D72" userLabel="檢視雷達" sceneMemberID="viewController">
+                <viewController id="bGU-pi-D72" userLabel="檢視雷達" customClass="RadarDisplayViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Rg7-dX-Lpg"/>
                         <viewControllerLayoutGuide type="bottom" id="Prs-5K-bGT"/>
@@ -295,7 +295,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="byC-T9-SKw" userLabel="CriteriaView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="byC-T9-SKw" userLabel="CriteriaView">
                                 <rect key="frame" x="0.0" y="64" width="600" height="163.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="36N-BY-w6f" userLabel="CriteriaSubView">
@@ -308,6 +308,9 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23a-c6-f3g">
                                                 <rect key="frame" x="531" y="8" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="enableCriteria:" destination="bGU-pi-D72" eventType="valueChanged" id="ZbG-TN-XZx"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -355,7 +358,10 @@
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
                                                         <rect key="frame" x="250" y="59" width="60" height="30"/>
-                                                        <state key="normal" title="修改設定"/>
+                                                        <state key="normal" title="更改條件"/>
+                                                        <connections>
+                                                            <segue destination="OaS-ny-kO8" kind="show" identifier="showConfigureRadar" id="Foe-EC-G9P"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -394,7 +400,7 @@
                                     <constraint firstItem="ZRq-hq-1aB" firstAttribute="centerX" secondItem="byC-T9-SKw" secondAttribute="centerX" id="zNh-Qh-WEf"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YN5-O7-pWJ" userLabel="ServiceView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YN5-O7-pWJ" userLabel="ServiceView">
                                 <rect key="frame" x="0.0" y="227.5" width="600" height="109"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7N5-qc-Jhl" userLabel="ServiceSubView">
@@ -572,7 +578,15 @@
                             <constraint firstItem="YN5-O7-pWJ" firstAttribute="width" secondItem="tqq-ek-c7l" secondAttribute="width" id="uzl-2q-FJy"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="檢視雷達" id="OlE-s0-y7i" userLabel="檢視雷達"/>
+                    <toolbarItems>
+                        <barButtonItem title="Item" id="WOZ-iV-i6k" userLabel="設定完成"/>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="檢視雷達" id="OlE-s0-y7i" userLabel="檢視雷達">
+                        <connections>
+                            <outlet property="backBarButtonItem" destination="WOZ-iV-i6k" id="Tjf-MX-ijr"/>
+                        </connections>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LaE-8c-zRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

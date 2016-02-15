@@ -14,6 +14,8 @@ private let Log = Logger.defaultLogger
 
 class ZuzuCriteria: NSObject, Mappable {
     
+    static let filterSections:[FilterSection] = ConfigLoader.loadAdvancedFilters()
+    
     var userId: String?
     var criteriaId: String?
     var enabled: Bool?
@@ -94,7 +96,7 @@ class ZuzuCriteria: NSObject, Mappable {
             
             // Collect all FilterGroup
             var filterGroups: [FilterGroup] = [FilterGroup]()
-            for filterSection in FilterTableViewController.filterSections {
+            for filterSection in ZuzuCriteria.filterSections {
                 for filterGroup in filterSection.filterGroups {
                     filterGroups.append(filterGroup)
                 }

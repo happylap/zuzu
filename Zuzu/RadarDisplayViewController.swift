@@ -8,22 +8,30 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 class RadarDisplayViewController: UIViewController {
 
+    var zuzuCriteria: ZuzuCriteria?
+    
+    struct ViewTransConst {
+        static let showConfigureRadar:String = "showConfigureRadar"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.configureButton()
         
+        self.refreshCriteria()
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func enableCriteria(sender: UISwitch) {
+        
+        
+        
     }
-    
-
     private func configureButton() {
         
         /*searchButton.layer.borderWidth = 2
@@ -38,14 +46,42 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    /*
-    // MARK: - Navigation
 
+    // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier)")
+            
+            self.navigationItem.backBarButtonItem?.title = "設定完成"
+            
+            switch identifier{
+                
+            case ViewTransConst.showConfigureRadar:
+                
+                if let vc = segue.destinationViewController as? RadarViewController {
+                    self.navigationItem.backBarButtonItem?.title = "設定完成"
+                    vc.delegate = self
+                    vc.searchCriteria = self.zuzuCriteria?.criteria
+                }
+            default: break
+                
+            }
+        }
     }
-    */
 
+    private func refreshCriteria(){
+        ZuzuWebService.sharedInstance.getCriteriaByUserId("test") { (result, error) -> Void in
+            self.zuzuCriteria = result
+        }
+    }
+}
+
+// MARK: - RadarViewControllerDelegate
+extension RadarDisplayViewController : RadarViewControllerDelegate {
+    func onCriteriaSettingDone(searchCriteria:SearchCriteria){
+        self.zuzuCriteria?.criteria = searchCriteria
+    }
+    
 }
