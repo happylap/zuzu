@@ -23,7 +23,7 @@ protocol RadarConfigureTableViewControllerDelegate: class {
 class RadarConfigureTableViewController: UITableViewController {
     
     var delegate: RadarConfigureTableViewControllerDelegate?
-    var filterGroups: [FilterGroup]?
+    var populateCriteria = false
     
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
@@ -124,21 +124,23 @@ class RadarConfigureTableViewController: UITableViewController {
     var currentCriteria: SearchCriteria = SearchCriteria() {
         
         didSet{
-            
-            if !(oldValue == currentCriteria) {
-                
-                ///Send criteria change notification
-                for observer in stateObservers {
-                    observer.notifyCriteriaChange(currentCriteria)
+            if (populateCriteria == true){
+                if !(oldValue == currentCriteria) {
+                    
+                    ///Send criteria change notification
+                    for observer in stateObservers {
+                        observer.notifyCriteriaChange(currentCriteria)
+                    }
+                    
+                    ///Save search criteria and enable reset button
+                    if(!currentCriteria.isEmpty()) {
+                        clearCriteriaButton.enabled = true
+                    }
+                    
+                    ///Load the criteria to the Search Box UI
+                    self.populateViewFromSearchCriteria(currentCriteria)
+                    
                 }
-
-                ///Save search criteria and enable reset button
-                if(!currentCriteria.isEmpty()) {
-                    clearCriteriaButton.enabled = true
-                }
-                
-                ///Load the criteria to the Search Box UI
-                self.populateViewFromSearchCriteria(currentCriteria)
             }
         }
     }
@@ -465,7 +467,7 @@ class RadarConfigureTableViewController: UITableViewController {
         
     }
     
-    private func stateToSearhCriteria() -> SearchCriteria {
+    private func stateToSearhCriteria(filterGroups: [FilterGroup]?) -> SearchCriteria {
         
         let searchCriteria = SearchCriteria()
 
@@ -536,7 +538,7 @@ class RadarConfigureTableViewController: UITableViewController {
             }
         }
         
-        searchCriteria.filterGroups = self.filterGroups
+        searchCriteria.filterGroups = filterGroups
         self.delegate?.onCriteriaConfigureDone(searchCriteria)
         return searchCriteria
     }
@@ -563,7 +565,7 @@ class RadarConfigureTableViewController: UITableViewController {
                     
                     selectAllButton.setToggleState(true)
                     
-                    currentCriteria = self.stateToSearhCriteria()
+                    currentCriteria = self.stateToSearhCriteria(nil)
                 }
                 
             } else {
@@ -575,7 +577,7 @@ class RadarConfigureTableViewController: UITableViewController {
                     selectAllButton.setToggleState(false)
                 }
                 
-                currentCriteria = self.stateToSearhCriteria()
+                currentCriteria = self.stateToSearhCriteria(nil)
             }
             
             
@@ -603,8 +605,21 @@ class RadarConfigureTableViewController: UITableViewController {
         case CellConst.moreFilters: //More Filters
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             let ftvc = storyboard.instantiateViewControllerWithIdentifier("FilterTableView") as! FilterTableViewController
-            //ftvc.selectedFilterIdSet = self.selectedFilterIdSet
+        
+            var filterIdSet = [String: Set<FilterIdentifier>]()
+            if let filterGroups = self.currentCriteria.filterGroups{
+                for filterGroup in filterGroups{
+                    var newFilterIdSet = [String: Set<FilterIdentifier>]()
+                    for filter in filterGroup.filters {
+                        newFilterIdSet[filterGroup.id] = [filter.identifier]
+                        for (groupId, valueSet) in newFilterIdSet {
+                            filterIdSet.updateValue(valueSet, forKey: groupId)
+                        }
+                    }
+                }
+            }
             
+            //ftvc.selectedFilterIdSet = filterIdSet
             ftvc.filterDelegate = self
             
             self.showViewController(ftvc, sender: self)
@@ -662,6 +677,14 @@ class RadarConfigureTableViewController: UITableViewController {
         let regionItemCountCriteriaObserver = RegionItemCountCriteriaObserver()
         regionItemCountCriteriaObserver.delegate = self
         stateObservers.append(regionItemCountCriteriaObserver)
+
+        populateCriteria = true
+        ///Save search criteria and enable reset button
+        if(!self.currentCriteria.isEmpty()) {
+            clearCriteriaButton.enabled = true
+            ///Load the criteria to the Search Box UI
+            self.populateViewFromSearchCriteria(currentCriteria)
+        }
         
         Log.exit()
     }
@@ -1012,7 +1035,7 @@ extension RadarConfigureTableViewController: UIPickerViewDelegate, UIPickerViewD
         //Update selection label
         updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
         
-        currentCriteria = self.stateToSearhCriteria()
+        currentCriteria = self.stateToSearhCriteria(nil)
     }
 }
 
@@ -1023,7 +1046,7 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
         
         regionSelectionState = regions
         
-        currentCriteria = self.stateToSearhCriteria()
+        currentCriteria = self.stateToSearhCriteria(nil)
         
         ///GA Tracker
         dispatch_async(GlobalBackgroundQueue) {
@@ -1071,8 +1094,8 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
-        self.filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
-        self.stateToSearhCriteria()
+        let filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
+        self.stateToSearhCriteria(filterGroups)
     }
     
     private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {

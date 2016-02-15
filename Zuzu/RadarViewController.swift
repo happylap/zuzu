@@ -12,19 +12,17 @@ private let Log = Logger.defaultLogger
 class RadarViewController: UIViewController {
     
     var searchCriteria:SearchCriteria?
-    var hideActivateButton = false
+    var isUpdateMode = true
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if hideActivateButton == true{
-            self.activateButton.hidden = true
-            self.activateButton.enabled = false
-        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        if self.isUpdateMode == true{
+            self.activateButton.hidden = true
+            self.activateButton.enabled = false
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -144,6 +142,9 @@ class RadarViewController: UIViewController {
             switch identifier{
             case ViewTransConst.showRegionConfigureTable:
                 if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
+                    if let searchCriteria = self.searchCriteria{
+                        vc.currentCriteria = searchCriteria
+                    }
                     vc.delegate  = self
                 }
                 

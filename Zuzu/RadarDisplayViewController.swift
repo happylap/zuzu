@@ -12,6 +12,8 @@ private let Log = Logger.defaultLogger
 
 class RadarDisplayViewController: UIViewController {
 
+    var zuzuCriteria: ZuzuCriteria?
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -21,14 +23,9 @@ class RadarDisplayViewController: UIViewController {
 
         self.configureButton()
         
+        self.refreshCriteria()
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     private func configureButton() {
         
@@ -59,8 +56,8 @@ class RadarDisplayViewController: UIViewController {
             case ViewTransConst.showConfigureRadar:
                 
                 if let vc = segue.destinationViewController as? RadarViewController {
-                    vc.hideActivateButton = true
                     self.navigationItem.backBarButtonItem?.title = "設定完成"
+                    vc.searchCriteria = self.zuzuCriteria?.criteria
                 }
             default: break
                 
@@ -68,5 +65,10 @@ class RadarDisplayViewController: UIViewController {
         }
     }
 
+    private func refreshCriteria(){
+        ZuzuWebService.sharedInstance.getCriteriaByUserId("test") { (result, error) -> Void in
+            self.zuzuCriteria = result
+        }
+    }
 
 }
