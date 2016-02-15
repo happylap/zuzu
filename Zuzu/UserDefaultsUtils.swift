@@ -10,6 +10,24 @@ import Foundation
 
 struct UserDefaultsUtils{
     
+    // MARK: Login Provider
+    static let loginProviderUserDefaultKey = "loginProvider"
+    
+    static func clearLoginProvider() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(loginProviderUserDefaultKey)
+    }
+    
+    static func setLoginProvider(provider: String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(provider, forKey: loginProviderUserDefaultKey)
+    }
+    
+    static func getLoginProvider() -> String? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(loginProviderUserDefaultKey) as? String
+    }
+    
     // MARK: My Collection
     
     static let myCollectionAlertUserDefaultKey = "myCollectionAlert"
