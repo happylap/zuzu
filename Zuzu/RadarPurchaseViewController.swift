@@ -19,6 +19,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // This list of available in-app purchases
     var products = [SKProduct]()
     
+    var completeHandler: (() -> Void)?
+    
     deinit {
         // NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -75,7 +77,13 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
+        
+        if let completeHandler = self.completeHandler {
+            completeHandler()
+        }
+        
         dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     
@@ -93,19 +101,32 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
-        let product = products[button.tag]
         
-        Log.info("productIdentifier: \(product.productIdentifier)")
+        let isLogin = false
         
-        priceFormatter.locale = product.priceLocale
-        let price = priceFormatter.stringFromNumber(product.price)
-        
-        let loginAlertView = SCLAlertView()
-        loginAlertView.addButton("購買") {
-            ZuzuStore.sharedInstance.makePurchase(product)
+        if isLogin {
+            
+            let product = products[button.tag]
+            Log.info("productIdentifier: \(product.productIdentifier)")
+            priceFormatter.locale = product.priceLocale
+            let price = priceFormatter.stringFromNumber(product.price)
+            
+            let loginAlertView = SCLAlertView()
+            loginAlertView.addButton("購買") {
+                ZuzuStore.sharedInstance.makePurchase(product)
+            }
+            let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
+            loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            
+        } else {
+            
+            let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+            if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
+                vc.modalPresentationStyle = .OverCurrentContext
+                presentViewController(vc, animated: true, completion: nil)
+                
+            }
         }
-        let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
-        loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     // When a product is purchased, this notification fires, redraw the correct row

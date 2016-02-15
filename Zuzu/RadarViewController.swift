@@ -48,7 +48,21 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var activateButton: UIButton!
     
     @IBAction func activateButtonClick(sender: UIButton) {
+        
         if self.searchCriteria != nil && self.user != nil && self.appleProductId != nil{
+            
+            let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+            if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+                ///Hide tab bar
+                self.tabBarController?.tabBarHidden = true
+                vc.modalPresentationStyle = .OverCurrentContext
+                vc.completeHandler = { () -> Void in
+                    ///Show tab bar
+                    self.tabBarController?.tabBarHidden = false
+                }
+                presentViewController(vc, animated: true, completion: nil)
+            }
+            
             ZuzuWebService.sharedInstance.createCriteriaByUserId(self.user!, appleProductId: self.appleProductId!, criteria: self.searchCriteria!) { (result, error) -> Void in
                 Log.debug(result)
             }
