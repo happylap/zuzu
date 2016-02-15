@@ -528,17 +528,13 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        if !FBLoginService.sharedInstance.hasActiveSession() {
-            FBLoginService.sharedInstance.confirmAndLogin(self)
-        } else {
-            if editingStyle == .Delete {
-                if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-                    CollectionItemService.sharedInstance.deleteItemById(collectionHouseItem.id)
-                    
-                    ///GA Tracker
-                    self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                        action: GAConst.Action.MyCollection.Delete)
-                }
+        if editingStyle == .Delete {
+            if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+                CollectionItemService.sharedInstance.deleteItemById(collectionHouseItem.id)
+                
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                    action: GAConst.Action.MyCollection.Delete)
             }
         }
     }
