@@ -126,12 +126,6 @@ class RadarConfigureTableViewController: UITableViewController {
         didSet{
             if (populateCriteria == true){
                 if !(oldValue == currentCriteria) {
-                    
-                    ///Send criteria change notification
-                    for observer in stateObservers {
-                        observer.notifyCriteriaChange(currentCriteria)
-                    }
-                    
                     ///Save search criteria and enable reset button
                     if(!currentCriteria.isEmpty()) {
                         clearCriteriaButton.enabled = true
@@ -467,7 +461,7 @@ class RadarConfigureTableViewController: UITableViewController {
         
     }
     
-    private func stateToSearhCriteria(filterGroups: [FilterGroup]?) -> SearchCriteria {
+    private func stateToSearhCriteria() -> SearchCriteria {
         
         let searchCriteria = SearchCriteria()
 
@@ -538,7 +532,7 @@ class RadarConfigureTableViewController: UITableViewController {
             }
         }
         
-        searchCriteria.filterGroups = filterGroups
+        searchCriteria.filterGroups = self.currentCriteria.filterGroups
         self.delegate?.onCriteriaConfigureDone(searchCriteria)
         return searchCriteria
     }
@@ -565,7 +559,7 @@ class RadarConfigureTableViewController: UITableViewController {
                     
                     selectAllButton.setToggleState(true)
                     
-                    currentCriteria = self.stateToSearhCriteria(nil)
+                    currentCriteria = self.stateToSearhCriteria()
                 }
                 
             } else {
@@ -577,7 +571,7 @@ class RadarConfigureTableViewController: UITableViewController {
                     selectAllButton.setToggleState(false)
                 }
                 
-                currentCriteria = self.stateToSearhCriteria(nil)
+                currentCriteria = self.stateToSearhCriteria()
             }
             
             
@@ -614,13 +608,6 @@ class RadarConfigureTableViewController: UITableViewController {
                     for filter in filterGroup.filters {
                         filterIdSet[filterGroup.id]?.insert(filter.identifier)
                     }
-                    /*var newFilterIdSet = [String: Set<FilterIdentifier>]()
-                    for filter in filterGroup.filters {
-                        newFilterIdSet[filterGroup.id] = [filter.identifier]
-                        for (groupId, valueSet) in newFilterIdSet {
-                            filterIdSet.updateValue(valueSet, forKey: groupId)
-                        }
-                    }*/
                 }
             }
             
@@ -1040,7 +1027,7 @@ extension RadarConfigureTableViewController: UIPickerViewDelegate, UIPickerViewD
         //Update selection label
         updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
         
-        currentCriteria = self.stateToSearhCriteria(nil)
+        currentCriteria = self.stateToSearhCriteria()
     }
 }
 
@@ -1051,7 +1038,7 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
         
         regionSelectionState = regions
         
-        currentCriteria = self.stateToSearhCriteria(nil)
+        currentCriteria = self.stateToSearhCriteria()
         
         ///GA Tracker
         dispatch_async(GlobalBackgroundQueue) {
@@ -1085,9 +1072,8 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     }
     
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
-        
-        let filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
-        currentCriteria = self.stateToSearhCriteria(filterGroups)
+        self.currentCriteria.filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
+        self.currentCriteria = self.stateToSearhCriteria()
     }
     
     private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {

@@ -15,6 +15,8 @@ protocol RadarViewControllerDelegate: class {
 
 class RadarViewController: UIViewController {
     
+    var user: String?
+    var appleProductId: String?
     var delegate: RadarViewControllerDelegate?
     var searchCriteria:SearchCriteria?
     var isUpdateMode = true
@@ -24,6 +26,8 @@ class RadarViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.user = "test"
+        self.appleProductId = "apple456"
         if self.isUpdateMode == true{
             self.activateButton.hidden = true
             self.activateButton.enabled = false
@@ -44,8 +48,8 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var activateButton: UIButton!
     
     @IBAction func activateButtonClick(sender: UIButton) {
-        if self.searchCriteria != nil{
-            ZuzuWebService.sharedInstance.createCriteriaByUserId("test", appleProductId: "apple123", criteria: self.searchCriteria!) { (result, error) -> Void in
+        if self.searchCriteria != nil && self.user != nil && self.appleProductId != nil{
+            ZuzuWebService.sharedInstance.createCriteriaByUserId(self.user!, appleProductId: self.appleProductId!, criteria: self.searchCriteria!) { (result, error) -> Void in
                 Log.debug(result)
             }
         }

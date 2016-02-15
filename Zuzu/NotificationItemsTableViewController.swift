@@ -14,6 +14,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
+    var user: String?
     // UILabel for empty collection list
     let emptyLabel = UILabel()
 
@@ -36,6 +37,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.user = "test"
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
         self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
@@ -150,14 +152,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
 
     func refreshData(){
-        ZuzuWebService.sharedInstance.getNotificationItemsByUserId("test") { (result, error) -> Void in
-            if let notifyItems: [NotifyItem] = result {
-                for notifyItem: NotifyItem in notifyItems {
-                    self.notificationService.add(notifyItem, isCommit: true)
+        if let user = self.user{
+            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(user) { (result, error) -> Void in
+                if let notifyItems: [NotifyItem] = result {
+                    for notifyItem: NotifyItem in notifyItems {
+                        self.notificationService.add(notifyItem, isCommit: true)
+                    }
                 }
+                
+                LoadingSpinner.shared.stop()
             }
-            
-            LoadingSpinner.shared.stop()
         }
     }
     
