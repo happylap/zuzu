@@ -62,6 +62,7 @@ class RadarDisplayViewController: UIViewController {
                 
                 if let vc = segue.destinationViewController as? RadarViewController {
                     self.navigationItem.backBarButtonItem?.title = "設定完成"
+                    vc.delegate = self
                     vc.searchCriteria = self.zuzuCriteria?.criteria
                 }
             default: break
@@ -75,5 +76,12 @@ class RadarDisplayViewController: UIViewController {
             self.zuzuCriteria = result
         }
     }
+}
 
+// MARK: - RadarViewControllerDelegate
+extension RadarDisplayViewController : RadarViewControllerDelegate {
+    func onCriteriaSettingDone(searchCriteria:SearchCriteria){
+        self.zuzuCriteria?.criteria = searchCriteria
+    }
+    
 }

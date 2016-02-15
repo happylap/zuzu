@@ -9,8 +9,13 @@ import UIKit
 
 private let Log = Logger.defaultLogger
 
+protocol RadarViewControllerDelegate: class {
+    func onCriteriaSettingDone(searchCriteria:SearchCriteria)
+}
+
 class RadarViewController: UIViewController {
     
+    var delegate: RadarViewControllerDelegate?
     var searchCriteria:SearchCriteria?
     var isUpdateMode = true
     
@@ -152,9 +157,21 @@ class RadarViewController: UIViewController {
             }
         }
     }
+    
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        super.willMoveToParentViewController(parent)
+        
+        if(parent == nil) {
+            
+            /// Filter Setting Finished
+            if let searchCriteria = self.searchCriteria{
+                self.delegate?.onCriteriaSettingDone(searchCriteria)
+            }
+        }
+    }
 }
 
-// MARK: - SearchCriteriaObserverDelegate
+// MARK: - RadarConfigureTableViewControllerDelegate
 extension RadarViewController : RadarConfigureTableViewControllerDelegate {
     
     func onCriteriaConfigureDone(searchCriteria:SearchCriteria){

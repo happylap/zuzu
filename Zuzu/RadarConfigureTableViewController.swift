@@ -609,13 +609,18 @@ class RadarConfigureTableViewController: UITableViewController {
             var filterIdSet = [String: Set<FilterIdentifier>]()
             if let filterGroups = self.currentCriteria.filterGroups{
                 for filterGroup in filterGroups{
-                    var newFilterIdSet = [String: Set<FilterIdentifier>]()
+                    //var newFilterIdSet = [String: Set<FilterIdentifier>]()
+                    filterIdSet[filterGroup.id] = []
+                    for filter in filterGroup.filters {
+                        filterIdSet[filterGroup.id]?.insert(filter.identifier)
+                    }
+                    /*var newFilterIdSet = [String: Set<FilterIdentifier>]()
                     for filter in filterGroup.filters {
                         newFilterIdSet[filterGroup.id] = [filter.identifier]
                         for (groupId, valueSet) in newFilterIdSet {
                             filterIdSet.updateValue(valueSet, forKey: groupId)
                         }
-                    }
+                    }*/
                 }
             }
             
@@ -1082,7 +1087,7 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         
         let filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
-        self.stateToSearhCriteria(filterGroups)
+        currentCriteria = self.stateToSearhCriteria(filterGroups)
     }
     
     private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
