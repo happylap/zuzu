@@ -13,6 +13,7 @@ private let Log = Logger.defaultLogger
 class RadarDisplayViewController: UIViewController {
 
     var zuzuCriteria: ZuzuCriteria?
+    var user: String?
     
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
@@ -21,8 +22,8 @@ class RadarDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.user = "test"
         self.configureButton()
-        
         self.refreshCriteria()
         // Do any additional setup after loading the view.
     }
@@ -72,8 +73,10 @@ class RadarDisplayViewController: UIViewController {
     }
 
     private func refreshCriteria(){
-        ZuzuWebService.sharedInstance.getCriteriaByUserId("test") { (result, error) -> Void in
-            self.zuzuCriteria = result
+        if let user = self.user{
+            ZuzuWebService.sharedInstance.getCriteriaByUserId(user) { (result, error) -> Void in
+                self.zuzuCriteria = result
+            }
         }
     }
 }
@@ -81,7 +84,14 @@ class RadarDisplayViewController: UIViewController {
 // MARK: - RadarViewControllerDelegate
 extension RadarDisplayViewController : RadarViewControllerDelegate {
     func onCriteriaSettingDone(searchCriteria:SearchCriteria){
-        self.zuzuCriteria?.criteria = searchCriteria
+        if let zuzuCriteria = self.zuzuCriteria{
+            zuzuCriteria.criteria = searchCriteria
+            if let user = self.user{
+                ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(user, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
+                   
+                }
+            }
+        }
     }
     
 }
