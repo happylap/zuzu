@@ -258,8 +258,8 @@ class AmazonClientManager : NSObject {
                 action: GAConst.Action.Blocking.loginReject)
         }
         
-        loginAlertView.showNotice("請選擇登入方式",
-            subTitle: "使用我的收藏功能，需要您使用下列其中一種帳戶登入\n\n日後更換裝置，收藏的物件也不會消失。豬豬快租不會以您的身份發佈任何資訊", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
+            subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         
     }
     
