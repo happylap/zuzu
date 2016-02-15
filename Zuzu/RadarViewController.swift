@@ -12,13 +12,18 @@ private let Log = Logger.defaultLogger
 class RadarViewController: UIViewController {
     
     var searchCriteria:SearchCriteria?
+    var hideActivateButton = false
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        if hideActivateButton == true{
+            self.activateButton.hidden = true
+            self.activateButton.enabled = false
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        
         
     }
     

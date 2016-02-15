@@ -8,8 +8,14 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 class RadarDisplayViewController: UIViewController {
 
+    struct ViewTransConst {
+        static let showConfigureRadar:String = "showConfigureRadar"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -38,14 +44,29 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    /*
-    // MARK: - Navigation
 
+    // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier)")
+            
+            self.navigationItem.backBarButtonItem?.title = "設定完成"
+            
+            switch identifier{
+                
+            case ViewTransConst.showConfigureRadar:
+                
+                if let vc = segue.destinationViewController as? RadarViewController {
+                    vc.hideActivateButton = true
+                    self.navigationItem.backBarButtonItem?.title = "設定完成"
+                }
+            default: break
+                
+            }
+        }
     }
-    */
+
 
 }

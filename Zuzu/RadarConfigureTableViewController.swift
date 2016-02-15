@@ -11,7 +11,7 @@ import SwiftyJSON
 import SCLAlertView
 import AwesomeCache
 
-private let ActionLabel = "UIAction"
+private let ActionLabel = "RadarUIAction"
 private let FileLog = Logger.fileLogger
 private let Log = Logger.defaultLogger
 
