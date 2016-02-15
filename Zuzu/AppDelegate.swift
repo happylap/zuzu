@@ -116,14 +116,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         return urls[urls.count-1] as NSURL
     }()
     
+    @available(iOS, introduced=8.0, deprecated=9.0)
+    func application(app: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return AmazonClientManager.sharedInstance.application(app, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+    }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        return AmazonClientManager.sharedInstance.application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+    @available(iOS 9.0, *)
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        return AmazonClientManager.sharedInstance.application(app, openURL: url, options: options)
     }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        // Initialize sign-in
+        AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         if FeatureOption.Radar.enableMain == true{
             pushNotificationsSetup()
@@ -169,7 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
                     }
                 }
             }
-
+            
         }else{
             rootViewController.selectedIndex = notifyTabIndex
         }
@@ -236,4 +242,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
     }
     
 }
-

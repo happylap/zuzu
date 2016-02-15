@@ -268,7 +268,8 @@ class ZuzuWebService: NSObject
     }
 
     
-    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool) {
+    
+    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (successed: Bool?, error: ErrorType?) -> Void) {
         Log.enter()
         
         let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
@@ -287,9 +288,11 @@ class ZuzuWebService: NSObject
             Log.debug("payload: \(payload)")
             
             switch result {
-            case .Success: break
+            case .Success:
+                handler(successed: true, error: nil)
             case .Failure(_, let error):
                 Log.debug("Error: \(error)")
+                handler(successed: false, error: error)
             }
         }
         
