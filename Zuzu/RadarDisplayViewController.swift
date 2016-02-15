@@ -29,9 +29,14 @@ class RadarDisplayViewController: UIViewController {
     }
 
     @IBAction func enableCriteria(sender: UISwitch) {
-        
-        
-        
+        if self.user != nil && self.zuzuCriteria != nil{
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.user!,
+                criteriaId: self.zuzuCriteria!.criteriaId!, enabled: sender.on)
+            self.zuzuCriteria!.enabled = sender.on
+        }
+        else{
+            
+        }
     }
     private func configureButton() {
         
@@ -85,10 +90,9 @@ class RadarDisplayViewController: UIViewController {
 extension RadarDisplayViewController : RadarViewControllerDelegate {
     func onCriteriaSettingDone(searchCriteria:SearchCriteria){
         if let zuzuCriteria = self.zuzuCriteria{
-            zuzuCriteria.criteria = searchCriteria
             if let user = self.user{
                 ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(user, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
-                   
+                   zuzuCriteria.criteria = searchCriteria
                 }
             }
         }
