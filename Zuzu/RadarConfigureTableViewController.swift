@@ -619,7 +619,7 @@ class RadarConfigureTableViewController: UITableViewController {
                 }
             }
             
-            //ftvc.selectedFilterIdSet = filterIdSet
+            ftvc.selectedFilterIdSet = filterIdSet
             ftvc.filterDelegate = self
             
             self.showViewController(ftvc, sender: self)
@@ -1067,29 +1067,16 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
 extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     
     private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
-        
-        /*let filterGroups = self.convertToFilterGroup(filteridSet)
-        
-        var allFiltersDic = [String:String]()
-        
-        for filterGroup in filterGroups {
-            let filterPair = filterGroup.filterDic
-            
-            for (key, value) in filterPair {
-                allFiltersDic[key] = value
-            }
-        }
-        
-        return allFiltersDic*/
-        
         return [String:String]()
     }
     
     func onFiltersReset() {
+        // don't do anything
     }
     
     
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        // don't do anything
     }
     
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
