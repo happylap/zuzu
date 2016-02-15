@@ -30,9 +30,11 @@ class RadarDisplayViewController: UIViewController {
 
     @IBAction func enableCriteria(sender: UISwitch) {
         if self.user != nil && self.zuzuCriteria != nil{
+            let isEnable = sender.on
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.user!,
-                criteriaId: self.zuzuCriteria!.criteriaId!, enabled: sender.on)
-            self.zuzuCriteria!.enabled = sender.on
+                criteriaId: self.zuzuCriteria!.criteriaId!, enabled: isEnable) { (result, error) -> Void in
+                    self.zuzuCriteria!.enabled = isEnable
+            }
         }
         else{
             
