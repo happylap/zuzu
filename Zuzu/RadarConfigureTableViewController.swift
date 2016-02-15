@@ -543,109 +543,6 @@ class RadarConfigureTableViewController: UITableViewController {
     
     // MARK: - UI Control Actions
     
-    
-    //The UI control event handler Should not be private    
-    @IBAction func onAppRatingButtonTouched(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        let appId = "id1064374526"
-        let appWeburl = "https://itunes.apple.com/tw/app/zhu-zhu-kuai-zu-yi-ci-sou/\(appId)?l=zh&mt=8"
-        let appUrl = "itms-apps://itunes.apple.com/app/\(appId)"
-        
-        var gaLabel:String?
-        var result = false
-        
-        if let url = NSURL(string: appUrl) {
-            if (UIApplication.sharedApplication().canOpenURL(url)) {
-                
-                result = UIApplication.sharedApplication().openURL(NSURL(string : appUrl)!)
-                if(result) {
-                    gaLabel = url.absoluteString
-                }
-            }
-        }
-        
-        ///iTunes App failed, Open by Browser
-        if(!result) {
-            if let url = NSURL(string: appWeburl) {
-                
-                if (UIApplication.sharedApplication().canOpenURL(url)) {
-                    
-                    result = UIApplication.sharedApplication().openURL(url)
-                    if(result) {
-                        gaLabel = url.absoluteString
-                    }
-                }
-            }
-        }
-        
-        ///GA Tracker
-        
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.RateUs,
-            label: gaLabel ?? "failed")
-        
-    }
-    
-    @IBAction func onOpenFanPage(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        let fbUrl = "https://www.facebook.com/zuzutw"
-        let fbAppUrl = "fb://profile/1675724006047703"
-        
-        var gaLabel:String?
-        var result = false
-        
-        ///Open by Facebook App
-        if let url = NSURL(string: fbAppUrl) {
-            
-            if (UIApplication.sharedApplication().canOpenURL(url)) {
-                
-                result = UIApplication.sharedApplication().openURL(url)
-                if(result) {
-                    gaLabel = url.absoluteString
-                }
-            }
-        }
-        
-        ///FB failed, Open by Browser
-        if(!result) {
-            if let url = NSURL(string: fbUrl) {
-                
-                if (UIApplication.sharedApplication().canOpenURL(url)) {
-                    
-                    result = UIApplication.sharedApplication().openURL(url)
-                    if(result) {
-                        gaLabel = url.absoluteString
-                    }
-                }
-            }
-        }
-        
-        ///Browser failed, Open by Embedded Browser
-        if(!result) {
-            let browserViewController = self.storyboard?.instantiateViewControllerWithIdentifier("browserView") as? BrowserViewController
-            
-            if let browserViewController = browserViewController {
-                browserViewController.enableToolBar = false
-                browserViewController.sourceLink = fbUrl
-                browserViewController.viewTitle = "豬豬快租"
-                //self.modalPresentationStyle = .CurrentContext
-                self.navigationController?.pushViewController(browserViewController, animated: true)
-                
-                gaLabel = fbUrl
-            }
-        }
-        
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.FanPage,
-            label: gaLabel ?? "failed")
-        
-        
-    }
-    
-    
     func onClearCriteriaButtonTouched(sender: UIButton) {
         Log.info("Sender: \(sender)", label: ActionLabel)
         
@@ -683,11 +580,6 @@ class RadarConfigureTableViewController: UITableViewController {
             
             
         }
-    }
-    
-    func onDismissCurrentView(sender: UIBarButtonItem) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        navigationController?.popToRootViewControllerAnimated(true)
     }
     
     // MARK: - Table Delegate
