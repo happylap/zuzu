@@ -355,7 +355,7 @@
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
                                                         <rect key="frame" x="250" y="59" width="60" height="30"/>
-                                                        <state key="normal" title="修改設定"/>
+                                                        <state key="normal" title="更改條件"/>
                                                         <connections>
                                                             <segue destination="OaS-ny-kO8" kind="show" identifier="showConfigureRadar" id="Foe-EC-G9P"/>
                                                         </connections>
