@@ -27,6 +27,11 @@ class RadarDisplayViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    @IBAction func enableCriteria(sender: UISwitch) {
+        
+        
+        
+    }
     private func configureButton() {
         
         /*searchButton.layer.borderWidth = 2

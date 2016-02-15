@@ -308,6 +308,9 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23a-c6-f3g">
                                                 <rect key="frame" x="531" y="8" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="enableCriteria:" destination="bGU-pi-D72" eventType="valueChanged" id="ZbG-TN-XZx"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>

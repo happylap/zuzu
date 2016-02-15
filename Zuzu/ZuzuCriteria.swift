@@ -94,9 +94,9 @@ class ZuzuCriteria: NSObject, Mappable {
             
             // Collect all FilterGroup
             var filterGroups: [FilterGroup] = [FilterGroup]()
-            for filterSection in FilterTableViewController.filterSections {
-                for filterGroup in filterSection.filterGroups {
-                    filterGroups.append(filterGroup)
+            for orig_filterSection in FilterTableViewController.filterSections {
+                for orig_filterGroup in orig_filterSection.filterGroups {
+                    filterGroups.append(orig_filterGroup.copy() as! FilterGroup)
                 }
             }
             
