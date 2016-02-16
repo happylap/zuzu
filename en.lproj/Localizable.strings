@@ -5,8 +5,12 @@
   Created by Jung-Shuo Pai on 2015/10/6.
   Copyright © 2015年 Jung-Shuo Pai. All rights reserved.
 */
-"unable_to_get_data.alert.title" = "Unable to get remote data";
+"unable_to_get_data.alert.title" = "無法查詢網路資料";
 
-"unable_to_get_data.alert.msg" = "We are unable to get data for you! You might be in an area with unstable Internet connections, or the wireless connectivity on your phone has been switched off.";
+"unable_to_get_data.alert.msg" = "目前無法為您讀取網路資料！可能是您所處區域的網路連線不穩定，或是手機無線網路被關閉了。";
 
-"unable_to_get_data.alert.button.ok" = "OK";
+"unable_to_get_data.alert.button.ok" = "知道了";
+
+"login.title" = "請選擇登入方式";
+
+"login.body" = "使用我的收藏功能，需要您選擇下列一種帳戶登入，日後更換裝置，收藏的物件才不會消失喔！\n\n豬豬快租絕不會以您的身份發佈任何資訊";

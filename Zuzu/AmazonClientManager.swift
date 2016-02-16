@@ -426,7 +426,11 @@ class AmazonClientManager : NSObject {
         }
         
         self.googleSignIn?.delegate = self
-        self.googleSignIn?.uiDelegate = theViewController as! GIDSignInUIDelegate
+        self.googleSignIn?.uiDelegate = self
+        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(theViewController.view)
         
         self.googleSignIn?.signIn()
     }
@@ -662,6 +666,8 @@ class AmazonClientManager : NSObject {
     
 }
 
+// MARK: Google GIDSignInDelegate
+
 extension AmazonClientManager: GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
@@ -689,21 +695,55 @@ extension AmazonClientManager: GIDSignInDelegate {
                 }
             } else {
                 
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.errorAlert("Google登入發生錯誤: " + error.localizedDescription)
+                let errorMessage = error.localizedDescription
+                
+                if(errorMessage.rangeOfString("canceled") != nil) {
+                    
+                    ///GA Tracker: Login failed
+                    if let viewController = signIn.uiDelegate as? UIViewController {
+                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                            action: GAConst.Action.Blocking.LoginCancel, label: "\(GAConst.Label.LoginType.Google), \(error.localizedDescription)")
+                    }
+                    
+                    Log.warning("Cancelled: \(error.userInfo), \(error.localizedDescription)")
+                    
+                } else {
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.errorAlert("Google登入發生錯誤: " + error.localizedDescription)
+                    }
+                    
+                    ///GA Tracker: Login failed
+                    if let viewController = signIn.uiDelegate as? UIViewController {
+                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                            action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Google), \(error.localizedDescription)")
+                    }
+                    
+                    Log.warning("Error: \(error.userInfo), \(error.localizedDescription)")
                 }
                 
-                ///GA Tracker: Login failed
-                if let viewController = signIn.uiDelegate as? UIViewController {
-                    viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Google), \(error.localizedDescription)")
-                }
                 
-                Log.warning("Error: \(error.userInfo), \(error.localizedDescription)")
             }
     }
 }
 
-extension UIViewController: GIDSignInUIDelegate {
+// MARK: Google GIDSignInUIDelegate
+extension AmazonClientManager: GIDSignInUIDelegate {
+    
+    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
+        LoadingSpinner.shared.stop()
+    }
+    
+    // Present a view that prompts the user to sign in with Google
+    func signIn(signIn: GIDSignIn!,
+        presentViewController viewController: UIViewController!) {
+            self.loginViewController?.presentViewController(viewController, animated: true, completion: nil)
+    }
+    
+    // Dismiss the "Sign in with Google" view
+    func signIn(signIn: GIDSignIn!,
+        dismissViewController viewController: UIViewController!) {
+            self.loginViewController?.dismissViewControllerAnimated(true, completion: nil)
+    }
     
 }
