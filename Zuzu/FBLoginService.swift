@@ -20,27 +20,23 @@ class FBLoginService: NSObject
         return Singleton.instance
     }
     
-    typealias ServiceResponse = (FBUserData?, NSError?) -> Void
+    typealias ServiceResponse = (UserData?, NSError?) -> Void
     
     
     func getFBUserData(sender: UIViewController, onCompletion: ServiceResponse) -> Void {
         if hasActiveSession() {
-            FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields":"id, email, name, first_name, last_name, picture.type(large)"]).startWithCompletionHandler { (connection, result, error) -> Void in
+            FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields":"id, email, first_name, last_name, picture.type(large)"]).startWithCompletionHandler { (connection, result, error) -> Void in
                 if error == nil {
                     let strId: String = (result.objectForKey("id") as? String)!
                     let strEmail: String = (result.objectForKey("email") as? String)!
                     let strName: String = (result.objectForKey("name") as? String)!
-                    let strFirstName: String = (result.objectForKey("first_name") as? String)!
-                    let strLastName: String = (result.objectForKey("last_name") as? String)!
                     let strPictureURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String)!
                     
-                    let fbUserData = FBUserData()
-                    fbUserData.facebookId = strId
-                    fbUserData.facebookEmail = strEmail
-                    fbUserData.facebookName = strName
-                    fbUserData.facebookFirstName = strFirstName
-                    fbUserData.facebookLastName = strLastName
-                    fbUserData.facebookPictureUrl = strPictureURL
+                    let fbUserData = UserData(provider: Provider.FB)
+                    fbUserData.id = strId
+                    fbUserData.email = strEmail
+                    fbUserData.name = strName
+                    fbUserData.pictureUrl = strPictureURL
                     
                     onCompletion(fbUserData, nil)
                     

@@ -315,7 +315,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         AmazonClientManager.sharedInstance.logOut() {
             (task: AWSTask!) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
-                SCLAlertView().showWarning("提醒您", subTitle: "您已登出Facebook", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                SCLAlertView().showWarning("提醒您", subTitle: "您已登出", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             }
             return nil
         }
