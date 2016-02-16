@@ -236,14 +236,20 @@ class AmazonClientManager : NSObject {
                     }
                 }
                 
-                //Post Login Notification
-                Log.debug("postNotificationName: \(UserLoginNotification)")
-                NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: nil, userInfo: nil)
-                
                 //Upload User Data to S3
                 if let userData = self.userLoginData {
-                    Log.debug(userData.description)
+                    
+                    Log.debug("postNotificationName: \(UserLoginNotification)")
+                    NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self, userInfo: ["userData": userData])
+                    
+                    
                     self.uploadUserDataToS3(userData)
+                    
+                } else {
+                    assert(false, "No userData after loggin in")
+                    
+                    Log.debug("postNotificationName: \(UserLoginNotification)")
+                    NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self, userInfo: nil)
                 }
             }
             
@@ -674,6 +680,8 @@ class AmazonClientManager : NSObject {
     
     private func uploadUserDataToS3(userData: UserData) {
         Log.enter()
+        
+        Log.debug(userData.description)
         
         let randomNumber = arc4random()
         
