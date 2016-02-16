@@ -63,6 +63,7 @@
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
 		2F8DB45B1C50B95F006C4B21 /* SmartFilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */; };
+		2F9139EB1C7334C5004325B1 /* RadarLandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */; };
 		2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */; };
 		2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */; };
 		2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */; };
@@ -230,6 +231,7 @@
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
 		2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterContainerView.swift; sourceTree = "<group>"; };
+		2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarLandingViewController.swift; sourceTree = "<group>"; };
 		2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailBasicInfoCell.swift; sourceTree = "<group>"; };
 		2F9410551BF445DD00BA12B5 /* HouseDetailContactBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailContactBarView.swift; sourceTree = "<group>"; };
 		2F9410571BF458A000BA12B5 /* HouseDetailContactBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HouseDetailContactBarView.xib; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */,
 				817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */,
 				1405856B1C73083800449C27 /* RadarDisplayItem.swift */,
+				2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */,
 			);
 			name = Radar;
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */,
 				81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */,
 				81FA28091BDA397B0038DD19 /* House.swift in Sources */,
+				2F9139EB1C7334C5004325B1 /* RadarLandingViewController.swift in Sources */,
 				2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */,
 				2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */,
 				2FD49B711C58AE3700857EAE /* SearchResultAdCell.swift in Sources */,

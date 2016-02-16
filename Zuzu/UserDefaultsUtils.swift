@@ -28,6 +28,23 @@ struct UserDefaultsUtils{
         return userDefaults.objectForKey(loginProviderUserDefaultKey) as? String
     }
     
+    // MARK: Radar
+    static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
+    
+    static func setRadarLandindPageDisplayed() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(true, forKey: radarLandingPageDisplayedUserDefaultKey)
+    }
+    
+    static func needsDisplayRadarLandingPage() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _ = userDefaults.objectForKey(radarLandingPageDisplayedUserDefaultKey) {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     // MARK: My Collection
     
     static let myCollectionAlertUserDefaultKey = "myCollectionAlert"

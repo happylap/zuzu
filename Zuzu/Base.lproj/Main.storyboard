@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Main Tab View Controller-->
@@ -20,5 +23,161 @@
             </objects>
             <point key="canvasLocation" x="-40" y="58"/>
         </scene>
+        <!--Duplicate House View-->
+        <scene sceneID="IPC-My-sup">
+            <objects>
+                <viewController storyboardIdentifier="radarLandingPage" title="Duplicate House View" id="dcr-wX-k6W" customClass="RadarLandingViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kme-gX-h36"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ta2-vl-VG8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LJ9-VR-utI">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HrV-fA-kRW" userLabel="Header View">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="租屋雷達" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfr-AS-x6H" userLabel="Title">
+                                        <rect key="frame" x="57" y="40" width="300" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YzE-PW-QCu" userLabel="Close Button">
+                                        <rect key="frame" x="16" y="39" width="25" height="25"/>
+                                        <state key="normal" image="cancel"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="YzE-PW-QCu" firstAttribute="centerY" secondItem="HrV-fA-kRW" secondAttribute="centerY" id="B5D-x6-oqF"/>
+                                    <constraint firstAttribute="trailing" secondItem="yfr-AS-x6H" secondAttribute="trailing" constant="57" id="DU8-mK-YX4"/>
+                                    <constraint firstItem="YzE-PW-QCu" firstAttribute="top" secondItem="HrV-fA-kRW" secondAttribute="top" constant="39" id="Fai-ZO-w2U"/>
+                                    <constraint firstItem="yfr-AS-x6H" firstAttribute="leading" secondItem="YzE-PW-QCu" secondAttribute="trailing" constant="16" id="Zst-zM-Cra"/>
+                                    <constraint firstItem="yfr-AS-x6H" firstAttribute="bottom" secondItem="YzE-PW-QCu" secondAttribute="bottom" id="fyi-rN-qYn"/>
+                                    <constraint firstItem="yfr-AS-x6H" firstAttribute="centerX" secondItem="HrV-fA-kRW" secondAttribute="centerX" id="o0j-IB-HIr"/>
+                                    <constraint firstItem="YzE-PW-QCu" firstAttribute="leading" secondItem="HrV-fA-kRW" secondAttribute="leading" constant="16" id="w3w-eR-sno"/>
+                                    <constraint firstAttribute="bottom" secondItem="YzE-PW-QCu" secondAttribute="bottom" constant="20" id="wrf-Oy-HAz"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="B5D-x6-oqF"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="租屋雷達即時通知服務" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBa-hE-DqY" userLabel="SubTitle1">
+                                <rect key="frame" x="28" y="100" width="358" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="gxd-1n-PNe"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ak6-rV-fMv" userLabel="SubTitle2">
+                                <rect key="frame" x="28" y="129" width="350" height="102"/>
+                                <string key="text">每次聯絡房東都總是遇到已經租出去的狀況嗎？
+有了 "租屋雷達" 即時通知服務，符合您需求
+的物件就會精準、即時地送到你手上！</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lxd-WG-UAo" userLabel="Image Container View">
+                                <rect key="frame" x="0.0" y="239" width="414" height="103.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="height" multiplier="4:1" id="3Yh-CI-Pki"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pSm-Fm-EMv" userLabel="Feature List View 1">
+                                <rect key="frame" x="0.0" y="342" width="414" height="103.5"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="pSm-Fm-EMv" secondAttribute="height" multiplier="4:1" id="Fbk-Er-gK6"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jQ3-N3-tQj" userLabel="Feature List View 2">
+                                <rect key="frame" x="0.0" y="445.5" width="414" height="103.5"/>
+                                <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="jQ3-N3-tQj" secondAttribute="height" multiplier="4:1" id="GgT-Gm-zlB"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5O3-jG-Jdx" userLabel="Feature List View 3">
+                                <rect key="frame" x="0.0" y="549" width="414" height="103.5"/>
+                                <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5O3-jG-Jdx" secondAttribute="height" multiplier="4:1" id="a2S-7n-YMm"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFI-eq-uUx">
+                                <rect key="frame" x="120" y="660.5" width="166" height="55.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="D2o-pA-XA3"/>
+                                    <constraint firstAttribute="width" constant="138" id="Wpd-Rp-5ff"/>
+                                    <constraint firstAttribute="width" secondItem="NFI-eq-uUx" secondAttribute="height" multiplier="3:1" id="nW5-u4-bVg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="開始使用">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="D2o-pA-XA3"/>
+                                        <exclude reference="Wpd-Rp-5ff"/>
+                                    </mask>
+                                </variation>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ak6-rV-fMv" firstAttribute="top" secondItem="QBa-hE-DqY" secondAttribute="bottom" constant="8" symbolic="YES" id="3Cy-E0-AFz"/>
+                            <constraint firstItem="NFI-eq-uUx" firstAttribute="width" secondItem="LJ9-VR-utI" secondAttribute="width" multiplier="1:2.5" id="5je-9C-O9O"/>
+                            <constraint firstItem="5O3-jG-Jdx" firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="width" id="8AF-pN-BCT"/>
+                            <constraint firstItem="QBa-hE-DqY" firstAttribute="leading" secondItem="LJ9-VR-utI" secondAttribute="leadingMargin" constant="8" id="8Os-05-0oe"/>
+                            <constraint firstItem="5O3-jG-Jdx" firstAttribute="top" secondItem="jQ3-N3-tQj" secondAttribute="bottom" id="9CU-6Y-hi7"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ak6-rV-fMv" secondAttribute="trailing" constant="16" id="BuJ-hd-kBD"/>
+                            <constraint firstAttribute="bottom" secondItem="NFI-eq-uUx" secondAttribute="bottom" constant="20" symbolic="YES" id="E8v-hF-HlY"/>
+                            <constraint firstItem="HrV-fA-kRW" firstAttribute="top" secondItem="LJ9-VR-utI" secondAttribute="top" id="FST-TY-ua5"/>
+                            <constraint firstItem="HrV-fA-kRW" firstAttribute="leading" secondItem="lxd-WG-UAo" secondAttribute="leading" id="G3G-Fj-eSU"/>
+                            <constraint firstItem="pSm-Fm-EMv" firstAttribute="bottom" secondItem="jQ3-N3-tQj" secondAttribute="top" id="Gz9-PT-PoW"/>
+                            <constraint firstItem="NFI-eq-uUx" firstAttribute="top" secondItem="5O3-jG-Jdx" secondAttribute="bottom" constant="8" symbolic="YES" id="Lc8-8f-xgc"/>
+                            <constraint firstAttribute="trailing" secondItem="HrV-fA-kRW" secondAttribute="trailing" id="N7Q-LS-1Oc"/>
+                            <constraint firstItem="pSm-Fm-EMv" firstAttribute="top" secondItem="lxd-WG-UAo" secondAttribute="bottom" id="PWr-bz-4FJ"/>
+                            <constraint firstItem="pSm-Fm-EMv" firstAttribute="leading" secondItem="lxd-WG-UAo" secondAttribute="leading" id="RsQ-QR-dwS"/>
+                            <constraint firstItem="QBa-hE-DqY" firstAttribute="top" secondItem="HrV-fA-kRW" secondAttribute="bottom" constant="16" id="UAM-Bm-rsw"/>
+                            <constraint firstItem="HrV-fA-kRW" firstAttribute="leading" secondItem="LJ9-VR-utI" secondAttribute="leading" id="UDU-w9-BA2"/>
+                            <constraint firstItem="NFI-eq-uUx" firstAttribute="centerX" secondItem="Ak6-rV-fMv" secondAttribute="centerX" id="WAB-mO-fNf"/>
+                            <constraint firstItem="HrV-fA-kRW" firstAttribute="trailing" secondItem="lxd-WG-UAo" secondAttribute="trailing" id="Zmr-ET-nbI"/>
+                            <constraint firstItem="pSm-Fm-EMv" firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="width" id="bco-UI-FNO"/>
+                            <constraint firstItem="Ak6-rV-fMv" firstAttribute="leading" secondItem="QBa-hE-DqY" secondAttribute="leading" id="eVo-Jf-nN2"/>
+                            <constraint firstItem="jQ3-N3-tQj" firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="width" id="ln5-bc-TRG"/>
+                            <constraint firstItem="lxd-WG-UAo" firstAttribute="top" secondItem="Ak6-rV-fMv" secondAttribute="bottom" constant="8" symbolic="YES" id="ns2-l4-tZP"/>
+                            <constraint firstItem="5O3-jG-Jdx" firstAttribute="leading" secondItem="lxd-WG-UAo" secondAttribute="leading" id="nvj-2C-2oF"/>
+                            <constraint firstItem="jQ3-N3-tQj" firstAttribute="leading" secondItem="lxd-WG-UAo" secondAttribute="leading" id="teu-ks-c2z"/>
+                            <constraint firstItem="QBa-hE-DqY" firstAttribute="top" secondItem="LJ9-VR-utI" secondAttribute="top" constant="100" id="u4o-is-PfT"/>
+                            <constraint firstItem="HrV-fA-kRW" firstAttribute="centerX" secondItem="QBa-hE-DqY" secondAttribute="centerX" id="yye-lM-5Mt"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="cancelButton" destination="YzE-PW-QCu" id="fBW-5g-O7b"/>
+                        <outlet property="continueButton" destination="NFI-eq-uUx" id="9KN-Hz-j8d"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QXP-fy-R5g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-133" y="843"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="cancel" width="30" height="30"/>
+    </resources>
 </document>

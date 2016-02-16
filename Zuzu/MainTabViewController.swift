@@ -70,8 +70,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-        //NSLog("%@ tabBarController", self)
-        
         
         if let sb = viewController.storyboard {
             if let name: String = sb.valueForKey("name") as? String {
@@ -83,6 +81,21 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                             return nil
                         }
                         return false
+                    }
+                
+                case "RadarStoryboard":
+                    //If fisrt time, pop up landing page
+                    if(UserDefaultsUtils.needsDisplayRadarLandingPage()) {
+                        
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewControllerWithIdentifier("radarLandingPage")
+                            vc.modalPresentationStyle = .OverCurrentContext
+                            presentViewController(vc, animated: true, completion: nil)
+                        
+                        return false
+                    } else {
+                        
+                        return true
                     }
                     
                 default: break
