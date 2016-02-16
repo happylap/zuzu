@@ -21,7 +21,7 @@ class CommonUtils: NSObject{
     static func getDateString(date: NSDate, format: String = "yyyy-MM-dd") -> String{
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = format
-        dateFormatter.timeZone = NSTimeZone(name: "UTC")
+        //dateFormatter.timeZone = NSTimeZone(name: "UTC")
         return dateFormatter.stringFromDate(date)
     }
     
