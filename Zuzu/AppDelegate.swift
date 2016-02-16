@@ -166,7 +166,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         if application.applicationState == UIApplicationState.Active {
             if rootViewController.selectedIndex == notifyTabIndex{
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNofyItems", object: self, userInfo: userInfo)
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: userInfo)
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
                     if let badge = aps["badge"] as? Int {
