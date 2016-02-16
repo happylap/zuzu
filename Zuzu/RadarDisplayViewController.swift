@@ -12,22 +12,49 @@ private let Log = Logger.defaultLogger
 
 class RadarDisplayViewController: UIViewController {
 
-    var zuzuCriteria: ZuzuCriteria?
-    var user: String?
-    var displayItem: RadarDisplayItem?{
+    var zuzuCriteria: ZuzuCriteria?{
         didSet{
-            self.regionLabel?.text = displayItem?.title
-            self.houseInfoLabel?.text = displayItem?.detail
-            Log.debug(displayItem?.detail)
-            Log.debug(self.houseInfoLabel?.text)
+            self.searchCriteria = self.zuzuCriteria?.criteria
+            var diff = 0
+            var expirDate = ""
+            if let expireDate = self.zuzuCriteria?.expireTime{
+                let now = NSDate()
+                diff = now.daysFrom(expireDate)
+                expirDate = CommonUtils.getStandardDateString(expireDate)
+            }
+            self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
+            self.serviceExpireLabel?.text = "到期日: \(expirDate)"
         }
     }
+    
+    var searchCriteria: SearchCriteria?{
+        didSet{
+            if searchCriteria != nil{
+                let displayItem = RadarDisplayItem(criteria:searchCriteria!)
+                self.regionLabel?.text = displayItem.title
+                self.houseInfoLabel?.text = displayItem.detail
+                var filterNum = 0
+                if let filterGroups = self.zuzuCriteria?.criteria?.filterGroups{
+                    filterNum = filterGroups.count
+                }
+                self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
+            }
+        }
+    }
+    
+    
+    
+    var user: String?
     
     @IBOutlet weak var regionLabel: UILabel!
     
     @IBOutlet weak var houseInfoLabel: UILabel!
     
     @IBOutlet weak var otherFiltersLabel: UILabel!
+    
+    @IBOutlet weak var serviceStatusLabel: UILabel!
+    
+    @IBOutlet weak var serviceExpireLabel: UILabel!
     
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
@@ -112,9 +139,6 @@ class RadarDisplayViewController: UIViewController {
                     //zuzualert
                 }else{
                     self.zuzuCriteria = result
-                    if let criteria = self.zuzuCriteria?.criteria{
-                        self.displayItem = RadarDisplayItem(criteria:criteria)
-                    }
                 }
             }
         }
@@ -131,9 +155,7 @@ extension RadarDisplayViewController : RadarViewControllerDelegate {
                         //zuzualert
                     }else{
                         zuzuCriteria.criteria = searchCriteria
-                        if zuzuCriteria.criteria  != nil{
-                            self.displayItem = RadarDisplayItem(criteria:zuzuCriteria.criteria!)
-                        }
+                        self.searchCriteria = searchCriteria
                     }
                 }
             }

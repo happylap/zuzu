@@ -35,7 +35,7 @@ class ZuzuCriteria: NSObject, Mappable {
         userId              <-  map["user_id"]
         criteriaId          <-  map["criteria_id"]
         enabled             <-  map["enabled"]
-        expireTime          <-  map["expire_time"]
+        expireTime          <-  (map["expire_time"], DateTransform())
         appleProductId      <-  map["apple_product_id"]
         criteria            <- (map["filters"], criteriaTransform)
     }

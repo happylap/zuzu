@@ -116,8 +116,10 @@ class RadarDisplayItem: NSObject, NSCoding {
             
             return result + titleStr.joinWithSeparator("，")
         }
+        
+
     }
-    
+        
     init(criteria:SearchCriteria) {
         self.criteria = criteria
     }
