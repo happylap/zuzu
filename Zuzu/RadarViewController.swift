@@ -14,25 +14,47 @@ protocol RadarViewControllerDelegate: class {
 }
 
 class RadarViewController: UIViewController {
+
+    struct ViewTransConst {
+        static let showRegionConfigureTable:String = "showRegionConfigureTable"
+    }
     
     var delegate: RadarViewControllerDelegate?
-    var searchCriteria = SearchCriteria()
+    var searchCriteria = SearchCriteria(){
+        didSet{
+            updateCriteriaTextLabel()()
+        }
+    }
     var isUpdateMode = true
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.isUpdateMode == true{
             self.activateButton.hidden = true
             self.activateButton.enabled = false
         }
+        self.houseInfoLabel.numberOfLines = 0
+        updateCriteriaTextLabel()()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    private func updateCriteriaTextLabel()(){
+        let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
+        self.regionLabel?.text = displayItem.title
+        self.houseInfoLabel?.text = displayItem.detail
+        var filterNum = 0
+        if let filterGroups = searchCriteria.filterGroups{
+            filterNum = filterGroups.count
+        }
+        self.otherCriteriaLabel?.text = "其他\(filterNum)個過濾條件"
     }
     
     
@@ -154,9 +176,6 @@ class RadarViewController: UIViewController {
 
     */
     
-    struct ViewTransConst {
-        static let showRegionConfigureTable:String = "showRegionConfigureTable"
-    }
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

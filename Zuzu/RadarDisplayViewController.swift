@@ -15,30 +15,13 @@ class RadarDisplayViewController: UIViewController {
     var zuzuCriteria: ZuzuCriteria?{
         didSet{
             self.searchCriteria = self.zuzuCriteria?.criteria
-            var diff = 0
-            var expirDate = ""
-            if let expireDate = self.zuzuCriteria?.expireTime{
-                let now = NSDate()
-                diff = now.daysFrom(expireDate)
-                expirDate = CommonUtils.getStandardDateString(expireDate)
-            }
-            self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
-            self.serviceExpireLabel?.text = "到期日: \(expirDate)"
+            self.updateServiceTextLabel()
         }
     }
     
     var searchCriteria: SearchCriteria?{
         didSet{
-            if searchCriteria != nil{
-                let displayItem = RadarDisplayItem(criteria:searchCriteria!)
-                self.regionLabel?.text = displayItem.title
-                self.houseInfoLabel?.text = displayItem.detail
-                var filterNum = 0
-                if let filterGroups = self.zuzuCriteria?.criteria?.filterGroups{
-                    filterNum = filterGroups.count
-                }
-                self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
-            }
+            updateCriteriaTextLabel()
         }
     }
     
@@ -90,6 +73,32 @@ class RadarDisplayViewController: UIViewController {
             //zuzualert
         }
     }
+    
+    private func updateCriteriaTextLabel(){
+        if searchCriteria != nil{
+            let displayItem = RadarDisplayItem(criteria:searchCriteria!)
+            self.regionLabel?.text = displayItem.title
+            self.houseInfoLabel?.text = displayItem.detail
+            var filterNum = 0
+            if let filterGroups = self.zuzuCriteria?.criteria?.filterGroups{
+                filterNum = filterGroups.count
+            }
+            self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
+        }
+    }
+    
+    private func updateServiceTextLabel(){
+        var diff = 0
+        var expirDate = ""
+        if let expireDate = self.zuzuCriteria?.expireTime{
+            let now = NSDate()
+            diff = now.daysFrom(expireDate)
+            expirDate = CommonUtils.getStandardDateString(expireDate)
+        }
+        self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
+        self.serviceExpireLabel?.text = "到期日: \(expirDate)"
+    }
+    
     private func configureButton() {
         
         /*searchButton.layer.borderWidth = 2
