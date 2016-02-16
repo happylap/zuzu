@@ -15,10 +15,8 @@ protocol RadarViewControllerDelegate: class {
 
 class RadarViewController: UIViewController {
     
-    var user: String?
-    var appleProductId: String?
     var delegate: RadarViewControllerDelegate?
-    var searchCriteria:SearchCriteria?
+    var searchCriteria = SearchCriteria()
     var isUpdateMode = false
     
     override func viewWillAppear(animated: Bool) {
@@ -26,8 +24,6 @@ class RadarViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.user = "test"
-        self.appleProductId = "apple456"
         if self.isUpdateMode == true{
             self.activateButton.hidden = true
             self.activateButton.enabled = false
@@ -49,28 +45,27 @@ class RadarViewController: UIViewController {
     
     @IBAction func activateButtonClick(sender: UIButton) {
         
-        if self.searchCriteria != nil && self.user != nil && self.appleProductId != nil{
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.completeHandler = { () -> Void in
+                ///Show tab bar
+                self.tabBarController?.tabBarHidden = false
+            }
             
-            let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-            if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-                ///Hide tab bar
-                self.tabBarController?.tabBarHidden = true
-                vc.modalPresentationStyle = .OverCurrentContext
-                vc.completeHandler = { () -> Void in
-                    ///Show tab bar
-                    self.tabBarController?.tabBarHidden = false
-                }
-                
-                presentViewController(vc, animated: true, completion: nil)
-                
-                vc.purchaseCompleteHandler = {(isSuccess) -> Void in
-                    if isSuccess == true{
-                        ZuzuWebService.sharedInstance.createCriteriaByUserId(self.user!, appleProductId: self.appleProductId!, criteria: self.searchCriteria!) { (result, error) -> Void in
-                            Log.debug(result)
-                        }
-                    }else{
-                        //zuzualert
+            presentViewController(vc, animated: true, completion: nil)
+            
+            vc.purchaseCompleteHandler = {(isSuccess, appleProductId) -> Void in
+                if isSuccess == true{
+                    let user = "test"
+                    ZuzuWebService.sharedInstance.createCriteriaByUserId(user, appleProductId: appleProductId, criteria: self.searchCriteria) { (result, error) -> Void in
+                        Log.debug(result)
+                        
                     }
+                }else{
+                    //zuzualert
                 }
             }
         }
@@ -172,9 +167,7 @@ class RadarViewController: UIViewController {
             switch identifier{
             case ViewTransConst.showRegionConfigureTable:
                 if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
-                    if let searchCriteria = self.searchCriteria{
-                        vc.currentCriteria = searchCriteria
-                    }
+                    vc.currentCriteria = searchCriteria
                     vc.delegate  = self
                 }
                 
@@ -187,18 +180,14 @@ class RadarViewController: UIViewController {
         super.willMoveToParentViewController(parent)
         
         if(parent == nil) {
-            
             /// Filter Setting Finished
-            if let searchCriteria = self.searchCriteria{
-                self.delegate?.onCriteriaSettingDone(searchCriteria)
-            }
+            self.delegate?.onCriteriaSettingDone(searchCriteria)
         }
     }
 }
 
 // MARK: - RadarConfigureTableViewControllerDelegate
 extension RadarViewController : RadarConfigureTableViewControllerDelegate {
-    
     func onCriteriaConfigureDone(searchCriteria:SearchCriteria){
         Log.debug("onCriteriaConfigureDone")
         self.searchCriteria = searchCriteria

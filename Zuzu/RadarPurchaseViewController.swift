@@ -21,7 +21,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     var completeHandler: (() -> Void)?
     
-    var purchaseCompleteHandler: ((isSuccess:Bool) -> Void)?
+    var purchaseCompleteHandler: ((isSuccess:Bool, appleProductId: String) -> Void)?
     
     deinit {
         // NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -138,14 +138,14 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             if product.productIdentifier == productIdentifier {
                 tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Fade)
                 if let purchaseCompleteHandler = self.purchaseCompleteHandler {
-                    purchaseCompleteHandler(isSuccess:true)
+                    purchaseCompleteHandler(isSuccess:true, appleProductId: product.productIdentifier)
                 }
                 return
             }
         }
         
         if let purchaseCompleteHandler = self.purchaseCompleteHandler {
-            purchaseCompleteHandler(isSuccess:false)
+            purchaseCompleteHandler(isSuccess:false, appleProductId: "")
         }
         
     }
