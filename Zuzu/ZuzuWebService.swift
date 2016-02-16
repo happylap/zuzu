@@ -17,6 +17,20 @@ struct WebApiConst {
         static let SCHEME = "http"
         static let HOST = "ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com"
         static let PORT = 4567
+        static var HEADERS: [String: String]? {
+            get {
+                var headers = ["Content-Type": "application/x-www-form-urlencoded"]
+                
+                let plainLoginString = (SecretConst.SolrQuery as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
+                    headers["Authorization"] = "Basic \(base64LoginString)"
+                } else {
+                    Log.debug("Unable to do Basic Authorization")
+                }
+                
+                return headers
+            }
+        }
     }
     
 }
@@ -47,29 +61,26 @@ class ZuzuWebService: NSObject
         
         let url = "\(self.hostUrl)/notifyitem/\(userId)"
         
-        Alamofire.request(.GET, url, encoding: .JSON)
-            .responseJSON { (_, _, result) in
-                Log.debug("URL: \(url)")
+        self._get(url) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+                return
+            }
+            
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
                 
-                switch result {
-                case .Success(let value):
-                    let json = JSON(value)
-                    Log.debug("Result: \(json)")
-                    
-                    var notifyItems: [NotifyItem] = [NotifyItem]()
-                    for (_, subJson): (String, JSON) in json {
-                        if let notifyItem = Mapper<NotifyItem>().map(subJson.description) {
-                            notifyItems.append(notifyItem)
-                        }
+                var notifyItems: [NotifyItem] = [NotifyItem]()
+                for (_, subJson): (String, JSON) in json {
+                    if let notifyItem = Mapper<NotifyItem>().map(subJson.description) {
+                        notifyItems.append(notifyItem)
                     }
-                    handler(result: notifyItems, error: nil)
-                    
-                case .Failure(_, let error):
-                    Log.debug("Error: \(error)")
-                    handler(result: nil, error: error)
                 }
-                
+                handler(result: notifyItems, error: nil)
+            }
         }
+        
         Log.exit()
     }
     
@@ -78,58 +89,25 @@ class ZuzuWebService: NSObject
         Log.enter()
         
         let url = "\(self.hostUrl)/notifyitem/\(itemId)/\(userId)"
-        let payload = [["op": "replace", "path": "/_read", "value": true]]
+        let payload:[[String: AnyObject]] = [["op": "replace", "path": "/_read", "value": true]]
         
-        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
-            Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
-            
-            switch result {
-            case .Success: break
-            case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-            }
-        }
-
+        self._patch(url, payload: payload, handler: nil)
+        
         Log.exit()
     }
     
-    func createUser(user: ZuzuUser, handler: (result: String?, error: ErrorType?) -> Void) {
+    func createUser(user: ZuzuUser, handler: (result: AnyObject?, error: ErrorType?) -> Void) {
         Log.enter()
         
         let url = "\(self.hostUrl)/user"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
-        Alamofire.request(.POST, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
-            Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
-            
-            switch result {
-            case .Success(let value):
-                Log.debug("Success.")
-                handler(result: value, error: nil)
-            case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-                handler(result: nil, error: error)
-            }
-        }
+        self._post(url, payload: payload, handler: handler)
         
         Log.exit()
     }
 
-    func createCriteriaByUserId(userId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: String?, error: ErrorType?) -> Void) {
+    func createCriteriaByUserId(userId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.enter()
         
         let url = "\(self.hostUrl)/criteria"
@@ -142,57 +120,36 @@ class ZuzuWebService: NSObject
         
         let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
         
-        Alamofire.request(.POST, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
-            Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
-            
-            switch result {
-            case .Success(let value):
-                Log.debug("Success. \(value)")
-                handler(result: value, error: nil)
-            case .Failure(_, let error):
-                Log.debug("Error: \(error)")
+        self._post(url, payload: payload, handler: handler)
+        
+        Log.exit()
+    }
+    
+    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: NSError?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/criteria/\(userId)"
+        
+        self._get(url) { (result, error) -> Void in
+            if let error = error {
                 handler(result: nil, error: error)
+                return
+            }
+            
+            if let value = result {
+                if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
+                    handler(result: zuzuCriteria, error: nil)
+                } else {
+                    Log.debug("Transfor to SearchCriteria has error.")
+                    handler(result: nil, error: NSError(domain: "Transfor to SearchCriteria has error", code: -1, userInfo: nil))
+                }
             }
         }
         
         Log.exit()
     }
     
-    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: ErrorType?) -> Void) {
-        Log.enter()
-        let url = "\(self.hostUrl)/criteria/\(userId)"
-        
-        Alamofire.request(.GET, url, encoding: .JSON)
-            .responseJSON { (_, _, result) in
-                Log.debug("URL: \(url)")
-                
-                switch result {
-                case .Success(let value):
-                    if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
-                        Log.debug("Success.")
-                        handler(result: zuzuCriteria, error: nil)
-                    } else {
-                        Log.debug("Transfor to SearchCriteria Error.")
-                        handler(result: nil, error: nil)
-                    }
-                    
-                case .Failure(_, let error):
-                    Log.debug("Error: \(error)")
-                    handler(result: nil, error: error)
-                }
-                
-        }
-        Log.exit()
-    }
-    
-    func updateCriteriaByUserId(userId: String, criteriaId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: String?, error: ErrorType?) -> Void) {
+    func updateCriteriaByUserId(userId: String, criteriaId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.enter()
         
         let url = "\(self.hostUrl)/criteria/update/\(criteriaId)/\(userId)"
@@ -204,30 +161,12 @@ class ZuzuWebService: NSObject
         
         let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
         
-        Alamofire.request(.PUT, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
-            Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
-            
-            switch result {
-            case .Success(let value):
-                Log.debug("Success. \(value)")
-                handler(result: value, error: nil)
-            case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-                handler(result: nil, error: error)
-            }
-        }
+        self._put(url, payload: payload, handler: handler)
         
         Log.exit()
     }
     
-    func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: String?, error: ErrorType?) -> Void) {
+    func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
 
         Log.enter()
         
@@ -244,68 +183,84 @@ class ZuzuWebService: NSObject
             payload.append(["op": "replace", "path": "/filters", "value": jsonString])
         }
         
-        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
-            Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
-            
-            switch result {
-            case .Success(let value):
-                Log.debug("Success. \(value)")
-                handler(result: value, error: nil)
-            case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-                handler(result: nil, error: error)
-            }
-        }
+        self._patch(url, payload: payload, handler: handler)
         
         Log.exit()
     }
 
     
     
-    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (successed: Bool, error: ErrorType?) -> Void) {
+    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.enter()
         
         let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
+        let payload:[[String: AnyObject]] = [["op": "replace", "path": "/enabled", "value": enabled]]
         
-        var payload = [[String: AnyObject]]()
-        payload.append(["op": "replace", "path": "/enabled", "value": enabled])
+        self._patch(url, payload: payload, handler: handler)
         
-        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
+        Log.exit()
+    }
+    
+    
+    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
+        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": dateStringOfNow]]
+        
+        self._patch(url, payload: payload, handler: handler)
+        
+        Log.exit()
+    }
+    
+    func setRegisterTimeByUserId(userId: String, deviceId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
+        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        let payload:[[String: AnyObject]] = [["op": "add", "path": "/registerTime", "value": dateStringOfNow]]
+        
+        self._patch(url, payload: payload, handler: handler)
+        
+        Log.exit()
+    }
+    
+    
+    private func _get(url: String, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        Log.enter()
+        
+        Alamofire.request(.GET, url, encoding: .JSON, headers: WebApiConst.Server.HEADERS).responseJSON { (_, response, result) in
             Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
+            Log.debug("response: \(response)")
+            
+            if let response = response {
+                if response.statusCode == 403 {
+                    if let handler = handler {
+                        handler(result: nil, error: NSError(domain: "Access to ZuzuApi is forbidden", code: 403, userInfo: nil))
+                    }
+                    return
+                }
+            }
             
             switch result {
-            case .Success:
-                handler(successed: true, error: nil)
+            case .Success(let value):
+                if let handler = handler {
+                    handler(result: value, error: nil)
+                }
             case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-                handler(successed: false, error: error)
+                Log.debug("error: \(error)")
+                if let handler = handler {
+                    handler(result: nil, error: ((error as Any) as! NSError))
+                }
             }
         }
         
         Log.exit()
     }
     
-    
-    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (successed: Bool, error: ErrorType?) -> Void) {
+    private func _patch(url: String, payload: [[String: AnyObject]], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
         Log.enter()
-        
-        let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
-        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
-        let payload = [["op": "add", "path": "/receiveNotifyTime", "value": dateStringOfNow]]
         
         Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
             (convertible, params) in
@@ -313,49 +268,112 @@ class ZuzuWebService: NSObject
             mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
             return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
+        }), headers: WebApiConst.Server.HEADERS).responseString { (_, response, result) in
             Log.debug("URL: \(url)")
             Log.debug("payload: \(payload)")
+            Log.debug("response: \(response)")
+            
+            if let response = response {
+                if response.statusCode == 403 {
+                    if let handler = handler {
+                        handler(result: nil, error: NSError(domain: "Access to ZuzuApi is forbidden", code: 403, userInfo: nil))
+                    }
+                    return
+                }
+            }
             
             switch result {
-            case .Success:
-                handler(successed: true, error: nil)
+            case .Success(let value):
+                if let handler = handler {
+                    handler(result: value, error: nil)
+                }
             case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-                handler(successed: false, error: error)
+                Log.debug("error: \(error)")
+                if let handler = handler {
+                    handler(result: nil, error: ((error as Any) as! NSError))
+                }
             }
-        }
-        
-        Log.exit()
-    }
-    
-    func setRegisterTimeByUserId(userId: String, deviceId: String, handler: (successed: Bool, error: ErrorType?) -> Void) {
-        Log.enter()
-        
-        let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
-        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
-        let payload = [["op": "add", "path": "/registerTime", "value": dateStringOfNow]]
-        
-        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
-            (convertible, params) in
-            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
-            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
-            return (mutableRequest, nil)
-        })).responseString { (_, _, result) in
-            Log.debug("URL: \(url)")
-            Log.debug("payload: \(payload)")
             
-            switch result {
-            case .Success:
-                handler(successed: true, error: nil)
-            case .Failure(_, let error):
-                Log.debug("Error: \(error)")
-                handler(successed: false, error: error)
-            }
         }
         
         Log.exit()
     }
 
+    private func _put(url: String, payload: [String: AnyObject], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        Log.enter()
+        
+        Alamofire.request(.PUT, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        }), headers: WebApiConst.Server.HEADERS).responseString { (_, response, result) in
+            Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
+            Log.debug("response: \(response)")
+            
+            if let response = response {
+                if response.statusCode == 403 {
+                    if let handler = handler {
+                        handler(result: nil, error: NSError(domain: "Access to ZuzuApi is forbidden", code: 403, userInfo: nil))
+                    }
+                    return
+                }
+            }
+            
+            switch result {
+            case .Success(let value):
+                if let handler = handler {
+                    handler(result: value, error: nil)
+                }
+            case .Failure(_, let error):
+                Log.debug("error: \(error)")
+                if let handler = handler {
+                    handler(result: nil, error: ((error as Any) as! NSError))
+                }
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    private func _post(url: String, payload: [String: AnyObject], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        Log.enter()
+        
+        Alamofire.request(.POST, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        }), headers: WebApiConst.Server.HEADERS).responseString { (_, response, result) in
+            Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
+            Log.debug("response: \(response)")
+            
+            if let response = response {
+                if response.statusCode == 403 {
+                    if let handler = handler {
+                        handler(result: nil, error: NSError(domain: "Access to ZuzuApi is forbidden", code: 403, userInfo: nil))
+                    }
+                    return
+                }
+            }
+            
+            switch result {
+            case .Success(let value):
+                if let handler = handler {
+                    handler(result: value, error: nil)
+                }
+            case .Failure(_, let error):
+                Log.debug("error: \(error)")
+                if let handler = handler {
+                    handler(result: nil, error: ((error as Any) as! NSError))
+                }
+            }
+        }
+        
+        Log.exit()
+    }
 }

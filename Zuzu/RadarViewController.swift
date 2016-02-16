@@ -83,7 +83,9 @@ class RadarViewController: UIViewController {
                 if isSuccess == true{
                     let user = "test"
                     ZuzuWebService.sharedInstance.createCriteriaByUserId(user, appleProductId: appleProductId, criteria: self.searchCriteria) { (result, error) -> Void in
-                        Log.debug(result)
+                        if let result = result {
+                            Log.debug("result = \(result)")
+                        }
                         
                     }
                 }else{
