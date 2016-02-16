@@ -66,16 +66,19 @@ class RadarDisplayViewController: UIViewController {
             
             Log.debug("prepareForSegue: \(identifier)")
             
-            self.navigationItem.backBarButtonItem?.title = "設定完成"
+            self.navigationItem.backBarButtonItem?.title = "完成"
             
             switch identifier{
                 
             case ViewTransConst.showConfigureRadar:
-                
                 if let vc = segue.destinationViewController as? RadarViewController {
-                    self.navigationItem.backBarButtonItem?.title = "設定完成"
+                    self.navigationItem.backBarButtonItem?.title = "完成"
                     vc.delegate = self
-                    vc.searchCriteria = self.zuzuCriteria?.criteria
+                    if let criteria = self.zuzuCriteria?.criteria{
+                        vc.searchCriteria = criteria
+                    }else{
+                        vc.searchCriteria = SearchCriteria()
+                    }
                 }
             default: break
                 
