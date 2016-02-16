@@ -269,13 +269,43 @@ class ZuzuWebService: NSObject
 
     
     
-    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (successed: Bool?, error: ErrorType?) -> Void) {
+    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (successed: Bool, error: ErrorType?) -> Void) {
         Log.enter()
         
         let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
         
         var payload = [[String: AnyObject]]()
         payload.append(["op": "replace", "path": "/enabled", "value": enabled])
+        
+        Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
+            (convertible, params) in
+            let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+            mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableRequest.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(payload, options: [])
+            return (mutableRequest, nil)
+        })).responseString { (_, _, result) in
+            Log.debug("URL: \(url)")
+            Log.debug("payload: \(payload)")
+            
+            switch result {
+            case .Success:
+                handler(successed: true, error: nil)
+            case .Failure(_, let error):
+                Log.debug("Error: \(error)")
+                handler(successed: false, error: error)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    
+    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (successed: Bool, error: ErrorType?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/device/\(deviceId)/\(userId)"
+        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        let payload = [["op": "replace", "path": "/receiveNotifyTime", "value": dateStringOfNow]]
         
         Alamofire.request(.PATCH, url, parameters: [:], encoding: .Custom({
             (convertible, params) in
