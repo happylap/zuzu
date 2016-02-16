@@ -283,6 +283,7 @@ class AmazonClientManager : NSObject {
         
         loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
             subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        Log.exit()
         
     }
     

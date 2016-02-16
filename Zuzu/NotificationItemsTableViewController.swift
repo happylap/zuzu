@@ -56,7 +56,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNofyItems:", name: "receiveNofyItems", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -169,7 +169,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         }
     }
     
-    func onReceiveNofyItems(notification:NSNotification) {
+    func onReceiveNotifyItems(notification:NSNotification) {
         self.refreshData()
     }
     

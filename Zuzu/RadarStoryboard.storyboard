@@ -647,6 +647,8 @@
                         <outlet property="houseInfoLabel" destination="GkN-Xn-yd1" id="VGa-Xd-ZvB"/>
                         <outlet property="otherFiltersLabel" destination="zpG-ZY-Ugx" id="mq3-YF-rxx"/>
                         <outlet property="regionLabel" destination="wkD-W0-Nni" id="Czv-Hx-4ca"/>
+                        <outlet property="serviceExpireLabel" destination="3ea-9P-KAv" id="kuU-EK-Y2I"/>
+                        <outlet property="serviceStatusLabel" destination="R0d-9F-apP" id="OJa-EX-5Vz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LaE-8c-zRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
