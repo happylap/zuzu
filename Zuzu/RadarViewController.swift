@@ -19,7 +19,7 @@ class RadarViewController: UIViewController {
     var appleProductId: String?
     var delegate: RadarViewControllerDelegate?
     var searchCriteria:SearchCriteria?
-    var isUpdateMode = true
+    var isUpdateMode = false
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -60,11 +60,18 @@ class RadarViewController: UIViewController {
                     ///Show tab bar
                     self.tabBarController?.tabBarHidden = false
                 }
+                
                 presentViewController(vc, animated: true, completion: nil)
-            }
-            
-            ZuzuWebService.sharedInstance.createCriteriaByUserId(self.user!, appleProductId: self.appleProductId!, criteria: self.searchCriteria!) { (result, error) -> Void in
-                Log.debug(result)
+                
+                vc.purchaseCompleteHandler = {(isSuccess) -> Void in
+                    if isSuccess == true{
+                        ZuzuWebService.sharedInstance.createCriteriaByUserId(self.user!, appleProductId: self.appleProductId!, criteria: self.searchCriteria!) { (result, error) -> Void in
+                            Log.debug(result)
+                        }
+                    }else{
+                        //zuzualert
+                    }
+                }
             }
         }
     }

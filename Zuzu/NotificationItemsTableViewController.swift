@@ -154,13 +154,17 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     func refreshData(){
         if let user = self.user{
             ZuzuWebService.sharedInstance.getNotificationItemsByUserId(user) { (result, error) -> Void in
-                if let notifyItems: [NotifyItem] = result {
-                    for notifyItem: NotifyItem in notifyItems {
-                        self.notificationService.add(notifyItem, isCommit: true)
+                if error != nil{
+                    //zuzualert
+                    LoadingSpinner.shared.stop()
+                }else{
+                    if let notifyItems: [NotifyItem] = result {
+                        for notifyItem: NotifyItem in notifyItems {
+                            self.notificationService.add(notifyItem, isCommit: true)
+                        }
                     }
+                    LoadingSpinner.shared.stop()
                 }
-                
-                LoadingSpinner.shared.stop()
             }
         }
     }
