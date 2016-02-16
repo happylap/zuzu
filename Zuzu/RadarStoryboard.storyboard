@@ -427,7 +427,13 @@
                                                     <constraint firstItem="zpG-ZY-Ugx" firstAttribute="top" secondItem="GkN-Xn-yd1" secondAttribute="bottom" constant="8" symbolic="YES" id="dGO-71-EE8"/>
                                                     <constraint firstItem="nQm-xW-OQB" firstAttribute="centerX" secondItem="9Xp-wk-oY1" secondAttribute="centerX" id="wjv-9Q-RxX"/>
                                                     <constraint firstItem="wkD-W0-Nni" firstAttribute="top" secondItem="9Xp-wk-oY1" secondAttribute="top" id="zzI-ds-ewB"/>
+                                                    <constraint firstItem="GkN-Xn-yd1" firstAttribute="width" secondItem="9Xp-wk-oY1" secondAttribute="width" id="zzx-Ne-Ui8"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="zzx-Ne-Ui8"/>
+                                                    </mask>
+                                                </variation>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -637,6 +643,11 @@
                         </connections>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="houseInfoLabel" destination="GkN-Xn-yd1" id="VGa-Xd-ZvB"/>
+                        <outlet property="otherFiltersLabel" destination="zpG-ZY-Ugx" id="mq3-YF-rxx"/>
+                        <outlet property="regionLabel" destination="wkD-W0-Nni" id="Czv-Hx-4ca"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LaE-8c-zRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

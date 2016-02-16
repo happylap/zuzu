@@ -78,7 +78,8 @@ class CityRegionContainerController: UIViewController {
         
         delegate?.onCitySelectionDone(regionSelectionState)
         
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
+        //navigationController?.popToRootViewControllerAnimated(true)
     }
     
     // MARK: - Notification Selector

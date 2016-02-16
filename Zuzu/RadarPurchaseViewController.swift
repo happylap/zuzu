@@ -107,7 +107,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         let isLogin = false
         
         if isLogin {
-            
             let product = products[button.tag]
             Log.info("productIdentifier: \(product.productIdentifier)")
             priceFormatter.locale = product.priceLocale

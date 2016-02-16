@@ -17,7 +17,7 @@ class RadarViewController: UIViewController {
     
     var delegate: RadarViewControllerDelegate?
     var searchCriteria = SearchCriteria()
-    var isUpdateMode = false
+    var isUpdateMode = true
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
