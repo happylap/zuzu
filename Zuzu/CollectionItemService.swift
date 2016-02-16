@@ -403,6 +403,7 @@ class CollectionItemService: NSObject
     // MARK: Check Off Shelf
     
     func isOffShelf(id: String, handler: (offShelf: Bool) -> Void) {
+        Log.enter()
         
         let _cacheName:String = "OFF_SHELF_CACHE"
         let _cacheTime:Double = 12 * 60 * 60 //12 hours
@@ -431,10 +432,12 @@ class CollectionItemService: NSObject
         }
         
         if(!_hitCache) {
+            Log.debug("HouseDataRequester.getInstance().searchById [id: \(id)]")
             
             HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
                 
                 if let error = error {
+                    Log.debug("Cannot get remote data [id: \(id)]")
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
                     handler(offShelf: false)
                     return
@@ -460,9 +463,11 @@ class CollectionItemService: NSObject
                 handler(offShelf: _offShelf)
             }
         }
+        Log.exit()
     }
     
     func isPriceCut(id: String, handler: (priceCut: Bool) -> Void) {
+        Log.enter()
         
         let _cacheName:String = "PRICE_CUT_CACHE"
         let _cacheTime:Double = 12 * 60 * 60 // 12 hours
@@ -491,11 +496,14 @@ class CollectionItemService: NSObject
         }
         
         if(!_hitCache) {
+            Log.debug("HouseDataRequester.getInstance().searchById [id: \(id)]")
             
             HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
                 
                 if let error = error {
+                    Log.debug("Cannot get remote data [id: \(id)]")
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
+
                     handler(priceCut: false)
                     return
                 }
@@ -524,5 +532,6 @@ class CollectionItemService: NSObject
                 handler(priceCut: _priceCut)
             }
         }
+        Log.exit()
     }
 }
