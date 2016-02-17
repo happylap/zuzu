@@ -447,8 +447,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let collectionItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
             cell.houseItemForCollection = collectionItem
             
-            Log.debug("Row[\(indexPath.row)] isOffShelf by id: \(collectionItem.id)")
-            CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+            let houseId = collectionItem.id
+            
+            Log.debug("Row[\(indexPath.row)] isOffShelf by id: \(houseId)")
+            CollectionItemService.sharedInstance.isOffShelf(houseId) { (offShelf) -> Void in
                 Log.debug("Row[\(indexPath.row)] isOffShelf is \(offShelf)")
                 
                 var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
@@ -457,8 +459,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                     houseFlags.append(SearchResultTableViewCell.HouseFlag.OFF_SHELF)
                 }
                 
-                Log.debug("Row[\(indexPath.row)] isPriceCut by id: \(collectionItem.id)")
-                CollectionItemService.sharedInstance.isPriceCut(collectionItem.id) { (priceCut) -> Void in
+                Log.debug("Row[\(indexPath.row)] isPriceCut by id: \(houseId)")
+                CollectionItemService.sharedInstance.isPriceCut(houseId) { (priceCut) -> Void in
                     Log.debug("Row[\(indexPath.row)] isPriceCut is \(priceCut)")
                     
                     if priceCut == true {

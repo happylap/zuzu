@@ -207,9 +207,9 @@ class CollectionItemService: NSObject
                             // Delete collectionItem, if its id isn't exist dirtyKeys
                             if let collectionItems = self.getAll() {
                                 for collectionItem: CollectionHouseItem in collectionItems {
-                                    Log.debug("collectionItem title: \(collectionItem.title)")
                                     let id = collectionItem.id
                                     if !dirtyKeys.contains(id) {
+                                        Log.debug("Sync To CoreData >>> DeleteItemByID: \(id)")
                                         self.dao.safeDeleteByID(id)
                                     }
                                 }
@@ -217,6 +217,7 @@ class CollectionItemService: NSObject
                             
                             // Delete collectionItem by modifyingKey
                             for modifyingKey: String in modifyingKeys {
+                                Log.debug("Sync To CoreData >>> DeleteItemByKey: \(modifyingKey)")
                                 self.dao.safeDeleteByID(modifyingKey)
                             }
                             
@@ -226,8 +227,13 @@ class CollectionItemService: NSObject
                                 let dirtyKey = dirtyRecord.recordId
                                 if modifyingKeys.contains(dirtyKey) {
                                     //Log.debug("%@ dirtyRecord: \(dirtyRecord)", self)
+                                    
                                     let JSONString = dirtyRecord.data.string()
-                                    Mapper<CollectionHouseItem>().map(JSONString)
+                                    let collectionItem: CollectionHouseItem? = Mapper<CollectionHouseItem>().map(JSONString)
+                                    
+                                    if collectionItem != nil {
+                                        Log.debug("Sync To CoreData >>> AddItem ID: \(collectionItem!.id)")
+                                    }
                                 }
                             }
                             
@@ -375,7 +381,6 @@ class CollectionItemService: NSObject
     // MARK: Check Off Shelf
     
     func isOffShelf(id: String, handler: (offShelf: Bool) -> Void) {
-        Log.enter()
         
         let _cacheName:String = "OFF_SHELF_CACHE"
         let _cacheTime:Double = 12 * 60 * 60 //12 hours
@@ -387,7 +392,7 @@ class CollectionItemService: NSObject
             ///Return cached data if there is cached data
             if let result = cache.objectForKey(id) as? String {
                     
-                Log.debug("Hit Cache for item: Id: \(id), OffShelf: \(result)")
+                //Log.debug("Hit Cache for item: Id: \(id), OffShelf: \(result)")
                 
                 _hitCache = true
                 
@@ -430,15 +435,13 @@ class CollectionItemService: NSObject
                     Log.debug("Something went wrong with the cache")
                 }
                 
-                Log.debug("HouseDataRequester SearchById: \(id), OffShelf: \(_offShelf)")
+                //Log.debug("HouseDataRequester SearchById: \(id), OffShelf: \(_offShelf)")
                 handler(offShelf: _offShelf)
             }
         }
-        Log.exit()
     }
     
     func isPriceCut(id: String, handler: (priceCut: Bool) -> Void) {
-        Log.enter()
         
         let _cacheName:String = "PRICE_CUT_CACHE"
         let _cacheTime:Double = 12 * 60 * 60 // 12 hours
@@ -450,7 +453,7 @@ class CollectionItemService: NSObject
             ///Return cached data if there is cached data
             if let result = cache.objectForKey(id) as? String {
                 
-                Log.debug("Hit Cache for item: Id: \(id), PriceCut: \(result)")
+                //Log.debug("Hit Cache for item: Id: \(id), PriceCut: \(result)")
                 
                 _hitCache = true
                 
@@ -498,10 +501,9 @@ class CollectionItemService: NSObject
                     Log.debug("Something went wrong with the cache")
                 }
                 
-                Log.debug("HouseDataRequester SearchById: \(id), OffShelf: \(_priceCut)")
+                //Log.debug("HouseDataRequester SearchById: \(id), PriceCut: \(_priceCut)")
                 handler(priceCut: _priceCut)
             }
         }
-        Log.exit()
     }
 }
