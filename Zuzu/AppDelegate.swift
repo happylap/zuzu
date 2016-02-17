@@ -131,6 +131,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         // Initialize sign-in
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        CollectionItemService.sharedInstance.start()
+        
         if FeatureOption.Radar.enableMain == true{
             pushNotificationsSetup()
         }

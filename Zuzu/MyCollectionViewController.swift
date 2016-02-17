@@ -350,18 +350,12 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         //Configure Sorting Status
         configureSortingButtons()
-        
-        CollectionItemService.sharedInstance.parentViewController = self
-        CollectionItemService.sharedInstance.sync()
     }
     
     override func viewWillAppear(animated: Bool) {
         Log.debug("\(self) viewWillAppear")
         super.viewWillAppear(animated)
         
-        // Synchronize core data from Cognito
-        CollectionItemService.sharedInstance.sync()
-
         ///Show tab bar
         self.tabBarController!.tabBarHidden = false
         
@@ -445,7 +439,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         let cell = tableView.dequeueReusableCellWithIdentifier(self.cellReuseIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
+        //Log.debug("- TableView Prepare Cell For Row[\(indexPath.row)]")
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
@@ -453,11 +447,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let collectionItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
             cell.houseItemForCollection = collectionItem
             
-            let houseId = collectionItem.id
-            
-            Log.debug("isOffShelf by id: \(houseId)")
-            CollectionItemService.sharedInstance.isOffShelf(houseId) { (offShelf) -> Void in
-                Log.debug("isOffShelf is \(offShelf)")
+            Log.debug("Row[\(indexPath.row)] isOffShelf by id: \(collectionItem.id)")
+            CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+                Log.debug("Row[\(indexPath.row)] isOffShelf is \(offShelf)")
                 
                 var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
                 
@@ -465,9 +457,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                     houseFlags.append(SearchResultTableViewCell.HouseFlag.OFF_SHELF)
                 }
                 
-                Log.debug("isPriceCut by id: \(houseId)")
-                CollectionItemService.sharedInstance.isPriceCut(houseId) { (priceCut) -> Void in
-                    Log.debug("isPriceCut is \(priceCut)")
+                Log.debug("Row[\(indexPath.row)] isPriceCut by id: \(collectionItem.id)")
+                CollectionItemService.sharedInstance.isPriceCut(collectionItem.id) { (priceCut) -> Void in
+                    Log.debug("Row[\(indexPath.row)] isPriceCut is \(priceCut)")
                     
                     if priceCut == true {
                         houseFlags.append(SearchResultTableViewCell.HouseFlag.PRICE_CUT)
@@ -490,16 +482,14 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let indexPath = tableView.indexPathForSelectedRow {
             if let collectionItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                 
-                let houseId = collectionItem.id
-                
-                Log.debug("isOffShelf by id: \(houseId)")
-                CollectionItemService.sharedInstance.isOffShelf(houseId) { (offShelf) -> Void in
-                    Log.debug("isOffShelf is \(offShelf)")
+                Log.debug("Row[\(indexPath.row)] isOffShelf by id: \(collectionItem.id)")
+                CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+                    Log.debug("Row[\(indexPath.row)] isOffShelf is \(offShelf)")
                     
                     if offShelf == true {
                         let loginAlertView = SCLAlertView()
                         loginAlertView.addButton("移除物件") {
-                            CollectionItemService.sharedInstance.deleteItemById(houseId)
+                            CollectionItemService.sharedInstance.deleteItemById(collectionItem.id)
                         }
                         let subTitle = "此物件已被下架或租出，建議從\"我的收藏\"中移除"
                         loginAlertView.showNotice("物件已下架", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)

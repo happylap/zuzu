@@ -32,7 +32,6 @@ class CollectionItemService: NSObject
     
     struct CollectionItemConstants {
         static let MYCOLLECTION_MAX_SIZE = 60
-        static let ENTER_TIMER_INTERVAL = 300.0  // Unit: second
         static let SYNCHRONIZE_DELAY_FOR_ADD = 3.0  // Unit: second
         static let SYNCHRONIZE_DELAY = 1.0  // Unit: second
     }
@@ -42,9 +41,44 @@ class CollectionItemService: NSObject
             static let instance = CollectionItemService()
         }
         
-        Singleton.instance.registerAWSCognitoNotifications()
-        
         return Singleton.instance
+    }
+    
+    func start() {
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "didFinishUserLoginNotification:",
+            name: UserLoginNotification,
+            object:nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "startSynchronizeNotification:",
+            name: AWSCognitoDidStartSynchronizeNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "endSynchronizeNotification:",
+            name: AWSCognitoDidEndSynchronizeNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "failToSynchronizeNotification:",
+            name: AWSCognitoDidFailToSynchronizeNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "changeRemoteValueNotification:",
+            name: AWSCognitoDidChangeRemoteValueNotification,
+            object:nil)
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "changeLocalValueFromRemoteNotification:",
+            name: AWSCognitoDidChangeLocalValueFromRemoteNotification,
+            object:nil)
     }
     
     // MARK: Private methods for modify items
@@ -114,70 +148,35 @@ class CollectionItemService: NSObject
     }
     
     
-    // MARK: AWSCognito Notifications
+    // MARK: Notifications
     
-    var registerAWSCognitoNotification = false
-    
-    func registerAWSCognitoNotifications() {
-        
-        if registerAWSCognitoNotification == true {
-            return
-        }
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "startSynchronizeNotification:",
-            name: AWSCognitoDidStartSynchronizeNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "endSynchronizeNotification:",
-            name: AWSCognitoDidEndSynchronizeNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "failToSynchronizeNotification:",
-            name: AWSCognitoDidFailToSynchronizeNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "changeRemoteValueNotification:",
-            name: AWSCognitoDidChangeRemoteValueNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "changeLocalValueFromRemoteNotification:",
-            name: AWSCognitoDidChangeLocalValueFromRemoteNotification,
-            object:nil)
-        
-        registerAWSCognitoNotification = true
+    func didFinishUserLoginNotification(aNotification: NSNotification) {
+        Log.debug("ZuzuApp didFinishUserLoginNotification")
+        self._doSync()
     }
     
     func startSynchronizeNotification(aNotification: NSNotification) {
-        Log.debug("\(self) AWSCognito startSynchronizeNotification")
+        Log.debug("AWSCognito startSynchronizeNotification")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
     }
     
     func endSynchronizeNotification(aNotification: NSNotification) {
-        Log.debug("\(self) AWSCognito endSynchronizeNotification")
+        Log.debug("AWSCognito endSynchronizeNotification")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
     
     func failToSynchronizeNotification(aNotification: NSNotification) {
-        Log.debug("\(self) AWSCognito failToSynchronizeNotification")
+        Log.debug("AWSCognito failToSynchronizeNotification")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
     
     func changeRemoteValueNotification(aNotification: NSNotification) {
-        Log.debug("\(self) AWSCognito changeRemoteValueNotification")
+        Log.debug("AWSCognito changeRemoteValueNotification")
         
     }
     
     func changeLocalValueFromRemoteNotification(aNotification: NSNotification) {
-        Log.debug("\(self) AWSCognito changeRemoteValueNotification")
+        Log.debug("AWSCognito changeRemoteValueNotification")
  
         dispatch_async(dispatch_get_main_queue()) {
             
@@ -208,7 +207,7 @@ class CollectionItemService: NSObject
                             // Delete collectionItem, if its id isn't exist dirtyKeys
                             if let collectionItems = self.getAll() {
                                 for collectionItem: CollectionHouseItem in collectionItems {
-                                    Log.debug("\(self) collectionItem title: \(collectionItem.title)")
+                                    Log.debug("collectionItem title: \(collectionItem.title)")
                                     let id = collectionItem.id
                                     if !dirtyKeys.contains(id) {
                                         self.dao.safeDeleteByID(id)
@@ -277,33 +276,6 @@ class CollectionItemService: NSObject
         _syncTimer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: "syncTimeUp", userInfo: nil, repeats: true)
     }
 
-    // MARK: Enter mycollection timer Methods
-    
-    var _enterTimer: NSTimer?
-    var _canEnter = true
-    
-    func enterTimeUp() { //The timeUp function is a selector, which must be a public function
-        self._enterTimer?.invalidate()
-        self._canEnter = true
-    }
-    
-    func resetEnterTimer() {
-        self._enterTimer?.invalidate()
-        self._canEnter = false
-        self._enterTimer = NSTimer.scheduledTimerWithTimeInterval(CollectionItemConstants.ENTER_TIMER_INTERVAL, target: self, selector: "enterTimeUp", userInfo: nil, repeats: true)
-    }
-    
-    func canSyncWhenEnter() -> Bool{
-        return self._canEnter
-    }
-    
-    // MARK: Public Sync methods
-    func sync(){
-        if self.canSyncWhenEnter(){
-            self._syncDataset(0)
-        }
-        self.resetEnterTimer()
-    }
     
     // MARK: Public Modify methods
     func canAdd() -> Bool {
@@ -432,12 +404,11 @@ class CollectionItemService: NSObject
         }
         
         if(!_hitCache) {
-            Log.debug("HouseDataRequester.getInstance().searchById [id: \(id)]")
+            Log.debug("HouseDataRequester SearchById: \(id)")
             
             HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
                 
                 if let error = error {
-                    Log.debug("Cannot get remote data [id: \(id)]")
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
                     handler(offShelf: false)
                     return
@@ -459,7 +430,7 @@ class CollectionItemService: NSObject
                     Log.debug("Something went wrong with the cache")
                 }
                 
-                Log.debug("Remote for item: Id: \(id), OffShelf: \(_offShelf)")
+                Log.debug("HouseDataRequester SearchById: \(id), OffShelf: \(_offShelf)")
                 handler(offShelf: _offShelf)
             }
         }
@@ -496,12 +467,11 @@ class CollectionItemService: NSObject
         }
         
         if(!_hitCache) {
-            Log.debug("HouseDataRequester.getInstance().searchById [id: \(id)]")
+            Log.debug("HouseDataRequester SearchById: \(id)")
             
             HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
                 
                 if let error = error {
-                    Log.debug("Cannot get remote data [id: \(id)]")
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
 
                     handler(priceCut: false)
@@ -528,7 +498,7 @@ class CollectionItemService: NSObject
                     Log.debug("Something went wrong with the cache")
                 }
                 
-                Log.debug("Remote for item: Id: \(id), PriceCut: \(_priceCut)")
+                Log.debug("HouseDataRequester SearchById: \(id), OffShelf: \(_priceCut)")
                 handler(priceCut: _priceCut)
             }
         }
