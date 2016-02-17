@@ -453,14 +453,22 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let collectionItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
             cell.houseItemForCollection = collectionItem
             
-            CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+            let houseId = collectionItem.id
+            
+            Log.debug("isOffShelf by id: \(houseId)")
+            CollectionItemService.sharedInstance.isOffShelf(houseId) { (offShelf) -> Void in
+                Log.debug("isOffShelf is \(offShelf)")
+                
                 var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
                 
                 if offShelf == true {
                     houseFlags.append(SearchResultTableViewCell.HouseFlag.OFF_SHELF)
                 }
                 
-                CollectionItemService.sharedInstance.isPriceCut(collectionItem.id) { (priceCut) -> Void in
+                Log.debug("isPriceCut by id: \(houseId)")
+                CollectionItemService.sharedInstance.isPriceCut(houseId) { (priceCut) -> Void in
+                    Log.debug("isPriceCut is \(priceCut)")
+                    
                     if priceCut == true {
                         houseFlags.append(SearchResultTableViewCell.HouseFlag.PRICE_CUT)
                     }
@@ -482,12 +490,16 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let indexPath = tableView.indexPathForSelectedRow {
             if let collectionItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                 
-                CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+                let houseId = collectionItem.id
+                
+                Log.debug("isOffShelf by id: \(houseId)")
+                CollectionItemService.sharedInstance.isOffShelf(houseId) { (offShelf) -> Void in
+                    Log.debug("isOffShelf is \(offShelf)")
                     
                     if offShelf == true {
                         let loginAlertView = SCLAlertView()
                         loginAlertView.addButton("移除物件") {
-                            CollectionItemService.sharedInstance.deleteItemById(collectionItem.id)
+                            CollectionItemService.sharedInstance.deleteItemById(houseId)
                         }
                         let subTitle = "此物件已被下架或租出，建議從\"我的收藏\"中移除"
                         loginAlertView.showNotice("物件已下架", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
