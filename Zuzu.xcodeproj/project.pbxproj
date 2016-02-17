@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1405856C1C73083800449C27 /* RadarDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405856B1C73083800449C27 /* RadarDisplayItem.swift */; };
+		140585721C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */; };
 		144195381C62EBDC00C8779A /* RadarConfigureTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */; };
 		1446FA5C1C2D3AA90073A8A7 /* CommonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */; };
 		1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */; };
@@ -169,6 +170,7 @@
 
 /* Begin PBXFileReference section */
 		1405856B1C73083800449C27 /* RadarDisplayItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarDisplayItem.swift; sourceTree = "<group>"; };
+		140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarPurchaseHistoryDataSource.swift; sourceTree = "<group>"; };
 		144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarConfigureTableViewController.swift; sourceTree = "<group>"; };
 		1446FA581C2D0C2C0073A8A7 /* Model20151225.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model20151225.xcdatamodel; sourceTree = "<group>"; };
 		1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonUtils.swift; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 				817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */,
 				1405856B1C73083800449C27 /* RadarDisplayItem.swift */,
 				2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */,
+				140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */,
 			);
 			name = Radar;
 			sourceTree = "<group>";
@@ -929,6 +932,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14914FAA1C27F7B400025AC1 /* AbstractHouseItemDao.swift in Sources */,
+				140585721C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift in Sources */,
 				2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */,
 				816635981C5F2CDA008C0AA3 /* NotifyItem.swift in Sources */,
 				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,

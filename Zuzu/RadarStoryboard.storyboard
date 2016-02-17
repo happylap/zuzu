@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -569,7 +569,7 @@
                                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="purchaseHistoryRecord" id="Lf8-PT-6ZU" userLabel="purchaseHistoryRecord">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="purchaseHistoryRecord" id="Lf8-PT-6ZU" userLabel="purchaseHistoryRecord" customClass="RadarPurchaseRecordTableViewCell" customModule="Zuzu" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lf8-PT-6ZU" id="CyX-Oc-2SH">
@@ -614,6 +614,12 @@
                                                 <constraint firstItem="Jbm-x5-DvT" firstAttribute="centerY" secondItem="CyX-Oc-2SH" secondAttribute="centerY" id="ooD-SI-vEd"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="purchaseDateLabel" destination="Jbm-x5-DvT" id="bcJ-fo-4Jm"/>
+                                            <outlet property="purchaseDescLabel" destination="tBo-l1-1gK" id="dYV-rM-KOe"/>
+                                            <outlet property="purchaseExpireLabel" destination="m5c-sH-HQw" id="t28-ja-edI"/>
+                                            <outlet property="purchaseImage" destination="CQn-wG-8Og" id="oRq-OV-wON"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -646,6 +652,7 @@
                     <connections>
                         <outlet property="houseInfoLabel" destination="GkN-Xn-yd1" id="VGa-Xd-ZvB"/>
                         <outlet property="otherFiltersLabel" destination="zpG-ZY-Ugx" id="mq3-YF-rxx"/>
+                        <outlet property="purchaseTableView" destination="kzV-PJ-lR5" id="IKU-GQ-xsh"/>
                         <outlet property="regionLabel" destination="wkD-W0-Nni" id="Czv-Hx-4ca"/>
                         <outlet property="serviceExpireLabel" destination="3ea-9P-KAv" id="kuU-EK-Y2I"/>
                         <outlet property="serviceStatusLabel" destination="R0d-9F-apP" id="OJa-EX-5Vz"/>

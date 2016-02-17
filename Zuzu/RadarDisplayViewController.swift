@@ -25,7 +25,7 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    
+    var purchaseHistotyTableDataSource = RadarPurchaseHistoryTableViewDataSource()
     
     var user: String?
     
@@ -39,6 +39,8 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var serviceExpireLabel: UILabel!
     
+    @IBOutlet weak var purchaseTableView: UITableView!
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -49,6 +51,9 @@ class RadarDisplayViewController: UIViewController {
         self.user = "test"
         self.configureButton()
         self.refreshCriteria()
+        self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
+        self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
+        
         // Do any additional setup after loading the view.
     }
 
