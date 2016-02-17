@@ -240,11 +240,31 @@ class AmazonClientManager : NSObject {
     
     func loginFromView(theViewController: UIViewController, withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
-        
+
         self.completionHandler = completionHandler
         self.loginViewController = theViewController
+
+
+       let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
+            vc.modalPresentationStyle = .OverCurrentContext
+            
+            vc.cancelHandler = { () -> Void in
+                ///GA Tracker: Login cancelled
+                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                    action: GAConst.Action.Blocking.loginReject)
+            }
+            
+            vc.fbLoginHandler = { () -> Void in
+                self.fbLogin(theViewController)
+            }
+            vc.googleLoginHandler = { () -> Void in
+                self.googleLogin(theViewController)
+            }
+            theViewController.presentViewController(vc, animated: true, completion: nil)
+        }
         
-        let loginAlertView = SCLAlertView()
+        /*let loginAlertView = SCLAlertView()
         loginAlertView.showCloseButton = false
         
         loginAlertView.addButton("Facebook帳號登入") {
@@ -262,7 +282,7 @@ class AmazonClientManager : NSObject {
         }
         
         loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
-            subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)*/
         Log.exit()
         
     }
