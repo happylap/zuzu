@@ -68,6 +68,12 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         reload()
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
+            vc.modalPresentationStyle = .OverCurrentContext
+            presentViewController(vc, animated: true, completion: nil)
+            
+        }
     }
     
     override func didReceiveMemoryWarning() {

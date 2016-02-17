@@ -63,6 +63,19 @@ class RadarDisplayViewController: UIViewController {
     }
     
     @IBAction func enableCriteria(sender: UISwitch) {
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.completeHandler = { () -> Void in
+                ///Show tab bar
+                self.tabBarController?.tabBarHidden = false
+            }
+            
+            presentViewController(vc, animated: true, completion: nil)
+            
+        }
         if self.user != nil && self.zuzuCriteria != nil{
             let isEnable = sender.on
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.user!,

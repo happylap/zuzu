@@ -13,8 +13,8 @@ class RadarPurchaseLoginViewController: UIViewController {
     
     @IBOutlet weak var cancelButton: UIButton!{
         didSet {
-            cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-            cancelButton.tintColor = UIColor.whiteColor()
+            /*cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            cancelButton.tintColor = UIColor.whiteColor()*/
             
             cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
         }
