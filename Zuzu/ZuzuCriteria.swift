@@ -15,6 +15,7 @@ private let Log = Logger.defaultLogger
 class ZuzuCriteria: NSObject, Mappable {
     
     static let filterSections:[FilterSection] = ConfigLoader.loadAdvancedFilters()
+    static let codeToCityMap:[Int : City] = ConfigLoader.CodeToCityMap
     
     var userId: String?
     var criteriaId: String?
@@ -76,21 +77,30 @@ class ZuzuCriteria: NSObject, Mappable {
             let json = JSON(data: dataFromString)
             
             // 地區
-            var cities = [City]()
+            var selectedCities = [City]()
             for (_, cityJson):(String, JSON) in json["city"] {
                 
-                var regions = [Region]()
+                let cityCode = cityJson["code"].intValue
                 
-                if cityJson["regions"].arrayValue.isEmpty {
-                    regions.append(Region.allRegions)
+                if let city = codeToCityMap[cityCode] {
+                    
+                    var selectedRegions = [Region]()
+                    
+                    if cityJson["regions"].arrayValue.isEmpty {
+                        selectedRegions.append(Region.allRegions)
+                    }
+                
+                    for (_, regionJson):(String, JSON) in cityJson["regions"] {
+                        
+                        let regionCode = regionJson.intValue
+                        
+                        if let region = city.regions.filter({$0.code == regionCode}).first {
+                            selectedRegions.append(Region(code: region.code, name: region.name))
+                        }
+                    }
+                    
+                    selectedCities.append(City(code: city.code, name: city.name, regions: selectedRegions))
                 }
-                
-                for (_, regionJson):(String, JSON) in cityJson["regions"] {
-                    regions.append(Region(code: regionJson.intValue, name: ""))
-                }
-                
-                let city = City(code: cityJson["code"].intValue, name: "", regions: regions)
-                cities.append(city)
             }
             
             // 用途
@@ -102,7 +112,7 @@ class ZuzuCriteria: NSObject, Mappable {
             // 坪數範圍
             let size:(Int, Int) = (json["size"]["from"].intValue, json["size"]["to"].intValue)
             
-            Log.debug("cities: \(cities)")
+            Log.debug("cities: \(selectedCities)")
             Log.debug("types: \(types)")
             Log.debug("price: \(price)")
             Log.debug("size: \(size)")
@@ -208,7 +218,7 @@ class ZuzuCriteria: NSObject, Mappable {
             }
             
             let criteria = SearchCriteria()
-            criteria.region = cities
+            criteria.region = selectedCities
             criteria.types = types
             criteria.price = price
             criteria.size = size
