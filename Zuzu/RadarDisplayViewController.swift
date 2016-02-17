@@ -76,6 +76,7 @@ class RadarDisplayViewController: UIViewController {
             presentViewController(vc, animated: true, completion: nil)
             
         }
+        
         if self.user != nil && self.zuzuCriteria != nil{
             let isEnable = sender.on
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.user!,

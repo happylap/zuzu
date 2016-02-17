@@ -11,6 +11,11 @@ private let Log = Logger.defaultLogger
 
 class RadarPurchaseLoginViewController: UIViewController {
     
+    var cancelHandler: (() -> Void)?
+    var fbLoginHandler: (() -> Void)?
+    var googleLoginHandler: (() -> Void)?
+    
+    
     @IBOutlet weak var cancelButton: UIButton!{
         didSet {
             /*cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
@@ -20,6 +25,22 @@ class RadarPurchaseLoginViewController: UIViewController {
         }
     }
     
+    
+    
+    @IBOutlet weak var loginText: UILabel!
+    
+    @IBOutlet weak var fbButton: UIButton!{
+        didSet{
+            fbButton.addTarget(self, action: "onFBButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+        }
+    }
+    
+    @IBOutlet weak var googleButton: UIButton!{
+        didSet{
+            googleButton.addTarget(self, action: "onGoogleButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+        }
+    }
+
     
     // MARK: - View Life Cycle
     
@@ -42,7 +63,16 @@ class RadarPurchaseLoginViewController: UIViewController {
     
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
-        dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: self.cancelHandler)
     }
     
+    func onFBButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onFBButtonTouched")
+        dismissViewControllerAnimated(true, completion: self.fbLoginHandler)
+    }
+  
+    func onGoogleButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onGoogleButtonTouched")
+        dismissViewControllerAnimated(true, completion: self.googleLoginHandler)
+    }
 }
