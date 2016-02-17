@@ -137,6 +137,7 @@ class ZuzuWebService: NSObject
             }
             
             if let value = result {
+                Log.debug("getCriteriaByUserId JSON: \(value)")
                 if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
                     handler(result: zuzuCriteria, error: nil)
                 } else {
@@ -206,8 +207,8 @@ class ZuzuWebService: NSObject
         Log.enter()
         
         let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
-        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
-        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": dateStringOfNow]]
+        let dateStringOfNow = CommonUtils.getStandardStringFromDate(NSDate())
+        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": dateStringOfNow!]]
         
         self._patch(url, payload: payload, handler: handler)
         
@@ -218,8 +219,8 @@ class ZuzuWebService: NSObject
         Log.enter()
         
         let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
-        let dateStringOfNow = CommonUtils.getDateString(NSDate(), format: "yyyy-MM-dd'T'HH:mm:ss'Z'")
-        let payload:[[String: AnyObject]] = [["op": "add", "path": "/registerTime", "value": dateStringOfNow]]
+        let dateStringOfNow = CommonUtils.getStandardStringFromDate(NSDate())
+        let payload:[[String: AnyObject]] = [["op": "add", "path": "/registerTime", "value": dateStringOfNow!]]
         
         self._patch(url, payload: payload, handler: handler)
         

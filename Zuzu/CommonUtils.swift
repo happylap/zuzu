@@ -11,6 +11,8 @@ import Foundation
 
 class CommonUtils: NSObject{
     
+    static let standardDateFormat: String = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    static let shortDateFormat: String = "yyyy-MM-dd"
     
     static func getStandardDateString(date:NSDate) -> String{
         let dateFormatter = NSDateFormatter()
@@ -25,6 +27,39 @@ class CommonUtils: NSObject{
         return dateFormatter.stringFromDate(date)
     }
     
+    
+    static func getStandardDateFromString(value:String) -> NSDate? {
+        return CommonUtils.getCustomDateFromString(value)
+    }
+    
+    static func getStandardStringFromDate(date:NSDate) -> String? {
+        return CommonUtils.getCustomStringFromDate(date)
+    }
+    
+    static func getShortDateFromString(value:String) -> NSDate? {
+        return CommonUtils.getCustomDateFromString(value, format: CommonUtils.shortDateFormat)
+    }
+    
+    static func getShortStringFromDate(date:NSDate) -> String? {
+        return CommonUtils.getCustomStringFromDate(date, format: CommonUtils.shortDateFormat)
+    }
+    
+    static func getCustomDateFromString(value:String, format: String = CommonUtils.standardDateFormat) -> NSDate? {
+        let df = NSDateFormatter()
+        df.dateFormat = format
+        df.timeZone = NSTimeZone(name: "UTC")
+        df.locale = NSLocale.currentLocale()
+        return df.dateFromString(value)
+    }
+    
+    static func getCustomStringFromDate(date:NSDate, format: String = CommonUtils.standardDateFormat) -> String? {
+        let df = NSDateFormatter()
+        df.dateFormat = format
+        df.timeZone = NSTimeZone(name: "UTC")
+        df.locale = NSLocale.currentLocale()
+        return df.stringFromDate(date)
+
+    }
 }
 
 extension NSDate {
