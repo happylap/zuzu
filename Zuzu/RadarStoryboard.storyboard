@@ -177,13 +177,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RsV-DL-Eyx" userLabel="Mask View">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="97j-Q3-uwC" userLabel="Login View">
                                 <rect key="frame" x="0.0" y="368" width="414" height="368"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eRv-tS-y4M" userLabel="Header View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="45"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登入個人帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PfZ-yO-Gsz">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登入個人帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PfZ-yO-Gsz" userLabel="Title Label">
                                                 <rect key="frame" x="156" y="12" width="102" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -212,54 +216,62 @@
                                         <rect key="frame" x="0.0" y="45" width="414" height="323"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ISR-Ry-OKb" userLabel="Description View">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="97"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="129"/>
                                                 <subviews>
-                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0jc-Qe-Tgj" userLabel="Login Text">
-                                                        <rect key="frame" x="41.5" y="39" width="331" height="58"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                    </textView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="使用我的收藏功能，需要您選擇下列一種帳戶登入，日後更換裝置，收藏的物件才不會消失喔！  豬豬快租絕不會以您的身份發佈任何資訊" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KI0-QH-nr2" userLabel="SubTitle Label">
+                                                        <rect key="frame" x="41" y="0.0" width="331" height="129"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstItem="0jc-Qe-Tgj" firstAttribute="top" secondItem="ISR-Ry-OKb" secondAttribute="top" id="GSU-jz-gqd"/>
-                                                    <constraint firstItem="0jc-Qe-Tgj" firstAttribute="width" secondItem="ISR-Ry-OKb" secondAttribute="width" multiplier="80:100" id="HhV-NL-kwz"/>
-                                                    <constraint firstItem="0jc-Qe-Tgj" firstAttribute="height" secondItem="ISR-Ry-OKb" secondAttribute="height" multiplier="60:100" id="N9R-tM-Q4l"/>
-                                                    <constraint firstAttribute="bottom" secondItem="0jc-Qe-Tgj" secondAttribute="bottom" id="TE5-v6-Gpl"/>
-                                                    <constraint firstItem="0jc-Qe-Tgj" firstAttribute="centerY" secondItem="ISR-Ry-OKb" secondAttribute="centerY" id="Utp-RA-t87"/>
-                                                    <constraint firstItem="0jc-Qe-Tgj" firstAttribute="centerX" secondItem="ISR-Ry-OKb" secondAttribute="centerX" id="WlA-hP-Nm9"/>
+                                                    <constraint firstItem="KI0-QH-nr2" firstAttribute="centerY" secondItem="ISR-Ry-OKb" secondAttribute="centerY" id="WbY-0p-FrF"/>
+                                                    <constraint firstItem="KI0-QH-nr2" firstAttribute="height" secondItem="ISR-Ry-OKb" secondAttribute="height" id="dQ4-db-4Nz"/>
+                                                    <constraint firstItem="KI0-QH-nr2" firstAttribute="width" secondItem="ISR-Ry-OKb" secondAttribute="width" multiplier="80:100" id="fW5-XQ-rsK"/>
+                                                    <constraint firstItem="KI0-QH-nr2" firstAttribute="centerX" secondItem="ISR-Ry-OKb" secondAttribute="centerX" id="xIy-Dk-IRa"/>
                                                 </constraints>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="GSU-jz-gqd"/>
-                                                        <exclude reference="Utp-RA-t87"/>
-                                                    </mask>
-                                                </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v8d-6h-7kb" userLabel="Buttons View">
-                                                <rect key="frame" x="0.0" y="97" width="414" height="226"/>
+                                                <rect key="frame" x="0.0" y="129" width="414" height="194"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0KF-wP-XgU" userLabel="facebookButton">
-                                                        <rect key="frame" x="83" y="10" width="248" height="56.5"/>
-                                                        <state key="normal" title="使用Facebook帳號登入"/>
+                                                        <rect key="frame" x="83" y="20" width="248" height="48.5"/>
+                                                        <color key="backgroundColor" red="0.086274509803921567" green="0.80784313725490198" blue="0.72941176470588232" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                        <state key="normal" title="使用Facebook帳號登入">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </state>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CXz-aL-wKx" userLabel="googleButton">
-                                                        <rect key="frame" x="83" y="76" width="248" height="56.5"/>
-                                                        <state key="normal" title="使用Google帳號登入"/>
+                                                        <rect key="frame" x="83" y="83" width="248" height="48.5"/>
+                                                        <color key="backgroundColor" red="0.086274509799999996" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                        <state key="normal" title="使用Google帳號登入">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </state>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="0KF-wP-XgU" firstAttribute="centerX" secondItem="v8d-6h-7kb" secondAttribute="centerX" id="1O8-V0-kWg"/>
+                                                    <constraint firstItem="CXz-aL-wKx" firstAttribute="height" secondItem="v8d-6h-7kb" secondAttribute="height" multiplier="25:100" id="5Mg-hZ-Jf0"/>
                                                     <constraint firstItem="0KF-wP-XgU" firstAttribute="height" secondItem="v8d-6h-7kb" secondAttribute="height" multiplier="25:100" id="CFd-kc-PMX"/>
-                                                    <constraint firstItem="CXz-aL-wKx" firstAttribute="top" secondItem="0KF-wP-XgU" secondAttribute="bottom" constant="10" id="EZE-VU-Upr"/>
+                                                    <constraint firstItem="CXz-aL-wKx" firstAttribute="top" secondItem="0KF-wP-XgU" secondAttribute="bottom" constant="15" id="EZE-VU-Upr"/>
                                                     <constraint firstItem="CXz-aL-wKx" firstAttribute="width" secondItem="v8d-6h-7kb" secondAttribute="width" multiplier="60:100" id="jBX-1G-dX6"/>
                                                     <constraint firstItem="CXz-aL-wKx" firstAttribute="centerX" secondItem="v8d-6h-7kb" secondAttribute="centerX" id="nGW-9i-Jvi"/>
                                                     <constraint firstItem="0KF-wP-XgU" firstAttribute="width" secondItem="v8d-6h-7kb" secondAttribute="width" multiplier="60:100" id="qxp-aT-dM3"/>
                                                     <constraint firstItem="CXz-aL-wKx" firstAttribute="height" secondItem="v8d-6h-7kb" secondAttribute="height" multiplier="25:100" id="rpI-0Z-k1y"/>
-                                                    <constraint firstItem="0KF-wP-XgU" firstAttribute="top" secondItem="v8d-6h-7kb" secondAttribute="top" constant="10" id="wHx-hC-ONJ"/>
+                                                    <constraint firstItem="0KF-wP-XgU" firstAttribute="top" secondItem="v8d-6h-7kb" secondAttribute="top" constant="20" id="wHx-hC-ONJ"/>
+                                                    <constraint firstItem="0KF-wP-XgU" firstAttribute="height" secondItem="v8d-6h-7kb" secondAttribute="height" multiplier="25:100" id="xEs-Hv-yZv"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="CFd-kc-PMX"/>
+                                                        <exclude reference="rpI-0Z-k1y"/>
+                                                    </mask>
+                                                </variation>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -268,9 +280,9 @@
                                             <constraint firstItem="ISR-Ry-OKb" firstAttribute="width" secondItem="ZgI-2d-9i7" secondAttribute="width" id="8co-eP-ghx"/>
                                             <constraint firstItem="ISR-Ry-OKb" firstAttribute="centerX" secondItem="ZgI-2d-9i7" secondAttribute="centerX" id="Afd-ZU-tZv"/>
                                             <constraint firstItem="v8d-6h-7kb" firstAttribute="width" secondItem="ZgI-2d-9i7" secondAttribute="width" id="Anr-6E-1hm"/>
-                                            <constraint firstItem="v8d-6h-7kb" firstAttribute="height" secondItem="ZgI-2d-9i7" secondAttribute="height" multiplier="70:100" id="Yx9-fE-0rh"/>
+                                            <constraint firstItem="v8d-6h-7kb" firstAttribute="height" secondItem="ZgI-2d-9i7" secondAttribute="height" multiplier="60:100" id="Yx9-fE-0rh"/>
                                             <constraint firstItem="v8d-6h-7kb" firstAttribute="centerX" secondItem="ZgI-2d-9i7" secondAttribute="centerX" id="ri3-ut-rZg"/>
-                                            <constraint firstItem="ISR-Ry-OKb" firstAttribute="height" secondItem="ZgI-2d-9i7" secondAttribute="height" multiplier="30:100" id="ryR-9U-XBB"/>
+                                            <constraint firstItem="ISR-Ry-OKb" firstAttribute="height" secondItem="ZgI-2d-9i7" secondAttribute="height" multiplier="40:100" id="ryR-9U-XBB"/>
                                             <constraint firstItem="ISR-Ry-OKb" firstAttribute="top" secondItem="ZgI-2d-9i7" secondAttribute="top" id="y9q-ei-Gfo"/>
                                         </constraints>
                                     </view>
@@ -299,8 +311,12 @@
                         <constraints>
                             <constraint firstItem="97j-Q3-uwC" firstAttribute="height" secondItem="Sct-pe-4SC" secondAttribute="height" multiplier="1:2" id="BGl-11-WV3"/>
                             <constraint firstItem="edd-Hm-GcU" firstAttribute="top" secondItem="97j-Q3-uwC" secondAttribute="bottom" id="HO8-rd-SzO"/>
+                            <constraint firstItem="RsV-DL-Eyx" firstAttribute="centerY" secondItem="Sct-pe-4SC" secondAttribute="centerY" id="SG1-Sg-6Ks"/>
+                            <constraint firstItem="RsV-DL-Eyx" firstAttribute="centerX" secondItem="Sct-pe-4SC" secondAttribute="centerX" id="VMn-Es-XV6"/>
+                            <constraint firstItem="RsV-DL-Eyx" firstAttribute="width" secondItem="Sct-pe-4SC" secondAttribute="width" id="Vl6-LD-cJe"/>
                             <constraint firstItem="97j-Q3-uwC" firstAttribute="width" secondItem="Sct-pe-4SC" secondAttribute="width" id="eKK-Og-9zs"/>
                             <constraint firstItem="97j-Q3-uwC" firstAttribute="centerX" secondItem="Sct-pe-4SC" secondAttribute="centerX" id="xJ9-wg-CYr"/>
+                            <constraint firstItem="RsV-DL-Eyx" firstAttribute="height" secondItem="Sct-pe-4SC" secondAttribute="height" id="zm8-VI-GSM"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
@@ -308,6 +324,9 @@
                         <outlet property="cancelButton" destination="KL1-er-ZiF" id="upj-U2-qpJ"/>
                         <outlet property="fbButton" destination="0KF-wP-XgU" id="Uwc-Fb-PJs"/>
                         <outlet property="googleButton" destination="CXz-aL-wKx" id="Ns1-MD-C1B"/>
+                        <outlet property="maskView" destination="RsV-DL-Eyx" id="a0C-KY-d9q"/>
+                        <outlet property="subTitleText" destination="KI0-QH-nr2" id="FMd-KA-0oK"/>
+                        <outlet property="titleText" destination="PfZ-yO-Gsz" id="OAv-NU-94Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6rE-3x-xbe" userLabel="First Responder" sceneMemberID="firstResponder"/>

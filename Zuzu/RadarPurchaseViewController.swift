@@ -69,7 +69,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         super.viewWillAppear(animated)
         reload()
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            AmazonClientManager.sharedInstance.loginFromView(self) {
+            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
                 return nil
             }
@@ -110,7 +110,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            AmazonClientManager.sharedInstance.loginFromView(self) {
+            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
                 dispatch_async(dispatch_get_main_queue()) {
                     self.alertPurchase(button)

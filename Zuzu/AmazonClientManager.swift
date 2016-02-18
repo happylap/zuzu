@@ -238,7 +238,7 @@ class AmazonClientManager : NSObject {
             }.continueWithBlock(self.completionHandler!)
     }
     
-    func loginFromView(theViewController: UIViewController, withCompletionHandler completionHandler: AWSContinuationBlock) {
+    func loginFromView(theViewController: UIViewController, mode: Int = 1, withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
 
         self.completionHandler = completionHandler
@@ -248,6 +248,7 @@ class AmazonClientManager : NSObject {
        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
+            vc.loginMode = mode
             
             vc.cancelHandler = { () -> Void in
                 ///GA Tracker: Login cancelled

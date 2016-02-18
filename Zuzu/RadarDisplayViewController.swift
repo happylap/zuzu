@@ -59,7 +59,7 @@ class RadarDisplayViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController!.tabBarHidden = false
+        //self.tabBarController!.tabBarHidden = false
     }
     
     @IBAction func enableCriteria(sender: UISwitch) {
