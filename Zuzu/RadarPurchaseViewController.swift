@@ -68,11 +68,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         reload()
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
-            vc.modalPresentationStyle = .OverCurrentContext
-            presentViewController(vc, animated: true, completion: nil)
-            
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
+            AmazonClientManager.sharedInstance.loginFromView(self) {
+                (task: AWSTask!) -> AnyObject! in
+                return nil
+            }
         }
     }
     
@@ -109,31 +109,31 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
-        
-        let isLogin = false
-        
-        if isLogin {
-            let product = products[button.tag]
-            Log.info("productIdentifier: \(product.productIdentifier)")
-            priceFormatter.locale = product.priceLocale
-            let price = priceFormatter.stringFromNumber(product.price)
-            
-            let loginAlertView = SCLAlertView()
-            loginAlertView.addButton("購買") {
-                ZuzuStore.sharedInstance.makePurchase(product)
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
+            AmazonClientManager.sharedInstance.loginFromView(self) {
+                (task: AWSTask!) -> AnyObject! in
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.alertPurchase(button)
+                }
+                return nil
             }
-            let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
-            loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            
-        } else {
-            
-            let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-            if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
-                vc.modalPresentationStyle = .OverCurrentContext
-                presentViewController(vc, animated: true, completion: nil)
-                
-            }
+        }else{
+            alertPurchase(button)
         }
+    }
+    
+    func alertPurchase(button: UIButton){
+        let product = products[button.tag]
+        Log.info("productIdentifier: \(product.productIdentifier)")
+        priceFormatter.locale = product.priceLocale
+        let price = priceFormatter.stringFromNumber(product.price)
+        
+        let loginAlertView = SCLAlertView()
+        loginAlertView.addButton("購買") {
+            ZuzuStore.sharedInstance.makePurchase(product)
+        }
+        let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
+        loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     // When a product is purchased, this notification fires, redraw the correct row
