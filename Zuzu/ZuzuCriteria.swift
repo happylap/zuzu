@@ -104,7 +104,7 @@ class ZuzuCriteria: NSObject, Mappable {
             }
             
             // 用途
-            let types = json["purpose_types"]["value"].arrayObject as? [Int]
+            let types = json["purpose_type"]["value"].arrayObject as? [Int]
             
             // 租金範圍
             let price:(Int, Int) = (json["price"]["from"].intValue, json["price"]["to"].intValue)
@@ -259,7 +259,7 @@ class ZuzuCriteria: NSObject, Mappable {
             
             // 用途
             if let purposeTypes = criteria.types {
-                JSONDict["purpose_types"] = ["operator": "OR", "value": purposeTypes]
+                JSONDict["purpose_type"] = ["operator": "OR", "value": purposeTypes]
             }
             
             // 租金範圍
