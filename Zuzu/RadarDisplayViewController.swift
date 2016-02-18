@@ -112,7 +112,9 @@ class RadarDisplayViewController: UIViewController {
         if let expireDate = self.zuzuCriteria?.expireTime{
             let now = NSDate()
             diff = now.daysFrom(expireDate)
-            expirDate = CommonUtils.getStandardDateString(expireDate)
+            if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
+                expirDate = dateString
+            }
         }
         self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
         self.serviceExpireLabel?.text = "到期日: \(expirDate)"

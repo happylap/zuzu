@@ -207,8 +207,7 @@ class ZuzuWebService: NSObject
         Log.enter()
         
         let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
-        let dateStringOfNow = CommonUtils.getStandardStringFromDate(NSDate())
-        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": dateStringOfNow!]]
+        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": ""]]
         
         self._patch(url, payload: payload, handler: handler)
         
@@ -219,8 +218,7 @@ class ZuzuWebService: NSObject
         Log.enter()
         
         let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
-        let dateStringOfNow = CommonUtils.getStandardStringFromDate(NSDate())
-        let payload:[[String: AnyObject]] = [["op": "add", "path": "/registerTime", "value": dateStringOfNow!]]
+        let payload:[[String: AnyObject]] = [["op": "add", "path": "/registerTime", "value": ""]]
         
         self._patch(url, payload: payload, handler: handler)
         

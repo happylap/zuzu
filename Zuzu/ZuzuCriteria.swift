@@ -48,12 +48,12 @@ class ZuzuCriteria: NSObject, Mappable {
     //
     let expireTimeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
             if let dateString = values {
-                return CommonUtils.getStandardDateFromString(dateString)
+                return CommonUtils.getUTCDateFromString(dateString)
             }
             return nil
         }, toJSON: { (values: NSDate?) -> String? in
             if let date = values {
-                return CommonUtils.getStandardStringFromDate(date)
+                return CommonUtils.getUTCStringFromDate(date)
             }
             return nil
     })
