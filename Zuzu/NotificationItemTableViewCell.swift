@@ -56,7 +56,7 @@ class NotificationItemTableViewCell: UITableViewCell
             houseTypeLabel?.text = "\(housetypeString)/\(purpose)"
             houseSizeLabel?.text = "\(item.size)坪"
             housePriceLabel?.text = "\(item.price)元"
-            postTimeLabel?.text = CommonUtils.getStandardDateString(item.postTime!)
+            postTimeLabel?.text = CommonUtils.getLocalShortStringFromDate(item.postTime!)
             
             if item.isRead == false{
                 self.contentView.backgroundColor = UIColor.colorWithRGB(0xE7F9F8, alpha: 1)

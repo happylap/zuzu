@@ -40,11 +40,24 @@ class NotifyItem: NSObject, Mappable {
         price       <- (map["price"],       TransformOf<Int32, Int>(fromJSON: { Int32($0!) }, toJSON: { $0.map { Int($0) } }))
         size        <-  map["size"]
         firstImgUrl <-  map["first_img_url"]
-        postTime    <- (map["post_time"], DateTransform())
+        postTime    <- (map["post_time"], UTCDateTransform)
         isRead      <-  map["_read"]
         
 //        "notify_time" : "2016-01-27T18:55:16Z",
 //        "criteria_id" : "1453647277020",
 //        "user_id" : "test",
     }
+    
+    //
+    let UTCDateTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
+        if let dateString = values {
+            return CommonUtils.getUTCDateFromString(dateString)
+        }
+        return nil
+        }, toJSON: { (values: NSDate?) -> String? in
+            if let date = values {
+                return CommonUtils.getUTCStringFromDate(date)
+            }
+            return nil
+    })
 }

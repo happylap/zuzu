@@ -221,29 +221,9 @@ class AmazonClientManager : NSObject {
             self.dumpCredentialProviderInfo()
             
             if (task.error != nil) {
-                
-                //Register Cognito Device Token
-                let userDefaults = NSUserDefaults.standardUserDefaults()
-                let currentDeviceToken: NSData? = userDefaults.objectForKey(Constants.DEVICE_TOKEN_KEY) as? NSData
-                var currentDeviceTokenString : String
-                
-                if currentDeviceToken != nil {
-                    currentDeviceTokenString = currentDeviceToken!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
-                } else {
-                    currentDeviceTokenString = ""
-                }
-                
-                if currentDeviceToken != nil && currentDeviceTokenString != userDefaults.stringForKey(Constants.COGNITO_DEVICE_TOKEN_KEY) {
-                    
-                    AWSCognito.defaultCognito().registerDevice(currentDeviceToken).continueWithBlock { (task: AWSTask!) -> AnyObject! in
-                        if (task.error == nil) {
-                            userDefaults.setObject(currentDeviceTokenString, forKey: Constants.COGNITO_DEVICE_TOKEN_KEY)
-                            userDefaults.synchronize()
-                        }
-                        return nil
-                    }
-                }
-                
+                assert(false, "Log in failed")
+            }
+            else{
                 //Upload User Data to S3
                 if let userData = self.userLoginData {
                     
@@ -254,7 +234,7 @@ class AmazonClientManager : NSObject {
                     self.uploadUserDataToS3(userData)
                     
                 } else {
-                    assert(false, "No userData after loggin in")
+                    //assert(false, "No userData after loggin in")
                     
                     Log.debug("postNotificationName: \(UserLoginNotification)")
                     NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self, userInfo: nil)
@@ -266,13 +246,34 @@ class AmazonClientManager : NSObject {
             }.continueWithBlock(self.completionHandler!)
     }
     
-    func loginFromView(theViewController: UIViewController, withCompletionHandler completionHandler: AWSContinuationBlock) {
+    func loginFromView(theViewController: UIViewController, mode: Int = 1, withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
-        
+
         self.completionHandler = completionHandler
         self.loginViewController = theViewController
+
+
+       let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.loginMode = mode
+            
+            vc.cancelHandler = { () -> Void in
+                ///GA Tracker: Login cancelled
+                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                    action: GAConst.Action.Blocking.loginReject)
+            }
+            
+            vc.fbLoginHandler = { () -> Void in
+                self.fbLogin(theViewController)
+            }
+            vc.googleLoginHandler = { () -> Void in
+                self.googleLogin(theViewController)
+            }
+            theViewController.presentViewController(vc, animated: true, completion: nil)
+        }
         
-        let loginAlertView = SCLAlertView()
+        /*let loginAlertView = SCLAlertView()
         loginAlertView.showCloseButton = false
         
         loginAlertView.addButton("Facebook帳號登入") {
@@ -290,7 +291,7 @@ class AmazonClientManager : NSObject {
         }
         
         loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
-            subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)*/
         Log.exit()
         
     }

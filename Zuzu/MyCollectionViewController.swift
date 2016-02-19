@@ -350,18 +350,12 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         //Configure Sorting Status
         configureSortingButtons()
-        
-        CollectionItemService.sharedInstance.parentViewController = self
-        CollectionItemService.sharedInstance.sync()
     }
     
     override func viewWillAppear(animated: Bool) {
         Log.debug("\(self) viewWillAppear")
         super.viewWillAppear(animated)
         
-        // Synchronize core data from Cognito
-        CollectionItemService.sharedInstance.sync()
-
         ///Show tab bar
         self.tabBarController!.tabBarHidden = false
         
@@ -445,7 +439,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         let cell = tableView.dequeueReusableCellWithIdentifier(self.cellReuseIdentifier, forIndexPath: indexPath) as! SearchResultTableViewCell
         
-        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
+        //Log.debug("- TableView Prepare Cell For Row[\(indexPath.row)]")
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
@@ -453,14 +447,22 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let collectionItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
             cell.houseItemForCollection = collectionItem
             
-            CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+            let houseId = collectionItem.id
+            
+            Log.debug("Row[\(indexPath.row)] isOffShelf by id: \(houseId)")
+            CollectionItemService.sharedInstance.isOffShelf(houseId) { (offShelf) -> Void in
+                Log.debug("Row[\(indexPath.row)] isOffShelf is \(offShelf)")
+                
                 var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
                 
                 if offShelf == true {
                     houseFlags.append(SearchResultTableViewCell.HouseFlag.OFF_SHELF)
                 }
                 
-                CollectionItemService.sharedInstance.isPriceCut(collectionItem.id) { (priceCut) -> Void in
+                Log.debug("Row[\(indexPath.row)] isPriceCut by id: \(houseId)")
+                CollectionItemService.sharedInstance.isPriceCut(houseId) { (priceCut) -> Void in
+                    Log.debug("Row[\(indexPath.row)] isPriceCut is \(priceCut)")
+                    
                     if priceCut == true {
                         houseFlags.append(SearchResultTableViewCell.HouseFlag.PRICE_CUT)
                     }
@@ -482,7 +484,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         if let indexPath = tableView.indexPathForSelectedRow {
             if let collectionItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                 
+                Log.debug("Row[\(indexPath.row)] isOffShelf by id: \(collectionItem.id)")
                 CollectionItemService.sharedInstance.isOffShelf(collectionItem.id) { (offShelf) -> Void in
+                    Log.debug("Row[\(indexPath.row)] isOffShelf is \(offShelf)")
                     
                     if offShelf == true {
                         let loginAlertView = SCLAlertView()

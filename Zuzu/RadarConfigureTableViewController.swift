@@ -689,25 +689,6 @@ class RadarConfigureTableViewController: UITableViewController {
         
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        Log.enter()
-        
-        /// Start all SearchCriteriaObservers
-        for observer in stateObservers {
-            observer.start()
-            
-            /// Try to trigger 1st facet query if there is no cache data
-            if let regionObserver = observer as? RegionItemCountCriteriaObserver{
-                if (getItemCountByRegion() == nil) {
-                    regionObserver.notifyCriteriaChange(currentCriteria)
-                }
-            }
-        }
-        
-        Log.exit()
-    }
-    
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
     }

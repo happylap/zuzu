@@ -25,7 +25,7 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    
+    var purchaseHistotyTableDataSource = RadarPurchaseHistoryTableViewDataSource()
     
     var user: String?
     
@@ -39,6 +39,8 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var serviceExpireLabel: UILabel!
     
+    @IBOutlet weak var purchaseTableView: UITableView!
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -49,15 +51,32 @@ class RadarDisplayViewController: UIViewController {
         self.user = "test"
         self.configureButton()
         self.refreshCriteria()
+        self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
+        self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
+        
         // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController!.tabBarHidden = false
+        //self.tabBarController!.tabBarHidden = false
     }
     
     @IBAction func enableCriteria(sender: UISwitch) {
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.completeHandler = { () -> Void in
+                ///Show tab bar
+                self.tabBarController?.tabBarHidden = false
+            }
+            
+            presentViewController(vc, animated: true, completion: nil)
+            
+        }
+        
         if self.user != nil && self.zuzuCriteria != nil{
             let isEnable = sender.on
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.user!,
@@ -93,7 +112,9 @@ class RadarDisplayViewController: UIViewController {
         if let expireDate = self.zuzuCriteria?.expireTime{
             let now = NSDate()
             diff = now.daysFrom(expireDate)
-            expirDate = CommonUtils.getStandardDateString(expireDate)
+            if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
+                expirDate = dateString
+            }
         }
         self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
         self.serviceExpireLabel?.text = "到期日: \(expirDate)"

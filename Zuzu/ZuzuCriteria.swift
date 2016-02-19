@@ -15,6 +15,7 @@ private let Log = Logger.defaultLogger
 class ZuzuCriteria: NSObject, Mappable {
     
     static let filterSections:[FilterSection] = ConfigLoader.loadAdvancedFilters()
+    static let codeToCityMap:[Int : City] = ConfigLoader.CodeToCityMap
     
     var userId: String?
     var criteriaId: String?
@@ -35,7 +36,7 @@ class ZuzuCriteria: NSObject, Mappable {
         userId              <-  map["user_id"]
         criteriaId          <-  map["criteria_id"]
         enabled             <-  map["enabled"]
-        expireTime          <-  (map["expire_time"], DateTransform())
+        expireTime          <- (map["expire_time"], expireTimeTransform)
         appleProductId      <-  map["apple_product_id"]
         criteria            <- (map["filters"], criteriaTransform)
     }
@@ -43,6 +44,20 @@ class ZuzuCriteria: NSObject, Mappable {
     
     
     // MARK - Transforms
+
+    //
+    let expireTimeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
+            if let dateString = values {
+                return CommonUtils.getUTCDateFromString(dateString)
+            }
+            return nil
+        }, toJSON: { (values: NSDate?) -> String? in
+            if let date = values {
+                return CommonUtils.getUTCStringFromDate(date)
+            }
+            return nil
+    })
+
     
     //
     let criteriaTransform = TransformOf<SearchCriteria, [String: AnyObject]>(fromJSON: { (values: [String: AnyObject]?) -> SearchCriteria? in
@@ -62,25 +77,34 @@ class ZuzuCriteria: NSObject, Mappable {
             let json = JSON(data: dataFromString)
             
             // 地區
-            var cities = [City]()
+            var selectedCities = [City]()
             for (_, cityJson):(String, JSON) in json["city"] {
                 
-                var regions = [Region]()
+                let cityCode = cityJson["code"].intValue
                 
-                if cityJson["regions"].arrayValue.isEmpty {
-                    regions.append(Region.allRegions)
+                if let city = codeToCityMap[cityCode] {
+                    
+                    var selectedRegions = [Region]()
+                    
+                    if cityJson["regions"].arrayValue.isEmpty {
+                        selectedRegions.append(Region.allRegions)
+                    }
+                
+                    for (_, regionJson):(String, JSON) in cityJson["regions"] {
+                        
+                        let regionCode = regionJson.intValue
+                        
+                        if let region = city.regions.filter({$0.code == regionCode}).first {
+                            selectedRegions.append(Region(code: region.code, name: region.name))
+                        }
+                    }
+                    
+                    selectedCities.append(City(code: city.code, name: city.name, regions: selectedRegions))
                 }
-                
-                for (_, regionJson):(String, JSON) in cityJson["regions"] {
-                    regions.append(Region(code: regionJson.intValue, name: ""))
-                }
-                
-                let city = City(code: cityJson["code"].intValue, name: "", regions: regions)
-                cities.append(city)
             }
             
             // 用途
-            let types = json["purpose_types"]["value"].arrayObject as? [Int]
+            let types = json["purpose_type"]["value"].arrayObject as? [Int]
             
             // 租金範圍
             let price:(Int, Int) = (json["price"]["from"].intValue, json["price"]["to"].intValue)
@@ -88,7 +112,7 @@ class ZuzuCriteria: NSObject, Mappable {
             // 坪數範圍
             let size:(Int, Int) = (json["size"]["from"].intValue, json["size"]["to"].intValue)
             
-            Log.debug("cities: \(cities)")
+            Log.debug("cities: \(selectedCities)")
             Log.debug("types: \(types)")
             Log.debug("price: \(price)")
             Log.debug("size: \(size)")
@@ -194,7 +218,7 @@ class ZuzuCriteria: NSObject, Mappable {
             }
             
             let criteria = SearchCriteria()
-            criteria.region = cities
+            criteria.region = selectedCities
             criteria.types = types
             criteria.price = price
             criteria.size = size
@@ -235,7 +259,7 @@ class ZuzuCriteria: NSObject, Mappable {
             
             // 用途
             if let purposeTypes = criteria.types {
-                JSONDict["purpose_types"] = ["operator": "OR", "value": purposeTypes]
+                JSONDict["purpose_type"] = ["operator": "OR", "value": purposeTypes]
             }
             
             // 租金範圍
