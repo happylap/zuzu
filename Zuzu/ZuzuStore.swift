@@ -18,6 +18,8 @@ public typealias ProductIdentifier = String
 /// Completion handler called when products are fetched.
 public typealias RequestProductsCompletionHandler = (success: Bool, products: [SKProduct]) -> ()
 
+/// Transaction handler called when there is any transaction status update.
+public typealias TransactionHandler = (store: ZuzuStore, transaction: SKPaymentTransaction) -> Bool
 
 /// A Helper class for In-App-Purchases, it can fetch products, tell you if a product has been purchased,
 /// purchase products, and restore purchases.  Uses NSUserDefaults to cache if a product has been purchased.
@@ -32,6 +34,7 @@ public class ZuzuStore: NSObject  {
     // Used by SKProductsRequestDelegate
     private var productsRequest: SKProductsRequest?
     private var completionHandler: RequestProductsCompletionHandler?
+    private var transactionHandler: TransactionHandler?
     
     //Share Instance for interacting with the ZuzuStore
     class var sharedInstance: ZuzuStore {
@@ -50,9 +53,19 @@ public class ZuzuStore: NSObject  {
         self.productIdentifiers = productIdentifiers
         
         super.init()
-        
+    }
+    
+    ///Start
+    public func start() {
+
         /// Observe the transaction
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+    }
+    
+    public func stop() {
+        
+        /// Observe the transaction
+        SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
     }
     
     /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
@@ -83,13 +96,27 @@ public class ZuzuStore: NSObject  {
     /// Make purchase of a product.
     public func makePurchase(product: SKProduct) {
         Log.debug("Buying \(product.productIdentifier)...")
-        let payment = SKPayment(product: product)
-
-        SKPaymentQueue.defaultQueue().addPayment(payment)
+        
+        
+        validateReceipt(NSBundle.mainBundle().appStoreReceiptURL) { (success: Bool) -> Void in
+            print("validateReceipt: \(success)")
+            
+            let payment = SKPayment(product: product)
+            
+            SKPaymentQueue.defaultQueue().addPayment(payment)
+        }
+    }
+    
+    public func finishTransaction(transaction: SKPaymentTransaction) {
+        
+        
+        /// Finish the transaction
+        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     
     /// If the state of whether purchases have been made is lost  (e.g. the
     /// user deletes and reinstalls the app) this will recover the purchases.
+    /// Only non-consumable products/ renewable subscription/ free subscription can be restored by AppStore
     public func restorePreviousPurchase() {
         SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
     }
@@ -103,6 +130,98 @@ public class ZuzuStore: NSObject  {
     /// Check against the locally cached data
     public func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
         return purchasedProductIdentifiers.contains(productIdentifier)
+    }
+    
+    private func receiptData(appStoreReceiptURL : NSURL?) -> NSData? {
+        
+        guard let receiptURL = appStoreReceiptURL,
+            receipt = NSData(contentsOfURL: receiptURL) else {
+                return nil
+        }
+        
+        do {
+            let receiptData = receipt.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            let requestContents = ["receipt-data" : receiptData]
+            let requestData = try NSJSONSerialization.dataWithJSONObject(requestContents, options: [])
+            return requestData
+        }
+        catch let error as NSError {
+            print(error)
+        }
+        
+        return nil
+    }
+    
+    private func validateReceiptInternal(appStoreReceiptURL : NSURL?, isProd: Bool , onCompletion: (Int?) -> Void) {
+        
+        let serverURL = isProd ? "https://buy.itunes.apple.com/verifyReceipt" : "https://sandbox.itunes.apple.com/verifyReceipt"
+        
+        guard let receiptData = receiptData(appStoreReceiptURL),
+            url = NSURL(string: serverURL)  else {
+                onCompletion(nil)
+                return
+        }
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        request.HTTPBody = receiptData
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            guard let data = data where error == nil else {
+                onCompletion(nil)
+                return
+            }
+            
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data, options:[])
+                print(json)
+                guard let statusCode = json["status"] as? Int else {
+                    onCompletion(nil)
+                    return
+                }
+                onCompletion(statusCode)
+            }
+            catch let error as NSError {
+                print(error)
+                onCompletion(nil)
+            }
+        })
+        task.resume()
+    }
+    
+    public func validateReceipt(appStoreReceiptURL : NSURL?, onCompletion: (Bool) -> Void) {
+        
+        validateReceiptInternal(appStoreReceiptURL, isProd: true) { (statusCode: Int?) -> Void in
+            guard let status = statusCode else {
+                onCompletion(false)
+                return
+            }
+            
+            // This receipt is from the test environment, but it was sent to the production environment for verification.
+            if status == 21007 {
+                self.validateReceiptInternal(appStoreReceiptURL, isProd: false) { (statusCode: Int?) -> Void in
+                    guard let statusValue = statusCode else {
+                        onCompletion(false)
+                        return
+                    }
+                    
+                    // 0 if the receipt is valid
+                    if statusValue == 0 {
+                        onCompletion(true)
+                    } else {
+                        onCompletion(false)
+                    }
+                    
+                }
+                
+                // 0 if the receipt is valid
+            } else if status == 0 {
+                onCompletion(true)
+            } else {
+                onCompletion(false)
+            }
+        }
     }
 }
 
@@ -136,10 +255,12 @@ extension ZuzuStore: SKProductsRequestDelegate {
 /// MARK: - SKProductsRequestDelegate
 // SKPaymentTransactionObserver: receive the result for the transactions
 extension ZuzuStore: SKPaymentTransactionObserver {
-
+    
     /// For each transaction act accordingly
     /// Save in the purchased cache, Issue notifications, Mark the transaction as complete.
     public func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        Log.enter()
+        
         for transaction in transactions {
             switch (transaction.transactionState) {
             case .Purchased:
@@ -159,24 +280,36 @@ extension ZuzuStore: SKPaymentTransactionObserver {
         }
     }
     
-    private func completeTransaction(transaction: SKPaymentTransaction) {
-        Log.debug("completeTransaction...")
-        provideContentForProductIdentifier(transaction.payment.productIdentifier)
-        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+    public func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError){
+        
+        Log.warning(error.description)
     }
     
-    private func failedTransaction(transaction: SKPaymentTransaction) {
-        Log.debug("failedTransaction...")
-        if transaction.error!.code != SKErrorPaymentCancelled {
-            Log.debug("Transaction error: \(transaction.error!.localizedDescription)")
-        }
+    public func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
+        
+        Log.warning(queue.description)
+    }
+    
+    private func completeTransaction(transaction: SKPaymentTransaction) {
+        Log.warning("completeTransaction... \(transaction.transactionIdentifier)")
+        provideContentForProductIdentifier(transaction.payment.productIdentifier)
+        
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     
     private func restoreTransaction(transaction: SKPaymentTransaction) {
         let productIdentifier = transaction.originalTransaction!.payment.productIdentifier
-        Log.debug("restoreTransaction... \(productIdentifier)")
+        Log.warning("restoreTransaction... \(productIdentifier)")
         provideContentForProductIdentifier(productIdentifier)
+        
+        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+    }
+    
+    private func failedTransaction(transaction: SKPaymentTransaction) {
+        Log.warning("failedTransaction...\(transaction.transactionIdentifier)")
+        if transaction.error!.code != SKErrorPaymentCancelled {
+            Log.debug("Transaction error: \(transaction.error!.localizedDescription)")
+        }
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     

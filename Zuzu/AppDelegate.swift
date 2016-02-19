@@ -128,6 +128,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        ZuzuStore.sharedInstance.start()
+        
         // Initialize sign-in
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -221,6 +223,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         //Filter data is not cached across App instance
         filterDataStore.clearFilterSetting()
+        
+        ZuzuStore.sharedInstance.stop()
     }
     
     func containerAvailable(container: TAGContainer!) {
