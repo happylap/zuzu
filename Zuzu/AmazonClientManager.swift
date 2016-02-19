@@ -24,7 +24,15 @@ private let Log = Logger.defaultLogger
 let UserLoginNotification = "UserLoginNotification"
 
 class AmazonClientManager : NSObject {
-    static let sharedInstance = AmazonClientManager()
+    
+    //Share Instance for interacting with the ZuzuStore
+    class var sharedInstance: AmazonClientManager {
+        struct Singleton {
+            static let instance = AmazonClientManager()
+        }
+        
+        return Singleton.instance
+    }
     
     private struct AWSConstants {
         static let DEFAULT_SERVICE_REGIONTYPE = AWSRegionType.APNortheast1
