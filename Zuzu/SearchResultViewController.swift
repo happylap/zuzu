@@ -247,10 +247,10 @@ class SearchResultViewController: UIViewController {
     }
     
     private func loadHouseListPage(pageNo: Int) {
+
+        let maxPageNum = ceil( Double(dataSource.estimatedTotalResults) / Double(HouseItemTableDataSource.Const.PAGE_SIZE))
         
-        let numberOfItems = pageNo * HouseItemTableDataSource.Const.PAGE_SIZE
-        
-        if(numberOfItems > dataSource.estimatedTotalResults){
+        if(pageNo > Int(maxPageNum)){
             Log.debug("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedTotalResults)]")
             return
         }
