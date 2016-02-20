@@ -275,7 +275,8 @@ class AmazonClientManager : NSObject {
                     
                     ///GA Tracker: Login failed
                     theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), \(error.userInfo)")
+                        action: GAConst.Action.Blocking.LoginError,
+                        label: "\(GAConst.Label.LoginType.Facebook), \(error.code), \(error.localizedDescription), \(error.localizedFailureReason), \(error.userInfo)")
                     
                     Log.warning("Error: \(error.userInfo)")
                     
