@@ -39,13 +39,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="租屋雷達" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfr-AS-x6H" userLabel="Title">
-                                        <rect key="frame" x="57" y="30" width="300" height="24"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <rect key="frame" x="163" y="39" width="88" height="26.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YzE-PW-QCu" userLabel="Close Button">
-                                        <rect key="frame" x="16" y="29" width="25" height="25"/>
+                                        <rect key="frame" x="16" y="39.5" width="25" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="Bvh-Og-HCb"/>
                                             <constraint firstAttribute="width" secondItem="YzE-PW-QCu" secondAttribute="height" multiplier="1:1" id="pfC-40-1hX"/>
@@ -55,11 +58,10 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="yfr-AS-x6H" firstAttribute="centerY" secondItem="YzE-PW-QCu" secondAttribute="centerY" id="4WR-hk-nI7"/>
                                     <constraint firstItem="yfr-AS-x6H" firstAttribute="centerX" secondItem="HrV-fA-kRW" secondAttribute="centerX" id="4Zd-5q-Bbf"/>
                                     <constraint firstItem="YzE-PW-QCu" firstAttribute="leading" secondItem="HrV-fA-kRW" secondAttribute="leading" constant="16" id="9Ih-eB-Yx0"/>
-                                    <constraint firstItem="YzE-PW-QCu" firstAttribute="centerY" secondItem="HrV-fA-kRW" secondAttribute="centerY" id="AkV-Vd-ruM"/>
-                                    <constraint firstAttribute="trailing" secondItem="yfr-AS-x6H" secondAttribute="trailing" constant="57" id="TbR-kj-fIj"/>
-                                    <constraint firstItem="yfr-AS-x6H" firstAttribute="centerY" secondItem="HrV-fA-kRW" secondAttribute="centerY" id="hRV-G0-0Yw"/>
+                                    <constraint firstItem="YzE-PW-QCu" firstAttribute="centerY" secondItem="HrV-fA-kRW" secondAttribute="centerY" constant="10" id="AkV-Vd-ruM"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="租屋雷達即時通知服務" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBa-hE-DqY" userLabel="SubTitle1">
@@ -67,6 +69,9 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ak6-rV-fMv" userLabel="SubTitle2">
                                 <rect key="frame" x="63" y="137" width="315" height="54"/>
@@ -79,6 +84,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="a7T-ad-y9Y"/>
@@ -125,12 +133,18 @@
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="滿足條件的物件，上架數小時內即時通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34V-ga-knY">
                                         <rect key="frame" x="20" y="53" width="270" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
@@ -159,12 +173,18 @@
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="智慧篩選掉重複物件，省時又方便" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhv-vR-3P5">
                                         <rect key="frame" x="20" y="53.5" width="225" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
@@ -193,12 +213,18 @@
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="超齊全的過濾條件，豬豬就是貼心!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="saB-vA-gZ0">
                                         <rect key="frame" x="20" y="53" width="229.5" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
@@ -213,10 +239,10 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFI-eq-uUx">
-                                <rect key="frame" x="124" y="609.5" width="166" height="56"/>
+                                <rect key="frame" x="115" y="618" width="184" height="52"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="166" id="jtZ-GD-Xwp"/>
-                                    <constraint firstAttribute="height" constant="56" id="nWr-Fv-5LT"/>
+                                    <constraint firstAttribute="height" constant="52" id="nWr-Fv-5LT"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="開始使用">
@@ -224,15 +250,21 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="25"/>
+                                        <integer key="value" value="8"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                 </userDefinedRuntimeAttributes>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="jtZ-GD-Xwp"/>
+                                    </mask>
+                                </variation>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="lxd-WG-UAo" firstAttribute="leading" secondItem="LJ9-VR-utI" secondAttribute="leading" id="3fg-nG-gyx"/>
+                            <constraint firstItem="NFI-eq-uUx" firstAttribute="width" secondItem="LJ9-VR-utI" secondAttribute="height" multiplier="1:4" id="4pW-gR-fBm"/>
                             <constraint firstItem="HrV-fA-kRW" firstAttribute="top" secondItem="LJ9-VR-utI" secondAttribute="top" id="7ef-Cp-aE8"/>
                             <constraint firstItem="HrV-fA-kRW" firstAttribute="centerX" secondItem="LJ9-VR-utI" secondAttribute="centerX" id="8g1-i9-vFr"/>
                             <constraint firstItem="HrV-fA-kRW" firstAttribute="width" secondItem="LJ9-VR-utI" secondAttribute="width" id="9mt-Hl-lPn"/>
@@ -249,18 +281,20 @@
                             <constraint firstItem="jQ3-N3-tQj" firstAttribute="centerX" secondItem="pSm-Fm-EMv" secondAttribute="centerX" id="cDd-pY-5f4"/>
                             <constraint firstItem="5O3-jG-Jdx" firstAttribute="trailing" secondItem="jQ3-N3-tQj" secondAttribute="trailing" id="e3r-K6-GE8"/>
                             <constraint firstItem="pSm-Fm-EMv" firstAttribute="trailing" secondItem="LJ9-VR-utI" secondAttribute="trailingMargin" id="gBv-v2-2HO"/>
-                            <constraint firstItem="NFI-eq-uUx" firstAttribute="top" secondItem="5O3-jG-Jdx" secondAttribute="bottom" constant="16" id="gJ9-W8-vUV"/>
+                            <constraint firstItem="NFI-eq-uUx" firstAttribute="top" secondItem="5O3-jG-Jdx" secondAttribute="bottom" constant="24" id="gJ9-W8-vUV"/>
                             <constraint firstItem="lxd-WG-UAo" firstAttribute="centerX" secondItem="LJ9-VR-utI" secondAttribute="centerX" id="hvi-3i-KKZ"/>
                             <constraint firstItem="5O3-jG-Jdx" firstAttribute="leading" secondItem="jQ3-N3-tQj" secondAttribute="leading" id="jAb-jb-l2P"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ak6-rV-fMv" secondAttribute="trailing" constant="16" id="kwN-ae-7DD"/>
                             <constraint firstItem="lxd-WG-UAo" firstAttribute="top" secondItem="Ak6-rV-fMv" secondAttribute="bottom" constant="16" id="lP5-QR-uzi"/>
                             <constraint firstItem="5O3-jG-Jdx" firstAttribute="centerX" secondItem="jQ3-N3-tQj" secondAttribute="centerX" id="nsa-Cn-Pde"/>
                             <constraint firstAttribute="trailing" secondItem="lxd-WG-UAo" secondAttribute="trailing" id="oHz-8R-QKp"/>
+                            <constraint firstItem="HrV-fA-kRW" firstAttribute="top" secondItem="kme-gX-h36" secondAttribute="bottom" constant="-20" id="uas-t3-2zO"/>
                             <constraint firstItem="pSm-Fm-EMv" firstAttribute="centerX" secondItem="lxd-WG-UAo" secondAttribute="centerX" id="wJH-qk-c69"/>
                             <constraint firstItem="Ak6-rV-fMv" firstAttribute="top" secondItem="QBa-hE-DqY" secondAttribute="bottom" constant="16" id="x0e-4A-EG8"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="uas-t3-2zO"/>
                                 <exclude reference="QcN-wY-pCR"/>
                             </mask>
                         </variation>
