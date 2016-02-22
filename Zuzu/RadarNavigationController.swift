@@ -16,14 +16,13 @@ class RadarNavigationController: UINavigationController {
         super.viewDidLoad()
     }
 
-
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.user = "test"
         
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView()
         }else{
+            self.user = "test"
             self.refreshCriteria()
         }
         
