@@ -432,6 +432,7 @@ class AmazonClientManager : NSObject {
             self.fbLoginManager = FBSDKLoginManager()
         }
         self.fbLoginManager?.logOut()
+        Log.exit()
     }
     
     
