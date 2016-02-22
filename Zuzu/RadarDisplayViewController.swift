@@ -12,22 +12,17 @@ private let Log = Logger.defaultLogger
 
 class RadarDisplayViewController: UIViewController {
 
-    var zuzuCriteria: ZuzuCriteria?{
+    var zuzuCriteria = ZuzuCriteria(){
         didSet{
-            self.searchCriteria = self.zuzuCriteria?.criteria
+            if zuzuCriteria.criteria == nil{
+                zuzuCriteria.criteria = SearchCriteria()
+            }
             self.updateServiceTextLabel()
-        }
-    }
-    
-    var searchCriteria: SearchCriteria?{
-        didSet{
-            updateCriteriaTextLabel()
+            self.updateCriteriaTextLabel()
         }
     }
     
     var purchaseHistotyTableDataSource = RadarPurchaseHistoryTableViewDataSource()
-    
-    var user: String?
     
     @IBOutlet weak var regionLabel: UILabel!
     
@@ -48,9 +43,9 @@ class RadarDisplayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.houseInfoLabel.numberOfLines = 0
-        self.user = "test"
+        self.updateServiceTextLabel()
+        self.updateCriteriaTextLabel()
         self.configureButton()
-        self.refreshCriteria()
         self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
         self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
         
@@ -77,39 +72,32 @@ class RadarDisplayViewController: UIViewController {
             
         }
         
-        if self.user != nil && self.zuzuCriteria != nil{
-            let isEnable = sender.on
-            ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.user!,
-                criteriaId: self.zuzuCriteria!.criteriaId!, enabled: isEnable) { (result, error) -> Void in
-                    if error != nil{
-                        //zuzualert
-                    }else{
-                        self.zuzuCriteria!.enabled = isEnable
-                    }
-            }
-        }
-        else{
-            //zuzualert
+        let isEnable = sender.on
+        ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.zuzuCriteria.userId!,
+            criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnable) { (result, error) -> Void in
+                if error != nil{
+                    //zuzualert
+                }else{
+                    self.zuzuCriteria.enabled = isEnable
+                }
         }
     }
     
     private func updateCriteriaTextLabel(){
-        if searchCriteria != nil{
-            let displayItem = RadarDisplayItem(criteria:searchCriteria!)
-            self.regionLabel?.text = displayItem.title
-            self.houseInfoLabel?.text = displayItem.detail
-            var filterNum = 0
-            if let filterGroups = self.zuzuCriteria?.criteria?.filterGroups{
-                filterNum = filterGroups.count
-            }
-            self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
+        let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
+        self.regionLabel?.text = displayItem.title
+        self.houseInfoLabel?.text = displayItem.detail
+        var filterNum = 0
+        if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
+            filterNum = filterGroups.count
         }
+        self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
     }
     
     private func updateServiceTextLabel(){
         var diff = 0
         var expirDate = ""
-        if let expireDate = self.zuzuCriteria?.expireTime{
+        if let expireDate = self.zuzuCriteria.expireTime{
             let now = NSDate()
             diff = now.daysFrom(expireDate)
             if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
@@ -150,26 +138,10 @@ class RadarDisplayViewController: UIViewController {
                 if let vc = segue.destinationViewController as? RadarViewController {
                     self.navigationItem.backBarButtonItem?.title = "完成"
                     vc.delegate = self
-                    if let criteria = self.zuzuCriteria?.criteria{
-                        vc.searchCriteria = criteria
-                    }else{
-                        vc.searchCriteria = SearchCriteria()
-                    }
+                    vc.searchCriteria = self.zuzuCriteria.criteria!
                 }
             default: break
                 
-            }
-        }
-    }
-
-    private func refreshCriteria(){
-        if let user = self.user{
-            ZuzuWebService.sharedInstance.getCriteriaByUserId(user) { (result, error) -> Void in
-                if error != nil{
-                    //zuzualert
-                }else{
-                    self.zuzuCriteria = result
-                }
             }
         }
     }
@@ -178,17 +150,14 @@ class RadarDisplayViewController: UIViewController {
 // MARK: - RadarViewControllerDelegate
 extension RadarDisplayViewController : RadarViewControllerDelegate {
     func onCriteriaSettingDone(searchCriteria:SearchCriteria){
-        if let zuzuCriteria = self.zuzuCriteria{
-            if let user = self.user{
-                ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(user, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
-                    if error != nil{
-                        //zuzualert
-                    }else{
-                        zuzuCriteria.criteria = searchCriteria
-                        self.searchCriteria = searchCriteria
-                    }
-                }
+        ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(zuzuCriteria.userId!, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
+            if error != nil{
+                //zuzualert
+                return
             }
+            
+            self.zuzuCriteria.criteria = searchCriteria
+            self.updateCriteriaTextLabel()
         }
     }
     
