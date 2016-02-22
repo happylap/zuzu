@@ -20,7 +20,13 @@ class RadarNavigationController: UINavigationController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.user = "test"
-        self.refreshCriteria()
+        
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            self.showConfigureRadarView()
+        }else{
+            self.refreshCriteria()
+        }
+        
     }
     
     /*
@@ -37,8 +43,6 @@ class RadarNavigationController: UINavigationController {
     // MARK: - criteria
     
     private func refreshCriteria(){
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        
         if let user = self.user{
             ZuzuWebService.sharedInstance.getCriteriaByUserId(user) { (result, error) -> Void in
                 if error != nil{
@@ -47,16 +51,26 @@ class RadarNavigationController: UINavigationController {
                 }
                 
                 if result != nil{
-                    if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
-                        vc.zuzuCriteria = result!
-                        self.showViewController(vc, sender: self)
-                    }
+                    self.showDisplayRadarView()
                 }else{
-                    if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {
-                        self.showViewController(vc, sender: self)
-                    }
+                    self.showConfigureRadarView()
                 }
             }
         }
     }
+    
+    private func showConfigureRadarView(){
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {
+            self.showViewController(vc, sender: self)
+        }
+    }
+    
+    private func showDisplayRadarView(){
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarViewController {
+            self.showViewController(vc, sender: self)
+        }
+    }
+    
 }

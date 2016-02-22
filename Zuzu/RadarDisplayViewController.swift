@@ -138,6 +138,7 @@ class RadarDisplayViewController: UIViewController {
                 if let vc = segue.destinationViewController as? RadarViewController {
                     self.navigationItem.backBarButtonItem?.title = "完成"
                     vc.delegate = self
+                    vc.isUpdateMode = true
                     vc.searchCriteria = self.zuzuCriteria.criteria!
                 }
             default: break

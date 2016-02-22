@@ -25,7 +25,7 @@ class RadarViewController: UIViewController {
             updateCriteriaTextLabel()()
         }
     }
-    var isUpdateMode = true
+    var isUpdateMode = false
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
