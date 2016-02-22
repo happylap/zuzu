@@ -133,6 +133,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         // Initialize sign-in
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        AmazonSNSService.sharedInstance.start()
+        
         CollectionItemService.sharedInstance.start()
         
         if FeatureOption.Radar.enableMain == true{
@@ -157,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
             .stringByReplacingOccurrencesOfString(" ", withString: "")
         Log.debug("deviceTokenString: \(deviceTokenString)")
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
-        AmazonClientManager.sharedInstance.registerSNSEndpoint()
+        NSNotificationCenter.defaultCenter().postNotificationName("deviceTokenChange", object: self, userInfo: ["deviceTokenString": deviceTokenString])
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

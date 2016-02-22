@@ -12,6 +12,7 @@ struct UserDefaultsUtils{
     
     // MARK: Login Provider
     static let loginProviderUserDefaultKey = "loginProvider"
+    static let loginUserDataUserDefaultKey = "loginUserData"
     
     static func clearLoginProvider() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -26,6 +27,16 @@ struct UserDefaultsUtils{
     static func getLoginProvider() -> String? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.objectForKey(loginProviderUserDefaultKey) as? String
+    }
+    
+    static func setUserLoginData(userData: UserData?) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(loginUserDataUserDefaultKey, forKey: loginUserDataUserDefaultKey)
+    }
+    
+    static func getUserLoginData() -> UserData?{
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(loginUserDataUserDefaultKey) as? UserData
     }
     
     // MARK: Radar
@@ -62,26 +73,26 @@ struct UserDefaultsUtils{
     
     // MARK: SNS Push Notifications
     
-    static let APN_DEVICE_TOKEN_KEY = "deviceToken"
-    static let SNS_ENDPOINT_ARN = "endpointArn"
+    static let deviceTokenUserDefaultKey = "deviceToken"
+    static let snsEndpointUserDefaultKey = "endpointArn"
     
     static func setAPNDevicetoken(deviceToken: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(deviceToken, forKey: APN_DEVICE_TOKEN_KEY)
+        userDefaults.setObject(deviceToken, forKey: deviceTokenUserDefaultKey)
     }
 
     static func getAPNDevicetoken() -> String?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.stringForKey(APN_DEVICE_TOKEN_KEY)
+        return userDefaults.stringForKey(deviceTokenUserDefaultKey)
     }
     
     static func setSNSEndpointArn(endpointArn: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(endpointArn, forKey: SNS_ENDPOINT_ARN)
+        userDefaults.setObject(endpointArn, forKey: snsEndpointUserDefaultKey)
     }
     
     static func getSNSEndpointArn() -> String?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.stringForKey(SNS_ENDPOINT_ARN)
+        return userDefaults.stringForKey(snsEndpointUserDefaultKey)
     }
 }
