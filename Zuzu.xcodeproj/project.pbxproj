@@ -140,6 +140,7 @@
 		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
 		81924E341C33AB4C00976EC7 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserData.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
+		81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */; };
 		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
 		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
 		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; };
@@ -317,6 +318,7 @@
 		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginService.swift; sourceTree = "<group>"; };
 		81924E331C33AB4C00976EC7 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
+		81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchase.swift; sourceTree = "<group>"; };
 		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
 		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
 		81FA28071BDA397B0038DD19 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
@@ -611,6 +613,7 @@
 				816635971C5F2CDA008C0AA3 /* NotifyItem.swift */,
 				816635991C608838008C0AA3 /* ZuzuUser.swift */,
 				8166359B1C60B67D008C0AA3 /* ZuzuCriteria.swift */,
+				81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -980,6 +983,7 @@
 				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
 				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
 				2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */,
+				81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */,
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,

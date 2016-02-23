@@ -15,7 +15,7 @@ struct WebApiConst {
     
     struct Server {
         static let SCHEME = "http"
-        static let HOST = "ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com"
+        static let HOST = "127.0.0.1" //"ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com"
         static let PORT = 4567
         static var HEADERS: [String: String]? {
             get {
@@ -375,4 +375,62 @@ class ZuzuWebService: NSObject
         
         Log.exit()
     }
+    
+    func purchaseCriteria(criteria: SearchCriteria, purchase: ZuzuPurchase, handler: (result: AnyObject?, error: NSError?) -> Void) {
+        Log.enter()
+        
+        let url = "\(self.hostUrl)/purchase"
+        
+        if let criteriaJSONDict = ZuzuCriteria.criteriaToJSON(criteria) {
+            let criteriaData = try! NSJSONSerialization.dataWithJSONObject(criteriaJSONDict, options: [])
+            
+            Log.debug("criteriaData: \(criteriaData)")
+            
+            Alamofire.upload(.POST, url, headers: WebApiConst.Server.HEADERS, multipartFormData: { multipartFormData -> Void in
+                
+                multipartFormData.appendBodyPart(data: purchase.userId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
+                multipartFormData.appendBodyPart(data: purchase.store.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "store")
+                multipartFormData.appendBodyPart(data: purchase.productId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_id")
+                multipartFormData.appendBodyPart(data: "\(purchase.productPrice)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_price")
+                multipartFormData.appendBodyPart(data: purchase.purchaseReceipt, name: "purchase_receipt")
+                if let productTitle = purchase.productTitle {
+                    multipartFormData.appendBodyPart(data: productTitle.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_title")
+                }
+                if let productLocaleId = purchase.productLocaleId {
+                    multipartFormData.appendBodyPart(data: productLocaleId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_locale_id")
+                }
+                multipartFormData.appendBodyPart(data: try! NSJSONSerialization.dataWithJSONObject(criteriaJSONDict, options: []), name: "criteria_filters")
+                
+            }, encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .Success(let upload, _, _):
+                    upload.responseJSON { (_, response, result) in
+                        switch result {
+                        case .Success(let value):
+                            let json = JSON(value)
+                            if json["code"].intValue == 0 {
+                                let successResult = json["result"].stringValue  // Return CriterisID
+                                handler(result: successResult, error: nil)
+                            } else {
+                                let errorCode = json["code"].intValue
+                                let errorMsg = json["errorMessage"].stringValue
+                                handler(result: nil, error: NSError(domain: errorMsg, code: errorCode, userInfo: nil))
+                            }
+                            
+                        case .Failure(_, let error):
+                            Log.debug("HTTP request error = \(error)")
+                            handler(result: nil, error: ((error as Any) as! NSError))
+                        }
+                    }
+                case .Failure(let encodingError):
+                    Log.debug("HTTP request error = \(encodingError)")
+                    handler(result: nil, error: ((encodingError as Any) as! NSError))
+                }
+            })
+        }
+        
+        Log.exit()
+    }
+    
+    
 }
