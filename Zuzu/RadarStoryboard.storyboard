@@ -799,7 +799,7 @@
         <!--無法載入-->
         <scene sceneID="KQ5-BG-4Am">
             <objects>
-                <viewController id="PLb-rK-2kd" userLabel="無法載入" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RadarRetryViewController" id="PLb-rK-2kd" userLabel="無法載入" customClass="RadarRetryViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="P0O-aH-OZ3"/>
                         <viewControllerLayoutGuide type="bottom" id="YRp-Ow-tVS"/>

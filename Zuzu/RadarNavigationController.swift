@@ -7,10 +7,9 @@
 //
 
 import UIKit
+import SCLAlertView
 
 class RadarNavigationController: UINavigationController {
-
-    var user: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,30 +21,19 @@ class RadarNavigationController: UINavigationController {
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView()
         }else{
-            self.user = "test"
             self.refreshCriteria()
         }
         
     }
     
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    
-    // MARK: - criteria
+    // MARK: - refresh criteria
     
     private func refreshCriteria(){
-        if let user = self.user{
+        if let user = AmazonClientManager.sharedInstance.userLoginData?.id{
             ZuzuWebService.sharedInstance.getCriteriaByUserId(user) { (result, error) -> Void in
                 if error != nil{
-                    //zuzualert
+                    self.alertRefreshError()
                     return
                 }
                 
@@ -55,8 +43,32 @@ class RadarNavigationController: UINavigationController {
                     self.showConfigureRadarView()
                 }
             }
+        }else{
+            self.alertRefreshError()
         }
     }
+    
+    private func alertRefreshError() {
+        
+        /*let alertView = SCLAlertView()
+        
+        let subTitle = "目前無法為您取得租屋雷達!可能是您所處區域的網路環境不穩定或是手機無線網路被關閉了"
+        
+        alertView.showCloseButton = true
+        
+        alertView.showInfo("連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)*/
+        
+        self.showRetryRadarView()
+        self.popViewControllerAnimated(true)
+        self.showConfigureRadarView()
+        
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
+    // MARK: - show radar page
     
     private func showConfigureRadarView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
@@ -67,7 +79,14 @@ class RadarNavigationController: UINavigationController {
     
     private func showDisplayRadarView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarViewController {
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
+            self.showViewController(vc, sender: self)
+        }
+    }
+    
+    private func showRetryRadarView(){
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             self.showViewController(vc, sender: self)
         }
     }
