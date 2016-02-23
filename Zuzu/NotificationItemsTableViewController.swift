@@ -43,7 +43,9 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
 
         refresh()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
         configureTableView()
+        
         //tableView.estimatedRowHeight = tableView.rowHeight
         //tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -54,16 +56,6 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
-    }
-    
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidAppear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear: \(self)")

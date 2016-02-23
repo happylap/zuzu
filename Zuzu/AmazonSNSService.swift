@@ -29,6 +29,7 @@ class AmazonSNSService : NSObject {
     func start(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleDeviceTokenChange:", name: "deviceTokenChange", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
     }
     
     func handleUserLogin(notification: NSNotification) {
@@ -174,4 +175,28 @@ class AmazonSNSService : NSObject {
         }
     }
     
+    func handleReceiveNotifyItems(){
+        Log.enter()
+        self.setReceiveNotification()
+        Log.exit()
+    }
+    
+    func setReceiveNotification(){
+        Log.enter()
+        let userId = AmazonClientManager.sharedInstance.userLoginData?.id
+        let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
+        if userId == nil || endpointArn == nil{
+            Log.error("No userId or endpointArn, cannot set receive notify time")
+            Log.exit()
+            return
+        }
+        ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId!, deviceId: endpointArn!){
+            (result, error) -> Void in
+            if result != nil{
+                Log.debug("setReceiveNotifyTimeByUserId success")
+            }
+        }
+        Log.exit()
+    }
+
 }

@@ -246,6 +246,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
             let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
             let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
             tabItem.badgeValue = "\(badgeNumber)"
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
         }
     }
     
