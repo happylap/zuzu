@@ -60,12 +60,8 @@ class AmazonClientManager : NSObject {
     private var transferManager: AWSS3TransferManager?
     
     //User Login Data
-    var userLoginData: UserData?{
-        didSet{
-            UserDefaultsUtils.setUserLoginData(userLoginData)
-        }
-    }
-
+    var userLoginData: UserData?
+    
     private func dumpCredentialProviderInfo() {
         
         Log.info("identityId: \(self.credentialsProvider?.identityId)")

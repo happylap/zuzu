@@ -12,7 +12,6 @@ struct UserDefaultsUtils{
     
     // MARK: Login Provider
     static let loginProviderUserDefaultKey = "loginProvider"
-    static let loginUserDataUserDefaultKey = "loginUserData"
     
     static func clearLoginProvider() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -28,17 +27,7 @@ struct UserDefaultsUtils{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.objectForKey(loginProviderUserDefaultKey) as? String
     }
-    
-    static func setUserLoginData(userData: UserData?) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(loginUserDataUserDefaultKey, forKey: loginUserDataUserDefaultKey)
-    }
-    
-    static func getUserLoginData() -> UserData?{
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.objectForKey(loginUserDataUserDefaultKey) as? UserData
-    }
-    
+        
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
     

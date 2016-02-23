@@ -54,7 +54,7 @@ class AmazonSNSService : NSObject {
  
     func handleDeviceTokenChange(notification: NSNotification) {
         Log.enter()
-        if let userLoginData = UserDefaultsUtils.getUserLoginData(){
+        if let userLoginData = AmazonClientManager.sharedInstance.userLoginData{
             if let userId = userLoginData.id{
                 if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String{
                     let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
