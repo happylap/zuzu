@@ -13,11 +13,31 @@ private let Log = Logger.defaultLogger
 
 class RadarNavigationController: UINavigationController {
     
+    var reach: Reachability?
     
     // MARK: - view life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let reachability: Reachability = Reachability.reachabilityForInternetConnection()
+        let networkStatus: NetworkStatus = reachability.currentReachabilityStatus()
+        
+        
+        Log.debug("\(networkStatus.rawValue)")
+        
+        switch networkStatus {
+        case NotReachable:
+            Log.debug("[Network Status]: NotReachable")
+            self.showRetryRadarView()
+            return
+        case ReachableViaWWAN:
+            Log.debug("[Network Status]: ReachableViaWWAN")
+        case ReachableViaWiFi:
+            Log.debug("[Network Status]: ReachableViaWiFi")
+        default:
+            break
+        }
+  
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView()
         }else{
@@ -33,8 +53,8 @@ class RadarNavigationController: UINavigationController {
         }
     }
 
-
     // MARK: - show radar page
+
     
     private func showConfigureRadarView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
