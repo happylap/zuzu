@@ -10,6 +10,7 @@
 		140250BE1C7C71B50009A076 /* RadarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140250BD1C7C71B50009A076 /* RadarService.swift */; };
 		1405856C1C73083800449C27 /* RadarDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405856B1C73083800449C27 /* RadarDisplayItem.swift */; };
 		140585721C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */; };
+		1430E3251C7C94780079E32C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1430E3241C7C94780079E32C /* Reachability.m */; };
 		144195381C62EBDC00C8779A /* RadarConfigureTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */; };
 		14426ACC1C7AFAD600C25440 /* RadarNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14426ACB1C7AFAD600C25440 /* RadarNavigationController.swift */; };
 		14426ACE1C7B30B000C25440 /* AmazonSNSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14426ACD1C7B30B000C25440 /* AmazonSNSService.swift */; };
@@ -178,6 +179,8 @@
 		140250BD1C7C71B50009A076 /* RadarService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarService.swift; sourceTree = "<group>"; };
 		1405856B1C73083800449C27 /* RadarDisplayItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarDisplayItem.swift; sourceTree = "<group>"; };
 		140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarPurchaseHistoryDataSource.swift; sourceTree = "<group>"; };
+		1430E3241C7C94780079E32C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		1430E3261C7C94850079E32C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarConfigureTableViewController.swift; sourceTree = "<group>"; };
 		14426ACB1C7AFAD600C25440 /* RadarNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarNavigationController.swift; sourceTree = "<group>"; };
 		14426ACD1C7B30B000C25440 /* AmazonSNSService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmazonSNSService.swift; sourceTree = "<group>"; };
@@ -368,6 +371,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1430E3231C7C94570079E32C /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				1430E3261C7C94850079E32C /* Reachability.h */,
+				1430E3241C7C94780079E32C /* Reachability.m */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 		14BACBF41C5F5F09007202CB /* Notification */ = {
 			isa = PBXGroup;
 			children = (
@@ -502,6 +514,7 @@
 		2F5854D01BB3CBA9007FF85B /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				1430E3231C7C94570079E32C /* Reachability */,
 				2FCD15FD1C548FD800A9C1E2 /* Logger */,
 				2FB16C511C48BDCF009738AC /* InAppPurchase */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
@@ -1050,6 +1063,7 @@
 				2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */,
 				2FE912701BFEE8B600019053 /* UrlPopoverViewController.swift in Sources */,
 				2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */,
+				1430E3251C7C94780079E32C /* Reachability.m in Sources */,
 				2FD8EA9C1C3FA9CC00C920D3 /* Secrets.swift in Sources */,
 				2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */,
 				2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */,

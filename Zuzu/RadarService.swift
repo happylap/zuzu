@@ -30,7 +30,16 @@ class RadarService : NSObject {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogout:", name: UserLogoutNotification, object: nil)
+        
+        /*NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "reachabilityChanged:",
+            name: kReachabilityChangedNotification,
+            object: nil)*/
     }
+    
+    /*func reachabilityChanged(notification: NSNotification){
+        Log.enter()
+    }*/
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()

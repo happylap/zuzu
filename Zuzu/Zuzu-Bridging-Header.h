@@ -14,3 +14,4 @@
 #import <GoogleTagManager/TAGContainerOpener.h>
 #import <GoogleTagManager/TAGDataLayer.h>
 #import <GoogleTagManager/TAGLogger.h>
+#import "Reachability.h"
