@@ -43,7 +43,7 @@ class RadarNavigationController: UINavigationController {
         }else{
             if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
                 if zuzuCriteria.criteria != nil{
-                    self.showDisplayRadarView()
+                    self.showDisplayRadarView(zuzuCriteria)
                 }else{
                     self.showConfigureRadarView() // no criteria in DB
                 }
@@ -63,9 +63,10 @@ class RadarNavigationController: UINavigationController {
         }
     }
     
-    private func showDisplayRadarView(){
+    private func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
+            vc.zuzuCriteria = zuzuCriteria
             self.setViewControllers([vc], animated: false)
         }
     }
