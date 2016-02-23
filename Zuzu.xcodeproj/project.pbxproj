@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		140250BE1C7C71B50009A076 /* RadarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140250BD1C7C71B50009A076 /* RadarService.swift */; };
 		1405856C1C73083800449C27 /* RadarDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405856B1C73083800449C27 /* RadarDisplayItem.swift */; };
 		140585721C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */; };
 		144195381C62EBDC00C8779A /* RadarConfigureTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */; };
@@ -174,6 +175,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		140250BD1C7C71B50009A076 /* RadarService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarService.swift; sourceTree = "<group>"; };
 		1405856B1C73083800449C27 /* RadarDisplayItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarDisplayItem.swift; sourceTree = "<group>"; };
 		140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarPurchaseHistoryDataSource.swift; sourceTree = "<group>"; };
 		144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarConfigureTableViewController.swift; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 				14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */,
 				81924E311C32D95100976EC7 /* FBLoginService.swift */,
 				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
+				140250BD1C7C71B50009A076 /* RadarService.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -946,6 +949,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				140250BE1C7C71B50009A076 /* RadarService.swift in Sources */,
 				14426AD01C7C3D1500C25440 /* RadarRetryViewController.swift in Sources */,
 				14914FAA1C27F7B400025AC1 /* AbstractHouseItemDao.swift in Sources */,
 				140585721C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift in Sources */,

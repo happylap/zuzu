@@ -8,10 +8,8 @@
 
 import UIKit
 
-class RadarRetryViewController: UIViewController {
+private let Log = Logger.defaultLogger
 
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        //self.navigationController?.popViewControllerAnimated(animated)
-    }
+class RadarRetryViewController: UIViewController {
+    
 }

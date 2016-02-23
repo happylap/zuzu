@@ -137,6 +137,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         CollectionItemService.sharedInstance.start()
         
+        RadarService.sharedInstance.start()
+        
         if FeatureOption.Radar.enableMain == true{
             pushNotificationsSetup()
         }

@@ -25,12 +25,15 @@ class AmazonSNSService : NSObject {
         static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
     }
     
-    // MARK: SNS Push Notifications
+    // MARK: start
+    
     func start(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleDeviceTokenChange:", name: "deviceTokenChange", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
     }
+    
+    // MARK: SNS Push Notifications
     
     func handleUserLogin(notification: NSNotification) {
         Log.enter()

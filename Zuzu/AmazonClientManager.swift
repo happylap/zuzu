@@ -21,6 +21,7 @@ private let Log = Logger.defaultLogger
 
 /// Notification that is generated when login is done.
 let UserLoginNotification = "UserLoginNotification"
+let UserLogoutNotification = "UserLogoutNotification"
 
 class AmazonClientManager : NSObject {
     
@@ -317,6 +318,9 @@ class AmazonClientManager : NSObject {
         self.credentialsProvider?.clearKeychain()
         
         AWSTask(result: nil).continueWithBlock(completionHandler)
+        
+        Log.debug("postNotificationName: \(UserLogoutNotification)")
+        NSNotificationCenter.defaultCenter().postNotificationName(UserLogoutNotification, object: self, userInfo: nil)
         
         Log.exit()
     }
