@@ -61,8 +61,12 @@ class AmazonClientManager : NSObject {
     private var transferManager: AWSS3TransferManager?
     
     //User Login Data
-    var userLoginData: UserData?
-    
+    var userLoginData: UserData?{
+        didSet{
+            UserDefaultsUtils.setUserLoginData(userLoginData)
+        }
+    }
+
     private func dumpCredentialProviderInfo() {
         
         Log.info("identityId: \(self.credentialsProvider?.identityId)")
@@ -682,6 +686,15 @@ extension AmazonClientManager: GIDSignInDelegate {
                 }
                 
             }
+    }
+    
+    func getUserId() -> String?{
+        let userId = self.userLoginData?.id
+        if userId != nil{
+            return userId
+        }
+        
+        return UserDefaultsUtils.getUserLoginData()?.id
     }
 }
 

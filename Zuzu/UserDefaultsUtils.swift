@@ -30,7 +30,8 @@ struct UserDefaultsUtils{
         
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
-    
+    static let loginUserDataUserDefaultKey = "loginUserData"
+
     static func setRadarLandindPageDisplayed() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(true, forKey: radarLandingPageDisplayedUserDefaultKey)
@@ -45,6 +46,16 @@ struct UserDefaultsUtils{
         }
     }
     
+    static func setUserLoginData(userData: UserData?) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(loginUserDataUserDefaultKey, forKey: loginUserDataUserDefaultKey)
+    }
+    
+    static func getUserLoginData() -> UserData?{
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(loginUserDataUserDefaultKey) as? UserData
+    }
+
     // MARK: My Collection
     
     static let myCollectionAlertUserDefaultKey = "myCollectionAlert"

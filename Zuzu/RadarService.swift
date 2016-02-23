@@ -43,21 +43,17 @@ class RadarService : NSObject {
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
-        if let userData = notification.userInfo?["userData"] as? UserData{
-            if let userId = userData.id{
-                self.retrieveRadarCriteria(userId){(result, error) -> Void in
-                    //if error == nil{
+        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+            self.retrieveRadarCriteria(userId){(result, error) -> Void in
+                if error == nil{
                     if result != nil{
                         self.zuzuCriteria = result
                     }else{
                         self.zuzuCriteria = ZuzuCriteria()
                     }
-                    
-                    //}
                 }
             }
         }
-        
         Log.exit()
     }
     
@@ -70,7 +66,7 @@ class RadarService : NSObject {
         zuzuUser.userId = userId
         ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
             if error != nil{
-                Log.error("Cannot get createUser by user id:\(userId)")
+                Log.error("Cannot create user by user id:\(userId)")
                 handler(result: nil, error: error)
                 return
             }

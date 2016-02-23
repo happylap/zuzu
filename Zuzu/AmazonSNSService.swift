@@ -37,45 +37,33 @@ class AmazonSNSService : NSObject {
     
     func handleUserLogin(notification: NSNotification) {
         Log.enter()
-        print("\(notification.userInfo)")
-        if let userData = notification.userInfo?["userData"] as? UserData{
-            if let userId = userData.id{
-                if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
-                    let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
-                    self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
-                }else{
-                    Log.warning("deviceTokenString is nil")
-                }
+        Log.debug("\(notification.userInfo)")
+        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+            if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
+                let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
+                self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
             }else{
-                Log.error("userId is nil")
+                Log.debug("deviceTokenString is nil")
             }
-        }
-        else{
-            Log.error("userData is nil")
+        }else{
+            Log.error("userId is nil")
         }
         Log.exit()
     }
  
     func handleDeviceTokenChange(notification: NSNotification) {
         Log.enter()
-        if let userLoginData = AmazonClientManager.sharedInstance.userLoginData{
-            if let userId = userLoginData.id{
-                if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String{
-                    let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
-                    self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
-                }else{
-                    Log.error("deviceTokenString is nil")
-                }
-                
+        if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String{
+            let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
+            if let userId = AmazonClientManager.sharedInstance.getUserId(){
+                self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
+            }else{
+                Log.debug("userId is nil")
             }
-            else{
-                Log.error("userId is nil")
-            }
+            
+        }else{
+            Log.error("deviceTokenString is nil")
         }
-        else{
-            Log.warning("userLoginData is nil")
-        }
-        
         Log.exit()
     }
     
@@ -186,7 +174,7 @@ class AmazonSNSService : NSObject {
     
     func setReceiveNotification(){
         Log.enter()
-        let userId = AmazonClientManager.sharedInstance.userLoginData?.id
+        let userId = AmazonClientManager.sharedInstance.getUserId()
         let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
         if userId == nil || endpointArn == nil{
             Log.error("No userId or endpointArn, cannot set receive notify time")
@@ -201,5 +189,4 @@ class AmazonSNSService : NSObject {
         }
         Log.exit()
     }
-
 }
