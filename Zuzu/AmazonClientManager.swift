@@ -310,7 +310,9 @@ class AmazonClientManager : NSObject {
         
         // Wipe credentials
         self.credentialsProvider?.logins = nil
-        AWSCognito.defaultCognito().wipe()
+        if (AWSCognito.defaultCognito() != nil){
+            AWSCognito.defaultCognito().wipe()
+        }
         self.credentialsProvider?.clearCredentials()
         self.credentialsProvider?.clearKeychain()
         
