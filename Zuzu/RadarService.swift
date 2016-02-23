@@ -53,7 +53,7 @@ class RadarService : NSObject {
     }
     
     func handleUserLogout(notification: NSNotification){
-        UserDefaultsUtils.setRadarCriteria(nil)
+        self.zuzuCriteria = nil
     }
     
     func retrieveRadarCriteria(userId:String, handler: (result: ZuzuCriteria?, error: ErrorType?) -> Void){
