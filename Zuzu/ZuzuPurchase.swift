@@ -18,7 +18,7 @@ class ZuzuPurchase: NSObject {
     var productLocaleId: String?
     var productPrice: NSDecimalNumber
     var purchaseTime: NSDate?
-    var purchaseReceipt: NSData
+    var purchaseReceipt: NSData?
     
     init(userId: String, productId: String, productPrice: NSDecimalNumber, purchaseReceipt: NSData) {
         self.userId = userId
@@ -26,6 +26,13 @@ class ZuzuPurchase: NSObject {
         self.productId = productId
         self.productPrice = productPrice
         self.purchaseReceipt = purchaseReceipt
+    }
+    
+    init(userId: String, productId: String, productPrice: NSDecimalNumber) {
+        self.userId = userId
+        self.store = "Apple"
+        self.productId = productId
+        self.productPrice = productPrice
     }
     
 }
