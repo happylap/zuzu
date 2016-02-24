@@ -42,6 +42,7 @@ class ZuzuWebService: NSObject
     private static let instance = ZuzuWebService()
     
     var hostUrl = ""
+    var alamoFireManager = Alamofire.Manager.sharedInstance
     
     class var sharedInstance: ZuzuWebService {
         return instance
@@ -52,6 +53,11 @@ class ZuzuWebService: NSObject
         super.init()
         
         self.hostUrl = "\(WebApiConst.Server.SCHEME)://\(WebApiConst.Server.HOST):\(WebApiConst.Server.PORT)"
+        
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForRequest = 30 // seconds
+        configuration.timeoutIntervalForResource = 30
+        self.alamoFireManager = Alamofire.Manager(configuration: configuration)
     }
     
     
@@ -347,7 +353,7 @@ class ZuzuWebService: NSObject
     }
     
     private func responseJSON(method: Alamofire.Method, url: String, payload: NSData?, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
-        Alamofire.request(method, url, parameters: [:], encoding: .Custom({
+        self.alamoFireManager.request(method, url, parameters: [:], encoding: .Custom({
             (convertible, params) in
             let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
             mutableRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
