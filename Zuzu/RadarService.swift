@@ -80,6 +80,8 @@ class RadarService : NSObject {
             }else{
                 self.zuzuCriteria = ZuzuCriteria()
             }
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
         }
     }
     
@@ -106,18 +108,4 @@ class RadarService : NSObject {
         }
         Log.exit()
     }
-    
-    func getZuzuUserId() -> String?{
-        if let zuzuUserId = UserDefaultsUtils.getZuzuUserId(){
-            return zuzuUserId
-        }
-        
-        if let loginUserId = UserDefaultsUtils.getUserLoginId(){
-            self.loginZuzuUser(loginUserId)
-        }
-        
-        return nil
-    }
-    
-    
 }
