@@ -70,7 +70,6 @@ class AmazonClientManager : NSObject {
     }
 
     private func dumpCredentialProviderInfo() {
-        
         Log.info("identityId: \(self.credentialsProvider?.identityId)")
         Log.info("identityPoolId: \(self.credentialsProvider?.identityPoolId)")
         Log.info("logins: \(self.credentialsProvider?.logins)")
@@ -78,7 +77,6 @@ class AmazonClientManager : NSObject {
         Log.info("secretKey: \(self.credentialsProvider?.secretKey)")
         Log.info("sessionKey: \(self.credentialsProvider?.sessionKey)")
         Log.info("expiration: \(self.credentialsProvider?.expiration)")
-        
     }
     
     private func initializeCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
@@ -171,17 +169,14 @@ class AmazonClientManager : NSObject {
         
         self.completionHandler = completionHandler
         
-        if let provider = UserDefaultsUtils.getLoginProvider() {
-            
-            switch(provider) {
-            case Provider.FB.rawValue:
-                self.reloadFBSession()
-            case Provider.GOOGLE.rawValue:
-                self.reloadGSession()
-            default:
-                assert(false, "Invalid Provider")
-            }
-            
+        if self.isLoggedInWithFacebook(){
+            self.reloadFBSession()
+            return
+        }
+        
+        if self.isLoggedInWithGoogle(){
+            self.reloadGSession()
+            return
         }
         
         Log.exit()
@@ -277,25 +272,6 @@ class AmazonClientManager : NSObject {
             theViewController.presentViewController(vc, animated: true, completion: nil)
         }
         
-        /*let loginAlertView = SCLAlertView()
-        loginAlertView.showCloseButton = false
-        
-        loginAlertView.addButton("Facebook帳號登入") {
-            self.fbLogin(theViewController)
-        }
-        
-        loginAlertView.addButton("Google帳號登入") {
-            self.googleLogin(theViewController)
-        }
-        
-        loginAlertView.addButton("取消") {
-            ///GA Tracker: Login cancelled
-            theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                action: GAConst.Action.Blocking.loginReject)
-        }
-        
-        loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
-            subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)*/
         Log.exit()
         
     }
@@ -313,6 +289,7 @@ class AmazonClientManager : NSObject {
         }
         
         self.userLoginData = nil
+        UserDefaultsUtils.clearUserLoginId()
         UserDefaultsUtils.clearLoginProvider()
         
         // Wipe credentials
@@ -332,31 +309,33 @@ class AmazonClientManager : NSObject {
     }
     
     func isLoggedIn() -> Bool {
-        return isLoggedInWithFacebook() || isLoggedInWithGoogle()
+        return self.isLoggedInWithFacebook() || self.isLoggedInWithGoogle()
     }
     
     // MARK: Facebook Login
     
     func isLoggedInWithFacebook() -> Bool {
-        let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
+        if let provider = UserDefaultsUtils.getLoginProvider() {
+            if provider == Provider.FB.rawValue{
+                let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
+                return loggedIn
+            }
+        }
         
-        return loggedIn
+        return false
     }
     
     func reloadFBSession() {
-        if let accessToken = FBSDKAccessToken.currentAccessToken() {
-            
-            Log.info("Reloading Facebook Session: \(accessToken.expirationDate.description)")
-            self.completeFBLoginWithUserData()
-        }
+        Log.info("Reloading Facebook Session")
+        self.completeFBLoginWithUserData()
     }
     
     func fbLogin(theViewController: UIViewController) {
         
         ///Already signed in
-        if FBSDKAccessToken.currentAccessToken() != nil {
+        if self.isLoggedInWithFacebook() {
             Log.debug("Resume FB Session")
-            self.completeFBLogin()
+            self.reloadFBSession()
             return
         }
         
@@ -426,11 +405,17 @@ class AmazonClientManager : NSObject {
                 }
                 
                 self.userLoginData = loginData
+                self.completeFBLogin()
             } else {
+                if !self.isLoggedInWithFacebook(){
+                    //not resume
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.errorAlert("Facebook 登入發生錯誤: " + error.localizedDescription)
+                    }
+                    self.fbLogout()
+                }
                 Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
             }
-            
-            self.completeFBLogin()
         }
     }
     
@@ -455,20 +440,23 @@ class AmazonClientManager : NSObject {
     // MARK: Google Login
     
     func isLoggedInWithGoogle() -> Bool {
-        
-        if(self.googleSignIn == nil) {
-            self.googleSignIn = GIDSignIn.sharedInstance()
+        if let provider = UserDefaultsUtils.getLoginProvider() {
+            if provider == Provider.GOOGLE.rawValue{
+                if(self.googleSignIn == nil) {
+                    self.googleSignIn = GIDSignIn.sharedInstance()
+                }
+                
+                if let _ = self.googleSignIn!.currentUser?.authentication?.accessToken {
+                    return true
+                } else {
+                    return false
+                }
+            }
         }
-        
-        if let _ = self.googleSignIn!.currentUser?.authentication?.accessToken {
-            return true
-        } else {
-            return false
-        }
+        return false
     }
     
     func reloadGSession() {
-        
         if(self.googleSignIn == nil) {
             self.googleSignIn = GIDSignIn.sharedInstance()
         }

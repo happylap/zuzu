@@ -47,6 +47,11 @@ struct UserDefaultsUtils{
         }
     }
 
+    static func clearZuzuUserId() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(zuzuUserIdUserDefaultKey)
+    }
+    
     static func setZuzuUserId(userId: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(userId, forKey: zuzuUserIdUserDefaultKey)
@@ -55,6 +60,11 @@ struct UserDefaultsUtils{
     static func getZuzuUserId() -> String?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.stringForKey(zuzuUserIdUserDefaultKey)
+    }
+    
+    static func clearUserLoginId() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(loginUserIdUserDefaultKey)
     }
     
     static func setUserLoginId(userId: String) {

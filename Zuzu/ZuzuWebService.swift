@@ -406,13 +406,13 @@ class ZuzuWebService: NSObject
             Log.debug("Unable to do Basic Authorization")
         }
         
-        if let userLoginData = AmazonClientManager.sharedInstance.userLoginData {
-            headers["UserId"] = userLoginData.id
-            headers["UserProvider"] = userLoginData.provider?.rawValue
-            if userLoginData.provider == Provider.FB {
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            headers["UserId"] = UserDefaultsUtils.getUserLoginId()
+            headers["UserProvider"] = UserDefaultsUtils.getLoginProvider()
+            if AmazonClientManager.sharedInstance.isLoggedInWithFacebook() {
                 headers["UserToken"] = FBSDKAccessToken.currentAccessToken().tokenString
             }
-            if userLoginData.provider == Provider.GOOGLE {
+            if AmazonClientManager.sharedInstance.isLoggedInWithGoogle() {
                 // TODO
             }
         }

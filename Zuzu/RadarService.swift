@@ -70,7 +70,6 @@ class RadarService : NSObject {
                     return
                 }
                 self.retrieveRadarCriteria(zuzuUserId)
-                
             }else{
                 self.loginZuzuUser(loginUserId)
                 return
@@ -80,7 +79,7 @@ class RadarService : NSObject {
     }
     
     func handleUserLogout(notification: NSNotification){
-        self.zuzuCriteria = nil
+        self.reset()
         NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
     }
     
@@ -105,7 +104,7 @@ class RadarService : NSObject {
     
     func loginZuzuUser(userId: String){
         Log.enter()
-        self.zuzuCriteria = nil
+        self.reset()
         let zuzuUser = ZuzuUser()
         zuzuUser.userId = userId
         
@@ -116,17 +115,40 @@ class RadarService : NSObject {
             zuzuUser.facebookGender = userData.gender
         }
         
-        ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
+        ZuzuWebService.sharedInstance.isExistUser(userId){(result, error) -> Void in
             if error != nil{
                 self.setNetworkObserver()
                 return
             }
             
-            UserDefaultsUtils.setZuzuUserId(userId)
-            self.retrieveRadarCriteria(userId)
-            self.removeNetworkObserver()
+            if result == true{
+                UserDefaultsUtils.setZuzuUserId(userId)
+                if AmazonClientManager.sharedInstance.userLoginData != nil{
+                    ZuzuWebService.sharedInstance.updateUser(zuzuUser){
+                        (result, error) -> Void in
+                    }
+                }
+                return
+            }
+            
+            ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
+                if error != nil{
+                    self.setNetworkObserver()
+                    return
+                }
+                
+                UserDefaultsUtils.setZuzuUserId(userId)
+                self.retrieveRadarCriteria(userId)
+                self.removeNetworkObserver()
+            }
         }
+        
         Log.exit()
+    }
+    
+    private func reset(){
+        UserDefaultsUtils.clearZuzuUserId()
+        self.zuzuCriteria = nil
     }
     
     func setNetworkObserver(){
@@ -140,5 +162,4 @@ class RadarService : NSObject {
     func removeNetworkObserver(){
         NSNotificationCenter.defaultCenter().removeObserver(self, name: kReachabilityChangedNotification, object: nil)
     }
-    
 }
