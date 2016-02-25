@@ -41,15 +41,33 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - User
     
-    func createUser(user: ZuzuUser, handler: (result: String?, error: ErrorType?) -> Void) {
+    func isExistUser(userId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        // TODO
+        handler(result: true, error: nil)
+        
+        Log.exit()
+    }
+    
+    func createUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
         let resource = "/user"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
-            handler(result: result as? String, error: error)
+            handler(result: (error == nil), error: error)
         }
+        
+        Log.exit()
+    }
+    
+    func updateUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [user: \(user)]")
+        
+        // TODO
+        handler(result: true, error: nil)
         
         Log.exit()
     }
@@ -136,6 +154,15 @@ class ZuzuWebService: NSObject
         
         Log.exit()
     }
+    
+    func hasValidCriteriaByUserId(userId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        // TODO
+        handler(result: true, error: nil)
+        
+        Log.exit()
+    }
 
     
     // MARK: - Public APIs - Notify
@@ -169,7 +196,7 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func setReadNotificationByUserId(userId: String, itemId: String, handler: (result: Bool?, error: NSError?) -> Void) {
+    func setReadNotificationByUserId(userId: String, itemId: String, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), itemId: \(itemId)]")
         
         let resource = "/notifyitem/\(itemId)/\(userId)"
@@ -184,7 +211,7 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Log
     
-    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: Bool?, error: NSError?) -> Void) {
+    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
         
         if let encodedDeviceId = CommonUtils.encodeToBase64(deviceId) {
