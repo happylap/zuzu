@@ -52,7 +52,7 @@ class AmazonClientManager : NSObject {
     private var googleSignIn: GIDSignIn?
     
     //Cognito
-    private var credentialsProvider: AWSCognitoCredentialsProvider?
+    var credentialsProvider: AWSCognitoCredentialsProvider?
     
     //Login View Controller
     private var loginViewController: UIViewController?
@@ -63,7 +63,9 @@ class AmazonClientManager : NSObject {
     //User Login Data
     var userLoginData: UserData?{
         didSet{
-            UserDefaultsUtils.setUserLoginData(userLoginData)
+            if let userId = userLoginData?.id{
+                UserDefaultsUtils.setUserLoginId(userId)
+            }
         }
     }
 
@@ -694,7 +696,7 @@ extension AmazonClientManager: GIDSignInDelegate {
             return userId
         }
         
-        return UserDefaultsUtils.getUserLoginData()?.id
+        return UserDefaultsUtils.getUserLoginId()
     }
 }
 

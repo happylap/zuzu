@@ -69,6 +69,12 @@ class AmazonSNSService : NSObject {
     
     func registerSNSEndpoint(userId: String, deviceTokenString:String, endpointArn:String?){
         Log.enter()
+        if AmazonClientManager.sharedInstance.credentialsProvider == nil{
+            Log.debug("Credebtial provider is nil, cannot register SNS")
+            Log.exit()
+            return
+        }
+        
         if endpointArn != nil{
             let sns = AWSSNS.defaultSNS()
             let request = AWSSNSGetEndpointAttributesInput()
@@ -119,6 +125,11 @@ class AmazonSNSService : NSObject {
     
     func updateEndpoint(deviceTokenString: String, endpointArn:String, userData: String){
         Log.enter()
+        if AmazonClientManager.sharedInstance.credentialsProvider == nil{
+            Log.debug("Credebtial provider is nil, cannot register SNS")
+            Log.exit()
+            return
+        }
         let sns = AWSSNS.defaultSNS()
         let request = AWSSNSSetEndpointAttributesInput()
         Log.debug("endpointArn: \(request.endpointArn)")
@@ -144,6 +155,11 @@ class AmazonSNSService : NSObject {
     
     func createEndpoint(deviceTokenString: String, userData: String?){
         Log.enter()
+        if AmazonClientManager.sharedInstance.credentialsProvider == nil{
+            Log.debug("Credebtial provider is nil, cannot register SNS")
+            Log.exit()
+            return
+        }
         if let customUserData = userData{
             let sns = AWSSNS.defaultSNS()
             let request = AWSSNSCreatePlatformEndpointInput()
