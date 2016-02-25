@@ -48,7 +48,7 @@ struct UserDefaultsUtils{
     
     static func setUserLoginData(userData: UserData?) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(loginUserDataUserDefaultKey, forKey: loginUserDataUserDefaultKey)
+        userDefaults.setObject(userData, forKey: loginUserDataUserDefaultKey)
     }
     
     static func getUserLoginData() -> UserData?{
