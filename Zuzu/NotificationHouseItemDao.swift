@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
+private let Log = Logger.defaultLogger
+
 class NotificationHouseItemDao: AbstractHouseItemDao
 {
     class var sharedInstance: NotificationHouseItemDao {
@@ -57,5 +59,14 @@ class NotificationHouseItemDao: AbstractHouseItemDao
         }
         
         return nil
+    }
+    
+    override func getAll() -> [AbstractHouseItem]? {
+        let fetchRequest = NSFetchRequest(entityName: self.entityName)
+        let sort = NSSortDescriptor(key: "postTime", ascending: false)
+        var sortDescriptors = [NSSortDescriptor]()
+        sortDescriptors.append(sort)
+        fetchRequest.sortDescriptors = sortDescriptors
+        return CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [AbstractHouseItem]
     }
 }

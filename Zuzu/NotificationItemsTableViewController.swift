@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -14,7 +15,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
-    var user: String?
+
     // UILabel for empty collection list
     let emptyLabel = UILabel()
 
@@ -28,7 +29,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func getResultsController() -> TableResultsController{
         let entityName = self.notificationService.entityName
-        let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("price", ascending: true).addSorting("postTime", ascending: false).build()
+        let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("postTime", ascending: false).build()
         controller.setDelegate(self)
         return controller
     }
@@ -37,12 +38,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.user = "test"
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
         self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
-
-        refresh()
+        self.refreshOnViewLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
         configureTableView()
         
@@ -133,43 +132,61 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
     
     // MARK: - Data manipulation Function
-
-    func refresh(){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.tableView)
-        self.refreshData()
+    
+    func refreshOnViewLoad(){
+        self.notificationService.dao.deleteAll()
+        self.refreshData(true)
         self.resultController.refreshData()
         self.tableView.reloadData()
     }
-
-    func refreshData(){
-        if let user = self.user{
-            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(user) { (result, error) -> Void in
+    
+    func refreshData(showSpinner: Bool){
+        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+            if showSpinner == true{
+                LoadingSpinner.shared.setImmediateAppear(true)
+                LoadingSpinner.shared.setOpacity(0.3)
+                LoadingSpinner.shared.startOnView(self.tableView)
+            }
+            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId) { (totalNum, result, error) -> Void in
                 if error != nil{
-                    //zuzualert
-                    LoadingSpinner.shared.stop()
-                }else{
+                    if showSpinner == true{
+                        LoadingSpinner.shared.stop()
+                    }
+                    return
+                }
+                
+                if totalNum > 0 {
                     if let notifyItems: [NotifyItem] = result {
                         for notifyItem: NotifyItem in notifyItems {
                             self.notificationService.add(notifyItem, isCommit: true)
                         }
                     }
+                    self.notificationService.removeExtra(true)
+                }
+                if showSpinner == true{
                     LoadingSpinner.shared.stop()
                 }
             }
         }
     }
     
+    func setItemRead(item:NotificationHouseItem){
+        var updateData = Dictionary<String, AnyObject>()
+        updateData["isRead"] = true
+        self.notificationService.updateItem(item, dataToUpdate: updateData)
+        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+            ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id){
+                (result, error) -> Void in
+            }
+        }
+    }
+
     func onReceiveNotifyItems(notification:NSNotification) {
-        self.refreshData()
+        self.refreshData(false)
     }
     
     func handleRefresh(refreshControl: UIRefreshControl) {
-        // Do some reloading of data and update the table view's data source
-        // Fetch more objects from a web service, for example...
-        
-        self.refreshData()
+        self.refreshData(false)
         self.tableView.reloadData()
         self.refreshControl?.endRefreshing()
     }
@@ -191,9 +208,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         if let item = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
             if item.isRead == false{
                 item.isRead = true
-                var updateData = Dictionary<String, AnyObject>()
-                updateData["isRead"] = true
-                self.notificationService.updateItem(item, dataToUpdate: updateData)
+                self.setItemRead(item)
             }
 
             let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
@@ -273,16 +288,6 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
     */
 

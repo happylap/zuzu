@@ -71,6 +71,25 @@ class NotificationItemService: NSObject
         return self.dao.getAll() as? [NotificationHouseItem]
     }
     
+    func removeExtra(isCommit: Bool){
+        if let notifyItems = self.getAll(){
+            if notifyItems.count > 200{
+                for (index, item) in notifyItems.reverse().enumerate() {
+                    if index >= 200{
+                        self.dao.deleteByID(item.id)
+                    }else{
+                        //break
+                    }
+                }
+                
+                if isCommit == true{
+                    self.dao.commit()
+                }
+            }
+        }
+        
+    }
+    
     func isExist(id: String) -> Bool{
         return self.dao.isExist(id)
     }
