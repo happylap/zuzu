@@ -32,16 +32,34 @@ class RadarService : NSObject {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogout:", name: UserLogoutNotification, object: nil)
-        
-        /*NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "reachabilityChanged:",
-            name: kReachabilityChangedNotification,
-            object: nil)*/
+        self.setNetworkObserver()
     }
     
-    /*func reachabilityChanged(notification: NSNotification){
+    func onNetWorkChanged(notification: NSNotification){
         Log.enter()
-    }*/
+        
+        let zuzuUserId = UserDefaultsUtils.getZuzuUserId()
+        let userLoginId = UserDefaultsUtils.getUserLoginId()
+
+        if !AmazonClientManager.sharedInstance.isLoggedIn()
+        || zuzuUserId != nil || userLoginId == nil{
+            self.removeNetworkObserver()
+            return
+        }
+        
+        if let reachability: Reachability = notification.object as? Reachability{
+            if(reachability.currentReachabilityStatus() == NotReachable) {
+                return
+            }
+        }
+        
+        if userLoginId != nil{
+            Log.debug("reget zuzu user id on netWork alive")
+            self.loginZuzuUser(userLoginId!)
+        }
+        
+        Log.exit()
+    }
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
@@ -100,12 +118,27 @@ class RadarService : NSObject {
         
         ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
             if error != nil{
+                self.setNetworkObserver()
                 return
             }
             
             UserDefaultsUtils.setZuzuUserId(userId)
             self.retrieveRadarCriteria(userId)
+            self.removeNetworkObserver()
         }
         Log.exit()
     }
+    
+    func setNetworkObserver(){
+        self.removeNetworkObserver()
+        NSNotificationCenter.defaultCenter().addObserver(self,
+        selector: "onNetWorkChanged:",
+        name: kReachabilityChangedNotification,
+        object: nil)
+    }
+    
+    func removeNetworkObserver(){
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: kReachabilityChangedNotification, object: nil)
+    }
+    
 }

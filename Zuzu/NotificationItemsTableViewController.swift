@@ -173,10 +173,6 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                     LoadingSpinner.shared.stop()
                 }
             }
-        }else{
-            if let userId = UserDefaultsUtils.getUserLoginId(){
-                RadarService.sharedInstance.loginZuzuUser(userId)
-            }
         }
     }
     
@@ -191,10 +187,6 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         if let userId = UserDefaultsUtils.getZuzuUserId(){
             ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id){
                 (result, error) -> Void in
-            }
-        }else{
-            if let userId = UserDefaultsUtils.getUserLoginId(){
-                RadarService.sharedInstance.loginZuzuUser(userId)
             }
         }
     }
