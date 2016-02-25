@@ -166,7 +166,7 @@ class AmazonSNSService : NSObject {
         }
     }
     
-    func handleReceiveNotifyItems(){
+    func handleReceiveNotifyItems(notification: NSNotification){
         Log.enter()
         self.setReceiveNotification()
         Log.exit()
