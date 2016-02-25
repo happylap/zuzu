@@ -38,7 +38,7 @@ class AmazonSNSService : NSObject {
     func handleUserLogin(notification: NSNotification) {
         Log.enter()
         Log.debug("\(notification.userInfo)")
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+        if let userId = UserDefaultsUtils.getUserLoginId(){
             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                 let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
@@ -55,7 +55,7 @@ class AmazonSNSService : NSObject {
         Log.enter()
         if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String{
             let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
-            if let userId = AmazonClientManager.sharedInstance.getUserId(){
+            if let userId = UserDefaultsUtils.getUserLoginId(){
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
             }else{
                 Log.debug("userId is nil")
@@ -190,7 +190,7 @@ class AmazonSNSService : NSObject {
     
     func setReceiveNotification(){
         Log.enter()
-        let userId = AmazonClientManager.sharedInstance.getUserId()
+        let userId = UserDefaultsUtils.getUserLoginId()
         let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
         if userId == nil || endpointArn == nil{
             Log.error("No userId or endpointArn, cannot set receive notify time")

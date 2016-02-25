@@ -143,7 +143,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
     
     func refreshData(showSpinner: Bool){
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            return
+        }
+        
+        if let userId = UserDefaultsUtils.getZuzuUserId(){
             if showSpinner == true{
                 LoadingSpinner.shared.setImmediateAppear(true)
                 LoadingSpinner.shared.setOpacity(0.3)
@@ -169,6 +173,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                     LoadingSpinner.shared.stop()
                 }
             }
+        }else{
+            if let userId = UserDefaultsUtils.getUserLoginId(){
+                RadarService.sharedInstance.loginZuzuUser(userId)
+            }
         }
     }
     
@@ -176,9 +184,17 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         var updateData = Dictionary<String, AnyObject>()
         updateData["isRead"] = true
         self.notificationService.updateItem(item, dataToUpdate: updateData)
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+        
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            return
+        }
+        if let userId = UserDefaultsUtils.getZuzuUserId(){
             ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id){
                 (result, error) -> Void in
+            }
+        }else{
+            if let userId = UserDefaultsUtils.getUserLoginId(){
+                RadarService.sharedInstance.loginZuzuUser(userId)
             }
         }
     }

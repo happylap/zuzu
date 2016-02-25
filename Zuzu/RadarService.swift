@@ -12,6 +12,8 @@ import Foundation
 private let Log = Logger.defaultLogger
 
 
+let ResetCriteriaNotification = "ResetCriteriaNotification"
+
 class RadarService : NSObject {
     
     var zuzuCriteria: ZuzuCriteria?
@@ -43,15 +45,17 @@ class RadarService : NSObject {
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
-            self.retrieveRadarCriteria(userId){(result, error) -> Void in
-                if error == nil{
-                    if result != nil{
-                        self.zuzuCriteria = result
-                    }else{
-                        self.zuzuCriteria = ZuzuCriteria()
-                    }
+        if let loginUserId = UserDefaultsUtils.getUserLoginId(){
+            if let zuzuUserId = UserDefaultsUtils.getZuzuUserId(){
+                if zuzuUserId != loginUserId{
+                    self.loginZuzuUser(loginUserId)
+                    return
                 }
+                self.retrieveRadarCriteria(zuzuUserId)
+                
+            }else{
+                self.loginZuzuUser(loginUserId)
+                return
             }
         }
         Log.exit()
@@ -59,28 +63,49 @@ class RadarService : NSObject {
     
     func handleUserLogout(notification: NSNotification){
         self.zuzuCriteria = nil
+        NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
     }
     
-    func retrieveRadarCriteria(userId:String, handler: (result: ZuzuCriteria?, error: ErrorType?) -> Void){
+    func retrieveRadarCriteria(userId:String){
         let zuzuUser = ZuzuUser()
         zuzuUser.userId = userId
-        ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
+        ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
             if error != nil{
-                Log.error("Cannot create user by user id:\(userId)")
-                handler(result: nil, error: error)
+                Log.error("Cannot get criteria by user id:\(userId)")
                 return
             }
             
-            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                if error != nil{
-                    Log.error("Cannot get criteria by user id:\(userId)")
-                    handler(result: nil, error: error)
-                    return
-                }
-                
-                handler(result: result, error: error)
+            if result != nil{
+                self.zuzuCriteria = result
+            }else{
+                self.zuzuCriteria = ZuzuCriteria()
             }
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
         }
     }
     
+    func loginZuzuUser(userId: String){
+        Log.enter()
+        self.zuzuCriteria = nil
+        let zuzuUser = ZuzuUser()
+        zuzuUser.userId = userId
+        
+        if let userData = AmazonClientManager.sharedInstance.userLoginData{
+            zuzuUser.facebookEmail = userData.email
+            zuzuUser.facebookFirstName = userData.name
+            zuzuUser.facebookGender = userData.birthday
+            zuzuUser.facebookGender = userData.gender
+        }
+        
+        ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
+            if error != nil{
+                return
+            }
+            
+            UserDefaultsUtils.setZuzuUserId(userId)
+            self.retrieveRadarCriteria(userId)
+        }
+        Log.exit()
+    }
 }
