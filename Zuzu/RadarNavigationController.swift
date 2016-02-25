@@ -53,16 +53,22 @@ class RadarNavigationController: UINavigationController {
         Log.enter()
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView()
-        }else{
-            if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
-                if zuzuCriteria.criteria != nil{
-                    self.showDisplayRadarView(zuzuCriteria)
-                }else{
-                    self.showConfigureRadarView() // no criteria in DB
-                }
+            return
+        }
+        
+        if UserDefaultsUtils.getZuzuUserId() == nil{
+            self.showRetryRadarView()
+            return
+        }
+        
+        if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
+            if zuzuCriteria.criteria != nil{
+                self.showDisplayRadarView(zuzuCriteria)
             }else{
-                self.showRetryRadarView() // error -> show retry
+                self.showConfigureRadarView() // no criteria in DB
             }
+        }else{
+            self.showRetryRadarView() // error -> show retry
         }
         Log.exit()
     }

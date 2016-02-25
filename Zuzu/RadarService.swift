@@ -38,26 +38,33 @@ class RadarService : NSObject {
     func onNetWorkChanged(notification: NSNotification){
         Log.enter()
         
-        let zuzuUserId = UserDefaultsUtils.getZuzuUserId()
-        let userLoginId = UserDefaultsUtils.getUserLoginId()
-
-        if !AmazonClientManager.sharedInstance.isLoggedIn()
-        || zuzuUserId != nil || userLoginId == nil{
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.removeNetworkObserver()
             return
         }
         
+        let zuzuUserId = UserDefaultsUtils.getZuzuUserId()
+        
+        if zuzuUserId != nil && self.zuzuCriteria != nil{
+            self.removeNetworkObserver()
+            return
+        }
+ 
         if let reachability: Reachability = notification.object as? Reachability{
             if(reachability.currentReachabilityStatus() == NotReachable) {
                 return
             }
         }
         
-        if userLoginId != nil{
-            Log.debug("reget zuzu user id on netWork alive")
-            self.loginZuzuUser(userLoginId!)
+        if let userLoginId = UserDefaultsUtils.getUserLoginId(){
+            self.loginZuzuUser(userLoginId)
         }
         
+        if zuzuUserId != nil && self.zuzuCriteria == nil{
+            self.retrieveRadarCriteria(zuzuUserId!)
+            return
+        }
+
         Log.exit()
     }
     
@@ -88,6 +95,7 @@ class RadarService : NSObject {
         zuzuUser.userId = userId
         ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
             if error != nil{
+                self.setNetworkObserver()
                 Log.error("Cannot get criteria by user id:\(userId)")
                 return
             }
@@ -97,7 +105,7 @@ class RadarService : NSObject {
             }else{
                 self.zuzuCriteria = ZuzuCriteria()
             }
-            
+
             NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
         }
     }
@@ -139,7 +147,6 @@ class RadarService : NSObject {
                 
                 UserDefaultsUtils.setZuzuUserId(userId)
                 self.retrieveRadarCriteria(userId)
-                self.removeNetworkObserver()
             }
         }
         
