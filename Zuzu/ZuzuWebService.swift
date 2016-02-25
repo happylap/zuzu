@@ -41,21 +41,21 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - User
     
-    // test ok
-    func createUser(user: ZuzuUser, handler: (result: AnyObject?, error: ErrorType?) -> Void) {
+    func createUser(user: ZuzuUser, handler: (result: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
         let resource = "/user"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
-        self.responseJSON(.POST, resource: resource, payload: payload, handler: handler)
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: result as? String, error: error)
+        }
         
         Log.exit()
     }
     
     // MARK: - Public APIs - Criteria
     
-    // test ok
     func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), criteria: \(criteria)]")
         
@@ -77,8 +77,38 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
+    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        let resource = "/criteria/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            
+            // Not found any criteria
+            if result == nil && error == nil {
+                handler(result: nil, error: nil)
+                return
+            }
+            
+            if let error = error {
+                handler(result: nil, error: error)
+                return
+            }
+            
+            if let value = result {
+                Log.debug("getCriteriaByUserId JSON: \(value)")
+                if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
+                    handler(result: zuzuCriteria, error: nil)
+                } else {
+                    Log.debug("Transfor to SearchCriteria has error.")
+                    handler(result: nil, error: NSError(domain: "Transfor to SearchCriteria has error", code: -1, userInfo: nil))
+                }
+            }
+        }
+        
+        Log.exit()
+    }
     
-    // test ok
     func createCriteriaByUserId(userId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), appleProductId: \(appleProductId), criteria: \(criteria)]")
         
@@ -96,8 +126,6 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    
-    // test ok
     func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), enabled: \(enabled)]")
         
@@ -112,16 +140,6 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Notify
     
-    // test ok
-    func getNotificationItemsByUserId(userId: String, handler: (result: [NotifyItem]?, error: ErrorType?) -> Void) {
-        self.getNotificationItemsByUserId(userId) { (totalNum, result, error) -> Void in
-            handler(result: result, error: error)
-        }
-        
-        Log.exit()
-    }
-    
-    // test ok
     func getNotificationItemsByUserId(userId: String, handler: (totalNum: Int, result: [NotifyItem]?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
@@ -151,28 +169,36 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    
-    // test: ok
-    func setReadNotificationByUserId(userId: String, itemId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+    func setReadNotificationByUserId(userId: String, itemId: String, handler: (result: Bool?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), itemId: \(itemId)]")
         
         let resource = "/notifyitem/\(itemId)/\(userId)"
         let payload:[[String: AnyObject]] = [["op": "replace", "path": "/_read", "value": true]]
         
-        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
         
         Log.exit()
     }
     
     // MARK: - Public APIs - Log
     
-    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+    func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: Bool?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
-
-        let resource = "/log/\(deviceId)/\(userId)"
-        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": ""]]
         
-        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
+        if let encodedDeviceId = CommonUtils.encodeToBase64(deviceId) {
+            Log.debug("encodedDeviceId =  \(encodedDeviceId)")
+            
+            let resource = "/log/\(encodedDeviceId)/\(userId)"
+            let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": ""]]
+            
+            self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
+                handler(result: (error == nil), error: error)
+            }
+        } else {
+            handler(result: false, error: NSError(domain: "DeviceId encodeToBase64 failure", code: 1, userInfo: nil))
+        }
         
         Log.exit()
     }
@@ -180,7 +206,6 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Purchase
     
-    // test ok
     func purchaseCriteria(criteria: SearchCriteria, purchase: ZuzuPurchase, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.enter()
         
@@ -224,7 +249,6 @@ class ZuzuWebService: NSObject
                                 Log.debug("HTTP Resopnse Json = \(json)")
                                 
                                 let code = json["code"].intValue
-                                Log.debug("HTTP Resopnse Json Code = \(code)")
                                 
                                 
                                 if code == 200 {
@@ -253,7 +277,6 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    // test ok
     func getPurchaseByUserId(userId: String, handler: (totalNum: Int, result: [ZuzuPurchase]?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
@@ -292,16 +315,14 @@ class ZuzuWebService: NSObject
         self.responseJSON(method, resource: resource, payload: try! NSJSONSerialization.dataWithJSONObject(payload, options: []), handler: handler)
     }
     
-    
     private func responseJSON(method: Alamofire.Method, resource: String, payload: [[String: AnyObject]], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
         self.responseJSON(method, resource: resource, payload: try! NSJSONSerialization.dataWithJSONObject(payload, options: []), handler: handler)
     }
     
-    
-    
     private func responseJSON(method: Alamofire.Method, resource: String, payload: NSData?, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
         
         let url = self.host + resource
+        
         let headers = self.getHeaders()
         
         self.alamoFireManager.request(method, url, parameters: [:], encoding: .Custom({
@@ -325,8 +346,6 @@ class ZuzuWebService: NSObject
                     Log.debug("HTTP Resopnse Json = \(json)")
                     
                     let code = json["code"].intValue
-                    Log.debug("HTTP Resopnse Json Code = \(code)")
-                    
                     
                     if code == 200 {
                         handler(result: json["data"].object, error: nil)

@@ -55,6 +55,14 @@ class CommonUtils: NSObject{
         return df.stringFromDate(date)
 
     }
+    
+    static func encodeToBase64(value: String) -> String? {
+        if let plainString = (value as NSString).dataUsingEncoding(NSUTF8StringEncoding) {
+            //return plainString.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
+            return plainString.base64EncodedStringWithOptions([])
+        }
+        return nil
+    }
 }
 
 extension NSDate {
