@@ -143,7 +143,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
     
     func refreshData(showSpinner: Bool){
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+        if let userId = UserDefaultsUtils.getUserLoginId(){
             if showSpinner == true{
                 LoadingSpinner.shared.setImmediateAppear(true)
                 LoadingSpinner.shared.setOpacity(0.3)
@@ -176,7 +176,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         var updateData = Dictionary<String, AnyObject>()
         updateData["isRead"] = true
         self.notificationService.updateItem(item, dataToUpdate: updateData)
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+        if let userId = UserDefaultsUtils.getUserLoginId(){
             ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id){
                 (result, error) -> Void in
             }

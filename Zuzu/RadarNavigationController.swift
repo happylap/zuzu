@@ -38,6 +38,19 @@ class RadarNavigationController: UINavigationController {
             break
         }
   
+        self.showCriteria()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleResetCriteria:", name: ResetCriteriaNotification, object: nil)
+    }
+
+    func handleResetCriteria(notification: NSNotification){
+        Log.enter()
+        self.showCriteria()
+        Log.exit()
+    }
+    
+    func showCriteria(){
+        Log.enter()
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView()
         }else{
@@ -51,11 +64,11 @@ class RadarNavigationController: UINavigationController {
                 self.showRetryRadarView() // error -> show retry
             }
         }
+        Log.exit()
     }
-
+    
     // MARK: - show radar page
 
-    
     private func showConfigureRadarView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {

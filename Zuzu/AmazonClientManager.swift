@@ -689,15 +689,6 @@ extension AmazonClientManager: GIDSignInDelegate {
                 
             }
     }
-    
-    func getUserId() -> String?{
-        let userId = self.userLoginData?.id
-        if userId != nil{
-            return userId
-        }
-        
-        return UserDefaultsUtils.getUserLoginId()
-    }
 }
 
 // MARK: Google GIDSignInUIDelegate

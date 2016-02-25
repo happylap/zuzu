@@ -12,6 +12,8 @@ import Foundation
 private let Log = Logger.defaultLogger
 
 
+let ResetCriteriaNotification = "ResetCriteriaNotification"
+
 class RadarService : NSObject {
     
     var zuzuCriteria: ZuzuCriteria?
@@ -43,7 +45,7 @@ class RadarService : NSObject {
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.getUserId(){
+        if let userId = UserDefaultsUtils.getUserLoginId(){
             self.retrieveRadarCriteria(userId){(result, error) -> Void in
                 if error == nil{
                     if result != nil{
@@ -51,6 +53,8 @@ class RadarService : NSObject {
                     }else{
                         self.zuzuCriteria = ZuzuCriteria()
                     }
+                    
+                    NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
                 }
             }
         }
@@ -59,6 +63,7 @@ class RadarService : NSObject {
     
     func handleUserLogout(notification: NSNotification){
         self.zuzuCriteria = nil
+        NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
     }
     
     func retrieveRadarCriteria(userId:String, handler: (result: ZuzuCriteria?, error: ErrorType?) -> Void){
