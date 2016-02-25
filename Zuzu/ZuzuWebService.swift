@@ -11,29 +11,8 @@ import Alamofire
 import SwiftyJSON
 import ObjectMapper
 
-struct WebApiConst {
-    
-    struct Server {
-        static let SCHEME = "http"
-        static let HOST = "ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com"
-        static let PORT = 4567
-        static var HEADERS: [String: String]? {
-            get {
-                var headers = ["Content-Type": "application/x-www-form-urlencoded"]
-                
-                let plainLoginString = (SecretConst.SolrQuery as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-                if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
-                    headers["Authorization"] = "Basic \(base64LoginString)"
-                } else {
-                    Log.debug("Unable to do Basic Authorization")
-                }
-                
-                return headers
-            }
-        }
-    }
-    
-}
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 private let Log = Logger.defaultLogger
 
@@ -41,7 +20,8 @@ class ZuzuWebService: NSObject
 {
     private static let instance = ZuzuWebService()
     
-    var hostUrl = ""
+    var host = "http://ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com:4567"
+    
     var alamoFireManager = Alamofire.Manager.sharedInstance
     
     class var sharedInstance: ZuzuWebService {
@@ -51,8 +31,6 @@ class ZuzuWebService: NSObject
     // Designated initializer
     private override init() {
         super.init()
-        
-        self.hostUrl = "\(WebApiConst.Server.SCHEME)://\(WebApiConst.Server.HOST):\(WebApiConst.Server.PORT)"
         
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForRequest = 30 // seconds
@@ -67,10 +45,10 @@ class ZuzuWebService: NSObject
     func createUser(user: ZuzuUser, handler: (result: AnyObject?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
-        let fullURL = "\(self.hostUrl)/user"
+        let resource = "/user"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
-        self.responseJSON(.POST, url: fullURL, payload: payload, handler: handler)
+        self.responseJSON(.POST, resource: resource, payload: payload, handler: handler)
         
         Log.exit()
     }
@@ -78,43 +56,10 @@ class ZuzuWebService: NSObject
     // MARK: - Public APIs - Criteria
     
     // test ok
-    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: NSError?) -> Void) {
-        Log.debug("Input parameters [userId: \(userId)]")
-        
-        let fullURL = "\(self.hostUrl)/criteria/\(userId)"
-        
-        self.responseJSON(.GET, url: fullURL) { (result, error) -> Void in
-            
-            // Not found any criteria
-            if result == nil && error == nil {
-                handler(result: nil, error: nil)
-                return
-            }
-            
-            if let error = error {
-                handler(result: nil, error: error)
-                return
-            }
-            
-            if let value = result {
-                Log.debug("getCriteriaByUserId JSON: \(value)")
-                if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
-                    handler(result: zuzuCriteria, error: nil)
-                } else {
-                    Log.debug("Transfor to SearchCriteria has error.")
-                    handler(result: nil, error: NSError(domain: "Transfor to SearchCriteria has error", code: -1, userInfo: nil))
-                }
-            }
-        }
-        
-        Log.exit()
-    }
-    
-    // test ok
     func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), criteria: \(criteria)]")
         
-        let url = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
+        let resource = "/criteria/\(criteriaId)/\(userId)"
         
         var payload = [[String: AnyObject]]()
         
@@ -127,8 +72,7 @@ class ZuzuWebService: NSObject
             payload.append(["op": "replace", "path": "/filters", "value": jsonString])
         }
         
-        self.responseJSON(.PATCH, url: url, payload: payload, handler: handler)
-        //self._patch(url, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
         
         Log.exit()
     }
@@ -144,10 +88,10 @@ class ZuzuWebService: NSObject
         zuzuCriteria.appleProductId = appleProductId
         zuzuCriteria.criteria = criteria
         
-        let fullURL = "\(self.hostUrl)/criteria"
+        let resource = "/criteria"
         let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
         
-        self.responseJSON(.POST, url: fullURL, payload: payload, handler: handler)
+        self.responseJSON(.POST, resource: resource, payload: payload, handler: handler)
         
         Log.exit()
     }
@@ -157,10 +101,10 @@ class ZuzuWebService: NSObject
     func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), enabled: \(enabled)]")
         
-        let fullURL = "\(self.hostUrl)/criteria/\(criteriaId)/\(userId)"
+        let resource = "/criteria/\(criteriaId)/\(userId)"
         let payload:[[String: AnyObject]] = [["op": "replace", "path": "/enabled", "value": enabled]]
         
-        self.responseJSON(.PATCH, url: fullURL, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
         
         Log.exit()
     }
@@ -181,9 +125,9 @@ class ZuzuWebService: NSObject
     func getNotificationItemsByUserId(userId: String, handler: (totalNum: Int, result: [NotifyItem]?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
-        let fullURL = "\(self.hostUrl)/notifyitem/\(userId)"
+        let resource = "/notifyitem/\(userId)"
         
-        self.responseJSON(.GET, url: fullURL) { (result, error) -> Void in
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
                 handler(totalNum: 0, result: nil, error: error)
                 return
@@ -212,10 +156,10 @@ class ZuzuWebService: NSObject
     func setReadNotificationByUserId(userId: String, itemId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), itemId: \(itemId)]")
         
-        let url = "\(self.hostUrl)/notifyitem/\(itemId)/\(userId)"
+        let resource = "/notifyitem/\(itemId)/\(userId)"
         let payload:[[String: AnyObject]] = [["op": "replace", "path": "/_read", "value": true]]
         
-        self.responseJSON(.PATCH, url: url, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
         
         Log.exit()
     }
@@ -225,10 +169,10 @@ class ZuzuWebService: NSObject
     func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
 
-        let url = "\(self.hostUrl)/log/\(deviceId)/\(userId)"
+        let resource = "/log/\(deviceId)/\(userId)"
         let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": ""]]
         
-        self.responseJSON(.PATCH, url: url, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
         
         Log.exit()
     }
@@ -240,14 +184,15 @@ class ZuzuWebService: NSObject
     func purchaseCriteria(criteria: SearchCriteria, purchase: ZuzuPurchase, handler: (result: AnyObject?, error: NSError?) -> Void) {
         Log.enter()
         
-        let url = "\(self.hostUrl)/purchase"
+        let url = self.host + "/purchase"
+        let headers = self.getHeaders()
         
         if let criteriaJSONDict = ZuzuCriteria.criteriaToJSON(criteria) {
             let criteriaData = try! NSJSONSerialization.dataWithJSONObject(criteriaJSONDict, options: [])
             
             Log.debug("criteriaData: \(criteriaData)")
             
-            Alamofire.upload(.POST, url, headers: WebApiConst.Server.HEADERS, multipartFormData: { multipartFormData -> Void in
+            Alamofire.upload(.POST, url, headers: headers, multipartFormData: { multipartFormData -> Void in
                 
                 multipartFormData.appendBodyPart(data: purchase.userId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
                 multipartFormData.appendBodyPart(data: purchase.store.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "store")
@@ -312,9 +257,9 @@ class ZuzuWebService: NSObject
     func getPurchaseByUserId(userId: String, handler: (totalNum: Int, result: [ZuzuPurchase]?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
-        let fullURL = "\(self.hostUrl)/purchase/\(userId)"
+        let resource = "/purchase/\(userId)"
         
-        self.responseJSON(.GET, url: fullURL) { (result, error) -> Void in
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
                 handler(totalNum: 0, result: nil, error: error)
                 return
@@ -339,20 +284,26 @@ class ZuzuWebService: NSObject
     
     // MARK: - Private Methods
     
-    private func responseJSON(method: Alamofire.Method, url: String, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
-        self.responseJSON(method, url: url, payload: nil, handler: handler)
+    private func responseJSON(method: Alamofire.Method, resource: String, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        self.responseJSON(method, resource: resource, payload: nil, handler: handler)
     }
     
-    private func responseJSON(method: Alamofire.Method, url: String, payload: [String: AnyObject], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
-        self.responseJSON(method, url: url, payload: try! NSJSONSerialization.dataWithJSONObject(payload, options: []), handler: handler)
+    private func responseJSON(method: Alamofire.Method, resource: String, payload: [String: AnyObject], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        self.responseJSON(method, resource: resource, payload: try! NSJSONSerialization.dataWithJSONObject(payload, options: []), handler: handler)
     }
     
     
-    private func responseJSON(method: Alamofire.Method, url: String, payload: [[String: AnyObject]], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
-        self.responseJSON(method, url: url, payload: try! NSJSONSerialization.dataWithJSONObject(payload, options: []), handler: handler)
+    private func responseJSON(method: Alamofire.Method, resource: String, payload: [[String: AnyObject]], handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        self.responseJSON(method, resource: resource, payload: try! NSJSONSerialization.dataWithJSONObject(payload, options: []), handler: handler)
     }
     
-    private func responseJSON(method: Alamofire.Method, url: String, payload: NSData?, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+    
+    
+    private func responseJSON(method: Alamofire.Method, resource: String, payload: NSData?, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
+        
+        let url = self.host + resource
+        let headers = self.getHeaders()
+        
         self.alamoFireManager.request(method, url, parameters: [:], encoding: .Custom({
             (convertible, params) in
             let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
@@ -361,7 +312,7 @@ class ZuzuWebService: NSObject
                 mutableRequest.HTTPBody = body
             }
             return (mutableRequest, nil)
-        }), headers: WebApiConst.Server.HEADERS).responseJSON { (_, response, result) in
+        }), headers: headers).responseJSON { (_, response, result) in
             Log.debug("HTTP Request URL: \(url)")
             
             Log.debug("HTTP Resopnse = \(response)")
@@ -396,6 +347,33 @@ class ZuzuWebService: NSObject
                 }
             }
         }
+    }
+    
+    private func getHeaders() -> [String: String] {
+        var headers = [String: String]()
+        
+        let plainLoginString = (SecretConst.SolrQuery as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+        if let base64LoginString = plainLoginString?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength) {
+            headers["Content-Type"] = "application/x-www-form-urlencoded"
+            headers["Authorization"] = "Basic \(base64LoginString)"
+        } else {
+            Log.debug("Unable to do Basic Authorization")
+        }
+        
+        if let userLoginData = AmazonClientManager.sharedInstance.userLoginData {
+            headers["UserId"] = userLoginData.id
+            headers["UserProvider"] = userLoginData.provider?.rawValue
+            if userLoginData.provider == Provider.FB {
+                headers["UserToken"] = FBSDKAccessToken.currentAccessToken().tokenString
+            }
+            if userLoginData.provider == Provider.GOOGLE {
+                // TODO
+            }
+        }
+        
+        Log.debug("headers: \(headers)")
+        
+        return headers
     }
 
 }
