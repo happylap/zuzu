@@ -19,7 +19,7 @@ class RadarNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let reachability: Reachability = Reachability.reachabilityForInternetConnection()
+        /*let reachability: Reachability = Reachability.reachabilityForInternetConnection()
         let networkStatus: NetworkStatus = reachability.currentReachabilityStatus()
         
         
@@ -36,7 +36,7 @@ class RadarNavigationController: UINavigationController {
             Log.debug("[Network Status]: ReachableViaWiFi")
         default:
             break
-        }
+        }*/
   
         self.showCriteria()
         
@@ -56,10 +56,10 @@ class RadarNavigationController: UINavigationController {
             return
         }
         
-        if UserDefaultsUtils.getZuzuUserId() == nil{
+        /*if UserDefaultsUtils.getZuzuUserId() == nil{
             self.showRetryRadarView()
             return
-        }
+        }*/
         
         if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
             if zuzuCriteria.criteria != nil{

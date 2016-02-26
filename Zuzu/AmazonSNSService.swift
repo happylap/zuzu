@@ -199,9 +199,6 @@ class AmazonSNSService : NSObject {
         }
         ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId!, deviceId: endpointArn!){
             (result, error) -> Void in
-            if result != nil{
-                Log.debug("setReceiveNotifyTimeByUserId success")
-            }
         }
         Log.exit()
     }

@@ -43,8 +43,8 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshOnViewLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogout:", name: UserLogoutNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleZuzuUserLogin:", name: ZuzuUserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleZuzuUserLogout:", name: ZuzuUserLogoutNotification, object: nil)
         configureTableView()
         
         //tableView.estimatedRowHeight = tableView.rowHeight
@@ -197,14 +197,14 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.refreshData(false)
     }
     
-    func handleUserLogin(notification: NSNotification){
+    func handleZuzuUserLogin(notification: NSNotification){
         self.notificationService.dao.deleteAll()
         self.refreshData(false)
         self.resultController.refreshData()
         self.tableView.reloadData()
     }
 
-    func handleUserLogout(notification: NSNotification){
+    func handleZuzuUserLogout(notification: NSNotification){
         self.notificationService.dao.deleteAll()
         self.resultController.refreshData()
         self.tableView.reloadData()
