@@ -75,8 +75,12 @@ class ZuzuWebService: NSObject
     func updateUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
-        // TODO
-        handler(result: true, error: nil)
+        let resource = "/user"
+        let payload = Mapper<ZuzuUser>().toJSON(user)
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
         
         Log.exit()
     }
