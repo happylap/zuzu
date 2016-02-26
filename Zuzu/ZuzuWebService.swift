@@ -20,7 +20,7 @@ class ZuzuWebService: NSObject
 {
     private static let instance = ZuzuWebService()
     
-    var host = "http://ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com:4567"
+    var host = "http://127.0.0.1:4567"//"http://ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com:4567"
     
     var alamoFireManager = Alamofire.Manager.sharedInstance
     
@@ -44,8 +44,17 @@ class ZuzuWebService: NSObject
     func isExistUser(userId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
-        // TODO
-        handler(result: true, error: nil)
+        let resource = "/user/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+            } else if let _ = result {
+                handler(result: true, error: nil)
+            } else {
+                handler(result: false, error: nil)
+            }
+        }
         
         Log.exit()
     }
@@ -74,7 +83,7 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Criteria
     
-    func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
+    func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), criteria: \(criteria)]")
         
         let resource = "/criteria/\(criteriaId)/\(userId)"
@@ -83,6 +92,7 @@ class ZuzuWebService: NSObject
         
         let zuzuCriteria = ZuzuCriteria()
         zuzuCriteria.criteria = criteria
+        
         let JSONDict = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
         if let filters = JSONDict["filters"] {
             let jsonData = try! NSJSONSerialization.dataWithJSONObject(filters, options: [])
@@ -90,7 +100,15 @@ class ZuzuWebService: NSObject
             payload.append(["op": "replace", "path": "/filters", "value": jsonString])
         }
         
-        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+            } else if let _ = result {
+                handler(result: true, error: nil)
+            } else {
+                handler(result: false, error: nil)
+            }
+        }
         
         Log.exit()
     }
@@ -101,26 +119,19 @@ class ZuzuWebService: NSObject
         let resource = "/criteria/\(userId)"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
-            
-            // Not found any criteria
-            if result == nil && error == nil {
-                handler(result: nil, error: nil)
-                return
-            }
-            
             if let error = error {
                 handler(result: nil, error: error)
-                return
-            }
-            
-            if let value = result {
+            } else if let value = result {
                 Log.debug("getCriteriaByUserId JSON: \(value)")
                 if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
                     handler(result: zuzuCriteria, error: nil)
                 } else {
-                    Log.debug("Transfor to SearchCriteria has error.")
-                    handler(result: nil, error: NSError(domain: "Transfor to SearchCriteria has error", code: -1, userInfo: nil))
+                    Log.debug("Can not transfor to SearchCriteria")
+                    handler(result: nil, error: NSError(domain: "Can not transfor to SearchCriteria", code: -1, userInfo: nil))
                 }
+            } else {
+                // Not found any criteria
+                handler(result: nil, error: nil)
             }
         }
         
@@ -144,13 +155,15 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: AnyObject?, error: NSError?) -> Void) {
+    func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), enabled: \(enabled)]")
         
         let resource = "/criteria/\(criteriaId)/\(userId)"
         let payload:[[String: AnyObject]] = [["op": "replace", "path": "/enabled", "value": enabled]]
         
-        self.responseJSON(.PATCH, resource: resource, payload: payload, handler: handler)
+        self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
         
         Log.exit()
     }
@@ -158,8 +171,17 @@ class ZuzuWebService: NSObject
     func hasValidCriteriaByUserId(userId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
-        // TODO
-        handler(result: true, error: nil)
+        let resource = "/criteria/valid/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+            } else if let _ = result {
+                handler(result: true, error: nil)
+            } else { // Not found any valid criteria
+                handler(result: false, error: nil)
+            }
+        }
         
         Log.exit()
     }
@@ -233,7 +255,7 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Purchase
     
-    func purchaseCriteria(criteria: SearchCriteria, purchase: ZuzuPurchase, handler: (result: AnyObject?, error: NSError?) -> Void) {
+    func purchaseCriteria(criteria: SearchCriteria, purchase: ZuzuPurchase, handler: (result: String?, error: NSError?) -> Void) {
         Log.enter()
         
         let url = self.host + "/purchase"
@@ -279,7 +301,7 @@ class ZuzuWebService: NSObject
                                 
                                 
                                 if code == 200 {
-                                    handler(result: json["data"].object, error: nil)
+                                    handler(result: json["data"].string, error: nil)
                                 }
                                 else {
                                     let message = json["message"].stringValue
