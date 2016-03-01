@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -58,29 +59,39 @@ class RadarDisplayViewController: UIViewController {
     }
     
     @IBAction func enableCriteria(sender: UISwitch) {
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-            ///Hide tab bar
-            self.tabBarController?.tabBarHidden = true
-            vc.modalPresentationStyle = .OverCurrentContext
-            vc.completeHandler = { () -> Void in
-                ///Show tab bar
-                self.tabBarController?.tabBarHidden = false
-            }
-            
-            presentViewController(vc, animated: true, completion: nil)
-            
-        }
-        
-        let isEnable = sender.on
-        ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.zuzuCriteria.userId!,
-            criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnable) { (result, error) -> Void in
+        let isEnabled = sender.on
+        if let userId = self.zuzuCriteria.userId{
+            ZuzuWebService.sharedInstance.hasValidCriteriaByUserId(userId){(result, error) -> Void in
                 if error != nil{
                     //zuzualert
-                }else{
-                    self.zuzuCriteria.enabled = isEnable
+                    self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
+                    sender.on = !isEnabled
+                    return
                 }
+                
+                if result == true{
+                    ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.zuzuCriteria.userId!,
+                        criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                            if error != nil{
+                                self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
+                                sender.on = !isEnabled
+                            }else{
+                                self.zuzuCriteria.enabled = isEnabled
+                            }
+                    }
+                }else{
+                    self.showPurchaseView()
+                }
+            }
         }
+    }
+    
+    private func alertServerError(subTitle: String) {
+        
+        let alertView = SCLAlertView()
+        
+        alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
     }
     
     private func updateCriteriaTextLabel(){
@@ -92,6 +103,23 @@ class RadarDisplayViewController: UIViewController {
             filterNum = filterGroups.count
         }
         self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
+    }
+    
+    
+    private func showPurchaseView(){
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+        ///Hide tab bar
+        self.tabBarController?.tabBarHidden = true
+        vc.modalPresentationStyle = .OverCurrentContext
+        vc.completeHandler = { () -> Void in
+        ///Show tab bar
+        self.tabBarController?.tabBarHidden = false
+        }
+        
+        presentViewController(vc, animated: true, completion: nil)
+        
+        }
     }
     
     private func updateServiceTextLabel(){
@@ -153,7 +181,7 @@ extension RadarDisplayViewController : RadarViewControllerDelegate {
     func onCriteriaSettingDone(searchCriteria:SearchCriteria){
         ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(zuzuCriteria.userId!, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
             if error != nil{
-                //zuzualert
+                self.alertServerError("暫時無法更新雷達設定，請檢查您的裝置是否處於無網路狀態或飛航模式")
                 return
             }
             
