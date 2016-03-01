@@ -142,24 +142,7 @@ class ZuzuWebService: NSObject
         
         Log.exit()
     }
-    
-    func createCriteriaByUserId(userId: String, appleProductId: String, criteria: SearchCriteria, handler: (result: AnyObject?, error: NSError?) -> Void) {
-        Log.debug("Input parameters [userId: \(userId), appleProductId: \(appleProductId), criteria: \(criteria)]")
         
-        let zuzuCriteria = ZuzuCriteria()
-        zuzuCriteria.userId = userId
-        zuzuCriteria.enabled = true
-        zuzuCriteria.appleProductId = appleProductId
-        zuzuCriteria.criteria = criteria
-        
-        let resource = "/criteria"
-        let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
-        
-        self.responseJSON(.POST, resource: resource, payload: payload, handler: handler)
-        
-        Log.exit()
-    }
-    
     func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), enabled: \(enabled)]")
         
