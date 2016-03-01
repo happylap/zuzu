@@ -388,6 +388,7 @@ class ZuzuWebService: NSObject
             return (mutableRequest, nil)
         }), headers: headers).responseJSON { (_, response, result) in
             Log.debug("HTTP Request URL: \(url)")
+            Log.debug("HTTP Request Payload: \(payload)")
             
             Log.debug("HTTP Resopnse = \(response)")
             
