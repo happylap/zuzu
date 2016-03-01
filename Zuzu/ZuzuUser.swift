@@ -10,15 +10,14 @@ import Foundation
 import ObjectMapper
 
 class ZuzuUser: NSObject, Mappable {
-    var userId: String!
+    var id: String!
     var registerTime: NSDate?
-    
-    var facebookEmail: String?
-    var facebookId: String?
-    var facebookName: String?
-    var facebookFirstName: String?
-    var facebookLastName: String?
-    var facebookGender: String?
+    var provider: String?
+    var email: String?
+    var name: String?
+    var gender: String?
+    var birthday: NSDate?
+    var pictureUrl: String?
     
     override init() {
         
@@ -30,13 +29,26 @@ class ZuzuUser: NSObject, Mappable {
     
     // Mappable
     func mapping(map: Map) {
-        userId              <- map["user_id"]
-        registerTime        <- (map["register_time"], DateTransform())
-        facebookEmail       <- map["facebook_email"]
-        facebookId          <- map["facebook_id"]
-        facebookName        <- map["facebook_name"]
-        facebookFirstName   <- map["facebook_first_name"]
-        facebookLastName    <- map["facebook_last_name"]
-        facebookGender      <- map["facebook_gender"]
+        id                  <- map["user_id"]
+        registerTime        <- (map["register_time"], timeTransform)
+        provider            <- map["provider"]
+        email               <- map["email"]
+        name                <- map["name"]
+        gender              <- map["gender"]
+        birthday            <- (map["birthday"], timeTransform)
+        pictureUrl          <- map["picture_url"]
     }
+    
+    //
+    let timeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
+        if let dateString = values {
+            return CommonUtils.getUTCDateFromString(dateString)
+        }
+        return nil
+        }, toJSON: { (values: NSDate?) -> String? in
+            if let date = values {
+                return CommonUtils.getUTCStringFromDate(date)
+            }
+            return nil
+    })
 }

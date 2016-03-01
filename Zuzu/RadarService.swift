@@ -96,7 +96,7 @@ class RadarService : NSObject {
     
     func retrieveRadarCriteria(userId:String){
         let zuzuUser = ZuzuUser()
-        zuzuUser.userId = userId
+        zuzuUser.id = userId
         ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
             if error != nil{
                 self.setNetworkObserver()
@@ -118,13 +118,17 @@ class RadarService : NSObject {
         Log.enter()
         self.reset()
         let zuzuUser = ZuzuUser()
-        zuzuUser.userId = userId
+        zuzuUser.id = userId
         
         if let userData = AmazonClientManager.sharedInstance.userLoginData{
-            zuzuUser.facebookEmail = userData.email
-            zuzuUser.facebookFirstName = userData.name
-            zuzuUser.facebookGender = userData.birthday
-            zuzuUser.facebookGender = userData.gender
+            zuzuUser.provider = userData.provider?.rawValue
+            zuzuUser.email = userData.email
+            zuzuUser.name = userData.name
+            zuzuUser.gender = userData.gender
+            if let birthday = userData.birthday {
+                zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
+            }
+            zuzuUser.pictureUrl = userData.pictureUrl
         }
         
         ZuzuWebService.sharedInstance.isExistUser(userId){(result, error) -> Void in
