@@ -174,12 +174,12 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         let product = products[indexPath.row]
         cell.textLabel?.text = product.localizedTitle
         
-        if ZuzuStore.sharedInstance.isProductPurchased(product.productIdentifier) {
+        /*if ZuzuStore.sharedInstance.isProductPurchased(product.productIdentifier) {
             cell.accessoryType = .Checkmark
             cell.accessoryView = nil
             cell.detailTextLabel?.text = ""
-        }
-        else if ZuzuStore.canMakePayments() {
+        }*/
+        if ZuzuStore.canMakePayments() {
             priceFormatter.locale = product.priceLocale
             cell.detailTextLabel?.text = priceFormatter.stringFromNumber(product.price)
             

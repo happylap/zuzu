@@ -114,6 +114,8 @@ class RadarViewController: UIViewController {
             if let userId = UserDefaultsUtils.getZuzuUserId(){
                 let zuzuPurchase = ZuzuPurchase(userId:userId ,productId:product.productIdentifier, productPrice:product.price)
                 
+                zuzuPurchase.purchaseReceipt = "test".dataUsingEncoding(NSUTF8StringEncoding)
+                
                 ZuzuWebService .sharedInstance.purchaseCriteria(self.searchCriteria, purchase: zuzuPurchase){
                     (result, error) -> Void in
                     if error != nil{
