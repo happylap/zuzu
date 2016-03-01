@@ -63,7 +63,6 @@ class RadarDisplayViewController: UIViewController {
         if let userId = self.zuzuCriteria.userId{
             ZuzuWebService.sharedInstance.hasValidCriteriaByUserId(userId){(result, error) -> Void in
                 if error != nil{
-                    //zuzualert
                     self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
                     sender.on = !isEnabled
                     return
@@ -109,16 +108,11 @@ class RadarDisplayViewController: UIViewController {
     private func showPurchaseView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-        ///Hide tab bar
-        self.tabBarController?.tabBarHidden = true
-        vc.modalPresentationStyle = .OverCurrentContext
-        vc.completeHandler = { () -> Void in
-        ///Show tab bar
-        self.tabBarController?.tabBarHidden = false
-        }
-        
-        presentViewController(vc, animated: true, completion: nil)
-        
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.purchaseCompleteHandler = self.createCriteriaAfterPurchase
+            presentViewController(vc, animated: true, completion: nil)
         }
     }
     
@@ -171,6 +165,21 @@ class RadarDisplayViewController: UIViewController {
                 }
             default: break
                 
+            }
+        }
+    }
+    
+    func createCriteriaAfterPurchase(isSuccess:Bool, product: SKProduct) -> Void{
+        if isSuccess == true{
+            if let userId = UserDefaultsUtils.getZuzuUserId(){
+                let zuzuPurchase = ZuzuPurchase(userId:userId ,productId:product.productIdentifier, productPrice:product.price)
+                
+                ZuzuWebService .sharedInstance.purchaseCriteria(self.zuzuCriteria.criteria!, purchase: zuzuPurchase){
+                    (result, error) -> Void in
+                    if error != nil{
+                        self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
+                    }
+                }
             }
         }
     }

@@ -594,6 +594,7 @@ class RadarConfigureTableViewController: UITableViewController {
             if let regionSelectionState = currentCriteria.region {
                 cityRegionVC.regionSelectionState = regionSelectionState
             }
+
             self.showViewController(cityRegionVC, sender: self)
 
         case CellConst.moreFilters: //More Filters

@@ -39,15 +39,10 @@ class RadarNavigationController: UINavigationController {
         }*/
   
         self.showCriteria()
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleResetCriteria:", name: ResetCriteriaNotification, object: nil)
+
     }
 
-    func handleResetCriteria(notification: NSNotification){
-        Log.enter()
-        self.showCriteria()
-        Log.exit()
-    }
+    // MARK: - show radar page
     
     func showCriteria(){
         Log.enter()
@@ -57,8 +52,8 @@ class RadarNavigationController: UINavigationController {
         }
         
         /*if UserDefaultsUtils.getZuzuUserId() == nil{
-            self.showRetryRadarView()
-            return
+        self.showRetryRadarView()
+        return
         }*/
         
         if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
@@ -73,16 +68,14 @@ class RadarNavigationController: UINavigationController {
         Log.exit()
     }
     
-    // MARK: - show radar page
-
-    private func showConfigureRadarView(){
+    func showConfigureRadarView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {
             self.setViewControllers([vc], animated: false)
         }
     }
     
-    private func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
+    func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
             vc.zuzuCriteria = zuzuCriteria
@@ -90,7 +83,7 @@ class RadarNavigationController: UINavigationController {
         }
     }
     
-    private func showRetryRadarView(){
+    func showRetryRadarView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             self.setViewControllers([vc], animated: false)

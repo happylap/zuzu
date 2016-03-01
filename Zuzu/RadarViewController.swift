@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -22,7 +23,7 @@ class RadarViewController: UIViewController {
     var delegate: RadarViewControllerDelegate?
     var searchCriteria = SearchCriteria(){
         didSet{
-            updateCriteriaTextLabel()()
+            updateCriteriaTextLabel()
         }
     }
     var isUpdateMode = false
@@ -38,10 +39,11 @@ class RadarViewController: UIViewController {
             self.activateButton.enabled = false
         }
         self.houseInfoLabel.numberOfLines = 0
-        updateCriteriaTextLabel()()
+        self.updateCriteriaTextLabel()
+        self.registerCriteriaObserver()
     }
     
-    private func updateCriteriaTextLabel()(){
+    private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
         self.regionLabel?.text = displayItem.title
         self.houseInfoLabel?.text = displayItem.detail
@@ -61,7 +63,7 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var activateButton: UIButton!
     
     @IBAction func activateButtonClick(sender: UIButton) {
-        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
             ///Hide tab bar
@@ -70,6 +72,7 @@ class RadarViewController: UIViewController {
             vc.completeHandler = { () -> Void in
                 ///Show tab bar
                 self.tabBarController?.tabBarHidden = false
+                self.registerCriteriaObserver()
             }
             
             presentViewController(vc, animated: true, completion: nil)
@@ -114,12 +117,46 @@ class RadarViewController: UIViewController {
                 ZuzuWebService .sharedInstance.purchaseCriteria(self.searchCriteria, purchase: zuzuPurchase){
                     (result, error) -> Void in
                     if error != nil{
-                        
+                        self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
                     }
                 }
             }
         }
     }
+    
+    private func alertServerError(subTitle: String) {
+        
+        let alertView = SCLAlertView()
+        
+        alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
+    }
+    
+    func handleResetCriteria(notification: NSNotification){
+        Log.enter()
+        if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
+            if zuzuCriteria.criteria != nil{
+                NSNotificationCenter.defaultCenter().removeObserver(self)
+                if let vc = self.navigationController as? RadarNavigationController{
+                    vc.showDisplayRadarView(zuzuCriteria)
+                }
+            }
+        }else{
+            NSNotificationCenter.defaultCenter().removeObserver(self)
+            if let vc = self.navigationController as? RadarNavigationController{
+                vc.showRetryRadarView() // error -> show retry
+            }
+        }
+        Log.exit()
+    }
+    
+    func registerCriteriaObserver(){
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            NSNotificationCenter.defaultCenter().removeObserver(self)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleResetCriteria:", name: ResetCriteriaNotification, object: nil)
+        }
+    }
+    
 }
 
 // MARK: - RadarConfigureTableViewControllerDelegate
