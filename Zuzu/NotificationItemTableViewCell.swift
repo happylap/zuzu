@@ -42,8 +42,40 @@ class NotificationItemTableViewCell: UITableViewCell
         }
     }
     
+    @IBOutlet weak var divider1: UIView!
+    @IBOutlet weak var divider2: UIView!
+    @IBOutlet weak var divider3: UIView!
+    
+    // MARK: - Inherited Methods
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        Log.debug("awakeFromNib")
+        
+        self.houseTitleLabel.textColor = UIColor.colorWithRGB(0x2E2E2E, alpha: 1)
+        self.addressLabel.textColor = UIColor.colorWithRGB(0x666666, alpha: 1)
+        self.postTimeLabel.textColor = UIColor.colorWithRGB(0x666666, alpha: 1)
+        self.houseTypeLabel.textColor = UIColor.colorWithRGB(0x666666, alpha: 1)
+        self.houseSizeLabel.textColor = UIColor.colorWithRGB(0x666666, alpha: 1)
+        self.housePriceLabel.textColor = UIColor.colorWithRGB(0xF38752, alpha: 1)
+        
+        self.divider1.backgroundColor = UIColor.colorWithRGB(0xDCDCDE, alpha: 1)
+        self.divider2.backgroundColor = UIColor.colorWithRGB(0xDCDCDE, alpha: 1)
+        self.divider3.backgroundColor = UIColor.colorWithRGB(0xDCDCDE, alpha: 1)
+       
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        Log.debug("prepareForReuse")
+        
+        
+    }
+    
     func updateUI()
     {
+        Log.debug("updateUI")
+        
         houseTitleLabel?.text = nil
         let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
         

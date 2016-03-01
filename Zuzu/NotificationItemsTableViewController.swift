@@ -71,6 +71,9 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
     // MARK: - Confiure View
     func configureTableView(){
+        
+        self.tableView.rowHeight = UIScreen.mainScreen().bounds.width * (500/1440)
+        
         //Remove extra cells when the table height is smaller than the screen
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
         // configure empty label
