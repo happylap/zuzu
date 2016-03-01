@@ -389,6 +389,13 @@ class ZuzuWebService: NSObject
         }), headers: headers).responseJSON { (_, response, result) in
             Log.debug("HTTP Request URL: \(url)")
             
+            if let payload = payload {
+                Log.debug(closure: { () -> String? in
+                    let payload = try! NSJSONSerialization.JSONObjectWithData(payload, options: [])
+                    return "HTTP Request Payload: \(payload)"
+                })
+            }
+            
             Log.debug("HTTP Resopnse = \(response)")
             
             if let handler = handler {
