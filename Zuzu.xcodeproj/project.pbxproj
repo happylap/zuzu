@@ -113,7 +113,7 @@
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
 		2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D41BE0721800498FC0 /* resultFilters.json */; };
-		2FDEA8B61C74119C00AA1375 /* AppstoreReceiptObtainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDEA8B51C74119C00AA1375 /* AppstoreReceiptObtainer.swift */; };
+		2FDEA8B61C74119C00AA1375 /* StoreReceiptObtainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDEA8B51C74119C00AA1375 /* StoreReceiptObtainer.swift */; };
 		2FDF87BE1C5A8D6F00511D11 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF87BD1C5A8D6F00511D11 /* FBAudienceNetwork.framework */; };
 		2FDF87C01C5A8ED700511D11 /* libAdapterFacebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDF87BF1C5A8ED700511D11 /* libAdapterFacebook.a */; };
 		2FE1326A1C312081008F5E68 /* RadarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE132691C312081008F5E68 /* RadarViewController.swift */; };
@@ -295,7 +295,7 @@
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
 		2FDCA0D41BE0721800498FC0 /* resultFilters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = resultFilters.json; sourceTree = "<group>"; };
-		2FDEA8B51C74119C00AA1375 /* AppstoreReceiptObtainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppstoreReceiptObtainer.swift; sourceTree = "<group>"; };
+		2FDEA8B51C74119C00AA1375 /* StoreReceiptObtainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreReceiptObtainer.swift; sourceTree = "<group>"; };
 		2FDF87BD1C5A8D6F00511D11 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
 		2FDF87BF1C5A8ED700511D11 /* libAdapterFacebook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterFacebook.a; sourceTree = "<group>"; };
 		2FE132691C312081008F5E68 /* RadarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarViewController.swift; sourceTree = "<group>"; };
@@ -554,7 +554,7 @@
 			children = (
 				2FB16C521C48BDEC009738AC /* ZuzuStore.swift */,
 				2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */,
-				2FDEA8B51C74119C00AA1375 /* AppstoreReceiptObtainer.swift */,
+				2FDEA8B51C74119C00AA1375 /* StoreReceiptObtainer.swift */,
 			);
 			name = InAppPurchase;
 			sourceTree = "<group>";
@@ -982,7 +982,7 @@
 				2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */,
 				2F9410561BF445DD00BA12B5 /* HouseDetailContactBarView.swift in Sources */,
 				2FC98D711BFC224F00D054B3 /* UIOverlayImageView.swift in Sources */,
-				2FDEA8B61C74119C00AA1375 /* AppstoreReceiptObtainer.swift in Sources */,
+				2FDEA8B61C74119C00AA1375 /* StoreReceiptObtainer.swift in Sources */,
 				2F4F809A1BCCFD31003D23F4 /* CityRegionContainerViewController.swift in Sources */,
 				14BACBF61C5F5F52007202CB /* NotificationItemTableViewCell.swift in Sources */,
 				2FC54C401C4CD51D0052FD6F /* DuplicateHouseViewController.swift in Sources */,

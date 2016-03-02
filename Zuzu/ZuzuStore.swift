@@ -45,92 +45,7 @@ public class ZuzuStore: NSObject  {
         return Singleton.instance
     }
     
-    /// MARK: - Public API
-    
-    /// Initialize the helper.  Pass in the set of ProductIdentifiers supported by the app.
-    public init(productIdentifiers: Set<ProductIdentifier>) {
-        
-        self.productIdentifiers = productIdentifiers
-        
-        super.init()
-    }
-    
-    ///Start
-    public func start() {
-
-        /// Observe the transaction
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
-    }
-    
-    public func stop() {
-        
-        /// Observe the transaction
-        SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
-    }
-    
-    /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
-    public func requestProducts(handler: RequestProductsCompletionHandler) {
-        
-        completionHandler = handler
-        
-        /// Init SKProductsRequest
-        productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
-        
-        for productIdentifier in productIdentifiers {
-            let purchased = NSUserDefaults.standardUserDefaults().boolForKey(productIdentifier)
-            if purchased {
-                purchasedProductIdentifiers.insert(productIdentifier)
-                Log.debug("Previously purchased: \(productIdentifier)")
-            }
-            else {
-                Log.debug("Not purchased: \(productIdentifier)")
-            }
-        }
-        
-        /// Receive response for product requests
-        productsRequest?.delegate = self
-        
-        productsRequest?.start()
-    }
-    
-    /// Make purchase of a product.
-    public func makePurchase(product: SKProduct) {
-        Log.debug("Buying \(product.productIdentifier)...")
-        
-        
-        validateReceipt(NSBundle.mainBundle().appStoreReceiptURL) { (success: Bool) -> Void in
-            print("validateReceipt: \(success)")
-            
-            let payment = SKPayment(product: product)
-            
-            SKPaymentQueue.defaultQueue().addPayment(payment)
-        }
-    }
-    
-    public func finishTransaction(transaction: SKPaymentTransaction) {
-        
-        
-        /// Finish the transaction
-        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
-    }
-    
-    /// If the state of whether purchases have been made is lost  (e.g. the
-    /// user deletes and reinstalls the app) this will recover the purchases.
-    /// Only non-consumable products/ renewable subscription/ free subscription can be restored by AppStore
-    public func restorePreviousPurchase() {
-        SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
-    }
-    
-    /// Check if the current device is allowed to make the payment
-    public class func canMakePayments() -> Bool {
-        return SKPaymentQueue.canMakePayments()
-    }
-    
-    /// Given the product identifier, returns true if that product has been purchased.
-    /// Check against the locally cached data
-    public func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
-        return purchasedProductIdentifiers.contains(productIdentifier)
-    }
+    /// MARK: - Private API
     
     private func receiptData(appStoreReceiptURL : NSURL?) -> NSData? {
         
@@ -190,6 +105,122 @@ public class ZuzuStore: NSObject  {
         task.resume()
     }
     
+    /// MARK: - Public API
+    
+    /// Initialize the helper.  Pass in the set of ProductIdentifiers supported by the app.
+    public init(productIdentifiers: Set<ProductIdentifier>) {
+        
+        self.productIdentifiers = productIdentifiers
+        
+        super.init()
+    }
+    
+    ///Start
+    public func start() {
+        
+        /// Observe the transaction
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+    }
+    
+    public func stop() {
+        
+        /// Observe the transaction
+        SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
+    }
+    
+    /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
+    public func requestProducts(handler: RequestProductsCompletionHandler) {
+        
+        completionHandler = handler
+        
+        /// Init SKProductsRequest
+        productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
+        
+        for productIdentifier in productIdentifiers {
+            let purchased = NSUserDefaults.standardUserDefaults().boolForKey(productIdentifier)
+            if purchased {
+                purchasedProductIdentifiers.insert(productIdentifier)
+                Log.debug("Previously purchased: \(productIdentifier)")
+            }
+            else {
+                Log.debug("Not purchased: \(productIdentifier)")
+            }
+        }
+        
+        /// Receive response for product requests
+        productsRequest?.delegate = self
+        
+        productsRequest?.start()
+    }
+    
+    public func readReceipt() -> NSData? {
+        
+        return StoreReceiptObtainer.sharedInstance.readReceipt()
+        
+    }
+    
+    /// Obtain the app store receipt
+    public func fetchReceipt(handler: RequestReceiptCompletionHandler) {
+        
+        StoreReceiptObtainer.sharedInstance.fetchReceipt(handler)
+        
+    }
+    
+    /// Make purchase of a product.
+    public func makePurchase(product: SKProduct) {
+        Log.debug("Buying \(product.productIdentifier)...")
+        
+        
+        let queue = SKPaymentQueue.defaultQueue()
+        
+        for trans in queue.transactions {
+            Log.debug("Unfinished: \(trans.payment.productIdentifier), \(trans.transactionState)...")
+        }
+        
+        validateReceipt(NSBundle.mainBundle().appStoreReceiptURL) { (success: Bool) -> Void in
+            print("validateReceipt: \(success)")
+            
+            let payment = SKPayment(product: product)
+            
+            SKPaymentQueue.defaultQueue().addPayment(payment)
+        }
+    }
+    
+    
+    /// Get list of unfinished transactions so that we can try to deliver/persist the service before we actually finish the transactions
+    public func getUnfinishedTransactionsForState(state: SKPaymentTransactionState) -> [SKPaymentTransaction] {
+        
+        return SKPaymentQueue.defaultQueue().transactions.filter({ (trans) -> Bool in
+            return trans.transactionState == .Purchased
+        })
+        
+    }
+    
+    public func finishTransaction(transaction: SKPaymentTransaction) {
+        
+        
+        /// Finish the transaction
+        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+    }
+    
+    /// If the state of whether purchases have been made is lost  (e.g. the
+    /// user deletes and reinstalls the app) this will recover the purchases.
+    /// Only non-consumable products/ renewable subscription/ free subscription can be restored by AppStore
+    public func restorePreviousPurchase() {
+        SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
+    }
+    
+    /// Check if the current device is allowed to make the payment
+    public class func canMakePayments() -> Bool {
+        return SKPaymentQueue.canMakePayments()
+    }
+    
+    /// Given the product identifier, returns true if that product has been purchased.
+    /// Check against the locally cached data
+    public func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
+        return purchasedProductIdentifiers.contains(productIdentifier)
+    }
+    
     public func validateReceipt(appStoreReceiptURL : NSURL?, onCompletion: (Bool) -> Void) {
         
         validateReceiptInternal(appStoreReceiptURL, isProd: true) { (statusCode: Int?) -> Void in
@@ -229,6 +260,7 @@ public class ZuzuStore: NSObject  {
 /// MARK: - SKProductsRequestDelegate
 // SKProductsRequestDelegate: to get a list of products, their titles, descriptions, and prices from the Apple server
 extension ZuzuStore: SKProductsRequestDelegate {
+    
     public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         Log.debug("Loaded list of products...")
         let products = response.products
