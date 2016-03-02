@@ -86,6 +86,31 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
+    // MARK: - Public APIs - Device
+    func createDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
+        
+        handler(result: true, error: nil)
+        
+        Log.exit()
+    }
+    
+    func deleteDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
+        
+        handler(result: true, error: nil)
+        
+        Log.exit()
+    }
+    
+    func isExistDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
+        
+        handler(result: false, error: nil)
+        
+        Log.exit()
+    }
+    
     // MARK: - Public APIs - Criteria
     
     func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: Bool, error: NSError?) -> Void) {
