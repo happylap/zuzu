@@ -87,8 +87,6 @@
 		2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */; };
 		2FB16C541C48BDEC009738AC /* ZuzuStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C521C48BDEC009738AC /* ZuzuStore.swift */; };
 		2FB16C551C48BDEC009738AC /* ZuzuProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */; };
-		2FB16C591C48BF4C009738AC /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C571C48BF4C009738AC /* MasterViewController.swift */; };
-		2FB16C5A1C48BF4C009738AC /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C581C48BF4C009738AC /* DetailViewController.swift */; };
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
 		2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */; };
 		2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */; };
@@ -266,8 +264,6 @@
 		2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCityPickerView.swift; sourceTree = "<group>"; };
 		2FB16C521C48BDEC009738AC /* ZuzuStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuStore.swift; sourceTree = "<group>"; };
 		2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuProducts.swift; sourceTree = "<group>"; };
-		2FB16C571C48BF4C009738AC /* MasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
-		2FB16C581C48BF4C009738AC /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadUtils.swift; sourceTree = "<group>"; };
 		2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -487,7 +483,6 @@
 			isa = PBXGroup;
 			children = (
 				14BACBF41C5F5F09007202CB /* Notification */,
-				2FB16C561C48BF38009738AC /* InAppPurchase */,
 				2FBC054F1BDE6E0E0035652D /* Application */,
 				2FBC05531BDE6F0A0035652D /* Controller */,
 				2F276B361BBED52200A41306 /* Collection */,
@@ -555,15 +550,6 @@
 				2FB16C521C48BDEC009738AC /* ZuzuStore.swift */,
 				2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */,
 				2FDEA8B51C74119C00AA1375 /* StoreReceiptObtainer.swift */,
-			);
-			name = InAppPurchase;
-			sourceTree = "<group>";
-		};
-		2FB16C561C48BF38009738AC /* InAppPurchase */ = {
-			isa = PBXGroup;
-			children = (
-				2FB16C571C48BF4C009738AC /* MasterViewController.swift */,
-				2FB16C581C48BF4C009738AC /* DetailViewController.swift */,
 			);
 			name = InAppPurchase;
 			sourceTree = "<group>";
@@ -1005,7 +991,6 @@
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				8166359A1C608838008C0AA3 /* ZuzuUser.swift in Sources */,
-				2FB16C5A1C48BF4C009738AC /* DetailViewController.swift in Sources */,
 				816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */,
 				14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */,
 				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
@@ -1050,7 +1035,6 @@
 				2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */,
 				2F6155591BD888660024145E /* SearchItemService.swift in Sources */,
 				14914FA11C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift in Sources */,
-				2FB16C591C48BF4C009738AC /* MasterViewController.swift in Sources */,
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
 				81390C751C365F2600450761 /* Contants.swift in Sources */,
 				2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */,

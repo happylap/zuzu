@@ -9,6 +9,13 @@ import StoreKit
 
 private let Log = Logger.defaultLogger
 
+@objc public protocol ZuzuStorePurchaseHandler : NSObjectProtocol {
+    
+    func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction)
+
+    func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction)
+}
+
 /// Notification that is generated when a product is purchased.
 public let ProductPurchasedNotification = "ProductPurchasedNotification"
 
@@ -19,22 +26,22 @@ public typealias ProductIdentifier = String
 public typealias RequestProductsCompletionHandler = (success: Bool, products: [SKProduct]) -> ()
 
 /// Transaction handler called when there is any transaction status update.
-public typealias TransactionHandler = (store: ZuzuStore, transaction: SKPaymentTransaction) -> Bool
+public typealias PurchaseHandler = (store: ZuzuStore, transaction: SKPaymentTransaction) -> Bool
+
 
 /// A Helper class for In-App-Purchases, it can fetch products, tell you if a product has been purchased,
 /// purchase products, and restore purchases.  Uses NSUserDefaults to cache if a product has been purchased.
 public class ZuzuStore: NSObject  {
     
-    /// MARK: - Private Properties
+    // MARK: - Private Members
     
     // Used to keep track of the possible products and which ones have been purchased.
     private let productIdentifiers: Set<ProductIdentifier>
-    private var purchasedProductIdentifiers = Set<ProductIdentifier>()
     
     // Used by SKProductsRequestDelegate
     private var productsRequest: SKProductsRequest?
-    private var completionHandler: RequestProductsCompletionHandler?
-    private var transactionHandler: TransactionHandler?
+    private var productsRequestHandler: RequestProductsCompletionHandler?
+    private var purchaseHandler: ZuzuStorePurchaseHandler?
     
     //Share Instance for interacting with the ZuzuStore
     class var sharedInstance: ZuzuStore {
@@ -45,7 +52,7 @@ public class ZuzuStore: NSObject  {
         return Singleton.instance
     }
     
-    /// MARK: - Private API
+    // MARK: - Private API
     
     /// Validate the receipt with remote Apple server
     private func validateReceipt(appStoreReceiptURL : NSURL?, onCompletion: (Bool) -> Void) {
@@ -140,7 +147,7 @@ public class ZuzuStore: NSObject  {
         task.resume()
     }
     
-    /// MARK: - Public API
+    // MARK: - Public API
     
     /// Initializer.  Pass in the set of ProductIdentifiers supported by the app.
     internal init(productIdentifiers: Set<ProductIdentifier>) {
@@ -153,12 +160,16 @@ public class ZuzuStore: NSObject  {
     ///Start ZuzuStore. The transaction observer will be registered
     internal func start() {
         
+        Log.enter()
+        
         /// Observe the transaction
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
     
     ///Stop ZuzuStore. The transaction observer will be deregistered
     internal func stop() {
+        
+        Log.enter()
         
         /// Stop observing the transaction
         SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
@@ -167,21 +178,12 @@ public class ZuzuStore: NSObject  {
     /// Request the list of SKProducts from the AppStore. The handler will get called with the list of products.
     internal func requestProducts(handler: RequestProductsCompletionHandler) {
         
-        completionHandler = handler
+        Log.debug("Fetch product list...")
+        
+        productsRequestHandler = handler
         
         /// Init SKProductsRequest
         productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
-        
-        for productIdentifier in productIdentifiers {
-            let purchased = NSUserDefaults.standardUserDefaults().boolForKey(productIdentifier)
-            if purchased {
-                purchasedProductIdentifiers.insert(productIdentifier)
-                Log.debug("Previously purchased: \(productIdentifier)")
-            }
-            else {
-                Log.debug("Not purchased: \(productIdentifier)")
-            }
-        }
         
         /// Receive response for product requests
         productsRequest?.delegate = self
@@ -204,22 +206,38 @@ public class ZuzuStore: NSObject  {
     }
     
     /// Make purchase of a product.
-    internal func makePurchase(product: SKProduct) {
-        Log.debug("Buying \(product.productIdentifier)...")
+    /// return false: if there exists an unfinished transaction for the product to purchase
+    /// return true: if the payment is sent to the server successfully
+    internal func makePurchase(product: SKProduct, handler: ZuzuStorePurchaseHandler) -> Bool {
         
+        purchaseHandler = handler
         
-        let queue = SKPaymentQueue.defaultQueue()
+        let productIdentifier = product.productIdentifier
         
-        for trans in queue.transactions {
-            Log.debug("Unfinished: \(trans.payment.productIdentifier), \(trans.transactionState)...")
+        Log.debug("Buying \(productIdentifier)...")
+        
+        let unfinishedTrans = self.getUnfinishedTransactions()
+        
+        let transForProduct = unfinishedTrans.filter { (trans) -> Bool in
+            return (trans.payment.productIdentifier == productIdentifier)
         }
         
-        validateReceipt(NSBundle.mainBundle().appStoreReceiptURL) { (success: Bool) -> Void in
-            print("validateReceipt: \(success)")
+        if(transForProduct.isEmpty) {
+            
+            Log.debug("Add payment for product = \(productIdentifier)...")
             
             let payment = SKPayment(product: product)
             
             SKPaymentQueue.defaultQueue().addPayment(payment)
+            
+            return true
+            
+        } else {
+            
+            Log.debug("You still have unfinished transaction for product = \(productIdentifier)...")
+            
+            return false
+            
         }
     }
     
@@ -235,10 +253,14 @@ public class ZuzuStore: NSObject  {
         SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
     }
     
-    /// Get list of unfinished transactions. We should deliver the service for these transactions before we actually finish them
-    internal func getUnfinishedTransactionsForState(state: SKPaymentTransactionState) -> [SKPaymentTransaction] {
+    /// Get list of unfinished transactions.
+    /// We should deliver the service for these transactions before we actually finish them
+    internal func getUnfinishedTransactions() -> [SKPaymentTransaction] {
         
         return SKPaymentQueue.defaultQueue().transactions.filter({ (trans) -> Bool in
+            
+            Log.warning("transaction = \(trans.transactionIdentifier), transaction = \(trans.transactionState), product = \(trans.payment.productIdentifier)")
+            
             return trans.transactionState == .Purchased
         })
         
@@ -249,23 +271,17 @@ public class ZuzuStore: NSObject  {
         return SKPaymentQueue.canMakePayments()
     }
     
-    /// Given the product identifier, returns true if that product has been purchased.
-    /// Check against the locally cached data
-    internal func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
-        return purchasedProductIdentifiers.contains(productIdentifier)
-    }
-    
 }
 
 
-/// MARK: - SKProductsRequestDelegate
+// MARK: - SKProductsRequestDelegate
 // SKProductsRequestDelegate: to get a list of products, their titles, descriptions, and prices from the Apple server
 extension ZuzuStore: SKProductsRequestDelegate {
     
     public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         Log.debug("Loaded list of products...")
         let products = response.products
-        completionHandler?(success: true, products: products)
+        productsRequestHandler?(success: true, products: products)
         clearRequest()
         
         // debug printing
@@ -281,11 +297,11 @@ extension ZuzuStore: SKProductsRequestDelegate {
     }
     
     private func clearRequest() {
-        completionHandler = nil
+        productsRequestHandler = nil
     }
 }
 
-/// MARK: - SKProductsRequestDelegate
+// MARK: - SKProductsRequestDelegate
 // SKPaymentTransactionObserver: receive the result for the transactions
 extension ZuzuStore: SKPaymentTransactionObserver {
     
@@ -302,8 +318,8 @@ extension ZuzuStore: SKPaymentTransactionObserver {
             case .Failed:
                 failedTransaction(transaction)
                 break
+                ///For now, we do not handle transactions with the following states
             case .Restored:
-                restoreTransaction(transaction)
                 break
             case .Deferred:
                 break
@@ -324,33 +340,28 @@ extension ZuzuStore: SKPaymentTransactionObserver {
     }
     
     private func completeTransaction(transaction: SKPaymentTransaction) {
-        Log.warning("completeTransaction... \(transaction.transactionIdentifier)")
-        provideContentForProductIdentifier(transaction.payment.productIdentifier)
-        
-        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+        Log.warning("completeTransaction... \(transaction.transactionIdentifier), product = \(transaction.payment.productIdentifier)")
+
+        purchaseHandler?.onPurchased(self, transaction: transaction)
     }
     
     private func restoreTransaction(transaction: SKPaymentTransaction) {
-        let productIdentifier = transaction.originalTransaction!.payment.productIdentifier
-        Log.warning("restoreTransaction... \(productIdentifier)")
-        provideContentForProductIdentifier(productIdentifier)
+        Log.warning("restoreTransaction... \(transaction.transactionIdentifier), product = \(transaction.payment.productIdentifier)")
         
+        //let productIdentifier = transaction.originalTransaction!.payment.productIdentifier
+
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     
     private func failedTransaction(transaction: SKPaymentTransaction) {
-        Log.warning("failedTransaction...\(transaction.transactionIdentifier)")
+        Log.warning("failedTransaction...\(transaction.transactionIdentifier), product = \(transaction.payment.productIdentifier)")
+        
         if transaction.error!.code != SKErrorPaymentCancelled {
-            Log.debug("Transaction error: \(transaction.error!.localizedDescription)")
+            Log.warning("Transaction error: \(transaction.error!.localizedDescription)")
         }
+        
+        purchaseHandler?.onFailed(self, transaction: transaction)
+        
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
-    }
-    
-    // Helper: Saves the fact that the product has been purchased and posts a notification.
-    private func provideContentForProductIdentifier(productIdentifier: String) {
-        purchasedProductIdentifiers.insert(productIdentifier)
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: productIdentifier)
-        NSUserDefaults.standardUserDefaults().synchronize()
-        NSNotificationCenter.defaultCenter().postNotificationName(ProductPurchasedNotification, object: productIdentifier)
     }
 }

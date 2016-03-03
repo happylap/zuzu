@@ -130,8 +130,27 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         let loginAlertView = SCLAlertView()
         loginAlertView.addButton("購買") {
-            ZuzuStore.sharedInstance.makePurchase(product)
+            if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
+                
+                ///Successfully sent out the payment request. Wait for handler callback
+                
+            } else {
+                
+                ///You have an unfinished transaction for the product
+                
+            }
         }
+        
+        loginAlertView.addButton("未完成交易") {
+            
+            let transList = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            
+            for trans in transList {
+                ZuzuStore.sharedInstance.finishTransaction(trans)
+                Log.warning("Unfinished Transactions: \(trans.transactionIdentifier), product = \(trans.payment.productIdentifier)")
+            }
+        }
+
         let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
         loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
@@ -202,5 +221,20 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             cell.detailTextLabel?.text = "Not available"
         }
         return cell
+    }
+}
+
+extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
+    
+    func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
+        
+        Log.debug("\(transaction.transactionIdentifier)")
+        
+    }
+    
+    func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
+        
+        Log.debug("\(transaction.transactionIdentifier)")
+        
     }
 }
