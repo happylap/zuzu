@@ -20,122 +20,128 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPa-0u-dhH">
-                                <rect key="frame" x="0.0" y="214" width="600" height="386"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HPa-0u-dhH">
+                                <rect key="frame" x="0.0" y="337" width="600" height="218.5"/>
                                 <connections>
                                     <segue destination="JCF-a3-JtA" kind="embed" identifier="showRegionConfigureTable" id="c9I-6A-hSi"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qgH-TH-Bdj" userLabel="DisplayView">
-                                <rect key="frame" x="0.0" y="64" width="600" height="150"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qgH-TH-Bdj" userLabel="DisplayView">
+                                <rect key="frame" x="0.0" y="20" width="600" height="282"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eYd-ML-Hvz" userLabel="CriteriaSubView">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8e-qv-mlE">
-                                                <rect key="frame" x="20" y="20" width="560" height="19.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstItem="z8e-qv-mlE" firstAttribute="leading" secondItem="eYd-ML-Hvz" secondAttribute="leading" constant="20" symbolic="YES" id="2Gq-ac-cLh"/>
-                                            <constraint firstAttribute="height" constant="45" id="2Oh-Op-2he"/>
-                                            <constraint firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" constant="20" symbolic="YES" id="42E-y9-26S"/>
-                                            <constraint firstItem="z8e-qv-mlE" firstAttribute="top" secondItem="eYd-ML-Hvz" secondAttribute="top" constant="20" symbolic="YES" id="cLV-Gr-AeY"/>
-                                        </constraints>
+                                    <imageView userInteractionEnabled="NO" alpha="0.94999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_house" translatesAutoresizingMaskIntoConstraints="NO" id="hBw-4p-Upo">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="282"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </imageView>
+                                    <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a6Z-xT-rKj">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="282"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ye-C3-dds" userLabel="Body">
-                                        <rect key="frame" x="0.0" y="45" width="600" height="105"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3W-qa-GGA">
-                                                <rect key="frame" x="20" y="20" width="560" height="65"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4W-N0-hHF" userLabel="regionLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="560" height="19.5"/>
-                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="整層住家, 20000 - 25000元, 20 - 30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lo2-T6-otx" userLabel="houseInfoLabel">
-                                                        <rect key="frame" x="0.0" y="27" width="560" height="16"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="其他6個過濾條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXu-2G-XaY" userLabel="otherCriteriaLabel">
-                                                        <rect key="frame" x="0.0" y="51" width="560" height="16"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYU-YW-y5a" userLabel="activateButton">
-                                                        <rect key="frame" x="250" y="59" width="60" height="30"/>
-                                                        <state key="normal" title="立即啟用"/>
-                                                        <connections>
-                                                            <action selector="activateButtonClick:" destination="OaS-ny-kO8" eventType="touchUpInside" id="Pc7-4z-RvG"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="j4W-N0-hHF" firstAttribute="leading" secondItem="z3W-qa-GGA" secondAttribute="leading" id="CPT-mI-5KG"/>
-                                                    <constraint firstItem="iXu-2G-XaY" firstAttribute="bottom" secondItem="uYU-YW-y5a" secondAttribute="top" constant="8" symbolic="YES" id="Enm-3L-mrJ"/>
-                                                    <constraint firstItem="j4W-N0-hHF" firstAttribute="top" secondItem="z3W-qa-GGA" secondAttribute="top" id="Tox-eh-ymq"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Lo2-T6-otx" secondAttribute="trailing" id="VIa-yQ-8fZ"/>
-                                                    <constraint firstAttribute="trailing" secondItem="j4W-N0-hHF" secondAttribute="trailing" id="dI3-DA-iOP"/>
-                                                    <constraint firstItem="Lo2-T6-otx" firstAttribute="top" secondItem="j4W-N0-hHF" secondAttribute="bottom" constant="8" symbolic="YES" id="eNq-dN-0QD"/>
-                                                    <constraint firstItem="Lo2-T6-otx" firstAttribute="leading" secondItem="z3W-qa-GGA" secondAttribute="leading" id="fSk-7r-9dD"/>
-                                                    <constraint firstAttribute="trailing" secondItem="iXu-2G-XaY" secondAttribute="trailing" id="hGM-NF-o5B"/>
-                                                    <constraint firstItem="iXu-2G-XaY" firstAttribute="leading" secondItem="z3W-qa-GGA" secondAttribute="leading" id="iKL-gB-iZo"/>
-                                                    <constraint firstItem="iXu-2G-XaY" firstAttribute="top" secondItem="Lo2-T6-otx" secondAttribute="bottom" constant="8" symbolic="YES" id="mRx-Qs-Nn7"/>
-                                                    <constraint firstItem="uYU-YW-y5a" firstAttribute="centerX" secondItem="z3W-qa-GGA" secondAttribute="centerX" id="pjJ-RA-UWB"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="z3W-qa-GGA" secondAttribute="bottom" constant="20" symbolic="YES" id="BNJ-Ib-nB9"/>
-                                            <constraint firstItem="z3W-qa-GGA" firstAttribute="leading" secondItem="7Ye-C3-dds" secondAttribute="leading" constant="20" symbolic="YES" id="ER5-9i-fed"/>
-                                            <constraint firstItem="z3W-qa-GGA" firstAttribute="top" secondItem="7Ye-C3-dds" secondAttribute="top" constant="20" symbolic="YES" id="PSx-MD-IJ1"/>
-                                            <constraint firstAttribute="trailing" secondItem="z3W-qa-GGA" secondAttribute="trailing" constant="20" symbolic="YES" id="ioL-o5-L0u"/>
-                                        </constraints>
-                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8e-qv-mlE">
+                                        <rect key="frame" x="20" y="20" width="560" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4W-N0-hHF" userLabel="regionLabel">
+                                        <rect key="frame" x="20" y="44" width="560" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="其他6個過濾條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXu-2G-XaY" userLabel="otherCriteriaLabel">
+                                        <rect key="frame" x="20" y="87" width="560" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYU-YW-y5a" userLabel="activateButton">
+                                        <rect key="frame" x="270" y="248" width="60" height="30"/>
+                                        <state key="normal" title="立即啟用"/>
+                                        <connections>
+                                            <action selector="activateButtonClick:" destination="OaS-ny-kO8" eventType="touchUpInside" id="Pc7-4z-RvG"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="整層住家, 20000 - 25000元, 20 - 30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lo2-T6-otx" userLabel="houseInfoLabel">
+                                        <rect key="frame" x="20" y="67" width="560" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="eYd-ML-Hvz" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="top" id="3uq-z7-cCp"/>
-                                    <constraint firstItem="7Ye-C3-dds" firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="width" id="I8o-ld-ABb"/>
-                                    <constraint firstItem="7Ye-C3-dds" firstAttribute="top" secondItem="eYd-ML-Hvz" secondAttribute="bottom" id="Rj7-ve-2B0"/>
-                                    <constraint firstItem="eYd-ML-Hvz" firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="width" id="URB-7b-UvX"/>
-                                    <constraint firstItem="7Ye-C3-dds" firstAttribute="centerX" secondItem="qgH-TH-Bdj" secondAttribute="centerX" id="m0k-zE-14G"/>
-                                    <constraint firstAttribute="bottom" secondItem="7Ye-C3-dds" secondAttribute="bottom" id="pHQ-Om-Rkg"/>
-                                    <constraint firstItem="eYd-ML-Hvz" firstAttribute="centerX" secondItem="qgH-TH-Bdj" secondAttribute="centerX" id="wBA-u5-BtU"/>
+                                    <constraint firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="height" multiplier="1500:705" id="0f4-2m-vSl"/>
+                                    <constraint firstItem="iXu-2G-XaY" firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" id="FLR-ZW-c5f"/>
+                                    <constraint firstItem="Lo2-T6-otx" firstAttribute="top" secondItem="j4W-N0-hHF" secondAttribute="bottom" constant="4" id="GVT-FR-87C"/>
+                                    <constraint firstItem="z8e-qv-mlE" firstAttribute="leading" secondItem="qgH-TH-Bdj" secondAttribute="leading" constant="20" symbolic="YES" id="HCc-97-rf8"/>
+                                    <constraint firstItem="Lo2-T6-otx" firstAttribute="leading" secondItem="z8e-qv-mlE" secondAttribute="leading" id="HKL-Vh-gMU"/>
+                                    <constraint firstItem="hBw-4p-Upo" firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="width" id="IWy-39-BMh"/>
+                                    <constraint firstItem="uYU-YW-y5a" firstAttribute="centerX" secondItem="qgH-TH-Bdj" secondAttribute="centerX" id="Jcy-ee-pbV"/>
+                                    <constraint firstItem="hBw-4p-Upo" firstAttribute="centerY" secondItem="qgH-TH-Bdj" secondAttribute="centerY" id="NVx-tg-3ze"/>
+                                    <constraint firstItem="a6Z-xT-rKj" firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="width" id="Orb-XZ-Dy8"/>
+                                    <constraint firstItem="iXu-2G-XaY" firstAttribute="leading" secondItem="qgH-TH-Bdj" secondAttribute="leading" constant="20" id="SGU-5d-ih1"/>
+                                    <constraint firstItem="Lo2-T6-otx" firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" id="cU8-44-DHf"/>
+                                    <constraint firstItem="a6Z-xT-rKj" firstAttribute="centerY" secondItem="qgH-TH-Bdj" secondAttribute="centerY" id="e0R-d9-0B9"/>
+                                    <constraint firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" constant="20" symbolic="YES" id="kYh-rd-R3o"/>
+                                    <constraint firstItem="j4W-N0-hHF" firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" id="nvR-fJ-TWx"/>
+                                    <constraint firstItem="j4W-N0-hHF" firstAttribute="leading" secondItem="z8e-qv-mlE" secondAttribute="leading" id="pb1-WE-1sQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="uYU-YW-y5a" secondAttribute="bottom" constant="4" id="pvk-nP-Zun"/>
+                                    <constraint firstItem="j4W-N0-hHF" firstAttribute="top" secondItem="z8e-qv-mlE" secondAttribute="bottom" constant="8" id="quj-gh-wHa"/>
+                                    <constraint firstItem="a6Z-xT-rKj" firstAttribute="centerX" secondItem="qgH-TH-Bdj" secondAttribute="centerX" id="r71-hL-Tt3"/>
+                                    <constraint firstItem="z8e-qv-mlE" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="top" constant="20" symbolic="YES" id="u2s-1u-vtg"/>
+                                    <constraint firstItem="a6Z-xT-rKj" firstAttribute="height" secondItem="qgH-TH-Bdj" secondAttribute="height" id="u6S-gK-VEf"/>
+                                    <constraint firstItem="iXu-2G-XaY" firstAttribute="top" secondItem="Lo2-T6-otx" secondAttribute="bottom" constant="4" id="uAh-6M-G7m"/>
+                                    <constraint firstItem="hBw-4p-Upo" firstAttribute="height" secondItem="qgH-TH-Bdj" secondAttribute="height" id="wnd-DT-7ic"/>
+                                    <constraint firstItem="hBw-4p-Upo" firstAttribute="centerX" secondItem="qgH-TH-Bdj" secondAttribute="centerX" id="yrR-8I-doi"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3B-Gj-w2p" userLabel="RadarBanner">
+                                <rect key="frame" x="0.0" y="302" width="600" height="35"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="雷達搜尋條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vex-Jt-wjS">
+                                        <rect key="frame" x="20" y="4" width="580" height="27"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="Vex-Jt-wjS" firstAttribute="top" secondItem="k3B-Gj-w2p" secondAttribute="top" constant="4" id="Iqg-aa-TsJ"/>
+                                    <constraint firstAttribute="height" secondItem="Vex-Jt-wjS" secondAttribute="height" multiplier="1.3:1" priority="800" id="WIg-VH-ESh"/>
+                                    <constraint firstAttribute="trailing" secondItem="Vex-Jt-wjS" secondAttribute="trailing" id="ZXg-c8-Vi3"/>
+                                    <constraint firstAttribute="bottom" secondItem="Vex-Jt-wjS" secondAttribute="bottom" constant="4" id="iQv-e4-bpJ"/>
+                                    <constraint firstItem="Vex-Jt-wjS" firstAttribute="leading" secondItem="k3B-Gj-w2p" secondAttribute="leading" constant="20" symbolic="YES" id="wUq-rH-YIt"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="k3B-Gj-w2p" firstAttribute="centerX" secondItem="o5Q-oC-r21" secondAttribute="centerX" id="1Bh-cf-qkL"/>
                             <constraint firstItem="qgH-TH-Bdj" firstAttribute="width" secondItem="o5Q-oC-r21" secondAttribute="width" id="1GY-EI-bbL"/>
-                            <constraint firstItem="HPa-0u-dhH" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="bottom" id="2yc-Sw-8Gj"/>
                             <constraint firstItem="HPa-0u-dhH" firstAttribute="centerX" secondItem="o5Q-oC-r21" secondAttribute="centerX" id="MwX-S2-TO2"/>
+                            <constraint firstItem="qgH-TH-Bdj" firstAttribute="top" secondItem="3MF-we-hIY" secondAttribute="bottom" id="R9e-1u-Rpd"/>
                             <constraint firstItem="HPa-0u-dhH" firstAttribute="width" secondItem="o5Q-oC-r21" secondAttribute="width" id="TVg-CP-DsJ"/>
-                            <constraint firstItem="qgH-TH-Bdj" firstAttribute="height" secondItem="o5Q-oC-r21" secondAttribute="height" multiplier="1:4" id="d3X-ak-Cke"/>
-                            <constraint firstItem="Wm7-aH-seM" firstAttribute="top" secondItem="HPa-0u-dhH" secondAttribute="bottom" id="hOC-32-hUf"/>
-                            <constraint firstItem="qgH-TH-Bdj" firstAttribute="top" secondItem="3MF-we-hIY" secondAttribute="bottom" id="skE-Xv-xvX"/>
+                            <constraint firstItem="k3B-Gj-w2p" firstAttribute="width" secondItem="o5Q-oC-r21" secondAttribute="width" id="X6o-x3-z8A"/>
+                            <constraint firstItem="HPa-0u-dhH" firstAttribute="top" secondItem="k3B-Gj-w2p" secondAttribute="bottom" id="XDg-Hj-5o4"/>
+                            <constraint firstItem="Wm7-aH-seM" firstAttribute="top" secondItem="HPa-0u-dhH" secondAttribute="bottom" priority="900" id="hOC-32-hUf"/>
                             <constraint firstItem="qgH-TH-Bdj" firstAttribute="centerX" secondItem="o5Q-oC-r21" secondAttribute="centerX" id="tKo-ah-MPJ"/>
+                            <constraint firstItem="k3B-Gj-w2p" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="bottom" id="vLO-8a-ndm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="通知條件設定" id="SR1-Hu-UOf" userLabel="設定"/>
                     <connections>
                         <outlet property="activateButton" destination="uYU-YW-y5a" id="j8t-ak-Ctq"/>
+                        <outlet property="currentConditionsLabel" destination="z8e-qv-mlE" id="Qe4-mR-A0J"/>
                         <outlet property="houseInfoLabel" destination="Lo2-T6-otx" id="kNm-Wy-TzV"/>
                         <outlet property="otherCriteriaLabel" destination="iXu-2G-XaY" id="Aeq-qZ-t7X"/>
                         <outlet property="regionLabel" destination="j4W-N0-hHF" id="3m1-yP-MNy"/>
@@ -1293,6 +1299,7 @@
     </scenes>
     <resources>
         <image name="arrow_down_n" width="15" height="15"/>
+        <image name="background_house" width="375" height="177"/>
         <image name="cancel" width="30" height="30"/>
         <image name="filter_p" width="30" height="30"/>
         <image name="main_radar_n" width="38" height="38"/>
