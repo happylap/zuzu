@@ -127,10 +127,6 @@ class RadarConfigureTableViewController: UITableViewController {
             if (populateCriteria == true){
                 if !(oldValue == currentCriteria) {
                     ///Save search criteria and enable reset button
-                    if(!currentCriteria.isEmpty()) {
-                        clearCriteriaButton.enabled = true
-                    }
-                    
                     ///Load the criteria to the Search Box UI
                     self.populateViewFromSearchCriteria(currentCriteria)
                     
@@ -155,17 +151,6 @@ class RadarConfigureTableViewController: UITableViewController {
         didSet {
             sizeArrow.image = downArrowImage
             sizeArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
-        }
-    }
-    
-    @IBOutlet weak var clearCriteriaButton: UIButton! {
-        didSet {
-            
-            clearCriteriaButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
-            clearCriteriaButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
-            clearCriteriaButton.enabled = false
-            clearCriteriaButton.addTarget(self, action: "onClearCriteriaButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-            
         }
     }
     
@@ -538,15 +523,6 @@ class RadarConfigureTableViewController: UITableViewController {
     }
     
     // MARK: - UI Control Actions
-    
-    func onClearCriteriaButtonTouched(sender: UIButton) {
-        Log.info("Sender: \(sender)", label: ActionLabel)
-        
-        self.currentCriteria = SearchCriteria()
-        
-        clearCriteriaButton.enabled = false
-    }
-    
     func onTypeButtonTouched(sender: UIButton) {
         Log.info("Sender: \(sender)", label: ActionLabel)
         
@@ -666,7 +642,6 @@ class RadarConfigureTableViewController: UITableViewController {
         populateCriteria = true
         ///Save search criteria and enable reset button
         if(!self.currentCriteria.isEmpty()) {
-            clearCriteriaButton.enabled = true
             ///Load the criteria to the Search Box UI
             self.populateViewFromSearchCriteria(currentCriteria)
         }
