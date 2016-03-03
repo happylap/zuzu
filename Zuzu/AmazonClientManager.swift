@@ -169,14 +169,16 @@ class AmazonClientManager : NSObject {
         
         self.completionHandler = completionHandler
         
-        if self.isLoggedInWithFacebook(){
-            self.reloadFBSession()
-            return
-        }
-        
-        if self.isLoggedInWithGoogle(){
-            self.reloadGSession()
-            return
+        if let provider = UserDefaultsUtils.getLoginProvider() {
+            
+            switch(provider) {
+            case Provider.FB.rawValue:
+                self.reloadFBSession()
+            case Provider.GOOGLE.rawValue:
+                self.reloadGSession()
+            default:
+                assert(false, "Invalid Provider")
+            }
         }
         
         Log.exit()
