@@ -41,6 +41,7 @@ class RadarViewController: UIViewController {
         self.houseInfoLabel.numberOfLines = 0
         self.updateCriteriaTextLabel()
         self.registerCriteriaObserver()
+        self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
     }
     
     private func updateCriteriaTextLabel(){
@@ -54,6 +55,7 @@ class RadarViewController: UIViewController {
         self.otherCriteriaLabel?.text = "其他\(filterNum)個過濾條件"
     }
     
+    @IBOutlet weak var currentConditionsLabel: UILabel!
     
     @IBOutlet weak var regionLabel: UILabel!
     @IBOutlet weak var houseInfoLabel: UILabel!
