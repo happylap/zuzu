@@ -20,8 +20,8 @@ class ZuzuWebService: NSObject
 {
     private static let instance = ZuzuWebService()
     
-    var host = "http://ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com:4567"
-    //var host = "http://127.0.0.1:4567"
+    //var host = "http://ec2-52-77-238-225.ap-southeast-1.compute.amazonaws.com:4567"
+    var host = "http://127.0.0.1:4567"
     
     var alamoFireManager = Alamofire.Manager.sharedInstance
     
@@ -90,7 +90,12 @@ class ZuzuWebService: NSObject
     func createDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
         
-        handler(result: true, error: nil)
+        let resource = "/device"
+        let payload = ["user_id": userId, "device_id": deviceId]
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
         
         Log.exit()
     }
@@ -98,7 +103,11 @@ class ZuzuWebService: NSObject
     func deleteDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
         
-        handler(result: true, error: nil)
+        let resource = "/device/\(userId)/\(deviceId)"
+
+        self.responseJSON(.DELETE, resource: resource) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
         
         Log.exit()
     }
@@ -106,7 +115,17 @@ class ZuzuWebService: NSObject
     func isExistDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
         
-        handler(result: false, error: nil)
+        let resource = "/device/\(userId)/\(deviceId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+            } else if let _ = result {
+                handler(result: true, error: nil)
+            } else {
+                handler(result: false, error: nil)
+            }
+        }
         
         Log.exit()
     }
