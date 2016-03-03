@@ -58,7 +58,7 @@ class RadarDisplayItem: NSObject, NSCoding {
     
     var detail:String {
         get{
-            var result = ""
+            var result = "不限用途，"
             var titleStr = [String]()
             var typeStr = [String]()
             
@@ -74,8 +74,15 @@ class RadarDisplayItem: NSObject, NSCoding {
                 result = typeStr.joinWithSeparator("/ ")
             }
             
-            result += "\n"
-            
+            if let count = criteria.types?.count{
+                if count <= 2{
+                    result += "，"
+                }else{
+                    result += "\n"
+                }
+            }
+
+        
             if let priceRange = criteria.price {
                 
                 assert(priceRange.0 != CriteriaConst.Bound.LOWER_ANY || priceRange.1 != CriteriaConst.Bound.UPPER_ANY

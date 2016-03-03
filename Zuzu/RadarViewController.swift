@@ -38,10 +38,20 @@ class RadarViewController: UIViewController {
             self.activateButton.hidden = true
             self.activateButton.enabled = false
         }
-        self.houseInfoLabel.numberOfLines = 0
+        //self.houseInfoLabel.numberOfLines = 0
         self.updateCriteriaTextLabel()
         self.registerCriteriaObserver()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
+        self.configureButton()
+    }
+    
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        super.willMoveToParentViewController(parent)
+        
+        if(parent == nil) {
+            /// Filter Setting Finished
+            self.delegate?.onCriteriaSettingDone(searchCriteria)
+        }
     }
     
     private func updateCriteriaTextLabel(){
@@ -52,7 +62,7 @@ class RadarViewController: UIViewController {
         if let filterGroups = searchCriteria.filterGroups{
             filterNum = filterGroups.count
         }
-        self.otherCriteriaLabel?.text = "其他\(filterNum)個過濾條件"
+        self.otherCriteriaLabel?.text = "其他 \(filterNum) 個過濾條件"
     }
     
     @IBOutlet weak var currentConditionsLabel: UILabel!
@@ -83,7 +93,6 @@ class RadarViewController: UIViewController {
         }
     }
     
-
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
@@ -102,14 +111,7 @@ class RadarViewController: UIViewController {
         }
     }
     
-    override func willMoveToParentViewController(parent: UIViewController?) {
-        super.willMoveToParentViewController(parent)
-        
-        if(parent == nil) {
-            /// Filter Setting Finished
-            self.delegate?.onCriteriaSettingDone(searchCriteria)
-        }
-    }
+    // MARK: - Criteria functions
     
     func createCriteriaAfterPurchase(isSuccess:Bool, product: SKProduct) -> Void{
         if isSuccess == true{
@@ -129,9 +131,7 @@ class RadarViewController: UIViewController {
     }
     
     private func alertServerError(subTitle: String) {
-        
         let alertView = SCLAlertView()
-        
         alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         
     }
@@ -161,6 +161,17 @@ class RadarViewController: UIViewController {
         }
     }
     
+    private func configureButton() {
+        activateButton.layer.borderWidth = 1
+        activateButton.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        activateButton.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        activateButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
+        activateButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
+    }
 }
 
 // MARK: - RadarConfigureTableViewControllerDelegate
