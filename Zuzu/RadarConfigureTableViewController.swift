@@ -663,14 +663,6 @@ class RadarConfigureTableViewController: UITableViewController {
         self.configurePricePicker()
         
         /// Init SearchCriteriaObservers
-        let fastCountCriteriaObserver = FastCountCriteriaObserver()
-
-        stateObservers.append(fastCountCriteriaObserver)
-        
-        let regionItemCountCriteriaObserver = RegionItemCountCriteriaObserver()
-        regionItemCountCriteriaObserver.delegate = self
-        stateObservers.append(regionItemCountCriteriaObserver)
-
         populateCriteria = true
         ///Save search criteria and enable reset button
         if(!self.currentCriteria.isEmpty()) {
@@ -1080,29 +1072,5 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
         }
         
         return filterGroupResult
-    }
-}
-
-// MARK: - SearchCriteriaObserverDelegate
-extension RadarConfigureTableViewController : RegionItemCountCriteriaObserverDelegate {
-    
-    func onBeforeQueryRegionItemCount() {
-        
-    }
-    
-    func onAfterQueryRegionItemCount(facetResult: [String: Int]?) {
-        
-        //Update the result to cache
-        if let facetResult = facetResult {
-            do {
-                let cache = try Cache<NSData>(name: self.cacheName)
-                let cachedData = NSKeyedArchiver.archivedDataWithRootObject(facetResult)
-                cache.setObject(cachedData, forKey: self.cacheKey, expires: CacheExpiry.Seconds(self.cacheTime))
-                
-            } catch _ {
-                Log.debug("Something went wrong with the cache")
-            }
-        }
-        
     }
 }

@@ -28,9 +28,7 @@ class RadarViewController: UIViewController {
     }
     var isUpdateMode = false
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-    }
+    // MARK: - View Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +53,8 @@ class RadarViewController: UIViewController {
             self.delegate?.onCriteriaSettingDone(searchCriteria)
         }
     }
+    
+    // MARK: - UI Label
     
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
@@ -85,6 +85,8 @@ class RadarViewController: UIViewController {
     
     @IBOutlet weak var activateButton: UIButton!
     
+    
+    // MARK: - activate button
     @IBAction func activateButtonClick(sender: UIButton) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
