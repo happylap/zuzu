@@ -38,13 +38,13 @@
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8e-qv-mlE">
-                                        <rect key="frame" x="20" y="20" width="560" height="16"/>
+                                        <rect key="frame" x="20" y="6" width="560" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4W-N0-hHF" userLabel="regionLabel">
-                                        <rect key="frame" x="20" y="44" width="560" height="20.5"/>
+                                        <rect key="frame" x="20" y="30" width="560" height="20.5"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -53,7 +53,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="其他6個過濾條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXu-2G-XaY" userLabel="otherCriteriaLabel">
-                                        <rect key="frame" x="20" y="88" width="560" height="16"/>
+                                        <rect key="frame" x="20" y="74" width="560" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -62,7 +62,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="整層住家, 20000 - 25000元, 20 - 30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lo2-T6-otx" userLabel="houseInfoLabel">
-                                        <rect key="frame" x="20" y="68" width="560" height="16"/>
+                                        <rect key="frame" x="20" y="54" width="560" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -90,6 +90,8 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="height" multiplier="1500:705" id="0f4-2m-vSl"/>
+                                    <constraint firstItem="uYU-YW-y5a" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iXu-2G-XaY" secondAttribute="bottom" priority="900" constant="2" id="33h-jZ-399"/>
+                                    <constraint firstItem="z8e-qv-mlE" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="top" priority="850" constant="6" id="9Bv-mA-knf"/>
                                     <constraint firstItem="iXu-2G-XaY" firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" id="FLR-ZW-c5f"/>
                                     <constraint firstItem="Lo2-T6-otx" firstAttribute="top" secondItem="j4W-N0-hHF" secondAttribute="bottom" constant="4" id="GVT-FR-87C"/>
                                     <constraint firstItem="z8e-qv-mlE" firstAttribute="leading" secondItem="qgH-TH-Bdj" secondAttribute="leading" constant="20" symbolic="YES" id="HCc-97-rf8"/>
@@ -108,7 +110,6 @@
                                     <constraint firstItem="j4W-N0-hHF" firstAttribute="top" secondItem="z8e-qv-mlE" secondAttribute="bottom" constant="8" id="quj-gh-wHa"/>
                                     <constraint firstItem="a6Z-xT-rKj" firstAttribute="centerX" secondItem="qgH-TH-Bdj" secondAttribute="centerX" id="r71-hL-Tt3"/>
                                     <constraint firstItem="uYU-YW-y5a" firstAttribute="width" secondItem="qgH-TH-Bdj" secondAttribute="width" multiplier="930:1500" id="rpU-dG-VCv"/>
-                                    <constraint firstItem="z8e-qv-mlE" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="top" constant="20" symbolic="YES" id="u2s-1u-vtg"/>
                                     <constraint firstItem="a6Z-xT-rKj" firstAttribute="height" secondItem="qgH-TH-Bdj" secondAttribute="height" id="u6S-gK-VEf"/>
                                     <constraint firstItem="iXu-2G-XaY" firstAttribute="top" secondItem="Lo2-T6-otx" secondAttribute="bottom" constant="4" id="uAh-6M-G7m"/>
                                     <constraint firstItem="hBw-4p-Upo" firstAttribute="height" secondItem="qgH-TH-Bdj" secondAttribute="height" id="wnd-DT-7ic"/>
