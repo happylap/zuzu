@@ -110,6 +110,8 @@ class HouseDetailViewController: UIViewController {
     
     var tableRows:[Int: CellInfo]!
     
+    // MARK: - Private Utils
+    
     private func handleHouseDetailResponse(result: AnyObject) {
         
         self.houseItemDetail = result
@@ -792,7 +794,7 @@ class HouseDetailViewController: UIViewController {
         }
     }
     
-    ///Action Handlers
+    // MARK: - Action Handlers
     
     func contactByMailButtonTouched(sender: UIButton) {
         
@@ -1076,6 +1078,13 @@ class HouseDetailViewController: UIViewController {
         
     }
     
+    func onClosePhotoBrowser(sender: UIBarButtonItem) {
+        
+        self.navigationController?.popViewControllerAnimated(true)
+        
+    }
+    
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -1145,7 +1154,7 @@ class HouseDetailViewController: UIViewController {
     }
     
     
-    // MARK: - Navigation
+    // MARK: - Controller Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -1212,6 +1221,8 @@ class HouseDetailViewController: UIViewController {
     
 }
 
+// MARK: - MFMailComposeViewControllerDelegate
+// Handle Mail Sending Results
 extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
     
     func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError?) {
@@ -1246,9 +1257,8 @@ extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
     }
 }
 
+// MARK: - Table View Data Source
 extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    // MARK: - Table View Data Source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return TableConst.sectionNum
@@ -1327,6 +1337,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         }
         
     }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if let cellInfo = tableRows[indexPath.row] {
@@ -1345,7 +1356,11 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 
                 let browser = MWPhotoBrowser(delegate: self)
                 
-                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+                
+                self.navigationItem.backBarButtonItem = nil
+                
+                // Config navigation left bar
+                browser.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: "onClosePhotoBrowser:")
                 
                 // Action button to allow sharing, copying, etc (default: true)
                 browser.displayActionButton = true
@@ -1411,7 +1426,8 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     
 }
 
-
+// MARK: - MWPhotoBrowserDelegate
+// Provide photos for photo browser
 extension HouseDetailViewController: MWPhotoBrowserDelegate {
     func numberOfPhotosInPhotoBrowser(photoBrowser: MWPhotoBrowser!) -> UInt {
         
