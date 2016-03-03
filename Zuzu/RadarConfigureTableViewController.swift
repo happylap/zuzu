@@ -225,21 +225,7 @@ class RadarConfigureTableViewController: UITableViewController {
         //Configure cell height
         tableView.delegate = self
     }
-    
-    private func setRowVisible(row: Int, visible: Bool) {
-        if(visible) {
-            hiddenCells.remove(row)
-        } else {
-            if(!hiddenCells.contains(row)) {
-                hiddenCells.insert(row)
-            }
-        }
         
-        tableView.deselectRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0), animated: false)
-        tableView.beginUpdates()
-        tableView.endUpdates()
-    }
-    
     private func handlePicker(indexPath:NSIndexPath) {
         var picker:UIPickerView?
         
@@ -282,37 +268,6 @@ class RadarConfigureTableViewController: UITableViewController {
             tableView.beginUpdates()
             tableView.endUpdates()
         }
-    }
-    
-    private func resetSearchBox() {
-        ///Region
-        regionSelectionState = nil
-        
-        ///Price Range
-        
-        let pickerPriceFrom:(component:Int, row:Int) = (0,0)
-        let pickerPriceTo:(component:Int, row:Int) = (1,0)
-        pricePicker.selectRow(pickerPriceFrom.row, inComponent: pickerPriceFrom.component, animated: true)
-        pricePicker.selectRow(pickerPriceTo.row, inComponent: pickerPriceTo.component, animated: true)
-        
-        priceLabel.text = PickerConst.anyUpper.label
-        
-        ///Size Range
-        let pickerSizeFrom:(component:Int, row:Int) = (0,0)
-        let pickerSizeTo:(component:Int, row:Int) = (1,0)
-        sizePicker.selectRow(pickerSizeFrom.row, inComponent: pickerSizeFrom.component, animated: true)
-        sizePicker.selectRow(pickerSizeTo.row, inComponent: pickerSizeTo.component, animated: true)
-        sizeLabel.text =  PickerConst.anyUpper.label
-        
-        //Check each type button (each with a different tag as set in the Story Board)
-        for tag in (1...5) {
-            
-            if let typeButton = typeButtonContainer.viewWithTag(tag) as? ToggleButton {
-                typeButton.setToggleState(false)
-            }
-        }
-        //At lease one type is selected, so "Select All" button can be set to false
-        selectAllButton.setToggleState(true)
     }
     
     private func populateViewFromSearchCriteria(criteria: SearchCriteria) {
