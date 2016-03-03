@@ -47,6 +47,41 @@ public class ZuzuStore: NSObject  {
     
     /// MARK: - Private API
     
+    /// Validate the receipt with remote Apple server
+    private func validateReceipt(appStoreReceiptURL : NSURL?, onCompletion: (Bool) -> Void) {
+        
+        validateReceiptInternal(appStoreReceiptURL, isProd: true) { (statusCode: Int?) -> Void in
+            guard let status = statusCode else {
+                onCompletion(false)
+                return
+            }
+            
+            // This receipt is from the test environment, but it was sent to the production environment for verification.
+            if status == 21007 {
+                self.validateReceiptInternal(appStoreReceiptURL, isProd: false) { (statusCode: Int?) -> Void in
+                    guard let statusValue = statusCode else {
+                        onCompletion(false)
+                        return
+                    }
+                    
+                    // 0 if the receipt is valid
+                    if statusValue == 0 {
+                        onCompletion(true)
+                    } else {
+                        onCompletion(false)
+                    }
+                    
+                }
+                
+                // 0 if the receipt is valid
+            } else if status == 0 {
+                onCompletion(true)
+            } else {
+                onCompletion(false)
+            }
+        }
+    }
+    
     private func receiptData(appStoreReceiptURL : NSURL?) -> NSData? {
         
         guard let receiptURL = appStoreReceiptURL,
@@ -107,29 +142,30 @@ public class ZuzuStore: NSObject  {
     
     /// MARK: - Public API
     
-    /// Initialize the helper.  Pass in the set of ProductIdentifiers supported by the app.
-    public init(productIdentifiers: Set<ProductIdentifier>) {
+    /// Initializer.  Pass in the set of ProductIdentifiers supported by the app.
+    internal init(productIdentifiers: Set<ProductIdentifier>) {
         
         self.productIdentifiers = productIdentifiers
         
         super.init()
     }
     
-    ///Start
-    public func start() {
+    ///Start ZuzuStore. The transaction observer will be registered
+    internal func start() {
         
         /// Observe the transaction
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
     
-    public func stop() {
+    ///Stop ZuzuStore. The transaction observer will be deregistered
+    internal func stop() {
         
-        /// Observe the transaction
+        /// Stop observing the transaction
         SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
     }
     
-    /// Gets the list of SKProducts from the Apple server calls the handler with the list of products.
-    public func requestProducts(handler: RequestProductsCompletionHandler) {
+    /// Request the list of SKProducts from the AppStore. The handler will get called with the list of products.
+    internal func requestProducts(handler: RequestProductsCompletionHandler) {
         
         completionHandler = handler
         
@@ -153,21 +189,22 @@ public class ZuzuStore: NSObject  {
         productsRequest?.start()
     }
     
-    public func readReceipt() -> NSData? {
+    /// Read local In-App Purchase receipt
+    internal func readReceipt() -> NSData? {
         
         return StoreReceiptObtainer.sharedInstance.readReceipt()
         
     }
     
-    /// Obtain the app store receipt
-    public func fetchReceipt(handler: RequestReceiptCompletionHandler) {
+    /// Refresh the app store receipt and pass the binary result to the handler
+    internal func fetchReceipt(handler: RequestReceiptCompletionHandler) {
         
         StoreReceiptObtainer.sharedInstance.fetchReceipt(handler)
         
     }
     
     /// Make purchase of a product.
-    public func makePurchase(product: SKProduct) {
+    internal func makePurchase(product: SKProduct) {
         Log.debug("Buying \(product.productIdentifier)...")
         
         
@@ -186,9 +223,20 @@ public class ZuzuStore: NSObject  {
         }
     }
     
+    /// Finish the transaction so that Apple server would know the transaction is complete
+    internal func finishTransaction(transaction: SKPaymentTransaction) {
+        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+    }
     
-    /// Get list of unfinished transactions so that we can try to deliver/persist the service before we actually finish the transactions
-    public func getUnfinishedTransactionsForState(state: SKPaymentTransactionState) -> [SKPaymentTransaction] {
+    /// If the state of whether purchases have been made is lost
+    /// (e.g. the user deletes and reinstalls the app) this will recover the purchases.
+    /// * Only non-consumable products/ renewable subscription/ free subscription can be restored by AppStore
+    internal func restorePreviousPurchase() {
+        SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
+    }
+    
+    /// Get list of unfinished transactions. We should deliver the service for these transactions before we actually finish them
+    internal func getUnfinishedTransactionsForState(state: SKPaymentTransactionState) -> [SKPaymentTransaction] {
         
         return SKPaymentQueue.defaultQueue().transactions.filter({ (trans) -> Bool in
             return trans.transactionState == .Purchased
@@ -196,64 +244,17 @@ public class ZuzuStore: NSObject  {
         
     }
     
-    public func finishTransaction(transaction: SKPaymentTransaction) {
-        
-        
-        /// Finish the transaction
-        SKPaymentQueue.defaultQueue().finishTransaction(transaction)
-    }
-    
-    /// If the state of whether purchases have been made is lost  (e.g. the
-    /// user deletes and reinstalls the app) this will recover the purchases.
-    /// Only non-consumable products/ renewable subscription/ free subscription can be restored by AppStore
-    public func restorePreviousPurchase() {
-        SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
-    }
-    
     /// Check if the current device is allowed to make the payment
-    public class func canMakePayments() -> Bool {
+    internal class func canMakePayments() -> Bool {
         return SKPaymentQueue.canMakePayments()
     }
     
     /// Given the product identifier, returns true if that product has been purchased.
     /// Check against the locally cached data
-    public func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
+    internal func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
         return purchasedProductIdentifiers.contains(productIdentifier)
     }
     
-    public func validateReceipt(appStoreReceiptURL : NSURL?, onCompletion: (Bool) -> Void) {
-        
-        validateReceiptInternal(appStoreReceiptURL, isProd: true) { (statusCode: Int?) -> Void in
-            guard let status = statusCode else {
-                onCompletion(false)
-                return
-            }
-            
-            // This receipt is from the test environment, but it was sent to the production environment for verification.
-            if status == 21007 {
-                self.validateReceiptInternal(appStoreReceiptURL, isProd: false) { (statusCode: Int?) -> Void in
-                    guard let statusValue = statusCode else {
-                        onCompletion(false)
-                        return
-                    }
-                    
-                    // 0 if the receipt is valid
-                    if statusValue == 0 {
-                        onCompletion(true)
-                    } else {
-                        onCompletion(false)
-                    }
-                    
-                }
-                
-                // 0 if the receipt is valid
-            } else if status == 0 {
-                onCompletion(true)
-            } else {
-                onCompletion(false)
-            }
-        }
-    }
 }
 
 

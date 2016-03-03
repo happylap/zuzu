@@ -84,6 +84,7 @@ class StoreReceiptObtainer: NSObject {
 }
 
 /// MARK: SKRequestDelegate methods
+// SKRequestDelegate: to fetch the receipt data from the Apple server
 extension StoreReceiptObtainer: SKRequestDelegate {
     
     func requestDidFinish(request: SKRequest) {
@@ -99,18 +100,25 @@ extension StoreReceiptObtainer: SKRequestDelegate {
                 completionHandler?(success: true, receiptData: nil)
             }
             
-            return
+        } else {
+            
+            Log.debug("something went wrong while obtaining the receipt, maybe the user did not successfully enter it's credentials")
+            
+            completionHandler?(success: false, receiptData: nil)
+            
         }
-        
-        Log.debug("something went wrong while obtaining the receipt, maybe the user did not successfully enter it's credentials")
-        
-        completionHandler?(success: false, receiptData: nil)
+        clearRequest()
     }
     
     func request(request: SKRequest, didFailWithError error: NSError) {
         Log.debug("request did fail with error: \(error.domain)")
         
         completionHandler?(success: false, receiptData: nil)
+        clearRequest()
+    }
+    
+    private func clearRequest() {
+        completionHandler = nil
     }
     
 }
