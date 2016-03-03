@@ -42,6 +42,8 @@ class RadarViewController: UIViewController {
         self.updateCriteriaTextLabel()
         self.registerCriteriaObserver()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
+        self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
+        
         self.configureButton()
     }
     
@@ -73,6 +75,7 @@ class RadarViewController: UIViewController {
         self.otherCriteriaLabel?.text = "其他 \(filterNum) 個過濾條件"
     }
     
+    @IBOutlet weak var radarBannerLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
     
     @IBOutlet weak var regionLabel: UILabel!

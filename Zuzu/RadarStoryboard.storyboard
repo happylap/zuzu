@@ -163,6 +163,7 @@
                         <outlet property="currentConditionsLabel" destination="z8e-qv-mlE" id="Qe4-mR-A0J"/>
                         <outlet property="houseInfoLabel" destination="Lo2-T6-otx" id="kNm-Wy-TzV"/>
                         <outlet property="otherCriteriaLabel" destination="iXu-2G-XaY" id="Aeq-qZ-t7X"/>
+                        <outlet property="radarBannerLabel" destination="Vex-Jt-wjS" id="VKb-a0-SeL"/>
                         <outlet property="regionLabel" destination="j4W-N0-hHF" id="3m1-yP-MNy"/>
                     </connections>
                 </viewController>
