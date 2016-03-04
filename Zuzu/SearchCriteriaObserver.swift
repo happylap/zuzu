@@ -108,7 +108,7 @@ class FastCountCriteriaObserver: NSObject, SearchCriteriaObserver {
 
 class RegionItemCountCriteriaObserver: NSObject, SearchCriteriaObserver {
     
-    private let allowedIdleTime = 2.0
+    private let allowedIdleTime = 1.5
     
     private var currentCriteria: SearchCriteria = SearchCriteria()
     

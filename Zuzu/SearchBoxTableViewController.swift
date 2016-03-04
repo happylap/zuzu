@@ -177,6 +177,9 @@ class SearchBoxTableViewController: UITableViewController {
             if !(oldValue == currentCriteria) {
                 filterDataStore.clearFilterSetting()
                 
+                ///Clear ItemCountByRegion Cache to avoid the case when the user would see the  ItemCountByRegion for previous criteria
+                clearItemCountByRegion()
+                
                 ///Send criteria change notification
                 for observer in stateObservers {
                     observer.notifyCriteriaChange(currentCriteria)
@@ -1223,6 +1226,18 @@ extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSo
         }
         
         return nil
+    }
+    
+    private func clearItemCountByRegion() {
+        
+        do {
+            let cache = try Cache<NSData>(name: cacheName)
+            
+            cache.removeAllObjects()
+            
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
+        }
     }
     
     private static func loadPickerData(resourceName: String, criteriaLabel: String) ->  [[(label:String, value:Int)]]{
