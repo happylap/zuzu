@@ -97,8 +97,9 @@ class AmazonSNSService : NSObject {
                         }
                     }
                     
-                    if let enabled = getEndpointResponse.attributes?["Enabled"] as? Bool{
-                        if enabled == false{
+                    if let enabled = getEndpointResponse.attributes?["Enabled"]{
+                        Log.debug("enabled:\(enabled)")
+                        if enabled == "false"{
                             isUpdate = true
                         }
                     }
