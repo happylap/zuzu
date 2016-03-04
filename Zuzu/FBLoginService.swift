@@ -20,7 +20,7 @@ class FBLoginService: NSObject
         return Singleton.instance
     }
     
-    typealias ServiceResponse = (UserData?, NSError?) -> Void
+    typealias ServiceResponse = (UserProfile?, NSError?) -> Void
     
     
     func getFBUserData(sender: UIViewController, onCompletion: ServiceResponse) -> Void {
@@ -32,7 +32,7 @@ class FBLoginService: NSObject
                     let strName: String = (result.objectForKey("name") as? String)!
                     let strPictureURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String)!
                     
-                    let fbUserData = UserData(provider: Provider.FB)
+                    let fbUserData = UserProfile(provider: Provider.FB)
                     fbUserData.id = strId
                     fbUserData.email = strEmail
                     fbUserData.name = strName

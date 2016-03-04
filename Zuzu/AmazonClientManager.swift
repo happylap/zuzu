@@ -58,15 +58,43 @@ class AmazonClientManager : NSObject {
     //S3
     private var transferManager: AWSS3TransferManager?
     
-    // MARK: Public Members
     //CognitoCredentialsProvider
-    var credentialsProvider: AWSCognitoCredentialsProvider?
+    private var credentialsProvider: AWSCognitoCredentialsProvider?
     
+    // MARK: Public Members
     //User Login Data
-    var userLoginData: UserData?{
-        didSet{
-            if let userId = userLoginData?.id{
-                UserDefaultsUtils.setUserLoginId(userId)
+    var currentUserProfile: UserProfile? {
+        get {
+            return UserDefaultsUtils.getUserProfile()
+        }
+    }
+    
+    var currentUserToken: String? {
+        get {
+            
+            if(!self.isLoggedIn()) {
+                return nil
+            }
+            
+            if let provider = self.currentUserProfile?.provider {
+                
+                switch(provider) {
+                case Provider.FB:
+                    
+                    return FBSDKAccessToken.currentAccessToken().tokenString
+                    
+                case Provider.GOOGLE:
+                    
+                    return self.googleSignIn.currentUser?.authentication?.idToken
+                    
+                default:
+                    assert(false, "Invalid Provider")
+                    return nil
+                }
+            } else {
+                
+                assert(false, "No previous login provider, but the user is logged in")
+                return nil
             }
         }
     }
@@ -149,7 +177,7 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    private func uploadUserDataToS3(userData: UserData) {
+    private func uploadUserDataToS3(userData: UserProfile) {
         Log.enter()
         
         Log.debug(userData.description)
@@ -296,8 +324,8 @@ class AmazonClientManager : NSObject {
     
     // MARK: Public General Login
     
-    func isConfigured() -> Bool {
-        return !(AWSConstants.COGNITO_IDENTITY_POOL_ID == "YourCognitoIdentityPoolId" || AWSConstants.COGNITO_REGIONTYPE == AWSRegionType.Unknown)
+    func isCredentailsProviderExist() -> Bool {
+        return self.credentialsProvider != nil
     }
     
     func resumeSession(completionHandler: AWSContinuationBlock) {
@@ -305,12 +333,14 @@ class AmazonClientManager : NSObject {
         
         self.completionHandler = completionHandler
         
-        if let provider = UserDefaultsUtils.getLoginProvider() {
+        if let provider = self.currentUserProfile?.provider {
+            
+            Log.warning("\(self.currentUserProfile?.id), \(provider)")
             
             switch(provider) {
-            case Provider.FB.rawValue:
+            case Provider.FB:
                 self.reloadFBSession()
-            case Provider.GOOGLE.rawValue:
+            case Provider.GOOGLE:
                 self.reloadGSession()
             default:
                 assert(false, "Invalid Provider")
@@ -347,7 +377,7 @@ class AmazonClientManager : NSObject {
             }
             else{
                 //Upload User Data to S3
-                if let userData = self.userLoginData {
+                if let userData = self.currentUserProfile {
                     
                     Log.debug("postNotificationName: \(UserLoginNotification)")
                     NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self, userInfo: ["userData": userData])
@@ -411,9 +441,8 @@ class AmazonClientManager : NSObject {
             self.googleLogout()
         }
         
-        self.userLoginData = nil
-        UserDefaultsUtils.clearUserLoginId()
-        UserDefaultsUtils.clearLoginProvider()
+        // Clear current user profile
+        UserDefaultsUtils.clearUserProfile()
         
         // Wipe credentials
         self.credentialsProvider?.logins = nil
@@ -445,7 +474,7 @@ class AmazonClientManager : NSObject {
     
     func reloadFBSession() {
         
-        Log.error("Reloading Facebook Session: \(FBSDKAccessToken.currentAccessToken().expirationDate)")
+        Log.error("Reloading Facebook Session: \(FBSDKAccessToken.currentAccessToken()?.expirationDate)")
         self.completeFBLoginWithUserData()
     }
     
@@ -497,58 +526,69 @@ class AmazonClientManager : NSObject {
     func completeFBLoginWithUserData(){
         //Query Facebook User Data
         FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields":"id, email, birthday, gender, name, picture.type(large)"]).startWithCompletionHandler { (connection, result, error) -> Void in
-            if error == nil {
+            
+            if(error != nil) {
                 
-                let loginData = UserData(provider: Provider.FB)
-                if let strId: String = result.objectForKey("id") as? String {
-                    loginData.id = strId
-                }
-                if let strEmail: String = result.objectForKey("email") as? String {
-                    loginData.email = strEmail
-                }
-                if let strName: String = result.objectForKey("name") as? String {
-                    loginData.name = strName
-                }
-                if let strGender: String = result.objectForKey("gender") as? String {
-                    loginData.gender = strGender
-                }
-                if let strBirthday: String = result.objectForKey("birthday") as? String {
-                    loginData.birthday = strBirthday
-                }
-                if let strPictureURL: String = result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String {
-                    loginData.pictureUrl = strPictureURL
-                }
-                
-                self.userLoginData = loginData
-                self.completeFBLogin()
-            } else {
-                if UserDefaultsUtils.getUserLoginId() == nil{
+                if UserDefaultsUtils.getUserProfile() == nil{
                     //not resume
                     dispatch_async(dispatch_get_main_queue()) {
                         self.errorAlert("Facebook 登入發生錯誤: " + error.localizedDescription)
                     }
                     self.fbLogout()
+                    
+                    ///GA Tracker: Fetch user data failed
+                    self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), \(error.localizedDescription)")
+                    
+                    Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
                 }
-                Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
+                
+            } else {
+                
+                let userProfile = UserProfile(provider: Provider.FB)
+                if let strId: String = result.objectForKey("id") as? String {
+                    userProfile.id = strId
+                }
+                if let strEmail: String = result.objectForKey("email") as? String {
+                    userProfile.email = strEmail
+                }
+                if let strName: String = result.objectForKey("name") as? String {
+                    userProfile.name = strName
+                }
+                if let strGender: String = result.objectForKey("gender") as? String {
+                    userProfile.gender = strGender
+                }
+                if let strBirthday: String = result.objectForKey("birthday") as? String {
+                    userProfile.birthday = strBirthday
+                }
+                if let strPictureURL: String = result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String {
+                    userProfile.pictureUrl = strPictureURL
+                }
+                
+                Log.warning("Persist UserProfile for Facebook")
+                UserDefaultsUtils.setUserProfile(userProfile)
+                self.completeFBLogin()
+                
             }
         }
     }
     
     func fbLogout() {
         Log.enter()
-        
         self.fbLoginManager.logOut()
         Log.exit()
     }
     
     private func completeFBLogin() {
         
-        UserDefaultsUtils.setLoginProvider(Provider.FB.rawValue)
-        
         Log.error("FB token: \(FBSDKAccessToken.currentAccessToken()?.tokenString)")
         Log.error("FB token: \(FBSDKAccessToken.currentAccessToken()?.expirationDate)")
         
-        self.completeLogin(["graph.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
+        if let accessToken = FBSDKAccessToken.currentAccessToken() {
+            self.completeLogin(["graph.facebook.com" : accessToken.tokenString])
+        } else {
+            assert(false, "AccessToken should not be nil")
+        }
     }
     
     
@@ -556,9 +596,17 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithGoogle() -> Bool {
         
+        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
+            Log.error("has AuthInKeychain")
+        } else {
+            Log.error("no AuthInKeychain")
+        }
+        
         if let _ = self.googleSignIn.currentUser?.authentication {
+            Log.error("has currentUser")
             return true
         } else {
+            Log.error("no currentUser")
             return false
         }
     }
@@ -593,10 +641,10 @@ class AmazonClientManager : NSObject {
     func googleLogout() {
         Log.enter()
         self.googleSignIn.signOut()
+        Log.exit()
     }
     
     private func completeGoogleLogin() {
-        UserDefaultsUtils.setLoginProvider(Provider.GOOGLE.rawValue)
         
         Log.error("Google token: \(self.googleSignIn.currentUser?.authentication?.idToken)")
         Log.error("Google token: \(self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate)")
@@ -606,6 +654,8 @@ class AmazonClientManager : NSObject {
         
         if let idToken = self.googleSignIn.currentUser.authentication.idToken {
             self.completeLogin(["accounts.google.com": idToken])
+        } else {
+            assert(false, "IdToken should not be nil")
         }
         
     }
@@ -653,18 +703,19 @@ extension AmazonClientManager: GIDSignInDelegate {
                 if let idToken = user.authentication.idToken { // Safe to send to the server
                     
                     //Save Google User Data
-                    let loginData = UserData(provider: Provider.GOOGLE)
-                    loginData.id = user.userID // For client-side use only!
+                    let userProfile = UserProfile(provider: Provider.GOOGLE)
+                    userProfile.id = user.userID // For client-side use only!
                     
-                    loginData.name = user.profile.name
+                    userProfile.name = user.profile.name
                     
-                    loginData.email = user.profile.email
+                    userProfile.email = user.profile.email
                     
                     if let pictureUrl = user.profile.imageURLWithDimension(200) {
-                        loginData.pictureUrl = pictureUrl.URLString
+                        userProfile.pictureUrl = pictureUrl.URLString
                     }
                     
-                    self.userLoginData = loginData
+                    Log.warning("Persist UserProfile for Google")
+                    UserDefaultsUtils.setUserProfile(userProfile)
                     
                     self.completeGoogleLogin()
                     

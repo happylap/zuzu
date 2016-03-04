@@ -139,7 +139,7 @@
 		817DBA901C7219DE00795941 /* RadarPurchaseLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */; };
 		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
 		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
-		81924E341C33AB4C00976EC7 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserData.swift */; };
+		81924E341C33AB4C00976EC7 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserProfile.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81B467941C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */; };
 		81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */; };
@@ -320,7 +320,7 @@
 		817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarPurchaseLoginViewController.swift; sourceTree = "<group>"; };
 		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginViewController.swift; sourceTree = "<group>"; };
 		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginService.swift; sourceTree = "<group>"; };
-		81924E331C33AB4C00976EC7 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		81924E331C33AB4C00976EC7 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchaseMapper.swift; sourceTree = "<group>"; };
 		81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchase.swift; sourceTree = "<group>"; };
@@ -617,7 +617,7 @@
 				81FA28071BDA397B0038DD19 /* House.swift */,
 				81FA28111BDA39B10038DD19 /* Note.swift */,
 				81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */,
-				81924E331C33AB4C00976EC7 /* UserData.swift */,
+				81924E331C33AB4C00976EC7 /* UserProfile.swift */,
 				816635971C5F2CDA008C0AA3 /* NotifyItem.swift */,
 				816635991C608838008C0AA3 /* ZuzuUser.swift */,
 				8166359B1C60B67D008C0AA3 /* ZuzuCriteria.swift */,
@@ -1075,7 +1075,7 @@
 				2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */,
 				14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */,
 				2FCD15FF1C54906F00A9C1E2 /* LoggerExtensions.swift in Sources */,
-				81924E341C33AB4C00976EC7 /* UserData.swift in Sources */,
+				81924E341C33AB4C00976EC7 /* UserProfile.swift in Sources */,
 				8130344C1C52367E00EF7FAB /* RadarPurchaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
