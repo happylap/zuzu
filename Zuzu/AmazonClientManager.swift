@@ -409,7 +409,7 @@ class AmazonClientManager : NSObject {
                 self.userLoginData = loginData
                 self.completeFBLogin()
             } else {
-                if !self.isLoggedInWithFacebook(){
+                if UserDefaultsUtils.getUserLoginId() == nil{
                     //not resume
                     dispatch_async(dispatch_get_main_queue()) {
                         self.errorAlert("Facebook 登入發生錯誤: " + error.localizedDescription)
