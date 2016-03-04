@@ -207,8 +207,11 @@ class HouseDetailViewController: UIViewController {
                         }
                     }
                     
-                    cell.houseTitleLabel.text = self.houseItem?.title
-                    
+                    if let houseDetail = self.houseItemDetail {
+                        cell.houseTitleLabel.text = houseDetail.valueForKey("title") as? String
+                    } else {
+                        cell.houseTitleLabel.text = ""
+                    }
                 }
             }),
             1:CellInfo(cellIdentifier: .PriceSizeCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
@@ -216,10 +219,7 @@ class HouseDetailViewController: UIViewController {
                     
                     var priceDetail:String?
                     if let houseItemDetail = self.houseItemDetail {
-                        
-                        
-                        
-                        
+
                         let attributes = [
                             NSBackgroundColorAttributeName: UIColor.colorWithRGB(0xFFFFFF),
                             NSForegroundColorAttributeName: UIColor.colorWithRGB(0xFF6666),
@@ -354,9 +354,13 @@ class HouseDetailViewController: UIViewController {
             }),
             5:CellInfo(cellIdentifier: .AddressCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailAddressCell {
-                    if let houseItem = self.houseItem {
-                        cell.addressLabel.text = houseItem.addr
+                    
+                    if let houseDetail = self.houseItemDetail {
+                        cell.addressLabel.text = houseDetail.valueForKey("addr") as? String
+                    } else {
+                        cell.addressLabel.text = ""
                     }
+                    
                 }
             }),
             6:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
@@ -805,11 +809,13 @@ class HouseDetailViewController: UIViewController {
         }
         */
         
-        let emailTitle = "租屋物件詢問: " + (self.houseItem?.title ?? self.houseItem?.addr ?? "")
-        
-        
         
         if let houseDetail = self.houseItemDetail {
+            
+            let title = houseDetail.valueForKey("title") as? String
+            let addr = houseDetail.valueForKey("addr") as? String
+            
+            let emailTitle = "租屋物件詢問: " + (title ?? addr ?? "")
             
             if let email = houseDetail.valueForKey("email") as? String {
                 
@@ -957,8 +963,9 @@ class HouseDetailViewController: UIViewController {
                     var objectsToShare = [AnyObject]()
                     
                     let appSlogan = "想租屋就找豬豬! 本資訊透過[豬豬快租App]與您分享"
-                    let titleToShare = self.houseItem?.title ?? ""
-                    let addressToShare = self.houseItem?.addr ?? ""
+                    
+                    let titleToShare = houseItemDetail.valueForKey("title") as? String ?? ""
+                    let addressToShare = houseItemDetail.valueForKey("addr") as? String ?? ""
                     
                     let text = ("\n\(titleToShare)\n\(addressToShare)\n\(houseLink)\n\n\(appSlogan)\n")
                     
@@ -1084,6 +1091,12 @@ class HouseDetailViewController: UIViewController {
         
     }
     
+    func onCloseMap(sender: UIBarButtonItem) {
+        
+        self.navigationController?.popViewControllerAnimated(true)
+        
+    }
+    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -1111,6 +1124,9 @@ class HouseDetailViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        ///Disable Back Button default title
+        self.title = ""
         
         ///Hide tab bar
         self.tabBarController?.tabBarHidden = true
@@ -1167,6 +1183,10 @@ class HouseDetailViewController: UIViewController {
             case ViewTransConst.displayHouseOnMap:
                 
                 if let mvc = segue.destinationViewController as? MapViewController {
+                    
+                    // Config navigation left bar
+                    mvc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: "onCloseMap:")
+                    
                     if let houseItemDetail = self.houseItemDetail {
                         let coordinateStr = houseItemDetail.valueForKey("coordinate") as? String
                         
@@ -1192,8 +1212,8 @@ class HouseDetailViewController: UIViewController {
                             }
                         }
                         
-                        mvc.houseTitle = self.houseItem?.title
-                        mvc.houseAddres = self.houseItem?.addr
+                        mvc.houseTitle = houseItemDetail.valueForKey("title") as? String
+                        mvc.houseAddres = houseItemDetail.valueForKey("addr") as? String
                     }
                 }
                 
@@ -1356,9 +1376,6 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 
                 let browser = MWPhotoBrowser(delegate: self)
                 
-                
-                self.navigationItem.backBarButtonItem = nil
-                
                 // Config navigation left bar
                 browser.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: "onClosePhotoBrowser:")
                 
@@ -1431,7 +1448,9 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
 extension HouseDetailViewController: MWPhotoBrowserDelegate {
     func numberOfPhotosInPhotoBrowser(photoBrowser: MWPhotoBrowser!) -> UInt {
         
-        if let houseItem = self.houseItem, let imgList = houseItem.imgList {
+        if let houseItemDetail = self.houseItemDetail,
+            let imgList = houseItemDetail.valueForKey("img") as? [String]{
+                
             return UInt(imgList.count)
         } else {
             return 0
@@ -1443,7 +1462,8 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         
         let photoIndex: Int = Int(index)
         
-        if let houseItem = self.houseItem, let imgList = houseItem.imgList {
+        if let houseItemDetail = self.houseItemDetail,
+            let imgList = houseItemDetail.valueForKey("img") as? [String]{
             
             if (photoIndex < imgList.endIndex) {
                 return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
@@ -1459,7 +1479,8 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
     func photoBrowser(photoBrowser: MWPhotoBrowser!, thumbPhotoAtIndex index: UInt) -> MWPhotoProtocol! {
         let photoIndex: Int = Int(index)
         
-        if let houseItem = self.houseItem, let imgList = houseItem.imgList {
+        if let houseItemDetail = self.houseItemDetail,
+            let imgList = houseItemDetail.valueForKey("img") as? [String] {
             
             if (photoIndex < imgList.endIndex) {
                 return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
