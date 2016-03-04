@@ -48,8 +48,8 @@ class AmazonClientManager : NSObject {
     private var completionHandler: AWSContinuationBlock?
     
     //Login Managers
-    private var fbLoginManager: FBSDKLoginManager?
-    private var googleSignIn: GIDSignIn?
+    private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
+    private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
     
     //Cognito
     var credentialsProvider: AWSCognitoCredentialsProvider?
@@ -69,7 +69,7 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    private func dumpCredentialProviderInfo() {
+    private func dumpCognitoCredentialProviderInfo() {
         Log.info("identityId: \(self.credentialsProvider?.identityId)")
         Log.info("identityPoolId: \(self.credentialsProvider?.identityPoolId)")
         Log.info("logins: \(self.credentialsProvider?.logins)")
@@ -79,24 +79,52 @@ class AmazonClientManager : NSObject {
         Log.info("expiration: \(self.credentialsProvider?.expiration)")
     }
     
+    private func addLoginForCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
+        var merge = [NSObject : AnyObject]()
+        
+        //Add existing logins
+        if let previousLogins = self.credentialsProvider?.logins {
+            merge = previousLogins
+        }
+        
+        //Add new logins
+        if let unwrappedLogins = logins {
+            for (key, value) in unwrappedLogins {
+                merge[key] = value
+            }
+            
+            Log.debug("Add new logins = \(merge)")
+            self.credentialsProvider?.logins = merge
+        }
+        //Force a refresh of credentials to see if merge is necessary
+        return self.credentialsProvider?.refresh()
+    }
+    
     private func initializeCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
         Log.info("Initializing Credentials Provider...")
         
-        AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
+        #if DEBUG
+            AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
+        #else
+            AWSLogger.defaultLogger().logLevel = AWSLogLevel.Info
+        #endif
         
+        ///Init AWSCognitoCredentialsProvider
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
         self.credentialsProvider?.logins = logins
+        
         if logins == nil{
             self.credentialsProvider?.clearKeychain()
         }
         
-        Log.info("Credential Provider Status (Initial):")
-        self.dumpCredentialProviderInfo()
+        self.dumpCognitoCredentialProviderInfo()
         
+        ///Init Default AWSServiceConfiguration
         let configuration = AWSServiceConfiguration(region: AWSConstants.DEFAULT_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
         
+        ///Init S3 AWSServiceConfiguration
         let configurationForS3 = AWSServiceConfiguration(region: AWSConstants.S3_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
         
         self.transferManager = AWSS3TransferManager(configuration: configurationForS3, identifier: "S3")
@@ -185,6 +213,7 @@ class AmazonClientManager : NSObject {
     }
     
     private func completeLogin(logins: [NSObject : AnyObject]?) {
+        
         Log.info("\(logins)")
         
         var task: AWSTask?
@@ -192,34 +221,18 @@ class AmazonClientManager : NSObject {
         if self.credentialsProvider == nil {
             task = self.initializeCredentialsProvider(logins)
             
-            Log.info("Task = \(task)")
         } else {
-            var merge = [NSObject : AnyObject]()
             
-            //Add existing logins
-            if let previousLogins = self.credentialsProvider?.logins {
-                merge = previousLogins
-            }
-            
-            //Add new logins
-            if let unwrappedLogins = logins {
-                for (key, value) in unwrappedLogins {
-                    merge[key] = value
-                }
-                
-                Log.debug("Add new logins = \(merge)")
-                self.credentialsProvider?.logins = merge
-            }
-            //Force a refresh of credentials to see if merge is necessary
-            task = self.credentialsProvider?.refresh()
-            Log.info("Task = \(task)")
+            task = self.addLoginForCredentialsProvider(logins)
         }
+        
+        Log.info("Task = \(task)")
         
         task?.continueWithBlock {
             (task: AWSTask!) -> AnyObject! in
             
-            Log.info("Credential Provider Status After Login:")
-            self.dumpCredentialProviderInfo()
+            Log.info("Credential Provider With Login")
+            self.dumpCognitoCredentialProviderInfo()
             
             if (task.error != nil) {
                 assert(false, "Log in failed")
@@ -323,7 +336,8 @@ class AmazonClientManager : NSObject {
     }
     
     func reloadFBSession() {
-        Log.info("Reloading Facebook Session")
+        
+        Log.error("Reloading Facebook Session: \(FBSDKAccessToken.currentAccessToken().expirationDate)")
         self.completeFBLoginWithUserData()
     }
     
@@ -331,17 +345,13 @@ class AmazonClientManager : NSObject {
         
         ///Already signed in
         if self.isLoggedInWithFacebook() {
-            Log.debug("Resume FB Session")
+            Log.debug("FB Already Sign-in")
             self.completeFBLogin()
             return
         }
         
-        if self.fbLoginManager == nil {
-            self.fbLoginManager = FBSDKLoginManager()
-        }
-        
         Log.debug("Login FB")
-        self.fbLoginManager?.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
+        self.fbLoginManager.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
             
             if (error != nil) {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -418,10 +428,8 @@ class AmazonClientManager : NSObject {
     
     func fbLogout() {
         Log.enter()
-        if self.fbLoginManager == nil {
-            self.fbLoginManager = FBSDKLoginManager()
-        }
-        self.fbLoginManager?.logOut()
+        
+        self.fbLoginManager.logOut()
         Log.exit()
     }
     
@@ -429,6 +437,9 @@ class AmazonClientManager : NSObject {
     private func completeFBLogin() {
         
         UserDefaultsUtils.setLoginProvider(Provider.FB.rawValue)
+        
+        Log.error("FB token: \(FBSDKAccessToken.currentAccessToken()?.tokenString)")
+        Log.error("FB token: \(FBSDKAccessToken.currentAccessToken()?.expirationDate)")
         
         self.completeLogin(["graph.facebook.com" : FBSDKAccessToken.currentAccessToken().tokenString])
     }
@@ -438,11 +449,7 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithGoogle() -> Bool {
         
-        if(self.googleSignIn == nil) {
-            self.googleSignIn = GIDSignIn.sharedInstance()
-        }
-        
-        if let _ = self.googleSignIn!.currentUser?.authentication?.accessToken {
+        if let _ = self.googleSignIn.currentUser?.authentication {
             return true
         } else {
             return false
@@ -450,46 +457,47 @@ class AmazonClientManager : NSObject {
     }
     
     func reloadGSession() {
-        if(self.googleSignIn == nil) {
-            self.googleSignIn = GIDSignIn.sharedInstance()
-        }
         
-        self.googleSignIn?.signInSilently()
+        Log.error("Reloading Google Session: \(self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate)")
+        
+        self.googleSignIn.signInSilently()
     }
     
     func googleLogin(theViewController: UIViewController) {
         
-        if(self.googleSignIn == nil) {
-            self.googleSignIn = GIDSignIn.sharedInstance()
-        }
-        
         ///Already signed in
-        if let _ = self.googleSignIn!.currentUser?.authentication?.idToken {
-            Log.debug("Resume Google Session")
+        if let _ = self.googleSignIn.currentUser?.authentication?.idToken {
+            Log.debug("Google Already Sign-in")
             self.completeGoogleLogin()
             return
         }
         
-        self.googleSignIn?.delegate = self
-        self.googleSignIn?.uiDelegate = self
+        self.googleSignIn.delegate = self
+        self.googleSignIn.uiDelegate = self
         
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(theViewController.view)
         
         Log.debug("Login Google")
-        self.googleSignIn?.signIn()
+        self.googleSignIn.signIn()
     }
     
     func googleLogout() {
         Log.enter()
-        self.googleSignIn?.signOut()
+        self.googleSignIn.signOut()
     }
     
     private func completeGoogleLogin() {
         UserDefaultsUtils.setLoginProvider(Provider.GOOGLE.rawValue)
         
-        if let idToken = self.googleSignIn?.currentUser.authentication.idToken {
+        Log.error("Google token: \(self.googleSignIn.currentUser?.authentication?.idToken)")
+        Log.error("Google token: \(self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate)")
+        
+        Log.error("Google access token: \(self.googleSignIn.currentUser?.authentication?.accessToken)")
+        Log.error("Google accesstoken: \(self.googleSignIn.currentUser?.authentication?.accessTokenExpirationDate)")
+        
+        if let idToken = self.googleSignIn.currentUser.authentication.idToken {
             self.completeLogin(["accounts.google.com": idToken])
         }
         
@@ -642,8 +650,6 @@ extension AmazonClientManager: GIDSignInDelegate {
                 // Perform any operations on signed in user here.
                 
                 if let idToken = user.authentication.idToken { // Safe to send to the server
-                    
-                    Log.info("Reloading Google session: \(self.googleSignIn?.currentUser?.authentication?.idTokenExpirationDate)")
                     
                     //Save Google User Data
                     let loginData = UserData(provider: Provider.GOOGLE)
