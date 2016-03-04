@@ -91,19 +91,19 @@ class AmazonSNSService : NSObject {
                     Log.debug("Enabled: \(getEndpointResponse.attributes!["Enabled"])")
                     Log.debug("CustomUserData: \(getEndpointResponse.attributes!["CustomUserData"])")
                     var isUpdate = false
-                    if let lastToken = getEndpointResponse.attributes!["Token"] as? String{
+                    if let lastToken = getEndpointResponse.attributes?["Token"]{
                         if deviceTokenString != lastToken{
                             isUpdate = true
                         }
                     }
                     
-                    if let enabled = getEndpointResponse.attributes!["Enabled"] as? Bool{
+                    if let enabled = getEndpointResponse.attributes?["Enabled"] as? Bool{
                         if enabled == false{
                             isUpdate = true
                         }
                     }
                     
-                    var customUserData = getEndpointResponse.attributes!["CustomUserData"] as? String
+                    var customUserData = getEndpointResponse.attributes?["CustomUserData"]
                     if customUserData == nil{
                         customUserData = userId
                         isUpdate = true
@@ -134,7 +134,7 @@ class AmazonSNSService : NSObject {
         let request = AWSSNSSetEndpointAttributesInput()
         Log.debug("endpointArn: \(request.endpointArn)")
         request.endpointArn = endpointArn
-        request.attributes = [NSObject:AnyObject]()
+        request.attributes = [String:String]()
         request.attributes!["Token"] = deviceTokenString
         request.attributes!["Enabled"] = "true"
         request.attributes!["CustomUserData"] = userData
