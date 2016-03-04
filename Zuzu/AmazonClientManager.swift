@@ -68,7 +68,7 @@ class AmazonClientManager : NSObject {
             }
         }
     }
-
+    
     private func dumpCredentialProviderInfo() {
         Log.info("identityId: \(self.credentialsProvider?.identityId)")
         Log.info("identityPoolId: \(self.credentialsProvider?.identityPoolId)")
@@ -249,12 +249,12 @@ class AmazonClientManager : NSObject {
     
     func loginFromView(theViewController: UIViewController, mode: Int = 1, withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
-
+        
         self.completionHandler = completionHandler
         self.loginViewController = theViewController
-
-
-       let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        
+        
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             vc.loginMode = mode
@@ -317,14 +317,9 @@ class AmazonClientManager : NSObject {
     // MARK: Facebook Login
     
     func isLoggedInWithFacebook() -> Bool {
-        if let provider = UserDefaultsUtils.getLoginProvider() {
-            if provider == Provider.FB.rawValue{
-                let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
-                return loggedIn
-            }
-        }
+        let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
         
-        return false
+        return loggedIn
     }
     
     func reloadFBSession() {
@@ -337,7 +332,7 @@ class AmazonClientManager : NSObject {
         ///Already signed in
         if self.isLoggedInWithFacebook() {
             Log.debug("Resume FB Session")
-            self.reloadFBSession()
+            self.completeFBLogin()
             return
         }
         
@@ -442,20 +437,16 @@ class AmazonClientManager : NSObject {
     // MARK: Google Login
     
     func isLoggedInWithGoogle() -> Bool {
-        if let provider = UserDefaultsUtils.getLoginProvider() {
-            if provider == Provider.GOOGLE.rawValue{
-                if(self.googleSignIn == nil) {
-                    self.googleSignIn = GIDSignIn.sharedInstance()
-                }
-                
-                if let _ = self.googleSignIn!.currentUser?.authentication?.accessToken {
-                    return true
-                } else {
-                    return false
-                }
-            }
+        
+        if(self.googleSignIn == nil) {
+            self.googleSignIn = GIDSignIn.sharedInstance()
         }
-        return false
+        
+        if let _ = self.googleSignIn!.currentUser?.authentication?.accessToken {
+            return true
+        } else {
+            return false
+        }
     }
     
     func reloadGSession() {
@@ -514,7 +505,7 @@ class AmazonClientManager : NSObject {
         
         self.loginViewController?.presentViewController(errorAlert, animated: true, completion: nil)
     }
-        
+    
     // MARK: S3
     
     private func prepareLocalFile(fileName: String, stringContent: String) -> NSURL? {
