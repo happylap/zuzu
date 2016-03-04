@@ -467,8 +467,8 @@ class AmazonClientManager : NSObject {
     // MARK: Public Facebook Login
     
     func isLoggedInWithFacebook() -> Bool {
-        let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
         
+        let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
         return loggedIn
     }
     
@@ -596,18 +596,19 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithGoogle() -> Bool {
         
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
-            Log.error("has AuthInKeychain")
-        } else {
-            Log.error("no AuthInKeychain")
-        }
-        
         if let _ = self.googleSignIn.currentUser?.authentication {
             Log.error("has currentUser")
             return true
         } else {
             Log.error("no currentUser")
-            return false
+            
+            if GIDSignIn.sharedInstance().hasAuthInKeychain() {
+                Log.error("has AuthInKeychain")
+                return true
+            } else {
+                Log.error("no AuthInKeychain")
+                return false
+            }
         }
     }
     

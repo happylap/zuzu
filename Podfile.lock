@@ -3,13 +3,13 @@ PODS:
   - AlamofireImage (1.1.2):
     - Alamofire (~> 2.0)
   - AwesomeCache (2.0)
-  - AWSCognito (2.3.2):
-    - AWSCore (= 2.3.2)
-  - AWSCore (2.3.2)
-  - AWSS3 (2.3.2):
-    - AWSCore (= 2.3.2)
-  - AWSSNS (2.3.2):
-    - AWSCore (= 2.3.2)
+  - AWSCognito (2.3.5):
+    - AWSCore (= 2.3.5)
+  - AWSCore (2.3.5)
+  - AWSS3 (2.3.5):
+    - AWSCore (= 2.3.5)
+  - AWSSNS (2.3.5):
+    - AWSCore (= 2.3.5)
   - Bolts (1.6.0):
     - Bolts/AppLinks (= 1.6.0)
     - Bolts/Tasks (= 1.6.0)
@@ -90,10 +90,10 @@ DEPENDENCIES:
   - Alamofire (= 2.0.2)
   - AlamofireImage (= 1.1.2)
   - AwesomeCache (= 2.0)
-  - AWSCognito (= 2.3.2)
-  - AWSCore (= 2.3.2)
-  - AWSS3 (= 2.3.2)
-  - AWSSNS (= 2.3.2)
+  - AWSCognito (= 2.3.5)
+  - AWSCore (= 2.3.5)
+  - AWSS3 (= 2.3.5)
+  - AWSSNS (= 2.3.5)
   - Device (= 0.0.4)
   - Dollar (= 4.0.1)
   - Fabric (= 1.6.4)
@@ -124,10 +124,10 @@ SPEC CHECKSUMS:
   Alamofire: 8edbab00802a752bb5240cc2abe70e7e881488ad
   AlamofireImage: dc3d3de5d095fd9545b144ba8f6da5bfc539512a
   AwesomeCache: 5d6839ad139cdcee3c3a067f6fc1849523867dd9
-  AWSCognito: af9cd756ab300f0a86582a11fbe1777d7fa81696
-  AWSCore: c2f69975fd2caf38a10736961de28a0105cdb00c
-  AWSS3: 9ac201e7a4ad8be0b68348c77acfd100027b97af
-  AWSSNS: c61e8296d6d48596b92ceb84b859809dadcecd8d
+  AWSCognito: f12700b4781897b2913544b36d6283f04ae72a44
+  AWSCore: 8022eda5778fd7b87c9182709d8a27388e1a31fb
+  AWSS3: 967f4ad3c91f1ed2c9dca09a9dcf905111232a87
+  AWSSNS: d95b17f039776ec0dd9cd9237313779d174b0215
   Bolts: f52a250053bb517ca874523c3913776359ab3def
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
