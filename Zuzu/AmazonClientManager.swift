@@ -34,6 +34,7 @@ class AmazonClientManager : NSObject {
         return Singleton.instance
     }
     
+    // MARK: Private Members
     private struct AWSConstants {
         static let DEFAULT_SERVICE_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
@@ -51,14 +52,15 @@ class AmazonClientManager : NSObject {
     private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
     
-    //Cognito
-    var credentialsProvider: AWSCognitoCredentialsProvider?
-    
     //Login View Controller
     private var loginViewController: UIViewController?
     
     //S3
     private var transferManager: AWSS3TransferManager?
+    
+    // MARK: Public Members
+    //CognitoCredentialsProvider
+    var credentialsProvider: AWSCognitoCredentialsProvider?
     
     //User Login Data
     var userLoginData: UserData?{
@@ -69,6 +71,112 @@ class AmazonClientManager : NSObject {
         }
     }
     
+    // MARK: Private UI Helpers
+    
+    private func errorAlert(message: String) {
+        let errorAlert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default) { (alert: UIAlertAction) -> Void in }
+        
+        errorAlert.addAction(okAction)
+        
+        self.loginViewController?.presentViewController(errorAlert, animated: true, completion: nil)
+    }
+    
+    // MARK: Private S3 Utils
+    
+    private func prepareLocalFile(fileName: String, stringContent: String) -> NSURL? {
+        
+        var tempFileURL: NSURL?
+        
+        //Create a test file in the temporary directory
+        let uploadFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory() + fileName)
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(uploadFileURL.path!) {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(uploadFileURL.path!)
+            } catch let error as NSError {
+                Log.debug("Error: \(error.code), \(error.localizedDescription)")
+            }
+        }
+        
+        do {
+            
+            try stringContent.writeToURL(uploadFileURL, atomically: true, encoding: NSUTF8StringEncoding)
+            
+            tempFileURL = uploadFileURL
+            
+        } catch let error as NSError {
+            Log.debug("Error: \(error.code), \(error.localizedDescription)")
+        }
+        
+        return tempFileURL
+    }
+    
+    private func uploadToS3(key: String, body: NSURL, bucket: String) {
+        
+        let uploadRequest = AWSS3TransferManagerUploadRequest()
+        uploadRequest.body = body
+        uploadRequest.key = key
+        uploadRequest.bucket = bucket
+        
+        if let s3Client = self.transferManager {
+            s3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
+                if task.result != nil {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        Log.debug("Success!")
+                    })
+                }
+                return nil
+            }
+        }
+        
+    }
+    
+    private func logErrorDataToS3(errorString: String) {
+        Log.enter()
+        
+        let randomNumber = arc4random()
+        var s3UploadKeyName = "\(NSDate().timeIntervalSince1970 * 1000)\(randomNumber).txt"
+        
+        if let deviceId = UIDevice.currentDevice().identifierForVendor?.UUIDString {
+            s3UploadKeyName = "\(deviceId).txt"
+        }
+        
+        if let localFile = prepareLocalFile(s3UploadKeyName, stringContent: errorString) {
+            
+            uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_ERROR_BUCKET)
+            
+        }
+    }
+    
+    private func uploadUserDataToS3(userData: UserData) {
+        Log.enter()
+        
+        Log.debug(userData.description)
+        
+        let randomNumber = arc4random()
+        
+        var s3UploadKeyName = "user\(NSDate().timeIntervalSince1970 * 1000)\(randomNumber).json"
+        
+        if let userId = userData.id {
+            if let provider = userData.provider {
+                s3UploadKeyName = "\(provider)_\(userId).json"
+            } else {
+                s3UploadKeyName = "\(userId).json"
+            }
+        }
+        
+        if let jsonString = Mapper().toJSONString(userData),
+            let localFile = prepareLocalFile(s3UploadKeyName, stringContent: jsonString) {
+                
+                uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_COLLECTION_BUCKET)
+                
+        }
+        
+        Log.exit()
+    }
+    
+    // MARK: Private Utils
     private func dumpCognitoCredentialProviderInfo() {
         Log.info("identityId: \(self.credentialsProvider?.identityId)")
         Log.info("identityPoolId: \(self.credentialsProvider?.identityPoolId)")
@@ -186,7 +294,7 @@ class AmazonClientManager : NSObject {
             return false
     }
     
-    // MARK: General Login
+    // MARK: Public General Login
     
     func isConfigured() -> Bool {
         return !(AWSConstants.COGNITO_IDENTITY_POOL_ID == "YourCognitoIdentityPoolId" || AWSConstants.COGNITO_REGIONTYPE == AWSRegionType.Unknown)
@@ -327,7 +435,7 @@ class AmazonClientManager : NSObject {
         return self.isLoggedInWithFacebook() || self.isLoggedInWithGoogle()
     }
     
-    // MARK: Facebook Login
+    // MARK: Public Facebook Login
     
     func isLoggedInWithFacebook() -> Bool {
         let loggedIn = FBSDKAccessToken.currentAccessToken() != nil
@@ -433,7 +541,6 @@ class AmazonClientManager : NSObject {
         Log.exit()
     }
     
-    
     private func completeFBLogin() {
         
         UserDefaultsUtils.setLoginProvider(Provider.FB.rawValue)
@@ -445,7 +552,7 @@ class AmazonClientManager : NSObject {
     }
     
     
-    // MARK: Google Login
+    // MARK: Public Google Login
     
     func isLoggedInWithGoogle() -> Bool {
         
@@ -502,116 +609,10 @@ class AmazonClientManager : NSObject {
         }
         
     }
-    
-    // MARK: UI Helpers
-    
-    private func errorAlert(message: String) {
-        let errorAlert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default) { (alert: UIAlertAction) -> Void in }
-        
-        errorAlert.addAction(okAction)
-        
-        self.loginViewController?.presentViewController(errorAlert, animated: true, completion: nil)
-    }
-    
-    // MARK: S3
-    
-    private func prepareLocalFile(fileName: String, stringContent: String) -> NSURL? {
-        
-        var tempFileURL: NSURL?
-        
-        //Create a test file in the temporary directory
-        let uploadFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory() + fileName)
-        
-        if NSFileManager.defaultManager().fileExistsAtPath(uploadFileURL.path!) {
-            do {
-                try NSFileManager.defaultManager().removeItemAtPath(uploadFileURL.path!)
-            } catch let error as NSError {
-                Log.debug("Error: \(error.code), \(error.localizedDescription)")
-            }
-        }
-        
-        do {
-            
-            try stringContent.writeToURL(uploadFileURL, atomically: true, encoding: NSUTF8StringEncoding)
-            
-            tempFileURL = uploadFileURL
-            
-        } catch let error as NSError {
-            Log.debug("Error: \(error.code), \(error.localizedDescription)")
-        }
-        
-        return tempFileURL
-    }
-    
-    private func uploadToS3(key: String, body: NSURL, bucket: String) {
-        
-        let uploadRequest = AWSS3TransferManagerUploadRequest()
-        uploadRequest.body = body
-        uploadRequest.key = key
-        uploadRequest.bucket = bucket
-        
-        if let s3Client = self.transferManager {
-            s3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
-                if task.result != nil {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        Log.debug("Success!")
-                    })
-                }
-                return nil
-            }
-        }
-        
-    }
-    
-    private func logErrorDataToS3(errorString: String) {
-        Log.enter()
-        
-        let randomNumber = arc4random()
-        var s3UploadKeyName = "\(NSDate().timeIntervalSince1970 * 1000)\(randomNumber).txt"
-        
-        if let deviceId = UIDevice.currentDevice().identifierForVendor?.UUIDString {
-            s3UploadKeyName = "\(deviceId).txt"
-        }
-        
-        if let localFile = prepareLocalFile(s3UploadKeyName, stringContent: errorString) {
-            
-            uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_ERROR_BUCKET)
-            
-        }
-    }
-    
-    private func uploadUserDataToS3(userData: UserData) {
-        Log.enter()
-        
-        Log.debug(userData.description)
-        
-        let randomNumber = arc4random()
-        
-        var s3UploadKeyName = "user\(NSDate().timeIntervalSince1970 * 1000)\(randomNumber).json"
-        
-        if let userId = userData.id {
-            if let provider = userData.provider {
-                s3UploadKeyName = "\(provider)_\(userId).json"
-            } else {
-                s3UploadKeyName = "\(userId).json"
-            }
-        }
-        
-        if let jsonString = Mapper().toJSONString(userData),
-            let localFile = prepareLocalFile(s3UploadKeyName, stringContent: jsonString) {
-                
-                uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_COLLECTION_BUCKET)
-                
-        }
-        
-        Log.exit()
-    }
-    
 }
 
 // MARK: Google GIDSignInDelegate
-
+// For getting sign-in response
 extension AmazonClientManager: GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
@@ -679,6 +680,7 @@ extension AmazonClientManager: GIDSignInDelegate {
 }
 
 // MARK: Google GIDSignInUIDelegate
+// For handling Google Signin UI Controller
 extension AmazonClientManager: GIDSignInUIDelegate {
     
     func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
