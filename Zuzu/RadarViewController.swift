@@ -59,8 +59,8 @@ class RadarViewController: UIViewController {
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
         self.regionLabel?.text = displayItem.title
-        self.houseInfoLabel?.text = displayItem.detail
-        
+        self.houseInfoLabel?.text = displayItem.purpostString
+        self.priceSizeLabel?.text = displayItem.priceSizeString
         var filterNum = 0
         if let filterGroups = searchCriteria.filterGroups{
             filterNum = filterGroups.count
