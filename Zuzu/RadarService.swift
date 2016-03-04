@@ -57,7 +57,7 @@ class RadarService : NSObject {
             }
         }
         
-        if let userLoginId = UserDefaultsUtils.getUserLoginId(){
+        if let userLoginId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             self.loginZuzuUser(userLoginId)
         }
         
@@ -71,7 +71,7 @@ class RadarService : NSObject {
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
-        if let loginUserId = UserDefaultsUtils.getUserLoginId(){
+        if let loginUserId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if let zuzuUserId = UserDefaultsUtils.getZuzuUserId(){
                 if zuzuUserId != loginUserId{ // switch user
                     self.loginZuzuUser(loginUserId)
@@ -120,7 +120,7 @@ class RadarService : NSObject {
         let zuzuUser = ZuzuUser()
         zuzuUser.id = userId
         
-        if let userData = AmazonClientManager.sharedInstance.userLoginData{
+        if let userData = AmazonClientManager.sharedInstance.currentUserProfile{
             zuzuUser.provider = userData.provider?.rawValue
             zuzuUser.email = userData.email
             zuzuUser.name = userData.name
@@ -141,7 +141,7 @@ class RadarService : NSObject {
                 UserDefaultsUtils.setZuzuUserId(userId)
                 self.retrieveRadarCriteria(userId)
                 NSNotificationCenter.defaultCenter().postNotificationName(ZuzuUserLoginNotification, object: self, userInfo: nil)
-                if AmazonClientManager.sharedInstance.userLoginData != nil{
+                if AmazonClientManager.sharedInstance.currentUserProfile != nil{
                     ZuzuWebService.sharedInstance.updateUser(zuzuUser){
                         (result, error) -> Void in
                     }

@@ -470,14 +470,9 @@ class ZuzuWebService: NSObject
         }
         
         if AmazonClientManager.sharedInstance.isLoggedIn(){
-            headers["UserId"] = UserDefaultsUtils.getUserLoginId()
-            headers["UserProvider"] = UserDefaultsUtils.getLoginProvider()
-            if AmazonClientManager.sharedInstance.isLoggedInWithFacebook() {
-                headers["UserToken"] = FBSDKAccessToken.currentAccessToken().tokenString
-            }
-            if AmazonClientManager.sharedInstance.isLoggedInWithGoogle() {
-                // TODO
-            }
+            headers["UserId"] = AmazonClientManager.sharedInstance.currentUserProfile?.id
+            headers["UserProvider"] = AmazonClientManager.sharedInstance.currentUserProfile?.provider?.rawValue
+            headers["UserToken"] = AmazonClientManager.sharedInstance.currentUserToken
         }
         
         Log.debug("headers: \(headers)")

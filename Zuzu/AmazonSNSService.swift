@@ -38,7 +38,7 @@ class AmazonSNSService : NSObject {
     func handleUserLogin(notification: NSNotification) {
         Log.enter()
         Log.debug("\(notification.userInfo)")
-        if let userId = UserDefaultsUtils.getUserLoginId(){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                 let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
@@ -55,7 +55,7 @@ class AmazonSNSService : NSObject {
         Log.enter()
         if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String{
             let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
-            if let userId = UserDefaultsUtils.getUserLoginId(){
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
             }else{
                 Log.debug("userId is nil")
@@ -69,7 +69,7 @@ class AmazonSNSService : NSObject {
     
     func registerSNSEndpoint(userId: String, deviceTokenString:String, endpointArn:String?){
         Log.enter()
-        if AmazonClientManager.sharedInstance.credentialsProvider == nil{
+        if (!AmazonClientManager.sharedInstance.isCredentailsProviderExist()){
             Log.debug("Credebtial provider is nil, cannot register SNS")
             Log.exit()
             return
@@ -125,7 +125,7 @@ class AmazonSNSService : NSObject {
     
     func updateEndpoint(deviceTokenString: String, endpointArn:String, userData: String){
         Log.enter()
-        if AmazonClientManager.sharedInstance.credentialsProvider == nil{
+        if (!AmazonClientManager.sharedInstance.isCredentailsProviderExist()){
             Log.debug("Credebtial provider is nil, cannot register SNS")
             Log.exit()
             return
@@ -155,7 +155,7 @@ class AmazonSNSService : NSObject {
     
     func createEndpoint(deviceTokenString: String, userData: String?){
         Log.enter()
-        if AmazonClientManager.sharedInstance.credentialsProvider == nil{
+        if (!AmazonClientManager.sharedInstance.isCredentailsProviderExist()){
             Log.debug("Credebtial provider is nil, cannot register SNS")
             Log.exit()
             return
@@ -190,7 +190,7 @@ class AmazonSNSService : NSObject {
     
     func setReceiveNotification(){
         Log.enter()
-        let userId = UserDefaultsUtils.getUserLoginId()
+        let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id
         let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
         if userId == nil || endpointArn == nil{
             Log.error("No userId or endpointArn, cannot set receive notify time")

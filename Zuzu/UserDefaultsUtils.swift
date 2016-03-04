@@ -9,28 +9,9 @@
 import Foundation
 
 struct UserDefaultsUtils{
-    
-    // MARK: Login Provider
-    static let loginProviderUserDefaultKey = "loginProvider"
-    
-    static func clearLoginProvider() {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey(loginProviderUserDefaultKey)
-    }
-    
-    static func setLoginProvider(provider: String) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(provider, forKey: loginProviderUserDefaultKey)
-    }
-    
-    static func getLoginProvider() -> String? {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.objectForKey(loginProviderUserDefaultKey) as? String
-    }
         
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
-    static let loginUserIdUserDefaultKey = "loginUserData"
     static let zuzuUserIdUserDefaultKey = "zuzuUserData"
 
     static func setRadarLandindPageDisplayed() {
@@ -62,19 +43,27 @@ struct UserDefaultsUtils{
         return userDefaults.stringForKey(zuzuUserIdUserDefaultKey)
     }
     
-    static func clearUserLoginId() {
+    // MARK: User Profile
+    /// UserProfile UserDefaults persistence APIs
+    static let userProfileUserDefaultKey = "loginUserData"
+    
+    static func clearUserProfile() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey(loginUserIdUserDefaultKey)
+        userDefaults.removeObjectForKey(userProfileUserDefaultKey)
     }
     
-    static func setUserLoginId(userId: String) {
+    static func setUserProfile(userProfile: UserProfile) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(userId, forKey: loginUserIdUserDefaultKey)
+        
+        let data = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
+        userDefaults.setObject(data, forKey: userProfileUserDefaultKey)
     }
     
-    static func getUserLoginId() -> String?{
+    static func getUserProfile() -> UserProfile?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.stringForKey(loginUserIdUserDefaultKey)
+        
+        let data = userDefaults.objectForKey(userProfileUserDefaultKey) as? NSData
+        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? UserProfile
     }
 
     // MARK: My Collection
