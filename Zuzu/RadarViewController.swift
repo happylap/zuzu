@@ -36,7 +36,7 @@ class RadarViewController: UIViewController {
             self.activateButton.hidden = true
             self.activateButton.enabled = false
         }
-        //self.houseInfoLabel.numberOfLines = 0
+
         self.updateCriteriaTextLabel()
         self.registerCriteriaObserver()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
@@ -59,15 +59,8 @@ class RadarViewController: UIViewController {
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
         self.regionLabel?.text = displayItem.title
-        let detail = displayItem.detail
-        if detail.containsString("\n"){
-            self.houseInfoLabel?.numberOfLines = 0
-        }else{
-            self.houseInfoLabel?.numberOfLines = 1
-        }
-        
-        self.houseInfoLabel?.text = detail
-        
+        self.houseInfoLabel?.text = displayItem.purpostString
+        self.priceSizeLabel?.text = displayItem.priceSizeString
         var filterNum = 0
         if let filterGroups = searchCriteria.filterGroups{
             filterNum = filterGroups.count
@@ -82,6 +75,7 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var houseInfoLabel: UILabel!
     
     @IBOutlet weak var otherCriteriaLabel: UILabel!
+    @IBOutlet weak var priceSizeLabel: UILabel!
     
     @IBOutlet weak var activateButton: UIButton!
     

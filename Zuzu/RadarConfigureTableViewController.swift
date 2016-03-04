@@ -139,7 +139,7 @@ class RadarConfigureTableViewController: UITableViewController {
     
     let downArrowImage = UIImage(named: "arrow_down_n")!.imageWithRenderingMode(.AlwaysTemplate)
     let upArrowImage = UIImage(named: "arrow_up_n")!.imageWithRenderingMode(.AlwaysTemplate)
-    
+    let filterImage = UIImage(named: "filter_n")!.imageWithRenderingMode(.AlwaysTemplate)
     @IBOutlet weak var priceArrow: UIImageView! {
         didSet {
             priceArrow.image = downArrowImage
@@ -151,6 +151,14 @@ class RadarConfigureTableViewController: UITableViewController {
         didSet {
             sizeArrow.image = downArrowImage
             sizeArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
+        }
+    }
+    
+    @IBOutlet weak var filtersImage: UIImageView!{
+        didSet {
+            self.filtersImage.image = filterImage
+            self.filtersImage.tintColor = UIColor.blackColor()
+            //self.filtersImage.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
         }
     }
     
@@ -516,6 +524,7 @@ class RadarConfigureTableViewController: UITableViewController {
         switch(indexPath.row) {
         case CellConst.sizeLabel, CellConst.priceLabel: // Price, Size Picker
             handlePicker(indexPath)
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: indexPath.row, inSection: indexPath.section), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
             
         case CellConst.area: //Area Picker
             ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
@@ -525,7 +534,7 @@ class RadarConfigureTableViewController: UITableViewController {
             if let regionSelectionState = currentCriteria.region {
                 cityRegionVC.regionSelectionState = regionSelectionState
             }
-
+            self.parentViewController?.navigationItem.backBarButtonItem?.title = "取消"
             self.showViewController(cityRegionVC, sender: self)
 
         case CellConst.moreFilters: //More Filters
@@ -545,7 +554,7 @@ class RadarConfigureTableViewController: UITableViewController {
             
             ftvc.selectedFilterIdSet = filterIdSet
             ftvc.filterDelegate = self
-            
+            self.parentViewController?.navigationItem.backBarButtonItem?.title = "完成"
             self.showViewController(ftvc, sender: self)
             
         default: break
