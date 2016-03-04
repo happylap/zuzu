@@ -524,6 +524,7 @@ class RadarConfigureTableViewController: UITableViewController {
         switch(indexPath.row) {
         case CellConst.sizeLabel, CellConst.priceLabel: // Price, Size Picker
             handlePicker(indexPath)
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: indexPath.row, inSection: indexPath.section), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
             
         case CellConst.area: //Area Picker
             ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
