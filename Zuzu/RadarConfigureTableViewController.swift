@@ -139,7 +139,7 @@ class RadarConfigureTableViewController: UITableViewController {
     
     let downArrowImage = UIImage(named: "arrow_down_n")!.imageWithRenderingMode(.AlwaysTemplate)
     let upArrowImage = UIImage(named: "arrow_up_n")!.imageWithRenderingMode(.AlwaysTemplate)
-    
+    let filterImage = UIImage(named: "filter_n")!.imageWithRenderingMode(.AlwaysTemplate)
     @IBOutlet weak var priceArrow: UIImageView! {
         didSet {
             priceArrow.image = downArrowImage
@@ -151,6 +151,14 @@ class RadarConfigureTableViewController: UITableViewController {
         didSet {
             sizeArrow.image = downArrowImage
             sizeArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
+        }
+    }
+    
+    @IBOutlet weak var filtersImage: UIImageView!{
+        didSet {
+            self.filtersImage.image = filterImage
+            self.filtersImage.tintColor = UIColor.blackColor()
+            //self.filtersImage.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
         }
     }
     

@@ -185,6 +185,7 @@
                         <outlet property="currentConditionsLabel" destination="z8e-qv-mlE" id="Qe4-mR-A0J"/>
                         <outlet property="houseInfoLabel" destination="Lo2-T6-otx" id="kNm-Wy-TzV"/>
                         <outlet property="otherCriteriaLabel" destination="iXu-2G-XaY" id="Aeq-qZ-t7X"/>
+                        <outlet property="priceSizeLabel" destination="rt8-Dr-kwW" id="YzT-oe-ddQ"/>
                         <outlet property="radarBannerLabel" destination="Vex-Jt-wjS" id="VKb-a0-SeL"/>
                         <outlet property="regionLabel" destination="j4W-N0-hHF" id="3m1-yP-MNy"/>
                     </connections>
@@ -1246,7 +1247,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="49.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" image="filter_p" translatesAutoresizingMaskIntoConstraints="NO" id="lhf-y9-3xZ">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="lhf-y9-3xZ" userLabel="filters">
                                                     <rect key="frame" x="8" y="10" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="5d3-ps-hgh"/>
@@ -1300,6 +1301,7 @@
                     <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="cityRegionLabel" destination="vfa-a9-w4p" id="MWW-lQ-WlP"/>
+                        <outlet property="filtersImage" destination="lhf-y9-3xZ" id="mAJ-F7-Dez"/>
                         <outlet property="priceArrow" destination="z7I-Er-QUv" id="lV6-zK-bFv"/>
                         <outlet property="priceLabel" destination="1QB-2l-ZjN" id="veK-lf-in2"/>
                         <outlet property="pricePicker" destination="qpx-CU-iYH" id="rFA-s1-REc"/>
@@ -1335,7 +1337,6 @@
         <image name="arrow_down_n" width="15" height="15"/>
         <image name="background_house" width="375" height="177"/>
         <image name="cancel" width="30" height="30"/>
-        <image name="filter_p" width="30" height="30"/>
         <image name="main_radar_n" width="38" height="38"/>
         <image name="search item_01" width="30" height="30"/>
         <image name="search item_02" width="30" height="30"/>

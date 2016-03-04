@@ -75,6 +75,7 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var houseInfoLabel: UILabel!
     
     @IBOutlet weak var otherCriteriaLabel: UILabel!
+    @IBOutlet weak var priceSizeLabel: UILabel!
     
     @IBOutlet weak var activateButton: UIButton!
     
