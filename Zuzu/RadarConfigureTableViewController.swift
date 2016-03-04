@@ -534,7 +534,7 @@ class RadarConfigureTableViewController: UITableViewController {
             if let regionSelectionState = currentCriteria.region {
                 cityRegionVC.regionSelectionState = regionSelectionState
             }
-
+            self.parentViewController?.navigationItem.backBarButtonItem?.title = "取消"
             self.showViewController(cityRegionVC, sender: self)
 
         case CellConst.moreFilters: //More Filters
@@ -554,7 +554,7 @@ class RadarConfigureTableViewController: UITableViewController {
             
             ftvc.selectedFilterIdSet = filterIdSet
             ftvc.filterDelegate = self
-            
+            self.parentViewController?.navigationItem.backBarButtonItem?.title = "完成"
             self.showViewController(ftvc, sender: self)
             
         default: break

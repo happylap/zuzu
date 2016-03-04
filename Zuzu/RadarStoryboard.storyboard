@@ -179,7 +179,14 @@
                             <constraint firstItem="k3B-Gj-w2p" firstAttribute="top" secondItem="qgH-TH-Bdj" secondAttribute="bottom" id="vLO-8a-ndm"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="通知條件設定" id="SR1-Hu-UOf" userLabel="設定"/>
+                    <toolbarItems>
+                        <barButtonItem title="完成" id="HWm-vo-9iw"/>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="通知條件設定" id="SR1-Hu-UOf" userLabel="設定">
+                        <connections>
+                            <outlet property="backBarButtonItem" destination="HWm-vo-9iw" id="nsr-Si-pje"/>
+                        </connections>
+                    </navigationItem>
                     <connections>
                         <outlet property="activateButton" destination="uYU-YW-y5a" id="j8t-ak-Ctq"/>
                         <outlet property="currentConditionsLabel" destination="z8e-qv-mlE" id="Qe4-mR-A0J"/>
