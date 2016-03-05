@@ -358,7 +358,7 @@ class HouseDetailViewController: UIViewController {
                     if let houseDetail = self.houseItemDetail {
                         cell.addressLabel.text = houseDetail.valueForKey("addr") as? String
                     } else {
-                        cell.addressLabel.text = ""
+                        cell.addressLabel.text = " " //To reserve the height
                     }
                     
                 }
