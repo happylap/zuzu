@@ -53,6 +53,12 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var addToCollectionButton: UIImageView!
     @IBOutlet weak var prefixedButton: UIImageView!
     @IBOutlet weak var contactedView: UIView!
+    
+    @IBOutlet weak var houseSourceBox: UIView! {
+        didSet {
+            houseSourceBox.layer.borderWidth = 1
+        }
+    }
     @IBOutlet weak var houseSourceLabel: UILabel!
     @IBOutlet weak var offShelfView: UIView!
     @IBOutlet weak var offShelfImg: UIImageView!
@@ -90,7 +96,7 @@ class SearchResultTableViewCell: UITableViewCell {
         return SearchResultTableViewCell.labelMaker.fromCodeForField("purpose_type", code: purpose)
     }
     
-    private func prpcessSourceString(label:UILabel, source:Int) {
+    private func processSourceString(label:UILabel, source:Int) {
         var labelColor: UIColor?
         var sourceText: String?
         
@@ -110,7 +116,7 @@ class SearchResultTableViewCell: UITableViewCell {
         }
         
         if let sourceText = sourceText, let labelColor = labelColor {
-            
+            houseSourceBox.layer.borderColor = labelColor.CGColor
             label.textColor = labelColor
             label.text = sourceText
             
@@ -142,7 +148,7 @@ class SearchResultTableViewCell: UITableViewCell {
                 }
             }
             
-            prpcessSourceString(houseSourceLabel, source: houseItem.source)
+            processSourceString(houseSourceLabel, source: houseItem.source)
             
             /// Round the size to the second place
             let multiplier:Float = pow(10.0, 2)
@@ -199,7 +205,7 @@ class SearchResultTableViewCell: UITableViewCell {
             let purposeTypeStr = self.getPurposeString(Int(collectionHouseItem.purposeType)) ?? ""
             self.houseTypeAndUsage.text = "\(houseTypeStr)/\(purposeTypeStr)"
             
-            prpcessSourceString(houseSourceLabel, source: Int(collectionHouseItem.source))
+            processSourceString(houseSourceLabel, source: Int(collectionHouseItem.source))
             
             self.houseImg.image = placeholderImg
             

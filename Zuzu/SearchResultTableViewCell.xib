@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="197"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MsK-AZ-Dfo" id="QwY-Xe-T1B">
-                <rect key="frame" x="0.0" y="0.0" width="414" height="196"/>
+                <rect key="frame" x="0.0" y="0.0" width="414" height="196.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="584" placeholderIntrinsicHeight="390" image="house_img" translatesAutoresizingMaskIntoConstraints="NO" id="Hbn-Ap-XJT" customClass="UIOverlayImageView" customModule="Zuzu" customModuleProvider="target">
@@ -24,7 +24,7 @@
                         </constraints>
                     </imageView>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFe-03-eKb">
-                        <rect key="frame" x="8" y="8" width="358" height="21"/>
+                        <rect key="frame" x="8" y="8" width="358" height="20.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -33,13 +33,13 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="內湖好房, 近捷運, 生活機能超棒" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UBI-K0-9Hv" userLabel="House Title For Collection">
-                        <rect key="frame" x="41" y="8" width="325" height="21"/>
+                        <rect key="frame" x="41" y="8" width="325" height="20.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" misplaced="YES" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
-                        <rect key="frame" x="368" y="174" width="38" height="19"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="元/月" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzB-16-z6B">
+                        <rect key="frame" x="368.5" y="174" width="37.5" height="19"/>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -48,8 +48,8 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
-                        <rect key="frame" x="8" y="151" width="363" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
+                        <rect key="frame" x="8" y="151" width="326.5" height="17"/>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -58,7 +58,7 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" misplaced="YES" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="電梯大樓/整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Cs-laH" userLabel="House Type">
                         <rect key="frame" x="8" y="175" width="117" height="17"/>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="8"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -68,8 +68,8 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
-                        <rect key="frame" x="133" y="175" width="32" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GD9-Jc-zPa" userLabel="House Size">
+                        <rect key="frame" x="133" y="175" width="31.5" height="17"/>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -78,8 +78,8 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
-                        <rect key="frame" x="321" y="174" width="45" height="19"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kgs-Ox-hob">
+                        <rect key="frame" x="321" y="174.5" width="44.5" height="18.5"/>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -88,17 +88,35 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" misplaced="YES" text="591" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KeF-nv-cuS" userLabel="Source Label">
-                        <rect key="frame" x="379" y="150" width="27" height="20"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                        <color key="textColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uY6-DH-haq" userLabel="Source Box">
+                        <rect key="frame" x="342.5" y="147.5" width="63.5" height="25.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="591" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KeF-nv-cuS" userLabel="Source Label">
+                                <rect key="frame" x="3" y="3" width="57.5" height="19.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <color key="textColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="KeF-nv-cuS" secondAttribute="bottom" constant="3" id="fXn-1s-lUN"/>
+                            <constraint firstItem="KeF-nv-cuS" firstAttribute="top" secondItem="uY6-DH-haq" secondAttribute="top" constant="3" id="mCh-jp-i9D"/>
+                            <constraint firstAttribute="trailing" secondItem="KeF-nv-cuS" secondAttribute="trailing" constant="3" id="nrT-c0-s6o"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="65" id="rI7-EI-75W"/>
+                            <constraint firstAttribute="width" secondItem="uY6-DH-haq" secondAttribute="height" multiplier="5:2" id="v4x-IO-vKX"/>
+                            <constraint firstItem="KeF-nv-cuS" firstAttribute="leading" secondItem="uY6-DH-haq" secondAttribute="leading" constant="3" id="wLh-Wx-knd"/>
+                        </constraints>
                         <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="8"/>
+                            </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
-                    </label>
+                    </view>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_n" translatesAutoresizingMaskIntoConstraints="NO" id="ttQ-yW-U9H">
-                        <rect key="frame" x="374" y="-1" width="40" height="40"/>
+                        <rect key="frame" x="374" y="-1.5" width="40" height="40.5"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="ttQ-yW-U9H" secondAttribute="height" multiplier="1:1" id="eOO-x8-iZs"/>
                             <constraint firstAttribute="width" constant="40" id="wDn-zW-w0n"/>
@@ -189,7 +207,6 @@
                     <constraint firstAttribute="trailingMargin" secondItem="zzB-16-z6B" secondAttribute="trailing" constant="8" id="4fQ-0W-376"/>
                     <constraint firstItem="11f-2y-aXb" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="leading" id="5Od-sx-1I1"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="centerY" secondItem="UBI-K0-9Hv" secondAttribute="centerY" id="6IG-FC-fZJ"/>
-                    <constraint firstItem="KeF-nv-cuS" firstAttribute="centerY" secondItem="11f-2y-aXb" secondAttribute="centerY" id="8B3-Dn-i7k"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="95t-2C-vcI"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GD9-Jc-zPa" secondAttribute="trailing" id="Cc8-sH-bbT"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="trailing" constant="8" symbolic="YES" id="EY4-hO-fbE"/>
@@ -203,7 +220,7 @@
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="T5V-z7-wUS"/>
                     <constraint firstAttribute="bottomMargin" secondItem="9Vu-St-5FI" secondAttribute="bottom" constant="60" id="VS7-yX-GaX"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="centerY" secondItem="GD9-Jc-zPa" secondAttribute="centerY" id="ZjA-Sw-ArO"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="KeF-nv-cuS" secondAttribute="trailing" constant="8" id="aPq-Hx-Y9e"/>
+                    <constraint firstItem="uY6-DH-haq" firstAttribute="centerY" secondItem="11f-2y-aXb" secondAttribute="centerY" id="chT-nj-rjd"/>
                     <constraint firstItem="9Vu-St-5FI" firstAttribute="bottom" secondItem="nmL-N8-6QR" secondAttribute="top" id="co6-J6-SgW"/>
                     <constraint firstAttribute="bottomMargin" secondItem="nmL-N8-6QR" secondAttribute="bottom" id="dAU-IF-Km2"/>
                     <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="3" id="fEz-oG-VR4"/>
@@ -215,11 +232,12 @@
                     <constraint firstItem="UBI-K0-9Hv" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="npe-DT-f43"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="baseline" secondItem="zzB-16-z6B" secondAttribute="baseline" id="omn-8y-ofX"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="baseline" secondItem="Sa0-Cs-laH" secondAttribute="baseline" id="qDp-tf-RuV"/>
-                    <constraint firstItem="KeF-nv-cuS" firstAttribute="leading" secondItem="11f-2y-aXb" secondAttribute="trailing" constant="8" id="roD-cb-uea"/>
+                    <constraint firstItem="uY6-DH-haq" firstAttribute="leading" secondItem="11f-2y-aXb" secondAttribute="trailing" constant="8" id="s2n-TY-AXB"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Hbn-Ap-XJT" secondAttribute="trailing" id="seC-2l-Ms1"/>
                     <constraint firstItem="hPJ-o1-WHC" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="svp-fv-6uQ"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="topMargin" constant="8" id="t5x-sW-gOn"/>
                     <constraint firstItem="UBI-K0-9Hv" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="41" id="u3I-Km-ebj"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="uY6-DH-haq" secondAttribute="trailing" constant="8" id="wIb-Wu-Crc"/>
                     <constraint firstAttribute="leadingMargin" secondItem="9Vu-St-5FI" secondAttribute="leading" id="x6Q-7O-e8d"/>
                     <constraint firstItem="hPJ-o1-WHC" firstAttribute="centerY" secondItem="UBI-K0-9Hv" secondAttribute="centerY" id="yKk-da-cpG"/>
                 </constraints>
@@ -242,6 +260,7 @@
                 <outlet property="houseImg" destination="Hbn-Ap-XJT" id="BwR-sB-AG3"/>
                 <outlet property="housePrice" destination="Kgs-Ox-hob" id="DXn-o0-6KX"/>
                 <outlet property="houseSize" destination="GD9-Jc-zPa" id="7Qw-L3-R4x"/>
+                <outlet property="houseSourceBox" destination="uY6-DH-haq" id="tqi-dO-gaD"/>
                 <outlet property="houseSourceLabel" destination="KeF-nv-cuS" id="tky-aX-8ff"/>
                 <outlet property="houseTitle" destination="KFe-03-eKb" id="IoH-ai-Z6l"/>
                 <outlet property="houseTitleForCollection" destination="UBI-K0-9Hv" id="zys-6f-KW6"/>
