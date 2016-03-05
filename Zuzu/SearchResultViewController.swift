@@ -39,9 +39,22 @@ class SearchResultViewController: UIViewController {
         case ScrollDirectionCrazy
     }
     
-    private let filterSettingOnImage = UIImage(named: "filter_on_n")
+    private var alertViewResponder: SCLAlertViewResponder?
     
+    private let filterSettingOnImage = UIImage(named: "filter_on_n")
     private let filterSettingNormalImage = UIImage(named: "filter_n")
+    
+    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    private let searchItemService : SearchItemService = SearchItemService.getInstance()
+    private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
+    private var lastContentOffset:CGFloat = 0
+    private var lastDirection: ScrollDirection = ScrollDirection.ScrollDirectionNone
+    private var ignoreScroll = false
+    
+    private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
+    private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
+    
+    private var duplicateHouseItem: HouseItem?
     
     // MARK: - Member Fields
     
@@ -70,25 +83,11 @@ class SearchResultViewController: UIViewController {
     
     @IBOutlet weak var sortByPostTimeButton: UIButton!
     
-    
     @IBOutlet weak var tableView: UITableView!
     
     var smartFilterContainerView: SmartFilterContainerView?
     
-    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
-    
     var debugTextStr: String = ""
-    
-    private let searchItemService : SearchItemService = SearchItemService.getInstance()
-    private let dataSource: HouseItemTableDataSource = HouseItemTableDataSource()
-    private var lastContentOffset:CGFloat = 0
-    private var lastDirection: ScrollDirection = ScrollDirection.ScrollDirectionNone
-    private var ignoreScroll = false
-    
-    private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
-    private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
-    
-    private var duplicateHouseItem: HouseItem?
     
     var searchCriteria: SearchCriteria?
     
@@ -252,7 +251,7 @@ class SearchResultViewController: UIViewController {
     }
     
     private func loadHouseListPage(pageNo: Int) {
-
+        
         let maxPageNum = ceil( Double(dataSource.estimatedTotalResults) / Double(HouseItemTableDataSource.Const.pageSize))
         
         if(pageNo > Int(maxPageNum)){
@@ -270,16 +269,23 @@ class SearchResultViewController: UIViewController {
         if let error = error {
             // Initialize Alert View
             
-            let alertView = UIAlertView(
-                title: NSLocalizedString("unable_to_get_data.alert.title", comment: ""),
-                message: NSLocalizedString("unable_to_get_data.alert.msg", comment: ""),
-                delegate: self,
-                cancelButtonTitle: NSLocalizedString("unable_to_get_data.alert.button.ok", comment: ""))
+            if(self.alertViewResponder == nil) {
+                
+                let msgTitle = NSLocalizedString("unable_to_get_data.alert.title", comment: "")
+                let subTitle = NSLocalizedString("unable_to_get_data.alert.msg", comment: "")
+                let okButton = NSLocalizedString("unable_to_get_data.alert.button.ok", comment: "")
+                
+                let alertView = SCLAlertView()
+                alertView.showCloseButton = true
+                
+                self.alertViewResponder = alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                
+                self.alertViewResponder?.setDismissBlock({ () -> Void in
+                    self.alertViewResponder = nil
+                })
+            }
             
-            alertView.tag = 1
-            alertView.show()
-            
-            ///GA Tracker
+            /// GA Tracker
             if let duration = dataSource.loadingDuration {
                 self.trackTimeForCurrentScreen("Networkdata", interval: Int(duration * 1000),
                     name: "searchHouse", label: String(error.code))
