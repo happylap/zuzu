@@ -152,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         customUISetup()
         
-        Fabric.with([MoPub.self, AWSCognito.self])
+        Fabric.with([MoPub.self])
         
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
