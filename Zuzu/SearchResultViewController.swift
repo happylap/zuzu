@@ -779,6 +779,7 @@ class SearchResultViewController: UIViewController {
         
         //Try preload Ad
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.adItem) as! SearchResultAdCell
+        cell.setupBanner(self)
         cell.loadAdForController(self)
     }
     
