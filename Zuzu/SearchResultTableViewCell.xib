@@ -49,7 +49,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新北市板橋區民族路151巷" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-2y-aXb" userLabel="House Addr">
-                        <rect key="frame" x="8" y="151" width="326.5" height="17"/>
+                        <rect key="frame" x="8" y="151" width="338" height="17"/>
                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -89,11 +89,11 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uY6-DH-haq" userLabel="Source Box">
-                        <rect key="frame" x="342.5" y="147.5" width="63.5" height="25.5"/>
+                        <rect key="frame" x="354" y="149" width="52" height="21"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="591" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KeF-nv-cuS" userLabel="Source Label">
-                                <rect key="frame" x="3" y="3" width="57.5" height="19.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <rect key="frame" x="3" y="2" width="46" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -102,8 +102,8 @@
                             </label>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="KeF-nv-cuS" secondAttribute="bottom" constant="3" id="fXn-1s-lUN"/>
-                            <constraint firstItem="KeF-nv-cuS" firstAttribute="top" secondItem="uY6-DH-haq" secondAttribute="top" constant="3" id="mCh-jp-i9D"/>
+                            <constraint firstAttribute="bottom" secondItem="KeF-nv-cuS" secondAttribute="bottom" constant="2" id="fXn-1s-lUN"/>
+                            <constraint firstItem="KeF-nv-cuS" firstAttribute="top" secondItem="uY6-DH-haq" secondAttribute="top" constant="2" id="mCh-jp-i9D"/>
                             <constraint firstAttribute="trailing" secondItem="KeF-nv-cuS" secondAttribute="trailing" constant="3" id="nrT-c0-s6o"/>
                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="65" id="rI7-EI-75W"/>
                             <constraint firstAttribute="width" secondItem="uY6-DH-haq" secondAttribute="height" multiplier="5:2" id="v4x-IO-vKX"/>
@@ -111,7 +111,7 @@
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="8"/>
+                                <integer key="value" value="10"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
