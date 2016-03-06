@@ -39,7 +39,7 @@ internal func getCurrentScale() -> CGFloat{
     default:
         Log.debug("It's an unknown device")
     }
-
+    
     return scale
     
 }
@@ -59,30 +59,16 @@ private func getScaledFontSize(baseFont: UIFont) -> CGFloat{
     
 }
 
-extension UIButton {
+extension UIView {
     var autoScaleRadious: Bool {
         set {
             let baseSize:CGFloat = self.layer.cornerRadius
             var scale:CGFloat = 1.0
             var scaledSize:CGFloat = baseSize
             
-            switch Device.version() {
-                /*** iPhone ***/
-            case .iPhone4, .iPhone4S, .iPhone5, .iPhone5C, .iPhone5S:
-                scale = ScaleConst.smallScale
-                scaledSize = floor(baseSize * scale)
-            case .iPhone6, .iPhone6S:
-                break
-            case .iPhone6Plus, .iPhone6SPlus:
-                scale = ScaleConst.largeScale
-                scaledSize = ceil(baseSize * scale)
-                /*** Simulator ***/
-            case .Simulator:
-                Log.debug("It's an  simulator")
-                /*** Unknown ***/
-            default:
-                Log.debug("It's an unknown device")
-            }
+            scale = getCurrentScale()
+            
+            scaledSize = round(baseSize * scale)
             
             self.layer.cornerRadius = scaledSize
             
@@ -92,7 +78,9 @@ extension UIButton {
             return false
         }
     }
-    
+}
+
+extension UIButton {
     var autoScaleFontSize: Bool {
         set {
             if newValue {
