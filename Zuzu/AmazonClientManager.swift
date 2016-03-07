@@ -247,9 +247,20 @@ class AmazonClientManager : NSObject {
             AWSLogger.defaultLogger().logLevel = AWSLogLevel.Info
         #endif
         
+        /// Clear previous IdentityId when we find the user has never logged to Cognito for
+        // this installation. This would avoid the use of previous IdentityId
+        // when switching to another login provider's account
+        if(UserDefaultsUtils.getCognitoIdentityId() == nil) {
+            // No previous Cognito identityId for current installation.
+            // We don't need the previous identityId in the keychain
+            Log.debug("Clear previous identityId")
+            self.credentialsProvider?.clearKeychain()
+        }
+        
         ///Init AWSCognitoCredentialsProvider
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
         self.credentialsProvider?.logins = logins
+        
         
         if logins == nil{
             self.credentialsProvider?.clearKeychain()
@@ -275,6 +286,11 @@ class AmazonClientManager : NSObject {
         if let userInfo = notification.userInfo as? [String: AnyObject] {
             Log.debug("userInfo = \(userInfo)")
             Log.debug("identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+            
+            /// Save the latest Cognito identityId
+            if let identityId = userInfo[AWSCognitoNotificationNewId] as? String {
+                UserDefaultsUtils.setCognitoIdentityId(identityId)
+            }
         }
     }
     
@@ -394,9 +410,8 @@ class AmazonClientManager : NSObject {
             self.dumpCognitoCredentialProviderInfo()
             
             if (task.error != nil) {
-                assert(false, "Log in failed")
-            }
-            else{
+                assert(false, "Log in failed. Cannot get IdentityId")
+            } else{
                 //Upload User Data to S3
                 if let userData = self.currentUserProfile {
                     
