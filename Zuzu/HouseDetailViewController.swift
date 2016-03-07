@@ -196,7 +196,10 @@ class HouseDetailViewController: UIViewController {
             0:CellInfo(cellIdentifier: .HouseDetailTitleCell, hidden: false, cellHeight: 213, handler: { (cell : UITableViewCell) -> () in
                 if let cell = cell as? HouseDetailTitleViewCell {
                     
-                    if let imgList = self.houseItem?.imgList {
+                    if let houseItemDetail = self.houseItemDetail {
+                        var data = JSON(houseItemDetail)
+                        let imgList = data["img"].arrayObject as? [String] ?? [String]()
+                        
                         cell.carouselView.imageUrls = imgList
                         cell.carouselView.tapHandler = { () -> Void in
                             Log.debug("carouselView.tapHandler")
@@ -205,6 +208,8 @@ class HouseDetailViewController: UIViewController {
                             //self.tableView.selectRowAtIndexPath(rowToSelect, animated: true, scrollPosition: UITableViewScrollPosition.None);
                             self.tableView(self.tableView, didSelectRowAtIndexPath: rowToSelect);
                         }
+                        
+                        cell.carouselView.setNeedsLayout()
                     }
                     
                     if let houseDetail = self.houseItemDetail {
