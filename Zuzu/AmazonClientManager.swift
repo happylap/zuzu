@@ -216,6 +216,8 @@ class AmazonClientManager : NSObject {
     }
     
     private func addLoginForCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
+        Log.enter()
+        
         var merge = [NSObject : AnyObject]()
         
         //Add existing logins
@@ -237,7 +239,7 @@ class AmazonClientManager : NSObject {
     }
     
     private func initializeCredentialsProvider(logins: [NSObject : AnyObject]?) -> AWSTask? {
-        Log.info("Initializing Credentials Provider...")
+        Log.enter()
         
         #if DEBUG
             AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
@@ -268,8 +270,21 @@ class AmazonClientManager : NSObject {
         return self.credentialsProvider?.getIdentityId()
     }
     
+    func identityDidChange(notification: NSNotification!) {
+        if let userInfo = notification.userInfo as? [String: AnyObject] {
+            Log.debug("userInfo = \(userInfo)")
+            Log.debug("identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+        }
+    }
+    
     override init() {
         super.init()
+        
+        /// IdentityId will be changed when a new provider login is set
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector:"identityDidChange:",
+            name:AWSCognitoIdentityIdChangedNotification,
+            object:nil)
     }
     
     // MARK: AppDelegate Handlers
@@ -345,6 +360,11 @@ class AmazonClientManager : NSObject {
             default:
                 assert(false, "Invalid Provider")
             }
+        } else {
+            
+            /// [Backward Compatible]
+            //When there is no login provider saved in UserDefaults, fallback to FB resuming
+            self.reloadFBSession()
         }
         
         Log.exit()
@@ -474,8 +494,12 @@ class AmazonClientManager : NSObject {
     
     func reloadFBSession() {
         
-        Log.error("Reloading Facebook Session: \(FBSDKAccessToken.currentAccessToken()?.expirationDate)")
-        self.completeFBLoginWithUserData()
+        if(self.isLoggedInWithFacebook()) {
+            Log.error("Reloading Facebook Session: \(FBSDKAccessToken.currentAccessToken()?.expirationDate)")
+            self.completeFBLoginWithUserData()
+        } else {
+            Log.error("Reloading Facebook Session: Failure")
+        }
     }
     
     func fbLogin(theViewController: UIViewController) {
@@ -597,10 +621,10 @@ class AmazonClientManager : NSObject {
     func isLoggedInWithGoogle() -> Bool {
         
         if let _ = self.googleSignIn.currentUser?.authentication {
-            Log.error("has currentUser")
+            Log.error("has Google currentUser")
             return true
         } else {
-            Log.error("no currentUser")
+            Log.error("no Google currentUser")
             
             if GIDSignIn.sharedInstance().hasAuthInKeychain() {
                 Log.error("has AuthInKeychain")
@@ -614,9 +638,14 @@ class AmazonClientManager : NSObject {
     
     func reloadGSession() {
         
-        Log.error("Reloading Google Session: \(self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate)")
-        
-        self.googleSignIn.signInSilently()
+        if(self.isLoggedInWithGoogle()) {
+            Log.error("Reloading Google Session: \(self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate)")
+            
+            self.googleSignIn.signInSilently()
+        } else {
+            
+            Log.error("Reloading Google Session: Failure")
+        }
     }
     
     func googleLogin(theViewController: UIViewController) {
