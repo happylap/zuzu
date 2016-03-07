@@ -149,7 +149,7 @@ class AmazonClientManager : NSObject {
         
         if let s3Client = self.transferManager {
             s3Client.upload(uploadRequest).continueWithBlock { (task) -> AnyObject! in
-                if task.result != nil {
+                if(task.completed) {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         Log.debug("Success!")
                     })
@@ -265,7 +265,8 @@ class AmazonClientManager : NSObject {
         ///Init S3 AWSServiceConfiguration
         let configurationForS3 = AWSServiceConfiguration(region: AWSConstants.S3_SERVICE_REGIONTYPE, credentialsProvider: self.credentialsProvider)
         
-        self.transferManager = AWSS3TransferManager(configuration: configurationForS3, identifier: "S3")
+        self.transferManager = AWSS3TransferManager.defaultS3TransferManager()
+        AWSS3TransferManager.registerS3TransferManagerWithConfiguration(configurationForS3, forKey: "S3")
         
         return self.credentialsProvider?.getIdentityId()
     }
