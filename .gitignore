@@ -42,3 +42,4 @@ Pods/
 
 Carthage/Build
 Secrets.swift
+LocalConst.swift
