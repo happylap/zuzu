@@ -54,7 +54,19 @@ class RadarViewController: UIViewController {
         }
     }
     
-    // MARK: - UI Label
+    // MARK: - UI
+    
+    private func configureButton() {
+        activateButton.layer.borderWidth = 1
+        activateButton.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        activateButton.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        activateButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
+        activateButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
+    }
     
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
@@ -80,7 +92,8 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var activateButton: UIButton!
     
     
-    // MARK: - activate button
+    // MARK: - Action
+    
     @IBAction func activateButtonClick(sender: UIButton) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
@@ -101,6 +114,7 @@ class RadarViewController: UIViewController {
     }
     
     // MARK: - Navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
             
@@ -166,18 +180,6 @@ class RadarViewController: UIViewController {
             NSNotificationCenter.defaultCenter().removeObserver(self)
             NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleResetCriteria:", name: ResetCriteriaNotification, object: nil)
         }
-    }
-    
-    private func configureButton() {
-        activateButton.layer.borderWidth = 1
-        activateButton.layer.borderColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-        activateButton.tintColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        activateButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
-        activateButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
 }
 
