@@ -162,7 +162,7 @@ class LoginDebugViewController: UIViewController {
         if let currentUser = AmazonClientManager.sharedInstance.currentUserProfile {
             
             subTitle = "UserId = \n\(currentUser.id ?? "-")" +
-                "\n\n Provider = \(currentUser.provider ?? nil)" +
+                "\n\n Provider = \(currentUser.provider?.rawValue ?? "-")" +
             "\n\n Email = \(currentUser.email ?? "-")"
         }
         
