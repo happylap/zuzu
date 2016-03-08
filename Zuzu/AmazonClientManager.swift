@@ -433,6 +433,16 @@ class AmazonClientManager : NSObject {
         
         GIDSignIn.sharedInstance().delegate = self
         
+        //Set sign-in language by device locale
+        var language = "zh-TW"
+        if let langId = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as? String,
+            let countryId = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as? String {
+                language = "\(langId)-\(countryId)" // en-US on my machine
+                Log.debug("current language = \(language)")
+        }
+        
+        GIDSignIn.sharedInstance().language = language
+        
         // Initialize Facebook sign-in
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
