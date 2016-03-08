@@ -122,6 +122,7 @@
 		2FE912761C045B0400019053 /* SearchCriteriaDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE912751C045B0400019053 /* SearchCriteriaDataStore.swift */; };
 		2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2FEC14CB1C15F41C000E652D /* .travis.yml */; };
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
+		810081D21C8E653100659BE2 /* ZuzuServiceMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810081D11C8E653100659BE2 /* ZuzuServiceMapper.swift */; };
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
 		812455341C5768E40085F3A8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812455331C5768E40085F3A8 /* StoreKit.framework */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
@@ -303,6 +304,7 @@
 		2FEC14CB1C15F41C000E652D /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = searchCriteriaOptions.json; sourceTree = "<group>"; };
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		810081D11C8E653100659BE2 /* ZuzuServiceMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuServiceMapper.swift; sourceTree = "<group>"; };
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
 		812455331C5768E40085F3A8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -711,6 +713,7 @@
 			isa = PBXGroup;
 			children = (
 				81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */,
+				810081D11C8E653100659BE2 /* ZuzuServiceMapper.swift */,
 			);
 			name = ObjectMapper;
 			sourceTree = "<group>";
@@ -990,6 +993,7 @@
 				14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
+				810081D21C8E653100659BE2 /* ZuzuServiceMapper.swift in Sources */,
 				8166359A1C608838008C0AA3 /* ZuzuUser.swift in Sources */,
 				816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */,
 				14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */,
