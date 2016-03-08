@@ -711,7 +711,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YN5-O7-pWJ" userLabel="ServiceView">
-                                                <rect key="frame" x="0.0" y="368" width="600" height="200"/>
+                                                <rect key="frame" x="0.0" y="360" width="600" height="200"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmx-jO-trx">
                                                         <rect key="frame" x="8" y="8" width="584" height="184"/>
@@ -823,10 +823,10 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kzV-PJ-lR5" userLabel="PurchaseTableView">
-                                                <rect key="frame" x="8" y="584" width="584" height="584"/>
+                                                <rect key="frame" x="8" y="568" width="584" height="389.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1500" id="W8T-DZ-bgd"/>
+                                                    <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1000" id="W8T-DZ-bgd"/>
                                                 </constraints>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="purchaseHistoryHeader" textLabel="VdT-YN-AiF" style="IBUITableViewCellStyleDefault" id="hNA-XF-Y4x">
@@ -913,6 +913,7 @@
                                                                 </mask>
                                                             </variation>
                                                         </tableViewCellContentView>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <connections>
                                                             <outlet property="purchaseDateLabel" destination="Jbm-x5-DvT" id="bcJ-fo-4Jm"/>
                                                             <outlet property="purchaseDescLabel" destination="tBo-l1-1gK" id="dYV-rM-KOe"/>
@@ -939,9 +940,9 @@
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="width" secondItem="Nrn-N1-0Oc" secondAttribute="width" id="Ffd-7Y-4np"/>
                                             <constraint firstItem="YN5-O7-pWJ" firstAttribute="centerX" secondItem="Nrn-N1-0Oc" secondAttribute="centerX" id="N0a-Yk-key"/>
                                             <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="bottom" constant="8" id="OTf-Go-c3u"/>
-                                            <constraint firstItem="YN5-O7-pWJ" firstAttribute="top" secondItem="byC-T9-SKw" secondAttribute="bottom" constant="8" id="Oux-6J-C0c"/>
+                                            <constraint firstItem="YN5-O7-pWJ" firstAttribute="top" secondItem="byC-T9-SKw" secondAttribute="bottom" id="Oux-6J-C0c"/>
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="centerX" secondItem="Nrn-N1-0Oc" secondAttribute="centerX" id="UQ4-PS-0DV"/>
-                                            <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="bottom" constant="16" id="Xeq-n3-nqe"/>
+                                            <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="bottom" constant="8" id="Xeq-n3-nqe"/>
                                             <constraint firstAttribute="trailing" secondItem="YN5-O7-pWJ" secondAttribute="trailing" constant="8" id="bYc-Fw-bvg"/>
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="leading" secondItem="Nrn-N1-0Oc" secondAttribute="leading" constant="8" id="h4W-dN-VQ3"/>
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="width" secondItem="Nrn-N1-0Oc" secondAttribute="width" id="q0T-PE-QZd"/>
