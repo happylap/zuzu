@@ -990,6 +990,7 @@
                         <outlet property="regionLabel" destination="wkD-W0-Nni" id="cVX-6v-SN5"/>
                         <outlet property="serviceExpireLabel" destination="3ea-9P-KAv" id="kuU-EK-Y2I"/>
                         <outlet property="serviceStatusLabel" destination="R0d-9F-apP" id="OJa-EX-5Vz"/>
+                        <outlet property="servieBannerLabel" destination="QMV-ev-uwx" id="itO-I6-7AC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LaE-8c-zRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
