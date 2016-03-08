@@ -161,9 +161,9 @@ class LoginDebugViewController: UIViewController {
         
         if let currentUser = AmazonClientManager.sharedInstance.currentUserProfile {
             
-            subTitle += "UserId = \n\(currentUser.id)" +
-                "\n\n Provider = \(currentUser.provider)" +
-            "\n\n Email = \(currentUser.email)"
+            subTitle = "UserId = \n\(currentUser.id ?? "-")" +
+                "\n\n Provider = \(currentUser.provider ?? nil)" +
+            "\n\n Email = \(currentUser.email ?? "-")"
         }
         
         myAlert.showTitle("Current User", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
