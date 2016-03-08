@@ -1022,14 +1022,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1w7-Y5-xeE">
-                                <rect key="frame" x="200" y="50" width="200" height="100"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sync_filled" translatesAutoresizingMaskIntoConstraints="NO" id="1w7-Y5-xeE">
+                                <rect key="frame" x="200" y="50" width="200" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="1w7-Y5-xeE" secondAttribute="height" multiplier="2:1" id="GJ6-JM-SLl"/>
+                                    <constraint firstAttribute="width" secondItem="1w7-Y5-xeE" secondAttribute="height" multiplier="1:1" id="GJ6-JM-SLl"/>
+                                    <constraint firstAttribute="width" secondItem="1w7-Y5-xeE" secondAttribute="height" multiplier="2:1" id="m9Q-uU-sUV"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="m9Q-uU-sUV"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="無法載入資料，請輕按重試" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P4b-pJ-WHt">
-                                <rect key="frame" x="202.5" y="162" width="195" height="100"/>
+                                <rect key="frame" x="202.5" y="262" width="195" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="195" id="I8f-Gw-6Ha"/>
                                     <constraint firstAttribute="height" constant="100" id="KEq-SD-hz8"/>
@@ -1051,14 +1057,8 @@
                             <constraint firstItem="1w7-Y5-xeE" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="8pf-rr-S6b"/>
                             <constraint firstItem="1w7-Y5-xeE" firstAttribute="width" secondItem="d4h-CZ-B2x" secondAttribute="width" multiplier="1:3" id="B81-hc-w88"/>
                             <constraint firstItem="1w7-Y5-xeE" firstAttribute="top" secondItem="P0O-aH-OZ3" secondAttribute="bottom" constant="30" id="a2H-2l-7vC"/>
-                            <constraint firstItem="YRp-Ow-tVS" firstAttribute="top" secondItem="1w7-Y5-xeE" secondAttribute="bottom" constant="405" id="eaV-ah-1NX"/>
                             <constraint firstItem="P4b-pJ-WHt" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="fFS-FI-K7d"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="eaV-ah-1NX"/>
-                            </mask>
-                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7zl-9S-4Mb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1508,5 +1508,6 @@
         <image name="search item_02" width="30" height="30"/>
         <image name="search item_03" width="30" height="30"/>
         <image name="search item_04" width="30" height="30"/>
+        <image name="sync_filled" width="125" height="125"/>
     </resources>
 </document>
