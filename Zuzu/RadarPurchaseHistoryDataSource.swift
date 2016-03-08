@@ -79,6 +79,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         if indexPath.row == 0{
             if let cell = tableView.dequeueReusableCellWithIdentifier(cellHeadrID){
                 cell.textLabel!.text = "購買紀錄"
+                cell.textLabel!.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
                 return cell
             } else {
                 assert(false, "Failed to prepare purchase cell instance")
