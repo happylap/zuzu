@@ -889,6 +889,7 @@ class AmazonClientManager : NSObject {
         self.googleSignIn.delegate = self
         self.googleSignIn.uiDelegate = self
         
+        LoadingSpinner.shared.setDimBackground(true)
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(theViewController.view)
