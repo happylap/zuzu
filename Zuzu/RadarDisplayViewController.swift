@@ -25,9 +25,13 @@ class RadarDisplayViewController: UIViewController {
     
     var purchaseHistotyTableDataSource = RadarPurchaseHistoryTableViewDataSource()
     
+    @IBOutlet weak var currentConditionLbel: UILabel!
+    
     @IBOutlet weak var regionLabel: UILabel!
     
     @IBOutlet weak var houseInfoLabel: UILabel!
+    
+    @IBOutlet weak var priceSizeLabel: UILabel!
     
     @IBOutlet weak var otherFiltersLabel: UILabel!
     
@@ -37,18 +41,23 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var purchaseTableView: UITableView!
     
+    @IBOutlet weak var modifyButtoon: UIButton!
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
     
+    
+    // MARK: - View Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.houseInfoLabel.numberOfLines = 0
         self.updateServiceTextLabel()
         self.updateCriteriaTextLabel()
         self.configureButton()
         self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
         self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
+        self.currentConditionLbel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
         
         // Do any additional setup after loading the view.
     }
@@ -57,6 +66,73 @@ class RadarDisplayViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tabBarController!.tabBarHidden = false
     }
+
+    
+    // MARK: - UI
+    
+    private func updateServiceTextLabel(){
+        var diff = 0
+        var expirDate = ""
+        if let expireDate = self.zuzuCriteria.expireTime{
+            let now = NSDate()
+            diff = now.daysFrom(expireDate)
+            if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
+                expirDate = dateString
+            }
+        }
+        self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
+        self.serviceExpireLabel?.text = "到期日: \(expirDate)"
+    }
+
+    private func updateCriteriaTextLabel(){
+        let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
+        self.regionLabel?.text = displayItem.title
+        self.houseInfoLabel?.text = displayItem.detail
+        var filterNum = 0
+        if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
+            filterNum = filterGroups.count
+        }
+        self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
+    }
+    
+    private func configureButton() {
+        modifyButtoon.layer.borderWidth = 1
+        modifyButtoon.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        modifyButtoon.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        modifyButtoon
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
+        modifyButtoon
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
+    }
+    
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier)")
+            
+            self.navigationItem.backBarButtonItem?.title = "完成"
+            
+            switch identifier{
+                
+            case ViewTransConst.showConfigureRadar:
+                if let vc = segue.destinationViewController as? RadarViewController {
+                    self.navigationItem.backBarButtonItem?.title = "完成"
+                    vc.delegate = self
+                    vc.isUpdateMode = true
+                    vc.searchCriteria = self.zuzuCriteria.criteria!
+                }
+            default: break
+                
+            }
+        }
+    }
+    
+    // MARK: - Criteria function
     
     @IBAction func enableCriteria(sender: UISwitch) {
         let isEnabled = sender.on
@@ -93,18 +169,6 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    private func updateCriteriaTextLabel(){
-        let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
-        self.regionLabel?.text = displayItem.title
-        self.houseInfoLabel?.text = displayItem.detail
-        var filterNum = 0
-        if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
-            filterNum = filterGroups.count
-        }
-        self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
-    }
-    
-    
     private func showPurchaseView(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
@@ -113,59 +177,6 @@ class RadarDisplayViewController: UIViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             vc.purchaseCompleteHandler = self.createCriteriaAfterPurchase
             presentViewController(vc, animated: true, completion: nil)
-        }
-    }
-    
-    private func updateServiceTextLabel(){
-        var diff = 0
-        var expirDate = ""
-        if let expireDate = self.zuzuCriteria.expireTime{
-            let now = NSDate()
-            diff = now.daysFrom(expireDate)
-            if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
-                expirDate = dateString
-            }
-        }
-        self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
-        self.serviceExpireLabel?.text = "到期日: \(expirDate)"
-    }
-    
-    private func configureButton() {
-        
-        /*searchButton.layer.borderWidth = 2
-        searchButton.layer.borderColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-        searchButton.tintColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        searchButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
-        searchButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)*/
-        
-    }
-    
-
-    // MARK: - Navigation
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier{
-            
-            Log.debug("prepareForSegue: \(identifier)")
-            
-            self.navigationItem.backBarButtonItem?.title = "完成"
-            
-            switch identifier{
-                
-            case ViewTransConst.showConfigureRadar:
-                if let vc = segue.destinationViewController as? RadarViewController {
-                    self.navigationItem.backBarButtonItem?.title = "完成"
-                    vc.delegate = self
-                    vc.isUpdateMode = true
-                    vc.searchCriteria = self.zuzuCriteria.criteria!
-                }
-            default: break
-                
-            }
         }
     }
     
