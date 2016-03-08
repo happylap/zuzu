@@ -86,7 +86,7 @@
                                                 <rect key="frame" x="0.0" y="106" width="600" height="173.5"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYU-YW-y5a" userLabel="activateButton">
-                                                        <rect key="frame" x="220" y="70" width="159" height="34"/>
+                                                        <rect key="frame" x="113.5" y="47" width="372" height="80"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="uYU-YW-y5a" secondAttribute="height" multiplier="930:200" id="SRg-Fw-I2f"/>
                                                         </constraints>
@@ -94,7 +94,7 @@
                                                         <state key="normal" title="立即啟用"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="20"/>
+                                                                <integer key="value" value="25"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
@@ -105,6 +105,7 @@
                                                     </button>
                                                 </subviews>
                                                 <constraints>
+                                                    <constraint firstItem="uYU-YW-y5a" firstAttribute="width" secondItem="dKm-Gp-BBg" secondAttribute="width" multiplier="930:1500" id="5Ip-eE-IVd"/>
                                                     <constraint firstItem="uYU-YW-y5a" firstAttribute="centerX" secondItem="dKm-Gp-BBg" secondAttribute="centerX" id="EkL-nL-GE9"/>
                                                     <constraint firstItem="uYU-YW-y5a" firstAttribute="centerY" secondItem="dKm-Gp-BBg" secondAttribute="centerY" id="V4v-hp-8D8"/>
                                                 </constraints>
