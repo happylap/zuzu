@@ -20,7 +20,8 @@ class ZuzuWebService: NSObject
 {
     private static let instance = ZuzuWebService()
     
-    var host = "http://ec2-52-74-19-65.ap-southeast-1.compute.amazonaws.com:4567"
+    //var host = "http://ec2-52-74-19-65.ap-southeast-1.compute.amazonaws.com:4567"
+    var host = "http://127.0.0.1:4567"
     
     var alamoFireManager = Alamofire.Manager.sharedInstance
     
@@ -80,6 +81,34 @@ class ZuzuWebService: NSObject
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             handler(result: (error == nil), error: error)
+        }
+        
+        Log.exit()
+    }
+    
+    // MARK: - Public APIs - Service
+    
+    func getServiceByUserId(userId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        let resource = "/service/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else if let value = result {
+                Log.debug("getServiceByUserId JSON: \(value)")
+                
+                if let serviceMapper = Mapper<ZuzuServiceMapper>().map(value) {
+                    handler(result: serviceMapper, error: nil)
+                } else {
+                    Log.debug("Can not transfor to SearchCriteria")
+                    handler(result: nil, error: NSError(domain: "Can not transfor to SearchCriteria", code: -1, userInfo: nil))
+                }
+            } else {
+                // Not found any criteria
+                handler(result: nil, error: nil)
+            }
         }
         
         Log.exit()
