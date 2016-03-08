@@ -43,9 +43,10 @@ struct UserDefaultsUtils{
         return userDefaults.stringForKey(zuzuUserIdUserDefaultKey)
     }
     
-    // MARK: User Profile
+    // MARK: Login
     /// UserProfile UserDefaults persistence APIs
     static let userProfileUserDefaultKey = "loginUserData"
+    static let userLastCognitoIdentityUserDefaultKey = "userLastCognitoIdentityUserDefaultKey"
     
     static func clearUserProfile() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -65,7 +66,18 @@ struct UserDefaultsUtils{
         let data = userDefaults.objectForKey(userProfileUserDefaultKey) as? NSData
         return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? UserProfile
     }
-
+    
+    /// Check if the user has ever loggin for this installation
+    static func setCognitoIdentityId(identityId : String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(identityId, forKey: userLastCognitoIdentityUserDefaultKey)
+    }
+    
+    static func getCognitoIdentityId() -> String? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(userLastCognitoIdentityUserDefaultKey) as? String
+    }
+    
     // MARK: My Collection
     
     static let myCollectionAlertUserDefaultKey = "myCollectionAlert"

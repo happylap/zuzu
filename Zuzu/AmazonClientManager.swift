@@ -249,7 +249,19 @@ class AmazonClientManager : NSObject {
         
         ///Init AWSCognitoCredentialsProvider
         self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
+        
+        /// Clear previous IdentityId when we find the user has never logged to Cognito for
+        // this installation. This would avoid the use of previous IdentityId
+        // when switching to another login provider's account
+        if(UserDefaultsUtils.getCognitoIdentityId() == nil) {
+            // No previous Cognito identityId for current installation.
+            // We don't need the previous identityId in the keychain
+            Log.debug("Clear previous identityId")
+            self.credentialsProvider?.clearKeychain()
+        }
+        
         self.credentialsProvider?.logins = logins
+        
         
         if logins == nil{
             self.credentialsProvider?.clearKeychain()
@@ -275,6 +287,11 @@ class AmazonClientManager : NSObject {
         if let userInfo = notification.userInfo as? [String: AnyObject] {
             Log.debug("userInfo = \(userInfo)")
             Log.debug("identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
+            
+            /// Save the latest Cognito identityId
+            if let identityId = userInfo[AWSCognitoNotificationNewId] as? String {
+                UserDefaultsUtils.setCognitoIdentityId(identityId)
+            }
         }
     }
     
@@ -394,9 +411,8 @@ class AmazonClientManager : NSObject {
             self.dumpCognitoCredentialProviderInfo()
             
             if (task.error != nil) {
-                assert(false, "Log in failed")
-            }
-            else{
+                assert(false, "Log in failed. Cannot get IdentityId")
+            } else{
                 //Upload User Data to S3
                 if let userData = self.currentUserProfile {
                     
@@ -513,7 +529,14 @@ class AmazonClientManager : NSObject {
         }
         
         Log.debug("Login FB")
+        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(theViewController.view)
+        
         self.fbLoginManager.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
+            
+            LoadingSpinner.shared.stop()
             
             if (error != nil) {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -698,6 +721,10 @@ extension AmazonClientManager: GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
         withError error: NSError!) {
+            Log.enter()
+            
+            LoadingSpinner.shared.stop()
+            
             if (error != nil) {
                 
                 let errorMessage = error.localizedDescription
@@ -766,18 +793,20 @@ extension AmazonClientManager: GIDSignInDelegate {
 extension AmazonClientManager: GIDSignInUIDelegate {
     
     func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
-        LoadingSpinner.shared.stop()
+        Log.enter()
     }
     
     // Present a view that prompts the user to sign in with Google
     func signIn(signIn: GIDSignIn!,
         presentViewController viewController: UIViewController!) {
+            Log.enter()
             self.loginViewController?.presentViewController(viewController, animated: true, completion: nil)
     }
     
     // Dismiss the "Sign in with Google" view
     func signIn(signIn: GIDSignIn!,
         dismissViewController viewController: UIViewController!) {
+            Log.enter()
             self.loginViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
