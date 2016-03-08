@@ -639,27 +639,26 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZRq-hq-1aB">
-                                                                <rect key="frame" x="0.0" y="133" width="584" height="211"/>
+                                                                <rect key="frame" x="0.0" y="133" width="584" height="207"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
-                                                                        <rect key="frame" x="111" y="67" width="362.5" height="78"/>
+                                                                        <rect key="frame" x="111" y="65" width="362.5" height="78"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="nQm-xW-OQB" secondAttribute="height" multiplier="930:200" id="ZwC-dy-Vo8"/>
                                                                         </constraints>
                                                                         <state key="normal" title="更改條件"/>
                                                                         <userDefinedRuntimeAttributes>
-                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                                 <integer key="value" value="25"/>
                                                                             </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <segue destination="OaS-ny-kO8" kind="show" identifier="showConfigureRadar" id="Foe-EC-G9P"/>
                                                                         </connections>
                                                                     </button>
                                                                 </subviews>
-                                                                <color key="backgroundColor" red="0.74266326800000004" green="1" blue="0.48539896710000002" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <constraints>
                                                                     <constraint firstItem="nQm-xW-OQB" firstAttribute="centerY" secondItem="ZRq-hq-1aB" secondAttribute="centerY" id="LOF-j7-ksE"/>
                                                                     <constraint firstItem="nQm-xW-OQB" firstAttribute="centerX" secondItem="ZRq-hq-1aB" secondAttribute="centerX" id="ebi-qP-YTg"/>
@@ -684,7 +683,7 @@
                                                             <constraint firstAttribute="trailing" secondItem="wkD-W0-Nni" secondAttribute="trailing" id="cLn-QA-odn"/>
                                                             <constraint firstItem="wkD-W0-Nni" firstAttribute="top" secondItem="36N-BY-w6f" secondAttribute="bottom" constant="6" id="e6s-x6-i15"/>
                                                             <constraint firstItem="zpG-ZY-Ugx" firstAttribute="leading" secondItem="wkD-W0-Nni" secondAttribute="leading" id="gUD-FC-u1S"/>
-                                                            <constraint firstAttribute="bottom" secondItem="ZRq-hq-1aB" secondAttribute="bottom" id="hrX-02-nkh"/>
+                                                            <constraint firstAttribute="bottom" secondItem="ZRq-hq-1aB" secondAttribute="bottom" constant="4" id="hrX-02-nkh"/>
                                                             <constraint firstItem="uHP-bL-3Pa" firstAttribute="top" secondItem="GkN-Xn-yd1" secondAttribute="bottom" constant="4" id="kOx-mh-y7M"/>
                                                             <constraint firstItem="uHP-bL-3Pa" firstAttribute="leading" secondItem="wkD-W0-Nni" secondAttribute="leading" id="qFQ-MU-32y"/>
                                                             <constraint firstItem="36N-BY-w6f" firstAttribute="centerX" secondItem="9Xp-wk-oY1" secondAttribute="centerX" id="yp6-Sd-jiL"/>
