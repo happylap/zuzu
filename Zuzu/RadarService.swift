@@ -72,20 +72,11 @@ class RadarService : NSObject {
     func handleUserLogin(notification: NSNotification){
         Log.enter()
         if let loginUserId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            if let zuzuUserId = UserDefaultsUtils.getZuzuUserId(){
-                if zuzuUserId != loginUserId{ // switch user
-                    self.loginZuzuUser(loginUserId)
-                    return
-                }
-                
-                if self.zuzuCriteria == nil{
-                    self.retrieveRadarCriteria(zuzuUserId)
-                }
-                
-            }else{
-                self.loginZuzuUser(loginUserId)
-                return
+            
+            if self.zuzuCriteria == nil{
+                self.retrieveRadarCriteria(loginUserId)
             }
+            
         }
         Log.exit()
     }

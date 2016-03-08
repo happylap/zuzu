@@ -23,6 +23,11 @@ private let Log = Logger.defaultLogger
 let UserLoginNotification = "UserLoginNotification"
 let UserLogoutNotification = "UserLogoutNotification"
 
+enum LoginStatus: Int {
+    case New
+    case Resume
+}
+
 class AmazonClientManager : NSObject {
     
     //Share Instance for interacting with the ZuzuStore
@@ -605,8 +610,14 @@ class AmazonClientManager : NSObject {
             }
             
             /// User already created before, no need to check with Zuzu backend again
-            if let _ = self.currentUserProfile {
+            if let userProfile = self.currentUserProfile {
                 Log.info("currentUserProfile exists. User should already be created")
+                
+                /// Resume completed
+                Log.debug("postNotificationName: \(UserLoginNotification)")
+                NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
+                    userInfo: ["userData": userProfile, "status": LoginStatus.Resume.rawValue])
+                
                 return nil
             }
             
@@ -618,12 +629,13 @@ class AmazonClientManager : NSObject {
                         
                         LoadingSpinner.shared.stop()
                         
-                        /// Sign-in completed
-                        Log.debug("postNotificationName: \(UserLoginNotification)")
-                        NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self, userInfo: ["userData": userProfile])
-                        
                         Log.warning("Persist UserProfile")
                         UserDefaultsUtils.setUserProfile(userProfile)
+                        
+                        /// Sign-in completed
+                        Log.debug("postNotificationName: \(UserLoginNotification)")
+                        NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
+                            userInfo: ["userData": userProfile, "status": LoginStatus.New.rawValue])
                         
                         self.transientUserProfile = nil
                         
@@ -716,7 +728,7 @@ class AmazonClientManager : NSObject {
         self.requestFBUserData() { (result: AnyObject!, error : NSError!) -> Void in
             
             if(error != nil) {
-                /// Cannot get user data. No need to complain since we are still logged in
+                /// Cannot get user data.
                 self.failLogin(.FacebookFailure)
                 Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
             } else {

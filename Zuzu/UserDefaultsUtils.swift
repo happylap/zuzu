@@ -58,6 +58,7 @@ struct UserDefaultsUtils{
         
         let data = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
         userDefaults.setObject(data, forKey: userProfileUserDefaultKey)
+        userDefaults.synchronize()
     }
     
     static func getUserProfile() -> UserProfile?{
