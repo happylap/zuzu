@@ -529,7 +529,14 @@ class AmazonClientManager : NSObject {
         }
         
         Log.debug("Login FB")
+        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(theViewController.view)
+        
         self.fbLoginManager.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
+            
+            LoadingSpinner.shared.stop()
             
             if (error != nil) {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -714,6 +721,10 @@ extension AmazonClientManager: GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
         withError error: NSError!) {
+            Log.enter()
+            
+            LoadingSpinner.shared.stop()
+            
             if (error != nil) {
                 
                 let errorMessage = error.localizedDescription
@@ -782,18 +793,20 @@ extension AmazonClientManager: GIDSignInDelegate {
 extension AmazonClientManager: GIDSignInUIDelegate {
     
     func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
-        LoadingSpinner.shared.stop()
+        Log.enter()
     }
     
     // Present a view that prompts the user to sign in with Google
     func signIn(signIn: GIDSignIn!,
         presentViewController viewController: UIViewController!) {
+            Log.enter()
             self.loginViewController?.presentViewController(viewController, animated: true, completion: nil)
     }
     
     // Dismiss the "Sign in with Google" view
     func signIn(signIn: GIDSignIn!,
         dismissViewController viewController: UIViewController!) {
+            Log.enter()
             self.loginViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     

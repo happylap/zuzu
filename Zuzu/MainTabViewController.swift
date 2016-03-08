@@ -78,19 +78,24 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                     if !AmazonClientManager.sharedInstance.isLoggedIn() {
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
+                            
+                            self.runOnMainThread({ () -> Void in
+                                self.selectedIndex = MainTabConstants.COLLECTION_TAB_INDEX
+                            })
+                            
                             return nil
                         }
                         return false
                     }
-                
+                    
                 case "RadarStoryboard":
                     //If fisrt time, pop up landing page
                     if(UserDefaultsUtils.needsDisplayRadarLandingPage()) {
                         UserDefaultsUtils.setRadarLandindPageDisplayed()
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let vc = storyboard.instantiateViewControllerWithIdentifier("radarLandingPage")
-                            vc.modalPresentationStyle = .OverCurrentContext
-                            presentViewController(vc, animated: true, completion: nil)
+                        vc.modalPresentationStyle = .OverCurrentContext
+                        presentViewController(vc, animated: true, completion: nil)
                         
                         return false
                     } else {
