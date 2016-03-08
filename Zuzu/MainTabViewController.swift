@@ -53,6 +53,15 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
             tabViewControllers.append(notificationViewController)
         }
         
+        
+        
+        #if DEBUG
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginDebugViewController:UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("loginDebugPage")
+            
+            tabViewControllers.append(loginDebugViewController)
+        #endif
+        
         self.viewControllers = tabViewControllers
         
         self.delegate = self

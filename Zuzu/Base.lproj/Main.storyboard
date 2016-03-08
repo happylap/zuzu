@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -308,6 +308,94 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QXP-fy-R5g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-209" y="850"/>
+        </scene>
+        <!--Login Debug View Controller-->
+        <scene sceneID="JIr-sy-C88">
+            <objects>
+                <viewController storyboardIdentifier="loginDebugPage" id="jVh-QR-suA" customClass="LoginDebugViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="spy-N1-ITn"/>
+                        <viewControllerLayoutGuide type="bottom" id="rr9-O0-vwt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="rle-Nh-8TE">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gtR-mL-aYb">
+                                <rect key="frame" x="20" y="40" width="120" height="60"/>
+                                <state key="normal" title="Google Login"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onGoogleLoginButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="p9m-1j-pfk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydf-Nd-SUy">
+                                <rect key="frame" x="19.5" y="108" width="120" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="height" multiplier="2:1" id="ebU-RJ-zRB"/>
+                                    <constraint firstAttribute="width" constant="120" id="lpn-Rf-VBc"/>
+                                </constraints>
+                                <state key="normal" title="Facebook Login"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onFacebookLoginButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="HHq-gV-WfX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7SY-p8-DAN">
+                                <rect key="frame" x="20" y="176" width="120" height="60"/>
+                                <state key="normal" title="Current User"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onCurrentUserButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="E4i-IT-hl9"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7SY-p8-DAN" firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="width" id="0qE-Bb-9rJ"/>
+                            <constraint firstItem="ydf-Nd-SUy" firstAttribute="top" secondItem="gtR-mL-aYb" secondAttribute="bottom" constant="8" symbolic="YES" id="3Ei-bI-Kf3"/>
+                            <constraint firstItem="7SY-p8-DAN" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="JLr-HY-DIk"/>
+                            <constraint firstItem="ydf-Nd-SUy" firstAttribute="centerX" secondItem="gtR-mL-aYb" secondAttribute="centerX" id="V5v-ua-SVa"/>
+                            <constraint firstItem="gtR-mL-aYb" firstAttribute="leading" secondItem="rle-Nh-8TE" secondAttribute="leadingMargin" id="c2p-uN-sqo"/>
+                            <constraint firstItem="gtR-mL-aYb" firstAttribute="top" secondItem="spy-N1-ITn" secondAttribute="bottom" constant="20" id="fET-5L-z79"/>
+                            <constraint firstItem="ydf-Nd-SUy" firstAttribute="centerX" secondItem="7SY-p8-DAN" secondAttribute="centerX" id="jW7-ff-Lm7"/>
+                            <constraint firstItem="gtR-mL-aYb" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="kZ8-oY-s4X"/>
+                            <constraint firstItem="7SY-p8-DAN" firstAttribute="top" secondItem="ydf-Nd-SUy" secondAttribute="bottom" constant="8" symbolic="YES" id="mX1-Pt-7j4"/>
+                            <constraint firstItem="gtR-mL-aYb" firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="width" id="yGx-aP-xP6"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" systemItem="more" id="qt7-Mf-hOX"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="currentUser" destination="7SY-p8-DAN" id="gwC-nx-fXh"/>
+                        <outlet property="facebookLogin" destination="ydf-Nd-SUy" id="djY-bv-JGC"/>
+                        <outlet property="googleLogin" destination="gtR-mL-aYb" id="PB7-yO-R78"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iRW-Zc-G7x" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="378" y="777"/>
         </scene>
     </scenes>
     <resources>
