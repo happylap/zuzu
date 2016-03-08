@@ -236,7 +236,7 @@ class RadarConfigureTableViewController: UITableViewController {
         
     private func handlePicker(indexPath:NSIndexPath) {
         var picker:UIPickerView?
-        
+        var isHidePicker = false
         switch(indexPath.row) {
         case CellConst.priceLabel: // Price Picker
             picker = pricePicker
@@ -251,6 +251,7 @@ class RadarConfigureTableViewController: UITableViewController {
                 /// Hide Price Picker
                 priceArrow.image = downArrowImage
                 hiddenCells.insert(CellConst.pricePicker)
+                isHidePicker = true
             }
             
         case CellConst.sizeLabel: // Size Picker
@@ -266,6 +267,7 @@ class RadarConfigureTableViewController: UITableViewController {
                 /// Hide Size Picker
                 sizeArrow.image = downArrowImage
                 hiddenCells.insert(CellConst.sizePicker)
+                isHidePicker = true
             }
         default: break
         }
@@ -275,6 +277,19 @@ class RadarConfigureTableViewController: UITableViewController {
             
             tableView.beginUpdates()
             tableView.endUpdates()
+            if isHidePicker == false{
+                if indexPath.row == CellConst.priceLabel{
+                    let lasIndexPath = NSIndexPath(forRow: indexPath.row-1, inSection: indexPath.section)
+                    let lastRect = tableView.rectForRowAtIndexPath(lasIndexPath)
+                    let x = lastRect.origin.x
+                    let y = lastRect.size.height*0.5 + lastRect.origin.y
+                    self.tableView.setContentOffset(CGPoint(x:x,y:y), animated: true)
+                }else if indexPath.row == CellConst.sizeLabel{
+                    let lasIndexPath = NSIndexPath(forRow: indexPath.row-2, inSection: indexPath.section)
+                    let lastRect = tableView.rectForRowAtIndexPath(lasIndexPath)
+                    self.tableView.setContentOffset(lastRect.origin, animated: true)
+                }
+            }
         }
     }
     
@@ -524,7 +539,6 @@ class RadarConfigureTableViewController: UITableViewController {
         switch(indexPath.row) {
         case CellConst.sizeLabel, CellConst.priceLabel: // Price, Size Picker
             handlePicker(indexPath)
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: indexPath.row, inSection: indexPath.section), atScrollPosition: UITableViewScrollPosition.Middle, animated: true)
             
         case CellConst.area: //Area Picker
             ///With modal transition, this segue may be very slow without explicitly send it to the main ui queue
@@ -941,6 +955,29 @@ extension RadarConfigureTableViewController: UIPickerViewDelegate, UIPickerViewD
         updatePickerSelectionLabel(pickerView, didSelectRow: row, inComponent: component, targetItems: targetItems)
         
         currentCriteria = self.stateToSearhCriteria()
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        
+        var valueText: String = ""
+        
+        if let rowItem = self.getItemForPicker(pickerView, component: component, row: row) {
+            
+            if(pickerView == pricePicker && component == 1) {
+                Log.debug("Upper Price: com = \(component), row = \(row), label = \(rowItem.label)")
+            }
+            
+            valueText = rowItem.label
+        }
+        
+        let pickerLabel = (view as? UILabel) ?? UILabel()
+        
+        pickerLabel.text = valueText
+        pickerLabel.font = UIFont.systemFontOfSize(18)
+        pickerLabel.autoScaleFontSize = true
+        pickerLabel.textAlignment = NSTextAlignment.Center
+        
+        return pickerLabel
     }
 }
 
