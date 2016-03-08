@@ -79,9 +79,11 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
                             
-                            self.runOnMainThread({ () -> Void in
-                                self.selectedIndex = MainTabConstants.COLLECTION_TAB_INDEX
-                            })
+                            if(task.error == nil) {
+                                self.runOnMainThread({ () -> Void in
+                                    self.selectedIndex = MainTabConstants.COLLECTION_TAB_INDEX
+                                })
+                            }
                             
                             return nil
                         }

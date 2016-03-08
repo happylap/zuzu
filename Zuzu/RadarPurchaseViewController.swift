@@ -112,9 +112,13 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.alertPurchase(button)
+                
+                if(task.error == nil) {
+                    self.runOnMainThread({ () -> Void in
+                        self.alertPurchase(button)
+                    })
                 }
+                
                 return nil
             }
         }else{

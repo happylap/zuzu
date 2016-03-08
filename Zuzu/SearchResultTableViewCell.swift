@@ -363,9 +363,13 @@ class SearchResultTableViewCell: UITableViewCell {
             AmazonClientManager.sharedInstance.loginFromView(viewController) {
                 (task: AWSTask!) -> AnyObject! in
                 
-                viewController.runOnMainThread({ () -> Void in
-                    self.continueCollectionCallback()
-                })
+                if(task.error == nil) {
+                    
+                    viewController.runOnMainThread({ () -> Void in
+                        self.continueCollectionCallback()
+                    })
+                    
+                }
                 
                 return nil
             }
