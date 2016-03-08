@@ -160,6 +160,55 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Criteria
     
+    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        let resource = "/criteria/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else if let value = result {
+                Log.debug("getCriteriaByUserId JSON: \(value)")
+                if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
+                    handler(result: zuzuCriteria, error: nil)
+                } else {
+                    Log.debug("Can not transfor to SearchCriteria")
+                    handler(result: nil, error: NSError(domain: "Can not transfor to SearchCriteria", code: -1, userInfo: nil))
+                }
+            } else {
+                // Not found any criteria
+                handler(result: nil, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    func createCriteriaByUserId(userId: String, criteria: SearchCriteria, handler: (result: Bool, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), criteria: \(criteria)]")
+        
+        let zuzuCriteria = ZuzuCriteria()
+        zuzuCriteria.userId = userId
+        zuzuCriteria.enabled = true
+        zuzuCriteria.criteria = criteria
+        
+        let resource = "/criteria"
+        let payload = Mapper<ZuzuCriteria>().toJSON(zuzuCriteria)
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+            } else if let _ = result {
+                handler(result: true, error: nil)
+            } else {
+                handler(result: false, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
     func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), criteria: \(criteria)]")
         
@@ -190,31 +239,6 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func getCriteriaByUserId(userId: String, handler: (result: ZuzuCriteria?, error: NSError?) -> Void) {
-        Log.debug("Input parameters [userId: \(userId)]")
-        
-        let resource = "/criteria/\(userId)"
-        
-        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
-            if let error = error {
-                handler(result: nil, error: error)
-            } else if let value = result {
-                Log.debug("getCriteriaByUserId JSON: \(value)")
-                if let zuzuCriteria = Mapper<ZuzuCriteria>().map(value) {
-                    handler(result: zuzuCriteria, error: nil)
-                } else {
-                    Log.debug("Can not transfor to SearchCriteria")
-                    handler(result: nil, error: NSError(domain: "Can not transfor to SearchCriteria", code: -1, userInfo: nil))
-                }
-            } else {
-                // Not found any criteria
-                handler(result: nil, error: nil)
-            }
-        }
-        
-        Log.exit()
-    }
-        
     func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), enabled: \(enabled)]")
         
