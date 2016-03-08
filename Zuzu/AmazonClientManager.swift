@@ -247,6 +247,9 @@ class AmazonClientManager : NSObject {
             AWSLogger.defaultLogger().logLevel = AWSLogLevel.Info
         #endif
         
+        ///Init AWSCognitoCredentialsProvider
+        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
+        
         /// Clear previous IdentityId when we find the user has never logged to Cognito for
         // this installation. This would avoid the use of previous IdentityId
         // when switching to another login provider's account
@@ -257,8 +260,6 @@ class AmazonClientManager : NSObject {
             self.credentialsProvider?.clearKeychain()
         }
         
-        ///Init AWSCognitoCredentialsProvider
-        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
         self.credentialsProvider?.logins = logins
         
         
