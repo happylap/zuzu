@@ -69,7 +69,7 @@ public struct Logger {
             
             /// Setup for NSLogger
             LoggerSetOptions(LoggerGetDefaultLogger(), UInt32( kLoggerOption_BufferLogsUntilConnection | kLoggerOption_BrowseBonjour | kLoggerOption_BrowseOnlyLocalDomain ))
-            LoggerSetupBonjour(LoggerGetDefaultLogger(), nil, "paimac2")
+            LoggerSetupBonjour(LoggerGetDefaultLogger(), nil, LoggerConst.TargetDevice)
             LoggerStart(LoggerGetDefaultLogger())
             logger.addLogDestination(XCGNSLoggerLogDestination(owner: logger, identifier: "nslogger.identifier"))
             
