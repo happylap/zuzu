@@ -229,12 +229,11 @@ class RadarDisplayViewController: UIViewController {
     func createCriteriaAfterPurchase(isSuccess:Bool, product: SKProduct) -> Void{
         if isSuccess == true{
             if let userId = UserDefaultsUtils.getZuzuUserId(){
-                let zuzuPurchase = ZuzuPurchase(userId:userId ,productId:product.productIdentifier, productPrice:product.price)
+                let zuzuPurchase = ZuzuPurchase(transactionId: "", userId:userId ,productId:product.productIdentifier, productPrice:product.price)
                 
                 zuzuPurchase.purchaseReceipt = "test".dataUsingEncoding(NSUTF8StringEncoding)
                 
-                ZuzuWebService .sharedInstance.purchaseCriteria(self.zuzuCriteria.criteria!, purchase: zuzuPurchase){
-                    (result, error) -> Void in
+                ZuzuWebService .sharedInstance.createPurchase(zuzuPurchase){ (result, error) -> Void in
                     if error != nil{
                         self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
                     }

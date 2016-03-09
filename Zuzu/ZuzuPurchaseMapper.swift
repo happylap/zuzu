@@ -16,6 +16,7 @@ private let Log = Logger.defaultLogger
 class ZuzuPurchaseMapper: NSObject, Mappable {
 
     var purchaseId: String?
+    var transactionId: String?
     var userId: String?
     var store: String?
     var productId: String?
@@ -34,6 +35,7 @@ class ZuzuPurchaseMapper: NSObject, Mappable {
     // Mappable
     func mapping(map: Map) {
         purchaseId          <-  map["purchase_id"]
+        transactionId       <-  map["transaction_id"]
         userId              <-  map["user_id"]
         store               <-  map["store"]
         productId           <-  map["product_id"]
@@ -57,8 +59,8 @@ class ZuzuPurchaseMapper: NSObject, Mappable {
     })
     
     func toPurchase() -> ZuzuPurchase? {
-        if let userId = self.userId, let productId = self.productId, let productPrice = self.productPrice {
-            let purchase = ZuzuPurchase(userId: userId, productId: productId, productPrice: NSDecimalNumber(double:productPrice))
+        if let transactionId = self.transactionId, userId = self.userId, let productId = self.productId, let productPrice = self.productPrice {
+            let purchase = ZuzuPurchase(transactionId: transactionId, userId: userId, productId: productId, productPrice: NSDecimalNumber(double:productPrice))
             if let store = self.store {
                 purchase.store = store
             }

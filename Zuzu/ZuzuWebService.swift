@@ -34,14 +34,49 @@ class ZuzuWebService: NSObject
         super.init()
         
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.timeoutIntervalForRequest = 30 // seconds
-        configuration.timeoutIntervalForResource = 30
+        configuration.timeoutIntervalForRequest = 15 // seconds
+        configuration.timeoutIntervalForResource = 15
         self.alamoFireManager = Alamofire.Manager(configuration: configuration)
     }
     
     
+    // MARK: - Public APIs - Register
+    
+    func registerValidByEmail(email: String, handler: (result: Bool, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [email: \(email)]")
+        
+        let resource = "/register/\(email)/valid"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+                return;
+            }
+            
+            if let result = result {
+                handler(result: result as! Bool, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    func registerUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [user: \(user)]")
+        
+        let resource = "/register"
+        let payload = Mapper<ZuzuUser>().toJSON(user)
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
+        
+        Log.exit()
+    }
+    
     // MARK: - Public APIs - User
     
+    // @Deprecated
     func isExistUser(userId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
@@ -60,14 +95,63 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
+    // @Deprecated
     func createUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
-        let resource = "/user"
+        let resource = "/register"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             handler(result: (error == nil), error: error)
+        }
+        
+        Log.exit()
+    }
+    
+    func getUserByEmail(email: String, handler: (result: ZuzuUser?, error: NSError?) -> Void) {
+        Log.debug("Input parameters [email: \(email)]")
+        
+        let resource = "/user/email/\(email)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else if let value = result {
+                if let userMapper = Mapper<ZuzuUser>().map(value) {
+                    handler(result: userMapper, error: nil)
+                } else {
+                    Log.debug("Can not transfor to ZuzuUser")
+                    handler(result: nil, error: NSError(domain: "Can not transfor to ZuzuUser", code: -1, userInfo: nil))
+                }
+            } else {
+                // Not found any ZuZuUser
+                handler(result: nil, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    func getUserById(userId: String, handler: (result: ZuzuUser?, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        let resource = "/user/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else if let value = result {
+                if let userMapper = Mapper<ZuzuUser>().map(value) {
+                    handler(result: userMapper, error: nil)
+                } else {
+                    Log.debug("Can not transfor to ZuzuUser")
+                    handler(result: nil, error: NSError(domain: "Can not transfor to ZuzuUser", code: -1, userInfo: nil))
+                }
+            } else {
+                // Not found any ZuZuUser
+                handler(result: nil, error: nil)
+            }
         }
         
         Log.exit()
@@ -86,33 +170,6 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    // MARK: - Public APIs - Service
-    
-    func getServiceByUserId(userId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
-        Log.debug("Input parameters [userId: \(userId)]")
-        
-        let resource = "/service/\(userId)"
-        
-        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
-            if let error = error {
-                handler(result: nil, error: error)
-            } else if let value = result {
-                Log.debug("getServiceByUserId JSON: \(value)")
-                
-                if let serviceMapper = Mapper<ZuzuServiceMapper>().map(value) {
-                    handler(result: serviceMapper, error: nil)
-                } else {
-                    Log.debug("Can not transfor to SearchCriteria")
-                    handler(result: nil, error: NSError(domain: "Can not transfor to SearchCriteria", code: -1, userInfo: nil))
-                }
-            } else {
-                // Not found any criteria
-                handler(result: nil, error: nil)
-            }
-        }
-        
-        Log.exit()
-    }
     
     // MARK: - Public APIs - Device
     func createDeviceByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
@@ -212,7 +269,7 @@ class ZuzuWebService: NSObject
     func updateCriteriaFiltersByUserId(userId: String, criteriaId: String, criteria: SearchCriteria, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), criteria: \(criteria)]")
         
-        let resource = "/criteria/\(criteriaId)/\(userId)"
+        let resource = "/criteria/\(userId)/\(criteriaId)"
         
         var payload = [[String: AnyObject]]()
         
@@ -242,7 +299,7 @@ class ZuzuWebService: NSObject
     func enableCriteriaByUserId(userId: String, criteriaId: String, enabled: Bool, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), criteriaId: \(criteriaId), enabled: \(enabled)]")
         
-        let resource = "/criteria/\(criteriaId)/\(userId)"
+        let resource = "/criteria/\(userId)/\(criteriaId)"
         let payload:[[String: AnyObject]] = [["op": "replace", "path": "/enabled", "value": enabled]]
         
         self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
@@ -305,7 +362,7 @@ class ZuzuWebService: NSObject
     func setReadNotificationByUserId(userId: String, itemId: String, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), itemId: \(itemId)]")
         
-        let resource = "/notifyitem/\(itemId)/\(userId)"
+        let resource = "/notifyitem/\(userId)/\(itemId)"
         let payload:[[String: AnyObject]] = [["op": "replace", "path": "/_read", "value": true]]
         
         self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
@@ -320,94 +377,78 @@ class ZuzuWebService: NSObject
     func setReceiveNotifyTimeByUserId(userId: String, deviceId: String, handler: (result: Bool, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
         
-        if let encodedDeviceId = CommonUtils.encodeToBase64(deviceId) {
-            Log.debug("encodedDeviceId =  \(encodedDeviceId)")
-            
-            let resource = "/log/\(encodedDeviceId)/\(userId)"
-            let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": ""]]
-            
-            self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
-                handler(result: (error == nil), error: error)
-            }
-        } else {
-            handler(result: false, error: NSError(domain: "DeviceId encodeToBase64 failure", code: 1, userInfo: nil))
-        }
+        let resource = "/log/\(userId)/\(deviceId)"
+        let payload: [[String: AnyObject]] = [["op": "add", "path": "/receiveNotifyTime", "value": ""]]
         
+        self.responseJSON(.PATCH, resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
         Log.exit()
     }
     
     
     // MARK: - Public APIs - Purchase
     
-    func purchaseCriteria(criteria: SearchCriteria, purchase: ZuzuPurchase, handler: (result: String?, error: NSError?) -> Void) {
+    func createPurchase(purchase: ZuzuPurchase, handler: (result: String?, error: NSError?) -> Void) {
         Log.enter()
         
         let url = self.host + "/purchase"
         let headers = self.getHeaders()
         
-        if let criteriaJSONDict = ZuzuCriteria.criteriaToJSON(criteria) {
-            let criteriaData = try! NSJSONSerialization.dataWithJSONObject(criteriaJSONDict, options: [])
+        Alamofire.upload(.POST, url, headers: headers, multipartFormData: { multipartFormData -> Void in
+            multipartFormData.appendBodyPart(data: purchase.transactionId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "transaction_id")
+            multipartFormData.appendBodyPart(data: purchase.userId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
+            multipartFormData.appendBodyPart(data: purchase.store.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "store")
+            multipartFormData.appendBodyPart(data: purchase.productId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_id")
+            multipartFormData.appendBodyPart(data: "\(purchase.productPrice)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_price")
             
-            Log.debug("criteriaData: \(criteriaData)")
+            if let productTitle = purchase.productTitle {
+                multipartFormData.appendBodyPart(data: productTitle.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_title")
+            }
+            if let productLocaleId = purchase.productLocaleId {
+                multipartFormData.appendBodyPart(data: productLocaleId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_locale_id")
+            }
+            if let purchaseReceipt = purchase.purchaseReceipt {
+                multipartFormData.appendBodyPart(data: purchaseReceipt, name: "purchase_receipt")
+            }
             
-            Alamofire.upload(.POST, url, headers: headers, multipartFormData: { multipartFormData -> Void in
-                
-                multipartFormData.appendBodyPart(data: purchase.userId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
-                multipartFormData.appendBodyPart(data: purchase.store.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "store")
-                multipartFormData.appendBodyPart(data: purchase.productId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_id")
-                multipartFormData.appendBodyPart(data: "\(purchase.productPrice)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_price")
-                
-                if let productTitle = purchase.productTitle {
-                    multipartFormData.appendBodyPart(data: productTitle.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_title")
-                }
-                if let productLocaleId = purchase.productLocaleId {
-                    multipartFormData.appendBodyPart(data: productLocaleId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "product_locale_id")
-                }
-                if let purchaseReceipt = purchase.purchaseReceipt {
-                    multipartFormData.appendBodyPart(data: purchaseReceipt, name: "purchase_receipt")
-                }
-                multipartFormData.appendBodyPart(data: try! NSJSONSerialization.dataWithJSONObject(criteriaJSONDict, options: []), name: "criteria_filters")
-                
-                }, encodingCompletion: { encodingResult in
-                    switch encodingResult {
-                    case .Success(let upload, _, _):
+            }, encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .Success(let upload, _, _):
+                    
+                    upload.responseJSON { (_, response, result) in
+                        Log.debug("HTTP Request URL: \(url)")
                         
-                        upload.responseJSON { (_, response, result) in
-                            Log.debug("HTTP Request URL: \(url)")
+                        switch result {
+                        case .Success(let value):
+                            let json = JSON(value)
                             
-                            Log.debug("HTTP Request Payload: \(criteriaJSONDict)")
+                            Log.debug("HTTP Resopnse Json = \(json)")
                             
-                            switch result {
-                            case .Success(let value):
-                                let json = JSON(value)
-                                
-                                Log.debug("HTTP Resopnse Json = \(json)")
-                                
-                                let code = json["code"].intValue
-                                
-                                
-                                if code == 200 {
-                                    handler(result: json["data"].string, error: nil)
-                                }
-                                else {
-                                    let message = json["message"].stringValue
-                                    Log.debug("HTTP Resopnse Error = \(message)")
-                                    assert(false, "Api response error:\n \(message)")
-                                    handler(result: nil, error: NSError(domain: message, code: code, userInfo: nil))
-                                }
-                            case .Failure(_, let error):
-                                Log.debug("HTTP Resopnse Error = \(error)")
-                                handler(result: nil, error: ((error as Any) as! NSError))
+                            let code = json["code"].intValue
+                            
+                            
+                            if code == 200 {
+                                handler(result: json["data"].string, error: nil)
                             }
-                            
+                            else {
+                                let message = json["message"].stringValue
+                                Log.debug("HTTP Resopnse Error = \(message)")
+                                assert(false, "Api response error:\n \(message)")
+                                handler(result: nil, error: NSError(domain: message, code: code, userInfo: nil))
+                            }
+                        case .Failure(_, let error):
+                            Log.debug("HTTP Resopnse Error = \(error)")
+                            handler(result: nil, error: ((error as Any) as! NSError))
                         }
-                    case .Failure(let encodingError):
-                        Log.debug("HTTP Resopnse Error = \(encodingError)")
-                        assert(false, "Api response error:\n \(encodingError)")
-                        handler(result: nil, error: ((encodingError as Any) as! NSError))
+                        
                     }
-            })
-        }
+                case .Failure(let encodingError):
+                    Log.debug("HTTP Resopnse Error = \(encodingError)")
+                    assert(false, "Api response error:\n \(encodingError)")
+                    handler(result: nil, error: ((encodingError as Any) as! NSError))
+                }
+        })
         
         Log.exit()
     }
@@ -434,6 +475,34 @@ class ZuzuWebService: NSObject
                     }
                 }
                 handler(totalNum: purchases.count, result: purchases, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    
+    // MARK: - Public APIs - Service
+    
+    func getServiceByUserId(userId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        let resource = "/service/\(userId)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else if let value = result {
+                Log.debug("getServiceByUserId JSON: \(value)")
+                
+                if let serviceMapper = Mapper<ZuzuServiceMapper>().map(value) {
+                    handler(result: serviceMapper, error: nil)
+                } else {
+                    handler(result: nil, error: NSError(domain: "Can not transfor to ZuzuService", code: -1, userInfo: nil))
+                }
+            } else {
+                // Not found any service
+                handler(result: nil, error: nil)
             }
         }
         

@@ -11,6 +11,7 @@ import Foundation
 class ZuzuPurchase: NSObject {
     
     var purchaseId: String?
+    var transactionId: String
     var userId: String
     var store: String
     var productId: String
@@ -20,7 +21,8 @@ class ZuzuPurchase: NSObject {
     var purchaseTime: NSDate?
     var purchaseReceipt: NSData?
     
-    init(userId: String, productId: String, productPrice: NSDecimalNumber, purchaseReceipt: NSData) {
+    init(transactionId: String, userId: String, productId: String, productPrice: NSDecimalNumber, purchaseReceipt: NSData) {
+        self.transactionId = transactionId
         self.userId = userId
         self.store = "Apple"
         self.productId = productId
@@ -28,7 +30,8 @@ class ZuzuPurchase: NSObject {
         self.purchaseReceipt = purchaseReceipt
     }
     
-    init(userId: String, productId: String, productPrice: NSDecimalNumber) {
+    init(transactionId: String, userId: String, productId: String, productPrice: NSDecimalNumber) {
+        self.transactionId = transactionId
         self.userId = userId
         self.store = "Apple"
         self.productId = productId
