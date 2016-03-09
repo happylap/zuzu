@@ -20,8 +20,7 @@ class ZuzuWebService: NSObject
 {
     private static let instance = ZuzuWebService()
     
-    //var host = "http://ec2-52-74-19-65.ap-southeast-1.compute.amazonaws.com:4567"
-    var host = "http://127.0.0.1:4567"
+    var host = HostConst.ZuzuBackend
     
     var alamoFireManager = Alamofire.Manager.sharedInstance
     
