@@ -264,61 +264,67 @@ class AmazonClientManager : NSObject {
     private func tryRegisterZuzuUser(userProfile : UserProfile, handler: (result: Bool) -> Void){
         Log.enter()
         
-        if let userId = userProfile.id {
+        if let userEmail = userProfile.email {
             
-            let zuzuUser = ZuzuUser()
-            zuzuUser.id = userId
-            
-            zuzuUser.provider = userProfile.provider?.rawValue
-            zuzuUser.email = userProfile.email
-            zuzuUser.name = userProfile.name
-            zuzuUser.gender = userProfile.gender
-            if let birthday = userProfile.birthday {
-                zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
-            }
-            zuzuUser.pictureUrl = userProfile.pictureUrl
-            
-            
-            ZuzuWebService.sharedInstance.isExistUser(userId){(result, error) -> Void in
+            ZuzuWebService.sharedInstance.isExistEmail(userEmail){(result, error) -> Void in
                 
                 let delay =  0 //* Double(NSEC_PER_SEC)
                 let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
                 
                 dispatch_after(time, dispatch_get_main_queue(), {
                     if error != nil{
-                        Log.debug("isExistUser, error = \(error)")
+                        Log.debug("isExistEmail, error = \(error)")
                         handler(result: false)
                         return
                     }
                     
-                    if(result == true) {
-                        /// Update user account data
-                        ZuzuWebService.sharedInstance.updateUser(zuzuUser){
-                            (result, error) -> Void in
+                    if(result) {
+                        
+                        ZuzuWebService.sharedInstance.getUserByEmail(userEmail, handler: { (result, error) -> Void in
                             
                             if error != nil{
-                                Log.debug("updateUser, error = \(error)")
+                                Log.debug("getUserByEmail, error = \(error)")
+                                handler(result: false)
+                                return
                             }
                             
-                        }
-                        
-                        /// We can say the user is logged in even the update is not successful
-                        handler(result: true)
-                        
+                            if let zuzuUser = result {
+                                self.transientUserProfile?.id = zuzuUser.id
+                                
+                                handler(result: true)
+                            } else {
+                                
+                                handler(result: false)
+                            }
+                            
+                        })
                         
                     } else {
                         /// Create new user account
-                        ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
+                        
+                        let zuzuUser = ZuzuUser()
+                        zuzuUser.email = userProfile.email
+                        zuzuUser.name = userProfile.name
+                        zuzuUser.gender = userProfile.gender
+                        if let birthday = userProfile.birthday {
+                            zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
+                        }
+                        zuzuUser.pictureUrl = userProfile.pictureUrl
+                        
+                        ZuzuWebService.sharedInstance.registerUser(zuzuUser){(result, error) -> Void in
                             
                             Log.debug("createUser")
                             
-                            if error != nil{
+                            if error != nil {
                                 Log.debug("createUser, error = \(error)")
                                 handler(result: false)
                                 return
                             }
                             
+                            self.transientUserProfile?.id = zuzuUser.id
+                            
                             handler(result: true)
+                            
                         }
                     }
                     
@@ -792,7 +798,14 @@ class AmazonClientManager : NSObject {
             
             if(error != nil) {
                 /// Cannot get user data.
-                self.failLogin(.FacebookFailure)
+                
+                /// Revert the login only if we are Not resuming the session
+                if self.currentUserProfile == nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.failLogin(.FacebookFailure)
+                    }
+                }
+
                 Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
             } else {
                 /// Update user data
@@ -998,8 +1011,11 @@ extension AmazonClientManager: GIDSignInDelegate {
                     
                 } else {
                     
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.failLogin(.GoogleFailure)
+                    /// Revert the login only if we are Not resuming the session
+                    if self.currentUserProfile == nil {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.failLogin(.GoogleFailure)
+                        }
                     }
                     
                     ///GA Tracker: Login failed
