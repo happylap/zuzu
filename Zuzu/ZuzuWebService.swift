@@ -45,7 +45,7 @@ class ZuzuWebService: NSObject
     func isExistEmail(email: String, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
-        let resource = "/register/\(email)/valid"
+        let resource = "/register/valid/\(email)"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
