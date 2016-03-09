@@ -52,10 +52,13 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     
     private let cellHeadrID = "purchaseHistoryHeader"
     
-    override init() {
+    private let uiViewController: RadarDisplayViewController!
+    
+    init(uiViewController: RadarDisplayViewController) {
+        self.uiViewController = uiViewController
         let dummy = RadarPurchaseRecord()
         let p1 = RadarPurchaseRecord()
-        self.purchaseData = [dummy, p1]
+        self.purchaseData = [dummy]
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,6 +72,17 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         }
         
         Log.debug("Number of purchase history = \(itemSize)")
+
+ 
+        let emptyLabel = self.uiViewController.emptyLabel
+        
+        if (itemSize <= 1) {
+            emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_SEARCH
+            emptyLabel.sizeToFit()
+            emptyLabel.hidden = false
+        } else {
+            emptyLabel.hidden = true
+        }
         
         return itemSize
     }
