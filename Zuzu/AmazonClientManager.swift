@@ -74,6 +74,8 @@ class AmazonClientManager : NSObject {
     
     private var transientUserProfile: UserProfile?
     
+    private var currentTimer: NSTimer?
+    
     // MARK: Public Members
     //User Login Data
     var currentUserProfile: UserProfile? {
@@ -485,6 +487,17 @@ class AmazonClientManager : NSObject {
     
     // MARK: Public General Login
     
+    // Token refreshing timer callback method
+    func onTokenNeedRefreshing(timer:NSTimer) {
+        
+        Log.enter()
+        
+        self.resumeSession { (task) -> AnyObject? in
+            nil
+        }
+        
+    }
+    
     func isCredentailsProviderExist() -> Bool {
         return self.credentialsProvider != nil
     }
@@ -546,6 +559,9 @@ class AmazonClientManager : NSObject {
         
         self.credentialsProvider?.clearCredentials()
         self.credentialsProvider?.clearKeychain()
+        
+        // Cancel current timer
+        self.currentTimer?.invalidate()
     }
     
     private func cancelLogin() {
@@ -591,6 +607,39 @@ class AmazonClientManager : NSObject {
         
     }
     
+    private func triggerTokenRefreshingTimer() {
+        
+        var interval = 0.0
+        var refreshTime: NSDate?
+        var timerProvider:String?
+        
+        self.currentTimer?.invalidate()
+        
+        if let provider = self.currentUserProfile?.provider {
+            switch(provider) {
+            case .FB:
+                if let expiryTime = FBSDKAccessToken.currentAccessToken()?.expirationDate {
+                    refreshTime = expiryTime.add(seconds: 1)
+                }
+                timerProvider = provider.rawValue
+            case .GOOGLE:
+                if let expiryTime = self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate {
+                    refreshTime = expiryTime.add(seconds: 1)
+                }
+                timerProvider = provider.rawValue
+            }
+        }
+        
+        if let refreshTime = refreshTime, let timerProvider = timerProvider {
+            Log.debug("Start token refreshing timer, trigger time = \(refreshTime)")
+            
+            interval = refreshTime.timeIntervalSinceNow
+            
+            self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: "onTokenNeedRefreshing:", userInfo: ["provider", timerProvider], repeats: false)
+        }
+        
+    }
+    
     private func completeLogin(logins: [NSObject : AnyObject]?) {
         
         Log.info("\(logins)")
@@ -628,6 +677,8 @@ class AmazonClientManager : NSObject {
                 NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
                     userInfo: ["userData": userProfile, "status": LoginStatus.Resume.rawValue])
                 
+                self.triggerTokenRefreshingTimer()
+                
                 return nil
             }
             
@@ -646,6 +697,8 @@ class AmazonClientManager : NSObject {
                         Log.debug("postNotificationName: \(UserLoginNotification)")
                         NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
                             userInfo: ["userData": userProfile, "status": LoginStatus.New.rawValue])
+                        
+                        self.triggerTokenRefreshingTimer()
                         
                         self.transientUserProfile = nil
                         
