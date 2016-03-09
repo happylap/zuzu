@@ -119,7 +119,7 @@ class RadarDisplayViewController: UIViewController {
         self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
         self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
         
-        self.purchaseTableView.rowHeight = UIScreen.mainScreen().bounds.width * (500/1440)
+        //self.purchaseTableView.rowHeight = UIScreen.mainScreen().bounds.width * (500/1440)
         
         //Remove extra cells when the table height is smaller than the screen
         self.purchaseTableView.tableFooterView = UIView(frame: CGRectZero)
@@ -131,13 +131,14 @@ class RadarDisplayViewController: UIViewController {
             emptyLabel.numberOfLines = -1
             emptyLabel.font = UIFont.systemFontOfSize(14)
             emptyLabel.textColor = UIColor.grayColor()
+            emptyLabel.autoScaleFontSize = true
             emptyLabel.hidden = true
             contentView.addSubview(emptyLabel)
             
             let xConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
-            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
             yConstraint.priority = UILayoutPriorityRequired
             
             let leftConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)

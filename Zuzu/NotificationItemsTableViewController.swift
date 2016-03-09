@@ -84,6 +84,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             emptyLabel.font = UIFont.systemFontOfSize(14)
             emptyLabel.textColor = UIColor.grayColor()
             emptyLabel.hidden = true
+            emptyLabel.autoScaleFontSize = true
             contentView.addSubview(emptyLabel)
             
             let xConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)

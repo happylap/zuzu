@@ -77,7 +77,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         let emptyLabel = self.uiViewController.emptyLabel
         
         if (itemSize <= 1) {
-            emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_SEARCH
+            emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
             emptyLabel.sizeToFit()
             emptyLabel.hidden = false
         } else {
