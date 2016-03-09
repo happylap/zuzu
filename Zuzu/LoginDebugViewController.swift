@@ -39,11 +39,23 @@ class LoginDebugViewController: UIViewController {
         }
     }
     
+    
+    @IBOutlet weak var webApi: UIButton! {
+        didSet {
+            webApi.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
+        }
+    }
+    
+    @IBOutlet weak var webApiPickerView: UIPickerView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleTokenRefreshed:", name: UserLoginNotification, object: nil)
         // Do any additional setup after loading the view.
+        
+        self.webApiPickerView.dataSource = self;
+        self.webApiPickerView.delegate = self;
     }
     
     override func didReceiveMemoryWarning() {
@@ -209,6 +221,75 @@ class LoginDebugViewController: UIViewController {
         myAlert.showTitle("Current User", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
     }
     
+    
+    let apiNameArray = [
+        "isExistEmail",
+        "registerUser",
+        "---",
+        "getUserByEmail",
+        "getUserById",
+        "updateUser",
+        "---",
+        "createDeviceByUserId",
+        "deleteDeviceByUserId",
+        "isExistDeviceByUserId",
+        "---",
+        "getCriteriaByUserId",
+        "createCriteriaByUserId",
+        "updateCriteriaFiltersByUserId",
+        "enableCriteriaByUserId",
+        "hasValidCriteriaByUserId",
+        "---",
+        "getNotificationItemsByUserId",
+        "setReadNotificationByUserId",
+        "setReceiveNotifyTimeByUserId",
+        "---",
+        "createPurchase",
+        "getPurchaseByUserId",
+        "---",
+        "getServiceByUserId"]
+    
+
+    var seletedApiName = ""
+    
+    @IBAction func onWebApiButtonTouched(sender: UIButton) {
+        Log.debug("onWebApiButtonTouched")
+        
+        if (self.seletedApiName == "isExistEmail") {
+            ZuzuWebService.sharedInstance.isExistEmail("eechih@gmail.com", handler: { (result, error) -> Void in
+                if let error = error {
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: "error: \(error)")
+                } else {
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: "result: \(result)")
+                }
+            })
+        }
+        
+        
+        else if (self.seletedApiName == "getUserByEmail") {
+            ZuzuWebService.sharedInstance.getUserByEmail("eechih@gmail.com", handler: { (result, error) -> Void in
+                if let error = error {
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: "error: \(error)")
+                }
+                
+                if let user = result {
+                    let subTitle = "userId: \(user.id)\n email: \(user.email)\n name: \(user.name)"
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: subTitle)
+                }
+            })
+        }
+        
+        else {
+            self.showAlert("\(seletedApiName) Api", subTitle: "Testing code not implement")
+        }
+    }
+    
+    private func showAlert(title: String, subTitle: String) {
+        let myAlert = SCLAlertView()
+        myAlert.showCloseButton = true
+        myAlert.showTitle(title, subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+    }
+    
     /*
     // MARK: - Navigation
     
@@ -218,5 +299,31 @@ class LoginDebugViewController: UIViewController {
     // Pass the selected object to the new view controller.
     }
     */
+    
+}
+
+extension LoginDebugViewController: UIPickerViewDataSource{
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
+        return 1
+    }
+    
+    //回傳資料筆數
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return apiNameArray.count
+    }
+    
+}
+
+extension LoginDebugViewController: UIPickerViewDelegate{
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return apiNameArray[row]
+    }
+    
+    //當選取時，將目標選取進行呼叫
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let v = apiNameArray[row]
+        Log.debug("select \(v)")
+        self.seletedApiName = v
+    }
     
 }
