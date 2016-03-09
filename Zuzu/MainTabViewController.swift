@@ -102,7 +102,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                 case "RadarStoryboard":
                     //If fisrt time, pop up landing page
                     if(UserDefaultsUtils.needsDisplayRadarLandingPage()) {
-                        UserDefaultsUtils.setRadarLandindPageDisplayed()
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let vc = storyboard.instantiateViewControllerWithIdentifier("radarLandingPage")
                         vc.modalPresentationStyle = .OverCurrentContext

@@ -35,9 +35,7 @@ class RadarLandingViewController: UIViewController {
     
     func onContinueButtonTouched(sender: UIButton) {
         
-        //self.delegate?.onContinue()
-        
-        //UserDefaultsUtils.setRadarLandindPageDisplayed()
+        UserDefaultsUtils.setRadarLandindPageDisplayed()
         
         NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : MainTabViewController.MainTabConstants.RADAR_TAB_INDEX])
         
