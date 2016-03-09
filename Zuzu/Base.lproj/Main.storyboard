@@ -337,7 +337,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydf-Nd-SUy">
-                                <rect key="frame" x="19.5" y="108" width="120" height="60"/>
+                                <rect key="frame" x="20" y="108" width="120" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="height" multiplier="2:1" id="ebU-RJ-zRB"/>
                                     <constraint firstAttribute="width" constant="120" id="lpn-Rf-VBc"/>
@@ -357,6 +357,21 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7SY-p8-DAN">
                                 <rect key="frame" x="20" y="176" width="120" height="60"/>
+                                <state key="normal" title="Cognito Identity"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onCognitoButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="8j8-xt-K0q"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UE7-6z-Alq">
+                                <rect key="frame" x="20" y="244" width="120" height="60"/>
                                 <state key="normal" title="Current User"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
@@ -367,15 +382,21 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="onCurrentUserButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="E4i-IT-hl9"/>
+                                    <action selector="onCurrentUserButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="awt-aV-2BZ"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7SY-p8-DAN" firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="width" id="0qE-Bb-9rJ"/>
+                            <constraint firstItem="UE7-6z-Alq" firstAttribute="top" secondItem="7SY-p8-DAN" secondAttribute="bottom" constant="8" symbolic="YES" id="1ko-0o-9ZF"/>
+                            <constraint firstItem="UE7-6z-Alq" firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="width" id="2IE-r0-iB9"/>
                             <constraint firstItem="ydf-Nd-SUy" firstAttribute="top" secondItem="gtR-mL-aYb" secondAttribute="bottom" constant="8" symbolic="YES" id="3Ei-bI-Kf3"/>
+                            <constraint firstItem="UE7-6z-Alq" firstAttribute="leading" secondItem="7SY-p8-DAN" secondAttribute="leading" id="3Lt-vJ-UCF"/>
+                            <constraint firstItem="UE7-6z-Alq" firstAttribute="centerX" secondItem="7SY-p8-DAN" secondAttribute="centerX" id="GUP-T5-tEl"/>
+                            <constraint firstItem="UE7-6z-Alq" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="Hcg-3e-zqq"/>
                             <constraint firstItem="7SY-p8-DAN" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="JLr-HY-DIk"/>
+                            <constraint firstItem="UE7-6z-Alq" firstAttribute="trailing" secondItem="7SY-p8-DAN" secondAttribute="trailing" id="UCd-7S-aJU"/>
                             <constraint firstItem="ydf-Nd-SUy" firstAttribute="centerX" secondItem="gtR-mL-aYb" secondAttribute="centerX" id="V5v-ua-SVa"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="leading" secondItem="rle-Nh-8TE" secondAttribute="leadingMargin" id="c2p-uN-sqo"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="top" secondItem="spy-N1-ITn" secondAttribute="bottom" constant="20" id="fET-5L-z79"/>
@@ -383,12 +404,21 @@
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="kZ8-oY-s4X"/>
                             <constraint firstItem="7SY-p8-DAN" firstAttribute="top" secondItem="ydf-Nd-SUy" secondAttribute="bottom" constant="8" symbolic="YES" id="mX1-Pt-7j4"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="width" id="yGx-aP-xP6"/>
+                            <constraint firstItem="rr9-O0-vwt" firstAttribute="top" secondItem="UE7-6z-Alq" secondAttribute="bottom" constant="247" id="zbj-6H-oVV"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3Lt-vJ-UCF"/>
+                                <exclude reference="UCd-7S-aJU"/>
+                                <exclude reference="zbj-6H-oVV"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="more" id="qt7-Mf-hOX"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="currentUser" destination="7SY-p8-DAN" id="gwC-nx-fXh"/>
+                        <outlet property="cognitoIdentity" destination="7SY-p8-DAN" id="mS8-Yf-5Rd"/>
+                        <outlet property="currentUser" destination="UE7-6z-Alq" id="XIe-5V-zaG"/>
                         <outlet property="facebookLogin" destination="ydf-Nd-SUy" id="djY-bv-JGC"/>
                         <outlet property="googleLogin" destination="gtR-mL-aYb" id="PB7-yO-R78"/>
                     </connections>

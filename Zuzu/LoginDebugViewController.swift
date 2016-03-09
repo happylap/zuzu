@@ -31,6 +31,12 @@ class LoginDebugViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var cognitoIdentity: UIButton! {
+        didSet {
+            cognitoIdentity.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -151,6 +157,29 @@ class LoginDebugViewController: UIViewController {
     
     @IBAction func onFacebookLoginButtonTouched(sender: UIButton) {
         self.popupFacebookStatus()
+    }
+    
+    private func popupCognitokStatus() {
+        
+        let myAlert = SCLAlertView()
+        myAlert.showCloseButton = true
+        
+        var subTitle = "Cognito not logged in"
+        
+        if let provider = AWSServiceManager.defaultServiceManager().defaultServiceConfiguration.credentialsProvider as?  AWSCognitoCredentialsProvider {
+            
+            subTitle = "Cognito IdentityID = \n\(provider.identityId ?? "-")" +
+            "\n\n IdentityID Expiry = \(provider.expiration ?? "-")"
+
+            
+        }
+        
+        myAlert.showTitle("Token Status", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+        
+    }
+    
+    @IBAction func onCognitoButtonTouched(sender: UIButton) {
+        self.popupCognitokStatus()
     }
     
     @IBAction func onCurrentUserButtonTouched(sender: UIButton) {
