@@ -828,6 +828,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1200" id="W8T-DZ-bgd"/>
                                                 </constraints>
+                                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="purchaseHistoryHeader" textLabel="VdT-YN-AiF" style="IBUITableViewCellStyleDefault" id="hNA-XF-Y4x">
                                                         <rect key="frame" x="0.0" y="28" width="584" height="44"/>
@@ -850,6 +851,7 @@
                                                             <color key="backgroundColor" white="0.97999999999999998" alpha="1" colorSpace="calibratedWhite"/>
                                                         </tableViewCellContentView>
                                                         <color key="backgroundColor" white="0.97999999999999998" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="purchaseHistoryRecord" id="Lf8-PT-6ZU" userLabel="purchaseHistoryRecord" customClass="RadarPurchaseRecordTableViewCell" customModule="Zuzu" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="72" width="584" height="44"/>
@@ -914,6 +916,7 @@
                                                             </variation>
                                                         </tableViewCellContentView>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="8"/>
                                                         <connections>
                                                             <outlet property="purchaseDateLabel" destination="Jbm-x5-DvT" id="bcJ-fo-4Jm"/>
                                                             <outlet property="purchaseDescLabel" destination="tBo-l1-1gK" id="dYV-rM-KOe"/>
