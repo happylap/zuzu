@@ -42,7 +42,7 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Register
     
-    func registerValidByEmail(email: String, handler: (result: Bool, error: ErrorType?) -> Void) {
+    func isExistEmail(email: String, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
         let resource = "/register/\(email)/valid"
