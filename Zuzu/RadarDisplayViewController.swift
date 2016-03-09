@@ -25,6 +25,8 @@ class RadarDisplayViewController: UIViewController {
     
     var purchaseHistotyTableDataSource = RadarPurchaseHistoryTableViewDataSource()
     
+    @IBOutlet weak var servieBannerLabel: UILabel!
+    
     @IBOutlet weak var currentConditionLbel: UILabel!
     
     @IBOutlet weak var regionLabel: UILabel!
@@ -58,7 +60,8 @@ class RadarDisplayViewController: UIViewController {
         self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
         self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
         self.currentConditionLbel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-        
+        self.servieBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
+        self.purchaseTableView.tableFooterView = UIView(frame: CGRectZero)
         // Do any additional setup after loading the view.
     }
 
