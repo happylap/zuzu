@@ -13,7 +13,7 @@ private let Log = Logger.defaultLogger
 
 class LoginDebugViewController: UIViewController {
     
-    var refreshProvider: Provider?
+    private var responder: SCLAlertViewResponder?
     
     @IBOutlet weak var googleLogin: UIButton! {
         didSet {
@@ -59,20 +59,17 @@ class LoginDebugViewController: UIViewController {
             
             if let status = notification.userInfo?["status"] as? Int {
                 if(status == LoginStatus.Resume.rawValue) {
-                    if let provider =  self.refreshProvider {
-                        
+                    
+                    if let provider = AmazonClientManager.sharedInstance.currentUserProfile?.provider {
                         switch(provider) {
                         case .FB:
                             self.popupFacebookStatus()
                         case .GOOGLE:
                             self.popupGoogleStatus()
                         }
-                        
                     }
                 }
             }
-            
-            self.refreshProvider = nil
         }
         
     }
@@ -80,6 +77,8 @@ class LoginDebugViewController: UIViewController {
     private func popupGoogleStatus() {
         
         Log.enter()
+        
+        responder?.close()
         
         let myAlert = SCLAlertView()
         myAlert.showCloseButton = true
@@ -94,27 +93,26 @@ class LoginDebugViewController: UIViewController {
             
         }
         
-        myAlert.addButton("Refresh") { () -> Void in
-            if(AmazonClientManager.sharedInstance.isLoggedInWithGoogle()) {
-                self.refreshProvider = Provider.GOOGLE
+        if(AmazonClientManager.sharedInstance.isLoggedInWithGoogle()) {
+            myAlert.addButton("Refresh") { () -> Void in
                 AmazonClientManager.sharedInstance.reloadGSession()
             }
-        }
-        
-        myAlert.addButton("Validate") { () -> Void in
             
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, provider =  AmazonClientManager.sharedInstance.currentUserProfile?.provider {
+            myAlert.addButton("Validate") { () -> Void in
                 
-                if(provider == Provider.GOOGLE) {
-                    ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                        SCLAlertView().showInfo("Validation Result", subTitle: "Result: \(result), Error: \(error)")
+                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, provider =  AmazonClientManager.sharedInstance.currentUserProfile?.provider {
+                    
+                    if(provider == Provider.GOOGLE) {
+                        ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                            SCLAlertView().showInfo("Validation Result", subTitle: "Result: \(result), Error: \(error)")
+                        }
                     }
                 }
+                
             }
-            
         }
         
-        myAlert.showTitle("Token Status", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+        responder = myAlert.showTitle("Token Status", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
         
     }
     
@@ -129,6 +127,8 @@ class LoginDebugViewController: UIViewController {
         
         Log.enter()
         
+        responder?.close()
+        
         let myAlert = SCLAlertView()
         myAlert.showCloseButton = true
         
@@ -142,27 +142,26 @@ class LoginDebugViewController: UIViewController {
             
         }
         
-        myAlert.addButton("Refresh") { () -> Void in
-            if(AmazonClientManager.sharedInstance.isLoggedInWithFacebook()) {
-                self.refreshProvider = Provider.FB
+        if(AmazonClientManager.sharedInstance.isLoggedInWithFacebook()) {
+            myAlert.addButton("Refresh") { () -> Void in
                 AmazonClientManager.sharedInstance.reloadFBSession()
             }
-        }
-        
-        myAlert.addButton("Validate") { () -> Void in
             
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, provider =  AmazonClientManager.sharedInstance.currentUserProfile?.provider {
+            myAlert.addButton("Validate") { () -> Void in
                 
-                if(provider == Provider.FB) {
-                    ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                        SCLAlertView().showInfo("Validation Result", subTitle: "Result: \(result), Error: \(error)")
+                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, provider =  AmazonClientManager.sharedInstance.currentUserProfile?.provider {
+                    
+                    if(provider == Provider.FB) {
+                        ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                            SCLAlertView().showInfo("Validation Result", subTitle: "Result: \(result), Error: \(error)")
+                        }
                     }
                 }
+                
             }
-            
         }
         
-        myAlert.showTitle("Token Status", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+        responder = myAlert.showTitle("Token Status", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
         
     }
     
@@ -177,7 +176,7 @@ class LoginDebugViewController: UIViewController {
         
         var subTitle = "Cognito not logged in"
         
-        if let provider = AWSServiceManager.defaultServiceManager().defaultServiceConfiguration.credentialsProvider as?  AWSCognitoCredentialsProvider {
+        if let provider = AWSServiceManager.defaultServiceManager().defaultServiceConfiguration?.credentialsProvider as?  AWSCognitoCredentialsProvider {
             
             subTitle = "Cognito IdentityID = \n\(provider.identityId ?? "-")" +
                 "\n\n IdentityID Expiry = \(provider.expiration ?? "-")" +
