@@ -11,6 +11,7 @@ import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
+
 class RadarNavigationController: UINavigationController {
     
     var reach: Reachability?
@@ -42,6 +43,28 @@ class RadarNavigationController: UINavigationController {
 
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            self.alertUnfinishError()
+        }
+        
+    }
+    
+    // MARK: - alert
+    
+    func alertUnfinishError(){
+        let msgTitle = "重新交易失敗"
+        let okButton = "知道了"
+        let subTitle = "很抱歉！交易無法成功，請重新再試！"
+        let alertView = SCLAlertView()
+        alertView.showCloseButton = false
+            
+        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
     // MARK: - show radar page
     
     func showCriteria(){
@@ -91,3 +114,15 @@ class RadarNavigationController: UINavigationController {
     }
     
 }
+
+class ZuzuCriteriaPurchaseHandler: NSObject, ZuzuStorePurchaseHandler{
+    
+    func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
+        
+    }
+    
+    func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
+        
+    }
+}
+
