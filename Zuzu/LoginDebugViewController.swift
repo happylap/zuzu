@@ -256,7 +256,7 @@ class LoginDebugViewController: UIViewController {
         Log.debug("onWebApiButtonTouched")
         
         if (self.seletedApiName == "isExistEmail") {
-            ZuzuWebService.sharedInstance.isExistEmail("eechih@gmail.com", handler: { (result, error) -> Void in
+            ZuzuWebService.sharedInstance.isExistEmail(ApiTestConst.email, handler: { (result, error) -> Void in
                 if let error = error {
                     self.showAlert("\(self.seletedApiName) Api", subTitle: "error: \(error)")
                 } else {
@@ -265,14 +265,42 @@ class LoginDebugViewController: UIViewController {
             })
         }
         
-        
-        else if (self.seletedApiName == "getUserByEmail") {
-            ZuzuWebService.sharedInstance.getUserByEmail("eechih@gmail.com", handler: { (result, error) -> Void in
+        else if (self.seletedApiName == "registerUser") {
+            let zuzuUser = ZuzuUser()
+            zuzuUser.email = ApiTestConst.email
+            
+            ZuzuWebService.sharedInstance.registerUser(zuzuUser, handler: { (userId, error) -> Void in
                 if let error = error {
                     self.showAlert("\(self.seletedApiName) Api", subTitle: "error: \(error)")
                 }
                 
-                if let user = result {
+                if let userId = userId {
+                    let subTitle = "return userId: \(userId)"
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: subTitle)
+                }
+            })
+        }
+        
+        else if (self.seletedApiName == "getUserByEmail") {
+            ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+                if let error = error {
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: "error: \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
+                    let subTitle = "userId: \(user.id)\n email: \(user.email)\n name: \(user.name)"
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: subTitle)
+                }
+            })
+        }
+            
+        else if (self.seletedApiName == "getUserById") {
+            ZuzuWebService.sharedInstance.getUserById(ApiTestConst.userId, handler: { (result, error) -> Void in
+                if let error = error {
+                    self.showAlert("\(self.seletedApiName) Api", subTitle: "error: \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
                     let subTitle = "userId: \(user.id)\n email: \(user.email)\n name: \(user.name)"
                     self.showAlert("\(self.seletedApiName) Api", subTitle: subTitle)
                 }
