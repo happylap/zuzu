@@ -798,7 +798,14 @@ class AmazonClientManager : NSObject {
             
             if(error != nil) {
                 /// Cannot get user data.
-                self.failLogin(.FacebookFailure)
+                
+                /// Revert the login only if we are Not resuming the session
+                if self.currentUserProfile == nil {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.failLogin(.FacebookFailure)
+                    }
+                }
+
                 Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
             } else {
                 /// Update user data
@@ -1004,8 +1011,11 @@ extension AmazonClientManager: GIDSignInDelegate {
                     
                 } else {
                     
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.failLogin(.GoogleFailure)
+                    /// Revert the login only if we are Not resuming the session
+                    if self.currentUserProfile == nil {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.failLogin(.GoogleFailure)
+                        }
                     }
                     
                     ///GA Tracker: Login failed
