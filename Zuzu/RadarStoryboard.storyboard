@@ -1060,6 +1060,9 @@
                             <constraint firstItem="P4b-pJ-WHt" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="fFS-FI-K7d"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="refreshImageView" destination="1w7-Y5-xeE" id="SYu-Y3-doY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7zl-9S-4Mb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
