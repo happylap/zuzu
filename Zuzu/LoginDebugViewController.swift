@@ -9,6 +9,8 @@ import UIKit
 import SCLAlertView
 import FBSDKLoginKit
 
+private let Log = Logger.defaultLogger
+
 class LoginDebugViewController: UIViewController {
     
     var refreshProvider: Provider?
@@ -52,6 +54,9 @@ class LoginDebugViewController: UIViewController {
     func handleTokenRefreshed(notification: NSNotification){
         
         self.runOnMainThread { () -> Void in
+            
+            Log.enter()
+            
             if let status = notification.userInfo?["status"] as? Int {
                 if(status == LoginStatus.Resume.rawValue) {
                     if let provider =  self.refreshProvider {
@@ -74,6 +79,8 @@ class LoginDebugViewController: UIViewController {
     
     private func popupGoogleStatus() {
         
+        Log.enter()
+        
         let myAlert = SCLAlertView()
         myAlert.showCloseButton = true
         
@@ -82,7 +89,8 @@ class LoginDebugViewController: UIViewController {
         if let googleToken = GIDSignIn.sharedInstance().currentUser?.authentication?.idToken {
             
             subTitle = "Google Token = \n\(googleToken)" +
-            "\n\n Token Expiry = \(GIDSignIn.sharedInstance().currentUser?.authentication?.idTokenExpirationDate ?? "-")"
+                "\n\n Token Expiry = \(GIDSignIn.sharedInstance().currentUser?.authentication?.idTokenExpirationDate ?? "-")" +
+            "\n\n Now(UTC) = \(NSDate())"
             
         }
         
@@ -119,6 +127,8 @@ class LoginDebugViewController: UIViewController {
     
     private func popupFacebookStatus() {
         
+        Log.enter()
+        
         let myAlert = SCLAlertView()
         myAlert.showCloseButton = true
         
@@ -127,7 +137,8 @@ class LoginDebugViewController: UIViewController {
         if let fbToken = FBSDKAccessToken.currentAccessToken()?.tokenString {
             
             subTitle = "FB Token = \n\(fbToken)" +
-            "\n\n Token Expiry = \(FBSDKAccessToken.currentAccessToken()?.expirationDate ?? "-")"
+                "\n\n Token Expiry = \(FBSDKAccessToken.currentAccessToken()?.expirationDate ?? "-")" +
+            "\n\n Now(UTC) = \(NSDate())"
             
         }
         
@@ -169,8 +180,9 @@ class LoginDebugViewController: UIViewController {
         if let provider = AWSServiceManager.defaultServiceManager().defaultServiceConfiguration.credentialsProvider as?  AWSCognitoCredentialsProvider {
             
             subTitle = "Cognito IdentityID = \n\(provider.identityId ?? "-")" +
-            "\n\n IdentityID Expiry = \(provider.expiration ?? "-")"
-
+                "\n\n IdentityID Expiry = \(provider.expiration ?? "-")" +
+            "\n\n Now(UTC) = \(NSDate())"
+            
             
         }
         

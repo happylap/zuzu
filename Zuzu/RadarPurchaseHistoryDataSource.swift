@@ -52,10 +52,13 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     
     private let cellHeadrID = "purchaseHistoryHeader"
     
-    override init() {
+    private let uiViewController: RadarDisplayViewController!
+    
+    init(uiViewController: RadarDisplayViewController) {
+        self.uiViewController = uiViewController
         let dummy = RadarPurchaseRecord()
         let p1 = RadarPurchaseRecord()
-        self.purchaseData = [dummy, p1]
+        self.purchaseData = [dummy]
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,6 +72,17 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         }
         
         Log.debug("Number of purchase history = \(itemSize)")
+
+ 
+        let emptyLabel = self.uiViewController.emptyLabel
+        
+        if (itemSize <= 1) {
+            emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
+            emptyLabel.sizeToFit()
+            emptyLabel.hidden = false
+        } else {
+            emptyLabel.hidden = true
+        }
         
         return itemSize
     }
@@ -79,6 +93,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         if indexPath.row == 0{
             if let cell = tableView.dequeueReusableCellWithIdentifier(cellHeadrID){
                 cell.textLabel!.text = "購買紀錄"
+                cell.textLabel!.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
                 return cell
             } else {
                 assert(false, "Failed to prepare purchase cell instance")

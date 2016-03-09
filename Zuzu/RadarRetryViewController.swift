@@ -12,8 +12,13 @@ private let Log = Logger.defaultLogger
 
 class RadarRetryViewController: UIViewController {
     
+    @IBOutlet weak var refreshImageView: UIImageView!
+    
     override func viewDidLoad() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleResetCriteria:", name: ResetCriteriaNotification, object: nil)
+        let tapGuesture = UITapGestureRecognizer(target: self, action: "imageTapped:")
+        self.refreshImageView.addGestureRecognizer(tapGuesture)
+        self.refreshImageView.userInteractionEnabled = true
     }
     
     func handleResetCriteria(notification: NSNotification){
@@ -32,5 +37,9 @@ class RadarRetryViewController: UIViewController {
         }
         
         Log.exit()
+    }
+    
+    func imageTapped(){
+        
     }
 }

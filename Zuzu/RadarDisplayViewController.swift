@@ -13,17 +13,15 @@ private let Log = Logger.defaultLogger
 
 class RadarDisplayViewController: UIViewController {
 
-    var zuzuCriteria = ZuzuCriteria(){
-        didSet{
-            if zuzuCriteria.criteria == nil{
-                zuzuCriteria.criteria = SearchCriteria()
-            }
-            self.updateServiceTextLabel()
-            self.updateCriteriaTextLabel()
-        }
+    struct ViewTransConst {
+        static let showConfigureRadar:String = "showConfigureRadar"
     }
     
-    var purchaseHistotyTableDataSource = RadarPurchaseHistoryTableViewDataSource()
+    private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource(uiViewController: self)
+    
+    let emptyLabel = UILabel()
+    
+    @IBOutlet weak var servieBannerLabel: UILabel!
     
     @IBOutlet weak var currentConditionLbel: UILabel!
     
@@ -43,23 +41,25 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var modifyButtoon: UIButton!
     
-    struct ViewTransConst {
-        static let showConfigureRadar:String = "showConfigureRadar"
+    var zuzuCriteria = ZuzuCriteria(){
+        didSet{
+            if zuzuCriteria.criteria == nil{
+                zuzuCriteria.criteria = SearchCriteria()
+            }
+            self.updateServiceTextLabel()
+            self.updateCriteriaTextLabel()
+        }
     }
-    
     
     // MARK: - View Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureButton()
+        self.configureBannerText()
+        self.configurePurchaseTableView()
         self.updateServiceTextLabel()
         self.updateCriteriaTextLabel()
-        self.configureButton()
-        self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
-        self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
-        self.currentConditionLbel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-        
-        // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -68,7 +68,7 @@ class RadarDisplayViewController: UIViewController {
     }
 
     
-    // MARK: - UI
+    // MARK: - Update UI
     
     private func updateServiceTextLabel(){
         var diff = 0
@@ -87,13 +87,16 @@ class RadarDisplayViewController: UIViewController {
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
         self.regionLabel?.text = displayItem.title
-        self.houseInfoLabel?.text = displayItem.detail
+        self.houseInfoLabel?.text = displayItem.purpostString
+        self.priceSizeLabel?.text = displayItem.priceSizeString
         var filterNum = 0
         if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
             filterNum = filterGroups.count
         }
         self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
     }
+    
+    // MARK: - Configure UI
     
     private func configureButton() {
         modifyButtoon.layer.borderWidth = 1
@@ -107,6 +110,49 @@ class RadarDisplayViewController: UIViewController {
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
     
+    private func configureBannerText(){
+        self.currentConditionLbel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
+        self.servieBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
+    }
+    
+    private func configurePurchaseTableView(){
+        self.purchaseTableView.delegate = self.purchaseHistotyTableDataSource
+        self.purchaseTableView.dataSource = self.purchaseHistotyTableDataSource
+        
+        //self.purchaseTableView.rowHeight = UIScreen.mainScreen().bounds.width * (500/1440)
+        
+        //Remove extra cells when the table height is smaller than the screen
+        self.purchaseTableView.tableFooterView = UIView(frame: CGRectZero)
+        
+        // configure empty label
+        if let contentView = self.purchaseTableView {
+            emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+            emptyLabel.textAlignment = NSTextAlignment.Center
+            emptyLabel.numberOfLines = -1
+            emptyLabel.font = UIFont.systemFontOfSize(14)
+            emptyLabel.textColor = UIColor.grayColor()
+            emptyLabel.autoScaleFontSize = true
+            emptyLabel.hidden = true
+            contentView.addSubview(emptyLabel)
+            
+            let xConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+            
+            let leftConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            leftConstraint.priority = UILayoutPriorityDefaultLow
+            
+            let rightConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            rightConstraint.priority = UILayoutPriorityDefaultLow
+            
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+            
+        }
+        
+    }
+
     
     // MARK: - Navigation
     
