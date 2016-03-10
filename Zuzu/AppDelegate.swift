@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
     
     static var tagContainer: TAGContainer?
     
-    var reachability:Reachability?
+    //var reachability:Reachability?
     
     let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
     
@@ -141,8 +141,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         RadarService.sharedInstance.start()
         
-        reachability = Reachability.reachabilityForInternetConnection();
-        reachability?.startNotifier();
+        //reachability = Reachability.reachabilityForInternetConnection();
+        //reachability?.startNotifier();
         
         if FeatureOption.Radar.enableMain == true{
             pushNotificationsSetup()
