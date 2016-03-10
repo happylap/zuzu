@@ -48,7 +48,7 @@ class RadarNavigationController: UINavigationController {
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
-        self.startLoadingText("重新設定租屋雷達...")
+        self.startLoadingText("重新設定租屋雷達服務...")
         self.performFinishTransactions()
     }
     
@@ -167,9 +167,9 @@ class RadarNavigationController: UINavigationController {
     // MARK: - alert
     
     func alertUnfinishError(){
-        let msgTitle = "重新設定雷達失敗"
+        let msgTitle = "重新設定租屋雷達服務失敗"
         let okButton = "知道了"
-        let subTitle = "很抱歉！設定雷達無法成功！"
+        let subTitle = "很抱歉！設定租屋雷達服務無法成功！"
         let alertView = SCLAlertView()
         alertView.showCloseButton = false
         

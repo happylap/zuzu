@@ -61,6 +61,8 @@ class RadarViewController: UIViewController {
             }else{
                 self.loginForUnfinishTransactions()
             }
+        }else{
+            self.checkService()
         }
     }
     
@@ -95,7 +97,7 @@ class RadarViewController: UIViewController {
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
-        self.startLoadingText("重新設定租屋雷達...")
+        self.startLoadingText("重新設定租屋雷達服務...")
         self.performFinishTransactions()
     }
     
@@ -136,27 +138,32 @@ class RadarViewController: UIViewController {
         self.stopLoadingText()
     }
     
-    func alertUnfinishError(){
-        let msgTitle = "重新設定雷達失敗"
-        let okButton = "知道了"
-        let subTitle = "很抱歉！設定雷達無法成功！"
-        let alertView = SCLAlertView()
-        alertView.showCloseButton = false
-        
-        alertView.addButton("重新再試") {
-            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            if unfinishedTranscations.count > 0{
-                if AmazonClientManager.sharedInstance.isLoggedIn(){
-                    self.doUnfinishTransactions(unfinishedTranscations)
-                }
+
+    // Service
+    
+    func checkService(){
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                self.startLoading()
+                ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
             }
         }
-        
-        alertView.addButton("取消") {
+    }
+    
+    func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
+        self.stopLoading()
+        if error != nil{
+            self.alertServiceError("目前可能處於飛航模式或是無網路狀態，暫時無法取得租屋雷達服務狀態")
+            return
         }
         
-        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        if result != nil{
+            if result?.status == "valid"{
+                self.alertService("租屋雷達服務已設定完成\n請立即啟用租屋雷達")
+            }
+        }
     }
+    
     
     // MARK: - UI Configure
     
@@ -246,21 +253,50 @@ class RadarViewController: UIViewController {
                 
                 ZuzuWebService .sharedInstance.createPurchase(zuzuPurchase){ (result, error) -> Void in
                     if error != nil{
-                        self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
+                        //self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
                     }
                 }
             }
         }
     }
     
-    private func alertServerError(subTitle: String) {
+    // MARK: - alert
+    
+    func alertUnfinishError(){
+        let msgTitle = "重新設定租屋雷達服務失敗"
+        let okButton = "知道了"
+        let subTitle = "很抱歉！設定租屋雷達服務無法成功！"
         let alertView = SCLAlertView()
-        alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView.showCloseButton = false
+        
+        alertView.addButton("重新再試") {
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            if unfinishedTranscations.count > 0{
+                if AmazonClientManager.sharedInstance.isLoggedIn(){
+                    self.doUnfinishTransactions(unfinishedTranscations)
+                }
+            }
+        }
+        
+        alertView.addButton("取消") {
+        }
+        
+        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
+    func alertServiceError(subTitle: String) {
+        let alertView = SCLAlertView()
+        alertView.showInfo("無法取得雷達服務狀態", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         
     }
     
+    func alertService(subTitle: String){
+        let alertView = SCLAlertView()
+        alertView.showInfo("雷達服務已設定完成", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
+    
 
-    // Loading
+    // MARK: - Loading
     
     func startLoading(){
         LoadingSpinner.shared.setImmediateAppear(true)
