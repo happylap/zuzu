@@ -9,7 +9,7 @@ import UIKit
 
 private let Log = Logger.defaultLogger
 
-class RadarPurchaseLoginViewController: UIViewController {
+class CommonLoginViewController: UIViewController {
     
     var cancelHandler: (() -> Void)?
     var fbLoginHandler: (() -> Void)?
