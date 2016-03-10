@@ -156,29 +156,8 @@ class RadarViewController: UIViewController {
         
     }
     
-    func handleResetCriteria(notification: NSNotification){
-        Log.enter()
-        if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
-            if zuzuCriteria.criteria != nil{
-                NSNotificationCenter.defaultCenter().removeObserver(self)
-                if let vc = self.navigationController as? RadarNavigationController{
-                    vc.showDisplayRadarView(zuzuCriteria)
-                }
-            }
-        }else{
-            NSNotificationCenter.defaultCenter().removeObserver(self)
-            if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRetryRadarView() // error -> show retry
-            }
-        }
-        Log.exit()
-    }
-    
     func registerCriteriaObserver(){
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            NSNotificationCenter.defaultCenter().removeObserver(self)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleResetCriteria:", name: ResetCriteriaNotification, object: nil)
-        }
+
     }
 }
 

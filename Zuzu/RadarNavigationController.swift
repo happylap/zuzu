@@ -14,46 +14,45 @@ private let Log = Logger.defaultLogger
 
 class RadarNavigationController: UINavigationController {
     
-    var reach: Reachability?
+    var zuzuCriteria: ZuzuCriteria?
     
     // MARK: - view life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*let reachability: Reachability = Reachability.reachabilityForInternetConnection()
-        let networkStatus: NetworkStatus = reachability.currentReachabilityStatus()
-        
-        
-        Log.debug("\(networkStatus.rawValue)")
-        
-        switch networkStatus {
-        case NotReachable:
-            Log.debug("[Network Status]: NotReachable")
-            self.showRetryRadarView()
-            return
-        case ReachableViaWWAN:
-            Log.debug("[Network Status]: ReachableViaWWAN")
-        case ReachableViaWiFi:
-            Log.debug("[Network Status]: ReachableViaWiFi")
-        default:
-            break
-        }*/
-  
-        self.showCriteria()
-
+        self.showRetryRadarView(true)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        self.showRadar()
+        /*let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.alertUnfinishError()
-        }
+        }*/
         
     }
     
     // MARK: - alert
+    
+    func alertLoginForUnfinish(){
+        let loginAlertView = SCLAlertView()
+        loginAlertView.showCloseButton = false
+        
+        loginAlertView.addButton("Facebook帳號登入") {
+            AmazonClientManager.sharedInstance.fbLogin(self)
+        }
+        
+        loginAlertView.addButton("Google帳號登入") {
+            AmazonClientManager.sharedInstance.googleLogin(self)
+        }
+
+        let subTitle = "之前購買的雷達尚未完成設定"
+        loginAlertView.showNotice("登入", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
+        loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
+        subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
     
     func alertUnfinishError(){
         let msgTitle = "重新交易失敗"
@@ -65,29 +64,55 @@ class RadarNavigationController: UINavigationController {
         alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
+    
+    //
+    func startLoading(){
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+    }
+    
+    func stopLoading(){
+        LoadingSpinner.shared.stop()
+    }
+    
     // MARK: - show radar page
     
-    func showCriteria(){
+    func showRadar(){
         Log.enter()
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            self.showConfigureRadarView()
-            return
-        }
-        
-        /*if UserDefaultsUtils.getZuzuUserId() == nil{
-        self.showRetryRadarView()
-        return
-        }*/
-        
-        if let zuzuCriteria = RadarService.sharedInstance.zuzuCriteria{
-            if zuzuCriteria.criteria != nil{
-                self.showDisplayRadarView(zuzuCriteria)
-            }else{
-                self.showConfigureRadarView() // no criteria in DB
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            if self.zuzuCriteria != nil{
+                self.showDisplayRadarView(self.zuzuCriteria!)
+                Log.exit()
+                return
             }
-        }else{
-            self.showRetryRadarView() // error -> show retry
+            
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                self.startLoading()
+                ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                    if error != nil{
+                        Log.error("Cannot get criteria by user id:\(userId)")
+                        self.stopLoading()
+                        self.showRetryRadarView(false)
+                        return
+                    }
+                    if result != nil{
+                        self.zuzuCriteria = result
+                        self.stopLoading()
+                        self.showDisplayRadarView(self.zuzuCriteria!)
+                    }else{
+                        self.stopLoading() // no criteria
+                        self.stopLoading()
+                        self.showConfigureRadarView()
+                    }
+                }
+            }
         }
+        else{
+            self.zuzuCriteria = nil
+            self.showConfigureRadarView()
+        }
+        
         Log.exit()
     }
     
@@ -106,9 +131,10 @@ class RadarNavigationController: UINavigationController {
         }
     }
     
-    func showRetryRadarView(){
+    func showRetryRadarView(isBlank: Bool){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
+            vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
         }
     }
