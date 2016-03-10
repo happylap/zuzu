@@ -17,8 +17,6 @@ let ZuzuUserLogoutNotification = "ZuzuUserLogoutNotification"
 
 class RadarService : NSObject {
     
-    var zuzuCriteria: ZuzuCriteria?
-    
     //Share Instance for interacting with the ZuzuStore
     class var sharedInstance: RadarService {
         struct Singleton {
@@ -30,149 +28,43 @@ class RadarService : NSObject {
     
     // MARK: start
     func start(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogout:", name: UserLogoutNotification, object: nil)
-        self.setNetworkObserver()
-    }
-    
-    func onNetWorkChanged(notification: NSNotification){
-        Log.enter()
-        
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            self.removeNetworkObserver()
-            return
-        }
-        
-        let zuzuUserId = UserDefaultsUtils.getZuzuUserId()
-        
-        if zuzuUserId != nil && self.zuzuCriteria != nil{
-            self.removeNetworkObserver()
-            return
-        }
- 
-        if let reachability: Reachability = notification.object as? Reachability{
-            if(reachability.currentReachabilityStatus() == NotReachable) {
-                return
-            }
-        }
-        
-        if let userLoginId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.loginZuzuUser(userLoginId)
-        }
-        
-        if zuzuUserId != nil && self.zuzuCriteria == nil{
-            self.retrieveRadarCriteria(zuzuUserId!)
-            return
-        }
 
-        Log.exit()
     }
     
-    func handleUserLogin(notification: NSNotification){
-        Log.enter()
-        if let loginUserId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            
-            if self.zuzuCriteria == nil{
-                self.retrieveRadarCriteria(loginUserId)
-            }
-            
-        }
-        Log.exit()
-    }
-    
-    func handleUserLogout(notification: NSNotification){
-        self.reset()
-    }
-    
-    func retrieveRadarCriteria(userId:String){
-        let zuzuUser = ZuzuUser()
-        zuzuUser.id = userId
-        ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-            if error != nil{
-                self.setNetworkObserver()
-                Log.error("Cannot get criteria by user id:\(userId)")
-                return
-            }
-            
-            if result != nil{
-                self.zuzuCriteria = result
-            }else{
-                self.zuzuCriteria = ZuzuCriteria()
-            }
-
-            NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
-        }
-    }
-    
-    func loginZuzuUser(userId: String){
-        Log.enter()
-        self.reset()
-        let zuzuUser = ZuzuUser()
-        zuzuUser.id = userId
+    func composeZuzuPurchase(transaction: SKPaymentTransaction, purchaseReceipt:NSData, handler: (result: ZuzuPurchase?, error: NSError?) -> Void){
         
-        if let userData = AmazonClientManager.sharedInstance.currentUserProfile{
-            zuzuUser.provider = userData.provider?.rawValue
-            zuzuUser.email = userData.email
-            zuzuUser.name = userData.name
-            zuzuUser.gender = userData.gender
-            if let birthday = userData.birthday {
-                zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
-            }
-            zuzuUser.pictureUrl = userData.pictureUrl
+        let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id
+        let transId = transaction.transactionIdentifier
+        let productId = transaction.payment.productIdentifier
+        
+        if userId == nil{
+            assert(false, "user id is nil")
+            handler(result: nil, error: NSError(domain: "user id is nil", code: -1, userInfo: nil))
+            return
         }
         
-        ZuzuWebService.sharedInstance.isExistUser(userId){(result, error) -> Void in
-            if error != nil{
-                self.setNetworkObserver()
-                return
-            }
-            
-            if result == true{
-                UserDefaultsUtils.setZuzuUserId(userId)
-                self.retrieveRadarCriteria(userId)
-                NSNotificationCenter.defaultCenter().postNotificationName(ZuzuUserLoginNotification, object: self, userInfo: nil)
-                if AmazonClientManager.sharedInstance.currentUserProfile != nil{
-                    ZuzuWebService.sharedInstance.updateUser(zuzuUser){
-                        (result, error) -> Void in
+        if transId == nil{
+            assert(false, "transaction id is nil")
+            handler(result: nil, error: NSError(domain: "transId", code: -1, userInfo: nil))
+            return
+        }
+        
+        ZuzuStore.sharedInstance.requestProducts { success, products in
+            if success {
+                for product in products{
+                    if product.productIdentifier == productId{
+                        let purchase = ZuzuPurchase(transactionId: transId!, userId: userId!, productId: productId, productPrice: product.price, purchaseReceipt: purchaseReceipt)
+                        handler(result: purchase, error: nil)
+                        return
                     }
                 }
-                return
+                
+                handler(result: nil, error: NSError(domain: "Cannot find any product associated with the transaction", code: -1, userInfo: nil))
+                
+            }else{
+                handler(result: nil, error: NSError(domain: "Can not request products from ZuzuStore", code: -1, userInfo: nil))
             }
             
-            ZuzuWebService.sharedInstance.createUser(zuzuUser){(result, error) -> Void in
-                if error != nil{
-                    self.setNetworkObserver()
-                    return
-                }
-                
-                UserDefaultsUtils.setZuzuUserId(userId)
-                NSNotificationCenter.defaultCenter().postNotificationName(ZuzuUserLoginNotification, object: self, userInfo: nil)
-                self.retrieveRadarCriteria(userId)
-            }
         }
-        
-        Log.exit()
-    }
-    
-    private func reset(){
-        UserDefaultsUtils.clearZuzuUserId()
-        NSNotificationCenter.defaultCenter().postNotificationName(ZuzuUserLogoutNotification, object: self, userInfo: nil)
-        if self.zuzuCriteria  != nil{
-            self.zuzuCriteria = nil
-            NSNotificationCenter.defaultCenter().postNotificationName(ResetCriteriaNotification, object: self, userInfo: nil)
-        }
-    }
-    
-    func setNetworkObserver(){
-        /*self.removeNetworkObserver()
-        NSNotificationCenter.defaultCenter().addObserver(self,
-        selector: "onNetWorkChanged:",
-        name: kReachabilityChangedNotification,
-        object: nil)*/
-    }
-    
-    func removeNetworkObserver(){
-        //NSNotificationCenter.defaultCenter().removeObserver(self, name: kReachabilityChangedNotification, object: nil)
     }
 }

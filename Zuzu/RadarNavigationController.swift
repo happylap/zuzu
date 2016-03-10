@@ -25,13 +25,53 @@ class RadarNavigationController: UINavigationController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        /*let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
-        self.alertUnfinishError()
-        }*/
-        
-        self.showRadar()
+            if AmazonClientManager.sharedInstance.isLoggedIn(){
+                self.finishTransactions(unfinishedTranscations)
+            }else{
+                
+            }
+        }else{
+            self.showRadar()
+        }
     }
+    
+    // MARK: finishTransactions
+    
+    func finishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
+        
+        self.startLoading()
+        
+        if let receipt = ZuzuStore.sharedInstance.readReceipt(){
+            for transaction in unfinishedTranscations{
+                
+                RadarService.sharedInstance.composeZuzuPurchase(transaction, purchaseReceipt: receipt){
+                    (result, error) -> Void in
+                    if let purchase = result{
+                        ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
+                            self.stopLoading()
+                            if error != nil{
+                                Log.error("Fail to createPurchase from transaction: \(transaction.transactionIdentifier)")
+                                //alert
+                                return
+                            }
+                            
+                            self.showRadar()
+                        }
+                    }else{
+                        Log.error("Fail to composeZuzuPurchase from transaction: \(transaction.transactionIdentifier)")
+                        self.stopLoading()
+                        //alert
+                    }
+                }
+            }
+        }
+        
+        self.stopLoading()
+    }
+
     
     // MARK: - alert
     
@@ -62,18 +102,6 @@ class RadarNavigationController: UINavigationController {
         alertView.showCloseButton = false
             
         alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    }
-    
-    
-    //
-    func startLoading(){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.view)
-    }
-    
-    func stopLoading(){
-        LoadingSpinner.shared.stop()
     }
     
     // MARK: - show radar page
@@ -151,16 +179,17 @@ class RadarNavigationController: UINavigationController {
         }
     }
     
+    // Loading
+    
+    func startLoading(){
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+    }
+    
+    func stopLoading(){
+        LoadingSpinner.shared.stop()
+    }
 }
 
-class ZuzuCriteriaPurchaseHandler: NSObject, ZuzuStorePurchaseHandler{
-    
-    func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
-        
-    }
-    
-    func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
-        
-    }
-}
 
