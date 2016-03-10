@@ -38,11 +38,23 @@ class RadarViewController: UIViewController {
         }
 
         self.updateCriteriaTextLabel()
-        self.registerCriteriaObserver()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
         self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
         
         self.configureButton()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count <= 0{
+            if AmazonClientManager.sharedInstance.isLoggedIn(){
+                // get service
+            }else{
+                AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
+            }
+        }
     }
     
     override func willMoveToParentViewController(parent: UIViewController?) {
@@ -54,7 +66,17 @@ class RadarViewController: UIViewController {
         }
     }
     
-    // MARK: - UI
+    // MARK: finishTransactions
+    
+    func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
+        //self.isOnLogging = false
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        //self.finishTransactions(unfinishedTranscations)
+        return nil
+    }
+    
+    
+    // MARK: - UI Configure
     
     private func configureButton() {
         activateButton.layer.borderWidth = 1
@@ -104,7 +126,6 @@ class RadarViewController: UIViewController {
             vc.completeHandler = { () -> Void in
                 ///Show tab bar
                 self.tabBarController?.tabBarHidden = false
-                self.registerCriteriaObserver()
             }
             
             presentViewController(vc, animated: true, completion: nil)
@@ -156,9 +177,7 @@ class RadarViewController: UIViewController {
         
     }
     
-    func registerCriteriaObserver(){
 
-    }
 }
 
 // MARK: - RadarConfigureTableViewControllerDelegate

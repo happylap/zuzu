@@ -71,6 +71,9 @@ class CommonLoginViewController: UIViewController {
         } else if loginMode == 2 {
             titleText.text = "登入個人帳號"
             subTitleText.text = "請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務"
+        } else if loginMode == 3 {
+            titleText.text = "登入個人帳號"
+            subTitleText.text = "偵測到購買的租屋雷達尚未完成設定，\n請您使用下列帳號登入，\n豬豬快租便能為您完成設定"
         }
         
     }

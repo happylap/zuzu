@@ -67,4 +67,31 @@ class RadarService : NSObject {
             
         }
     }
+    
+
+    func createPurchase(transaction: SKPaymentTransaction, handler: (result: String?, error: NSError?) -> Void){
+        if let receipt = ZuzuStore.sharedInstance.readReceipt(){
+            self.composeZuzuPurchase(transaction, purchaseReceipt: receipt){
+                (result, error) -> Void in
+                if let purchase = result{
+                    ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
+                        if error != nil{
+                            Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")
+                            handler(result: nil, error: error)
+                            return
+                        }
+                        
+                        handler(result: result, error: nil)
+                    }
+                }else{
+                    Log.error("Fail to composeZuzuPurchase for transaction: \(transaction.transactionIdentifier)")
+                    handler(result: nil, error: error)
+                }
+            }
+        }else{
+            Log.error("Fail to read receipt for the transaction")
+            handler(result: nil, error: NSError(domain: "Fail to read receipt for the transaction", code: -1, userInfo: nil))
+            //
+        }
+    }
 }

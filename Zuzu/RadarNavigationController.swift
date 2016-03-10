@@ -16,6 +16,10 @@ class RadarNavigationController: UINavigationController {
     
     var zuzuCriteria: ZuzuCriteria?
     
+    var unfinishedTranscations: [SKPaymentTransaction]?
+    
+    var porcessTransactionNum = 0
+    
     // MARK: - view life cycle
     
     override func viewDidLoad() {
@@ -25,13 +29,13 @@ class RadarNavigationController: UINavigationController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
-                self.finishTransactions(unfinishedTranscations)
+                self.doUnfinishTransactions(unfinishedTranscations)
             }else{
-                
+                self.showConfigureRadarView()
             }
         }else{
             self.showRadar()
@@ -40,71 +44,38 @@ class RadarNavigationController: UINavigationController {
     
     // MARK: finishTransactions
     
-    func finishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
-        
-        self.startLoading()
-        
-        if let receipt = ZuzuStore.sharedInstance.readReceipt(){
-            for transaction in unfinishedTranscations{
-                
-                RadarService.sharedInstance.composeZuzuPurchase(transaction, purchaseReceipt: receipt){
-                    (result, error) -> Void in
-                    if let purchase = result{
-                        ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
-                            self.stopLoading()
-                            if error != nil{
-                                Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")
-                                //alert
-                                return
-                            }
-                            
-                            self.showRadar()
-                        }
-                    }else{
-                        Log.error("Fail to composeZuzuPurchase for transaction: \(transaction.transactionIdentifier)")
-                        self.stopLoading()
-                        //alert
-                    }
-                }
+    func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
+        self.porcessTransactionNum = 0
+        self.unfinishedTranscations = unfinishedTranscations
+        self.performFinishTransactions()
+    }
+    
+    func performFinishTransactions(){
+        if let transactions = self.unfinishedTranscations{
+            if self.porcessTransactionNum  < transactions.count{
+                RadarService.sharedInstance.createPurchase(transactions[self.porcessTransactionNum], handler: self.handleCompleteTransaction)
             }
-        }else{
-            Log.error("Fail to get receipt for transaction")
-            self.stopLoading()
-            //alert
         }
     }
-
     
-    // MARK: - alert
-    
-    func alertLoginForUnfinish(){
-        let loginAlertView = SCLAlertView()
-        loginAlertView.showCloseButton = false
-        
-        loginAlertView.addButton("Facebook帳號登入") {
-            AmazonClientManager.sharedInstance.fbLogin(self)
+    func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
+        if error != nil{
+            self.unfinishedTranscations = nil
+            self.porcessTransactionNum = 0
+            self.alertUnfinishError()
+            return
         }
         
-        loginAlertView.addButton("Google帳號登入") {
-            AmazonClientManager.sharedInstance.googleLogin(self)
+        self.porcessTransactionNum = self.porcessTransactionNum + 1
+        if let transactions = self.unfinishedTranscations{
+            if self.porcessTransactionNum  < transactions.count{
+                self.performFinishTransactions()
+            }else{
+                self.showRadar()
+            }
         }
-
-        let subTitle = "之前購買的雷達尚未完成設定"
-        loginAlertView.showNotice("登入", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-        
-        loginAlertView.showNotice(NSLocalizedString("login.title", comment: ""),
-        subTitle: NSLocalizedString("login.body", comment: ""), colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
-    func alertUnfinishError(){
-        let msgTitle = "重新交易失敗"
-        let okButton = "知道了"
-        let subTitle = "很抱歉！交易無法成功，請重新再試！"
-        let alertView = SCLAlertView()
-        alertView.showCloseButton = false
-            
-        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    }
     
     // MARK: - show radar page
     
@@ -179,6 +150,31 @@ class RadarNavigationController: UINavigationController {
             vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
         }
+    }
+    
+    // MARK: - alert
+    
+    func alertUnfinishError(){
+        let msgTitle = "重新設定雷達失敗"
+        let okButton = "知道了"
+        let subTitle = "很抱歉！設定雷達無法成功！"
+        let alertView = SCLAlertView()
+        alertView.showCloseButton = false
+        
+        alertView.addButton("重新再試") {
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            if unfinishedTranscations.count > 0{
+                if AmazonClientManager.sharedInstance.isLoggedIn(){
+                    self.doUnfinishTransactions(unfinishedTranscations)
+                }
+            }
+        }
+        
+        alertView.addButton("取消") {
+            self.showConfigureRadarView()
+        }
+        
+        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     // Loading
