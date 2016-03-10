@@ -53,7 +53,7 @@ class RadarNavigationController: UINavigationController {
                         ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
                             self.stopLoading()
                             if error != nil{
-                                Log.error("Fail to createPurchase from transaction: \(transaction.transactionIdentifier)")
+                                Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")
                                 //alert
                                 return
                             }
@@ -61,15 +61,17 @@ class RadarNavigationController: UINavigationController {
                             self.showRadar()
                         }
                     }else{
-                        Log.error("Fail to composeZuzuPurchase from transaction: \(transaction.transactionIdentifier)")
+                        Log.error("Fail to composeZuzuPurchase for transaction: \(transaction.transactionIdentifier)")
                         self.stopLoading()
                         //alert
                     }
                 }
             }
+        }else{
+            Log.error("Fail to get receipt for transaction")
+            self.stopLoading()
+            //alert
         }
-        
-        self.stopLoading()
     }
 
     
