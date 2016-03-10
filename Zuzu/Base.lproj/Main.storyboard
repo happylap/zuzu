@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -464,6 +464,189 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iRW-Zc-G7x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="378" y="777"/>
+        </scene>
+        <!--購買雷達 登入-->
+        <scene sceneID="Bcn-e0-ucz">
+            <objects>
+                <viewController storyboardIdentifier="commonLoginView" title="購買雷達 登入" id="TOl-Ic-VLE" customClass="CommonLoginViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Z02-1F-pBV"/>
+                        <viewControllerLayoutGuide type="bottom" id="Nd7-4x-JFt"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="BP1-Th-S5z">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.40000000596046448" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w88-5d-9hw" userLabel="Mask View">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aOi-cu-zQb" userLabel="Login View">
+                                <rect key="frame" x="0.0" y="368" width="414" height="368"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3ZG-pT-Qzg" userLabel="Header View">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="45"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登入個人帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-xT-rkg" userLabel="Title Label">
+                                                <rect key="frame" x="156" y="12" width="102" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4j-C1-nVh">
+                                                <rect key="frame" x="0.0" y="5" width="50" height="35"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="35" id="Cz5-4x-KSG"/>
+                                                    <constraint firstAttribute="width" constant="50" id="M3A-I3-eo0"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <state key="normal" title="取消"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="z4j-C1-nVh" firstAttribute="centerY" secondItem="3ZG-pT-Qzg" secondAttribute="centerY" id="0mG-Zm-iwS"/>
+                                            <constraint firstAttribute="height" constant="45" id="1oV-XS-Rsk"/>
+                                            <constraint firstItem="c8q-xT-rkg" firstAttribute="centerX" secondItem="3ZG-pT-Qzg" secondAttribute="centerX" id="8Le-RN-gdC"/>
+                                            <constraint firstItem="z4j-C1-nVh" firstAttribute="leading" secondItem="3ZG-pT-Qzg" secondAttribute="leading" id="NJB-xF-Ut3"/>
+                                            <constraint firstItem="c8q-xT-rkg" firstAttribute="centerY" secondItem="3ZG-pT-Qzg" secondAttribute="centerY" id="sHz-fb-z7g"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oFm-FW-jrI" userLabel="Body View">
+                                        <rect key="frame" x="0.0" y="45" width="414" height="323"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h80-a3-W4q" userLabel="Description View">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="129"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beA-12-Mxz" userLabel="SubTitle Label">
+                                                        <rect key="frame" x="41" y="0.0" width="331" height="129"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="beA-12-Mxz" firstAttribute="width" secondItem="h80-a3-W4q" secondAttribute="width" multiplier="80:100" id="8I6-eo-Ral"/>
+                                                    <constraint firstItem="beA-12-Mxz" firstAttribute="centerX" secondItem="h80-a3-W4q" secondAttribute="centerX" id="FY6-ez-oVw"/>
+                                                    <constraint firstItem="beA-12-Mxz" firstAttribute="height" secondItem="h80-a3-W4q" secondAttribute="height" id="JFq-BK-DZW"/>
+                                                    <constraint firstItem="beA-12-Mxz" firstAttribute="centerY" secondItem="h80-a3-W4q" secondAttribute="centerY" id="nm4-nm-CGj"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mgS-Sg-InM" userLabel="Buttons View">
+                                                <rect key="frame" x="0.0" y="129" width="414" height="194"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Way-ed-8OL" userLabel="facebookButton">
+                                                        <rect key="frame" x="83" y="20" width="248" height="48.5"/>
+                                                        <color key="backgroundColor" red="0.086274509799999996" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                        <state key="normal" title="使用Facebook帳號登入">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LLW-ZJ-MKa" userLabel="googleButton">
+                                                        <rect key="frame" x="83" y="83" width="248" height="48.5"/>
+                                                        <color key="backgroundColor" red="0.086274509799999996" green="0.80784313730000001" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                        <state key="normal" title="使用Google帳號登入">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="Way-ed-8OL" firstAttribute="height" secondItem="mgS-Sg-InM" secondAttribute="height" multiplier="25:100" id="46n-Xp-IMy"/>
+                                                    <constraint firstItem="LLW-ZJ-MKa" firstAttribute="width" secondItem="mgS-Sg-InM" secondAttribute="width" multiplier="60:100" id="5G2-ye-wuP"/>
+                                                    <constraint firstItem="LLW-ZJ-MKa" firstAttribute="height" secondItem="mgS-Sg-InM" secondAttribute="height" multiplier="25:100" id="6Bo-6x-Htk"/>
+                                                    <constraint firstItem="LLW-ZJ-MKa" firstAttribute="height" secondItem="mgS-Sg-InM" secondAttribute="height" multiplier="25:100" id="DOC-TO-crF"/>
+                                                    <constraint firstItem="LLW-ZJ-MKa" firstAttribute="centerX" secondItem="mgS-Sg-InM" secondAttribute="centerX" id="PR1-Xf-OH7"/>
+                                                    <constraint firstItem="Way-ed-8OL" firstAttribute="width" secondItem="mgS-Sg-InM" secondAttribute="width" multiplier="60:100" id="a0m-vb-VeK"/>
+                                                    <constraint firstItem="Way-ed-8OL" firstAttribute="height" secondItem="mgS-Sg-InM" secondAttribute="height" multiplier="25:100" id="dxq-QG-WGy"/>
+                                                    <constraint firstItem="Way-ed-8OL" firstAttribute="centerX" secondItem="mgS-Sg-InM" secondAttribute="centerX" id="krt-a6-4nl"/>
+                                                    <constraint firstItem="LLW-ZJ-MKa" firstAttribute="top" secondItem="Way-ed-8OL" secondAttribute="bottom" constant="15" id="lM6-cH-Qan"/>
+                                                    <constraint firstItem="Way-ed-8OL" firstAttribute="top" secondItem="mgS-Sg-InM" secondAttribute="top" constant="20" id="tMc-4K-PCj"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="46n-Xp-IMy"/>
+                                                        <exclude reference="DOC-TO-crF"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="h80-a3-W4q" firstAttribute="top" secondItem="oFm-FW-jrI" secondAttribute="top" id="Axh-yP-m6z"/>
+                                            <constraint firstItem="h80-a3-W4q" firstAttribute="centerX" secondItem="oFm-FW-jrI" secondAttribute="centerX" id="Jfn-Cg-aLn"/>
+                                            <constraint firstItem="mgS-Sg-InM" firstAttribute="centerX" secondItem="oFm-FW-jrI" secondAttribute="centerX" id="NX0-QT-70J"/>
+                                            <constraint firstItem="h80-a3-W4q" firstAttribute="width" secondItem="oFm-FW-jrI" secondAttribute="width" id="PQL-v9-JMD"/>
+                                            <constraint firstItem="mgS-Sg-InM" firstAttribute="width" secondItem="oFm-FW-jrI" secondAttribute="width" id="Vjd-Lb-Tgl"/>
+                                            <constraint firstAttribute="bottom" secondItem="mgS-Sg-InM" secondAttribute="bottom" id="WLU-Xt-vQl"/>
+                                            <constraint firstItem="mgS-Sg-InM" firstAttribute="height" secondItem="oFm-FW-jrI" secondAttribute="height" multiplier="60:100" id="kei-hw-kfB"/>
+                                            <constraint firstItem="h80-a3-W4q" firstAttribute="height" secondItem="oFm-FW-jrI" secondAttribute="height" multiplier="40:100" id="qiL-7f-Dab"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="3ZG-pT-Qzg" firstAttribute="width" secondItem="aOi-cu-zQb" secondAttribute="width" id="5UY-AG-8B2"/>
+                                    <constraint firstAttribute="bottom" secondItem="oFm-FW-jrI" secondAttribute="bottom" id="GUE-db-02Y"/>
+                                    <constraint firstItem="3ZG-pT-Qzg" firstAttribute="leading" secondItem="aOi-cu-zQb" secondAttribute="leading" id="JWf-vu-LlT"/>
+                                    <constraint firstItem="oFm-FW-jrI" firstAttribute="centerX" secondItem="aOi-cu-zQb" secondAttribute="centerX" id="PMn-Ru-GjI"/>
+                                    <constraint firstItem="oFm-FW-jrI" firstAttribute="top" secondItem="3ZG-pT-Qzg" secondAttribute="bottom" id="aiQ-Lp-RiX"/>
+                                    <constraint firstAttribute="trailing" secondItem="3ZG-pT-Qzg" secondAttribute="trailing" id="jTu-uy-xC3"/>
+                                    <constraint firstItem="3ZG-pT-Qzg" firstAttribute="top" secondItem="aOi-cu-zQb" secondAttribute="top" id="m71-Fg-wJq"/>
+                                    <constraint firstItem="oFm-FW-jrI" firstAttribute="width" secondItem="aOi-cu-zQb" secondAttribute="width" id="tQo-9i-uFE"/>
+                                    <constraint firstItem="3ZG-pT-Qzg" firstAttribute="centerX" secondItem="aOi-cu-zQb" secondAttribute="centerX" id="wah-3H-XRX"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="JWf-vu-LlT"/>
+                                        <exclude reference="jTu-uy-xC3"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="w88-5d-9hw" firstAttribute="height" secondItem="BP1-Th-S5z" secondAttribute="height" id="DFs-u1-QW9"/>
+                            <constraint firstItem="aOi-cu-zQb" firstAttribute="centerX" secondItem="BP1-Th-S5z" secondAttribute="centerX" id="QUP-Kn-evZ"/>
+                            <constraint firstItem="w88-5d-9hw" firstAttribute="centerY" secondItem="BP1-Th-S5z" secondAttribute="centerY" id="Qef-Kz-HTF"/>
+                            <constraint firstItem="w88-5d-9hw" firstAttribute="centerX" secondItem="BP1-Th-S5z" secondAttribute="centerX" id="SK0-da-CNg"/>
+                            <constraint firstItem="Nd7-4x-JFt" firstAttribute="top" secondItem="aOi-cu-zQb" secondAttribute="bottom" id="V0f-Wg-afp"/>
+                            <constraint firstItem="aOi-cu-zQb" firstAttribute="height" secondItem="BP1-Th-S5z" secondAttribute="height" multiplier="1:2" id="abQ-lf-rlW"/>
+                            <constraint firstItem="aOi-cu-zQb" firstAttribute="width" secondItem="BP1-Th-S5z" secondAttribute="width" id="g9n-EG-7FN"/>
+                            <constraint firstItem="w88-5d-9hw" firstAttribute="width" secondItem="BP1-Th-S5z" secondAttribute="width" id="jm1-B0-wZQ"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="cancelButton" destination="z4j-C1-nVh" id="kOM-cf-iif"/>
+                        <outlet property="fbButton" destination="Way-ed-8OL" id="u5Y-fG-PKH"/>
+                        <outlet property="googleButton" destination="LLW-ZJ-MKa" id="0JG-Px-cib"/>
+                        <outlet property="maskView" destination="w88-5d-9hw" id="UaA-1g-wqF"/>
+                        <outlet property="subTitleText" destination="beA-12-Mxz" id="r5b-hm-9xR"/>
+                        <outlet property="titleText" destination="c8q-xT-rkg" id="QWt-Sv-VLh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mCz-Iy-W2T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-797" y="845"/>
         </scene>
     </scenes>
     <resources>

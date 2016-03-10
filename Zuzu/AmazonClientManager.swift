@@ -731,8 +731,8 @@ class AmazonClientManager : NSObject {
         self.loginViewController = theViewController
         
         
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseLoginView") as? RadarPurchaseLoginViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("commonLoginView") as? CommonLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             vc.loginMode = mode
             

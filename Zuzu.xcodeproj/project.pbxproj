@@ -138,7 +138,7 @@
 		8166359A1C608838008C0AA3 /* ZuzuUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816635991C608838008C0AA3 /* ZuzuUser.swift */; };
 		8166359C1C60B67D008C0AA3 /* ZuzuCriteria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8166359B1C60B67D008C0AA3 /* ZuzuCriteria.swift */; };
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
-		817DBA901C7219DE00795941 /* RadarPurchaseLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */; };
+		817DBA901C7219DE00795941 /* CommonLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */; };
 		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
 		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
 		81924E341C33AB4C00976EC7 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserProfile.swift */; };
@@ -149,7 +149,6 @@
 		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
 		81FA28091BDA397B0038DD19 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28071BDA397B0038DD19 /* House.swift */; };
 		81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28081BDA397B0038DD19 /* HouseDao.swift */; };
-		81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280B1BDA39800038DD19 /* HouseDetailController.swift */; };
 		81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA280D1BDA39880038DD19 /* CoreDataManager.swift */; };
 		81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */; };
 		81FA28131BDA39B10038DD19 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28111BDA39B10038DD19 /* Note.swift */; };
@@ -321,7 +320,7 @@
 		816635991C608838008C0AA3 /* ZuzuUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuUser.swift; sourceTree = "<group>"; };
 		8166359B1C60B67D008C0AA3 /* ZuzuCriteria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuCriteria.swift; sourceTree = "<group>"; };
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewCell.swift; sourceTree = "<group>"; };
-		817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarPurchaseLoginViewController.swift; sourceTree = "<group>"; };
+		817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonLoginViewController.swift; sourceTree = "<group>"; };
 		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginViewController.swift; sourceTree = "<group>"; };
 		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginService.swift; sourceTree = "<group>"; };
 		81924E331C33AB4C00976EC7 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -332,7 +331,6 @@
 		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
 		81FA28071BDA397B0038DD19 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		81FA28081BDA397B0038DD19 /* HouseDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDao.swift; sourceTree = "<group>"; };
-		81FA280B1BDA39800038DD19 /* HouseDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailController.swift; sourceTree = "<group>"; };
 		81FA280D1BDA39880038DD19 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyCollectionStoryboard.storyboard; sourceTree = "<group>"; };
 		81FA28111BDA39B10038DD19 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
@@ -448,7 +446,6 @@
 				2FE132691C312081008F5E68 /* RadarViewController.swift */,
 				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
 				8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */,
-				817DBA8F1C7219DE00795941 /* RadarPurchaseLoginViewController.swift */,
 				1405856B1C73083800449C27 /* RadarDisplayItem.swift */,
 				2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */,
 				140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */,
@@ -634,7 +631,7 @@
 		2FBC05531BDE6F0A0035652D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				81FA280B1BDA39800038DD19 /* HouseDetailController.swift */,
+				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -1013,7 +1010,6 @@
 				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
 				2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */,
-				81FA280C1BDA39800038DD19 /* HouseDetailController.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
 				14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */,
 				81FA280A1BDA397B0038DD19 /* HouseDao.swift in Sources */,
@@ -1054,7 +1050,7 @@
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,
 				14632AAF1C27B614008C9A2D /* NotificationItemsTableViewController.swift in Sources */,
 				81B467941C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift in Sources */,
-				817DBA901C7219DE00795941 /* RadarPurchaseLoginViewController.swift in Sources */,
+				817DBA901C7219DE00795941 /* CommonLoginViewController.swift in Sources */,
 				14426ACC1C7AFAD600C25440 /* RadarNavigationController.swift in Sources */,
 				2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */,
 				2F8DB45B1C50B95F006C4B21 /* SmartFilterContainerView.swift in Sources */,
