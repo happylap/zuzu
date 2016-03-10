@@ -167,7 +167,19 @@ class ZuzuWebService: NSObject
         let resource = "/user"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
-        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+        self.responseJSON(.PUT , resource: resource, payload: payload) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
+        
+        Log.exit()
+    }
+    
+    func removeUserById(userId: String, email: String, handler: (result: Bool, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), email: \(email)]")
+        
+        let resource = "/user/\(userId)/\(email)"
+        
+        self.responseJSON(.DELETE, resource: resource) { (result, error) -> Void in
             handler(result: (error == nil), error: error)
         }
         
@@ -330,6 +342,18 @@ class ZuzuWebService: NSObject
         
         Log.exit()
     }
+    
+    func deleteCriteriaByUserId(userId: String, handler: (result: Bool, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId)]")
+        
+        let resource = "/criteria/\(userId)"
+        
+        self.responseJSON(.DELETE, resource: resource) { (result, error) -> Void in
+            handler(result: (error == nil), error: error)
+        }
+        
+        Log.exit()
+    }
 
     
     // MARK: - Public APIs - Notify
@@ -488,7 +512,7 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Service
     
-    func getServiceByUserId(userId: String, handler: (result: AnyObject?, error: NSError?) -> Void) {
+    func getServiceByUserId(userId: String, handler: (result: ZuzuServiceMapper?, error: NSError?) -> Void) {
         Log.debug("Input parameters [userId: \(userId)]")
         
         let resource = "/service/\(userId)"
