@@ -60,14 +60,19 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func registerUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
+    func registerUser(user: ZuzuUser, handler: (userId: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
         let resource = "/register"
         let payload = Mapper<ZuzuUser>().toJSON(user)
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
-            handler(result: (error == nil), error: error)
+            
+            if let error = error {
+                handler(userId: nil, error: error)
+            } else {
+                handler(userId: result as? String, error: nil)
+            }
         }
         
         Log.exit()
@@ -433,7 +438,7 @@ class ZuzuWebService: NSObject
                             else {
                                 let message = json["message"].stringValue
                                 Log.debug("HTTP Resopnse Error = \(message)")
-                                assert(false, "Api response error:\n \(message)")
+                                //assert(false, "Api response error:\n \(message)")
                                 handler(result: nil, error: NSError(domain: message, code: code, userInfo: nil))
                             }
                         case .Failure(_, let error):
@@ -567,7 +572,7 @@ class ZuzuWebService: NSObject
                     else {
                         let message = json["message"].stringValue
                         Log.debug("HTTP Resopnse Error = \(message)")
-                        assert(false, "Api response error:\n \(message)")
+                        //assert(false, "Api response error:\n \(message)")
                         handler(result: nil, error: NSError(domain: message, code: code, userInfo: nil))
                     }
                 case .Failure(_, let error):
