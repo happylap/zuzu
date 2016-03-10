@@ -30,7 +30,9 @@ class RadarRetryViewController: UIViewController {
         }
     }
 
-    func imageTapped(){
-        
+    func imageTapped(sender: UITapGestureRecognizer){
+        if let vc = self.navigationController as? RadarNavigationController{
+            vc.showRadar()
+        }
     }
 }
