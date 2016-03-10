@@ -242,15 +242,17 @@ class LoginDebugViewController: UIViewController {
         "enableCriteriaByUserId",
         "hasValidCriteriaByUserId",
         "deleteCriteriaByUserId",
-        "(getNotificationItemsByUserId)",
-        "(setReadNotificationByUserId)",
-        "(setReceiveNotifyTimeByUserId)",
-        "(createPurchase",
+        "getNotificationItemsByUserId",
+        "setReadNotificationByUserId",
+        "setReceiveNotifyTimeByUserId",
+        "(createPurchase)",
         "getPurchaseByUserId",
         "getServiceByUserId"]
     
 
     var seletedApiName = ""
+    let deviceTokenForTest = "123456789_for_test"
+    let notifyItemIdForTest = "123456789_for_test"
     
     @IBAction func onWebApiButtonTouched(sender: UIButton) {
         Log.debug("onWebApiButtonTouched")
@@ -378,12 +380,12 @@ class LoginDebugViewController: UIViewController {
             case "createDeviceByUserId":
                 
                 self.checkLogin({ (userId, email) -> Void in
-                    let token = "1234567890"
+                    let deviceId = self.deviceTokenForTest
                     
-                    ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: token, handler: { (result, error) -> Void in
+                    ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
                         
                         let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(token) \n\n result: \n"
+                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
                         
                         if let error = error {
                             self.showAlert(title, subTitle: "\(subTitle) \(error)")
@@ -396,12 +398,12 @@ class LoginDebugViewController: UIViewController {
             case "isExistDeviceByUserId":
             
                 self.checkLogin({ (userId, email) -> Void in
-                    let token = "1234567890"
+                    let deviceId = self.deviceTokenForTest
                     
-                    ZuzuWebService.sharedInstance.isExistDeviceByUserId(userId, deviceId: token, handler: { (result, error) -> Void in
+                    ZuzuWebService.sharedInstance.isExistDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
                         
                         let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(token) \n\n result: \n"
+                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
                         
                         if let error = error {
                             self.showAlert(title, subTitle: "\(subTitle) \(error)")
@@ -414,12 +416,12 @@ class LoginDebugViewController: UIViewController {
             case "deleteDeviceByUserId":
                 
                 self.checkLogin({ (userId, email) -> Void in
-                    let token = "1234567890"
+                    let deviceId = self.deviceTokenForTest
                     
-                    ZuzuWebService.sharedInstance.deleteDeviceByUserId(userId, deviceId: token, handler: { (result, error) -> Void in
+                    ZuzuWebService.sharedInstance.deleteDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
                         
                         let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(token) \n\n result: \n"
+                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
                         
                         if let error = error {
                             self.showAlert(title, subTitle: "\(subTitle) \(error)")
@@ -572,6 +574,61 @@ class LoginDebugViewController: UIViewController {
                         }
                     })
                 })
+            
+            case "getNotificationItemsByUserId":
+                self.checkLogin({ (userId, email) -> Void in
+                    
+                    ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
+                        let title = "User"
+                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                        
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        }
+                        
+                        if let _ = result {
+                            self.showAlert(title, subTitle: "\(subTitle) totalNum: \(totalNum)")
+                        }
+                    })
+                    
+                })
+            
+            case "setReadNotificationByUserId":
+                
+                self.checkLogin({ (userId, email) -> Void in
+                    let itemId = self.notifyItemIdForTest
+                    
+                    ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: itemId, handler: { (result, error) -> Void in
+                        let title = "User"
+                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n itemId: \(itemId) \n\n result: \n"
+                        
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        } else {
+                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                        }
+                    })
+                    
+                })
+            
+            case "setReceiveNotifyTimeByUserId":
+                
+                self.checkLogin({ (userId, email) -> Void in
+                    let deviceId = self.deviceTokenForTest
+                    
+                    ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
+                        let title = "User"
+                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId: \(deviceId) \n\n result: \n"
+                        
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        } else {
+                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                        }
+                    })
+                    
+                })
+
             
             case "getPurchaseByUserId":
             
