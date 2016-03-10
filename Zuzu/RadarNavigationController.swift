@@ -71,6 +71,9 @@ class RadarNavigationController: UINavigationController {
             if self.porcessTransactionNum  < transactions.count{
                 self.performFinishTransactions()
             }else{
+                //all unfinished transaction is done!
+                self.unfinishedTranscations = nil
+                self.porcessTransactionNum = 0
                 self.showRadar()
             }
         }
