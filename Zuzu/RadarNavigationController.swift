@@ -25,12 +25,12 @@ class RadarNavigationController: UINavigationController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.showRadar()
         /*let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
-            self.alertUnfinishError()
+        self.alertUnfinishError()
         }*/
         
+        self.showRadar()
     }
     
     // MARK: - alert
@@ -117,6 +117,12 @@ class RadarNavigationController: UINavigationController {
     }
     
     func showConfigureRadarView(){
+        if self.viewControllers.count > 0 {
+            if let vc = self.viewControllers[0] as? RadarViewController{
+                return
+            }
+        }
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {
             self.setViewControllers([vc], animated: false)
@@ -124,6 +130,12 @@ class RadarNavigationController: UINavigationController {
     }
     
     func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
+        if self.viewControllers.count > 0 {
+            if let vc = self.viewControllers[0] as? RadarDisplayViewController{
+                return
+            }
+        }
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
             vc.zuzuCriteria = zuzuCriteria
