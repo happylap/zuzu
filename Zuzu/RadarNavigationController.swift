@@ -8,6 +8,7 @@
 
 import UIKit
 import SCLAlertView
+import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
@@ -18,7 +19,7 @@ class RadarNavigationController: UINavigationController {
     
     var unfinishedTranscations: [SKPaymentTransaction]?
     
-    var porcessTransactionNum = 0
+    var porcessTransactionNum = -1
     
     // MARK: - view life cycle
     
@@ -45,8 +46,9 @@ class RadarNavigationController: UINavigationController {
     // MARK: finishTransactions
     
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
-        self.porcessTransactionNum = 0
         self.unfinishedTranscations = unfinishedTranscations
+        self.porcessTransactionNum = 0
+        self.startLoadingText("重新設定租屋雷達...")
         self.performFinishTransactions()
     }
     
@@ -55,13 +57,15 @@ class RadarNavigationController: UINavigationController {
             if self.porcessTransactionNum  < transactions.count{
                 RadarService.sharedInstance.createPurchase(transactions[self.porcessTransactionNum], handler: self.handleCompleteTransaction)
             }
+        }else{
+            self.transactionDone()
+            self.showRadar()
         }
     }
     
     func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
         if error != nil{
-            self.unfinishedTranscations = nil
-            self.porcessTransactionNum = 0
+            self.transactionDone()
             self.alertUnfinishError()
             return
         }
@@ -70,13 +74,18 @@ class RadarNavigationController: UINavigationController {
         if let transactions = self.unfinishedTranscations{
             if self.porcessTransactionNum  < transactions.count{
                 self.performFinishTransactions()
-            }else{
-                //all unfinished transaction is done!
-                self.unfinishedTranscations = nil
-                self.porcessTransactionNum = 0
-                self.showRadar()
+                return
             }
         }
+        
+        self.transactionDone()
+        self.showRadar()
+    }
+    
+    func transactionDone(){
+        self.unfinishedTranscations = nil
+        self.porcessTransactionNum = -1
+        self.stopLoadingText()
     }
     
     
@@ -190,6 +199,20 @@ class RadarNavigationController: UINavigationController {
     
     func stopLoading(){
         LoadingSpinner.shared.stop()
+    }
+    
+    func startLoadingText(text: String){
+        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
+        dialog.animationType = .ZoomIn
+        dialog.dimBackground = true
+        dialog.labelText = text
+        
+        self.runOnMainThread() { () -> Void in}
+    }
+    
+    func stopLoadingText(){
+        MBProgressHUD.hideHUDForView(self.view, animated: true)
     }
 }
 

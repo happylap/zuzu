@@ -7,6 +7,7 @@
 
 import UIKit
 import SCLAlertView
+import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
@@ -16,6 +17,12 @@ protocol RadarViewControllerDelegate: class {
 
 class RadarViewController: UIViewController {
 
+    var unfinishedTranscations: [SKPaymentTransaction]?
+    
+    var porcessTransactionNum = -1
+    
+    var isOnLogging = false
+    
     struct ViewTransConst {
         static let showRegionConfigureTable:String = "showRegionConfigureTable"
     }
@@ -48,11 +55,11 @@ class RadarViewController: UIViewController {
         super.viewDidAppear(animated)
         
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count <= 0{
+        if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
                 // get service
             }else{
-                AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
+                self.loginForUnfinishTransactions()
             }
         }
     }
@@ -69,12 +76,87 @@ class RadarViewController: UIViewController {
     // MARK: finishTransactions
     
     func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
-        //self.isOnLogging = false
+        self.isOnLogging = false
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        //self.finishTransactions(unfinishedTranscations)
+        if unfinishedTranscations.count > 0{
+            self.doUnfinishTransactions(unfinishedTranscations)
+        }
         return nil
     }
     
+    func loginForUnfinishTransactions(){
+        if self.isOnLogging == true {
+            return
+        }
+
+        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
+    }
+    
+    func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
+        self.unfinishedTranscations = unfinishedTranscations
+        self.porcessTransactionNum = 0
+        self.startLoadingText("重新設定租屋雷達...")
+        self.performFinishTransactions()
+    }
+    
+    func performFinishTransactions(){
+        if let transactions = self.unfinishedTranscations{
+            if self.porcessTransactionNum  < transactions.count{
+                RadarService.sharedInstance.createPurchase(transactions[self.porcessTransactionNum], handler: self.handleCompleteTransaction)
+            }
+        }else{
+            self.transactionDone()
+        }
+    }
+    
+    func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
+        if error != nil{
+            self.transactionDone()
+            self.alertUnfinishError()
+            return
+        }
+        
+        self.porcessTransactionNum = self.porcessTransactionNum + 1
+        if let transactions = self.unfinishedTranscations{
+            if self.porcessTransactionNum  < transactions.count{
+                self.performFinishTransactions()
+                return
+            }
+            
+            self.transactionDone()
+            if let vc = self.navigationController as? RadarNavigationController{
+                vc.showRadar()
+            }
+        }
+    }
+    
+    func transactionDone(){
+        self.unfinishedTranscations = nil
+        self.porcessTransactionNum = -1
+        self.stopLoadingText()
+    }
+    
+    func alertUnfinishError(){
+        let msgTitle = "重新設定雷達失敗"
+        let okButton = "知道了"
+        let subTitle = "很抱歉！設定雷達無法成功！"
+        let alertView = SCLAlertView()
+        alertView.showCloseButton = false
+        
+        alertView.addButton("重新再試") {
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            if unfinishedTranscations.count > 0{
+                if AmazonClientManager.sharedInstance.isLoggedIn(){
+                    self.doUnfinishTransactions(unfinishedTranscations)
+                }
+            }
+        }
+        
+        alertView.addButton("取消") {
+        }
+        
+        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
     
     // MARK: - UI Configure
     
@@ -178,6 +260,31 @@ class RadarViewController: UIViewController {
     }
     
 
+    // Loading
+    
+    func startLoading(){
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+    }
+    
+    func stopLoading(){
+        LoadingSpinner.shared.stop()
+    }
+    
+    func startLoadingText(text: String){
+        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
+        dialog.animationType = .ZoomIn
+        dialog.dimBackground = true
+        dialog.labelText = text
+        
+        self.runOnMainThread() { () -> Void in}
+    }
+    
+    func stopLoadingText(){
+        MBProgressHUD.hideHUDForView(self.view, animated: true)
+    }
 }
 
 // MARK: - RadarConfigureTableViewControllerDelegate
