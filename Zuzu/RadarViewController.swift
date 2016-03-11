@@ -23,6 +23,8 @@ class RadarViewController: UIViewController {
     
     var isOnLogging = false
     
+    var hasValidService = false
+    
     @IBOutlet weak var radarBannerLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
     
@@ -204,6 +206,10 @@ class RadarViewController: UIViewController {
     // MARK: - Radar Service
     
     func checkService(){
+        if self.hasValidService == true{
+            return
+        }
+        
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.startLoading()
@@ -221,6 +227,7 @@ class RadarViewController: UIViewController {
         
         if result != nil{
             if result?.status == "valid"{
+                self.hasValidService = true
                 self.alertService("租屋雷達服務已設定完成\n請立即啟用租屋雷達")
             }
         }
@@ -291,7 +298,11 @@ class RadarViewController: UIViewController {
     // MARK: - Purchase Radar
     
     @IBAction func activateButtonClick(sender: UIButton) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        if self.hasValidService == true{
+            self.setUpCriteria()
+            return
+        }
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
             ///Hide tab bar
@@ -317,25 +328,7 @@ extension RadarViewController{
         if error != nil{
             return
         }
-        
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.startLoading()
-            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                if error != nil{
-                    Log.error("Cannot get criteria by user id:\(userId)")
-                    self.stopLoading()
-                    return
-                }
-                if result != nil{
-                    result!.criteria = self.searchCriteria
-                    self.updateCriteria(result!)
-                }else{
-                    self.createCriteria()
-                }
-                
-            }
-        }
-        
+        self.setUpCriteria()
     }
     
     func unfinishedTransactionHandler() -> Void{
@@ -346,12 +339,40 @@ extension RadarViewController{
         }
     }
     
+    func setUpCriteria(){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
+            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                if error != nil{
+                    Log.error("Cannot get criteria by user id:\(userId)")
+                    self.stopLoading()
+                    return
+                }
+                
+                if result != nil{
+                    result!.criteria = self.searchCriteria
+                    self.updateCriteria(result!)
+                }else{
+                    self.createCriteria()
+                }
+                
+            }
+        }
+    }
+    
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
+                
+                self.stopLoading()
+                
                 if error != nil{
-                    
                     return
+                }
+                
+                if let vc = self.navigationController as? RadarNavigationController{
+                    vc.zuzuCriteria = zuzuCriteria
+                    vc.showRadar()
                 }
                 
             }
@@ -360,7 +381,20 @@ extension RadarViewController{
     }
     
     func createCriteria(){
-        
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.searchCriteria){
+                (result, error) -> Void in
+                self.stopLoading()
+                
+                if error != nil{
+                    return
+                }
+                
+                if let vc = self.navigationController as? RadarNavigationController{
+                    vc.showRadar()
+                }
+            }
+        }
     }
 }
 
