@@ -16,7 +16,7 @@ protocol RadarViewControllerDelegate: class {
 }
 
 class RadarViewController: UIViewController {
-
+    
     var unfinishedTranscations: [SKPaymentTransaction]?
     
     var porcessTransactionNum = -1
@@ -43,7 +43,7 @@ class RadarViewController: UIViewController {
             self.activateButton.hidden = true
             self.activateButton.enabled = false
         }
-
+        
         self.updateCriteriaTextLabel()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
         self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
@@ -90,7 +90,7 @@ class RadarViewController: UIViewController {
         if self.isOnLogging == true {
             return
         }
-
+        
         AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
     }
     
@@ -138,7 +138,7 @@ class RadarViewController: UIViewController {
         self.stopLoadingText()
     }
     
-
+    
     // Service
     
     func checkService(){
@@ -295,7 +295,7 @@ class RadarViewController: UIViewController {
         alertView.showInfo("雷達服務已設定完成", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
-
+    
     // MARK: - Loading
     
     func startLoading(){
@@ -329,6 +329,6 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
         Log.debug("onCriteriaConfigureDone")
         self.searchCriteria = searchCriteria
     }
-
+    
 }
 

@@ -15,12 +15,18 @@ private let Log = Logger.defaultLogger
 
 class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    
     // This list of available in-app purchases
     var products = [ZuzuProduct]()
     
     var completeHandler: (() -> Void)?
+
+    var cancelPurchaseHandler: (() -> Void)?
     
     var purchaseCompleteHandler: ((isSuccess:Bool, product: ZuzuProduct) -> Void)?
+    var completePurchaseHandler: ((isSuccess:Bool, error: NSError?) -> Void)?
+    
+    var unfinishedTransactionHandler: (() -> Void)?
     
     deinit {
         // NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -96,7 +102,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
                     
                     ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, result, error) -> Void in
-
+                        
                         if let purchaseList = result {
                             
                             let alreadyActivated = purchaseList.contains({ (purchase) -> Bool in
@@ -139,7 +145,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             } else {
                 
                 ///You have an unfinished transaction for the product or the product is not valid
-                Log.debug("Purchase Request Not Sent")
+                Log.info("Find unfinished transaction")
+                if let handler = self.unfinishedTransactionHandler{
+                    handler()
+                }
+                
                 
             }
             
@@ -156,8 +166,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
         
         //Configure table DataSource & Delegate
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
+        //self.tableView.dataSource = self
+        //self.tableView.delegate = self
         
         self.tableView.scrollEnabled = false
         self.tableView.allowsSelection = false
@@ -189,8 +199,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
         
-        if let completeHandler = self.completeHandler {
-            completeHandler()
+        if let cancelPurchaseHandler = self.cancelPurchaseHandler {
+            cancelPurchaseHandler()
         }
         
         dismissViewControllerAnimated(true, completion: nil)
@@ -203,18 +213,21 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
                 
-                if(task.error == nil) {
-                    self.runOnMainThread({ () -> Void in
-                        
-                        if(button.tag < self.products.count) {
-                            let product = self.products[button.tag]
-                            self.proceedTransaction(product)
-                        } else {
-                            assert(false, "Access products array out of bound \(self.products.count)")
-                        }
-                        
-                    })
+                if let error = task.error{
+                    Log.warning("Login Failed")
+                    return nil
                 }
+                self.runOnMainThread({ () -> Void in
+                    
+                    if(button.tag < self.products.count) {
+                        let product = self.products[button.tag]
+                        self.proceedTransaction(product)
+                    } else {
+                        assert(false, "Access products array out of bound \(self.products.count)")
+                    }
+                    
+                })
+                
                 
                 return nil
             }
@@ -224,20 +237,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 self.proceedTransaction(product)
             } else {
                 assert(false, "Access products array out of bound \(self.products.count)")
-            }
-        }
-    }
-    
-    // When a product is purchased, this notification fires, redraw the correct row
-    func productPurchased(notification: NSNotification) {
-        let productIdentifier = notification.object as! String
-        for (index, product) in products.enumerate() {
-            if product.productIdentifier == productIdentifier {
-                tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Fade)
-                if let purchaseCompleteHandler = self.purchaseCompleteHandler {
-                    purchaseCompleteHandler(isSuccess:true, product: product)
-                }
-                return
             }
         }
     }
@@ -308,8 +307,24 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
 extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
-        
         Log.debug("\(transaction.transactionIdentifier)")
+        RadarService.sharedInstance.createPurchase(transaction){
+            (result: String?, error: NSError?) -> Void in
+            
+            if error != nil{
+                Log.error("create purchase error")
+                if let handler = self.completePurchaseHandler{
+                    handler(isSuccess: false, error: NSError(domain: "設定雷達服務交易失敗", code: -1, userInfo: nil))
+                }
+                return
+            }
+            
+            ZuzuStore.sharedInstance.finishTransaction(transaction)
+            
+            if let handler = self.completePurchaseHandler{
+                handler(isSuccess: true, error: nil)
+            }
+        }
         
         /// TODO: Start to make purchase with Zuzu Backend
         
@@ -318,6 +333,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
         
         Log.debug("\(transaction.transactionIdentifier)")
+        if let handler = self.completePurchaseHandler{
+            handler(isSuccess: false, error: NSError(domain: "購買雷達服務交易失敗", code: -1, userInfo: nil))
+        }
         
     }
+    
 }
