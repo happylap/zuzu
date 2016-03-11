@@ -724,7 +724,7 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    func loginFromView(theViewController: UIViewController, mode: Int = 1, withCompletionHandler completionHandler: AWSContinuationBlock) {
+    func loginFromView(theViewController: UIViewController, mode: Int = 1, cancelHandler:(() -> Void)? = nil,withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
         
         self.completionHandler = completionHandler
@@ -740,6 +740,9 @@ class AmazonClientManager : NSObject {
                 ///GA Tracker: Login cancelled
                 theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                     action: GAConst.Action.Blocking.loginReject)
+                if let handler = cancelHandler{
+                    handler()
+                }
             }
             
             vc.fbLoginHandler = { () -> Void in

@@ -80,7 +80,7 @@ class RadarViewController: UIViewController {
             self.checkService()
         }
     }
-    
+        
     override func willMoveToParentViewController(parent: UIViewController?) {
         super.willMoveToParentViewController(parent)
         
@@ -149,13 +149,17 @@ class RadarViewController: UIViewController {
         return nil
     }
     
+    func cancelLoginHandler() -> Void{
+        self.tabBarController!.tabBarHidden = false
+    }
+    
     func loginForUnfinishTransactions(){
         if self.isOnLogging == true {
             return
         }
 
         self.tabBarController!.tabBarHidden = true
-        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
+        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, cancelHandler: self.cancelLoginHandler, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
     }
     
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
