@@ -23,6 +23,17 @@ class RadarViewController: UIViewController {
     
     var isOnLogging = false
     
+    @IBOutlet weak var radarBannerLabel: UILabel!
+    @IBOutlet weak var currentConditionsLabel: UILabel!
+    
+    @IBOutlet weak var regionLabel: UILabel!
+    @IBOutlet weak var houseInfoLabel: UILabel!
+    
+    @IBOutlet weak var otherCriteriaLabel: UILabel!
+    @IBOutlet weak var priceSizeLabel: UILabel!
+    
+    @IBOutlet weak var activateButton: UIButton!
+    
     struct ViewTransConst {
         static let showRegionConfigureTable:String = "showRegionConfigureTable"
     }
@@ -57,7 +68,7 @@ class RadarViewController: UIViewController {
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
-                // get service
+                self.doUnfinishTransactions(unfinishedTranscations)
             }else{
                 self.loginForUnfinishTransactions()
             }
@@ -75,7 +86,52 @@ class RadarViewController: UIViewController {
         }
     }
     
-    // MARK: finishTransactions
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier) \(self)")
+            
+            switch identifier{
+            case ViewTransConst.showRegionConfigureTable:
+                if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
+                    vc.currentCriteria = searchCriteria
+                    vc.delegate  = self
+                }
+                
+            default: break
+            }
+        }
+    }
+    
+    // MARK: - UI Configure
+    
+    private func configureButton() {
+        activateButton.layer.borderWidth = 1
+        activateButton.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        activateButton.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        activateButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
+        activateButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
+    }
+    
+    private func updateCriteriaTextLabel(){
+        let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
+        self.regionLabel?.text = displayItem.title
+        self.houseInfoLabel?.text = displayItem.purpostString
+        self.priceSizeLabel?.text = displayItem.priceSizeString
+        var filterNum = 0
+        if let filterGroups = searchCriteria.filterGroups{
+            filterNum = filterGroups.count
+        }
+        self.otherCriteriaLabel?.text = "其他 \(filterNum) 個過濾條件"
+    }
+    
+    // MARK: unfinished transactions
     
     func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
         self.isOnLogging = false
@@ -83,6 +139,8 @@ class RadarViewController: UIViewController {
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
+        }else{
+            self.checkService()
         }
         return nil
     }
@@ -141,7 +199,7 @@ class RadarViewController: UIViewController {
     }
     
 
-    // Service
+    // MARK: - Radar Service
     
     func checkService(){
         if AmazonClientManager.sharedInstance.isLoggedIn(){
@@ -162,102 +220,6 @@ class RadarViewController: UIViewController {
         if result != nil{
             if result?.status == "valid"{
                 self.alertService("租屋雷達服務已設定完成\n請立即啟用租屋雷達")
-            }
-        }
-    }
-    
-    
-    // MARK: - UI Configure
-    
-    private func configureButton() {
-        activateButton.layer.borderWidth = 1
-        activateButton.layer.borderColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-        activateButton.tintColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        activateButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
-        activateButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
-    }
-    
-    private func updateCriteriaTextLabel(){
-        let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
-        self.regionLabel?.text = displayItem.title
-        self.houseInfoLabel?.text = displayItem.purpostString
-        self.priceSizeLabel?.text = displayItem.priceSizeString
-        var filterNum = 0
-        if let filterGroups = searchCriteria.filterGroups{
-            filterNum = filterGroups.count
-        }
-        self.otherCriteriaLabel?.text = "其他 \(filterNum) 個過濾條件"
-    }
-    
-    @IBOutlet weak var radarBannerLabel: UILabel!
-    @IBOutlet weak var currentConditionsLabel: UILabel!
-    
-    @IBOutlet weak var regionLabel: UILabel!
-    @IBOutlet weak var houseInfoLabel: UILabel!
-    
-    @IBOutlet weak var otherCriteriaLabel: UILabel!
-    @IBOutlet weak var priceSizeLabel: UILabel!
-    
-    @IBOutlet weak var activateButton: UIButton!
-    
-    
-    // MARK: - Action
-    
-    @IBAction func activateButtonClick(sender: UIButton) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-            ///Hide tab bar
-            self.tabBarController?.tabBarHidden = true
-            vc.modalPresentationStyle = .OverCurrentContext
-            vc.completeHandler = { () -> Void in
-                ///Show tab bar
-                self.tabBarController?.tabBarHidden = false
-            }
-            
-            presentViewController(vc, animated: true, completion: nil)
-            
-            vc.purchaseCompleteHandler  = self.createCriteriaAfterPurchase
-        }
-    }
-    
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier{
-            
-            Log.debug("prepareForSegue: \(identifier) \(self)")
-            
-            switch identifier{
-            case ViewTransConst.showRegionConfigureTable:
-                if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
-                    vc.currentCriteria = searchCriteria
-                    vc.delegate  = self
-                }
-                
-            default: break
-            }
-        }
-    }
-    
-    // MARK: - Criteria functions
-    
-    func createCriteriaAfterPurchase(isSuccess:Bool, product: SKProduct) -> Void{
-        if isSuccess == true{
-            if let userId = UserDefaultsUtils.getZuzuUserId(){
-                let zuzuPurchase = ZuzuPurchase(transactionId: "", userId:userId ,productId:product.productIdentifier, productPrice:product.price)
-                
-                zuzuPurchase.purchaseReceipt = "test".dataUsingEncoding(NSUTF8StringEncoding)
-                
-                ZuzuWebService .sharedInstance.createPurchase(zuzuPurchase){ (result, error) -> Void in
-                    if error != nil{
-                        //self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
-                    }
-                }
             }
         }
     }
@@ -322,6 +284,81 @@ class RadarViewController: UIViewController {
     
     func stopLoadingText(){
         MBProgressHUD.hideHUDForView(self.view, animated: true)
+    }
+    
+    // MARK: - Purchase Radar
+    
+    @IBAction func activateButtonClick(sender: UIButton) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            vc.modalPresentationStyle = .OverCurrentContext
+            
+            vc.cancelPurchaseHandler = self.cancelPurchaseHandler
+            vc.completePurchaseHandler = self.completePurchaseHandler
+            vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
+            
+            presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+}
+
+extension RadarViewController{
+    func cancelPurchaseHandler() -> Void{
+        self.tabBarController?.tabBarHidden = false
+    }
+    
+    func completePurchaseHandler(isSuccess:Bool, error: NSError?) -> Void{
+        self.tabBarController?.tabBarHidden = false
+        if error != nil{
+            return
+        }
+        
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
+            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                if error != nil{
+                    Log.error("Cannot get criteria by user id:\(userId)")
+                    self.stopLoading()
+                    return
+                }
+                if result != nil{
+                    result!.criteria = self.searchCriteria
+                    self.updateCriteria(result!)
+                }else{
+                    self.createCriteria()
+                }
+                
+            }
+        }
+        
+    }
+    
+    func unfinishedTransactionHandler() -> Void{
+        self.tabBarController?.tabBarHidden = false
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            self.doUnfinishTransactions(unfinishedTranscations)
+        }
+    }
+    
+    func updateCriteria(zuzuCriteria: ZuzuCriteria){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
+                if error != nil{
+                    
+                    return
+                }
+                
+            }
+        }
+        
+    }
+    
+    func createCriteria(){
+        
     }
 }
 

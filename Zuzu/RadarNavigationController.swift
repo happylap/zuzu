@@ -43,7 +43,7 @@ class RadarNavigationController: UINavigationController {
         }
     }
     
-    // MARK: finishTransactions
+    // MARK: unfinished transactions
     
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         self.unfinishedTranscations = unfinishedTranscations
@@ -189,7 +189,7 @@ class RadarNavigationController: UINavigationController {
         alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
-    // Loading
+    // MARK: - Loading
     
     func startLoading(){
         LoadingSpinner.shared.setImmediateAppear(true)
