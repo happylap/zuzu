@@ -13,15 +13,14 @@ import StoreKit
 
 private let Log = Logger.defaultLogger
 
-
 class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // This list of available in-app purchases
-    var products = [SKProduct]()
+    var products = [ZuzuProduct]()
     
     var completeHandler: (() -> Void)?
     
-    var purchaseCompleteHandler: ((isSuccess:Bool, product: SKProduct) -> Void)?
+    var purchaseCompleteHandler: ((isSuccess:Bool, product: ZuzuProduct) -> Void)?
     
     deinit {
         // NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -44,7 +43,109 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
         }
     }
+    
+    // Free Trial Product Info
+    private static let TrialProduct = ZuzuProduct(productIdentifier: ZuzuProducts.ProductRadarFreeTrial,
+        localizedTitle: "14天的租屋雷達服務禮包",
+        price: 0.0,
+        priceLocale: NSLocale.currentLocale())
+    
+    // Purchase Button UI
+    let disabledColor = UIColor.colorWithRGB(0xE0E0E0, alpha: 0.8)
+    
+    // MARK: - Private Util
+    
+    // Fetch the products from iTunes connect, redisplay the table on successful completion
+    private func loadProducts() {
+        ZuzuStore.sharedInstance.requestProducts { success, products in
+            if success {
+                
+                self.products.append(RadarPurchaseViewController.TrialProduct)
+                
+                
+                let storeProducts = products.map({ (product) -> ZuzuProduct in
+                    
+                    let zuzuProduct:ZuzuProduct = ZuzuProduct(productIdentifier: product.productIdentifier,
+                        localizedTitle: product.localizedTitle,
+                        price: product.price,
+                        priceLocale: product.priceLocale)
+                    
+                    return zuzuProduct
+                })
+                
+                
+                self.products.appendContentsOf(storeProducts)
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func proceedTransaction(product: ZuzuProduct) {
+        
+        if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
+            //Alert redeem
+            
+            let freeTrialAlertView = SCLAlertView()
+            
+            let subTitle = "確認現在兌換：\(product.localizedTitle)？"
+            
+            freeTrialAlertView.addButton("馬上兌換", action: { () -> Void in
+                
+                /// Check if the free trial is already activated
+                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+                    
+                    ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, result, error) -> Void in
 
+                        if let purchaseList = result {
+                            
+                            let alreadyActivated = purchaseList.contains({ (purchase) -> Bool in
+                                
+                                return (purchase.productId == ZuzuProducts.ProductRadarFreeTrial)
+                                
+                            })
+                            
+                            if(alreadyActivated) {
+                                
+                                Log.debug("Free trial already activated")
+                                
+                            } else {
+                                
+                                /// TODO: Start to make purchase with Zuzu Backend
+                                
+                            }
+                            
+                        } else {
+                            Log.debug("No previous purchase")
+                            
+                            /// TODO: Start to make purchase with Zuzu Backend
+                            
+                        }
+                        
+                    })
+                }
+            })
+            
+            freeTrialAlertView.showNotice("租屋雷達免費兌換", subTitle: subTitle, closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            
+        } else{
+            
+            //AppStore will pop up confirmation dialog
+            if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
+                
+                ///Successfully sent out the payment request to Zuzu Backend. Wait for handler callback
+                Log.debug("Purchase Request Sent")
+                
+            } else {
+                
+                ///You have an unfinished transaction for the product or the product is not valid
+                Log.debug("Purchase Request Not Sent")
+                
+            }
+            
+        }
+        
+    }
     
     // MARK: - View Life Cycle
     
@@ -67,10 +168,13 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        reload()
+        loadProducts()
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
+                
+                self.products.append(RadarPurchaseViewController.TrialProduct)
+                
                 return nil
             }
         }
@@ -80,8 +184,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         super.didReceiveMemoryWarning()
     }
     
-    
-    // MARK: - Private Util
+    // MARK: - Action Handlers
     
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
@@ -94,19 +197,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
     }
     
-    
-    // Fetch the products from iTunes connect, redisplay the table on successful completion
-    func reload() {
-        products = []
-        tableView.reloadData()
-        ZuzuStore.sharedInstance.requestProducts { success, products in
-            if success {
-                self.products = products
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
@@ -115,48 +205,27 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 if(task.error == nil) {
                     self.runOnMainThread({ () -> Void in
-                        self.alertPurchase(button)
+                        
+                        if(button.tag < self.products.count) {
+                            let product = self.products[button.tag]
+                            self.proceedTransaction(product)
+                        } else {
+                            assert(false, "Access products array out of bound \(self.products.count)")
+                        }
+                        
                     })
                 }
                 
                 return nil
             }
         }else{
-            alertPurchase(button)
-        }
-    }
-    
-    func alertPurchase(button: UIButton){
-        let product = products[button.tag]
-        Log.info("productIdentifier: \(product.productIdentifier)")
-        priceFormatter.locale = product.priceLocale
-        let price = priceFormatter.stringFromNumber(product.price)
-        
-        let loginAlertView = SCLAlertView()
-        loginAlertView.addButton("購買") {
-            if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
-                
-                ///Successfully sent out the payment request. Wait for handler callback
-                
+            if(button.tag < self.products.count) {
+                let product = self.products[button.tag]
+                self.proceedTransaction(product)
             } else {
-                
-                ///You have an unfinished transaction for the product
-                
+                assert(false, "Access products array out of bound \(self.products.count)")
             }
         }
-        
-        loginAlertView.addButton("未完成交易") {
-            
-            let transList = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            
-            for trans in transList {
-                ZuzuStore.sharedInstance.finishTransaction(trans)
-                Log.warning("Unfinished Transactions: \(trans.transactionIdentifier), product = \(trans.payment.productIdentifier)")
-            }
-        }
-
-        let subTitle = "您要以 \(price!) 的價格購買一個 \(product.localizedTitle) 嗎？"
-        loginAlertView.showNotice("確認您的購買項目", subTitle: subTitle, closeButtonTitle: "取消", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     // When a product is purchased, this notification fires, redraw the correct row
@@ -174,7 +243,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     // MARK: - Table View Data Source
-
+    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -195,35 +264,43 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         let cell = tableView.dequeueReusableCellWithIdentifier("radarPurchaseTableViewCell", forIndexPath: indexPath)
         
         let product = products[indexPath.row]
-        cell.textLabel?.text = product.localizedTitle
         
-        /*if ZuzuStore.sharedInstance.isProductPurchased(product.productIdentifier) {
-            cell.accessoryType = .Checkmark
-            cell.accessoryView = nil
-            cell.detailTextLabel?.text = ""
-        }*/
-        if ZuzuStore.canMakePayments() {
-            priceFormatter.locale = product.priceLocale
-            cell.detailTextLabel?.text = priceFormatter.stringFromNumber(product.price)
+        self.priceFormatter.locale = product.priceLocale
+        cell.detailTextLabel?.text = priceFormatter.stringFromNumber(product.price)
+        
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 72, height: 36))
+        button.backgroundColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
+        button.setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: .Normal)
+        
+        button.layer.borderWidth = 1.0
+        button.layer.borderColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        button.layer.cornerRadius = CGFloat(18.0)
+        
+        if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
+            cell.textLabel?.text = "\(product.localizedTitle)"
+            cell.detailTextLabel?.text = "免費"
             
-            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 72, height: 36))
-            button.backgroundColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
-            button.setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: .Normal)
+            button.setTitle("兌換", forState: .Normal)
+            cell.textLabel?.textColor = UIColor.colorWithRGB(0xFF6666)
+            
+        } else {
+            cell.textLabel?.text = product.localizedTitle
             button.setTitle("購買", forState: .Normal)
-            button.layer.borderWidth = 2.0
-            button.layer.borderColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-            button.layer.cornerRadius = CGFloat(18.0)
             
-            button.tag = indexPath.row
-            button.addTarget(self, action: "onBuyButtonTapped:", forControlEvents: .TouchUpInside)
-            cell.accessoryType = .None
-            cell.accessoryView = button
+            if(!ZuzuStore.canMakePayments()) {
+                button.enabled = false
+                button.setTitleColor(disabledColor, forState: .Normal)
+                button.layer.borderColor = disabledColor.CGColor
+            }
+            
         }
-        else {
-            cell.accessoryType = .None
-            cell.accessoryView = nil
-            cell.detailTextLabel?.text = "Not available"
-        }
+        
+        button.tag = indexPath.row
+        button.addTarget(self, action: "onBuyButtonTapped:", forControlEvents: .TouchUpInside)
+        
+        cell.accessoryType = .None
+        cell.accessoryView = button
+        
         return cell
     }
 }
@@ -233,6 +310,8 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         
         Log.debug("\(transaction.transactionIdentifier)")
+        
+        /// TODO: Start to make purchase with Zuzu Backend
         
     }
     

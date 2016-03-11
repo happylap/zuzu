@@ -244,7 +244,7 @@ class RadarViewController: UIViewController {
     
     // MARK: - Criteria functions
     
-    func createCriteriaAfterPurchase(isSuccess:Bool, product: SKProduct) -> Void{
+    func createCriteriaAfterPurchase(isSuccess:Bool, product: ZuzuProduct) -> Void{
         if isSuccess == true{
             if let userId = UserDefaultsUtils.getZuzuUserId(){
                 let zuzuPurchase = ZuzuPurchase(transactionId: "", userId:userId ,productId:product.productIdentifier, productPrice:product.price)

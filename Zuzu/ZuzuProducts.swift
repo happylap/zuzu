@@ -19,11 +19,11 @@ public struct ZuzuProducts {
     
     public static let ProductRadar3Month = Prefix + "radar3"
     
-    public static let ProductRadar4Month = Prefix + "radar4"
+    public static let ProductRadarFreeTrial = Prefix + "radarfree1"
     
     // All of the products assembled into a set of product identifiers.
     public static let productIdentifiers: Set<ProductIdentifier> =
-    [ZuzuProducts.ProductRadar1Month, ZuzuProducts.ProductRadar2Month, ZuzuProducts.ProductRadar3Month, ProductRadar4Month]
+    [ZuzuProducts.ProductRadarFreeTrial, ZuzuProducts.ProductRadar1Month, ZuzuProducts.ProductRadar2Month, ZuzuProducts.ProductRadar3Month]
     
     /// Return the resourcename for the product identifier.
     internal static func resourceNameForProductIdentifier(productIdentifier: String) -> String? {

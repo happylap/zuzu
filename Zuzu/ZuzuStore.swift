@@ -28,6 +28,12 @@ public typealias RequestProductsCompletionHandler = (success: Bool, products: [S
 /// Transaction handler called when there is any transaction status update.
 public typealias PurchaseHandler = (store: ZuzuStore, transaction: SKPaymentTransaction) -> Bool
 
+public struct ZuzuProduct {
+    var productIdentifier: String
+    var localizedTitle: String
+    var price: NSDecimalNumber
+    var priceLocale: NSLocale
+}
 
 /// A Helper class for In-App-Purchases, it can fetch products, tell you if a product has been purchased,
 /// purchase products, and restore purchases.  Uses NSUserDefaults to cache if a product has been purchased.
@@ -37,6 +43,8 @@ public class ZuzuStore: NSObject  {
     
     // Used to keep track of the possible products and which ones have been purchased.
     private let productIdentifiers: Set<ProductIdentifier>
+    
+    private var validSKProducts: [SKProduct]?
     
     // Used by SKProductsRequestDelegate
     private var productsRequest: SKProductsRequest?
@@ -208,7 +216,7 @@ public class ZuzuStore: NSObject  {
     /// Make purchase of a product.
     /// return false: if there exists an unfinished transaction for the product to purchase
     /// return true: if the payment is sent to the server successfully
-    internal func makePurchase(product: SKProduct, handler: ZuzuStorePurchaseHandler) -> Bool {
+    internal func makePurchase(product: ZuzuProduct, handler: ZuzuStorePurchaseHandler) -> Bool {
         
         purchaseHandler = handler
         
@@ -226,11 +234,21 @@ public class ZuzuStore: NSObject  {
             
             Log.debug("Add payment for product = \(productIdentifier)...")
             
-            let payment = SKPayment(product: product)
-            
-            SKPaymentQueue.defaultQueue().addPayment(payment)
-            
-            return true
+            if let products = self.validSKProducts,
+                let targetProduct = products.filter({ (skProduct) -> Bool in
+                return (skProduct.productIdentifier == productIdentifier) }).first {
+                
+                let payment = SKPayment(product: targetProduct)
+                
+                SKPaymentQueue.defaultQueue().addPayment(payment)
+                
+                return true
+                
+            } else {
+                
+                Log.debug("The product = \(productIdentifier) is not a valid SKProduct...")
+                return false
+            }
             
         } else {
             
@@ -280,11 +298,17 @@ extension ZuzuStore: SKProductsRequestDelegate {
     
     public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         Log.debug("Loaded list of products...")
-        let products = response.products
+        
+        // Cache product list
+        self.validSKProducts = response.products
+        
+        let products = self.validSKProducts ?? [SKProduct]()
+        
         productsRequestHandler?(success: true, products: products)
+        
         clearRequest()
         
-        // debug printing
+        // Debug printing
         for p in products {
             Log.debug("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
         }
