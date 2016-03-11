@@ -64,8 +64,8 @@ class RadarViewController: UIViewController {
         self.configureButton()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         if self.isUpdateMode == true{
             return
         }
@@ -185,6 +185,17 @@ class RadarViewController: UIViewController {
     }
 }
 
+// MARK: - RadarConfigureTableViewControllerDelegate
+extension RadarViewController : RadarConfigureTableViewControllerDelegate {
+    func onCriteriaConfigureDone(searchCriteria:SearchCriteria){
+        Log.debug("onCriteriaConfigureDone")
+        self.searchCriteria = searchCriteria
+    }
+    
+}
+
+// MARK: - Purchase Radar Callback
+
 extension RadarViewController{
     func cancelPurchaseHandler() -> Void{
         self.tabBarController?.tabBarHidden = false
@@ -280,21 +291,54 @@ extension RadarViewController{
     }
 }
 
-// MARK: - RadarConfigureTableViewControllerDelegate
-extension RadarViewController : RadarConfigureTableViewControllerDelegate {
-    func onCriteriaConfigureDone(searchCriteria:SearchCriteria){
-        Log.debug("onCriteriaConfigureDone")
-        self.searchCriteria = searchCriteria
-    }
-    
-}
-
-// MARK: Unfinished transactions & Check Service
+// MARK: Check Radar service
 
 extension RadarViewController{
     
-    // MARK: unfinished transactions
+    func checkService(){
+        if self.hasValidService == true{
+            return
+        }
+        
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                self.startLoading()
+                ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
+            }
+        }
+    }
     
+    func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
+        self.stopLoading()
+        if error != nil{
+            self.alertServiceError("目前可能處於飛航模式或是無網路狀態，暫時無法取得租屋雷達服務狀態")
+            return
+        }
+        
+        if result != nil{
+            if result?.status == "valid"{
+                self.hasValidService = true
+                self.alertService("租屋雷達服務已設定完成\n請立即啟用租屋雷達")
+            }
+        }
+    }
+    
+    func alertServiceError(subTitle: String) {
+        let alertView = SCLAlertView()
+        alertView.showInfo("無法取得雷達服務狀態", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        
+    }
+    
+    func alertService(subTitle: String){
+        let alertView = SCLAlertView()
+        alertView.showInfo("雷達服務已設定完成", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
+}
+
+// MARK: Handle unfinished transactions
+
+extension RadarViewController{
+
     func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
         self.isOnLogging = false
         self.tabBarController!.tabBarHidden = false
@@ -368,38 +412,6 @@ extension RadarViewController{
         Log.exit()
     }
     
-    // MARK: - Radar Service
-    
-    func checkService(){
-        if self.hasValidService == true{
-            return
-        }
-        
-        if AmazonClientManager.sharedInstance.isLoggedIn(){
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.startLoading()
-                ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
-            }
-        }
-    }
-    
-    func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
-        self.stopLoading()
-        if error != nil{
-            self.alertServiceError("目前可能處於飛航模式或是無網路狀態，暫時無法取得租屋雷達服務狀態")
-            return
-        }
-        
-        if result != nil{
-            if result?.status == "valid"{
-                self.hasValidService = true
-                self.alertService("租屋雷達服務已設定完成\n請立即啟用租屋雷達")
-            }
-        }
-    }
-
-    // MARK: - Alert for unfinised transaction and check service
-    
     func alertUnfinishError(){
         let msgTitle = "重新設定租屋雷達服務失敗"
         let okButton = "知道了"
@@ -421,16 +433,4 @@ extension RadarViewController{
         
         alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
-    
-    func alertServiceError(subTitle: String) {
-        let alertView = SCLAlertView()
-        alertView.showInfo("無法取得雷達服務狀態", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-        
-    }
-    
-    func alertService(subTitle: String){
-        let alertView = SCLAlertView()
-        alertView.showInfo("雷達服務已設定完成", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-    }
 }
-
