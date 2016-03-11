@@ -27,6 +27,12 @@ class LoginDebugViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var finishTransButton: UIButton!{
+        didSet {
+            facebookLogin.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
+        }
+    }
+    
     @IBOutlet weak var currentUser: UIButton! {
         didSet {
             currentUser.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
@@ -134,6 +140,15 @@ class LoginDebugViewController: UIViewController {
         
     }
     
+
+    @IBAction func onFinishTransaction(sender: AnyObject) {
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            for transaction in unfinishedTranscations{
+                ZuzuStore.sharedInstance.finishTransaction(transaction)
+            }
+        }
+    }
     
     private func popupFacebookStatus() {
         

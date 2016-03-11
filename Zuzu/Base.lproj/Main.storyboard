@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -407,6 +407,21 @@
                                     <outlet property="delegate" destination="rle-Nh-8TE" id="tJx-22-Aqo"/>
                                 </connections>
                             </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNG-BA-KzA">
+                                <rect key="frame" x="156" y="40" width="125" height="60"/>
+                                <state key="normal" title="Finish Transaction"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="keyPath">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onFinishTransaction:" destination="jVh-QR-suA" eventType="touchUpInside" id="SrZ-MM-JHh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -417,6 +432,8 @@
                             <constraint firstItem="biy-yK-7aq" firstAttribute="centerY" secondItem="iHg-98-mRc" secondAttribute="centerY" id="2f6-wy-C03"/>
                             <constraint firstItem="ydf-Nd-SUy" firstAttribute="top" secondItem="gtR-mL-aYb" secondAttribute="bottom" constant="8" symbolic="YES" id="3Ei-bI-Kf3"/>
                             <constraint firstItem="UE7-6z-Alq" firstAttribute="leading" secondItem="7SY-p8-DAN" secondAttribute="leading" id="3Lt-vJ-UCF"/>
+                            <constraint firstItem="WNG-BA-KzA" firstAttribute="bottom" secondItem="gtR-mL-aYb" secondAttribute="bottom" id="4Kt-zI-MKf"/>
+                            <constraint firstItem="WNG-BA-KzA" firstAttribute="leading" secondItem="gtR-mL-aYb" secondAttribute="trailing" constant="16" id="6Gl-UL-hOf"/>
                             <constraint firstItem="iHg-98-mRc" firstAttribute="top" secondItem="UE7-6z-Alq" secondAttribute="bottom" constant="8" id="DqL-W9-J3e"/>
                             <constraint firstItem="biy-yK-7aq" firstAttribute="leading" secondItem="iHg-98-mRc" secondAttribute="trailing" constant="8" id="EAD-L5-nN5"/>
                             <constraint firstItem="UE7-6z-Alq" firstAttribute="centerX" secondItem="7SY-p8-DAN" secondAttribute="centerX" id="GUP-T5-tEl"/>
@@ -428,6 +445,7 @@
                             <constraint firstItem="biy-yK-7aq" firstAttribute="top" secondItem="iHg-98-mRc" secondAttribute="top" id="a2z-oJ-7Y9"/>
                             <constraint firstItem="biy-yK-7aq" firstAttribute="top" secondItem="iHg-98-mRc" secondAttribute="bottom" constant="17" id="alG-hi-Q4z"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="leading" secondItem="rle-Nh-8TE" secondAttribute="leadingMargin" id="c2p-uN-sqo"/>
+                            <constraint firstItem="WNG-BA-KzA" firstAttribute="top" secondItem="gtR-mL-aYb" secondAttribute="top" id="das-PI-1YY"/>
                             <constraint firstAttribute="trailingMargin" secondItem="biy-yK-7aq" secondAttribute="trailing" id="edT-an-9Ue"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="top" secondItem="spy-N1-ITn" secondAttribute="bottom" constant="20" id="fET-5L-z79"/>
                             <constraint firstItem="iHg-98-mRc" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="i21-Sg-Wgf"/>
@@ -456,6 +474,7 @@
                         <outlet property="cognitoIdentity" destination="7SY-p8-DAN" id="mS8-Yf-5Rd"/>
                         <outlet property="currentUser" destination="UE7-6z-Alq" id="XIe-5V-zaG"/>
                         <outlet property="facebookLogin" destination="ydf-Nd-SUy" id="djY-bv-JGC"/>
+                        <outlet property="finishTransButton" destination="WNG-BA-KzA" id="OkL-KC-pVD"/>
                         <outlet property="googleLogin" destination="gtR-mL-aYb" id="PB7-yO-R78"/>
                         <outlet property="webApi" destination="iHg-98-mRc" id="2BI-wT-iDn"/>
                         <outlet property="webApiPickerView" destination="biy-yK-7aq" id="Osk-7K-KUh"/>
