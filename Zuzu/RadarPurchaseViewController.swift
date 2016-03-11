@@ -19,11 +19,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // This list of available in-app purchases
     var products = [ZuzuProduct]()
     
-    var completeHandler: (() -> Void)?
-
     var cancelPurchaseHandler: (() -> Void)?
     
-    var purchaseCompleteHandler: ((isSuccess:Bool, product: ZuzuProduct) -> Void)?
     var completePurchaseHandler: ((isSuccess:Bool, error: NSError?) -> Void)?
     
     var unfinishedTransactionHandler: (() -> Void)?
@@ -325,9 +322,6 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                 handler(isSuccess: true, error: nil)
             }
         }
-        
-        /// TODO: Start to make purchase with Zuzu Backend
-        
     }
     
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
