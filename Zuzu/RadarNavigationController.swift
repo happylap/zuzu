@@ -101,11 +101,13 @@ class RadarNavigationController: UINavigationController {
     }
     
     func showRetryRadarView(isBlank: Bool){
-        if let vc = self.viewControllers[0] as? RadarRetryViewController{
-            vc.isBlank = isBlank
-            return
+        if self.viewControllers.count > 0 {
+            if let vc = self.viewControllers[0] as? RadarRetryViewController{
+                vc.isBlank = isBlank
+                return
+            }
         }
-        
+
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             vc.isBlank = isBlank
