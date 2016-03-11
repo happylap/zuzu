@@ -57,7 +57,6 @@ class RadarNavigationController: UINavigationController {
                         self.showDisplayRadarView(self.zuzuCriteria!)
                     }else{
                         self.stopLoading() // no criteria
-                        self.stopLoading()
                         self.showConfigureRadarView()
                     }
                 }

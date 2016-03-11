@@ -8,11 +8,11 @@
 
 import UIKit
 import SCLAlertView
-
+import MBProgressHUD
 private let Log = Logger.defaultLogger
 
 class RadarDisplayViewController: UIViewController {
-
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -41,12 +41,17 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var modifyButtoon: UIButton!
     
+    var zuzuService: ZuzuServiceMapper?{
+        didSet{
+            self.updateServiceUI()
+        }
+    }
+    
     var zuzuCriteria = ZuzuCriteria(){
         didSet{
             if zuzuCriteria.criteria == nil{
                 zuzuCriteria.criteria = SearchCriteria()
             }
-            self.updateServiceTextLabel()
             self.updateCriteriaTextLabel()
         }
     }
@@ -55,33 +60,57 @@ class RadarDisplayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.serviceStatusLabel?.text = ""
+        self.serviceExpireLabel?.text = ""
         self.configureButton()
         self.configureBannerText()
         self.configurePurchaseTableView()
-        self.updateServiceTextLabel()
         self.updateCriteriaTextLabel()
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController!.tabBarHidden = false
+        self.checkService()
     }
-
     
     // MARK: - Update UI
     
-    private func updateServiceTextLabel(){
-        var diff = 0
-        var expirDate = ""
-        if let expireDate = self.zuzuCriteria.expireTime{
-            let now = NSDate()
-            diff = now.daysFrom(expireDate)
-            if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
-                expirDate = dateString
+    private func updateServiceUI(){
+        if let service = self.zuzuService{
+            if let status = service.status{
+                if status == "valid"{
+
+                    var days = 0
+                    var hours = 0
+                    if let remaining = service.remainingSecond{
+                        days = remaining/86400
+                        hours = (remaining % 86400)/3600
+                    }
+                    self.serviceStatusLabel?.text = "您的租屋雷達服務還有\(days)天又\(hours)小時"
+                }else{
+                    self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
+                }
+            }else{
+                self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
             }
+            
+            // expiration date
+            var expireDateStr = ""
+            if let expireDate = service.expireTime{
+                if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
+                    expireDateStr = dateString
+                }
+            }
+            self.serviceExpireLabel?.text = "到期日: \(expireDateStr)"
+            
+            
+            return
         }
-        self.serviceStatusLabel?.text = "您的通知服務還有\(diff)天"
-        self.serviceExpireLabel?.text = "到期日: \(expirDate)"
+
+        
+        self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
+        self.serviceExpireLabel?.text = ""
     }
 
     private func updateCriteriaTextLabel(){
@@ -241,6 +270,32 @@ class RadarDisplayViewController: UIViewController {
             }
         }
     }
+    
+    // MARK: - Loading
+    
+    func startLoading(){
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+    }
+    
+    func stopLoading(){
+        LoadingSpinner.shared.stop()
+    }
+    
+    func startLoadingText(text: String){
+        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        
+        dialog.animationType = .ZoomIn
+        dialog.dimBackground = true
+        dialog.labelText = text
+        
+        self.runOnMainThread() { () -> Void in}
+    }
+    
+    func stopLoadingText(){
+        MBProgressHUD.hideHUDForView(self.view, animated: true)
+    }
 }
 
 // MARK: - RadarViewControllerDelegate
@@ -258,3 +313,96 @@ extension RadarDisplayViewController : RadarViewControllerDelegate {
     }
     
 }
+
+// MARK: - Purchase Radar Callback
+
+extension RadarDisplayViewController{
+    func cancelPurchaseHandler() -> Void{
+        self.tabBarController?.tabBarHidden = false
+    }
+    
+    func completePurchaseHandler(isSuccess:Bool, error: NSError?) -> Void{
+        Log.debug("isSuccess: \(isSuccess), error: \(error)")
+        self.tabBarController?.tabBarHidden = false
+        if error != nil{
+            return
+        }
+        //self.updateCriteria()
+    }
+    
+    func unfinishedTransactionHandler() -> Void{
+        Log.enter()
+        self.tabBarController?.tabBarHidden = false
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            //self.doUnfinishTransactions(unfinishedTranscations)
+        }
+        Log.exit()
+    }
+    
+    func updateCriteria(zuzuCriteria: ZuzuCriteria){
+        Log.enter()
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.zuzuCriteria.criteria!) { (result, error) -> Void in
+                
+                self.stopLoading()
+                
+                if error != nil{
+                    //alert
+                    if let vc = self.navigationController as? RadarNavigationController{
+                        vc.zuzuCriteria = zuzuCriteria // still old criteria
+                        vc.showRadar()
+                    }
+                }
+                
+                if let vc = self.navigationController as? RadarNavigationController{
+                    //zuzuCriteria.criteria = self.searchCriteria // new criteria
+                    vc.zuzuCriteria = zuzuCriteria
+                    vc.showRadar()
+                }
+                
+            }
+        }
+        Log.exit()
+    }
+    
+}
+
+// MARK: Check Radar service
+
+extension RadarDisplayViewController{
+    
+    func checkService(){
+        if self.zuzuService != nil{
+            return
+        }
+        
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
+            ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
+        }
+    }
+    
+    func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
+        self.stopLoading()
+        if error != nil{
+            self.alertServiceError("目前可能處於飛航模式或是無網路狀態，暫時無法取得租屋雷達服務狀態")
+            return
+        }
+        
+        self.zuzuService = result
+
+    }
+    
+    func alertServiceError(subTitle: String) {
+        let alertView = SCLAlertView()
+        alertView.showInfo("無法取得雷達服務狀態", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        
+    }
+    
+    func alertService(subTitle: String){
+        let alertView = SCLAlertView()
+        alertView.showInfo("雷達服務已設定完成", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
+}
+
