@@ -17,8 +17,14 @@ struct GAConst {
         ///MyCollection event
         static let MyCollection = "myCollection"
         
-        ///ZuzuRadarCriteria event
-        static let ZuzuRadarCriteria = "zuzuRadarCriteria"
+        ///ZuzuRadarSetting event
+        static let ZuzuRadarSetting = "zuzuRadarSetting"
+
+        ///ZuzuRadarPurchase event
+        static let ZuzuRadarPurchase = "zuzuRadarPurchase"
+        
+        ///ZuzuRadarNotification event
+        static let ZuzuRadarNotification = "zuzuRadarNotification"
         
         ///SearchHouse event
         static let SearchHouse = "searchHouse"
@@ -33,9 +39,6 @@ struct GAConst {
         
         ///Blocking event
         static let Blocking = "blocking"
-        
-        ///Error event
-        static let Error = "error"
     }
     
     
@@ -72,6 +75,8 @@ struct GAConst {
             static let CurrentLocation = "currentLocation"
             
             static let Login = "login"
+            
+            static let ChangeRadarStatus = "changeRadarStatus"
         }
         
         struct MyCollection {
@@ -89,6 +94,57 @@ struct GAConst {
             static let AddItemType = "addItemType"
             
             static let Delete = "delete"
+        }
+        
+        struct ZuzuRadarSetting {
+            
+            static let Region = "region"
+            
+            static let Type = "type"
+            
+            static let PriceMax = "priceMax"
+            
+            static let PriceMin = "priceMin"
+            
+            static let SizeMax = "sizeMax"
+            
+            static let SizeMin = "sizeMin"
+            
+            static let UpdateCriteriaSuccess = "updateCriteriaSuccess"
+            
+            static let UpdateCriteriaError = "updateCriteriaError"
+        }
+        
+        struct ZuzuRadarPurchase {
+            
+            static let TryPurchase = "tryPurchase"
+            
+            static let MakePaymentSuccess = "makePaymentSuccess"
+            
+            static let MakePaymentFailure = "makePaymentFailure"
+            
+            static let SaveTransactionSuccess = "saveTransactionSuccess"
+            
+            static let SaveTransactionFailure = "saveTransactionFailure"
+            
+            static let ResumeTransactionSuccess = "resumeTransactionSuccess"
+            
+            static let ResumeTransactionFailure = "resumeTransactionFailure"
+            
+            static let SaveCriteriaSuccess = "saveCriteriaSuccess"
+            
+            static let SaveCriteriaError = "saveCriteriaError"
+        }
+        
+        struct ZuzuRadarNotification {
+            
+            static let ReceiveNotification = "receiveNotification"
+            
+            static let ReadNotificationPrice = "readNotificationPrice"
+            
+            static let ReadNotificationSize = "readNotificationSize"
+            
+            static let ReadNotificationType = "readNotificationType"
         }
         
         struct SearchHouse {
@@ -113,9 +169,9 @@ struct GAConst {
             
             static let LoadPage = "loadPage"
             
-            static let DuplicateItemContinue = "DuplicateItemContinue"
+            static let DuplicateItemContinue = "duplicateItemContinue"
             
-            static let DuplicateItemView = "DuplicateItemView"
+            static let DuplicateItemView = "duplicateItemView"
         }
 
         
@@ -128,12 +184,6 @@ struct GAConst {
             static let LoginCancel = "loginCancel"
             
             static let loginReject = "loginReject"
-            
-        }
-        
-        struct Error {
-            
-            static let SearchHouse = "searchHouse"
             
         }
     }
