@@ -98,28 +98,29 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 /// Check if the free trial is already activated
                 if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
                     
-                    ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, result, error) -> Void in
+                    ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, purchaseList, error) -> Void in
                         
-                        if let purchaseList = result {
+                        if let _ = error {
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍候再試，謝謝！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                             
-                            let alreadyActivated = purchaseList.contains({ (purchase) -> Bool in
-                                
-                                return (purchase.productId == ZuzuProducts.ProductRadarFreeTrial)
-                                
-                            })
+                            return
+                        }
+                        
+                        /// Check if free trial is already activated
+                        let alreadyActivated = purchaseList?.contains({ (purchase) -> Bool in
                             
-                            if(alreadyActivated) {
-                                
-                                Log.debug("Free trial already activated")
-                                
-                            } else {
-                                
-                                /// TODO: Start to make purchase with Zuzu Backend
-                                
-                            }
+                            return (purchase.productId == ZuzuProducts.ProductRadarFreeTrial)
+                            
+                        }) ?? false
+                        
+                        
+                        if(alreadyActivated) {
+                            
+                            Log.debug("Free trial already activated")
+                            
+                            SCLAlertView().showInfo("您已經試用過此服務", subTitle: "若覺得滿意我們的服務，可以考慮購買正式服務，讓您輕鬆找租屋。豬豬快租非常感謝您的支持！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                             
                         } else {
-                            Log.debug("No previous purchase")
                             
                             /// TODO: Start to make purchase with Zuzu Backend
                             
@@ -163,8 +164,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
         
         //Configure table DataSource & Delegate
-        //self.tableView.dataSource = self
-        //self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
         
         self.tableView.scrollEnabled = false
         self.tableView.allowsSelection = false
