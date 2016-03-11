@@ -358,6 +358,7 @@ extension RadarViewController{
                 if error != nil{
                     Log.error("Cannot get criteria by user id:\(userId)")
                     self.stopLoading()
+                    //alert
                     return
                 }
                 
@@ -376,15 +377,20 @@ extension RadarViewController{
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
+            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
                 
                 self.stopLoading()
                 
                 if error != nil{
-                    return
+                    //alert
+                    if let vc = self.navigationController as? RadarNavigationController{
+                        vc.zuzuCriteria = zuzuCriteria // still old criteria
+                        vc.showRadar()
+                    }
                 }
                 
                 if let vc = self.navigationController as? RadarNavigationController{
+                    zuzuCriteria.criteria = self.searchCriteria // new criteria
                     vc.zuzuCriteria = zuzuCriteria
                     vc.showRadar()
                 }
@@ -402,6 +408,7 @@ extension RadarViewController{
                 self.stopLoading()
                 
                 if error != nil{
+                    //alert
                     return
                 }
                 
