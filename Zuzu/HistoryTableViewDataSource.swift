@@ -43,8 +43,8 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
             tableViewController.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
             
             ///GA Tracker
-            tableViewController.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.History, label: GAConst.Label.History.Load)
+            tableViewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                action: GAConst.Action.UIActivity.History, label: GAConst.Label.History.Load)
         }
     }
     

@@ -234,16 +234,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                     houseDetailVC.houseItem = houseItem
                     
                     //GA Tracker
-                    self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                        action: GAConst.Action.Activity.ViewItemPrice,
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                        action: GAConst.Action.UIActivity.ViewItemPrice,
                         label: String(houseItem.price))
                     
-                    self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                        action: GAConst.Action.Activity.ViewItemSize,
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                        action: GAConst.Action.UIActivity.ViewItemSize,
                         label: String(houseItem.size))
                     
-                    self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                        action: GAConst.Action.Activity.ViewItemType,
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                        action: GAConst.Action.UIActivity.ViewItemType,
                         label: String(houseItem.purposeType))
                 }
                                 

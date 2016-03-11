@@ -61,9 +61,15 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // Fetch the products from iTunes connect, redisplay the table on successful completion
     private func loadProducts() {
         
-        self.products.append(RadarPurchaseViewController.TrialProduct)
-        
         ZuzuStore.sharedInstance.requestProducts { success, products in
+            
+            /// Provide free trial whether there are products from AppStroe or not
+            let productId = RadarPurchaseViewController.TrialProduct.productIdentifier
+            
+            if(!UserDefaultsUtils.hasUsedFreeTrial(productId)) {
+                self.products.append(RadarPurchaseViewController.TrialProduct)
+            }
+            
             if success {
                 let storeProducts = products.map({ (product) -> ZuzuProduct in
                     

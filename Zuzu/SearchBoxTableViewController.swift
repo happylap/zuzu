@@ -794,8 +794,8 @@ class SearchBoxTableViewController: UITableViewController {
         
         ///GA Tracker
         
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.RateUs,
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+            action: GAConst.Action.UIActivity.RateUs,
             label: gaLabel ?? "failed")
         
     }
@@ -851,8 +851,8 @@ class SearchBoxTableViewController: UITableViewController {
         }
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.FanPage,
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+            action: GAConst.Action.UIActivity.FanPage,
             label: gaLabel ?? "failed")
         
         
@@ -876,8 +876,8 @@ class SearchBoxTableViewController: UITableViewController {
         clearCriteriaButton.enabled = false
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.ResetCriteria)
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+            action: GAConst.Action.UIActivity.ResetCriteria)
     }
     
     func onTypeButtonTouched(sender: UIButton) {
@@ -1686,8 +1686,8 @@ extension SearchBoxTableViewController : CLLocationManagerDelegate {
                     
                     if(!self.locationTracked) {
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.CurrentLocation, label: pm.postalCode)
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.CurrentLocation, label: pm.postalCode)
                         
                         self.locationTracked = true
                     }

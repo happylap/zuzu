@@ -924,8 +924,8 @@ class HouseDetailViewController: UIViewController {
                         }
                         
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.Contact,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.Contact,
                             label: GAConst.Label.Contact.Phone,
                             value:  UInt(success))
                         
@@ -939,8 +939,8 @@ class HouseDetailViewController: UIViewController {
                 (alert: UIAlertAction!) -> Void in
                 
                 ///GA Tracker
-                self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                    action: GAConst.Action.Activity.Contact,
+                self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                    action: GAConst.Action.UIActivity.Contact,
                     label: GAConst.Label.Contact.Phone,
                     value:  2)
             })
@@ -992,16 +992,16 @@ class HouseDetailViewController: UIViewController {
         
         ///GA Tracker
         if let houseItem = houseItem {
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ShareItemPrice,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                action: GAConst.Action.UIActivity.ShareItemPrice,
                 label: String(houseItem.price))
             
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ShareItemSize,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                action: GAConst.Action.UIActivity.ShareItemSize,
                 label: String(houseItem.size))
             
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.ShareItemType,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                action: GAConst.Action.UIActivity.ShareItemType,
                 label: String(houseItem.purposeType))
         }
         
@@ -1233,8 +1233,8 @@ class HouseDetailViewController: UIViewController {
                         
                         ///GA Tracker
                         if let houseItem = houseItem {
-                            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                                action: GAConst.Action.Activity.ViewSource,
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                action: GAConst.Action.UIActivity.ViewSource,
                                 label: String(houseItem.source))
                         }
                     }
@@ -1272,8 +1272,8 @@ extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
         }
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-            action: GAConst.Action.Activity.Contact,
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+            action: GAConst.Action.UIActivity.Contact,
             label: GAConst.Label.Contact.Email,
             value:  UInt(success))
         

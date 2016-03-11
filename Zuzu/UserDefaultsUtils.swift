@@ -43,6 +43,19 @@ struct UserDefaultsUtils{
         return userDefaults.stringForKey(zuzuUserIdUserDefaultKey)
     }
     
+    // Free Trial
+    static func setUsedFreeTrial(productIdentifier: String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setInteger(1, forKey: productIdentifier)
+    }
+    
+    static func hasUsedFreeTrial(productIdentifier: String) -> Bool{
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let status = userDefaults.integerForKey(productIdentifier)
+        
+        return (status >= 1)
+    }
+    
     // MARK: Login
     /// UserProfile UserDefaults persistence APIs
     static let userProfileUserDefaultKey = "loginUserData"
