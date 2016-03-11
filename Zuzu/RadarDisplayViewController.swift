@@ -221,7 +221,7 @@ class RadarDisplayViewController: UIViewController {
             ///Hide tab bar
             self.tabBarController?.tabBarHidden = true
             vc.modalPresentationStyle = .OverCurrentContext
-            vc.purchaseCompleteHandler = self.createCriteriaAfterPurchase
+            //vc.purchaseCompleteHandler = self.createCriteriaAfterPurchase
             presentViewController(vc, animated: true, completion: nil)
         }
     }

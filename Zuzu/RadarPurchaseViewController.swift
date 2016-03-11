@@ -331,7 +331,6 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     }
     
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
-        
         Log.debug("\(transaction.transactionIdentifier)")
         if let handler = self.completePurchaseHandler{
             handler(isSuccess: false, error: NSError(domain: "購買雷達服務交易失敗", code: -1, userInfo: nil))
