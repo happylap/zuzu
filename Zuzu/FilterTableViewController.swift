@@ -126,7 +126,7 @@ class FilterTableViewController: UITableViewController {
         self.notifyFilterChange()
         
         ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity, action: GAConst.Action.Activity.ResetFilters)
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity, action: GAConst.Action.UIActivity.ResetFilters)
     }
     
 //    @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {

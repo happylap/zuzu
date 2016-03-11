@@ -12,10 +12,13 @@ struct GAConst {
     
     struct Catrgory {
         ///Common UI event
-        static let Activity = "activity"
+        static let UIActivity = "activity"
         
         ///MyCollection event
         static let MyCollection = "myCollection"
+        
+        ///ZuzuRadarCriteria event
+        static let ZuzuRadarCriteria = "zuzuRadarCriteria"
         
         ///SearchHouse event
         static let SearchHouse = "searchHouse"
@@ -38,7 +41,7 @@ struct GAConst {
     
     struct Action {
         
-        struct Activity {
+        struct UIActivity {
             
             static let History = "history"
             
@@ -67,11 +70,11 @@ struct GAConst {
             static let ResetFilters = "resetFilters"
             
             static let CurrentLocation = "currentLocation"
+            
+            static let Login = "login"
         }
         
         struct MyCollection {
-            
-            static let Login = "login"
             
             static let ViewItemPrice = "viewItemPrice"
             

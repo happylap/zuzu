@@ -622,8 +622,8 @@ class SearchResultViewController: UIViewController {
             }
             
             ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                action: GAConst.Action.Activity.History,
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                action: GAConst.Action.UIActivity.History,
                 label: GAConst.Label.History.Save)
         }
     }
@@ -875,16 +875,16 @@ class SearchResultViewController: UIViewController {
                     
                     if let targetHouseItem = targetHouseItem {
                         ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItemPrice,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.ViewItemPrice,
                             label: String(targetHouseItem.price))
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItemSize,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.ViewItemSize,
                             label: String(targetHouseItem.size))
                         
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Activity,
-                            action: GAConst.Action.Activity.ViewItemType,
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.ViewItemType,
                             label: String(targetHouseItem.purposeType))
                     }
                 }

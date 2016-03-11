@@ -882,8 +882,8 @@ class AmazonClientManager : NSObject {
                 }
                 
                 ///GA Tracker: Login successful
-                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                    action: GAConst.Action.MyCollection.Login, label: GAConst.Label.LoginType.Facebook)
+                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                    action: GAConst.Action.UIActivity.Login, label: GAConst.Label.LoginType.Facebook)
             }
         })
     }
@@ -1054,8 +1054,8 @@ extension AmazonClientManager: GIDSignInDelegate {
                     
                     ///GA Tracker: Login successful
                     if let viewController = signIn.uiDelegate as? UIViewController {
-                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                            action: GAConst.Action.MyCollection.Login, label: GAConst.Label.LoginType.Google)
+                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.Login, label: GAConst.Label.LoginType.Google)
                     }
                 }
                 
