@@ -79,6 +79,7 @@ class RadarViewController: UIViewController {
     
     func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
         self.isOnLogging = false
+        self.tabBarController!.tabBarHidden = false
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
@@ -91,6 +92,7 @@ class RadarViewController: UIViewController {
             return
         }
 
+        self.tabBarController!.tabBarHidden = true
         AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
     }
     
