@@ -29,7 +29,7 @@ class LoginDebugViewController: UIViewController {
     
     @IBOutlet weak var finishTransButton: UIButton!{
         didSet {
-            facebookLogin.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
+            finishTransButton.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
         }
     }
     
