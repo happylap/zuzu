@@ -60,12 +60,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     // Fetch the products from iTunes connect, redisplay the table on successful completion
     private func loadProducts() {
+        
+        self.products.append(RadarPurchaseViewController.TrialProduct)
+        
         ZuzuStore.sharedInstance.requestProducts { success, products in
             if success {
-                
-                self.products.append(RadarPurchaseViewController.TrialProduct)
-                
-                
                 let storeProducts = products.map({ (product) -> ZuzuProduct in
                     
                     let zuzuProduct:ZuzuProduct = ZuzuProduct(productIdentifier: product.productIdentifier,
@@ -176,13 +175,12 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         loadProducts()
+        
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
-                
-                self.products.append(RadarPurchaseViewController.TrialProduct)
-                
                 return nil
             }
         }
