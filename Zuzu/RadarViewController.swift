@@ -316,7 +316,7 @@ extension RadarViewController{
         }
         
         if result != nil{
-            if result?.status == "valid"{
+            if result?.status == RadarStatusValid{
                 self.hasValidService = true
                 self.alertService("租屋雷達服務已設定完成\n請立即啟用租屋雷達")
             }

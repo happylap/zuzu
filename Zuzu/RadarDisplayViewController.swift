@@ -11,6 +11,8 @@ import SCLAlertView
 import MBProgressHUD
 private let Log = Logger.defaultLogger
 
+let RadarStatusValid = "valid"
+
 class RadarDisplayViewController: UIViewController {
     
     struct ViewTransConst {
@@ -20,6 +22,8 @@ class RadarDisplayViewController: UIViewController {
     private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource(uiViewController: self)
     
     let emptyLabel = UILabel()
+    
+    @IBOutlet weak var criteriaEnableSwitch: UISwitch!
     
     @IBOutlet weak var servieBannerLabel: UILabel!
     
@@ -79,7 +83,7 @@ class RadarDisplayViewController: UIViewController {
     private func updateServiceUI(){
         if let service = self.zuzuService{
             if let status = service.status{
-                if status == "valid"{
+                if status == RadarStatusValid{
 
                     var days = 0
                     var hours = 0
@@ -207,34 +211,39 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    // MARK: - Criteria function
+    // MARK: - Enable radar
     
     @IBAction func enableCriteria(sender: UISwitch) {
         let isEnabled = sender.on
-        if let userId = self.zuzuCriteria.userId{
-            ZuzuWebService.sharedInstance.hasValidCriteriaByUserId(userId){(result, error) -> Void in
-                if error != nil{
-                    self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
-                    sender.on = !isEnabled
+        
+        if let service = self.zuzuService{
+            if let status = service.status{
+                if status == RadarStatusValid{
+                    self.startLoading()
+                    self.setCriteriaEnabled(isEnabled)
                     return
-                }
-                
-                if result == true{
-                    ZuzuWebService.sharedInstance.enableCriteriaByUserId(self.zuzuCriteria.userId!,
-                        criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
-                            if error != nil{
-                                self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
-                                sender.on = !isEnabled
-                            }else{
-                                self.zuzuCriteria.enabled = isEnabled
-                            }
-                    }
-                }else{
-                    self.showPurchaseView()
                 }
             }
         }
+        
+        sender.on = !isEnabled
+        
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            vc.modalPresentationStyle = .OverCurrentContext
+            
+            vc.cancelPurchaseHandler = self.cancelPurchaseHandler
+            vc.completePurchaseHandler = self.completePurchaseHandler
+            vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
+            
+            presentViewController(vc, animated: true, completion: nil)
+        }
+  
     }
+    
+    // MARK: - alert
     
     private func alertServerError(subTitle: String) {
         
@@ -242,33 +251,6 @@ class RadarDisplayViewController: UIViewController {
         
         alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         
-    }
-    
-    private func showPurchaseView(){
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-            ///Hide tab bar
-            self.tabBarController?.tabBarHidden = true
-            vc.modalPresentationStyle = .OverCurrentContext
-            //vc.purchaseCompleteHandler = self.createCriteriaAfterPurchase
-            presentViewController(vc, animated: true, completion: nil)
-        }
-    }
-    
-    func createCriteriaAfterPurchase(isSuccess:Bool, product: ZuzuProduct) -> Void{
-        if isSuccess == true{
-            if let userId = UserDefaultsUtils.getZuzuUserId(){
-                let zuzuPurchase = ZuzuPurchase(transactionId: "", userId:userId ,productId:product.productIdentifier, productPrice:product.price)
-                
-                zuzuPurchase.purchaseReceipt = "test".dataUsingEncoding(NSUTF8StringEncoding)
-                
-                ZuzuWebService .sharedInstance.createPurchase(zuzuPurchase){ (result, error) -> Void in
-                    if error != nil{
-                        self.alertServerError("購買雷達失敗，，請檢查您的裝置是否處於無網路狀態或飛航模式")
-                    }
-                }
-            }
-        }
     }
     
     // MARK: - Loading
@@ -327,7 +309,9 @@ extension RadarDisplayViewController{
         if error != nil{
             return
         }
-        //self.updateCriteria()
+        
+        self.startLoading()
+        self.updateCriteria()
     }
     
     func unfinishedTransactionHandler() -> Void{
@@ -340,30 +324,37 @@ extension RadarDisplayViewController{
         Log.exit()
     }
     
-    func updateCriteria(zuzuCriteria: ZuzuCriteria){
+    func updateCriteria(){
         Log.enter()
+
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.zuzuCriteria.criteria!) { (result, error) -> Void in
-                
-                self.stopLoading()
-                
+            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: self.zuzuCriteria.criteriaId!, criteria: self.zuzuCriteria.criteria!) { (result, error) -> Void in
+
                 if error != nil{
                     //alert
-                    if let vc = self.navigationController as? RadarNavigationController{
-                        vc.zuzuCriteria = zuzuCriteria // still old criteria
-                        vc.showRadar()
-                    }
                 }
                 
-                if let vc = self.navigationController as? RadarNavigationController{
-                    //zuzuCriteria.criteria = self.searchCriteria // new criteria
-                    vc.zuzuCriteria = zuzuCriteria
-                    vc.showRadar()
-                }
-                
+                self.setCriteriaEnabled(true)
+                //alert for success
             }
         }
         Log.exit()
+    }
+    
+    func setCriteriaEnabled(isEnabled: Bool){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
+                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                    self.stopLoading()
+                    
+                    if error != nil{
+                        self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
+                        self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
+                    }else{
+                        self.zuzuCriteria.enabled = isEnabled
+                    }
+            }
+        }
     }
     
 }
