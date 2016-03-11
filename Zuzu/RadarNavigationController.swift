@@ -15,79 +15,21 @@ private let Log = Logger.defaultLogger
 
 class RadarNavigationController: UINavigationController {
     
-    var zuzuCriteria: ZuzuCriteria?
-    
-    var unfinishedTranscations: [SKPaymentTransaction]?
-    
-    var porcessTransactionNum = -1
+    var zuzuCriteria: ZuzuCriteria? //cache the acquired criteria
     
     // MARK: - view life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showRetryRadarView(true)
+        self.showRetryRadarView(true) // Use retry view as blank page
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            if AmazonClientManager.sharedInstance.isLoggedIn(){
-                self.doUnfinishTransactions(unfinishedTranscations)
-            }else{
-                self.showConfigureRadarView()
-            }
-        }else{
-            self.showRadar()
-        }
-    }
-    
-    // MARK: unfinished transactions
-    
-    func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
-        self.unfinishedTranscations = unfinishedTranscations
-        self.porcessTransactionNum = 0
-        self.startLoadingText("重新設定租屋雷達服務...")
-        self.performFinishTransactions()
-    }
-    
-    func performFinishTransactions(){
-        if let transactions = self.unfinishedTranscations{
-            if self.porcessTransactionNum  < transactions.count{
-                RadarService.sharedInstance.createPurchase(transactions[self.porcessTransactionNum], handler: self.handleCompleteTransaction)
-            }
-        }else{
-            self.transactionDone()
-            self.showRadar()
-        }
-    }
-    
-    func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
-        if error != nil{
-            self.transactionDone()
-            self.alertUnfinishError()
-            return
-        }
-        
-        self.porcessTransactionNum = self.porcessTransactionNum + 1
-        if let transactions = self.unfinishedTranscations{
-            if self.porcessTransactionNum  < transactions.count{
-                self.performFinishTransactions()
-                return
-            }
-        }
-        
-        self.transactionDone()
         self.showRadar()
+
     }
-    
-    func transactionDone(){
-        self.unfinishedTranscations = nil
-        self.porcessTransactionNum = -1
-        self.stopLoadingText()
-    }
-    
     
     // MARK: - show radar page
     
@@ -131,7 +73,8 @@ class RadarNavigationController: UINavigationController {
     
     func showConfigureRadarView(){
         if self.viewControllers.count > 0 {
-            if let vc = self.viewControllers[0] as? RadarViewController{
+            let vc = self.viewControllers[0] as? RadarViewController
+            if vc != nil{
                 return
             }
         }
@@ -144,7 +87,8 @@ class RadarNavigationController: UINavigationController {
     
     func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
         if self.viewControllers.count > 0 {
-            if let vc = self.viewControllers[0] as? RadarDisplayViewController{
+            let vc = self.viewControllers[0] as? RadarDisplayViewController
+            if vc != nil{
                 return
             }
         }
@@ -157,36 +101,16 @@ class RadarNavigationController: UINavigationController {
     }
     
     func showRetryRadarView(isBlank: Bool){
+        if let vc = self.viewControllers[0] as? RadarRetryViewController{
+            vc.isBlank = isBlank
+            return
+        }
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
         }
-    }
-    
-    // MARK: - alert
-    
-    func alertUnfinishError(){
-        let msgTitle = "重新設定租屋雷達服務失敗"
-        let okButton = "知道了"
-        let subTitle = "很抱歉！設定租屋雷達服務無法成功！"
-        let alertView = SCLAlertView()
-        alertView.showCloseButton = false
-        
-        alertView.addButton("重新再試") {
-            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            if unfinishedTranscations.count > 0{
-                if AmazonClientManager.sharedInstance.isLoggedIn(){
-                    self.doUnfinishTransactions(unfinishedTranscations)
-                }
-            }
-        }
-        
-        alertView.addButton("取消") {
-            self.showConfigureRadarView()
-        }
-        
-        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     // MARK: - Loading
