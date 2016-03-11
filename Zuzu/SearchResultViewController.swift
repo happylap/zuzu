@@ -39,7 +39,8 @@ class SearchResultViewController: UIViewController {
         case ScrollDirectionCrazy
     }
     
-    private var alertViewResponder: SCLAlertViewResponder?
+    // MARK: - Private Fields
+    private static var alertViewResponder: SCLAlertViewResponder?
     
     private let filterSettingOnImage = UIImage(named: "filter_on_n")
     private let filterSettingNormalImage = UIImage(named: "filter_n")
@@ -56,7 +57,7 @@ class SearchResultViewController: UIViewController {
     
     private var duplicateHouseItem: HouseItem?
     
-    // MARK: - Member Fields
+    // MARK: - Public Fields
     
     @IBOutlet weak var filterSettingButton: UIButton!
     
@@ -269,7 +270,7 @@ class SearchResultViewController: UIViewController {
         if let error = error {
             // Initialize Alert View
             
-            if(self.alertViewResponder == nil) {
+            if(SearchResultViewController.alertViewResponder == nil) {
                 
                 let msgTitle = NSLocalizedString("unable_to_get_data.alert.title", comment: "")
                 let subTitle = NSLocalizedString("unable_to_get_data.alert.msg", comment: "")
@@ -278,10 +279,10 @@ class SearchResultViewController: UIViewController {
                 let alertView = SCLAlertView()
                 alertView.showCloseButton = true
                 
-                self.alertViewResponder = alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                SearchResultViewController.alertViewResponder = alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 
-                self.alertViewResponder?.setDismissBlock({ () -> Void in
-                    self.alertViewResponder = nil
+                SearchResultViewController.alertViewResponder?.setDismissBlock({ () -> Void in
+                    SearchResultViewController.alertViewResponder = nil
                 })
             }
             
