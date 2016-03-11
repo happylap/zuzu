@@ -162,6 +162,15 @@ class RadarViewController: UIViewController {
         MBProgressHUD.hideHUDForView(self.view, animated: true)
     }
     
+    
+    private func alertServerError(subTitle: String) {
+        
+        let alertView = SCLAlertView()
+        
+        alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
+    }
+    
     // MARK: - Purchase Radar
     
     @IBAction func activateButtonClick(sender: UIButton) {
@@ -257,13 +266,10 @@ extension RadarViewController{
                         vc.zuzuCriteria = zuzuCriteria // still old criteria
                         vc.showRadar()
                     }
+                    return
                 }
                 
-                if let vc = self.navigationController as? RadarNavigationController{
-                    zuzuCriteria.criteria = self.searchCriteria // new criteria
-                    vc.zuzuCriteria = zuzuCriteria
-                    vc.showRadar()
-                }
+                self.setCriteriaEnabled(zuzuCriteria, isEnabled:true)
                 
             }
         }
@@ -288,6 +294,26 @@ extension RadarViewController{
             }
         }
         Log.exit()
+    }
+    
+    func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria, isEnabled: Bool){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
+                criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                    self.stopLoading()
+                    if error != nil{
+                        //alert
+                        self.alertServerError("啟動租屋雷達服務失敗")
+                    }
+                    
+                    if let vc = self.navigationController as? RadarNavigationController{
+                        zuzuCriteria.criteria = self.searchCriteria // new criteria
+                        zuzuCriteria.enabled = isEnabled
+                        vc.zuzuCriteria = zuzuCriteria
+                        vc.showRadar()
+                    }
+            }
+        }
     }
 }
 

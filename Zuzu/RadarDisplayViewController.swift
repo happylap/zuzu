@@ -346,9 +346,8 @@ extension RadarDisplayViewController{
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
                     self.stopLoading()
-                    
                     if error != nil{
-                        self.alertServerError("暫時無法更新雷達狀態，請檢查您的裝置是否處於無網路狀態或飛航模式")
+                        self.alertServerError("啟動租屋雷達服務失敗")
                         self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
                     }else{
                         self.zuzuCriteria.enabled = isEnabled
