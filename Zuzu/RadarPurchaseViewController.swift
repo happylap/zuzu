@@ -90,7 +90,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             
             let freeTrialAlertView = SCLAlertView()
             
-            let subTitle = "確認現在兌換：\(product.localizedTitle)？"
+            let subTitle = "請問是否確認現在兌換：\(product.localizedTitle)？"
             
             freeTrialAlertView.addButton("馬上兌換", action: { () -> Void in
                 
