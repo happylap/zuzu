@@ -128,7 +128,23 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         } else {
                             
                             /// TODO: Start to make purchase with Zuzu Backend
+                            let productId = product.productIdentifier
+                            let price = product.price
+                            let purchase = ZuzuPurchase(transactionId:"", userId: userId, productId: productId, productPrice: price)
                             
+                            ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
+                                if error != nil{
+                                    Log.error("Fail to createPurchase for product: \(productId)")
+                                    if let handler = self.completePurchaseHandler{
+                                        handler(isSuccess: false, error: NSError(domain: "設定租屋雷達服務交易失敗", code: -1, userInfo: nil))
+                                    }
+                                    return
+                                }
+                                
+                                if let handler = self.completePurchaseHandler{
+                                    handler(isSuccess: true, error: nil)
+                                }
+                            }
                         }
                         
                     })
@@ -316,7 +332,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
             if error != nil{
                 Log.error("create purchase error")
                 if let handler = self.completePurchaseHandler{
-                    handler(isSuccess: false, error: NSError(domain: "設定雷達服務交易失敗", code: -1, userInfo: nil))
+                    handler(isSuccess: false, error: NSError(domain: "設定租屋雷達服務交易失敗", code: -1, userInfo: nil))
                 }
                 return
             }
