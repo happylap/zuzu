@@ -140,7 +140,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     }
                                     return
                                 }
-                                
+
+                                self.dismissViewControllerAnimated(true, completion: nil)
                                 if let handler = self.completePurchaseHandler{
                                     handler(isSuccess: true, error: nil)
                                 }
@@ -325,6 +326,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
 extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
+        dismissViewControllerAnimated(true, completion: nil)
         Log.debug("\(transaction.transactionIdentifier)")
         RadarService.sharedInstance.createPurchase(transaction){
             (result: String?, error: NSError?) -> Void in
@@ -346,6 +348,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     }
     
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
+        dismissViewControllerAnimated(true, completion: nil)
         Log.debug("\(transaction.transactionIdentifier)")
         if let handler = self.completePurchaseHandler{
             handler(isSuccess: false, error: NSError(domain: "購買雷達服務交易失敗", code: -1, userInfo: nil))
