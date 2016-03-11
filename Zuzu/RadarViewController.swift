@@ -159,10 +159,12 @@ class RadarViewController: UIViewController {
     }
     
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
+        Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
         self.startLoadingText("重新設定租屋雷達服務...")
         self.performFinishTransactions()
+        Log.exit()
     }
     
     func performFinishTransactions(){
@@ -197,9 +199,11 @@ class RadarViewController: UIViewController {
     }
     
     func transactionDone(){
+        Log.enter()
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
         self.stopLoadingText()
+        Log.exit()
     }
     
 
@@ -324,6 +328,7 @@ extension RadarViewController{
     }
     
     func completePurchaseHandler(isSuccess:Bool, error: NSError?) -> Void{
+        Log.debug("isSuccess: \(isSuccess), error: \(error)")
         self.tabBarController?.tabBarHidden = false
         if error != nil{
             return
@@ -332,14 +337,17 @@ extension RadarViewController{
     }
     
     func unfinishedTransactionHandler() -> Void{
+        Log.enter()
         self.tabBarController?.tabBarHidden = false
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
         }
+        Log.exit()
     }
     
     func setUpCriteria(){
+        Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             self.startLoading()
             ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
@@ -358,9 +366,11 @@ extension RadarViewController{
                 
             }
         }
+        Log.exit()
     }
     
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
+        Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
                 
@@ -377,10 +387,11 @@ extension RadarViewController{
                 
             }
         }
-        
+        Log.exit()
     }
     
     func createCriteria(){
+        Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.searchCriteria){
                 (result, error) -> Void in
@@ -395,6 +406,7 @@ extension RadarViewController{
                 }
             }
         }
+        Log.exit()
     }
 }
 
