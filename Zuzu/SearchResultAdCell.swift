@@ -34,18 +34,21 @@ class SearchResultAdCell: UITableViewCell {
             dispatch_after(delayInNanoSeconds, dispatch_get_main_queue()) {
                 Log.enter()
                 let request = GADRequest()
-                request.testDevices = self.testDevice
+                //request.testDevices = self.testDevice
                 self.bannerView.loadRequest(request)
             }
         }
     }
     
     func setupBanner(controller: SearchResultViewController) {
-        //Test adUnit
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         
-        //Real adUnit
-        //bannerView.adUnitID = "ca-app-pub-7083975197863528/3785388890"
+        #if DEBUG
+            //Test adUnit
+            bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        #else
+            //Real adUnit
+            bannerView.adUnitID = "ca-app-pub-7083975197863528/3785388890"
+        #endif
         
         bannerView.rootViewController = controller
         bannerView.delegate = self
