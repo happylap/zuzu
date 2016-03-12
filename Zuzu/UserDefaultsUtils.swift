@@ -43,7 +43,7 @@ struct UserDefaultsUtils{
         return userDefaults.stringForKey(zuzuUserIdUserDefaultKey)
     }
     
-    // Free Trial
+    // Free Trial (Need to be cleared when switching users)
     static func setUsedFreeTrial(productIdentifier: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setInteger(1, forKey: productIdentifier)
@@ -54,6 +54,11 @@ struct UserDefaultsUtils{
         let status = userDefaults.integerForKey(productIdentifier)
         
         return (status >= 1)
+    }
+    
+    static func clearUsedFreeTrial(productIdentifier: String){
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(productIdentifier)
     }
     
     // MARK: Login

@@ -556,6 +556,9 @@ class AmazonClientManager : NSObject {
             self.googleLogout()
         }
         
+        // Clear free trial history
+        UserDefaultsUtils.clearUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+        
         // Clear current user profile
         UserDefaultsUtils.clearUserProfile()
         

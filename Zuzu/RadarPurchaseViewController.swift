@@ -61,6 +61,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // Fetch the products from iTunes connect, redisplay the table on successful completion
     private func loadProducts() {
         
+        self.products.removeAll()
+        
         ZuzuStore.sharedInstance.requestProducts { success, products in
             
             /// Provide free trial whether there are products from AppStroe or not
@@ -123,7 +125,12 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             
                             Log.debug("Free trial already activated")
                             
-                            SCLAlertView().showInfo("您已經試用過此服務", subTitle: "若覺得滿意我們的服務，可以考慮購買正式服務，讓您輕鬆找租屋。豬豬快租非常感謝您的支持！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                            /// The free trial is activated successfully
+                            UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                            
+                            SCLAlertView().showInfo("您已經試用過此服務", subTitle: "若覺得滿意我們的服務，可以考慮購買正式服務，讓您輕鬆找租屋。豬豬快租非常感謝您的支持！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock({ () -> Void in
+                                self.loadProducts()
+                            })
                             
                         } else {
                             
@@ -140,7 +147,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     }
                                     return
                                 }
-
+                                
+                                /// The free trial is activated successfully 
+                                UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                                
                                 self.dismissViewControllerAnimated(true, completion: nil)
                                 if let handler = self.completePurchaseHandler{
                                     handler(isSuccess: true, error: nil)
@@ -304,6 +314,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         } else {
             cell.textLabel?.text = product.localizedTitle
             button.setTitle("購買", forState: .Normal)
+            cell.textLabel?.textColor = UIColor.blackColor()
             
             if(!ZuzuStore.canMakePayments()) {
                 button.enabled = false
