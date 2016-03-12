@@ -578,15 +578,11 @@
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tQY-Zr-6Ob">
-                                                                                <rect key="frame" x="171.5" y="-6" width="376.5" height="32"/>
+                                                                                <rect key="frame" x="516" y="-6" width="32" height="32"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                                 <state key="normal" title="購買"/>
                                                                                 <userDefinedRuntimeAttributes>
                                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                                        <integer key="value" value="25"/>
-                                                                                    </userDefinedRuntimeAttribute>
-                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                                                 </userDefinedRuntimeAttributes>
                                                                                 <connections>
                                                                                     <action selector="onServiceButtonTapped:" destination="bGU-pi-D72" eventType="touchUpInside" id="w1Y-1H-Ydx"/>
@@ -595,10 +591,13 @@
                                                                         </subviews>
                                                                         <constraints>
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" id="D60-cb-L03"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="tQY-Zr-6Ob" secondAttribute="trailing" constant="20" symbolic="YES" id="EHi-hL-Kso"/>
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" id="KUf-jQ-IgV"/>
+                                                                            <constraint firstItem="tQY-Zr-6Ob" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="171.5" id="OaP-z1-iaH"/>
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="top" secondItem="ddn-jE-7Zf" secondAttribute="top" id="PwA-k6-VaX"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" id="RFJ-O2-Qof"/>
                                                                             <constraint firstAttribute="bottom" secondItem="3ea-9P-KAv" secondAttribute="bottom" id="TUI-iU-2X5"/>
+                                                                            <constraint firstItem="tQY-Zr-6Ob" firstAttribute="leading" secondItem="R0d-9F-apP" secondAttribute="trailing" constant="8" symbolic="YES" id="czV-wc-Hbn"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="centerY" secondItem="R0d-9F-apP" secondAttribute="centerY" id="dio-21-trU"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="centerX" secondItem="R0d-9F-apP" secondAttribute="centerX" id="gb6-jM-tMx"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="top" secondItem="ddn-jE-7Zf" secondAttribute="top" id="hHT-17-SgH"/>
@@ -609,8 +608,12 @@
                                                                         <variation key="default">
                                                                             <mask key="constraints">
                                                                                 <exclude reference="D60-cb-L03"/>
+                                                                                <exclude reference="OaP-z1-iaH"/>
+                                                                                <exclude reference="czV-wc-Hbn"/>
                                                                                 <exclude reference="gb6-jM-tMx"/>
                                                                                 <exclude reference="hHT-17-SgH"/>
+                                                                                <exclude reference="lri-ON-xBR"/>
+                                                                                <exclude reference="yDL-gF-YZe"/>
                                                                             </mask>
                                                                         </variation>
                                                                     </view>

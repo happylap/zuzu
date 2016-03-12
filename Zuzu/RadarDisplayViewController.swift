@@ -66,6 +66,7 @@ class RadarDisplayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.serviceButton?.hidden = true
         self.serviceStatusLabel?.text = ""
         self.serviceExpireLabel?.text = ""
         self.configureButton()
@@ -96,9 +97,15 @@ class RadarDisplayViewController: UIViewController {
                     self.serviceStatusLabel?.text = "您的租屋雷達服務還有\(days)天又\(hours)小時"
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
+                    self.criteriaEnableSwitch?.on = false
+                    self.criteriaEnableSwitch?.enabled = false
+                    self.serviceButton?.hidden = false
                 }
             }else{
                 self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
+                self.criteriaEnableSwitch?.on = false
+                self.criteriaEnableSwitch?.enabled = false
+                self.serviceButton?.hidden = false
             }
             
             // expiration date
@@ -142,16 +149,6 @@ class RadarDisplayViewController: UIViewController {
         modifyButtoon
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
         modifyButtoon
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
-        
-        serviceButton.layer.borderWidth = 1
-        serviceButton.layer.borderColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-        serviceButton.tintColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        serviceButton
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
-        serviceButton
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
     
@@ -223,7 +220,7 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    // MARK: - Enable radar
+    // MARK: - Actions
     
     @IBAction func enableCriteria(sender: UISwitch) {
         let isEnabled = sender.on
@@ -240,6 +237,15 @@ class RadarDisplayViewController: UIViewController {
         
         sender.on = !isEnabled
         
+        self.showPurchase()
+    }
+    
+    @IBAction func onServiceButtonTapped(sender: AnyObject) {
+        
+        self.showPurchase()
+    }
+    
+    func showPurchase(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
             ///Hide tab bar
@@ -252,11 +258,8 @@ class RadarDisplayViewController: UIViewController {
             
             presentViewController(vc, animated: true, completion: nil)
         }
-  
     }
     
-    @IBAction func onServiceButtonTapped(sender: AnyObject) {
-    }
     // MARK: - alert
     
     private func alertServerError(subTitle: String) {
@@ -266,6 +269,8 @@ class RadarDisplayViewController: UIViewController {
         alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         
     }
+    
+
     
     // MARK: - Loading
     
