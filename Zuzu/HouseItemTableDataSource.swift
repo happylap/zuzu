@@ -136,7 +136,11 @@ public class HouseItemTableDataSource {
     }
     
     func getItemForRow(row:Int) -> HouseItem{
-        return cachedData[row] //index within memory cache
+        if(row > 0 && row < cachedData.count) {
+            return cachedData[row] //index within memory cache
+        } else {
+            assert(false, "Cannot access house item: \(row). Total count: \(cachedData.count)")
+        }
     }
     
     func getSize() -> Int{
