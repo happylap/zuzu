@@ -789,7 +789,7 @@ class SearchResultViewController: UIViewController {
         Log.debug("\(self) [[viewWillAppear]]")
         
         ///Hide tab bar
-        self.tabBarController!.tabBarHidden = true
+        self.tabBarController?.tabBarHidden = true
         
         //Update Smart Filter State to sync with the setting in Advanced setting UI
         updateSmartFilterState()

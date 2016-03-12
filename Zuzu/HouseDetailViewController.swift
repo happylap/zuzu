@@ -1164,7 +1164,7 @@ class HouseDetailViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         ///Display tab bar
-        self.tabBarController!.tabBarHidden = false
+        self.tabBarController?.tabBarHidden = false
         
         LoadingSpinner.shared.stop()
     }

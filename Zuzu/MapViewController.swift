@@ -68,7 +68,7 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         
         ///Hide tab bar
-        self.tabBarController!.tabBarHidden = true
+        self.tabBarController?.tabBarHidden = true
         
         ///Google Analytics Tracker
         self.trackScreen()
@@ -78,7 +78,7 @@ class MapViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         ///Display tab bar
-        self.tabBarController!.tabBarHidden = false
+        self.tabBarController?.tabBarHidden = false
     }
     
     override func didReceiveMemoryWarning() {

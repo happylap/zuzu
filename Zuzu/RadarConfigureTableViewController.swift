@@ -631,7 +631,7 @@ class RadarConfigureTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         //Restore hidden tab bar before apeearing
-        self.tabBarController!.tabBarHidden = false
+        self.tabBarController?.tabBarHidden = false
         
     }
     

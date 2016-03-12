@@ -121,7 +121,7 @@ class CityRegionContainerController: UIViewController {
         Log.debug("viewWillAppear: \(self)")
         
         ///Hide tab bar
-        self.tabBarController!.tabBarHidden = true
+        self.tabBarController?.tabBarHidden = true
         
         //Google Analytics Tracker
         self.trackScreen()

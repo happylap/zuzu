@@ -1058,7 +1058,7 @@ class SearchBoxTableViewController: UITableViewController {
         }
         
         //Restore hidden tab bar before apeearing
-        self.tabBarController!.tabBarHidden = false
+        self.tabBarController?.tabBarHidden = false
         
         //Configure location manager
         locationManager.delegate = self

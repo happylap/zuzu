@@ -378,7 +378,7 @@ extension RadarViewController{
     }
     
     func cancelLoginHandler() -> Void{
-        self.tabBarController!.tabBarHidden = false
+        self.tabBarController?.tabBarHidden = false
     }
     
     func loginForUnfinishTransactions(){
@@ -386,7 +386,7 @@ extension RadarViewController{
             return
         }
         
-        self.tabBarController!.tabBarHidden = true
+        self.tabBarController?.tabBarHidden = true
         AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, cancelHandler: self.cancelLoginHandler, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
     }
     
