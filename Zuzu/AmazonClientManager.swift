@@ -102,9 +102,6 @@ class AmazonClientManager : NSObject {
                     
                     return self.googleSignIn.currentUser?.authentication?.idToken
                     
-                default:
-                    assert(false, "Invalid Provider")
-                    return nil
                 }
             } else {
                 
@@ -530,8 +527,6 @@ class AmazonClientManager : NSObject {
                 } else {
                     Log.error("Reloading Google Session: Failure")
                 }
-            default:
-                assert(false, "Invalid Provider")
             }
         } else {
             
@@ -1037,7 +1032,7 @@ extension AmazonClientManager: GIDSignInDelegate {
                 
                 // Perform any operations on signed in user here.
                 
-                if let idToken = user.authentication.idToken { // Safe to send to the server
+                if let _ = user.authentication.idToken { // Safe to send to the server
                     
                     //Save Google User Data
                     let userProfile = UserProfile(provider: Provider.GOOGLE)

@@ -242,8 +242,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
                 (task: AWSTask!) -> AnyObject! in
                 
-                if let error = task.error{
-                    Log.warning("Login Failed")
+                if let error = task.error {
+                    Log.warning("Login Failed: \(error)")
                     return nil
                 }
                 self.runOnMainThread({ () -> Void in

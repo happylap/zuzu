@@ -215,7 +215,7 @@ class HouseDao: NSObject {
         /* Extra Benefits */
         let furniture = data["furniture"].arrayObject as? [Int] ?? [Int]()
         let facility = data["facility"].arrayObject as? [Int] ?? [Int]()
-        let surrounding = data["surrounding"].arrayObject as? [Int] ?? [Int]()
+        let _ = data["surrounding"].arrayObject as? [Int] ?? [Int]()
         let nearbyBus = data["nearby_bus"].stringValue
         let nearbyTrain = data["nearby_train"].stringValue
         let nearbyMrt = data["nearby_mrt"].stringValue

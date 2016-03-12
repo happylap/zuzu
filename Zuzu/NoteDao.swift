@@ -96,9 +96,7 @@ class NoteDao: NSObject {
         
         if let result = self.getNoteListByHouseId(houseId) {
             for item in result {
-                if let obj: NSManagedObject = item as? NSManagedObject {
-                    CoreDataManager.shared.deleteEntity(obj)
-                }
+                CoreDataManager.shared.deleteEntity(item)
             }
             CoreDataManager.shared.save()
         }

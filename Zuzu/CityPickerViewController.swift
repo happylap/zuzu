@@ -145,7 +145,7 @@ extension CityPickerViewController: UIPickerViewDelegate {
         pickerView.partLabel.text = (partOfTaiwan == nil ? "" : partOfTaiwan!)
         
         /// Determin city title
-        var cityTitle = city.name
+        let cityTitle = city.name
         var selectionStatus = ""
         
         if let regionSelectionState = regionSelectionState {

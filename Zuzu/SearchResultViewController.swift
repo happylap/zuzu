@@ -1007,7 +1007,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
             return
         }
         
-        if let duplicates = houseItem.children {
+        if let _ = houseItem.children {
             self.runOnMainThreadAfter(0.1, block: { () -> Void in
                 self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
             })
