@@ -45,6 +45,8 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var modifyButtoon: UIButton!
     
+    @IBOutlet weak var serviceButton: UIButton!
+    
     var zuzuService: ZuzuServiceMapper?{
         didSet{
             self.updateServiceUI()

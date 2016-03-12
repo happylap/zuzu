@@ -376,8 +376,8 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="36N-BY-w6f" userLabel="CriteriaBannerView">
                                                                 <rect key="frame" x="0.0" y="0.0" width="584" height="43"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="60w-GP-foy">
-                                                                        <rect key="frame" x="16" y="4.5" width="548" height="34"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="60w-GP-foy">
+                                                                        <rect key="frame" x="16" y="5" width="548" height="33"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                         <nil key="highlightedColor"/>
                                                                         <userDefinedRuntimeAttributes>
@@ -411,7 +411,7 @@
                                                                 </constraints>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wkD-W0-Nni" userLabel="regionLabel">
-                                                                <rect key="frame" x="20" y="48.5" width="564" height="19.5"/>
+                                                                <rect key="frame" x="20" y="49" width="564" height="19.5"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="20" id="j9n-Yg-JTa"/>
                                                                 </constraints>
@@ -428,7 +428,7 @@
                                                                 </variation>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="整層住家, 20000 - 25000元, 20 - 30坪" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkN-Xn-yd1" userLabel="houseInfoLabel">
-                                                                <rect key="frame" x="20" y="72.5" width="564" height="16"/>
+                                                                <rect key="frame" x="20" y="73" width="564" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -437,7 +437,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不限坪數" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uHP-bL-3Pa" userLabel="priceSizeLabel">
-                                                                <rect key="frame" x="20" y="92.5" width="564" height="16"/>
+                                                                <rect key="frame" x="20" y="93" width="564" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -446,7 +446,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="其他6個過濾條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zpG-ZY-Ugx" userLabel="otherCriteriaLabel">
-                                                                <rect key="frame" x="20" y="112.5" width="564" height="16"/>
+                                                                <rect key="frame" x="20" y="113" width="564" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -455,10 +455,10 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZRq-hq-1aB">
-                                                                <rect key="frame" x="0.0" y="132.5" width="584" height="207.5"/>
+                                                                <rect key="frame" x="0.0" y="133" width="584" height="206.5"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
-                                                                        <rect key="frame" x="111" y="65.5" width="362.5" height="78"/>
+                                                                        <rect key="frame" x="111" y="64" width="362.5" height="78"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="nQm-xW-OQB" secondAttribute="height" multiplier="930:200" id="ZwC-dy-Vo8"/>
                                                                         </constraints>
@@ -560,7 +560,7 @@
                                                                         <rect key="frame" x="8" y="8" width="568" height="139"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您的通知服務還有29天" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R0d-9F-apP" userLabel="serviceStatusLabel">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="568" height="19.5"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="19.5"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -577,6 +577,18 @@
                                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tQY-Zr-6Ob">
+                                                                                <rect key="frame" x="171.5" y="-6" width="376.5" height="32"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                                                <state key="normal" title="購買"/>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="autoScaleRadious">
+                                                                                        <integer key="value" value="25"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </button>
                                                                         </subviews>
                                                                         <constraints>
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" id="D60-cb-L03"/>
@@ -584,8 +596,20 @@
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="top" secondItem="ddn-jE-7Zf" secondAttribute="top" id="PwA-k6-VaX"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" id="RFJ-O2-Qof"/>
                                                                             <constraint firstAttribute="bottom" secondItem="3ea-9P-KAv" secondAttribute="bottom" id="TUI-iU-2X5"/>
+                                                                            <constraint firstItem="tQY-Zr-6Ob" firstAttribute="centerY" secondItem="R0d-9F-apP" secondAttribute="centerY" id="dio-21-trU"/>
+                                                                            <constraint firstItem="tQY-Zr-6Ob" firstAttribute="centerX" secondItem="R0d-9F-apP" secondAttribute="centerX" id="gb6-jM-tMx"/>
+                                                                            <constraint firstItem="tQY-Zr-6Ob" firstAttribute="top" secondItem="ddn-jE-7Zf" secondAttribute="top" id="hHT-17-SgH"/>
+                                                                            <constraint firstItem="tQY-Zr-6Ob" firstAttribute="leading" secondItem="R0d-9F-apP" secondAttribute="trailing" constant="8" symbolic="YES" id="lri-ON-xBR"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="tQY-Zr-6Ob" secondAttribute="trailing" constant="20" symbolic="YES" id="yDL-gF-YZe"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" id="z3q-ql-q1F"/>
                                                                         </constraints>
+                                                                        <variation key="default">
+                                                                            <mask key="constraints">
+                                                                                <exclude reference="D60-cb-L03"/>
+                                                                                <exclude reference="gb6-jM-tMx"/>
+                                                                                <exclude reference="hHT-17-SgH"/>
+                                                                            </mask>
+                                                                        </variation>
                                                                     </view>
                                                                 </subviews>
                                                                 <constraints>
@@ -815,6 +839,7 @@
                         <outlet property="priceSizeLabel" destination="uHP-bL-3Pa" id="kvA-QI-JJZ"/>
                         <outlet property="purchaseTableView" destination="kzV-PJ-lR5" id="IKU-GQ-xsh"/>
                         <outlet property="regionLabel" destination="wkD-W0-Nni" id="cVX-6v-SN5"/>
+                        <outlet property="serviceButton" destination="tQY-Zr-6Ob" id="EmM-yN-2f3"/>
                         <outlet property="serviceExpireLabel" destination="3ea-9P-KAv" id="kuU-EK-Y2I"/>
                         <outlet property="serviceStatusLabel" destination="R0d-9F-apP" id="OJa-EX-5Vz"/>
                         <outlet property="servieBannerLabel" destination="QMV-ev-uwx" id="itO-I6-7AC"/>
