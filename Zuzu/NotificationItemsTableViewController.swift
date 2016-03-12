@@ -137,7 +137,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             return
         }
         
-        if let userId = UserDefaultsUtils.getZuzuUserId(){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if showSpinner == true{
                 LoadingSpinner.shared.setImmediateAppear(true)
                 LoadingSpinner.shared.setOpacity(0.3)
@@ -174,7 +174,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             return
         }
-        if let userId = UserDefaultsUtils.getZuzuUserId(){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id){
                 (result, error) -> Void in
             }

@@ -12,7 +12,6 @@ struct UserDefaultsUtils{
         
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
-    static let zuzuUserIdUserDefaultKey = "zuzuUserData"
 
     static func setRadarLandindPageDisplayed() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -26,21 +25,6 @@ struct UserDefaultsUtils{
         } else {
             return true
         }
-    }
-
-    static func clearZuzuUserId() {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey(zuzuUserIdUserDefaultKey)
-    }
-    
-    static func setZuzuUserId(userId: String) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(userId, forKey: zuzuUserIdUserDefaultKey)
-    }
-    
-    static func getZuzuUserId() -> String?{
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.stringForKey(zuzuUserIdUserDefaultKey)
     }
     
     // Free Trial (Need to be cleared when switching users)
