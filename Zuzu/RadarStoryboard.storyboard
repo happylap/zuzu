@@ -583,11 +583,14 @@
                                                                                 <state key="normal" title="購買"/>
                                                                                 <userDefinedRuntimeAttributes>
                                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="autoScaleRadious">
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                                         <integer key="value" value="25"/>
                                                                                     </userDefinedRuntimeAttribute>
                                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                                                 </userDefinedRuntimeAttributes>
+                                                                                <connections>
+                                                                                    <action selector="onServiceButtonTapped:" destination="bGU-pi-D72" eventType="touchUpInside" id="w1Y-1H-Ydx"/>
+                                                                                </connections>
                                                                             </button>
                                                                         </subviews>
                                                                         <constraints>

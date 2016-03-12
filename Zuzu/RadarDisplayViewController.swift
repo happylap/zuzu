@@ -143,6 +143,16 @@ class RadarDisplayViewController: UIViewController {
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
         modifyButtoon
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
+        
+        serviceButton.layer.borderWidth = 1
+        serviceButton.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        serviceButton.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        serviceButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
+        serviceButton
+            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
     
     private func configureBannerText(){
@@ -245,6 +255,8 @@ class RadarDisplayViewController: UIViewController {
   
     }
     
+    @IBAction func onServiceButtonTapped(sender: AnyObject) {
+    }
     // MARK: - alert
     
     private func alertServerError(subTitle: String) {
