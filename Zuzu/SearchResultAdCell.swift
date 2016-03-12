@@ -16,7 +16,7 @@ private let Log = Logger.defaultLogger
 
 class SearchResultAdCell: UITableViewCell {
     
-    private let testDevice = ["a78e7dfcf98d255d2c1d107bb5e96449"]
+    private let testDevice = ["a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7"]
     
     var bannerView: GADBannerView = GADBannerView()
     
@@ -34,7 +34,7 @@ class SearchResultAdCell: UITableViewCell {
             dispatch_after(delayInNanoSeconds, dispatch_get_main_queue()) {
                 Log.enter()
                 let request = GADRequest()
-                //request.testDevices = self.testDevice
+                request.testDevices = self.testDevice
                 self.bannerView.loadRequest(request)
             }
         }
