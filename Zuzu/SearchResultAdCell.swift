@@ -16,7 +16,7 @@ private let Log = Logger.defaultLogger
 
 class SearchResultAdCell: UITableViewCell {
     
-    private let testDevice = ["a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "9fb7611b1b5d7b16fa1ae16a0bd28752a569d4af"]
+    private let testDevice = ["a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "6889c4bd976a58bd447f1e7eab997323"]
     
     var bannerView: GADBannerView = GADBannerView()
     
