@@ -101,27 +101,33 @@ class RadarService : NSObject {
         let types = criteria.types
         let size = criteria.size
         
-        if region == nil {
-             SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇通知條件地區", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            return false
+        var subTitle = ""
+        
+        if region == nil || region?.count<=0{
+            subTitle  =  "\(subTitle)\n地區"
         }
         
-        if types == nil{
-             SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇用途", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            return false
+        if types == nil || types?.count<=0{
+            subTitle  =  "\(subTitle)\n用途"
         }
 
         if price == nil{
-             SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇租金範圍", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            return false
+            subTitle  =  "\(subTitle)\n租金範圍"
         }
         
         if size == nil{
-            SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇坪數範圍", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            return false
+            subTitle  =  "\(subTitle)\n坪數範圍"
         }
         
-        return true
+        if subTitle == ""{
+            return true
+        }
+        
+        subTitle = "尚未設定以下條件:\(subTitle)"
+        
+        SCLAlertView().showInfo("設定雷達條件", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        
+        return false
         
     }
 }
