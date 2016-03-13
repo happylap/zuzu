@@ -410,20 +410,15 @@ extension RadarDisplayViewController{
     }
     
     func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
-        self.stopLoading()
-        if error != nil{
-            self.alertServiceError("目前可能處於飛航模式或是無網路狀態，暫時無法取得租屋雷達服務狀態")
-            return
+        self.runOnMainThread(){
+            self.stopLoading()
+            if error != nil{
+                Log.error("get radar service error")
+                return
+            }
+            
+            self.zuzuService = result
         }
-        
-        self.zuzuService = result
-
-    }
-    
-    func alertServiceError(subTitle: String) {
-        let alertView = SCLAlertView()
-        alertView.showInfo("無法取得雷達服務狀態", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-        
     }
 }
 
