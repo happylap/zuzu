@@ -37,6 +37,7 @@
 		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; };
 		2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */; };
 		2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */; };
+		2F1DC9A31C9573DF00F0ADAD /* PieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DC9A21C9573DF00F0ADAD /* PieChartViewController.swift */; };
 		2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F276B2E1BBE989E00A41306 /* DataPersistence.swift */; };
 		2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */; };
 		2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31F5081BBF7B6400054355 /* MainTabViewController.swift */; };
@@ -208,6 +209,7 @@
 		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GAExtensions.swift; sourceTree = "<group>"; };
 		2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GAConst.swift; sourceTree = "<group>"; };
+		2F1DC9A21C9573DF00F0ADAD /* PieChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartViewController.swift; sourceTree = "<group>"; };
 		2F276B2E1BBE989E00A41306 /* DataPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPersistence.swift; sourceTree = "<group>"; };
 		2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterSettingDataStore.swift; sourceTree = "<group>"; };
 		2F31F5081BBF7B6400054355 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
@@ -632,6 +634,7 @@
 			isa = PBXGroup;
 			children = (
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
+				2F1DC9A21C9573DF00F0ADAD /* PieChartViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -991,6 +994,7 @@
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
 				1486A42A1C630CB800A6F7CA /* RadarDisplayViewController.swift in Sources */,
 				14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */,
+				2F1DC9A31C9573DF00F0ADAD /* PieChartViewController.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				810081D21C8E653100659BE2 /* ZuzuServiceMapper.swift in Sources */,
