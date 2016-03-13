@@ -231,6 +231,15 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
 extension RadarViewController{
     func cancelPurchaseHandler() -> Void{
         self.tabBarController?.tabBarHidden = false
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                self.runOnMainThread(){
+                    if let vc = self.navigationController as? RadarNavigationController{
+                        vc.showRadar()
+                    }
+                }
+            }
+        }
     }
     
     func completePurchaseHandler(isSuccess:Bool, error: NSError?) -> Void{
