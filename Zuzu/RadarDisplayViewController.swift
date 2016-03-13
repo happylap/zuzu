@@ -85,6 +85,7 @@ class RadarDisplayViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
                 vc.showRadar()
@@ -289,17 +290,6 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    // MARK: - alert
-    
-    private func alertServerError(subTitle: String) {
-        
-        let alertView = SCLAlertView()
-        
-        alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-        
-    }
-    
-
     
     // MARK: - Loading
     
@@ -331,17 +321,9 @@ class RadarDisplayViewController: UIViewController {
 // MARK: - RadarViewControllerDelegate
 extension RadarDisplayViewController : RadarViewControllerDelegate {
     func onCriteriaSettingDone(searchCriteria:SearchCriteria){
-        ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(zuzuCriteria.userId!, criteriaId: zuzuCriteria.criteriaId!, criteria: searchCriteria) { (result, error) -> Void in
-            if error != nil{
-                self.alertServerError("暫時無法更新雷達設定，請檢查您的裝置是否處於無網路狀態或飛航模式")
-                return
-            }
-            
-            self.zuzuCriteria.criteria = searchCriteria
-            self.updateCriteriaTextLabel()
-        }
+        self.zuzuCriteria.criteria = searchCriteria
+        self.updateCriteriaTextLabel()
     }
-    
 }
 
 // MARK: - Purchase Radar Callback
@@ -358,7 +340,6 @@ extension RadarDisplayViewController{
             return
         }
         
-        self.startLoading()
         self.updateCriteria()
     }
     
@@ -374,16 +355,20 @@ extension RadarDisplayViewController{
     
     func updateCriteria(){
         Log.enter()
-
+        
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: self.zuzuCriteria.criteriaId!, criteria: self.zuzuCriteria.criteria!) { (result, error) -> Void in
-
-                if error != nil{
-                    //alert
-                }
                 
-                self.setCriteriaEnabled(true)
-                //alert for success
+                self.runOnMainThread(){
+                    self.stopLoading()
+                    if error != nil{
+                        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
+                    }else{
+                        self.setCriteriaEnabled(true)
+                    }
+                }
             }
         }
         Log.exit()
@@ -391,14 +376,19 @@ extension RadarDisplayViewController{
     
     func setCriteriaEnabled(isEnabled: Bool){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
-                    self.stopLoading()
-                    if error != nil{
-                        self.alertServerError("啟動租屋雷達服務失敗")
-                        self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
-                    }else{
+                    self.runOnMainThread(){
+                        self.stopLoading()
+                        if error != nil{
+                            SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "啟動雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
+                            return
+                        }
+                        
                         self.zuzuCriteria.enabled = isEnabled
+                        SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經啟用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                     }
             }
         }
