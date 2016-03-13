@@ -174,6 +174,10 @@ class RadarViewController: UIViewController {
     // MARK: - Purchase Radar
     
     @IBAction func activateButtonClick(sender: UIButton) {
+        if RadarService.sharedInstance.checkCriteria(self.searchCriteria) == false{
+           return
+        }
+        
         if self.hasValidService == true{
             self.setUpCriteria()
             return
