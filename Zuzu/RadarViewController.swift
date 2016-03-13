@@ -288,10 +288,13 @@ extension RadarViewController{
                 
                 if error != nil{
                     //alert
-                    if let vc = self.navigationController as? RadarNavigationController{
-                        vc.zuzuCriteria = zuzuCriteria // still old criteria
-                        vc.showRadar()
+                    self.runOnMainThread(){
+                        if let vc = self.navigationController as? RadarNavigationController{
+                            vc.zuzuCriteria = zuzuCriteria // still old criteria
+                            vc.showRadar()
+                        }
                     }
+
                     return
                 }
                 
@@ -314,9 +317,12 @@ extension RadarViewController{
                     return
                 }
                 
-                if let vc = self.navigationController as? RadarNavigationController{
-                    vc.showRadar()
+                self.runOnMainThread(){
+                    if let vc = self.navigationController as? RadarNavigationController{
+                        vc.showRadar()
+                    }
                 }
+
             }
         }
         Log.exit()

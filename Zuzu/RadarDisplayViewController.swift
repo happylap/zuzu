@@ -367,7 +367,7 @@ extension RadarDisplayViewController{
         self.tabBarController?.tabBarHidden = false
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
-            //self.doUnfinishTransactions(unfinishedTranscations)
+            self.doUnfinishTransactions(unfinishedTranscations)
         }
         Log.exit()
     }
