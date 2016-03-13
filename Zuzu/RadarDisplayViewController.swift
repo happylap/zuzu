@@ -408,10 +408,5 @@ extension RadarDisplayViewController{
         alertView.showInfo("無法取得雷達服務狀態", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         
     }
-    
-    func alertService(subTitle: String){
-        let alertView = SCLAlertView()
-        alertView.showInfo("雷達服務已設定完成", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-    }
 }
 
