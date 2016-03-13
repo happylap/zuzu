@@ -37,6 +37,7 @@ pod 'SCLAlertView', '0.4.3'
 pod 'SDWebImage', '3.7.3'
 pod 'UICKeyChainStore', '2.0.7'
 pod 'XCGLogger', '3.2'
+pod 'Charts', '2.2.3'
 end
 
 target 'ZuzuTests' do
