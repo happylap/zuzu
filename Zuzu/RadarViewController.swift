@@ -25,6 +25,10 @@ class RadarViewController: UIViewController {
     
     var hasValidService = false
     
+    var displayRadarViewController: RadarDisplayViewController?
+    
+    var delegate: RadarViewControllerDelegate?
+    
     @IBOutlet weak var radarBannerLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
     
@@ -40,7 +44,6 @@ class RadarViewController: UIViewController {
         static let showRegionConfigureTable:String = "showRegionConfigureTable"
     }
     
-    var delegate: RadarViewControllerDelegate?
     var searchCriteria = SearchCriteria(){
         didSet{
             updateCriteriaTextLabel()
@@ -53,22 +56,18 @@ class RadarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.isUpdateMode == true{
-            self.activateButton.hidden = true
-            self.activateButton.enabled = false
+            self.activateButton.setTitle("設定完成", forState: .Normal)
         }
         
         self.updateCriteriaTextLabel()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
         self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-        
         self.configureButton()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if self.isUpdateMode == true{
-            return
-        }
+        
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
@@ -78,15 +77,6 @@ class RadarViewController: UIViewController {
             }
         }else{
             self.checkService()
-        }
-    }
-    
-    override func willMoveToParentViewController(parent: UIViewController?) {
-        super.willMoveToParentViewController(parent)
-        
-        if(parent == nil) {
-            /// Filter Setting Finished
-            self.delegate?.onCriteriaSettingDone(searchCriteria)
         }
     }
     
@@ -174,6 +164,15 @@ class RadarViewController: UIViewController {
     // MARK: - Purchase Radar
     
     @IBAction func activateButtonClick(sender: UIButton) {
+        if RadarService.sharedInstance.checkCriteria(self.searchCriteria) == false{
+           return
+        }
+        
+        if self.isUpdateMode == true{
+            self.updateCriteria()
+            return
+        }
+        
         if self.hasValidService == true{
             self.setUpCriteria()
             return
@@ -190,6 +189,30 @@ class RadarViewController: UIViewController {
             vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
             
             presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
+    func updateCriteria(){
+        self.startLoading()
+        if let zuzuCriteria = self.displayRadarViewController?.zuzuCriteria{
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
+                    
+                    self.stopLoading()
+                    
+                    if error != nil{
+                        //alert
+
+                        return
+                    }
+                    
+                    self.runOnMainThread(){
+                        self.delegate?.onCriteriaSettingDone(self.searchCriteria)
+                        self.navigationController?.popViewControllerAnimated(true)
+                        //self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+                }
+            }
         }
     }
 }
@@ -243,7 +266,7 @@ extension RadarViewController{
                 
                 if result != nil{
                     result!.criteria = self.searchCriteria
-                    self.updateCriteria(result!)
+                    self.updateCriteriaForConfigure(result!)
                 }else{
                     self.createCriteria()
                 }
@@ -253,7 +276,7 @@ extension RadarViewController{
         Log.exit()
     }
     
-    func updateCriteria(zuzuCriteria: ZuzuCriteria){
+    func updateCriteriaForConfigure(zuzuCriteria: ZuzuCriteria){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in

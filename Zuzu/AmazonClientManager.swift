@@ -1073,6 +1073,7 @@ extension AmazonClientManager: GIDSignInUIDelegate {
     func signIn(signIn: GIDSignIn!,
         presentViewController viewController: UIViewController!) {
             Log.enter()
+            viewController.modalPresentationStyle = .OverCurrentContext
             self.loginViewController?.presentViewController(viewController, animated: true, completion: nil)
     }
     
