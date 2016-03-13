@@ -53,22 +53,18 @@ class RadarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.isUpdateMode == true{
-            self.activateButton.hidden = true
-            self.activateButton.enabled = false
+            self.activateButton.setTitle("設定完成", forState: .Normal)
         }
         
         self.updateCriteriaTextLabel()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
         self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-        
         self.configureButton()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if self.isUpdateMode == true{
-            return
-        }
+        
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
