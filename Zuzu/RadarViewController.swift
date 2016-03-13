@@ -29,6 +29,8 @@ class RadarViewController: UIViewController {
     
     var delegate: RadarViewControllerDelegate?
     
+    var isCheckService = true
+    
     @IBOutlet weak var radarBannerLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
     
@@ -65,8 +67,9 @@ class RadarViewController: UIViewController {
         self.configureButton()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
         
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
@@ -79,7 +82,7 @@ class RadarViewController: UIViewController {
             self.checkService()
         }
     }
-    
+        
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -90,6 +93,7 @@ class RadarViewController: UIViewController {
             switch identifier{
             case ViewTransConst.showRegionConfigureTable:
                 if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
+                    self.isCheckService = false
                     vc.currentCriteria = searchCriteria
                     vc.delegate  = self
                 }

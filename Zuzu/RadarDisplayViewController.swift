@@ -15,6 +15,8 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
+    var isCheckService = true
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -78,6 +80,11 @@ class RadarDisplayViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBarHidden = false
+        if self.isCheckService == false{
+            self.isCheckService = true
+            return
+        }
+        
         self.checkService()
         self.purchaseHistotyTableDataSource.refresh()
     }
@@ -209,6 +216,7 @@ class RadarDisplayViewController: UIViewController {
             case ViewTransConst.showConfigureRadar:
                 if let vc = segue.destinationViewController as? RadarViewController {
                     self.navigationItem.backBarButtonItem?.title = "返回"
+                    self.isCheckService = false
                     vc.delegate = self
                     vc.displayRadarViewController = self
                     vc.isUpdateMode = true
