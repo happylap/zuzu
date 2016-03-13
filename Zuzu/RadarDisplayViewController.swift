@@ -79,6 +79,7 @@ class RadarDisplayViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBarHidden = false
         self.checkService()
+        self.purchaseHistotyTableDataSource.refresh()
     }
     
     // MARK: - Update UI
