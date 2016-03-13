@@ -68,7 +68,7 @@ class RadarViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewDidAppear(animated)
 
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
