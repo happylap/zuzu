@@ -310,9 +310,9 @@ extension RadarViewController{
     func createCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
             ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.searchCriteria){
                 (result, error) -> Void in
-                
                 
                 self.runOnMainThread(){
                     self.stopLoading()
@@ -335,6 +335,7 @@ extension RadarViewController{
     
     func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria, isEnabled: Bool){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
                     self.runOnMainThread(){
