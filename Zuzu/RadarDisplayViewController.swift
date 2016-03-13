@@ -385,8 +385,13 @@ extension RadarDisplayViewController{
                             return
                         }
                         
+                        
                         self.zuzuCriteria.enabled = isEnabled
-                        SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經啟用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        var subTitle = "租屋雷達服務已經啟用"
+                        if isEnabled == false{
+                            subTitle = "租屋雷達服務已經停用"
+                        }
+                        SCLAlertView().showInfo("設定成功", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                     }
             }
         }
