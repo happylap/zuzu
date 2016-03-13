@@ -138,6 +138,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             let productId = product.productIdentifier
                             let price = product.price
                             let purchase = ZuzuPurchase(transactionId:"", userId: userId, productId: productId, productPrice: price)
+                            purchase.productTitle = product.localizedTitle
                             
                             self.startLoading()
                             ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in

@@ -414,6 +414,7 @@ extension RadarDisplayViewController{
                         self.criteriaEnableSwitch.on = true
                         SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                         
+                        self.purchaseHistotyTableDataSource.refresh()
                         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                             ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                                 (result, error) ->Void in

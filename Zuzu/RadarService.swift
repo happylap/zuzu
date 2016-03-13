@@ -54,6 +54,7 @@ class RadarService : NSObject {
                 for product in products{
                     if product.productIdentifier == productId{
                         let purchase = ZuzuPurchase(transactionId: transId!, userId: userId!, productId: productId, productPrice: product.price, purchaseReceipt: purchaseReceipt)
+                        purchase.productTitle = product.localizedTitle
                         handler(result: purchase, error: nil)
                         return
                     }
