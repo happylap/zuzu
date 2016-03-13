@@ -11,13 +11,6 @@ import UIKit
 
 private let Log = Logger.defaultLogger
 
-class RadarPurchaseRecord: NSObject{
-    
-    var purchaseDate = "test date"
-    var purchaseDesc = "test desc"
-    var purchaseExpire = true
-    
-}
 
 class RadarPurchaseRecordTableViewCell: UITableViewCell
 {
@@ -29,7 +22,7 @@ class RadarPurchaseRecordTableViewCell: UITableViewCell
     
     @IBOutlet weak var purchaseImage: UIImageView!
     
-    var recordItem:RadarPurchaseRecord?
+    var recordItem:ZuzuPurchase?
         {
         didSet{
             updateUI()
@@ -38,17 +31,24 @@ class RadarPurchaseRecordTableViewCell: UITableViewCell
     
     func updateUI()
     {
-        self.purchaseDateLabel.text = recordItem?.purchaseDate
-        self.purchaseDescLabel.text = recordItem?.purchaseDesc
+        if let dt = recordItem?.purchaseTime{
+            self.purchaseDateLabel.text = CommonUtils.getLocalShortStringFromDate(dt)
+        }else{
+            self.purchaseDateLabel.text = ""
+        }
+        self.purchaseDescLabel.text = recordItem?.productTitle ?? ""
+        
     }
 }
 
 
 class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, UITableViewDataSource {
         
-    private var purchaseData:[RadarPurchaseRecord]?
+    private var purchaseData:[ZuzuPurchase]?
     
     private let cellID = "purchaseHistoryRecord"
+    
+    let dummyRecord = ZuzuPurchase(transactionId: "", userId: "", productId: "", productPrice: 0)
     
     private let cellHeadrID = "purchaseHistoryHeader"
     
@@ -56,9 +56,27 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     
     init(uiViewController: RadarDisplayViewController) {
         self.uiViewController = uiViewController
-        let dummy = RadarPurchaseRecord()
-        let p1 = RadarPurchaseRecord()
-        self.purchaseData = [dummy]
+    }
+    
+    func refresh(){
+        self.purchaseData = [self.dummyRecord]
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.getPurchaseByUserId(userId){
+                (totalNum, result, error) -> Void in
+                self.purchaseData = [self.dummyRecord]
+                if error != nil{
+                    return
+                }
+                
+                if(result != nil){
+                    for purchase in result!{
+                        self.purchaseData?.append(purchase)
+                    }
+                }
+                
+                self.uiViewController?.purchaseTableView.reloadData()
+            }
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

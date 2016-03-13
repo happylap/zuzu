@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -93,5 +93,35 @@ class RadarService : NSObject {
             handler(result: nil, error: NSError(domain: "Fail to read receipt for the transaction", code: -1, userInfo: nil))
             //
         }
+    }
+    
+    func checkCriteria(criteria: SearchCriteria) -> Bool{
+        let region = criteria.region
+        let price = criteria.price
+        let types = criteria.types
+        let size = criteria.size
+        
+        if region == nil {
+             SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇通知條件地區", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return false
+        }
+        
+        if types == nil{
+             SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇用途", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return false
+        }
+
+        if price == nil{
+             SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇租金範圍", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return false
+        }
+        
+        if size == nil{
+            SCLAlertView().showInfo("設定雷達條件", subTitle: "尚未選擇坪數範圍", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return false
+        }
+        
+        return true
+        
     }
 }

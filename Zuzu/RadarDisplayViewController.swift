@@ -79,6 +79,7 @@ class RadarDisplayViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBarHidden = false
         self.checkService()
+        self.purchaseHistotyTableDataSource.refresh()
     }
     
     // MARK: - Update UI
@@ -203,14 +204,13 @@ class RadarDisplayViewController: UIViewController {
             
             Log.debug("prepareForSegue: \(identifier)")
             
-            self.navigationItem.backBarButtonItem?.title = "完成"
-            
             switch identifier{
                 
             case ViewTransConst.showConfigureRadar:
                 if let vc = segue.destinationViewController as? RadarViewController {
-                    self.navigationItem.backBarButtonItem?.title = "完成"
+                    self.navigationItem.backBarButtonItem?.title = "返回"
                     vc.delegate = self
+                    vc.displayRadarViewController = self
                     vc.isUpdateMode = true
                     vc.searchCriteria = self.zuzuCriteria.criteria!
                 }
