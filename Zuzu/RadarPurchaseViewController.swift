@@ -139,7 +139,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             let price = product.price
                             let purchase = ZuzuPurchase(transactionId:"", userId: userId, productId: productId, productPrice: price)
                             
+                            self.startLoading()
                             ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
+                                self.stopLoading()
                                 if error != nil{
                                     Log.error("Fail to createPurchase for product: \(productId)")
                                     if let handler = self.completePurchaseHandler{
@@ -334,14 +336,17 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     }
 }
 
+// MARK: - ZuzuStorePurchaseHandler
+
 extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         dismissViewControllerAnimated(true, completion: nil)
         Log.debug("\(transaction.transactionIdentifier)")
+        self.startLoading()
         RadarService.sharedInstance.createPurchase(transaction){
             (result: String?, error: NSError?) -> Void in
-            
+            self.stopLoading()
             if error != nil{
                 Log.error("create purchase error")
                 if let handler = self.completePurchaseHandler{
@@ -367,4 +372,19 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         
     }
     
+
+}
+
+// MARK: - Loading
+
+extension RadarPurchaseViewController{
+    func startLoading(){
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(self.view)
+    }
+    
+    func stopLoading(){
+        LoadingSpinner.shared.stop()
+    }
 }
