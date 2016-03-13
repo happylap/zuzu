@@ -135,12 +135,15 @@ public class HouseItemTableDataSource {
         loadRemoteData(Const.startPage)
     }
     
-    func getItemForRow(row:Int) -> HouseItem{
-        if(row > 0 && row < cachedData.count) {
+    func getItemForRow(row:Int) -> HouseItem? {
+        
+        if(row >= cachedData.startIndex && row < cachedData.count) {
             return cachedData[row] //index within memory cache
         } else {
             assert(false, "Cannot access house item: \(row). Total count: \(cachedData.count)")
+            return nil
         }
+        
     }
     
     func getSize() -> Int{

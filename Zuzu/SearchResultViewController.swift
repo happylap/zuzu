@@ -898,9 +898,11 @@ class SearchResultViewController: UIViewController {
                         
                         let houseItem = dataSource.getItemForRow(row)
                         
-                        dhvc.houseItem = houseItem
-                        dhvc.delegate = self
-                        dhvc.duplicateList = houseItem.children
+                        if let houseItem = houseItem {
+                            dhvc.houseItem = houseItem
+                            dhvc.delegate = self
+                            dhvc.duplicateList = houseItem.children
+                        }
                     }
                 }
             default: break
@@ -912,16 +914,13 @@ class SearchResultViewController: UIViewController {
 // MARK: - Table View Data Source
 extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
     
-    private func handleResultCell(indexPath: NSIndexPath) -> SearchResultTableViewCell {
+    private func handleResultCell(indexPath: NSIndexPath, houseItem: HouseItem) -> SearchResultTableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.houseItem, forIndexPath: indexPath) as! SearchResultTableViewCell
         
         Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         cell.parentTableView = tableView
         cell.indexPath = indexPath
-        
-        let houseItem = dataSource.getItemForRow(indexPath.row)
-        
         cell.houseItem = houseItem
         
         var houseFlags: [SearchResultTableViewCell.HouseFlag] = []
@@ -985,15 +984,22 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     /// Do not do heavy data binding in this function. Postpone until willDisplayCell
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let displayAd = (self.dataSource.getItemForRow(indexPath.row).id == "Ad")
-        
-        if(displayAd) {
+        if let houseItem = self.dataSource.getItemForRow(indexPath.row) {
             
-            return handleAdCell(indexPath)
+            let displayAd = (houseItem.id == "Ad")
+            
+            if(displayAd) {
+                
+                return handleAdCell(indexPath)
+                
+            } else {
+                
+                return handleResultCell(indexPath, houseItem: houseItem)
+            }
             
         } else {
-            
-            return handleResultCell(indexPath)
+            assert(false, "No HouseItem for the cell \(indexPath.row)")
+            return SearchResultTableViewCell()
         }
     }
     
@@ -1001,18 +1007,22 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         
         let houseItem = dataSource.getItemForRow(indexPath.row)
         
-        Log.debug("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
-        
-        if(houseItem.id == "Ad") {
-            return
-        }
-        
-        if let _ = houseItem.children {
-            self.runOnMainThreadAfter(0.1, block: { () -> Void in
-                self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
-            })
+        if let houseItem = houseItem {
+            Log.debug("Duplicates: \(houseItem.children?.joinWithSeparator(","))")
+            
+            if(houseItem.id == "Ad") {
+                return
+            }
+            
+            if let _ = houseItem.children {
+                self.runOnMainThreadAfter(0.1, block: { () -> Void in
+                    self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
+                })
+            } else {
+                self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+            }
         } else {
-            self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+            assert(false, "No HouseItem for the cell \(indexPath.row)")
         }
     }
     
