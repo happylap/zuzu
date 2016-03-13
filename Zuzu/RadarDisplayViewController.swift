@@ -15,6 +15,14 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
+    var isCheckService = true
+    
+    var isOnLogging = false
+    
+    var unfinishedTranscations: [SKPaymentTransaction]?
+    
+    var porcessTransactionNum = -1
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -77,9 +85,29 @@ class RadarDisplayViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            if let vc = self.navigationController as? RadarNavigationController{
+                vc.showRadar()
+            }
+            return
+        }
+        
         self.tabBarController?.tabBarHidden = false
-        self.checkService()
-        self.purchaseHistotyTableDataSource.refresh()
+        
+        if self.isCheckService == false{
+            self.isCheckService = true
+            return
+        }
+        
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            self.doUnfinishTransactions(unfinishedTranscations)
+        }else{
+            self.checkService()
+            self.purchaseHistotyTableDataSource.refresh()
+        }
+
+
     }
     
     // MARK: - Update UI
@@ -209,6 +237,7 @@ class RadarDisplayViewController: UIViewController {
             case ViewTransConst.showConfigureRadar:
                 if let vc = segue.destinationViewController as? RadarViewController {
                     self.navigationItem.backBarButtonItem?.title = "返回"
+                    self.isCheckService = false
                     vc.delegate = self
                     vc.displayRadarViewController = self
                     vc.isUpdateMode = true
@@ -410,3 +439,88 @@ extension RadarDisplayViewController{
     }
 }
 
+// MARK: Handle unfinished transactions
+
+extension RadarDisplayViewController{
+    
+    func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
+        self.isOnLogging = false
+        self.tabBarController!.tabBarHidden = false
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            self.doUnfinishTransactions(unfinishedTranscations)
+        }else{
+            self.checkService()
+        }
+        return nil
+    }
+ 
+    func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
+        Log.enter()
+        self.unfinishedTranscations = unfinishedTranscations
+        self.porcessTransactionNum = 0
+        self.startLoadingText("重新設定租屋雷達服務...")
+        self.performFinishTransactions()
+        Log.exit()
+    }
+    
+    func performFinishTransactions(){
+        if let transactions = self.unfinishedTranscations{
+            if self.porcessTransactionNum  < transactions.count{
+                RadarService.sharedInstance.createPurchase(transactions[self.porcessTransactionNum], handler: self.handleCompleteTransaction)
+            }
+        }else{
+            self.transactionDone()
+        }
+    }
+    
+    func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
+        if error != nil{
+            self.transactionDone()
+            self.alertUnfinishError()
+            return
+        }
+        
+        self.porcessTransactionNum = self.porcessTransactionNum + 1
+        if let transactions = self.unfinishedTranscations{
+            if self.porcessTransactionNum  < transactions.count{
+                self.performFinishTransactions()
+                return
+            }
+            
+            self.transactionDone()
+        }
+    }
+    
+    func transactionDone(){
+        Log.enter()
+        self.unfinishedTranscations = nil
+        self.porcessTransactionNum = -1
+        self.stopLoadingText()
+        self.checkService()
+        self.purchaseHistotyTableDataSource.refresh()
+        Log.exit()
+    }
+    
+    func alertUnfinishError(){
+        let msgTitle = "重新設定租屋雷達服務失敗"
+        let okButton = "知道了"
+        let subTitle = "很抱歉！設定租屋雷達服務無法成功！"
+        let alertView = SCLAlertView()
+        alertView.showCloseButton = false
+        
+        alertView.addButton("重新再試") {
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            if unfinishedTranscations.count > 0{
+                if AmazonClientManager.sharedInstance.isLoggedIn(){
+                    self.doUnfinishTransactions(unfinishedTranscations)
+                }
+            }
+        }
+        
+        alertView.addButton("取消") {
+        }
+        
+        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+}

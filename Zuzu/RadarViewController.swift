@@ -29,6 +29,8 @@ class RadarViewController: UIViewController {
     
     var delegate: RadarViewControllerDelegate?
     
+    var isCheckService = true
+    
     @IBOutlet weak var radarBannerLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
     
@@ -65,9 +67,9 @@ class RadarViewController: UIViewController {
         self.configureButton()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
@@ -79,7 +81,7 @@ class RadarViewController: UIViewController {
             self.checkService()
         }
     }
-    
+        
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -90,6 +92,7 @@ class RadarViewController: UIViewController {
             switch identifier{
             case ViewTransConst.showRegionConfigureTable:
                 if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
+                    self.isCheckService = false
                     vc.currentCriteria = searchCriteria
                     vc.delegate  = self
                 }
@@ -343,13 +346,11 @@ extension RadarViewController{
 // MARK: Check Radar service
 
 extension RadarViewController{
-    
     func checkService(){
-        if self.hasValidService == true{
-            return
-        }
-        
         if AmazonClientManager.sharedInstance.isLoggedIn(){
+            if self.hasValidService == true{
+                return
+            }
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.startLoading()
                 ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
