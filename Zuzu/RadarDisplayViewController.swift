@@ -79,6 +79,13 @@ class RadarDisplayViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            if let vc = self.navigationController as? RadarNavigationController{
+                vc.showRadar()
+            }
+            return
+        }
+        
         self.tabBarController?.tabBarHidden = false
         if self.isCheckService == false{
             self.isCheckService = true

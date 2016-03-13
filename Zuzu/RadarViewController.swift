@@ -70,7 +70,6 @@ class RadarViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
@@ -347,13 +346,11 @@ extension RadarViewController{
 // MARK: Check Radar service
 
 extension RadarViewController{
-    
     func checkService(){
-        if self.hasValidService == true{
-            return
-        }
-        
         if AmazonClientManager.sharedInstance.isLoggedIn(){
+            if self.hasValidService == true{
+                return
+            }
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.startLoading()
                 ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
