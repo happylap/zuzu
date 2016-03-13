@@ -175,6 +175,7 @@ class AmazonSNSService : NSObject {
                     Log.debug("endpointArn: \(createEndpointResponse.endpointArn)")
                     if let endpointArn = createEndpointResponse.endpointArn{
                         UserDefaultsUtils.setSNSEndpointArn(endpointArn)
+                        self.createDevice(endpointArn)
                     }
                 }
                 Log.exit()
@@ -203,4 +204,18 @@ class AmazonSNSService : NSObject {
         }
         Log.exit()
     }
+    
+    func createDevice(endpointArn: String){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: endpointArn){
+                (result, error) -> Void in
+                
+                if error != nil{
+                    Log.error("Fail to register endpointArn: \(endpointArn) for user: \(userId)")
+                }
+                
+            }
+        }
+    }
+    
 }
