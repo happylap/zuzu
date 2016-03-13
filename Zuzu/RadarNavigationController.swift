@@ -47,19 +47,22 @@ class RadarNavigationController: UINavigationController {
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.startLoading()
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                    if error != nil{
-                        Log.error("Cannot get criteria by user id:\(userId)")
+                    self.runOnMainThread(){
                         self.stopLoading()
-                        self.showRetryRadarView(false)
-                        return
-                    }
-                    if result != nil{
-                        self.zuzuCriteria = result
-                        self.stopLoading()
-                        self.showDisplayRadarView(self.zuzuCriteria!)
-                    }else{
-                        self.stopLoading() // no criteria
-                        self.showConfigureRadarView()
+                        if error != nil{
+                            Log.error("Cannot get criteria by user id:\(userId)")
+                            self.showRetryRadarView(false)
+                            return
+                        }
+                        
+                        if result != nil{
+                            self.zuzuCriteria = result
+                            self.stopLoading()
+                            self.showDisplayRadarView(self.zuzuCriteria!)
+                        }else{
+                            self.stopLoading() // no criteria
+                            self.showConfigureRadarView()
+                        }
                     }
                 }
             }
@@ -126,20 +129,6 @@ class RadarNavigationController: UINavigationController {
     
     func stopLoading(){
         LoadingSpinner.shared.stop()
-    }
-    
-    func startLoadingText(text: String){
-        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        
-        dialog.animationType = .ZoomIn
-        dialog.dimBackground = true
-        dialog.labelText = text
-        
-        self.runOnMainThread() { () -> Void in}
-    }
-    
-    func stopLoadingText(){
-        MBProgressHUD.hideHUDForView(self.view, animated: true)
     }
 }
 

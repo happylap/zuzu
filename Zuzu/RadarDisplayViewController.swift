@@ -258,7 +258,6 @@ class RadarDisplayViewController: UIViewController {
         if let service = self.zuzuService{
             if let status = service.status{
                 if status == RadarStatusValid{
-                    self.startLoading()
                     self.setCriteriaEnabled(isEnabled)
                     return
                 }
