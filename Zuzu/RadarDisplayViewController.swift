@@ -489,9 +489,6 @@ extension RadarDisplayViewController{
             }
             
             self.transactionDone()
-            if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRadar()
-            }
         }
     }
     
