@@ -85,7 +85,6 @@ class RadarDisplayViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
                 vc.showRadar()
