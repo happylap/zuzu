@@ -117,18 +117,21 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
                 assert(false, "Failed to prepare purchase cell instance")
             }
         }else{
-            if let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as? RadarPurchaseRecordTableViewCell{
-                
-                if let purchaseData = self.purchaseData {
+            let dataSize = self.purchaseData?.count
+            if dataSize != nil && indexPath.row <= dataSize{
+                if let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as? RadarPurchaseRecordTableViewCell{
                     
-                    let purchase = purchaseData[indexPath.row]
-                    
-                    cell.recordItem = purchase
-                    
-                    return cell
+                    if let purchaseData = self.purchaseData {
+                        
+                        let purchase = purchaseData[indexPath.row]
+                        
+                        cell.recordItem = purchase
+                        
+                        return cell
+                    }
+                } else {
+                    assert(false, "Failed to prepare purchase cell instance")
                 }
-            } else {
-                assert(false, "Failed to prepare purchase cell instance")
             }
         }
         
