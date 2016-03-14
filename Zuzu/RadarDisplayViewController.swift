@@ -38,6 +38,16 @@ class RadarDisplayViewController: UIViewController {
     
     let emptyLabel = UILabel()
     
+    @IBOutlet weak var statusImageView: UIImageView!{
+        
+        didSet {
+            statusImageView.image = UIImage(named: "comment-check-outline")?.imageWithRenderingMode(.AlwaysTemplate)
+            statusImageView.tintColor = UIColor.lightGrayColor()
+            statusImageView.hidden = true
+        }
+        
+    }
+    
     @IBOutlet weak var statusPieChart: PieChartView! {
         didSet {
             statusPieChart.descriptionText = ""
@@ -92,6 +102,19 @@ class RadarDisplayViewController: UIViewController {
     }
     
     // MARK: - Private Utils
+    
+    func toggleServiceStatusIcon(isValid: Bool) {
+        
+        statusImageView.hidden = false
+        
+        if(isValid) {
+            statusImageView.image = UIImage(named: "comment-check-outline")?.imageWithRenderingMode(.AlwaysTemplate)
+        } else {
+            statusImageView.image = UIImage(named: "comment-alert-outline")?.imageWithRenderingMode(.AlwaysTemplate)
+        }
+        
+    }
+    
     func setChart(dataPoints: [String], values: [Double], info: String) {
         
         var dataEntries: [ChartDataEntry] = []
@@ -108,8 +131,8 @@ class RadarDisplayViewController: UIViewController {
         
         statusPieChart.centerText = info
         
-        let usedDays = UIColor.colorWithRGB(0xFF6666)
-        let remainingDays = UIColor.colorWithRGB(0x4990E2)
+        let usedDays = UIColor.colorWithRGB(0xFFCC66)//.colorWithRGB(0xFF6666)
+        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)//.colorWithRGB(0x66FFCC)//.colorWithRGB(0x4990E2)
         
         pieChartDataSet.colors = [usedDays, remainingDays]
     }
@@ -199,7 +222,7 @@ class RadarDisplayViewController: UIViewController {
                     let roundedRemainingDays = Int(floor(remainingDays))
                     let roundedRemainingHours  = Int(floor(remainingHours))
                     
-                    self.serviceStatusLabel?.text = "租屋雷達服務還有 \(roundedRemainingDays) 天又 \(roundedRemainingHours) 小時"
+                    self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDays) 日 \(roundedRemainingHours) 小時"
                     self.serviceButton?.hidden = true
                     self.enableModifyButton()
                     
@@ -217,9 +240,12 @@ class RadarDisplayViewController: UIViewController {
                         }
                     }
                     
+                    // Update Chart
                     self.setChart(["已使用天數","剩餘天數"],
                         values: [Double(usedDays), Double(remainingDays)],
                         info: infoText ?? "")
+                    
+                    toggleServiceStatusIcon(true)
                     
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
@@ -229,6 +255,8 @@ class RadarDisplayViewController: UIViewController {
                     
                     // Update Chart
                     self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
+                    
+                    toggleServiceStatusIcon(false)
                 }
             }else{
                 self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
@@ -238,6 +266,8 @@ class RadarDisplayViewController: UIViewController {
                 
                 // Update Chart
                 self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
+                
+                toggleServiceStatusIcon(false)
             }
             
             // expiration date
@@ -247,7 +277,7 @@ class RadarDisplayViewController: UIViewController {
                     expireDateStr = dateString
                 }
             }
-            self.serviceExpireLabel?.text = "到期日: \(expireDateStr)"
+            self.serviceExpireLabel?.text = "雷達服務到期日: \(expireDateStr)"
             
             return
         }

@@ -514,10 +514,10 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YN5-O7-pWJ" userLabel="ServiceView">
-                                                <rect key="frame" x="0.0" y="360" width="600" height="362.5"/>
+                                                <rect key="frame" x="0.0" y="360" width="600" height="390.5"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmx-jO-trx">
-                                                        <rect key="frame" x="8" y="8" width="584" height="346.5"/>
+                                                        <rect key="frame" x="8" y="8" width="584" height="374.5"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7N5-qc-Jhl" userLabel="ServiceSubView">
                                                                 <rect key="frame" x="0.0" y="0.0" width="584" height="43"/>
@@ -542,13 +542,42 @@
                                                                 </constraints>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-l8-20L" userLabel="Body">
-                                                                <rect key="frame" x="0.0" y="43" width="584" height="303.5"/>
+                                                                <rect key="frame" x="0.0" y="43" width="584" height="331.5"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddn-jE-7Zf">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="584" height="303.5"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="584" height="331.5"/>
                                                                         <subviews>
+                                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8jR-qu-ktx" userLabel="Status Image View">
+                                                                                <rect key="frame" x="16" y="8" width="20" height="20"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" secondItem="8jR-qu-ktx" secondAttribute="height" multiplier="1:1" id="M7l-hO-YpH"/>
+                                                                                    <constraint firstAttribute="width" constant="20" id="wC7-ZH-2fF"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="您的通知服務還有29天" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="R0d-9F-apP" userLabel="serviceStatusLabel">
+                                                                                <rect key="frame" x="44" y="9.5" width="143.5" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tQY-Zr-6Ob">
+                                                                                <rect key="frame" x="534" y="3.5" width="30" height="30"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                                <state key="normal" title="續訂">
+                                                                                    <color key="titleColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                </state>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                                <connections>
+                                                                                    <action selector="onServiceButtonTapped:" destination="bGU-pi-D72" eventType="touchUpInside" id="w1Y-1H-Ydx"/>
+                                                                                </connections>
+                                                                            </button>
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h9Q-ML-UFy" userLabel="pieChart" customClass="PieChartView" customModule="Charts">
-                                                                                <rect key="frame" x="-8" y="19" width="292" height="292"/>
+                                                                                <rect key="frame" x="146" y="18" width="292" height="292"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" secondItem="h9Q-ML-UFy" secondAttribute="height" multiplier="1:1" id="Pzl-ff-VI2"/>
@@ -561,17 +590,8 @@
                                                                                     </mask>
                                                                                 </variation>
                                                                             </view>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="您的通知服務還有29天" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="R0d-9F-apP" userLabel="serviceStatusLabel">
-                                                                                <rect key="frame" x="8" y="8" width="163.5" height="19.5"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                                                <color key="textColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="到期日: 2016/02/19" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ea-9P-KAv" userLabel="serviceExpirationLabel">
-                                                                                <rect key="frame" x="276" y="156.5" width="300" height="17"/>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="到期日: 2016/02/19" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ea-9P-KAv" userLabel="serviceExpirationLabel">
+                                                                                <rect key="frame" x="16" y="302" width="560" height="17"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                 <color key="textColor" red="0.49803921580314636" green="0.49803921580314636" blue="0.49803921580314636" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -579,33 +599,44 @@
                                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
-                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tQY-Zr-6Ob">
-                                                                                <rect key="frame" x="532" y="2" width="32" height="32"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                                                <state key="normal" title="購買"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                                <connections>
-                                                                                    <action selector="onServiceButtonTapped:" destination="bGU-pi-D72" eventType="touchUpInside" id="w1Y-1H-Ydx"/>
-                                                                                </connections>
-                                                                            </button>
                                                                         </subviews>
                                                                         <constraints>
+                                                                            <constraint firstItem="R0d-9F-apP" firstAttribute="leading" secondItem="8jR-qu-ktx" secondAttribute="trailing" constant="8" id="03q-jV-B3n"/>
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="top" secondItem="ddn-jE-7Zf" secondAttribute="top" constant="8" id="38l-sk-LLg"/>
+                                                                            <constraint firstItem="h9Q-ML-UFy" firstAttribute="centerX" secondItem="ddn-jE-7Zf" secondAttribute="centerX" id="60e-G2-tXB"/>
                                                                             <constraint firstAttribute="bottom" secondItem="h9Q-ML-UFy" secondAttribute="bottom" constant="-8" id="7fk-qC-QxT"/>
                                                                             <constraint firstItem="h9Q-ML-UFy" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="-8" id="9jA-zj-qfR"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="centerY" secondItem="R0d-9F-apP" secondAttribute="centerY" id="9sx-ea-Ehk"/>
-                                                                            <constraint firstItem="R0d-9F-apP" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="8" id="Cit-kL-efe"/>
+                                                                            <constraint firstItem="R0d-9F-apP" firstAttribute="centerY" secondItem="8jR-qu-ktx" secondAttribute="centerY" id="Asc-NU-Km3"/>
+                                                                            <constraint firstItem="R0d-9F-apP" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="16" id="Cit-kL-efe"/>
                                                                             <constraint firstAttribute="trailing" secondItem="tQY-Zr-6Ob" secondAttribute="trailing" constant="20" symbolic="YES" id="EHi-hL-Kso"/>
                                                                             <constraint firstItem="h9Q-ML-UFy" firstAttribute="top" secondItem="R0d-9F-apP" secondAttribute="bottom" constant="-8" id="Eqb-BH-Kis"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="3ea-9P-KAv" secondAttribute="bottom" constant="12.5" id="GD8-6z-gfh"/>
+                                                                            <constraint firstItem="8jR-qu-ktx" firstAttribute="top" secondItem="R0d-9F-apP" secondAttribute="bottom" constant="8" id="Git-fG-nWL"/>
+                                                                            <constraint firstItem="3ea-9P-KAv" firstAttribute="top" secondItem="h9Q-ML-UFy" secondAttribute="bottom" constant="-8" id="HEh-T9-vm8"/>
                                                                             <constraint firstAttribute="trailing" secondItem="3ea-9P-KAv" secondAttribute="trailing" constant="8" id="VBU-on-xJh"/>
+                                                                            <constraint firstItem="8jR-qu-ktx" firstAttribute="top" secondItem="ddn-jE-7Zf" secondAttribute="top" constant="8" id="VDg-x5-Lfq"/>
+                                                                            <constraint firstItem="3ea-9P-KAv" firstAttribute="centerX" secondItem="h9Q-ML-UFy" secondAttribute="centerX" id="WXg-ZH-y6t"/>
+                                                                            <constraint firstItem="3ea-9P-KAv" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="16" id="aCz-3U-rVo"/>
+                                                                            <constraint firstItem="8jR-qu-ktx" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="16" id="aPV-kH-mUY"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="leading" secondItem="h9Q-ML-UFy" secondAttribute="trailing" constant="-8" id="bIZ-ny-8Iq"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="R0d-9F-apP" secondAttribute="trailing" constant="8" id="ek0-K8-E78"/>
                                                                             <constraint firstItem="h9Q-ML-UFy" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" multiplier="1:2" id="iba-gw-7db"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="centerY" secondItem="h9Q-ML-UFy" secondAttribute="centerY" id="pDD-Iu-lYm"/>
                                                                         </constraints>
                                                                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                                                        <variation key="default">
+                                                                            <mask key="constraints">
+                                                                                <exclude reference="Git-fG-nWL"/>
+                                                                                <exclude reference="38l-sk-LLg"/>
+                                                                                <exclude reference="Cit-kL-efe"/>
+                                                                                <exclude reference="7fk-qC-QxT"/>
+                                                                                <exclude reference="9jA-zj-qfR"/>
+                                                                                <exclude reference="WXg-ZH-y6t"/>
+                                                                                <exclude reference="bIZ-ny-8Iq"/>
+                                                                                <exclude reference="pDD-Iu-lYm"/>
+                                                                            </mask>
+                                                                        </variation>
                                                                     </view>
                                                                 </subviews>
                                                                 <constraints>
@@ -648,7 +679,7 @@
                                                 </variation>
                                             </view>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kzV-PJ-lR5" userLabel="PurchaseTableView">
-                                                <rect key="frame" x="8" y="730" width="584" height="467"/>
+                                                <rect key="frame" x="8" y="758" width="584" height="467"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1200" id="W8T-DZ-bgd"/>
@@ -837,6 +868,7 @@
                         <outlet property="serviceExpireLabel" destination="3ea-9P-KAv" id="kuU-EK-Y2I"/>
                         <outlet property="serviceStatusLabel" destination="R0d-9F-apP" id="bHD-gy-ZEE"/>
                         <outlet property="servieBannerLabel" destination="QMV-ev-uwx" id="itO-I6-7AC"/>
+                        <outlet property="statusImageView" destination="8jR-qu-ktx" id="gR7-9a-Fww"/>
                         <outlet property="statusPieChart" destination="h9Q-ML-UFy" id="tA2-7c-tXl"/>
                     </connections>
                 </viewController>
