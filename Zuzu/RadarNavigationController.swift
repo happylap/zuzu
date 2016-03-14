@@ -45,7 +45,9 @@ class RadarNavigationController: UINavigationController {
             }
             
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                
                 RadarService.sharedInstance.startLoading(self)
+                
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
                     self.runOnMainThread(){
                         if error != nil{
