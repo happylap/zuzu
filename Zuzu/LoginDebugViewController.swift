@@ -685,12 +685,14 @@ class LoginDebugViewController: UIViewController {
                     if let mapper: ZuzuServiceMapper = result {
                         let userId = mapper.userId
                         let status = mapper.status
+                        let totalSecond = mapper.totalSecond
                         let remainingSecond = mapper.remainingSecond
+                        let startTime = mapper.startTime
                         let expireTime = mapper.expireTime
                         let validPurchaseCount = mapper.validPurchaseCount
                         let invalidPurchaseCount = mapper.invalidPurchaseCount
                         
-                        self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)\n status: \(status)\n remainingSecond: \(remainingSecond)\n expireTime: \(expireTime)\n validPurchaseCount: \(validPurchaseCount)\n invalidPurchaseCount: \(invalidPurchaseCount)")
+                        self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)\n status: \(status)\n totalSecond: \(totalSecond)\n remainingSecond: \(remainingSecond)\n startTime: \(startTime)\n expireTime: \(expireTime)\n validPurchaseCount: \(validPurchaseCount)\n invalidPurchaseCount: \(invalidPurchaseCount)")
                     }
                 })
             })
