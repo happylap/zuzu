@@ -141,7 +141,6 @@ class RadarService : NSObject {
     func checkCriteria(criteria: SearchCriteria) -> Bool{
         let region = criteria.region
         let price = criteria.price
-        let types = criteria.types
         let size = criteria.size
         
         var subTitle = ""
@@ -150,10 +149,6 @@ class RadarService : NSObject {
             subTitle  =  "\(subTitle)\n地區"
         }
         
-        if types == nil || types?.count<=0{
-            subTitle  =  "\(subTitle)\n用途"
-        }
-
         if price == nil{
             subTitle  =  "\(subTitle)\n租金範圍"
         }
