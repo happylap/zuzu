@@ -339,6 +339,7 @@ extension RadarDisplayViewController{
     func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
+        self.purchaseViewController = purchaseView
         RadarService.sharedInstance.startLoading(self)
         self.updateCriteria()
         Log.exit()
@@ -348,11 +349,17 @@ extension RadarDisplayViewController{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
         
+        self.purchaseViewController = purchaseView
+        
+        self.stopPurchaseLoading(true)
+        
         SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF)
+        
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
         }
+        
         Log.exit()
     }
     
@@ -364,8 +371,10 @@ extension RadarDisplayViewController{
                 
                 self.runOnMainThread(){
                     if error != nil{
-                        RadarService.sharedInstance.stopLoading(self)
-                        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        
+                        self.stopPurchaseLoading(true)
+                        
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
                     }else{
                         self.enableCriteriaForPurchase(true)
@@ -384,7 +393,7 @@ extension RadarDisplayViewController{
                     if error != nil{
                         self.runOnMainThread(){
                             self.criteriaEnableSwitch.on = false
-                            RadarService.sharedInstance.stopLoading(self)
+                            self.stopPurchaseLoading(true)
                             SCLAlertView().showInfo("網路連線失敗", subTitle: "啟動雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         }
                         return
@@ -404,9 +413,10 @@ extension RadarDisplayViewController{
                                     self.zuzuService = result
                                 }
                                 
-                                RadarService.sharedInstance.stopLoading(self)
+                                self.stopPurchaseLoading(true)
+                                
                                 SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                                self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+ 
                             }
                         }
                     }else{
@@ -416,6 +426,14 @@ extension RadarDisplayViewController{
         }
     }
 
+    private func stopPurchaseLoading(isDismissPurchaseView: Bool){
+        
+        RadarService.sharedInstance.stopLoading(self)
+        
+        if isDismissPurchaseView == true{
+            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
 }
 
 // MARK: Check Radar service
@@ -500,7 +518,7 @@ extension RadarDisplayViewController{
         Log.enter()
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
-        self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+        RadarService.sharedInstance.stopLoading(self)
         self.checkService()
         Log.exit()
     }
