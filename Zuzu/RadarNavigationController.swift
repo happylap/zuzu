@@ -39,13 +39,13 @@ class RadarNavigationController: UINavigationController {
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if self.zuzuCriteria != nil{
                 self.showDisplayRadarView(self.zuzuCriteria!)
+                self.stopLoading()
                 Log.exit()
                 return
             }
             
-            
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.startLoading()
+
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
                     self.runOnMainThread(){
                         self.stopLoading()
@@ -57,11 +57,12 @@ class RadarNavigationController: UINavigationController {
                         
                         if result != nil{
                             self.zuzuCriteria = result
-                            self.stopLoading()
                             self.showDisplayRadarView(self.zuzuCriteria!)
+                            self.stopLoading()
                         }else{
-                            self.stopLoading() // no criteria
+                             // no criteria
                             self.showConfigureRadarView()
+                            self.stopLoading()
                         }
                     }
                 }
@@ -70,6 +71,7 @@ class RadarNavigationController: UINavigationController {
         else{
             self.zuzuCriteria = nil
             self.showConfigureRadarView()
+            self.stopLoading()
         }
         
         Log.exit()
