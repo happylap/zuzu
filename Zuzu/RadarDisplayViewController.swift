@@ -92,7 +92,7 @@ class RadarDisplayViewController: UIViewController {
     }
     
     // MARK: - Private Utils
-    func setChart(dataPoints: [String], values: [Double]) {
+    func setChart(dataPoints: [String], values: [Double], info: String) {
         
         var dataEntries: [ChartDataEntry] = []
         
@@ -106,15 +106,7 @@ class RadarDisplayViewController: UIViewController {
         pieChartDataSet.drawValuesEnabled = false
         statusPieChart.data = pieChartData
         
-        if let remainingDays = values.last {
-            if(remainingDays > 0) {
-                statusPieChart.centerText = "\(Int(remainingDays))天"
-            } else {
-                statusPieChart.centerText = "已到期"
-            }
-        } else {
-            statusPieChart.centerText = "已到期"
-        }
+        statusPieChart.centerText = info
         
         let usedDays = UIColor.colorWithRGB(0xFF6666)
         let remainingDays = UIColor.colorWithRGB(0x4990E2)
@@ -123,19 +115,19 @@ class RadarDisplayViewController: UIViewController {
     }
     
     // MARK: - View Life cycle
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        Log.error("viewDidLayoutSubviews")
-//        // Update Chart Size
-//        let currentSize = statusPieChart.frame.size
-//        let currentCenter = statusPieChart.center
-//        
-//        let newFrame = CGSize(width: currentSize.width * 1.3, height: currentSize.height * 1.3)
-//        
-//        statusPieChart.frame.size = newFrame
-//        statusPieChart.center = currentCenter
-//    }
-
+    //    override func viewDidLayoutSubviews() {
+    //        super.viewDidLayoutSubviews()
+    //        Log.error("viewDidLayoutSubviews")
+    //        // Update Chart Size
+    //        let currentSize = statusPieChart.frame.size
+    //        let currentCenter = statusPieChart.center
+    //
+    //        let newFrame = CGSize(width: currentSize.width * 1.3, height: currentSize.height * 1.3)
+    //
+    //        statusPieChart.frame.size = newFrame
+    //        statusPieChart.center = currentCenter
+    //    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.serviceButton?.hidden = true
@@ -193,26 +185,41 @@ class RadarDisplayViewController: UIViewController {
                     var usedDays = 0.0
                     var usedHours = 0.0
                     if let remaining = service.remainingSecond,
-                    let total = service.totalSecond{
-                        
-                        let used = total - remaining
-                        
-                        remainingDays = Double(remaining)/secPerDay
-                        remainingHours = (Double(remaining) % secPerDay)/secPerHour
-                        
-                        usedDays = Double(used)/secPerDay
-                        usedHours = (Double(used) % secPerDay)/secPerHour
+                        let total = service.totalSecond{
+                            
+                            let used = total - remaining
+                            
+                            remainingDays = Double(remaining)/secPerDay
+                            remainingHours = (Double(remaining) % secPerDay)/secPerHour
+                            
+                            usedDays = Double(used)/secPerDay
+                            usedHours = (Double(used) % secPerDay)/secPerHour
                     }
                     
                     let roundedRemainingDays = Int(floor(remainingDays))
                     let roundedRemainingHours  = Int(floor(remainingHours))
                     
-                    self.serviceStatusLabel?.text = "租屋雷達服務還有\(roundedRemainingDays)天又\(roundedRemainingHours)小時"
+                    self.serviceStatusLabel?.text = "租屋雷達服務還有 \(roundedRemainingDays) 天又 \(roundedRemainingHours) 小時"
                     self.serviceButton?.hidden = true
                     self.enableModifyButton()
                     
                     // Update Chart
-                    self.setChart(["已使用天數","剩餘天數"], values: [Double(usedDays), Double(remainingDays)])
+                    
+                    var infoText: String?
+                    if(roundedRemainingDays > 0) {
+                        infoText = "\(roundedRemainingDays) 日"
+                    } else {
+                        
+                        if(roundedRemainingHours > 0) {
+                            infoText = "\(roundedRemainingHours) 小時"
+                        }else {
+                            infoText = "已到期"
+                        }
+                    }
+                    
+                    self.setChart(["已使用天數","剩餘天數"],
+                        values: [Double(usedDays), Double(remainingDays)],
+                        info: infoText ?? "")
                     
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
@@ -221,7 +228,7 @@ class RadarDisplayViewController: UIViewController {
                     self.disableModifyButton()
                     
                     // Update Chart
-                    self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0])
+                    self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
                 }
             }else{
                 self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
@@ -230,7 +237,7 @@ class RadarDisplayViewController: UIViewController {
                 self.disableModifyButton()
                 
                 // Update Chart
-                self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0])
+                self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
             }
             
             // expiration date
@@ -399,7 +406,7 @@ class RadarDisplayViewController: UIViewController {
                             SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經啟用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                             
                         }else{
-                        SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經停用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經停用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         }
                     }
             }
@@ -495,7 +502,7 @@ extension RadarDisplayViewController{
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
-
+                    
                     if error != nil{
                         self.runOnMainThread(){
                             self.criteriaEnableSwitch.on = false
@@ -522,7 +529,7 @@ extension RadarDisplayViewController{
                                 self.stopPurchaseLoading(true)
                                 
                                 SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
- 
+                                
                             }
                         }
                     }else{
@@ -532,7 +539,7 @@ extension RadarDisplayViewController{
         }
     }
     
-
+    
     private func stopPurchaseLoading(isDismissPurchaseView: Bool){
         
         RadarService.sharedInstance.stopLoading(self)
@@ -645,7 +652,7 @@ extension RadarDisplayViewController{
                 }
             }
         }
- 
+        
         alertView.addButton("取消") {
         }
         
