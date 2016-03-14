@@ -306,7 +306,7 @@ class RadarDisplayViewController: UIViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             
             vc.cancelPurchaseHandler = self.cancelPurchaseHandler
-            vc.completePurchaseHandler = self.completePurchaseHandler
+            vc.purchaseSuccessHandler = self.purchaseSuccessHandler
             vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
             
             presentViewController(vc, animated: true, completion: nil)
@@ -356,19 +356,17 @@ extension RadarDisplayViewController{
         self.tabBarController?.tabBarHidden = false
     }
     
-    func completePurchaseHandler(isSuccess:Bool, error: NSError?) -> Void{
-        Log.debug("isSuccess: \(isSuccess), error: \(error)")
+    func purchaseSuccessHandler() -> Void{
+        Log.enter()
         self.tabBarController?.tabBarHidden = false
-        if error != nil{
-            return
-        }
-        
         self.updateCriteria()
+        Log.exit()
     }
     
     func unfinishedTransactionHandler() -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
+        SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF)
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)

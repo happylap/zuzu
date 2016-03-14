@@ -188,7 +188,7 @@ class RadarViewController: UIViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             
             vc.cancelPurchaseHandler = self.cancelPurchaseHandler
-            vc.completePurchaseHandler = self.completePurchaseHandler
+            vc.purchaseSuccessHandler = self.purchaseSuccessHandler
             vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
             
             presentViewController(vc, animated: true, completion: nil)
@@ -232,7 +232,7 @@ extension RadarViewController{
     func cancelPurchaseHandler() -> Void{
         self.tabBarController?.tabBarHidden = false
         if AmazonClientManager.sharedInstance.isLoggedIn(){
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            if let _ = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.runOnMainThread(){
                     if let vc = self.navigationController as? RadarNavigationController{
                         vc.showRadar()
@@ -242,18 +242,17 @@ extension RadarViewController{
         }
     }
     
-    func completePurchaseHandler(isSuccess:Bool, error: NSError?) -> Void{
-        Log.debug("isSuccess: \(isSuccess), error: \(error)")
+    func purchaseSuccessHandler() -> Void{
+        Log.enter()
         self.tabBarController?.tabBarHidden = false
-        if error != nil{
-            return
-        }
         self.setUpCriteria()
+        Log.exit()
     }
     
     func unfinishedTransactionHandler() -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
+        SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF)
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
@@ -373,6 +372,9 @@ extension RadarViewController{
 
 extension RadarViewController{
     func checkService(){
+        if self.isUpdateMode == true{
+            return
+        }
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if self.hasValidService == true{
                 return

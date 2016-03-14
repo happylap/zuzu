@@ -35,7 +35,7 @@ class RadarNavigationController: UINavigationController {
     
     func showRadar(){
         Log.enter()
-        self.showRetryRadarView(true)
+
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if self.zuzuCriteria != nil{
                 self.showDisplayRadarView(self.zuzuCriteria!)
