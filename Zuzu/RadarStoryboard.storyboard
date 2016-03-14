@@ -856,10 +856,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sync_filled" translatesAutoresizingMaskIntoConstraints="NO" id="1w7-Y5-xeE">
-                                <rect key="frame" x="200" y="50" width="200" height="200"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="refresh" translatesAutoresizingMaskIntoConstraints="NO" id="1w7-Y5-xeE">
+                                <rect key="frame" x="398" y="198" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="1w7-Y5-xeE" secondAttribute="height" multiplier="1:1" id="GJ6-JM-SLl"/>
+                                    <constraint firstAttribute="width" constant="30" id="RvV-qG-4JJ"/>
                                     <constraint firstAttribute="width" secondItem="1w7-Y5-xeE" secondAttribute="height" multiplier="2:1" id="m9Q-uU-sUV"/>
                                 </constraints>
                                 <variation key="default">
@@ -868,33 +869,65 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="無法載入資料，請輕按重試" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P4b-pJ-WHt">
-                                <rect key="frame" x="202.5" y="262" width="195" height="100"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="無法載入資料，請輕按重試" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="P4b-pJ-WHt">
+                                <rect key="frame" x="210" y="204" width="180" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="195" id="I8f-Gw-6Ha"/>
                                     <constraint firstAttribute="height" constant="100" id="KEq-SD-hz8"/>
                                     <constraint firstAttribute="width" secondItem="P4b-pJ-WHt" secondAttribute="height" multiplier="1:2" id="RAn-vR-fI5"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.49803921580314636" green="0.49803921580314636" blue="0.49803921580314636" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="I8f-Gw-6Ha"/>
+                                        <exclude reference="KEq-SD-hz8"/>
                                         <exclude reference="RAn-vR-fI5"/>
                                     </mask>
                                 </variation>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud-outline-off" translatesAutoresizingMaskIntoConstraints="NO" id="mAe-td-x1a">
+                                <rect key="frame" x="240" y="52" width="120" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="mAe-td-x1a" secondAttribute="height" multiplier="1:1" id="0ZF-Ie-PRv"/>
+                                    <constraint firstAttribute="width" constant="120" id="4W6-Cl-Eyg"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="P4b-pJ-WHt" firstAttribute="top" secondItem="1w7-Y5-xeE" secondAttribute="bottom" constant="12" id="2Li-aJ-kzy"/>
+                            <constraint firstItem="P4b-pJ-WHt" firstAttribute="top" secondItem="1w7-Y5-xeE" secondAttribute="bottom" constant="16" id="2Li-aJ-kzy"/>
                             <constraint firstItem="1w7-Y5-xeE" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="8pf-rr-S6b"/>
+                            <constraint firstItem="P4b-pJ-WHt" firstAttribute="top" secondItem="mAe-td-x1a" secondAttribute="bottom" constant="32" id="Az0-PO-u0X"/>
+                            <constraint firstItem="1w7-Y5-xeE" firstAttribute="centerY" secondItem="P4b-pJ-WHt" secondAttribute="centerY" id="B7l-sZ-mnS"/>
                             <constraint firstItem="1w7-Y5-xeE" firstAttribute="width" secondItem="d4h-CZ-B2x" secondAttribute="width" multiplier="1:3" id="B81-hc-w88"/>
+                            <constraint firstItem="mAe-td-x1a" firstAttribute="top" secondItem="P0O-aH-OZ3" secondAttribute="bottom" constant="32" id="L3Z-xk-YEi"/>
+                            <constraint firstItem="1w7-Y5-xeE" firstAttribute="leading" secondItem="P4b-pJ-WHt" secondAttribute="trailing" constant="8" id="NQn-Wb-Y63"/>
+                            <constraint firstItem="mAe-td-x1a" firstAttribute="top" secondItem="P4b-pJ-WHt" secondAttribute="bottom" constant="16" id="QC4-gE-HjX"/>
+                            <constraint firstItem="mAe-td-x1a" firstAttribute="centerY" secondItem="d4h-CZ-B2x" secondAttribute="centerY" id="UfH-0g-Xig"/>
                             <constraint firstItem="1w7-Y5-xeE" firstAttribute="top" secondItem="P0O-aH-OZ3" secondAttribute="bottom" constant="30" id="a2H-2l-7vC"/>
+                            <constraint firstItem="mAe-td-x1a" firstAttribute="top" secondItem="P4b-pJ-WHt" secondAttribute="bottom" constant="16" id="auC-IQ-xd0"/>
+                            <constraint firstItem="mAe-td-x1a" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="f7E-Xj-9u3"/>
                             <constraint firstItem="P4b-pJ-WHt" firstAttribute="centerX" secondItem="d4h-CZ-B2x" secondAttribute="centerX" id="fFS-FI-K7d"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="QC4-gE-HjX"/>
+                                <exclude reference="UfH-0g-Xig"/>
+                                <exclude reference="auC-IQ-xd0"/>
+                                <exclude reference="2Li-aJ-kzy"/>
+                                <exclude reference="8pf-rr-S6b"/>
+                                <exclude reference="B81-hc-w88"/>
+                                <exclude reference="a2H-2l-7vC"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
+                        <outlet property="offlineStateImage" destination="mAe-td-x1a" id="voJ-6o-Fl8"/>
                         <outlet property="refreshImageView" destination="1w7-Y5-xeE" id="SYu-Y3-doY"/>
                         <outlet property="refreshTextLabel" destination="P4b-pJ-WHt" id="G8B-hU-PNP"/>
                     </connections>
@@ -1324,11 +1357,12 @@
         <image name="arrow_down_n" width="15" height="15"/>
         <image name="background_house" width="375" height="177"/>
         <image name="cancel" width="30" height="30"/>
+        <image name="cloud-outline-off" width="120" height="120"/>
         <image name="main_radar_n" width="38" height="38"/>
+        <image name="refresh" width="60" height="60"/>
         <image name="search item_01" width="30" height="30"/>
         <image name="search item_02" width="30" height="30"/>
         <image name="search item_03" width="30" height="30"/>
         <image name="search item_04" width="30" height="30"/>
-        <image name="sync_filled" width="125" height="125"/>
     </resources>
 </document>
