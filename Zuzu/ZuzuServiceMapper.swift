@@ -17,7 +17,9 @@ class ZuzuServiceMapper: NSObject, Mappable {
     
     var userId: String?
     var status: String?
+    var totalSecond: Int?
     var remainingSecond: Int?
+    var startTime: NSDate?
     var expireTime: NSDate?
     var validPurchaseCount: Int?
     var invalidPurchaseCount: Int?
@@ -33,7 +35,9 @@ class ZuzuServiceMapper: NSObject, Mappable {
     func mapping(map: Map) {
         userId                  <-  map["user_id"]
         status                  <-  map["status"]
+        totalSecond             <-  map["total_second"]
         remainingSecond         <-  map["remaining_second"]
+        startTime               <-  (map["start_time"], timeTransform)
         expireTime              <-  (map["expire_time"], timeTransform)
         validPurchaseCount      <-  map["valid_purchase_count"]
         invalidPurchaseCount    <-  map["invalid_purchase_count"]
