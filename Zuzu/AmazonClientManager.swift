@@ -78,35 +78,37 @@ class AmazonClientManager : NSObject {
     
     // MARK: Public Members
     //User Login Data
-    var currentUserProfile: UserProfile? {
+    var currentUserProfile: ZuzuUser? {
         get {
             return UserDefaultsUtils.getUserProfile()
         }
     }
     
-    var currentUserToken: String? {
+    var currentUserToken: (provider:String?, token:String?) {
         get {
             
-            if(!self.isLoggedIn()) {
-                return nil
-            }
+            //TODO: Allow token access even when the logged in process is not completely finished
+            //Since we need the token to finish our login process.
+            //Need to refine the whole process.
+            //if(!self.isLoggedIn()) {
+            //    return nil
+            //}
             
-            if let provider = self.currentUserProfile?.provider {
-                
-                switch(provider) {
-                case Provider.FB:
-                    
-                    return FBSDKAccessToken.currentAccessToken().tokenString
-                    
-                case Provider.GOOGLE:
-                    
-                    return self.googleSignIn.currentUser?.authentication?.idToken
-                    
-                }
+            if let provider = UserDefaultsUtils.getLoginProvider() {
+                    switch(provider) {
+                    case Provider.FB:
+                        
+                        return (provider.rawValue, FBSDKAccessToken.currentAccessToken()?.tokenString)
+                        
+                    case Provider.GOOGLE:
+                        
+                        return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
+                        
+                    }
             } else {
                 
                 assert(false, "No previous login provider, but the user is logged in")
-                return nil
+                return (nil, nil)
             }
         }
     }
@@ -258,7 +260,7 @@ class AmazonClientManager : NSObject {
         Log.info("expiration: \(self.credentialsProvider?.expiration)")
     }
     
-    private func tryRegisterZuzuUser(userProfile : UserProfile, handler: (result: Bool) -> Void){
+    private func tryRegisterZuzuUser(userProfile : UserProfile, handler: (user: ZuzuUser?, result: Bool) -> Void){
         Log.enter()
         
         if let userEmail = userProfile.email {
@@ -271,7 +273,7 @@ class AmazonClientManager : NSObject {
                 dispatch_after(time, dispatch_get_main_queue(), {
                     if error != nil{
                         Log.debug("isExistEmail, error = \(error)")
-                        handler(result: false)
+                        handler(user: nil, result: false)
                         return
                     }
                     
@@ -281,17 +283,17 @@ class AmazonClientManager : NSObject {
                             
                             if error != nil{
                                 Log.debug("getUserByEmail, error = \(error)")
-                                handler(result: false)
+                                handler(user: nil, result: false)
                                 return
                             }
                             
                             if let zuzuUser = result {
-                                self.transientUserProfile?.id = zuzuUser.id
                                 
-                                handler(result: true)
+                                handler(user: zuzuUser, result: true)
+                                
                             } else {
                                 
-                                handler(result: false)
+                                handler(user: nil, result: false)
                             }
                             
                         })
@@ -299,30 +301,36 @@ class AmazonClientManager : NSObject {
                     } else {
                         /// Create new user account
                         
-                        let zuzuUser = ZuzuUser()
-                        zuzuUser.email = userProfile.email
-                        zuzuUser.name = userProfile.name
-                        zuzuUser.gender = userProfile.gender
-                        if let birthday = userProfile.birthday {
-                            zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
+                        if let provider = UserDefaultsUtils.getLoginProvider() {
+                                
+                                let zuzuUser = ZuzuUser()
+                                zuzuUser.email = userProfile.email
+                                zuzuUser.name = userProfile.name
+                                zuzuUser.gender = userProfile.gender
+                                if let birthday = userProfile.birthday {
+                                    zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
+                                }
+                                zuzuUser.pictureUrl = userProfile.pictureUrl
+                                
+                                ZuzuWebService.sharedInstance.registerUser(zuzuUser){(result, error) -> Void in
+                                    
+                                    Log.debug("createUser")
+                                    
+                                    if error != nil {
+                                        Log.debug("createUser, error = \(error)")
+                                        handler(user: nil, result: false)
+                                        return
+                                    }
+                                    
+                                    handler(user: zuzuUser, result: true)
+                                    
+                                }
+                                
+                        } else {
+                            assert(false, "No login provider for current user")
+                            handler(user: nil, result: false)
                         }
-                        zuzuUser.pictureUrl = userProfile.pictureUrl
                         
-                        ZuzuWebService.sharedInstance.registerUser(zuzuUser){(result, error) -> Void in
-                            
-                            Log.debug("createUser")
-                            
-                            if error != nil {
-                                Log.debug("createUser, error = \(error)")
-                                handler(result: false)
-                                return
-                            }
-                            
-                            self.transientUserProfile?.id = zuzuUser.id
-                            
-                            handler(result: true)
-                            
-                        }
                     }
                     
                 })
@@ -510,28 +518,32 @@ class AmazonClientManager : NSObject {
         
         self.completionHandler = completionHandler
         
-        if let provider = self.currentUserProfile?.provider {
+        if let profile = self.currentUserProfile {
             
-            Log.warning("\(self.currentUserProfile?.id), \(provider)")
-            
-            switch(provider) {
-            case Provider.FB:
-                if(self.isLoggedInWithFacebook()) {
-                    self.reloadFBSession()
-                } else {
-                    Log.error("Reloading Facebook Session: Failure")
-                }
-            case Provider.GOOGLE:
-                if(self.isLoggedInWithGoogle()) {
-                    self.reloadGSession()
-                } else {
-                    Log.error("Reloading Google Session: Failure")
-                }
+            if let provider = UserDefaultsUtils.getLoginProvider(){
+                 
+                    Log.warning("Current Login: \(profile.id), \(provider)")
+                    
+                    switch(provider) {
+                    case Provider.FB:
+                        if(self.isLoggedInWithFacebook()) {
+                            self.reloadFBSession()
+                        } else {
+                            Log.error("Reloading Facebook Session: Failure")
+                        }
+                    case Provider.GOOGLE:
+                        if(self.isLoggedInWithGoogle()) {
+                            self.reloadGSession()
+                        } else {
+                            Log.error("Reloading Google Session: Failure")
+                        }
+                    }
             }
+            
         } else {
             
             /// [Backward Compatible]
-            //When there is no login provider saved in UserDefaults, Force resuming FB session
+            //When there is no currentProfile saved in UserDefaults, Force resuming FB session
             if(FBSDKAccessToken.currentAccessToken() != nil) {
                 self.reloadFBSession()
             }
@@ -556,6 +568,9 @@ class AmazonClientManager : NSObject {
         
         // Clear current user profile
         UserDefaultsUtils.clearUserProfile()
+        
+        // Clear current login provider
+        UserDefaultsUtils.clearLoginProvider()
         
         // Wipe credentials
         self.credentialsProvider?.logins = nil
@@ -619,7 +634,7 @@ class AmazonClientManager : NSObject {
         
         self.currentTimer?.invalidate()
         
-        if let provider = self.currentUserProfile?.provider {
+        if let provider = UserDefaultsUtils.getLoginProvider(){
             switch(provider) {
             case .FB:
                 if let expiryTime = FBSDKAccessToken.currentAccessToken()?.expirationDate {
@@ -689,24 +704,35 @@ class AmazonClientManager : NSObject {
             ///Try registering the authenticated users (FB/GOOGLE) with Zuzu backend
             if let userProfile = self.transientUserProfile {
                 
-                self.tryRegisterZuzuUser(userProfile, handler: { (result) -> Void in
+                self.tryRegisterZuzuUser(userProfile, handler: { (user, result) -> Void in
                     if(result) {
                         
                         LoadingSpinner.shared.stop()
                         
-                        Log.warning("Persist UserProfile")
-                        UserDefaultsUtils.setUserProfile(userProfile)
-                        
-                        /// Sign-in completed
-                        Log.debug("postNotificationName: \(UserLoginNotification)")
-                        NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
-                            userInfo: ["userData": userProfile, "status": LoginStatus.New.rawValue])
-                        
-                        self.triggerTokenRefreshingTimer()
-                        
-                        self.transientUserProfile = nil
-                        
-                        AWSTask(result: nil).continueWithBlock(self.completionHandler!)
+                        if let zuzuUser = user {
+                            
+                            /// Persist ZuzuUser
+                            Log.debug("Persist ZuzuUser")
+                            UserDefaultsUtils.setUserProfile(zuzuUser)
+                            
+                            /// Sign-in completed
+                            Log.debug("postNotificationName: \(UserLoginNotification)")
+                            NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
+                                userInfo: ["userData": userProfile, "status": LoginStatus.New.rawValue])
+                            
+                            self.triggerTokenRefreshingTimer()
+                            
+                            self.transientUserProfile = nil
+                            
+                            AWSTask(result: nil).continueWithBlock(self.completionHandler!)
+                            
+                        } else {
+                            
+                            assert(false, "ZuzuUser Id cannot be nil")
+                            /// Zuzu Web Api failure
+                            self.failLogin(.ZuzuFailure)
+                            
+                        }
                         
                     } else {
                         /// Zuzu Web Api failure
@@ -806,14 +832,26 @@ class AmazonClientManager : NSObject {
                         self.failLogin(.FacebookFailure)
                     }
                 }
-
+                
                 Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
             } else {
                 /// Update user data
                 
-                self.transientUserProfile = self.dynamicType.toUserProfile(result)
-                
-                self.completeFBLogin()
+                if let userProfile = self.dynamicType.toUserProfile(result) {
+                    
+                    self.transientUserProfile = userProfile
+                    
+                    self.completeFBLogin()
+                    
+                } else {
+                    
+                    assert(false, "Nil User Profile")
+                    self.failLogin(.FacebookFailure)
+                    
+                    ///GA Tracker: Fetch user data failed
+                    self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), Nil User Profile")
+                }
                 
             }
             
@@ -872,9 +910,22 @@ class AmazonClientManager : NSObject {
                         
                     } else {
                         
-                        self.transientUserProfile = self.dynamicType.toUserProfile(result)
+                        if let userProfile = self.dynamicType.toUserProfile(result) {
+                            
+                            self.transientUserProfile = userProfile
+                            
+                            self.completeFBLogin()
+                            
+                        } else {
+                            
+                            assert(false, "Nil User Profile")
+                            self.failLogin(.FacebookFailure)
+                            
+                            ///GA Tracker: Fetch user data failed
+                            self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                                action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Facebook), Nil User Profile")
+                        }
                         
-                        self.completeFBLogin()
                     }
                     
                 }
@@ -909,6 +960,9 @@ class AmazonClientManager : NSObject {
         Log.debug("FB token: \(FBSDKAccessToken.currentAccessToken()?.expirationDate)")
         
         if let accessToken = FBSDKAccessToken.currentAccessToken() {
+            //Set current login provider
+            UserDefaultsUtils.setLoginProvider(Provider.FB)
+            
             self.completeLogin(["graph.facebook.com" : accessToken.tokenString])
         } else {
             assert(false, "AccessToken should not be nil")
@@ -980,6 +1034,9 @@ class AmazonClientManager : NSObject {
         Log.debug("Google accesstoken: \(self.googleSignIn.currentUser?.authentication?.accessTokenExpirationDate)")
         
         if let idToken = self.googleSignIn.currentUser.authentication.idToken {
+            //Set current login provider
+            UserDefaultsUtils.setLoginProvider(Provider.GOOGLE)
+            
             self.completeLogin(["accounts.google.com": idToken])
         } else {
             assert(false, "IdToken should not be nil")

@@ -9,10 +9,10 @@
 import Foundation
 
 struct UserDefaultsUtils{
-        
+    
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
-
+    
     static func setRadarLandindPageDisplayed() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(true, forKey: radarLandingPageDisplayedUserDefaultKey)
@@ -47,15 +47,41 @@ struct UserDefaultsUtils{
     
     // MARK: Login
     /// UserProfile UserDefaults persistence APIs
+    static let userLoginUserDefaultKey = "userLoginStatus"
     static let userProfileUserDefaultKey = "loginUserData"
+    static let loginProviderUserDefaultKey = "loginProvider"
     static let userLastCognitoIdentityUserDefaultKey = "userLastCognitoIdentityUserDefaultKey"
     
+    // Login Provider
+    static func clearLoginProvider() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(loginProviderUserDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func setLoginProvider(provider: Provider) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(provider.rawValue, forKey: loginProviderUserDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func getLoginProvider() -> Provider? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let providerStr = userDefaults.objectForKey(loginProviderUserDefaultKey) as? String {
+            return Provider(rawValue: providerStr)
+        }else {
+            return nil
+        }
+    }
+    
+    // User Profile
     static func clearUserProfile() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(userProfileUserDefaultKey)
+        userDefaults.synchronize()
     }
     
-    static func setUserProfile(userProfile: UserProfile) {
+    static func setUserProfile(userProfile: ZuzuUser) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         
         let data = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
@@ -63,12 +89,27 @@ struct UserDefaultsUtils{
         userDefaults.synchronize()
     }
     
-    static func getUserProfile() -> UserProfile?{
+    static func getUserProfile() -> ZuzuUser?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         
         let data = userDefaults.objectForKey(userProfileUserDefaultKey) as? NSData
-        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? UserProfile
+        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? ZuzuUser
     }
+    
+    // User Login
+    //    static func setUserLoggedIn(userId: String) {
+    //        let userDefaults = NSUserDefaults.standardUserDefaults()
+    //        userDefaults.setObject(userId, forKey: userLoginUserDefaultKey)
+    //        userDefaults.synchronize()
+    //    }
+    //
+    //    static func isUserLoggedIn() -> Bool{
+    //        let userDefaults = NSUserDefaults.standardUserDefaults()
+    //
+    //        let currentUserId = userDefaults.objectForKey(userLoginUserDefaultKey) as? String
+    //
+    //        return (currentUserId != nil)
+    //    }
     
     /// Check if the user has ever loggin for this installation
     static func setCognitoIdentityId(identityId : String) {
@@ -105,7 +146,7 @@ struct UserDefaultsUtils{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(deviceToken, forKey: deviceTokenUserDefaultKey)
     }
-
+    
     static func getAPNDevicetoken() -> String?{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.stringForKey(deviceTokenUserDefaultKey)

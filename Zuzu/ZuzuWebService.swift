@@ -205,7 +205,7 @@ class ZuzuWebService: NSObject
         Log.debug("Input parameters [userId: \(userId), deviceId: \(deviceId)]")
         
         let resource = "/device/\(userId)/\(deviceId)"
-
+        
         self.responseJSON(.DELETE, resource: resource) { (result, error) -> Void in
             handler(result: (error == nil), error: error)
         }
@@ -354,7 +354,7 @@ class ZuzuWebService: NSObject
         
         Log.exit()
     }
-
+    
     
     // MARK: - Public APIs - Notify
     
@@ -618,15 +618,13 @@ class ZuzuWebService: NSObject
             Log.debug("Unable to do Basic Authorization")
         }
         
-        if AmazonClientManager.sharedInstance.isLoggedIn(){
-            headers["UserId"] = AmazonClientManager.sharedInstance.currentUserProfile?.id
-            headers["UserProvider"] = AmazonClientManager.sharedInstance.currentUserProfile?.provider?.rawValue
-            headers["UserToken"] = AmazonClientManager.sharedInstance.currentUserToken
-        }
+        let userToken = AmazonClientManager.sharedInstance.currentUserToken
+        headers["UserProvider"] = userToken.provider
+        headers["UserToken"] = userToken.token
         
         Log.debug("headers: \(headers)")
         
         return headers
     }
-
+    
 }

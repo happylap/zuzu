@@ -9,11 +9,8 @@
 import Foundation
 import ObjectMapper
 
-enum Provider: String {
-    case FB, GOOGLE
-}
 
-class UserProfile: NSObject, NSCoding, Mappable {
+class UserProfile: NSObject, Mappable {
     
     var provider: Provider?
     var id: String?
@@ -29,43 +26,6 @@ class UserProfile: NSObject, NSCoding, Mappable {
     
     required init?(_ map: Map) {
         
-    }
-    
-    convenience required init?(coder decoder: NSCoder) {
-        
-        if let provider = Provider(rawValue: decoder.decodeObjectForKey("provider") as? String ?? "") {
-            
-            let id = decoder.decodeObjectForKey("id") as? String
-            let email = decoder.decodeObjectForKey("email") as? String
-            let name = decoder.decodeObjectForKey("name") as? String
-            let gender = decoder.decodeObjectForKey("gender") as? String
-            let birthday = decoder.decodeObjectForKey("birthday") as? String
-            let pictureUrl = decoder.decodeObjectForKey("pictureUrl") as? String
-            
-            self.init(provider: provider)
-            self.id = id
-            self.email = email
-            self.name = name
-            self.gender = gender
-            self.birthday = birthday
-            self.pictureUrl = pictureUrl
-            
-        } else {
-            
-            return nil
-            
-        }
-        
-    }
-    
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(provider?.rawValue, forKey: "provider")
-        aCoder.encodeObject(id, forKey:"id")
-        aCoder.encodeObject(email, forKey:"email")
-        aCoder.encodeObject(name, forKey:"name")
-        aCoder.encodeObject(gender, forKey:"gender")
-        aCoder.encodeObject(birthday, forKey:"birthday")
-        aCoder.encodeObject(pictureUrl, forKey:"pictureUrl")
     }
     
     // Mappable

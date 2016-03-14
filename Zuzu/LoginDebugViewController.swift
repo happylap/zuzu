@@ -78,14 +78,15 @@ class LoginDebugViewController: UIViewController {
             if let status = notification.userInfo?["status"] as? Int {
                 if(status == LoginStatus.Resume.rawValue) {
                     
-                    if let provider = AmazonClientManager.sharedInstance.currentUserProfile?.provider {
-                        switch(provider) {
-                        case .FB:
-                            self.popupFacebookStatus()
-                        case .GOOGLE:
-                            self.popupGoogleStatus()
-                        }
+                    if let provider = UserDefaultsUtils.getLoginProvider(){
+                            switch(provider) {
+                            case .FB:
+                                self.popupFacebookStatus()
+                            case .GOOGLE:
+                                self.popupGoogleStatus()
+                            }
                     }
+                    
                 }
             }
         }
@@ -118,7 +119,9 @@ class LoginDebugViewController: UIViewController {
             
             myAlert.addButton("Validate") { () -> Void in
                 
-                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, provider =  AmazonClientManager.sharedInstance.currentUserProfile?.provider {
+                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+                    
+                    let provider = UserDefaultsUtils.getLoginProvider()
                     
                     if(provider == Provider.GOOGLE) {
                         ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
@@ -140,7 +143,7 @@ class LoginDebugViewController: UIViewController {
         
     }
     
-
+    
     @IBAction func onFinishTransaction(sender: AnyObject) {
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
@@ -176,7 +179,9 @@ class LoginDebugViewController: UIViewController {
             
             myAlert.addButton("Validate") { () -> Void in
                 
-                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, provider =  AmazonClientManager.sharedInstance.currentUserProfile?.provider {
+                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+                    
+                    let provider = UserDefaultsUtils.getLoginProvider()
                     
                     if(provider == Provider.FB) {
                         ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
@@ -228,8 +233,10 @@ class LoginDebugViewController: UIViewController {
         
         if let currentUser = AmazonClientManager.sharedInstance.currentUserProfile {
             
+            let provider = UserDefaultsUtils.getLoginProvider()
+            
             subTitle = "UserId = \n\(currentUser.id ?? "-")" +
-                "\n\n Provider = \(currentUser.provider?.rawValue ?? "-")" +
+                "\n\n Provider = \(provider?.rawValue ?? "-")" +
             "\n\n Email = \(currentUser.email ?? "-")"
         }
         
@@ -264,7 +271,7 @@ class LoginDebugViewController: UIViewController {
         "getPurchaseByUserId",
         "getServiceByUserId"]
     
-
+    
     var seletedApiName = ""
     let deviceTokenForTest = "123456789_for_test"
     let notifyItemIdForTest = "123456789_for_test"
@@ -275,48 +282,112 @@ class LoginDebugViewController: UIViewController {
         
         switch self.seletedApiName {
             
-            case "isExistEmail":
-                
-                ZuzuWebService.sharedInstance.isExistEmail(ApiTestConst.email, handler: { (result, error) -> Void in
-                    
-                    let title = "Tester"
-                    let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
-                    
-                    if let error = error {
-                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                    } else {
-                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                    }
-                })
+        case "isExistEmail":
             
-            case "registerUser":
+            ZuzuWebService.sharedInstance.isExistEmail(ApiTestConst.email, handler: { (result, error) -> Void in
                 
-                let user = ZuzuUser()
-                user.email = ApiTestConst.email
-                user.name = "Tester2"
-                user.gender = "男性"
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
                 
-                ZuzuWebService.sharedInstance.registerUser(user, handler: { (userId, error) -> Void in
-                    
-                    let title = "Tester"
-                    let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
-                    
-                    if let error = error {
-                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                    }
-                    
-                    if let userId = userId {
-                        self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)")
-                    }
-                })
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                } else {
+                    self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                }
+            })
+            
+        case "registerUser":
+            
+            let user = ZuzuUser()
+            user.email = ApiTestConst.email
+            user.name = "Tester2"
+            user.gender = "男性"
+            
+            ZuzuWebService.sharedInstance.registerUser(user, handler: { (userId, error) -> Void in
+                
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let userId = userId {
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)")
+                }
+            })
             
             
-            case "getUserByEmail":
+        case "getUserByEmail":
+            
+            ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
                 
-                ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(user.id)\n email: \(user.email)\n registerTime: \(user.registerTime)\n name: \(user.name)\n gender: \(user.gender)\n birthday: \(user.birthday)")
+                }
+            })
+            
+            
+        case "removeUser":
+            
+            ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+                
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
+                    ZuzuWebService.sharedInstance.removeUserById(user.id, email: user.email!, handler: { (result, error) -> Void in
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        } else {
+                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                        }
+                    })
+                }
+            })
+            
+        case "updateUser":
+            ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
+                    user.name = "Tester2"
+                    user.gender = "女性"
+                    user.birthday = NSDate()
+                    user.pictureUrl = "456"
+                    ZuzuWebService.sharedInstance.updateUser(user, handler: { (result, error) -> Void in
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        } else {
+                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                        }
+                    })
+                }
+            })
+            
+        case "getUserById":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.getUserById(userId, handler: { (result, error) -> Void in
                     
-                    let title = "Tester"
-                    let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
                     
                     if let error = error {
                         self.showAlert(title, subTitle: "\(subTitle) \(error)")
@@ -326,371 +397,307 @@ class LoginDebugViewController: UIViewController {
                         self.showAlert(title, subTitle: "\(subTitle) userId: \(user.id)\n email: \(user.email)\n registerTime: \(user.registerTime)\n name: \(user.name)\n gender: \(user.gender)\n birthday: \(user.birthday)")
                     }
                 })
+            })
             
+        case "createDeviceByUserId":
             
-            case "removeUser":
+            self.checkLogin({ (userId, email) -> Void in
+                let deviceId = self.deviceTokenForTest
                 
-                ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+                ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
                     
-                    let title = "Tester"
-                    let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+            })
+            
+        case "isExistDeviceByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                let deviceId = self.deviceTokenForTest
+                
+                ZuzuWebService.sharedInstance.isExistDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
+                    
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+            })
+            
+        case "deleteDeviceByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                let deviceId = self.deviceTokenForTest
+                
+                ZuzuWebService.sharedInstance.deleteDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
+                    
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+            })
+            
+        case "getCriteriaByUserId":
+            self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
+                    let title = "User"
+                    var subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
                     
                     if let error = error {
                         self.showAlert(title, subTitle: "\(subTitle) \(error)")
                     }
                     
-                    if let user: ZuzuUser = result {
-                        ZuzuWebService.sharedInstance.removeUserById(user.id, email: user.email!, handler: { (result, error) -> Void in
+                    if let c: ZuzuCriteria = result {
+                        subTitle = "\(subTitle) criteriaId: \(c.criteriaId)\n enabled: \(c.enabled)\n"
+                        
+                        if let critaria: SearchCriteria = c.criteria {
+                            subTitle = "\(subTitle) criteria: (size: \(critaria.size), price: \(critaria.price), types: \(critaria.types))"
+                        }
+                        
+                        self.showAlert(title, subTitle: subTitle)
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) not find criteria")
+                    }
+                })
+                
+            })
+            
+        case "createCriteriaByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                let criteria = SearchCriteria()
+                criteria.size = (0, 100)
+                criteria.price = (10000, 20000)
+                criteria.types = [1,2,3]
+                
+                ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: criteria, handler: { (result, error) -> Void in
+                    
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+            })
+            
+            
+        case "updateCriteriaFiltersByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                
+                ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
+                    
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    }
+                    
+                    if let criteriaId = result?.criteriaId {
+                        
+                        let criteria = SearchCriteria()
+                        criteria.size = (200, 300)
+                        criteria.price = (50000, 100000)
+                        criteria.types = [4,5,6]
+                        
+                        ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: criteriaId, criteria: criteria, handler: { (result, error) -> Void in
                             if let error = error {
                                 self.showAlert(title, subTitle: "\(subTitle) \(error)")
                             } else {
                                 self.showAlert(title, subTitle: "\(subTitle) \(result)")
                             }
                         })
+                        
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) not find criteria")
                     }
                 })
+            })
             
-            case "updateUser":
-                ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
-                    let title = "Tester"
-                    let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+        case "enableCriteriaByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
+                    
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
                     
                     if let error = error {
                         self.showAlert(title, subTitle: "\(subTitle) \(error)")
                     }
                     
-                    if let user: ZuzuUser = result {
-                        user.name = "Tester2"
-                        user.gender = "女性"
-                        user.birthday = NSDate()
-                        user.pictureUrl = "456"
-                        ZuzuWebService.sharedInstance.updateUser(user, handler: { (result, error) -> Void in
+                    if let criteriaId = result?.criteriaId {
+                        
+                        let enabled = false
+                        let subTitle2 = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n criteriaId: \(criteriaId) \n\n enabled: \(enabled) \n\n result: \n"
+                        
+                        ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: criteriaId, enabled: enabled, handler: { (result, error) -> Void in
                             if let error = error {
-                                self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                                self.showAlert(title, subTitle: "\(subTitle2) \(error)")
                             } else {
-                                self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                                self.showAlert(title, subTitle: "\(subTitle2) \(result)")
                             }
                         })
+                        
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) not find criteria")
                     }
                 })
+            })
             
-            case "getUserById":
+        case "hasValidCriteriaByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.hasValidCriteriaByUserId(userId, handler: { (result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    ZuzuWebService.sharedInstance.getUserById(userId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let user: ZuzuUser = result {
-                            self.showAlert(title, subTitle: "\(subTitle) userId: \(user.id)\n email: \(user.email)\n registerTime: \(user.registerTime)\n name: \(user.name)\n gender: \(user.gender)\n birthday: \(user.birthday)")
-                        }
-                    })
-                })
+            })
             
-            case "createDeviceByUserId":
+        case "deleteCriteriaByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.deleteCriteriaByUserId(userId, handler: { (result, error) -> Void in
+                    
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+            })
+            
+        case "getNotificationItemsByUserId":
+            self.checkLogin({ (userId, email) -> Void in
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    let deviceId = self.deviceTokenForTest
+                ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
                     
-                    ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
-                })
-            
-            case "isExistDeviceByUserId":
-            
-                self.checkLogin({ (userId, email) -> Void in
-                    let deviceId = self.deviceTokenForTest
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    }
                     
-                    ZuzuWebService.sharedInstance.isExistDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
+                    if let _ = result {
+                        self.showAlert(title, subTitle: "\(subTitle) totalNum: \(totalNum)")
+                    }
                 })
-            
-            case "deleteDeviceByUserId":
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    let deviceId = self.deviceTokenForTest
-                    
-                    ZuzuWebService.sharedInstance.deleteDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId:\(deviceId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
-                })
+            })
             
-            case "getCriteriaByUserId":
-                self.checkLogin({ (userId, email) -> Void in
-                    ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
-                        let title = "User"
-                        var subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let c: ZuzuCriteria = result {
-                            subTitle = "\(subTitle) criteriaId: \(c.criteriaId)\n enabled: \(c.enabled)\n"
-                            
-                            if let critaria: SearchCriteria = c.criteria {
-                                subTitle = "\(subTitle) criteria: (size: \(critaria.size), price: \(critaria.price), types: \(critaria.types))"
-                            }
-                            
-                            self.showAlert(title, subTitle: subTitle)
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) not find criteria")
-                        }
-                    })
-                    
-                })
+        case "setReadNotificationByUserId":
             
-            case "createCriteriaByUserId":
+            self.checkLogin({ (userId, email) -> Void in
+                let itemId = self.notifyItemIdForTest
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    let criteria = SearchCriteria()
-                    criteria.size = (0, 100)
-                    criteria.price = (10000, 20000)
-                    criteria.types = [1,2,3]
+                ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: itemId, handler: { (result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n itemId: \(itemId) \n\n result: \n"
                     
-                    ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: criteria, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
                 })
-            
-            
-            case "updateCriteriaFiltersByUserId":
-            
-                self.checkLogin({ (userId, email) -> Void in
-                    
-                    ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let criteriaId = result?.criteriaId {
-                            
-                            let criteria = SearchCriteria()
-                            criteria.size = (200, 300)
-                            criteria.price = (50000, 100000)
-                            criteria.types = [4,5,6]
-                            
-                            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: criteriaId, criteria: criteria, handler: { (result, error) -> Void in
-                                if let error = error {
-                                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                                } else {
-                                    self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                                }
-                            })
-                            
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) not find criteria")
-                        }
-                    })
-                })
-            
-            case "enableCriteriaByUserId":
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let criteriaId = result?.criteriaId {
-                            
-                            let enabled = false
-                            let subTitle2 = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n criteriaId: \(criteriaId) \n\n enabled: \(enabled) \n\n result: \n"
-                            
-                            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: criteriaId, enabled: enabled, handler: { (result, error) -> Void in
-                                if let error = error {
-                                    self.showAlert(title, subTitle: "\(subTitle2) \(error)")
-                                } else {
-                                    self.showAlert(title, subTitle: "\(subTitle2) \(result)")
-                                }
-                            })
-                            
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) not find criteria")
-                        }
-                    })
-                })
+            })
             
-            case "hasValidCriteriaByUserId":
+        case "setReceiveNotifyTimeByUserId":
             
-                self.checkLogin({ (userId, email) -> Void in
-                    ZuzuWebService.sharedInstance.hasValidCriteriaByUserId(userId, handler: { (result, error) -> Void in
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
-                    
-                })
-            
-            case "deleteCriteriaByUserId":
+            self.checkLogin({ (userId, email) -> Void in
+                let deviceId = self.deviceTokenForTest
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    ZuzuWebService.sharedInstance.deleteCriteriaByUserId(userId, handler: { (result, error) -> Void in
-                        
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
-                })
-            
-            case "getNotificationItemsByUserId":
-                self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId: \(deviceId) \n\n result: \n"
                     
-                    ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let _ = result {
-                            self.showAlert(title, subTitle: "\(subTitle) totalNum: \(totalNum)")
-                        }
-                    })
-                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
                 })
-            
-            case "setReadNotificationByUserId":
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    let itemId = self.notifyItemIdForTest
-                    
-                    ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: itemId, handler: { (result, error) -> Void in
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n itemId: \(itemId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
-                    
-                })
+            })
             
-            case "setReceiveNotifyTimeByUserId":
+            
+        case "getPurchaseByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    }
+                    
+                    if let _ = result {
+                        self.showAlert(title, subTitle: "\(subTitle) totalNum: \(totalNum)")
+                    }
+                })
                 
-                self.checkLogin({ (userId, email) -> Void in
-                    let deviceId = self.deviceTokenForTest
-                    
-                    ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n deviceId: \(deviceId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        } else {
-                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
-                        }
-                    })
-                    
-                })
-
+            })
             
-            case "getPurchaseByUserId":
+        case "getServiceByUserId":
             
-                self.checkLogin({ (userId, email) -> Void in
-                    ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, result, error) -> Void in
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                        
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let _ = result {
-                            self.showAlert(title, subTitle: "\(subTitle) totalNum: \(totalNum)")
-                        }
-                    })
-                    
-                })
-            
-            case "getServiceByUserId":
+            self.checkLogin({ (userId, email) -> Void in
                 
-                self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: { (result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
                     
-                    ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: { (result, error) -> Void in
-                        let title = "User"
-                        let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    }
+                    
+                    if let mapper: ZuzuServiceMapper = result {
+                        let userId = mapper.userId
+                        let status = mapper.status
+                        let remainingSecond = mapper.remainingSecond
+                        let expireTime = mapper.expireTime
+                        let validPurchaseCount = mapper.validPurchaseCount
+                        let invalidPurchaseCount = mapper.invalidPurchaseCount
                         
-                        if let error = error {
-                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                        }
-                        
-                        if let mapper: ZuzuServiceMapper = result {
-                            let userId = mapper.userId
-                            let status = mapper.status
-                            let remainingSecond = mapper.remainingSecond
-                            let expireTime = mapper.expireTime
-                            let validPurchaseCount = mapper.validPurchaseCount
-                            let invalidPurchaseCount = mapper.invalidPurchaseCount
-                            
-                            self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)\n status: \(status)\n remainingSecond: \(remainingSecond)\n expireTime: \(expireTime)\n validPurchaseCount: \(validPurchaseCount)\n invalidPurchaseCount: \(invalidPurchaseCount)")
-                        }
-                    })
+                        self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)\n status: \(status)\n remainingSecond: \(remainingSecond)\n expireTime: \(expireTime)\n validPurchaseCount: \(validPurchaseCount)\n invalidPurchaseCount: \(invalidPurchaseCount)")
+                    }
                 })
-
+            })
             
-            default:
-                self.showAlert("\(seletedApiName) Api", subTitle: "Testing code not implement")
+            
+        default:
+            self.showAlert("\(seletedApiName) Api", subTitle: "Testing code not implement")
         }
         
     }
