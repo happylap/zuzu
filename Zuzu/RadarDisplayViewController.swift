@@ -17,6 +17,9 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
+    private let secPerDay = 86400.0
+    private let secPerHour = 3600.0
+    
     var isCheckService = true
     
     var isOnLogging = false
@@ -185,18 +188,31 @@ class RadarDisplayViewController: UIViewController {
             if let status = service.status{
                 if status == RadarStatusValid{
                     
-                    var days = 0
-                    var hours = 0
-                    if let remaining = service.remainingSecond{
-                        days = remaining/86400
-                        hours = (remaining % 86400)/3600
+                    var remainingDays = 0.0
+                    var remainingHours = 0.0
+                    var usedDays = 0.0
+                    var usedHours = 0.0
+                    if let remaining = service.remainingSecond,
+                    let total = service.totalSecond{
+                        
+                        let used = total - remaining
+                        
+                        remainingDays = Double(remaining)/secPerDay
+                        remainingHours = (Double(remaining) % secPerDay)/secPerHour
+                        
+                        usedDays = Double(used)/secPerDay
+                        usedHours = (Double(used) % secPerDay)/secPerHour
                     }
                     
-                    self.serviceStatusLabel?.text = "租屋雷達服務還有\(days)天又\(hours)小時"
+                    let roundedRemainingDays = Int(floor(remainingDays))
+                    let roundedRemainingHours  = Int(floor(remainingHours))
+                    
+                    self.serviceStatusLabel?.text = "租屋雷達服務還有\(roundedRemainingDays)天又\(roundedRemainingHours)小時"
                     self.serviceButton?.hidden = true
                     self.enableModifyButton()
+                    
                     // Update Chart
-                    self.setChart(["已使用天數","剩餘天數"], values: [10.0, Double(days)])
+                    self.setChart(["已使用天數","剩餘天數"], values: [Double(usedDays), Double(remainingDays)])
                     
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
