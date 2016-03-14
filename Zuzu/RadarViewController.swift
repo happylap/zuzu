@@ -230,7 +230,9 @@ extension RadarViewController{
                 self.runOnMainThread(){
                     if let vc = self.navigationController as? RadarNavigationController{
                         self.startLoading()
-                        vc.showRadar()
+                        vc.showRadar(){
+                            self.stopLoading()
+                        }
                     }
                 }
             }
@@ -358,7 +360,9 @@ extension RadarViewController{
                     Log.info("create criteria success")
                     
                     if let vc = self.navigationController as? RadarNavigationController{
-                        vc.showRadar()
+                        vc.showRadar(){
+                            self.stopLoading()
+                        }
                     }
                 }
             }
@@ -473,9 +477,10 @@ extension RadarViewController{
                 return
             }
             
-            self.transactionDone()
             if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRadar()
+                vc.showRadar(){
+                    self.transactionDone()
+                }
             }
         }
     }
