@@ -193,7 +193,7 @@ class RadarDisplayViewController: UIViewController {
                     }
                     
                     self.serviceStatusLabel?.text = "租屋雷達服務還有\(days)天又\(hours)小時"
-                    
+                    self.serviceButton?.hidden = true
                     // Update Chart
                     self.setChart(["已使用天數","剩餘天數"], values: [10.0, Double(days)])
                     

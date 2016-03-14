@@ -143,7 +143,8 @@ class RadarViewController: UIViewController {
         if self.isUpdateMode == true{
             if let zuzuCriteria = self.displayRadarViewController?.zuzuCriteria{
                 if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                    RadarService.sharedInstance.startLoading(self)
+                    RadarService.sharedInstance.stopLoading(self)
+                    RadarService.sharedInstance.startLoadingText(self, text:"更新雷達設定")
                     ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
                         self.runOnMainThread(){
                             if error != nil{
