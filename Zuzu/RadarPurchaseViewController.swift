@@ -135,21 +135,37 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         } else {
                             
                             /// TODO: Start to make purchase with Zuzu Backend
+                            let transId = ""
                             let productId = product.productIdentifier
                             let price = product.price
-                            let purchase = ZuzuPurchase(transactionId:"", userId: userId, productId: productId, productPrice: price)
+                            let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
                             purchase.productTitle = product.localizedTitle
                             
                             self.startLoading()
                             ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
-                                self.stopLoading()
+                                
                                 if error != nil{
                                     Log.error("Fail to createPurchase for product: \(productId)")
-                                    Log.error("Cannot get criteria by user id:\(userId)")
-                                    SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                                    
+                                    RadarService.sharedInstance.checkPurchaseExist(transId){
+                                        (isExist, checkExistError) -> Void in
+                                        self.stopLoading()
+                                        if isExist == true{
+                                            self.dismissViewControllerAnimated(true, completion: nil)
+                                            if let handler = self.purchaseSuccessHandler{
+                                                handler()
+                                            }
+                                            return
+                                        }
+                                        
+                                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                                        
+                                    }
+                                    
                                     return
                                 }
                                 
+                                self.stopLoading()
                                 /// The free trial is activated successfully 
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                 

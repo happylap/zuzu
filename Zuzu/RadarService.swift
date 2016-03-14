@@ -78,7 +78,20 @@ class RadarService : NSObject {
                     ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
                         if error != nil{
                             Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")
-                            handler(result: nil, error: error)
+                            
+                            self.checkPurchaseExist(purchase.transactionId){
+                                (isExist, checkExistError) -> Void in
+                                
+                                if isExist == true{
+                                    handler(result: "", error: nil)
+                                    return
+                                }
+                                
+                                handler(result: nil, error: error)
+                                
+                             }
+                            
+                            
                             return
                         }
                         
@@ -95,6 +108,35 @@ class RadarService : NSObject {
             //
         }
     }
+    
+    func checkPurchaseExist(transactionId: String, handler: (isExist: Bool, checkExistError: ErrorType?) -> Void)
+    {
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.getPurchaseByUserId(userId){
+                (totalNum, result, error) -> Void in
+                
+                if error != nil{
+                    Log.error("cannot get purchase information for transaction: \(transactionId)")
+                    handler(isExist: false, checkExistError: error)
+                    return
+                }
+                
+                if(result != nil){
+                    for purchase in result!{
+                        if purchase.transactionId == transactionId{
+                            handler(isExist: true, checkExistError: nil)
+                            return
+                        }
+                    }
+                }
+                
+                Log.error("purchase not exist for transaction: \(transactionId)")
+                
+                handler(isExist: false, checkExistError: nil)
+            }
+        }
+    }
+    
     
     func checkCriteria(criteria: SearchCriteria) -> Bool{
         let region = criteria.region
