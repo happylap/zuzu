@@ -42,6 +42,7 @@ class AmazonSNSService : NSObject {
             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                 let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
+                self.createDevice(deviceTokenString)
             }else{
                 Log.debug("deviceTokenString is nil")
             }
@@ -57,6 +58,7 @@ class AmazonSNSService : NSObject {
             let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
+                self.createDevice(deviceTokenString)
             }else{
                 Log.debug("userId is nil")
             }
@@ -143,6 +145,7 @@ class AmazonSNSService : NSObject {
         Log.debug("endpointArn: \(request.endpointArn)")
         Log.debug("Token: \(request.attributes!["Token"])")
         Log.debug("Enabled: \(request.attributes!["Enabled"])")
+        
         sns.setEndpointAttributes(request).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task: AWSTask!) -> AnyObject! in
             if task.error != nil {
                 Log.debug("Error: \(task.error)")
@@ -175,7 +178,6 @@ class AmazonSNSService : NSObject {
                     Log.debug("endpointArn: \(createEndpointResponse.endpointArn)")
                     if let endpointArn = createEndpointResponse.endpointArn{
                         UserDefaultsUtils.setSNSEndpointArn(endpointArn)
-                        self.createDevice(endpointArn)
                     }
                 }
                 Log.exit()
@@ -205,13 +207,13 @@ class AmazonSNSService : NSObject {
         Log.exit()
     }
     
-    func createDevice(endpointArn: String){
+    func createDevice(deviceToken: String){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: endpointArn){
+            ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceToken){
                 (result, error) -> Void in
                 
                 if error != nil{
-                    Log.error("Fail to register endpointArn: \(endpointArn) for user: \(userId)")
+                    Log.error("Fail to register deviceToken: \(deviceToken) for user: \(userId)")
                 }
                 
             }
