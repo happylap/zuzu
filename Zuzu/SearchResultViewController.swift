@@ -57,6 +57,8 @@ class SearchResultViewController: UIViewController {
     
     private var duplicateHouseItem: HouseItem?
     
+    private var alertView:SCLAlertView? = SCLAlertView()
+    
     // MARK: - Public Fields
     
     @IBOutlet weak var filterSettingButton: UIButton!
@@ -272,18 +274,19 @@ class SearchResultViewController: UIViewController {
             
             if(SearchResultViewController.alertViewResponder == nil) {
                 
-                let msgTitle = NSLocalizedString("unable_to_get_data.alert.title", comment: "")
-                let subTitle = NSLocalizedString("unable_to_get_data.alert.msg", comment: "")
-                let okButton = NSLocalizedString("unable_to_get_data.alert.button.ok", comment: "")
-                
-                let alertView = SCLAlertView()
-                alertView.showCloseButton = true
-                
-                SearchResultViewController.alertViewResponder = alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                
-                SearchResultViewController.alertViewResponder?.setDismissBlock({ () -> Void in
-                    SearchResultViewController.alertViewResponder = nil
-                })
+                if let alertView = self.alertView {
+                    let msgTitle = NSLocalizedString("unable_to_get_data.alert.title", comment: "")
+                    let subTitle = NSLocalizedString("unable_to_get_data.alert.msg", comment: "")
+                    let okButton = NSLocalizedString("unable_to_get_data.alert.button.ok", comment: "")
+                    
+                    alertView.showCloseButton = true
+                    
+                    SearchResultViewController.alertViewResponder = alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                    
+                    SearchResultViewController.alertViewResponder?.setDismissBlock({ () -> Void in
+                        SearchResultViewController.alertViewResponder = nil
+                    })
+                }
             }
             
             /// GA Tracker
@@ -428,6 +431,8 @@ class SearchResultViewController: UIViewController {
     }
     
     private func reloadDataWithNewCriteria(criteria: SearchCriteria?) {
+        Log.enter()
+        
         self.dataSource.criteria = criteria
         
         LoadingSpinner.shared.setImmediateAppear(true)
@@ -439,6 +444,8 @@ class SearchResultViewController: UIViewController {
         
         //Update Advanced Filtet Icon Status
         updateFilterSettingButtonStatus()
+        
+        Log.exit()
     }
     
     private func getStateForSmartFilterButton(filterGroup : FilterGroup) -> Bool {
@@ -809,6 +816,9 @@ class SearchResultViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        self.alertView = nil
+        
         Log.debug("\(self) [[viewWillDisappear]]")
     }
     
