@@ -373,6 +373,9 @@ extension RadarViewController{
 
 extension RadarViewController{
     func checkService(){
+        if self.isUpdateMode == true{
+            return
+        }
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if self.hasValidService == true{
                 return
