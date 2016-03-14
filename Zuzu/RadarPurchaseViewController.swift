@@ -377,7 +377,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         
         RadarService.sharedInstance.stopLoading(self)
         
-        SCLAlertView().showInfo("網路連線失敗", subTitle: "購買雷達服務交易失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        SCLAlertView().showInfo("購買失敗", subTitle: "購買雷達服務交易失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         
     }
     
