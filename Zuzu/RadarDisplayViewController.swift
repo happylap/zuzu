@@ -38,7 +38,7 @@ class RadarDisplayViewController: UIViewController {
     @IBOutlet weak var statusPieChart: PieChartView! {
         didSet {
             statusPieChart.descriptionText = ""
-            statusPieChart.noDataText = "服務狀態載入中.."
+            statusPieChart.noDataText = "載入中..."
             statusPieChart.highlightPerTapEnabled = false
             statusPieChart.rotationEnabled = false
             statusPieChart.legend.enabled = false
@@ -107,10 +107,10 @@ class RadarDisplayViewController: UIViewController {
             if(remainingDays > 0) {
                 statusPieChart.centerText = "\(Int(remainingDays))天"
             } else {
-                statusPieChart.centerText = "服務到期"
+                statusPieChart.centerText = "已到期"
             }
         } else {
-            statusPieChart.centerText = "服務到期"
+            statusPieChart.centerText = "已到期"
         }
         
         let usedDays = UIColor.colorWithRGB(0xFF6666)
