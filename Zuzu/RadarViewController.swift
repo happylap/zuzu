@@ -156,27 +156,42 @@ class RadarViewController: UIViewController {
     }
     
     
-    private func alertServerError(subTitle: String) {
-        
-        let alertView = SCLAlertView()
-        
-        alertView.showInfo("與伺服器連線失敗", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-        
-    }
-    
     // MARK: - Purchase Radar
     
     @IBAction func activateButtonClick(sender: UIButton) {
+        
+        // check critria first
         if RadarService.sharedInstance.checkCriteria(self.searchCriteria) == false{
            return
         }
         
+        // updateMode --> update criteria
         if self.isUpdateMode == true{
-            self.updateCriteria()
+            if let zuzuCriteria = self.displayRadarViewController?.zuzuCriteria{
+                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+                    
+                    ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
+                        self.runOnMainThread(){
+                            self.stopLoading()
+                            if error != nil{
+                                self.startLoading()
+                                Log.error("Cannot update criteria by user id:\(userId)")
+                                SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                                return
+                            }
+                            Log.info("update criteria success")
+                            self.delegate?.onCriteriaSettingDone(self.searchCriteria)
+                            self.navigationController?.popViewControllerAnimated(true)
+                            self.startLoading()
+                        }
+                    }
+                }
+            }
             return
         }
         
         if self.hasValidService == true{
+            self.startLoadingText("重新設定租屋雷達服務...")
             self.setUpCriteria()
             return
         }
@@ -192,27 +207,6 @@ class RadarViewController: UIViewController {
             vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
             
             presentViewController(vc, animated: true, completion: nil)
-        }
-    }
-    
-    func updateCriteria(){
-        if let zuzuCriteria = self.displayRadarViewController?.zuzuCriteria{
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.startLoading()
-                ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
-                    self.runOnMainThread(){
-                        self.stopLoading()
-                        if error != nil{
-                            Log.error("Cannot update criteria by user id:\(userId)")
-                            SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                            return
-                        }
-                        Log.info("update criteria success")
-                        self.delegate?.onCriteriaSettingDone(self.searchCriteria)
-                        self.navigationController?.popViewControllerAnimated(true)
-                    }
-                }
-            }
         }
     }
 }
@@ -235,7 +229,10 @@ extension RadarViewController{
             if let _ = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 self.runOnMainThread(){
                     if let vc = self.navigationController as? RadarNavigationController{
-                        vc.showRadar()
+                        self.startLoading()
+                        vc.showRadar(){
+                            self.stopLoading()
+                        }
                     }
                 }
             }
@@ -265,20 +262,20 @@ extension RadarViewController{
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             self.startLoading()
             ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                self.stopLoading()
-                self.runOnMainThread(){
-                    if error != nil{
+
+                if error != nil{
+                    self.runOnMainThread(){
+                        self.stopLoading()
                         Log.error("Cannot get criteria by user id:\(userId)")
-                        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                        return
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
+                    return
                 }
                 
                 Log.info("get criteria successfully")
-                
                 if result != nil{
                     result!.criteria = self.searchCriteria
-                    self.updateCriteriaForConfigure(result!)
+                    self.updateCriteria(result!)
                 }else{
                     self.createCriteria()
                 }
@@ -288,22 +285,25 @@ extension RadarViewController{
         Log.exit()
     }
     
-    func updateCriteriaForConfigure(zuzuCriteria: ZuzuCriteria){
+    func updateCriteria(zuzuCriteria: ZuzuCriteria){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.startLoading()
+
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
-                self.stopLoading()
-                self.runOnMainThread(){
-                    if error != nil{
+                
+                if error != nil{
+                    self.runOnMainThread(){
                         Log.error("Cannot update criteria by user id:\(userId)")
-                        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        self.stopLoading()
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         if let vc = self.navigationController as? RadarNavigationController{
                             vc.zuzuCriteria = zuzuCriteria // still old criteria
-                            vc.showRadar()
+                            vc.showDisplayRadarView(zuzuCriteria)
+                            self.stopLoading()
                         }
-                        return
                     }
+
+                    return
                 }
                 
                 Log.info("update criteria success")
@@ -315,56 +315,59 @@ extension RadarViewController{
         Log.exit()
     }
     
+    func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria, isEnabled: Bool){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
+                criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                    self.runOnMainThread(){
+                        if let vc = self.navigationController as? RadarNavigationController{
+                            if error != nil{
+                                Log.error("Cannot enable criteria by user id:\(userId)")
+                                vc.zuzuCriteria = zuzuCriteria
+                                vc.showDisplayRadarView(zuzuCriteria)
+                                self.stopLoading()
+                                SCLAlertView().showInfo("網路連線失敗", subTitle: "設定雷達成功\n請啟用租屋雷達", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            }else{
+                                Log.info("enable criteria success")
+                                zuzuCriteria.enabled = isEnabled
+                                vc.zuzuCriteria = zuzuCriteria
+                                vc.showDisplayRadarView(zuzuCriteria)
+                                self.stopLoading()
+                            }
+                        }
+                    }
+            }
+        }
+    }
+    
     func createCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.startLoading()
+
             ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.searchCriteria){
                 (result, error) -> Void in
                 
                 self.runOnMainThread(){
-                    self.stopLoading()
+                    
                     if error != nil{
+                        self.stopLoading()
                         Log.error("Cannot update criteria by user id:\(userId)")
-                        SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         return
                     }
                     
                     Log.info("create criteria success")
                     
                     if let vc = self.navigationController as? RadarNavigationController{
-                        vc.showRadar()
+                        vc.showRadar(){
+                            self.stopLoading()
+                        }
                     }
                 }
             }
         }
         Log.exit()
-    }
-    
-    func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria, isEnabled: Bool){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.startLoading()
-            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
-                    self.runOnMainThread(){
-                        self.stopLoading()
-                        if error != nil{
-                            Log.error("Cannot enable criteria by user id:\(userId)")
-                            SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                            return
-                        }
-                        
-                        Log.info("enable criteria success")
-                        
-                        if let vc = self.navigationController as? RadarNavigationController{
-                            zuzuCriteria.criteria = self.searchCriteria // new criteria
-                            zuzuCriteria.enabled = isEnabled
-                            vc.zuzuCriteria = zuzuCriteria
-                            vc.showRadar()
-                        }
-                    }
-            }
-        }
     }
 }
 
@@ -375,29 +378,36 @@ extension RadarViewController{
         if self.isUpdateMode == true{
             return
         }
-        if AmazonClientManager.sharedInstance.isLoggedIn(){
-            if self.hasValidService == true{
-                return
-            }
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.startLoading()
-                ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
-            }
+        
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            return
+        }
+        
+        if self.hasValidService == true{
+            SCLAlertView().showInfo("雷達服務已設定完成", subTitle: "租屋雷達服務已設定完成\n請立即啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return
+        }
+        
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            self.startLoading()
+            ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
         }
     }
     
     func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
         self.runOnMainThread(){
-            self.stopLoading()
+            
             if error != nil{
                 Log.error("get radar service error")
-                SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "無法取得租屋雷達服務狀態", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                self.stopLoading()
+                SCLAlertView().showInfo("網路連線失敗", subTitle: "無法取得租屋雷達服務狀態", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 return
             }
             
             if result != nil{
                 if result?.status == RadarStatusValid{
                     self.hasValidService = true
+                    self.stopLoading()
                     SCLAlertView().showInfo("雷達服務已設定完成", subTitle: "租屋雷達服務已設定完成\n請立即啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                 }
             }
@@ -467,9 +477,10 @@ extension RadarViewController{
                 return
             }
             
-            self.transactionDone()
             if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRadar()
+                vc.showRadar(){
+                    self.transactionDone()
+                }
             }
         }
     }
