@@ -146,12 +146,12 @@ class RadarDisplayViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        Log.error("viewDidAppear")
+        Log.debug("viewDidAppear")
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        Log.error("viewWillAppear")
+        Log.debug("viewWillAppear")
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
                 vc.showRadar()
@@ -202,12 +202,18 @@ class RadarDisplayViewController: UIViewController {
                     self.criteriaEnableSwitch?.on = false
                     self.criteriaEnableSwitch?.enabled = false
                     self.serviceButton?.hidden = false
+                    
+                    // Update Chart
+                    self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0])
                 }
             }else{
                 self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
                 self.criteriaEnableSwitch?.on = false
                 self.criteriaEnableSwitch?.enabled = false
                 self.serviceButton?.hidden = false
+                
+                // Update Chart
+                self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0])
             }
             
             // expiration date
@@ -224,6 +230,7 @@ class RadarDisplayViewController: UIViewController {
         
         
         self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
+        self.statusPieChart.centerText = "無法取得資料"
         self.serviceExpireLabel?.text = ""
     }
     
