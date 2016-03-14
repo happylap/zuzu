@@ -9,6 +9,8 @@
 import UIKit
 import SCLAlertView
 import MBProgressHUD
+import Charts
+
 private let Log = Logger.defaultLogger
 
 let RadarStatusValid = "valid"
@@ -30,6 +32,20 @@ class RadarDisplayViewController: UIViewController {
     private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource(uiViewController: self)
     
     let emptyLabel = UILabel()
+    
+    @IBOutlet weak var statusPieChart: PieChartView! {
+        didSet {
+            statusPieChart.descriptionText = ""
+            statusPieChart.noDataText = "服務狀態載入中.."
+            statusPieChart.highlightPerTapEnabled = false
+            statusPieChart.rotationEnabled = false
+            statusPieChart.legend.enabled = false
+            
+            statusPieChart.drawMarkers = false
+            statusPieChart.drawSliceTextEnabled = false
+            statusPieChart.drawSlicesUnderHoleEnabled = false
+        }
+    }
     
     @IBOutlet weak var criteriaEnableSwitch: UISwitch!
     
@@ -70,8 +86,51 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    // MARK: - View Life cycle
+    // MARK: - Private Utils
+    func setChart(dataPoints: [String], values: [Double]) {
+        
+        var dataEntries: [ChartDataEntry] = []
+        
+        for i in 0..<dataPoints.count {
+            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
+            dataEntries.append(dataEntry)
+        }
+        
+        let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "服務狀態")
+        let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
+        pieChartDataSet.drawValuesEnabled = false
+        statusPieChart.data = pieChartData
+        
+        if let remainingDays = values.last {
+            if(remainingDays > 0) {
+                statusPieChart.centerText = "\(Int(remainingDays))天"
+            } else {
+                statusPieChart.centerText = "服務到期"
+            }
+        } else {
+            statusPieChart.centerText = "服務到期"
+        }
+        
+        let usedDays = UIColor.colorWithRGB(0xFF6666)
+        let remainingDays = UIColor.colorWithRGB(0x4990E2)
+        
+        pieChartDataSet.colors = [usedDays, remainingDays]
+    }
     
+    // MARK: - View Life cycle
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        Log.error("viewDidLayoutSubviews")
+//        // Update Chart Size
+//        let currentSize = statusPieChart.frame.size
+//        let currentCenter = statusPieChart.center
+//        
+//        let newFrame = CGSize(width: currentSize.width * 1.3, height: currentSize.height * 1.3)
+//        
+//        statusPieChart.frame.size = newFrame
+//        statusPieChart.center = currentCenter
+//    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.serviceButton?.hidden = true
@@ -82,9 +141,15 @@ class RadarDisplayViewController: UIViewController {
         self.configurePurchaseTableView()
         self.updateCriteriaTextLabel()
     }
-
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.error("viewDidAppear")
+    }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        Log.error("viewWillAppear")
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
                 vc.showRadar()
@@ -106,8 +171,6 @@ class RadarDisplayViewController: UIViewController {
             self.checkService()
             self.purchaseHistotyTableDataSource.refresh()
         }
-
-
     }
     
     // MARK: - Update UI
@@ -116,14 +179,19 @@ class RadarDisplayViewController: UIViewController {
         if let service = self.zuzuService{
             if let status = service.status{
                 if status == RadarStatusValid{
-
+                    
                     var days = 0
                     var hours = 0
                     if let remaining = service.remainingSecond{
                         days = remaining/86400
                         hours = (remaining % 86400)/3600
                     }
-                    self.serviceStatusLabel?.text = "您的租屋雷達服務還有\(days)天又\(hours)小時"
+                    
+                    self.serviceStatusLabel?.text = "租屋雷達服務還有\(days)天又\(hours)小時"
+                    
+                    // Update Chart
+                    self.setChart(["已使用天數","剩餘天數"], values: [10.0, Double(days)])
+                    
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
                     self.criteriaEnableSwitch?.on = false
@@ -146,15 +214,14 @@ class RadarDisplayViewController: UIViewController {
             }
             self.serviceExpireLabel?.text = "到期日: \(expireDateStr)"
             
-            
             return
         }
-
+        
         
         self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
         self.serviceExpireLabel?.text = ""
     }
-
+    
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
         self.regionLabel?.text = displayItem.title
@@ -223,7 +290,7 @@ class RadarDisplayViewController: UIViewController {
         }
         
     }
-
+    
     
     // MARK: - Navigation
     
@@ -423,7 +490,7 @@ extension RadarDisplayViewController{
             }
         }
     }
-
+    
 }
 
 // MARK: Check Radar service
@@ -469,7 +536,7 @@ extension RadarDisplayViewController{
         }
         return nil
     }
- 
+    
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
