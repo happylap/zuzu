@@ -194,14 +194,15 @@ class RadarDisplayViewController: UIViewController {
                     
                     self.serviceStatusLabel?.text = "租屋雷達服務還有\(days)天又\(hours)小時"
                     self.serviceButton?.hidden = true
+                    self.enableModifyButton()
                     // Update Chart
                     self.setChart(["已使用天數","剩餘天數"], values: [10.0, Double(days)])
                     
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
                     self.criteriaEnableSwitch?.on = false
-                    self.criteriaEnableSwitch?.enabled = false
                     self.serviceButton?.hidden = false
+                    self.disableModifyButton()
                     
                     // Update Chart
                     self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0])
@@ -209,8 +210,8 @@ class RadarDisplayViewController: UIViewController {
             }else{
                 self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
                 self.criteriaEnableSwitch?.on = false
-                self.criteriaEnableSwitch?.enabled = false
                 self.serviceButton?.hidden = false
+                self.disableModifyButton()
                 
                 // Update Chart
                 self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0])
@@ -232,6 +233,8 @@ class RadarDisplayViewController: UIViewController {
         self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
         self.statusPieChart.centerText = "無法取得資料"
         self.serviceExpireLabel?.text = ""
+        self.serviceButton?.hidden = true
+        self.enableModifyButton()
     }
     
     private func updateCriteriaTextLabel(){
@@ -250,14 +253,24 @@ class RadarDisplayViewController: UIViewController {
     
     private func configureButton() {
         modifyButtoon.layer.borderWidth = 1
-        modifyButtoon.layer.borderColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-        modifyButtoon.tintColor =
-            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        modifyButtoon
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Normal)
-        modifyButtoon
-            .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
+        self.enableModifyButton()
+    }
+    
+    private func disableModifyButton(){
+        let disabledColor = UIColor.colorWithRGB(0xE0E0E0, alpha: 0.8)
+        modifyButtoon.enabled = false
+        modifyButtoon.setTitleColor(disabledColor, forState: .Normal)
+        modifyButtoon.tintColor = disabledColor
+        modifyButtoon.layer.borderColor = disabledColor.CGColor
+    }
+    
+    private func enableModifyButton(){
+        let enbledColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        modifyButtoon.enabled = true
+        modifyButtoon.layer.borderColor = enbledColor.CGColor
+        modifyButtoon.tintColor = enbledColor
+        modifyButtoon.setTitleColor(enbledColor, forState: .Normal)
+        modifyButtoon.setTitleColor(enbledColor, forState: .Selected)
     }
     
     private func configureBannerText(){
@@ -331,9 +344,9 @@ class RadarDisplayViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func enableCriteria(sender: UISwitch) {
-        
+        let isEnabled = sender.on
         if let service = self.zuzuService{
-            let isEnabled = sender.on
+            
             if let status = service.status{
                 if status == RadarStatusValid{
                     RadarService.sharedInstance.startLoading(self)
@@ -342,7 +355,10 @@ class RadarDisplayViewController: UIViewController {
                 }
             }
         }
-
+        
+        sender.on = !isEnabled
+        self.showPurchase()
+        
     }
     
     @IBAction func onServiceButtonTapped(sender: AnyObject) {
@@ -361,14 +377,14 @@ class RadarDisplayViewController: UIViewController {
                             return
                         }
                         
-                        
-                        self.zuzuCriteria.enabled = isEnabled
-                        var subTitle = "租屋雷達服務已經啟用"
-                        if isEnabled == false{
-                            subTitle = "租屋雷達服務已經停用"
-                        }
                         RadarService.sharedInstance.stopLoading(self)
-                        SCLAlertView().showInfo("設定成功", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        self.zuzuCriteria.enabled = isEnabled
+                        if isEnabled == true{
+                            SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經啟用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                            
+                        }else{
+                        SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經停用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        }
                     }
             }
         }
