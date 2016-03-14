@@ -377,14 +377,14 @@ class RadarDisplayViewController: UIViewController {
                             return
                         }
                         
-                        
-                        self.zuzuCriteria.enabled = isEnabled
-                        var subTitle = "租屋雷達服務已經啟用"
-                        if isEnabled == false{
-                            subTitle = "租屋雷達服務已經停用"
-                        }
                         RadarService.sharedInstance.stopLoading(self)
-                        SCLAlertView().showInfo("設定成功", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                        self.zuzuCriteria.enabled = isEnabled
+                        if isEnabled == true{
+                            SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經啟用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                            
+                        }else{
+                        SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經停用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        }
                     }
             }
         }
