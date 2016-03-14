@@ -23,6 +23,8 @@ class RadarDisplayViewController: UIViewController {
     
     var porcessTransactionNum = -1
     
+    var purchaseViewController: RadarPurchaseViewController?
+    
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
@@ -334,7 +336,7 @@ extension RadarDisplayViewController{
         }
     }
     
-    func purchaseSuccessHandler() -> Void{
+    func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
         RadarService.sharedInstance.startLoading(self)
@@ -342,9 +344,10 @@ extension RadarDisplayViewController{
         Log.exit()
     }
     
-    func unfinishedTransactionHandler() -> Void{
+    func unfinishedTransactionHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
+        
         SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF)
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
@@ -403,6 +406,7 @@ extension RadarDisplayViewController{
                                 
                                 RadarService.sharedInstance.stopLoading(self)
                                 SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                                self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
                             }
                         }
                     }else{
@@ -420,6 +424,7 @@ extension RadarDisplayViewController{
     
     func checkService(){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            RadarService.sharedInstance.startLoading(self)
             ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                 (result: ZuzuServiceMapper?, error: NSError?) -> Void in
                 self.runOnMainThread(){
@@ -495,6 +500,7 @@ extension RadarDisplayViewController{
         Log.enter()
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
+        self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
         self.checkService()
         Log.exit()
     }
