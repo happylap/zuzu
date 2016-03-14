@@ -106,6 +106,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     }
     
     
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         if indexPath.row == 0{
@@ -117,21 +118,18 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
                 assert(false, "Failed to prepare purchase cell instance")
             }
         }else{
-            let dataSize = self.purchaseData?.count
-            if dataSize != nil && indexPath.row <= dataSize{
-                if let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as? RadarPurchaseRecordTableViewCell{
+            if let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as? RadarPurchaseRecordTableViewCell{
+                
+                if let purchaseData = self.purchaseData {
                     
-                    if let purchaseData = self.purchaseData {
-                        
-                        let purchase = purchaseData[indexPath.row]
-                        
-                        cell.recordItem = purchase
-                        
-                        return cell
-                    }
-                } else {
-                    assert(false, "Failed to prepare purchase cell instance")
+                    let purchase = purchaseData[indexPath.row]
+                    
+                    cell.recordItem = purchase
+                    
+                    return cell
                 }
+            } else {
+                assert(false, "Failed to prepare purchase cell instance")
             }
         }
         
