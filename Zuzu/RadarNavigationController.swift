@@ -26,42 +26,51 @@ class RadarNavigationController: UINavigationController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.showRadar()
-
     }
     
     // MARK: - show radar page
     
-    func showRadar(){
+    func showRadar(handler: (() -> Void)? = nil){
         Log.enter()
 
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if self.zuzuCriteria != nil{
                 self.showDisplayRadarView(self.zuzuCriteria!)
+                if handler != nil{
+                    handler!()
+                }
                 Log.exit()
                 return
             }
             
-            
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.startLoading()
+                
+                RadarService.sharedInstance.startLoading(self)
+                
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
                     self.runOnMainThread(){
-                        self.stopLoading()
                         if error != nil{
                             Log.error("Cannot get criteria by user id:\(userId)")
                             self.showRetryRadarView(false)
+                            if handler != nil{
+                                handler!()
+                            }
                             return
                         }
                         
                         if result != nil{
                             self.zuzuCriteria = result
-                            self.stopLoading()
                             self.showDisplayRadarView(self.zuzuCriteria!)
+                            if handler != nil{
+                                handler!()
+                            }
                         }else{
-                            self.stopLoading() // no criteria
+                             // no criteria
                             self.showConfigureRadarView()
+                            if handler != nil{
+                                handler!()
+                            }
                         }
                     }
                 }
@@ -70,6 +79,9 @@ class RadarNavigationController: UINavigationController {
         else{
             self.zuzuCriteria = nil
             self.showConfigureRadarView()
+            if handler != nil{
+                handler!()
+            }
         }
         
         Log.exit()
@@ -109,19 +121,8 @@ class RadarNavigationController: UINavigationController {
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
+            RadarService.sharedInstance.stopLoading(self)
         }
-    }
-    
-    // MARK: - Loading
-    
-    func startLoading(){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.view)
-    }
-    
-    func stopLoading(){
-        LoadingSpinner.shared.stop()
     }
 }
 

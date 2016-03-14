@@ -8,6 +8,7 @@
 
 import Foundation
 import SCLAlertView
+import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
@@ -17,6 +18,8 @@ let ZuzuUserLogoutNotification = "ZuzuUserLogoutNotification"
 
 class RadarService : NSObject {
     
+    var isLoading = false
+    var isLoadingText = true
     //Share Instance for interacting with the ZuzuStore
     class var sharedInstance: RadarService {
         struct Singleton {
@@ -168,4 +171,59 @@ class RadarService : NSObject {
         return false
         
     }
+    
+    // MARK: - Loading
+    
+    func startLoading(theViewController: UIViewController){
+        if self.isLoading == true{
+            return
+        }
+        
+        if self.isLoadingText == true{
+            self.stopLoading(theViewController)
+            self.isLoadingText = false
+        }
+        
+        self.isLoading = true
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.startOnView(theViewController.view)
+    }
+    
+    func startLoadingText(theViewController: UIViewController, text: String){
+        if self.isLoadingText == true{
+            return
+        }
+        
+        if self.isLoading == true{
+            self.stopLoading(theViewController)
+            self.isLoading = false
+            return
+        }
+        
+        self.isLoadingText = true
+        
+        let dialog = MBProgressHUD.showHUDAddedTo(theViewController.view, animated: true)
+        
+        dialog.animationType = .ZoomIn
+        dialog.dimBackground = true
+        dialog.labelText = text
+        
+        theViewController.runOnMainThread() { () -> Void in}
+    }
+    
+    func stopLoading(theViewController: UIViewController){
+        if self.isLoading == true{
+            self.isLoading = false
+            LoadingSpinner.shared.stop()
+        }
+        
+        if self.isLoadingText == true{
+            self.isLoadingText = false
+            MBProgressHUD.hideHUDForView(theViewController.view, animated: true)
+        }
+    }
+    
+
+    
 }
