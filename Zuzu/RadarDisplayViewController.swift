@@ -512,15 +512,15 @@ extension RadarDisplayViewController{
         let alertView = SCLAlertView()
         alertView.showCloseButton = false
         
-        alertView.addButton("重新再試") {
-            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            if unfinishedTranscations.count > 0{
-                if AmazonClientManager.sharedInstance.isLoggedIn(){
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            if AmazonClientManager.sharedInstance.isLoggedIn(){
+                alertView.addButton("重新再試") {
                     self.doUnfinishTransactions(unfinishedTranscations)
                 }
             }
         }
-        
+ 
         alertView.addButton("取消") {
         }
         

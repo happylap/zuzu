@@ -147,15 +147,21 @@ class RadarViewController: UIViewController {
                     ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
                         self.runOnMainThread(){
                             if error != nil{
+                                
                                 RadarService.sharedInstance.stopLoading(self)
+                                
                                 Log.error("Cannot update criteria by user id:\(userId)")
-                                SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                                
+                                SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                                 return
                             }
+                            
                             Log.info("update criteria success")
                             self.delegate?.onCriteriaSettingDone(self.searchCriteria)
-                            self.navigationController?.popViewControllerAnimated(true)
+                            
                             RadarService.sharedInstance.stopLoading(self)
+                            
+                            self.navigationController?.popViewControllerAnimated(true)
                         }
                     }
                 }
@@ -218,13 +224,20 @@ extension RadarViewController{
     
     func unfinishedTransactionHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
+        
         self.tabBarController?.tabBarHidden = false
+        
         self.purchaseViewController = purchaseView
+        
+        self.stopPurchaseLoading(true)
+        
         SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF)
+        
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
         }
+        
         Log.exit()
     }
     
@@ -235,7 +248,9 @@ extension RadarViewController{
 
                 if error != nil{
                     self.runOnMainThread(){
-                        RadarService.sharedInstance.stopLoading(self)
+                        
+                        self.stopPurchaseLoading(false)
+                        
                         Log.error("Cannot get criteria by user id:\(userId)")
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
@@ -264,12 +279,14 @@ extension RadarViewController{
                 if error != nil{
                     self.runOnMainThread(){
                         Log.error("Cannot update criteria by user id:\(userId)")
-                        RadarService.sharedInstance.stopLoading(self)
+                        
+                        self.stopPurchaseLoading(true)
+                        
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        
                         if let vc = self.navigationController as? RadarNavigationController{
                             vc.zuzuCriteria = zuzuCriteria // still old criteria
                             vc.showDisplayRadarView(zuzuCriteria)
-                            RadarService.sharedInstance.stopLoading(self)
                         }
                     }
 
@@ -294,17 +311,20 @@ extension RadarViewController{
                         if let vc = self.navigationController as? RadarNavigationController{
                             if error != nil{
                                 Log.error("Cannot enable criteria by user id:\(userId)")
-                                RadarService.sharedInstance.stopLoading(self)
+                                
                                 SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功\n請啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                                RadarService.sharedInstance.stopLoading(self)
-                                self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                                
+                                self.stopPurchaseLoading(true)
+                                
                                 vc.zuzuCriteria = zuzuCriteria
                                 vc.showDisplayRadarView(zuzuCriteria)
                             }else{
                                 Log.info("enable criteria success")
+                                
                                 SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                                RadarService.sharedInstance.stopLoading(self)
-                                self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                                
+                                self.stopPurchaseLoading(true)
+     
                                 zuzuCriteria.enabled = isEnabled
                                 vc.zuzuCriteria = zuzuCriteria
                                 vc.showDisplayRadarView(zuzuCriteria)
@@ -326,24 +346,36 @@ extension RadarViewController{
                 self.runOnMainThread(){
                     
                     if error != nil{
-                        RadarService.sharedInstance.stopLoading(self)
+                        self.stopPurchaseLoading(false)
+                        
                         Log.error("Cannot update criteria by user id:\(userId)")
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        
                         return
                     }
                     
                     Log.info("create criteria success")
                     
+                    SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    
+                    self.stopPurchaseLoading(true)
+                    
                     if let vc = self.navigationController as? RadarNavigationController{
-                        vc.showRadar(){
-                            RadarService.sharedInstance.stopLoading(self)
-                            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
-                        }
+                        vc.showRadar()
                     }
                 }
             }
         }
         Log.exit()
+    }
+    
+    private func stopPurchaseLoading(isDismissPurchaseView: Bool){
+        
+        RadarService.sharedInstance.stopLoading(self)
+        
+        if isDismissPurchaseView == true{
+            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 }
 
@@ -368,6 +400,7 @@ extension RadarViewController{
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            RadarService.sharedInstance.startLoading(self)
             ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
         }
     }
@@ -389,6 +422,7 @@ extension RadarViewController{
             }
         }
     }
+    
 }
 
 // MARK: Handle unfinished transactions
@@ -408,6 +442,7 @@ extension RadarViewController{
     }
     
     func cancelLoginHandler() -> Void{
+        self.isOnLogging = false
         self.tabBarController?.tabBarHidden = false
     }
     
@@ -416,6 +451,7 @@ extension RadarViewController{
             return
         }
         
+        self.isOnLogging = true
         self.tabBarController?.tabBarHidden = true
         AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, cancelHandler: self.cancelLoginHandler, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
     }
@@ -466,7 +502,7 @@ extension RadarViewController{
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
         RadarService.sharedInstance.stopLoading(self)
-        self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+        self.checkService() // need to check service after unfinished transaction is processed
         Log.exit()
     }
     
@@ -477,15 +513,15 @@ extension RadarViewController{
         let alertView = SCLAlertView()
         alertView.showCloseButton = false
         
-        alertView.addButton("重新再試") {
-            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            if unfinishedTranscations.count > 0{
-                if AmazonClientManager.sharedInstance.isLoggedIn(){
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            if AmazonClientManager.sharedInstance.isLoggedIn(){
+                alertView.addButton("重新再試") {
                     self.doUnfinishTransactions(unfinishedTranscations)
                 }
             }
         }
-        
+
         alertView.addButton("取消") {
         }
         
