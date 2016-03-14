@@ -570,8 +570,8 @@
                                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                                                 </userDefinedRuntimeAttributes>
                                                                             </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="到期日: 2016/02/19" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ea-9P-KAv" userLabel="serviceExpirationLabel">
-                                                                                <rect key="frame" x="276" y="156.5" width="123.5" height="17"/>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="到期日: 2016/02/19" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ea-9P-KAv" userLabel="serviceExpirationLabel">
+                                                                                <rect key="frame" x="276" y="156.5" width="300" height="17"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                 <color key="textColor" red="0.49803921580314636" green="0.49803921580314636" blue="0.49803921580314636" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -599,6 +599,7 @@
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="8" id="Cit-kL-efe"/>
                                                                             <constraint firstAttribute="trailing" secondItem="tQY-Zr-6Ob" secondAttribute="trailing" constant="20" symbolic="YES" id="EHi-hL-Kso"/>
                                                                             <constraint firstItem="h9Q-ML-UFy" firstAttribute="top" secondItem="R0d-9F-apP" secondAttribute="bottom" constant="-8" id="Eqb-BH-Kis"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="3ea-9P-KAv" secondAttribute="trailing" constant="8" id="VBU-on-xJh"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="leading" secondItem="h9Q-ML-UFy" secondAttribute="trailing" constant="-8" id="bIZ-ny-8Iq"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="R0d-9F-apP" secondAttribute="trailing" constant="8" id="ek0-K8-E78"/>
                                                                             <constraint firstItem="h9Q-ML-UFy" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" multiplier="1:2" id="iba-gw-7db"/>
