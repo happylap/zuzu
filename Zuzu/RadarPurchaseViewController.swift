@@ -21,7 +21,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     var cancelPurchaseHandler: (() -> Void)?
     
-    var completePurchaseHandler: ((isSuccess:Bool, error: NSError?) -> Void)?
+    var purchaseSuccessHandler: (() -> Void)?
     
     var unfinishedTransactionHandler: (() -> Void)?
     
@@ -145,9 +145,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 self.stopLoading()
                                 if error != nil{
                                     Log.error("Fail to createPurchase for product: \(productId)")
-                                    if let handler = self.completePurchaseHandler{
-                                        handler(isSuccess: false, error: NSError(domain: "設定租屋雷達服務交易失敗", code: -1, userInfo: nil))
-                                    }
+                                    Log.error("Cannot get criteria by user id:\(userId)")
+                                    SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                                     return
                                 }
                                 
@@ -155,8 +154,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                 
                                 self.dismissViewControllerAnimated(true, completion: nil)
-                                if let handler = self.completePurchaseHandler{
-                                    handler(isSuccess: true, error: nil)
+                                if let handler = self.purchaseSuccessHandler{
+                                    handler()
                                 }
                             }
                         }
@@ -350,16 +349,14 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
             self.stopLoading()
             if error != nil{
                 Log.error("create purchase error")
-                if let handler = self.completePurchaseHandler{
-                    handler(isSuccess: false, error: NSError(domain: "設定租屋雷達服務交易失敗", code: -1, userInfo: nil))
-                }
+                SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 return
             }
             
             ZuzuStore.sharedInstance.finishTransaction(transaction)
             
-            if let handler = self.completePurchaseHandler{
-                handler(isSuccess: true, error: nil)
+            if let handler = self.purchaseSuccessHandler{
+                handler()
             }
         }
     }
@@ -367,10 +364,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
         dismissViewControllerAnimated(true, completion: nil)
         Log.debug("\(transaction.transactionIdentifier)")
-        if let handler = self.completePurchaseHandler{
-            handler(isSuccess: false, error: NSError(domain: "購買雷達服務交易失敗", code: -1, userInfo: nil))
-        }
-        
+        SCLAlertView().showInfo("網路連線失敗", subTitle: "購買雷達服務交易失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
 
