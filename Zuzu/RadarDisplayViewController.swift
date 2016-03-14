@@ -129,6 +129,7 @@ class RadarDisplayViewController: UIViewController {
                         hours = (remaining % 86400)/3600
                     }
                     self.serviceStatusLabel?.text = "您的租屋雷達服務還有\(days)天又\(hours)小時"
+                    self.serviceButton?.hidden = true
                 }else{
                     self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
                     self.criteriaEnableSwitch?.on = false
