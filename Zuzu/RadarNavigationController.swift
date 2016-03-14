@@ -26,14 +26,7 @@ class RadarNavigationController: UINavigationController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if AmazonClientManager.sharedInstance.isLoggedIn() && self.zuzuCriteria == nil{
-            self.startLoading()
-            self.showRadar()
-        }else{
-            self.showRadar()
-        }
-        
+        self.showRadar()
     }
     
     // MARK: - show radar page
@@ -52,7 +45,7 @@ class RadarNavigationController: UINavigationController {
             }
             
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-
+                RadarService.sharedInstance.startLoading(self)
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
                     self.runOnMainThread(){
                         if error != nil{
@@ -126,20 +119,8 @@ class RadarNavigationController: UINavigationController {
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
-            self.stopLoading()
+            RadarService.sharedInstance.stopLoading(self)
         }
-    }
-    
-    // MARK: - Loading
-    
-    func startLoading(){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.view)
-    }
-    
-    func stopLoading(){
-        LoadingSpinner.shared.stop()
     }
 }
 

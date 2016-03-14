@@ -301,7 +301,7 @@ class AmazonClientManager : NSObject {
                     } else {
                         /// Create new user account
                         
-                        if let provider = UserDefaultsUtils.getLoginProvider() {
+                        if let _ = UserDefaultsUtils.getLoginProvider() {
                                 
                                 let zuzuUser = ZuzuUser()
                                 zuzuUser.email = userProfile.email

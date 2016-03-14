@@ -128,34 +128,6 @@ class RadarViewController: UIViewController {
         self.otherCriteriaLabel?.text = "其他 \(filterNum) 個過濾條件"
     }
     
-
-    // MARK: - Loading
-    
-    func startLoading(){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.view)
-    }
-    
-    func stopLoading(){
-        LoadingSpinner.shared.stop()
-    }
-    
-    func startLoadingText(text: String){
-        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        
-        dialog.animationType = .ZoomIn
-        dialog.dimBackground = true
-        dialog.labelText = text
-        
-        self.runOnMainThread() { () -> Void in}
-    }
-    
-    func stopLoadingText(){
-        MBProgressHUD.hideHUDForView(self.view, animated: true)
-    }
-    
-    
     // MARK: - Purchase Radar
     
     @IBAction func activateButtonClick(sender: UIButton) {
@@ -169,12 +141,11 @@ class RadarViewController: UIViewController {
         if self.isUpdateMode == true{
             if let zuzuCriteria = self.displayRadarViewController?.zuzuCriteria{
                 if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                    
+                    RadarService.sharedInstance.startLoading(self)
                     ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
                         self.runOnMainThread(){
-                            self.stopLoading()
                             if error != nil{
-                                self.startLoading()
+                                RadarService.sharedInstance.stopLoading(self)
                                 Log.error("Cannot update criteria by user id:\(userId)")
                                 SCLAlertView().showInfo("與伺服器連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                                 return
@@ -182,7 +153,7 @@ class RadarViewController: UIViewController {
                             Log.info("update criteria success")
                             self.delegate?.onCriteriaSettingDone(self.searchCriteria)
                             self.navigationController?.popViewControllerAnimated(true)
-                            self.startLoading()
+                            RadarService.sharedInstance.stopLoading(self)
                         }
                     }
                 }
@@ -191,7 +162,7 @@ class RadarViewController: UIViewController {
         }
         
         if self.hasValidService == true{
-            self.startLoadingText("重新設定租屋雷達服務...")
+            RadarService.sharedInstance.startLoadingText(self, text:"重新設定租屋雷達服務...")
             self.setUpCriteria()
             return
         }
@@ -227,13 +198,8 @@ extension RadarViewController{
         self.tabBarController?.tabBarHidden = false
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if let _ = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.runOnMainThread(){
-                    if let vc = self.navigationController as? RadarNavigationController{
-                        self.startLoading()
-                        vc.showRadar(){
-                            self.stopLoading()
-                        }
-                    }
+                if let vc = self.navigationController as? RadarNavigationController{
+                    vc.showRadar()
                 }
             }
         }
@@ -242,6 +208,7 @@ extension RadarViewController{
     func purchaseSuccessHandler() -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
+        RadarService.sharedInstance.startLoading(self)
         self.setUpCriteria()
         Log.exit()
     }
@@ -260,12 +227,11 @@ extension RadarViewController{
     func setUpCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.startLoading()
             ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
 
                 if error != nil{
                     self.runOnMainThread(){
-                        self.stopLoading()
+                        RadarService.sharedInstance.stopLoading(self)
                         Log.error("Cannot get criteria by user id:\(userId)")
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
@@ -294,12 +260,12 @@ extension RadarViewController{
                 if error != nil{
                     self.runOnMainThread(){
                         Log.error("Cannot update criteria by user id:\(userId)")
-                        self.stopLoading()
+                        RadarService.sharedInstance.stopLoading(self)
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         if let vc = self.navigationController as? RadarNavigationController{
                             vc.zuzuCriteria = zuzuCriteria // still old criteria
                             vc.showDisplayRadarView(zuzuCriteria)
-                            self.stopLoading()
+                            RadarService.sharedInstance.stopLoading(self)
                         }
                     }
 
@@ -326,14 +292,14 @@ extension RadarViewController{
                                 Log.error("Cannot enable criteria by user id:\(userId)")
                                 vc.zuzuCriteria = zuzuCriteria
                                 vc.showDisplayRadarView(zuzuCriteria)
-                                self.stopLoading()
+                                RadarService.sharedInstance.stopLoading(self)
                                 SCLAlertView().showInfo("網路連線失敗", subTitle: "設定雷達成功\n請啟用租屋雷達", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                             }else{
                                 Log.info("enable criteria success")
                                 zuzuCriteria.enabled = isEnabled
                                 vc.zuzuCriteria = zuzuCriteria
                                 vc.showDisplayRadarView(zuzuCriteria)
-                                self.stopLoading()
+                                RadarService.sharedInstance.stopLoading(self)
                             }
                         }
                     }
@@ -351,7 +317,7 @@ extension RadarViewController{
                 self.runOnMainThread(){
                     
                     if error != nil{
-                        self.stopLoading()
+                        RadarService.sharedInstance.stopLoading(self)
                         Log.error("Cannot update criteria by user id:\(userId)")
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         return
@@ -361,7 +327,7 @@ extension RadarViewController{
                     
                     if let vc = self.navigationController as? RadarNavigationController{
                         vc.showRadar(){
-                            self.stopLoading()
+                            RadarService.sharedInstance.stopLoading(self)
                         }
                     }
                 }
@@ -376,30 +342,31 @@ extension RadarViewController{
 extension RadarViewController{
     func checkService(){
         if self.isUpdateMode == true{
+            RadarService.sharedInstance.stopLoading(self)
             return
         }
         
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            RadarService.sharedInstance.stopLoading(self)
             return
         }
         
         if self.hasValidService == true{
+            RadarService.sharedInstance.stopLoading(self)
             SCLAlertView().showInfo("雷達服務已設定完成", subTitle: "租屋雷達服務已設定完成\n請立即啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             return
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            self.startLoading()
             ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: self.checkServiceHandler)
         }
     }
     
     func checkServiceHandler(result: ZuzuServiceMapper?, error: NSError?) -> Void{
         self.runOnMainThread(){
-            
+            RadarService.sharedInstance.stopLoading(self)
             if error != nil{
                 Log.error("get radar service error")
-                self.stopLoading()
                 SCLAlertView().showInfo("網路連線失敗", subTitle: "無法取得租屋雷達服務狀態", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 return
             }
@@ -407,7 +374,6 @@ extension RadarViewController{
             if result != nil{
                 if result?.status == RadarStatusValid{
                     self.hasValidService = true
-                    self.stopLoading()
                     SCLAlertView().showInfo("雷達服務已設定完成", subTitle: "租屋雷達服務已設定完成\n請立即啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                 }
             }
@@ -448,7 +414,7 @@ extension RadarViewController{
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
-        self.startLoadingText("重新設定租屋雷達服務...")
+        RadarService.sharedInstance.startLoadingText(self,text:"重新設定租屋雷達服務...")
         self.performFinishTransactions()
         Log.exit()
     }
@@ -489,7 +455,7 @@ extension RadarViewController{
         Log.enter()
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
-        self.stopLoadingText()
+        RadarService.sharedInstance.stopLoading(self)
         Log.exit()
     }
     

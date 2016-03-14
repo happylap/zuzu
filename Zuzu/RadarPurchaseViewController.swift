@@ -141,7 +141,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
                             purchase.productTitle = product.localizedTitle
                             
-                            self.startLoading()
+                            RadarService.sharedInstance.startLoading(self)
                             ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
                                 
                                 if error != nil{
@@ -149,7 +149,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     
                                     RadarService.sharedInstance.checkPurchaseExist(transId){
                                         (isExist, checkExistError) -> Void in
-                                        self.stopLoading()
                                         if isExist == true{
                                             self.dismissViewControllerAnimated(true, completion: nil)
                                             if let handler = self.purchaseSuccessHandler{
@@ -165,7 +164,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     return
                                 }
                                 
-                                self.stopLoading()
                                 /// The free trial is activated successfully 
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                 
@@ -359,11 +357,11 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         dismissViewControllerAnimated(true, completion: nil)
         Log.debug("\(transaction.transactionIdentifier)")
-        self.startLoading()
+        RadarService.sharedInstance.startLoading(self)
         RadarService.sharedInstance.createPurchase(transaction){
             (result: String?, error: NSError?) -> Void in
-            self.stopLoading()
             if error != nil{
+                RadarService.sharedInstance.stopLoading(self)
                 Log.error("create purchase error")
                 SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 return
@@ -384,18 +382,4 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     }
     
 
-}
-
-// MARK: - Loading
-
-extension RadarPurchaseViewController{
-    func startLoading(){
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.startOnView(self.view)
-    }
-    
-    func stopLoading(){
-        LoadingSpinner.shared.stop()
-    }
 }
