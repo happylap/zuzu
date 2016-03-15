@@ -46,13 +46,15 @@ class RadarNavigationController: UINavigationController {
             
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 
+                self.showRetryRadarView(true)
+                
                 RadarService.sharedInstance.startLoading(self)
                 
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
                     self.runOnMainThread(){
                         if error != nil{
                             Log.error("Cannot get criteria by user id:\(userId)")
-                            self.showRetryRadarView(false)
+                            
                             if handler != nil{
                                 handler!()
                             }
