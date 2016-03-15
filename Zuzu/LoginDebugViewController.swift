@@ -264,7 +264,9 @@ class LoginDebugViewController: UIViewController {
         "enableCriteriaByUserId",
         "hasValidCriteriaByUserId",
         "deleteCriteriaByUserId",
+        "updateCriteriaFiltersByUserId",
         "getNotificationItemsByUserId",
+        "getNotificationItemsByUserId2",
         "setReadNotificationByUserId",
         "setReceiveNotifyTimeByUserId",
         "(createPurchase)",
@@ -599,6 +601,9 @@ class LoginDebugViewController: UIViewController {
             
         case "getNotificationItemsByUserId":
             self.checkLogin({ (userId, email) -> Void in
+                ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: nil, handler: { (totalNum, result, error) -> Void in
+                    
+                })
                 
                 ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
                     let title = "User"
@@ -615,14 +620,49 @@ class LoginDebugViewController: UIViewController {
                 
             })
             
-        case "setReadNotificationByUserId":
+        case "getNotificationItemsByUserId":
             
             self.checkLogin({ (userId, email) -> Void in
-                let itemId = self.notifyItemIdForTest
                 
-                ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: itemId, handler: { (result, error) -> Void in
+                ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
                     let title = "User"
-                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n itemId: \(itemId) \n\n result: \n"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+                
+            })
+            
+        case "getNotificationItemsByUserId":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                
+                ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    }
+                })
+                
+            })
+            
+        case "getNotificationItemsByUserId2":
+            
+            self.checkLogin({ (userId, email) -> Void in
+                
+                let postTime = NSDate()
+                
+                ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: postTime, handler: { (totalNum, result, error) -> Void in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n postTime: \(postTime) \n\n result: \n"
                     
                     if let error = error {
                         self.showAlert(title, subTitle: "\(subTitle) \(error)")

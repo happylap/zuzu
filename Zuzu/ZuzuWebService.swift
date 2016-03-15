@@ -358,10 +358,15 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Notify
     
-    func getNotificationItemsByUserId(userId: String, handler: (totalNum: Int, result: [NotifyItem]?, error: ErrorType?) -> Void) {
-        Log.debug("Input parameters [userId: \(userId)]")
+    func getNotificationItemsByUserId(userId: String, postTime: NSDate? = nil, handler: (totalNum: Int, result: [NotifyItem]?, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), postTime: \(postTime)]")
         
-        let resource = "/notifyitem/\(userId)"
+        var resource = "/notifyitem/\(userId)"
+        
+        if let postTime = postTime {
+            let secondsOfPostTime = Int(postTime.timeIntervalSince1970)
+            resource = "/notifyitem/\(userId)/after/\(secondsOfPostTime)"
+        }
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
