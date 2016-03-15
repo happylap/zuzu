@@ -99,15 +99,16 @@
                                 </variation>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lxd-WG-UAo" userLabel="Image Container View">
-                                <rect key="frame" x="0.0" y="191" width="414" height="83"/>
+                                <rect key="frame" x="0.0" y="191" width="414" height="103.5"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eHx-uB-Lqi">
-                                        <rect key="frame" x="228" y="0.0" width="124" height="83"/>
-                                        <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rightRadarLanding" translatesAutoresizingMaskIntoConstraints="NO" id="eHx-uB-Lqi" userLabel="Right Image View">
+                                        <rect key="frame" x="238.5" y="0.0" width="103.5" height="103.5"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZoI-Eb-35T">
-                                        <rect key="frame" x="62" y="0.0" width="124" height="83"/>
-                                        <color key="backgroundColor" red="0.40000000596046448" green="1" blue="0.80000001192092896" alpha="1" colorSpace="calibratedRGB"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="leftRadarLanding" translatesAutoresizingMaskIntoConstraints="NO" id="ZoI-Eb-35T" userLabel="Left Image View">
+                                        <rect key="frame" x="72.5" y="0.0" width="103.5" height="103.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="ZoI-Eb-35T" secondAttribute="height" multiplier="1:1" id="MLE-yx-5ag"/>
+                                        </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="0"/>
@@ -121,15 +122,20 @@
                                     <constraint firstItem="eHx-uB-Lqi" firstAttribute="width" secondItem="ZoI-Eb-35T" secondAttribute="width" id="G0Y-nZ-cBA"/>
                                     <constraint firstItem="eHx-uB-Lqi" firstAttribute="top" secondItem="lxd-WG-UAo" secondAttribute="top" id="Rsf-Y1-bYk"/>
                                     <constraint firstItem="eHx-uB-Lqi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZoI-Eb-35T" secondAttribute="trailing" priority="750" constant="8" symbolic="YES" id="cxx-HH-ZRY"/>
-                                    <constraint firstItem="ZoI-Eb-35T" firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="width" multiplier="0.3" id="fAu-aK-Ul1"/>
+                                    <constraint firstItem="ZoI-Eb-35T" firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="width" multiplier="1:4" id="fAu-aK-Ul1"/>
                                     <constraint firstItem="eHx-uB-Lqi" firstAttribute="centerX" secondItem="lxd-WG-UAo" secondAttribute="centerX" multiplier="1.4" id="i3u-Qj-x4t"/>
                                     <constraint firstAttribute="bottom" secondItem="ZoI-Eb-35T" secondAttribute="bottom" id="m06-6g-CvW"/>
                                     <constraint firstAttribute="width" secondItem="lxd-WG-UAo" secondAttribute="height" multiplier="5:1" id="qZb-gM-khL"/>
                                     <constraint firstItem="ZoI-Eb-35T" firstAttribute="top" secondItem="lxd-WG-UAo" secondAttribute="top" id="sXp-Hg-Jum"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="qZb-gM-khL"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pSm-Fm-EMv" userLabel="Feature List View 1">
-                                <rect key="frame" x="21" y="282" width="373" height="93"/>
+                                <rect key="frame" x="21" y="302.5" width="373" height="93.5"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checked_green" translatesAutoresizingMaskIntoConstraints="NO" id="Iml-7A-pKU">
                                         <rect key="frame" x="20" y="6" width="25" height="25"/>
@@ -148,7 +154,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="想要的物件，上架數小時內即時通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34V-ga-knY">
-                                        <rect key="frame" x="20" y="39" width="240" height="48"/>
+                                        <rect key="frame" x="20" y="39" width="240" height="48.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -171,7 +177,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jQ3-N3-tQj" userLabel="Feature List View 2">
-                                <rect key="frame" x="21" y="383" width="373" height="93.5"/>
+                                <rect key="frame" x="21" y="404" width="373" height="93"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checked_green" translatesAutoresizingMaskIntoConstraints="NO" id="UzA-fG-7TW">
                                         <rect key="frame" x="20" y="6" width="25" height="25"/>
@@ -190,7 +196,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重複物件智慧篩選，省時又方便" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhv-vR-3P5">
-                                        <rect key="frame" x="20" y="39" width="210" height="48.5"/>
+                                        <rect key="frame" x="20" y="39" width="210" height="48"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -213,7 +219,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5O3-jG-Jdx" userLabel="Feature List View 3">
-                                <rect key="frame" x="21" y="484" width="373" height="93"/>
+                                <rect key="frame" x="21" y="504.5" width="373" height="93.5"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checked_green" translatesAutoresizingMaskIntoConstraints="NO" id="ksZ-E8-xlM">
                                         <rect key="frame" x="20" y="6" width="25" height="25"/>
@@ -232,7 +238,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="過濾條件超齊全，豬豬就是貼心!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="saB-vA-gZ0">
-                                        <rect key="frame" x="20" y="39" width="214.5" height="48"/>
+                                        <rect key="frame" x="20" y="39" width="214.5" height="48.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -255,7 +261,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFI-eq-uUx">
-                                <rect key="frame" x="115" y="593" width="184" height="48"/>
+                                <rect key="frame" x="115" y="614" width="184" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="166" id="jtZ-GD-Xwp"/>
                                     <constraint firstAttribute="height" constant="48" id="nWr-Fv-5LT"/>
@@ -313,6 +319,8 @@
                     <connections>
                         <outlet property="cancelButton" destination="YzE-PW-QCu" id="fBW-5g-O7b"/>
                         <outlet property="continueButton" destination="NFI-eq-uUx" id="9KN-Hz-j8d"/>
+                        <outlet property="leftSampleImage" destination="ZoI-Eb-35T" id="ezM-ip-MUf"/>
+                        <outlet property="rightSampleImage" destination="eHx-uB-Lqi" id="6ne-FG-fbg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QXP-fy-R5g" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -747,6 +755,8 @@
     <resources>
         <image name="cancel" width="30" height="30"/>
         <image name="checked_green" width="30" height="30"/>
+        <image name="leftRadarLanding" width="275" height="238"/>
         <image name="lock_icon" width="30" height="30"/>
+        <image name="rightRadarLanding" width="283" height="268"/>
     </resources>
 </document>
