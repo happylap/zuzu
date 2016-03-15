@@ -160,6 +160,7 @@ class RadarDisplayViewController: UIViewController {
         self.configureBannerText()
         self.configurePurchaseTableView()
         self.updateCriteriaTextLabel()
+        self.purchaseHistotyTableDataSource.refresh()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -584,11 +585,10 @@ extension RadarDisplayViewController{
     
     func checkService(){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            RadarService.sharedInstance.startLoading(self)
+            RadarService.sharedInstance.startLoadingText(self, text:"更新服務狀態")
             ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                 (result: ZuzuServiceMapper?, error: NSError?) -> Void in
                 self.runOnMainThread(){
-                    self.purchaseHistotyTableDataSource.refresh()
                     RadarService.sharedInstance.stopLoading(self)
                     if error != nil{
                         self.zuzuService = nil
