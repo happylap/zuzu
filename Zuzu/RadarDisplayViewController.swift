@@ -17,6 +17,8 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
+    var navigationView: RadarNavigationController?
+    
     private let secPerDay = 86400.0
     private let secPerHour = 3600.0
     
@@ -175,9 +177,7 @@ class RadarDisplayViewController: UIViewController {
         
         Log.debug("viewWillAppear")
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            if let vc = self.navigationController as? RadarNavigationController{
-                vc.showConfigureRadarView()
-            }
+            self.navigationView?.showConfigureRadarView()
             return
         }
         
@@ -489,9 +489,7 @@ extension RadarDisplayViewController{
     func cancelPurchaseHandler() -> Void{
         self.tabBarController?.tabBarHidden = false
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            if let vc = self.navigationController as? RadarNavigationController{
-                vc.showConfigureRadarView()
-            }
+            self.navigationView?.showConfigureRadarView()
         }
     }
     

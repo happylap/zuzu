@@ -16,6 +16,8 @@ protocol RadarViewControllerDelegate: class {
 
 class RadarViewController: UIViewController {
     
+    var navigationView: RadarNavigationController?
+    
     var unfinishedTranscations: [SKPaymentTransaction]?
     
     var porcessTransactionNum = -1
@@ -212,9 +214,7 @@ extension RadarViewController{
         self.tabBarController?.tabBarHidden = false
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if let _ = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                if let vc = self.navigationController as? RadarNavigationController{
-                    vc.showRadar()
-                }
+                self.navigationView?.showRadar()
             }
         }
     }
@@ -387,16 +387,13 @@ extension RadarViewController{
     }
     
     private func gotoDisplayRadar(zuzuCriteria: ZuzuCriteria?){
-        if let vc = self.navigationController as? RadarNavigationController{
-            vc.showRetryRadarView(true)
-            self.purchaseViewController?.dismissViewControllerAnimated(true){
-                if zuzuCriteria == nil{
-                    vc.showRadar()
-                    return
-                }
-                vc.showDisplayRadarView(zuzuCriteria!)
+        self.navigationView?.showRetryRadarView(true)
+        self.purchaseViewController?.dismissViewControllerAnimated(true){
+            if zuzuCriteria == nil{
+                self.navigationView?.showRadar()
+                return
             }
-            
+            self.navigationView?.showDisplayRadarView(zuzuCriteria!)
         }
     }
     
@@ -514,9 +511,7 @@ extension RadarViewController{
             
             transactionDone()
             
-            if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRadar()
-            }
+            self.navigationView?.showRadar()
         }
     }
     

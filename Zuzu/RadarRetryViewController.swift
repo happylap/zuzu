@@ -12,6 +12,8 @@ private let Log = Logger.defaultLogger
 
 class RadarRetryViewController: UIViewController {
     
+    var navigationView: RadarNavigationController?
+    
     var isBlank = false
     
     @IBOutlet weak var offlineStateImage: UIImageView! {
@@ -70,8 +72,6 @@ class RadarRetryViewController: UIViewController {
         
         self.hideComponents()
         
-        if let vc = self.navigationController as? RadarNavigationController{
-            vc.showRadar()
-        }
+        self.navigationView?.showRadar()
     }
 }
