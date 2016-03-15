@@ -186,8 +186,6 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 if showSpinner == true{
                     LoadingSpinner.shared.stop()
                 }
-                
-                self.tableView.reloadData()
             }
         }
         Log.exit()
