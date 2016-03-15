@@ -180,7 +180,7 @@ class RadarDisplayViewController: UIViewController {
         Log.debug("viewWillAppear")
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRadar()
+                vc.showConfigureRadarView()
             }
             return
         }
@@ -488,7 +488,7 @@ extension RadarDisplayViewController{
         self.tabBarController?.tabBarHidden = false
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
-                vc.showRadar()
+                vc.showConfigureRadarView()
             }
         }
     }

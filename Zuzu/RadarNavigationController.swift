@@ -31,15 +31,12 @@ class RadarNavigationController: UINavigationController {
     
     // MARK: - show radar page
     
-    func showRadar(handler: (() -> Void)? = nil){
+    func showRadar(){
         Log.enter()
 
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if self.zuzuCriteria != nil{
                 self.showDisplayRadarView(self.zuzuCriteria!)
-                if handler != nil{
-                    handler!()
-                }
                 Log.exit()
                 return
             }
@@ -54,25 +51,16 @@ class RadarNavigationController: UINavigationController {
                     self.runOnMainThread(){
                         if error != nil{
                             Log.error("Cannot get criteria by user id:\(userId)")
-                            
-                            if handler != nil{
-                                handler!()
-                            }
+                            self.showRetryRadarView(false)
                             return
                         }
                         
                         if result != nil{
                             self.zuzuCriteria = result
                             self.showDisplayRadarView(self.zuzuCriteria!)
-                            if handler != nil{
-                                handler!()
-                            }
                         }else{
                              // no criteria
                             self.showConfigureRadarView()
-                            if handler != nil{
-                                handler!()
-                            }
                         }
                     }
                 }
@@ -81,9 +69,6 @@ class RadarNavigationController: UINavigationController {
         else{
             self.zuzuCriteria = nil
             self.showConfigureRadarView()
-            if handler != nil{
-                handler!()
-            }
         }
         
         Log.exit()
