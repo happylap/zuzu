@@ -91,16 +91,21 @@ class ZuzuCriteria: NSObject, Mappable {
             let types = json["purpose_type"]["value"].arrayObject as? [Int]
             
             // 租金範圍
-            let price:(Int, Int) = (json["price"]["from"].intValue, json["price"]["to"].intValue)
+            var price:(Int, Int)?
+            if let _ = json["price"].dictionary {
+                price = (json["price"]["from"].intValue, json["price"]["to"].intValue)
+            }
             
             // 坪數範圍
-            let size:(Int, Int) = (json["size"]["from"].intValue, json["size"]["to"].intValue)
+            var size:(Int, Int)?
+            if let _ = json["size"].dictionary {
+                size = (json["size"]["from"].intValue, json["size"]["to"].intValue)
+            }
             
             Log.debug("cities: \(selectedCities)")
             Log.debug("types: \(types)")
             Log.debug("price: \(price)")
             Log.debug("size: \(size)")
-            
             
             // Collect all FilterGroup
             var filterGroups: [FilterGroup] = [FilterGroup]()
@@ -255,7 +260,6 @@ class ZuzuCriteria: NSObject, Mappable {
             if let (from, to) = criteria.size {
                 JSONDict["size"] = ["from": from, "to": to]
             }
-            
             
             if let filterGroups = criteria.filterGroups {
                 
