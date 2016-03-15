@@ -7,7 +7,6 @@
 
 import UIKit
 import SCLAlertView
-import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
