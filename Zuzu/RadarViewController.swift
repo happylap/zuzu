@@ -279,13 +279,11 @@ extension RadarViewController{
                     self.runOnMainThread(){
                         Log.error("Cannot update criteria by user id:\(userId)")
                         
-                        self.stopPurchaseLoading(true)
+                        RadarService.sharedInstance.stopLoading(self)
                         
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                        
-                        if let vc = self.navigationController as? RadarNavigationController{
-                            vc.zuzuCriteria = zuzuCriteria // still old criteria
-                            vc.showDisplayRadarView(zuzuCriteria)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            () ->Void in
+                            self.showSuccess(zuzuCriteria)
                         }
                     }
 
@@ -302,32 +300,42 @@ extension RadarViewController{
     }
     
     func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria, isEnabled: Bool){
+        
+        if isEnabled == true{
+            RadarService.sharedInstance.stopLoading(self)
+            
+            SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                () ->Void in
+                zuzuCriteria.enabled = isEnabled
+                self.showSuccess(zuzuCriteria)
+            }
+            return
+        }
+        
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
                     self.runOnMainThread(){
-                        if let vc = self.navigationController as? RadarNavigationController{
-                            if error != nil{
-                                Log.error("Cannot enable criteria by user id:\(userId)")
-                                
-                                SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功\n請啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                                
-                                self.stopPurchaseLoading(true)
-                                
-                                vc.zuzuCriteria = zuzuCriteria
-                                vc.showDisplayRadarView(zuzuCriteria)
-                            }else{
-                                Log.info("enable criteria success")
-                                
-                                SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                                
-                                self.stopPurchaseLoading(true)
-     
+                        if error != nil{
+                            Log.error("Cannot enable criteria by user id:\(userId)")
+                            
+                            RadarService.sharedInstance.stopLoading(self)
+                            
+                            SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功\n請啟用租屋雷達", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                                () ->Void in
                                 zuzuCriteria.enabled = isEnabled
-                                vc.zuzuCriteria = zuzuCriteria
-                                vc.showDisplayRadarView(zuzuCriteria)
-                                
+                                self.showSuccess(zuzuCriteria)
+                            }
+                        }else{
+                            Log.info("enable criteria success")
+                            
+                            RadarService.sharedInstance.stopLoading(self)
+                            
+                            SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                                () ->Void in
+                                zuzuCriteria.enabled = isEnabled
+                                self.showSuccess(zuzuCriteria)
                             }
                         }
                     }
@@ -355,17 +363,30 @@ extension RadarViewController{
                     
                     Log.info("create criteria success")
                     
-                    SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    RadarService.sharedInstance.stopLoading(self)
                     
-                    self.stopPurchaseLoading(true)
-                    
-                    if let vc = self.navigationController as? RadarNavigationController{
-                        vc.showRadar()
+                    SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        () ->Void in
+                        self.showSuccess(nil)
                     }
                 }
             }
         }
         Log.exit()
+    }
+    
+    private func showSuccess(zuzuCriteria: ZuzuCriteria?){
+        if let vc = self.navigationController as? RadarNavigationController{
+            vc.showRetryRadarView(true)
+            self.purchaseViewController?.dismissViewControllerAnimated(true){
+                if zuzuCriteria == nil{
+                    vc.showRadar()
+                    return
+                }
+                vc.showDisplayRadarView(zuzuCriteria!)
+            }
+            
+        }
     }
     
     private func stopPurchaseLoading(isDismissPurchaseView: Bool){
