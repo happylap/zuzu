@@ -37,6 +37,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
+        Log.enter()
         super.viewDidLoad()
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
@@ -46,13 +47,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleZuzuUserLogin:", name: ZuzuUserLoginNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleZuzuUserLogout:", name: ZuzuUserLogoutNotification, object: nil)
         configureTableView()
+        Log.exit()
     }
 
     override func viewDidAppear(animated: Bool) {
+        Log.enter()
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear: \(self)")
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         self.parentViewController?.tabBarItem.badgeValue = nil
+        Log.exit()
     }
     
     // MARK: - Confiure View
@@ -126,19 +130,24 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - Data manipulation Function
     
     func refreshOnViewLoad(){
+        Log.enter()
         /// Load local data first
         self.resultController.refreshData()
         self.tableView.reloadData()
         
         /// Fetch remote difference data
         self.refreshData(true)
+        Log.exit()
     }
     
     func refreshData(showSpinner: Bool){
+        Log.enter()
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             return
         }
         
+        Log.debug("showSpinner: \(showSpinner)")
+            
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if showSpinner == true{
                 LoadingSpinner.shared.setImmediateAppear(true)
@@ -159,6 +168,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             
             ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
                 if error != nil{
+                    Log.debug("getNotificationItemsByUserId fails")
                     if showSpinner == true{
                         LoadingSpinner.shared.stop()
                     }
@@ -180,6 +190,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 self.tableView.reloadData()
             }
         }
+        Log.exit()
     }
     
     func setItemRead(item:NotificationHouseItem){
@@ -200,28 +211,36 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - handle notification
     
     func onReceiveNotifyItems(notification:NSNotification) {
+        Log.enter()
         self.refreshData(false)
+        Log.exit()
     }
     
     func handleZuzuUserLogin(notification: NSNotification){
+        Log.enter()
         self.notificationService.dao.deleteAll()
         self.refreshData(false)
         self.resultController.refreshData()
         self.tableView.reloadData()
+        Log.exit()
     }
 
     func handleZuzuUserLogout(notification: NSNotification){
+        Log.enter()
         self.notificationService.dao.deleteAll()
         self.resultController.refreshData()
         self.tableView.reloadData()
+        Log.exit()
     }
     
     // MARK: - Pull update
     
     func handleRefresh(refreshControl: UIRefreshControl) {
+        Log.enter()
         self.refreshData(false)
         self.tableView.reloadData()
         self.refreshControl?.endRefreshing()
+        Log.exit()
     }
     
     // MARK: - swipe-left-to-delete
