@@ -212,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         let badgeNumber = application.applicationIconBadgeNumber
-        if badgeNumber <= 0{
+        if badgeNumber > 0{
             let rootViewController = self.window?.rootViewController as! UITabBarController!
             let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
             if rootViewController.selectedIndex == notifyTabIndex{
