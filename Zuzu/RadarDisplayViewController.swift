@@ -188,11 +188,7 @@ class RadarDisplayViewController: UIViewController {
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
         }else{
-            if self.zuzuService != nil{
-                RadarService.sharedInstance.stopLoading(self)
-            }else{
-                self.checkService()
-            }
+            self.checkService()
         }
     }
     
@@ -402,7 +398,6 @@ class RadarDisplayViewController: UIViewController {
             
             if let status = service.status{
                 if status == RadarStatusValid{
-                    RadarService.sharedInstance.startLoading(self)
                     self.setCriteriaEnabled(isEnabled)
                     return
                 }
@@ -420,24 +415,27 @@ class RadarDisplayViewController: UIViewController {
     
     func setCriteriaEnabled(isEnabled: Bool){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
+            var text = "啟用中"
+            if isEnabled == false{
+                text = "停用中"
+            }
+            
+            RadarService.sharedInstance.stopLoading(self)
+            RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
+            
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
                     self.runOnMainThread(){
                         if error != nil{
                             RadarService.sharedInstance.stopLoading(self)
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "啟動雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                            self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "\(text)雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            self.criteriaEnableSwitch.on = !isEnabled
                             return
                         }
                         
                         RadarService.sharedInstance.stopLoading(self)
                         self.zuzuCriteria.enabled = isEnabled
-                        if isEnabled == true{
-                            SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經啟用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                            
-                        }else{
-                            SCLAlertView().showInfo("設定成功", subTitle: "租屋雷達服務已經停用", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                        }
                     }
             }
         }

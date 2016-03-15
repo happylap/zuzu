@@ -191,7 +191,7 @@ class RadarService : NSObject {
         LoadingSpinner.shared.startOnView(theViewController.view)
     }
     
-    func startLoadingText(theViewController: UIViewController, text: String){
+    func startLoadingText(theViewController: UIViewController, text: String, animated: Bool = true){
         if self.isLoadingText == true{
             return
         }
@@ -204,16 +204,14 @@ class RadarService : NSObject {
         
         self.isLoadingText = true
         
-        let dialog = MBProgressHUD.showHUDAddedTo(theViewController.view, animated: true)
+        let dialog = MBProgressHUD.showHUDAddedTo(theViewController.view, animated: animated)
         
-        dialog.animationType = .ZoomIn
-        dialog.dimBackground = true
+        dialog.animationType = .Fade
+        //dialog.dimBackground = true
         dialog.labelText = text
-        
-        theViewController.runOnMainThread() { () -> Void in}
     }
     
-    func stopLoading(theViewController: UIViewController){
+    func stopLoading(theViewController: UIViewController, animated: Bool = true){
         if self.isLoading == true{
             self.isLoading = false
             LoadingSpinner.shared.stop()
@@ -221,7 +219,7 @@ class RadarService : NSObject {
         
         if self.isLoadingText == true{
             self.isLoadingText = false
-            MBProgressHUD.hideHUDForView(theViewController.view, animated: true)
+            MBProgressHUD.hideHUDForView(theViewController.view, animated: animated)
         }
     }
     
