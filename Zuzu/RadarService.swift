@@ -204,14 +204,14 @@ class RadarService : NSObject {
         
         self.isLoadingText = true
         
-        let dialog = MBProgressHUD.showHUDAddedTo(theViewController.view, animated: false)
+        let dialog = MBProgressHUD.showHUDAddedTo(theViewController.view, animated: animated)
         
         dialog.animationType = .Fade
         //dialog.dimBackground = true
         dialog.labelText = text
     }
     
-    func stopLoading(theViewController: UIViewController){
+    func stopLoading(theViewController: UIViewController, animated: Bool = true){
         if self.isLoading == true{
             self.isLoading = false
             LoadingSpinner.shared.stop()
