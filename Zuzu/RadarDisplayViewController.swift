@@ -173,16 +173,6 @@ class RadarDisplayViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // RadarNavigationController will call showRadar() in viewWillAppear()
-        // in showRadar() function, it may switch the root container to others
-        // Therefore, don't put something like alert in viewWillAppear
-        
-        Log.debug("viewWillAppear")
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
         Log.debug("viewWillAppear")
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             if let vc = self.navigationController as? RadarNavigationController{
@@ -205,6 +195,11 @@ class RadarDisplayViewController: UIViewController {
         }else{
             self.checkService()
         }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.debug("viewDidAppear")
     }
     
     // MARK: - Update UI

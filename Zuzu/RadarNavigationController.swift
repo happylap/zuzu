@@ -21,13 +21,22 @@ class RadarNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         self.showRetryRadarView(true) // Use retry view as blank page
+        self.showRadar()
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.showRadar()
+        Log.debug("viewDidAppear")
     }
+    
+    func handleUserLogin(notification: NSNotification){
+        Log.enter()
+        self.showRadar()
+        Log.exit()
+    }
+
     
     // MARK: - show radar page
     
@@ -42,8 +51,6 @@ class RadarNavigationController: UINavigationController {
             }
             
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                
-                self.showRetryRadarView(true)
                 
                 RadarService.sharedInstance.startLoading(self)
                 

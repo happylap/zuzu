@@ -70,16 +70,6 @@ class RadarViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // RadarNavigationController will call showRadar() in viewWillAppear()
-        // in showRadar() function, it may switch the root container to others
-        // Therefore, don't put something like alert in viewWillAppear
-        
-        Log.debug("viewWillAppear")
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
 
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
@@ -91,6 +81,12 @@ class RadarViewController: UIViewController {
         }else{
             self.checkService()
         }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        Log.debug("viewDidAppear")
     }
         
     // MARK: - Navigation
