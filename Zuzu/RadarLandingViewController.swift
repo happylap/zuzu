@@ -12,24 +12,16 @@ class RadarLandingViewController: UIViewController {
     @IBOutlet weak var leftSampleImage: UIImageView! {
         didSet {
             
-            leftSampleImage.layer.borderWidth=1.0
-            leftSampleImage.layer.masksToBounds = false
-            leftSampleImage.layer.borderColor = UIColor.lightGrayColor().CGColor
-            leftSampleImage.layer.cornerRadius = 13
-            leftSampleImage.layer.cornerRadius = leftSampleImage.frame.size.height/2
-            leftSampleImage.clipsToBounds = true
+            setImageToCircle(leftSampleImage)
+            
         }
     }
     
     @IBOutlet weak var rightSampleImage: UIImageView!{
         didSet {
             
-            rightSampleImage.layer.borderWidth=1.0
-            rightSampleImage.layer.masksToBounds = false
-            rightSampleImage.layer.borderColor = UIColor.lightGrayColor().CGColor
-            rightSampleImage.layer.cornerRadius = 13
-            rightSampleImage.layer.cornerRadius = rightSampleImage.frame.size.height/2
-            rightSampleImage.clipsToBounds = true
+            setImageToCircle(rightSampleImage)
+            
         }
     }
     
@@ -56,6 +48,13 @@ class RadarLandingViewController: UIViewController {
         }
     }
     
+    private func setImageToCircle(imageView: UIImageView) {
+        imageView.layer.borderWidth = 6.0
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderColor = UIColor.colorWithRGB(0x66FFCC, alpha: 0.8).CGColor
+        imageView.layer.cornerRadius = leftSampleImage.frame.size.height/2
+        imageView.clipsToBounds = true
+    }
     
     func onContinueButtonTouched(sender: UIButton) {
         
@@ -70,6 +69,12 @@ class RadarLandingViewController: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        setImageToCircle(leftSampleImage)
+        setImageToCircle(rightSampleImage)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
