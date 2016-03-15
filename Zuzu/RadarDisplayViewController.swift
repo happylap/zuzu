@@ -38,6 +38,7 @@ class RadarDisplayViewController: UIViewController {
     
     let emptyLabel = UILabel()
     
+    
     @IBOutlet weak var statusImageView: UIImageView!{
         
         didSet {
@@ -62,7 +63,13 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var criteriaEnableSwitch: UISwitch!
+    @IBOutlet weak var criteriaEnableSwitch: UISwitch! {
+        didSet {
+            let ratio = getCurrentScale()
+            
+            criteriaEnableSwitch.transform = CGAffineTransformMakeScale(ratio, ratio)
+        }
+    }
     
     @IBOutlet weak var servieBannerLabel: UILabel!
     

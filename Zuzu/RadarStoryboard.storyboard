@@ -368,10 +368,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="1500"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="byC-T9-SKw" userLabel="CriteriaView">
-                                                <rect key="frame" x="0.0" y="0.0" width="600" height="360"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="600" height="340"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Xp-wk-oY1">
-                                                        <rect key="frame" x="8" y="8" width="584" height="352"/>
+                                                        <rect key="frame" x="8" y="8" width="584" height="332"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="36N-BY-w6f" userLabel="CriteriaBannerView">
                                                                 <rect key="frame" x="0.0" y="0.0" width="584" height="43"/>
@@ -448,17 +448,17 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZRq-hq-1aB">
-                                                                <rect key="frame" x="0.0" y="133" width="584" height="214.5"/>
+                                                                <rect key="frame" x="0.0" y="133" width="584" height="194.5"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
-                                                                        <rect key="frame" x="111" y="69" width="362.5" height="78"/>
+                                                                        <rect key="frame" x="111" y="61" width="362.5" height="72.5"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" secondItem="nQm-xW-OQB" secondAttribute="height" multiplier="930:200" id="ZwC-dy-Vo8"/>
+                                                                            <constraint firstAttribute="width" secondItem="nQm-xW-OQB" secondAttribute="height" multiplier="1000:200" id="ZwC-dy-Vo8"/>
                                                                         </constraints>
                                                                         <state key="normal" title="更改條件"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                                <integer key="value" value="25"/>
+                                                                                <integer key="value" value="22"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
@@ -502,7 +502,7 @@
                                                 <constraints>
                                                     <constraint firstItem="9Xp-wk-oY1" firstAttribute="leading" secondItem="byC-T9-SKw" secondAttribute="leading" constant="8" id="AHd-4k-iUg"/>
                                                     <constraint firstAttribute="bottom" secondItem="9Xp-wk-oY1" secondAttribute="bottom" id="QHZ-eG-FWO"/>
-                                                    <constraint firstAttribute="width" secondItem="byC-T9-SKw" secondAttribute="height" multiplier="1500:900" id="jmx-Rz-FqU"/>
+                                                    <constraint firstAttribute="width" secondItem="byC-T9-SKw" secondAttribute="height" multiplier="1500:850" id="jmx-Rz-FqU"/>
                                                     <constraint firstItem="9Xp-wk-oY1" firstAttribute="top" secondItem="byC-T9-SKw" secondAttribute="top" constant="8" id="xVO-8R-TfG"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Xp-wk-oY1" secondAttribute="trailing" constant="8" id="zyy-L1-CnN"/>
                                                 </constraints>
@@ -514,10 +514,10 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YN5-O7-pWJ" userLabel="ServiceView">
-                                                <rect key="frame" x="0.0" y="360" width="600" height="390.5"/>
+                                                <rect key="frame" x="0.0" y="340" width="600" height="386"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmx-jO-trx">
-                                                        <rect key="frame" x="8" y="8" width="584" height="374.5"/>
+                                                        <rect key="frame" x="8" y="8" width="584" height="370"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7N5-qc-Jhl" userLabel="ServiceSubView">
                                                                 <rect key="frame" x="0.0" y="0.0" width="584" height="43"/>
@@ -542,10 +542,10 @@
                                                                 </constraints>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-l8-20L" userLabel="Body">
-                                                                <rect key="frame" x="0.0" y="43" width="584" height="331.5"/>
+                                                                <rect key="frame" x="0.0" y="43" width="584" height="327"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddn-jE-7Zf">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="584" height="331.5"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="584" height="327"/>
                                                                         <subviews>
                                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8jR-qu-ktx" userLabel="Status Image View">
                                                                                 <rect key="frame" x="16" y="8" width="20" height="20"/>
@@ -611,7 +611,7 @@
                                                                             <constraint firstItem="R0d-9F-apP" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="16" id="Cit-kL-efe"/>
                                                                             <constraint firstAttribute="trailing" secondItem="tQY-Zr-6Ob" secondAttribute="trailing" constant="20" symbolic="YES" id="EHi-hL-Kso"/>
                                                                             <constraint firstItem="h9Q-ML-UFy" firstAttribute="top" secondItem="R0d-9F-apP" secondAttribute="bottom" constant="-8" id="Eqb-BH-Kis"/>
-                                                                            <constraint firstAttribute="bottom" secondItem="3ea-9P-KAv" secondAttribute="bottom" constant="12.5" id="GD8-6z-gfh"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="3ea-9P-KAv" secondAttribute="bottom" constant="8" id="GD8-6z-gfh"/>
                                                                             <constraint firstItem="8jR-qu-ktx" firstAttribute="top" secondItem="R0d-9F-apP" secondAttribute="bottom" constant="8" id="Git-fG-nWL"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="top" secondItem="h9Q-ML-UFy" secondAttribute="bottom" constant="-8" id="HEh-T9-vm8"/>
                                                                             <constraint firstAttribute="trailing" secondItem="3ea-9P-KAv" secondAttribute="trailing" constant="8" id="VBU-on-xJh"/>
@@ -621,7 +621,7 @@
                                                                             <constraint firstItem="8jR-qu-ktx" firstAttribute="leading" secondItem="ddn-jE-7Zf" secondAttribute="leading" constant="16" id="aPV-kH-mUY"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="leading" secondItem="h9Q-ML-UFy" secondAttribute="trailing" constant="-8" id="bIZ-ny-8Iq"/>
                                                                             <constraint firstItem="tQY-Zr-6Ob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="R0d-9F-apP" secondAttribute="trailing" constant="8" id="ek0-K8-E78"/>
-                                                                            <constraint firstItem="h9Q-ML-UFy" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" multiplier="1:2" id="iba-gw-7db"/>
+                                                                            <constraint firstItem="h9Q-ML-UFy" firstAttribute="width" secondItem="ddn-jE-7Zf" secondAttribute="width" multiplier="100:200" id="iba-gw-7db"/>
                                                                             <constraint firstItem="3ea-9P-KAv" firstAttribute="centerY" secondItem="h9Q-ML-UFy" secondAttribute="centerY" id="pDD-Iu-lYm"/>
                                                                         </constraints>
                                                                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
@@ -679,7 +679,7 @@
                                                 </variation>
                                             </view>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kzV-PJ-lR5" userLabel="PurchaseTableView">
-                                                <rect key="frame" x="8" y="750.5" width="584" height="467"/>
+                                                <rect key="frame" x="8" y="726" width="584" height="467"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1200" id="W8T-DZ-bgd"/>
