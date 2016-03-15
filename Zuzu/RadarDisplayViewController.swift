@@ -188,11 +188,7 @@ class RadarDisplayViewController: UIViewController {
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
         }else{
-            if self.zuzuService != nil{
-                RadarService.sharedInstance.stopLoading(self)
-            }else{
-                self.checkService()
-            }
+            self.checkService()
         }
     }
     
