@@ -371,7 +371,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="600" height="360"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Xp-wk-oY1">
-                                                        <rect key="frame" x="8" y="8" width="584" height="344"/>
+                                                        <rect key="frame" x="8" y="8" width="584" height="352"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="36N-BY-w6f" userLabel="CriteriaBannerView">
                                                                 <rect key="frame" x="0.0" y="0.0" width="584" height="43"/>
@@ -448,10 +448,10 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZRq-hq-1aB">
-                                                                <rect key="frame" x="0.0" y="133" width="584" height="206.5"/>
+                                                                <rect key="frame" x="0.0" y="133" width="584" height="214.5"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQm-xW-OQB" userLabel="modifyCriteriaButton">
-                                                                        <rect key="frame" x="111" y="65" width="362.5" height="78"/>
+                                                                        <rect key="frame" x="111" y="69" width="362.5" height="78"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="nQm-xW-OQB" secondAttribute="height" multiplier="930:200" id="ZwC-dy-Vo8"/>
                                                                         </constraints>
@@ -501,7 +501,7 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="9Xp-wk-oY1" firstAttribute="leading" secondItem="byC-T9-SKw" secondAttribute="leading" constant="8" id="AHd-4k-iUg"/>
-                                                    <constraint firstAttribute="bottom" secondItem="9Xp-wk-oY1" secondAttribute="bottom" constant="8" id="QHZ-eG-FWO"/>
+                                                    <constraint firstAttribute="bottom" secondItem="9Xp-wk-oY1" secondAttribute="bottom" id="QHZ-eG-FWO"/>
                                                     <constraint firstAttribute="width" secondItem="byC-T9-SKw" secondAttribute="height" multiplier="1500:900" id="jmx-Rz-FqU"/>
                                                     <constraint firstItem="9Xp-wk-oY1" firstAttribute="top" secondItem="byC-T9-SKw" secondAttribute="top" constant="8" id="xVO-8R-TfG"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Xp-wk-oY1" secondAttribute="trailing" constant="8" id="zyy-L1-CnN"/>
@@ -679,7 +679,7 @@
                                                 </variation>
                                             </view>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kzV-PJ-lR5" userLabel="PurchaseTableView">
-                                                <rect key="frame" x="8" y="758" width="584" height="467"/>
+                                                <rect key="frame" x="8" y="750.5" width="584" height="467"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1200" id="W8T-DZ-bgd"/>
@@ -803,7 +803,7 @@
                                             <constraint firstItem="7N5-qc-Jhl" firstAttribute="height" secondItem="36N-BY-w6f" secondAttribute="height" id="SV2-qD-oXW"/>
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="centerX" secondItem="Nrn-N1-0Oc" secondAttribute="centerX" id="UQ4-PS-0DV"/>
                                             <constraint firstItem="7N5-qc-Jhl" firstAttribute="height" secondItem="36N-BY-w6f" secondAttribute="height" id="WWa-IG-0fd"/>
-                                            <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="bottom" constant="8" id="Xeq-n3-nqe"/>
+                                            <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="YN5-O7-pWJ" secondAttribute="bottom" id="Xeq-n3-nqe"/>
                                             <constraint firstAttribute="trailing" secondItem="YN5-O7-pWJ" secondAttribute="trailing" constant="8" id="bYc-Fw-bvg"/>
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="leading" secondItem="Nrn-N1-0Oc" secondAttribute="leading" constant="8" id="h4W-dN-VQ3"/>
                                             <constraint firstItem="byC-T9-SKw" firstAttribute="width" secondItem="Nrn-N1-0Oc" secondAttribute="width" id="q0T-PE-QZd"/>
