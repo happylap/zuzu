@@ -213,7 +213,8 @@ extension RadarViewController{
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             if let _ = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 if let vc = self.navigationController as? RadarNavigationController{
-                    vc.showRadar()                }
+                    vc.showRadar()
+                }
             }
         }
     }

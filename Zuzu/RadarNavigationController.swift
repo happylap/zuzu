@@ -15,8 +15,7 @@ private let Log = Logger.defaultLogger
 
 class RadarNavigationController: UINavigationController {
     
-    var zuzuCriteria: ZuzuCriteria? //cache the acquired criteria
-    
+    var isShowRadar = false
     // MARK: - view life cycle
     
     override func viewDidLoad() {
@@ -27,13 +26,21 @@ class RadarNavigationController: UINavigationController {
     }
 
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+
         Log.debug("viewDidAppear")
+        super.viewWillAppear(animated)
+        if self.isShowRadar == true{
+            self.isShowRadar = false
+            self.showRadar()
+        }
+        
+        
     }
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
-        self.showRadar()
+        self.isShowRadar = true
+        self.showRetryRadarView(true) // Use retry view as blank page
         Log.exit()
     }
 
@@ -43,43 +50,36 @@ class RadarNavigationController: UINavigationController {
     func showRadar(){
         Log.enter()
 
-        if AmazonClientManager.sharedInstance.isLoggedIn(){
-            if self.zuzuCriteria != nil{
-                self.showDisplayRadarView(self.zuzuCriteria!)
-                Log.exit()
-                return
-            }
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            self.showConfigureRadarView()
+            return
+        }
+        
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                
-                RadarService.sharedInstance.startLoading(self)
-                
-                ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                    self.runOnMainThread(){
-                        if error != nil{
-                            RadarService.sharedInstance.stopLoading(self)
-                            Log.error("Cannot get criteria by user id:\(userId)")
-                            self.showRetryRadarView(false)
-                            return
-                        }
-                        
-                        if result != nil{
-                            self.zuzuCriteria = result
-                            // don't need to stop loading here, the next view to show may keep loading
-                            self.showDisplayRadarView(self.zuzuCriteria!)
-                        }else{
-                             // no criteria
-                            // don't need to stop loading here, the next view to show may keep loading
-                            self.showConfigureRadarView()
-                        }
+            RadarService.sharedInstance.startLoading(self)
+            
+            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                self.runOnMainThread(){
+                    if error != nil{
+                        RadarService.sharedInstance.stopLoading(self)
+                        Log.error("Cannot get criteria by user id:\(userId)")
+                        self.showRetryRadarView(false)
+                        return
+                    }
+                    
+                    if result != nil{
+                        // don't need to stop loading here, the next view to show may keep loading
+                        self.showDisplayRadarView(result!)
+                    }else{
+                        // no criteria
+                        // don't need to stop loading here, the next view to show may keep loading
+                        self.showConfigureRadarView()
                     }
                 }
             }
-        }
-        else{
-            self.zuzuCriteria = nil
-            // don't need to stop loading here, the next view to show may keep loading
-            self.showConfigureRadarView()
+        }else{
+            assert(false, "user id should not be nil")
         }
         
         Log.exit()

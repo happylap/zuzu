@@ -17,7 +17,7 @@ let ResetCriteriaNotification = "ResetCriteriaNotification"
 class RadarService : NSObject {
     
     var isLoading = false
-    var isLoadingText = true
+    var isLoadingText = false
     //Share Instance for interacting with the ZuzuStore
     class var sharedInstance: RadarService {
         struct Singleton {
@@ -178,8 +178,7 @@ class RadarService : NSObject {
         }
         
         if self.isLoadingText == true{
-            self.stopLoading(theViewController)
-            self.isLoadingText = false
+            return
         }
         
         self.isLoading = true
@@ -195,8 +194,6 @@ class RadarService : NSObject {
         }
         
         if self.isLoading == true{
-            self.stopLoading(theViewController)
-            self.isLoading = false
             return
         }
         

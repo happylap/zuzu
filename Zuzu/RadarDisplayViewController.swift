@@ -672,7 +672,9 @@ extension RadarDisplayViewController{
     
     func checkService(){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+ 
             RadarService.sharedInstance.startLoadingText(self, text:"更新服務狀態")
+            
             ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                 (result: ZuzuServiceMapper?, error: NSError?) -> Void in
                 self.runOnMainThread(){
