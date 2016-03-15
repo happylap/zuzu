@@ -202,7 +202,7 @@ class RadarDisplayViewController: UIViewController {
                     var remainingDays = 0.0
                     var remainingHours = 0.0
                     var usedDays = 0.0
-                    var usedHours = 0.0
+                    
                     if let remaining = service.remainingSecond,
                         let total = service.totalSecond{
                             
@@ -212,13 +212,21 @@ class RadarDisplayViewController: UIViewController {
                             remainingHours = (Double(remaining) % secPerDay)/secPerHour
                             
                             usedDays = Double(used)/secPerDay
-                            usedHours = (Double(used) % secPerDay)/secPerHour
                     }
                     
-                    let roundedRemainingDays = Int(floor(remainingDays))
+                    let roundedRemainingDays = Int(ceil(remainingDays))
                     let roundedRemainingHours  = Int(floor(remainingHours))
                     
-                    self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDays) 日 \(roundedRemainingHours) 小時"
+                    if(remainingDays >= 1) {
+                        
+                        self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDays) 日"
+                        
+                    } else {
+                        
+                        self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(roundedRemainingHours) 小時"
+                        
+                    }
+                    
                     self.serviceButton?.hidden = true
                     self.enableModifyButton()
                     
@@ -267,7 +275,7 @@ class RadarDisplayViewController: UIViewController {
             }
             
             // expiration date
-            var expireDateStr = ""
+            var expireDateStr = "—"
             if let expireDate = service.expireTime{
                 if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
                     expireDateStr = dateString
