@@ -49,9 +49,9 @@ class RadarLandingViewController: UIViewController {
     }
     
     private func setImageToCircle(imageView: UIImageView) {
-        imageView.layer.borderWidth = 6.0
+        imageView.layer.borderWidth = 0.3
         imageView.layer.masksToBounds = true
-        imageView.layer.borderColor = UIColor.colorWithRGB(0x66FFCC, alpha: 0.8).CGColor
+        imageView.layer.borderColor = UIColor.lightGrayColor().CGColor//colorWithRGB(0x66FFCC, alpha: 0.8).CGColor
         imageView.layer.cornerRadius = leftSampleImage.frame.size.height/2
         imageView.clipsToBounds = true
     }
