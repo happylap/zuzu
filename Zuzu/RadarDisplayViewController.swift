@@ -311,7 +311,7 @@ class RadarDisplayViewController: UIViewController {
         if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
             filterNum = filterGroups.count
         }
-        self.otherFiltersLabel?.text = "其他\(filterNum)個過濾條件"
+        self.otherFiltersLabel?.text = "其他 \(filterNum) 個過濾條件"
     }
     
     // MARK: - Configure UI
