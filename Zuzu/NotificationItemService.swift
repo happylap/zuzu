@@ -39,11 +39,12 @@ class NotificationItemService: NSObject
             newItem.addr = item.addr
             newItem.postTime = item.postTime
             newItem.isRead = item.isRead
+            
+            if (isCommit == true) {
+                self.dao.commit()
+            }
         }
         
-        if (isCommit == true) {
-            self.dao.commit()
-        }
     }
     
     func addItem(jsonObj: AnyObject){
