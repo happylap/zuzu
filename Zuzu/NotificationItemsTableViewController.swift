@@ -58,16 +58,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         super.viewWillAppear(animated)
         Log.enter()
         
-        if self.isNeedRefresh == true{
-            self.isNeedRefresh = false
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+        if badgeNumber > 0{
             self.refreshData(true)
         }else{
-            let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-            if badgeNumber > 0{
+            if self.isNeedRefresh == true{
+                self.isNeedRefresh = false
                 self.refreshData(true)
             }
         }
-        
+    
         Log.exit()
     }
     
