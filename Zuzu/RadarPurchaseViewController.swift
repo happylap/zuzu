@@ -144,6 +144,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
                             purchase.productTitle = product.localizedTitle
                             
+                            if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
+                                AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
+                            }
+                            
                             ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
                                 
                                 if error != nil{
@@ -355,6 +359,11 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
         
+
+        if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
+            AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
+        }
+
         RadarService.sharedInstance.createPurchase(transaction){
             (result: String?, error: NSError?) -> Void in
             if error != nil{
