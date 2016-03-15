@@ -498,7 +498,7 @@ extension RadarDisplayViewController{
         self.tabBarController?.tabBarHidden = false
         self.purchaseViewController = purchaseView
         RadarService.sharedInstance.startLoading(self)
-        self.updateCriteria()
+        self.setUpCriteria()
         Log.exit()
     }
     
@@ -508,15 +508,51 @@ extension RadarDisplayViewController{
         
         self.purchaseViewController = purchaseView
         
-        self.stopPurchaseLoading(true)
+        RadarService.sharedInstance.stopLoading(self)
         
-        SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF)
+        SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            () -> Void in
+            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
         
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
         }
         
+        Log.exit()
+    }
+    
+    func setUpCriteria(){
+        Log.enter()
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+                
+                if error != nil{
+                    self.runOnMainThread(){
+                        
+                        RadarService.sharedInstance.stopLoading(self)
+                        
+                        Log.error("Cannot get criteria by user id:\(userId)")
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            () -> Void in
+                            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                    }
+                    return
+                }
+                
+                Log.info("get criteria successfully")
+                
+                if result != nil{
+                    self.zuzuCriteria = result!
+
+                    self.updateCriteria()
+                }else{
+                    assert(false, "Criteria should not be nil")
+                }
+            }
+        }
         Log.exit()
     }
     
@@ -528,13 +564,16 @@ extension RadarDisplayViewController{
                 
                 self.runOnMainThread(){
                     if error != nil{
+
+                        RadarService.sharedInstance.stopLoading(self)
                         
-                        self.stopPurchaseLoading(true)
-                        
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                        self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            () -> Void in
+                            self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
+                            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                        }
                     }else{
-                        self.enableCriteriaForPurchase(true)
+                        self.enableCriteriaForPurchase()
                     }
                 }
             }
@@ -542,56 +581,87 @@ extension RadarDisplayViewController{
         Log.exit()
     }
     
-    func enableCriteriaForPurchase(isEnabled: Bool){
+    func enableCriteriaForPurchase(){
+        
+        let isEnabled = self.zuzuCriteria.enabled ?? false
+        if isEnabled == true{
+            
+            self.criteriaEnableSwitch.on = true
+            
+            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+
+                ZuzuWebService.sharedInstance.getServiceByUserId(userId){
+                    (result, error) ->Void in
+                    self.runOnMainThread(){
+                        self.purchaseHistotyTableDataSource.refresh()
+                        
+                        if error != nil{
+                            self.zuzuService = nil
+                            Log.error("get radar service error")
+                        }else{
+                            self.zuzuService = result
+                        }
+                        
+                        RadarService.sharedInstance.stopLoading(self)
+                        
+                        SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            () -> Void in
+                            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                        
+                    }
+                }
+                
+            }
+
+            return
+        }
+        
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                criteriaId: self.zuzuCriteria.criteriaId!, enabled: true) { (result, error) -> Void in
                     
                     if error != nil{
                         self.runOnMainThread(){
                             self.criteriaEnableSwitch.on = false
-                            self.stopPurchaseLoading(true)
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "啟動雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            
+                            RadarService.sharedInstance.stopLoading(self)
+                            
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "啟動雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                                () -> Void in
+                                self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                            }
                         }
                         return
                     }
                     
                     self.criteriaEnableSwitch.on = true
-                    if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                        ZuzuWebService.sharedInstance.getServiceByUserId(userId){
-                            (result, error) ->Void in
-                            self.runOnMainThread(){
-                                self.purchaseHistotyTableDataSource.refresh()
-                                
-                                if error != nil{
-                                    self.zuzuService = nil
-                                    Log.error("get radar service error")
-                                }else{
-                                    self.zuzuService = result
-                                }
-                                
-                                self.stopPurchaseLoading(true)
-                                
-                                SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                                
+                    
+                    ZuzuWebService.sharedInstance.getServiceByUserId(userId){
+                        (result, error) ->Void in
+                        self.runOnMainThread(){
+                            self.purchaseHistotyTableDataSource.refresh()
+                            
+                            if error != nil{
+                                self.zuzuService = nil
+                                Log.error("get radar service error")
+                            }else{
+                                self.zuzuService = result
                             }
+                            
+                            RadarService.sharedInstance.stopLoading(self)
+                            
+                            SCLAlertView().showInfo("設定成功", subTitle: "啟動雷達設定成功", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                                () -> Void in
+                                self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+                            }
+                            
                         }
-                    }else{
-                        RadarService.sharedInstance.stopLoading(self)
                     }
             }
         }
     }
-    
-    
-    private func stopPurchaseLoading(isDismissPurchaseView: Bool){
-        
-        RadarService.sharedInstance.stopLoading(self)
-        
-        if isDismissPurchaseView == true{
-            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
-        }
-    }
+
 }
 
 // MARK: Check Radar service
