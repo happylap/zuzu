@@ -13,6 +13,7 @@ private let Log = Logger.defaultLogger
 
 class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate {
 
+    var isNeedRefresh = false
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
 
@@ -37,23 +38,42 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
-        Log.enter()
         super.viewDidLoad()
+        Log.enter()
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
         self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshOnViewLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleZuzuUserLogin:", name: ZuzuUserLoginNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleZuzuUserLogout:", name: ZuzuUserLogoutNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setNeedRefresh:", name: "receiveNotifyItems", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setNeedRefresh:", name: UserLoginNotification, object: nil)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItemsOnForeground:", name: "receiveNotifyItemsOnForeground", object: nil)
+        
         configureTableView()
         Log.exit()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         Log.enter()
+        
+        if self.isNeedRefresh == true{
+            self.isNeedRefresh = false
+            self.refreshData(true)
+        }else{
+            let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+            if badgeNumber > 0{
+                self.refreshData(true)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        Log.debug("viewDidAppear: \(self)")
+        Log.enter()
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         self.parentViewController?.tabBarItem.badgeValue = nil
         Log.exit()
@@ -208,28 +228,19 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
     // MARK: - handle notification
     
-    func onReceiveNotifyItems(notification:NSNotification) {
+    func handleReceiveNotifyItemsOnForeground(notification:NSNotification) {
         Log.enter()
         self.refreshData(false)
         Log.exit()
     }
     
-    func handleZuzuUserLogin(notification: NSNotification){
+    func setNeedRefresh(notification: NSNotification){
         Log.enter()
-        self.notificationService.dao.deleteAll()
-        self.refreshData(false)
-        self.resultController.refreshData()
-        self.tableView.reloadData()
+        self.isNeedRefresh = true
         Log.exit()
     }
 
-    func handleZuzuUserLogout(notification: NSNotification){
-        Log.enter()
-        self.notificationService.dao.deleteAll()
-        self.resultController.refreshData()
-        self.tableView.reloadData()
-        Log.exit()
-    }
+
     
     // MARK: - Pull update
     

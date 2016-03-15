@@ -13,8 +13,6 @@ import MBProgressHUD
 private let Log = Logger.defaultLogger
 
 let ResetCriteriaNotification = "ResetCriteriaNotification"
-let ZuzuUserLoginNotification = "ZuzuUserLoginNotification"
-let ZuzuUserLogoutNotification = "ZuzuUserLogoutNotification"
 
 class RadarService : NSObject {
     

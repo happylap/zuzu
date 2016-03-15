@@ -180,7 +180,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         if application.applicationState == UIApplicationState.Active {
             if rootViewController.selectedIndex == notifyTabIndex{
                 Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: userInfo)
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
                     if let badge = aps["badge"] as? Int {
