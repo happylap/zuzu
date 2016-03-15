@@ -312,7 +312,7 @@ class AmazonClientManager : NSObject {
                                 }
                                 zuzuUser.pictureUrl = userProfile.pictureUrl
                                 
-                                ZuzuWebService.sharedInstance.registerUser(zuzuUser){(result, error) -> Void in
+                                ZuzuWebService.sharedInstance.registerUser(zuzuUser){(userId, error) -> Void in
                                     
                                     Log.debug("createUser")
                                     
@@ -322,6 +322,9 @@ class AmazonClientManager : NSObject {
                                         return
                                     }
                                     
+                                    /// Update generated userID
+                                    zuzuUser.id = userId
+                                        
                                     handler(user: zuzuUser, result: true)
                                     
                                 }
