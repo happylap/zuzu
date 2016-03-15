@@ -194,16 +194,23 @@ class AmazonSNSService : NSObject {
     
     func setReceiveNotification(){
         Log.enter()
-        let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id
-        let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
-        if userId == nil || endpointArn == nil{
-            Log.error("No userId or endpointArn, cannot set receive notify time")
-            Log.exit()
-            return
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
+                
+                
+                ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId, deviceId: deviceTokenString){
+                    (result, error) -> Void in
+                    
+                    if error != nil{
+                        Log.error("setReceiveNotifyTimeByUserId fails")
+                        return
+                    }
+                    
+                    Log.info("setReceiveNotifyTimeByUserId successfully")
+                }
+            }
         }
-        ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId!, deviceId: endpointArn!){
-            (result, error) -> Void in
-        }
+        
         Log.exit()
     }
     
