@@ -50,6 +50,7 @@ class RadarNavigationController: UINavigationController {
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
                     self.runOnMainThread(){
                         if error != nil{
+                            RadarService.sharedInstance.stopLoading(self)
                             Log.error("Cannot get criteria by user id:\(userId)")
                             self.showRetryRadarView(false)
                             return
@@ -57,9 +58,11 @@ class RadarNavigationController: UINavigationController {
                         
                         if result != nil{
                             self.zuzuCriteria = result
+                            // don't need to stop loading here, the next view to show may keep loading
                             self.showDisplayRadarView(self.zuzuCriteria!)
                         }else{
                              // no criteria
+                            // don't need to stop loading here, the next view to show may keep loading
                             self.showConfigureRadarView()
                         }
                     }
@@ -68,6 +71,7 @@ class RadarNavigationController: UINavigationController {
         }
         else{
             self.zuzuCriteria = nil
+            // don't need to stop loading here, the next view to show may keep loading
             self.showConfigureRadarView()
         }
         
@@ -105,9 +109,7 @@ class RadarNavigationController: UINavigationController {
     
     func showRetryRadarView(isBlank: Bool){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
-            RadarService.sharedInstance.stopLoading(self)
-            
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {            
             vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
         }
