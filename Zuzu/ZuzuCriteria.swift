@@ -20,8 +20,6 @@ class ZuzuCriteria: NSObject, Mappable {
     var userId: String?
     var criteriaId: String?
     var enabled: Bool?
-    var expireTime: NSDate?
-    var appleProductId: String?
     var criteria: SearchCriteria?
     
     override init() {
@@ -36,8 +34,6 @@ class ZuzuCriteria: NSObject, Mappable {
         userId              <-  map["user_id"]
         criteriaId          <-  map["criteria_id"]
         enabled             <-  map["enabled"]
-        expireTime          <- (map["expire_time"], expireTimeTransform)
-        appleProductId      <-  map["apple_product_id"]
         criteria            <- (map["filters"], criteriaTransform)
     }
     
@@ -45,18 +41,6 @@ class ZuzuCriteria: NSObject, Mappable {
     
     // MARK - Transforms
 
-    //
-    let expireTimeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
-            if let dateString = values {
-                return CommonUtils.getUTCDateFromString(dateString)
-            }
-            return nil
-        }, toJSON: { (values: NSDate?) -> String? in
-            if let date = values {
-                return CommonUtils.getUTCStringFromDate(date)
-            }
-            return nil
-    })
 
     
     //
