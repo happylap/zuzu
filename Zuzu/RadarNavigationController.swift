@@ -40,7 +40,12 @@ class RadarNavigationController: UINavigationController {
     func handleUserLogin(notification: NSNotification){
         Log.enter()
         self.isShowRadar = true
-        self.showRetryRadarView(true) // Use retry view as blank page
+        if self.viewControllers.count > 0 {
+            let vc = self.viewControllers[0] as? RadarViewController
+            if vc != nil{
+                vc?.isCheckService = false
+            }
+        }
         Log.exit()
     }
 
