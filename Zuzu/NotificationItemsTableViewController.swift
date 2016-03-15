@@ -126,10 +126,12 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - Data manipulation Function
     
     func refreshOnViewLoad(){
-        self.notificationService.dao.deleteAll()
-        self.refreshData(true)
+        /// Load local data first
         self.resultController.refreshData()
         self.tableView.reloadData()
+        
+        /// Fetch remote difference data
+        self.refreshData(true)
     }
     
     func refreshData(showSpinner: Bool){
@@ -143,7 +145,19 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 LoadingSpinner.shared.setOpacity(0.3)
                 LoadingSpinner.shared.startOnView(self.tableView)
             }
-            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId) { (totalNum, result, error) -> Void in
+            
+            var lastUpdateTime: NSDate?
+            
+            if let houseItems = NotificationHouseItemDao.sharedInstance.getAll() as? [NotificationHouseItem] {
+                
+                if let newestItem = houseItems.first {
+                    lastUpdateTime = newestItem.postTime
+                }
+            }
+            
+            Log.debug("getNotificationItemsByUserId: \(userId), \(lastUpdateTime)")
+            
+            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
                 if error != nil{
                     if showSpinner == true{
                         LoadingSpinner.shared.stop()
@@ -162,6 +176,8 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 if showSpinner == true{
                     LoadingSpinner.shared.stop()
                 }
+                
+                self.tableView.reloadData()
             }
         }
     }
