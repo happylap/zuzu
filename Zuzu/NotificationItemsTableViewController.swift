@@ -170,6 +170,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if showSpinner == true{
+                LoadingSpinner.shared.stop()
                 LoadingSpinner.shared.setImmediateAppear(true)
                 LoadingSpinner.shared.setOpacity(0.3)
                 LoadingSpinner.shared.startOnView(self.tableView)
@@ -189,9 +190,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
                 if error != nil{
                     Log.debug("getNotificationItemsByUserId fails")
-                    if showSpinner == true{
-                        LoadingSpinner.shared.stop()
-                    }
+                    LoadingSpinner.shared.stop()
                     return
                 }
                 
@@ -203,9 +202,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                     }
                     self.notificationService.removeExtra(true)
                 }
-                if showSpinner == true{
-                    LoadingSpinner.shared.stop()
-                }
+                LoadingSpinner.shared.stop()
             }
         }
         Log.exit()
