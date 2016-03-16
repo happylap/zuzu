@@ -36,11 +36,6 @@ class RadarConfigureTableViewController: UITableViewController {
         static let moreFilters = 6
     }
     
-    //Cache Configs
-    let cacheName = "itemCountCache"
-    let cacheKey = "itemCountByRegion"
-    let cacheTime:Double = 12 * 60 * 60 //12 hours
-    
     // Price & Size Picker Vars
     struct PickerConst {
         static let anyLower:(label:String, value:Int) = ("0",CriteriaConst.Bound.LOWER_ANY)
@@ -51,30 +46,102 @@ class RadarConfigureTableViewController: UITableViewController {
         static let upperCompIdx = 1
     }
     
-    var delegate: RadarConfigureTableViewControllerDelegate?
-    
     private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
     
-    private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
-    
-    var regionSelectionState: [City]? {
+    private var regionSelectionState: [City]? {
         didSet {
             updateRegionLabel(regionSelectionState)
         }
     }
     
-    var filterSelectionState: [FilterGroup]? {
+    private var filterSelectionState: [FilterGroup]? {
         didSet {
             updateFilterLabel(filterSelectionState)
         }
     }
     
-    var sizeUpperRange:Range<Int>?
-    var priceUpperRange:Range<Int>?
+    private var sizeUpperRange:Range<Int>?
+    private var priceUpperRange:Range<Int>?
     
-    let sizeItems:[[(label:String, value:Int)]] = RadarConfigureTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
-    let priceItems:[[(label:String, value:Int)]] = RadarConfigureTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
+    private let sizeItems:[[(label:String, value:Int)]] = RadarConfigureTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
+    private let priceItems:[[(label:String, value:Int)]] = RadarConfigureTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
     
+    private var selectAllButton:ToggleButton!
+    
+    private let downArrowImage = UIImage(named: "arrow_down_n")!.imageWithRenderingMode(.AlwaysTemplate)
+    private let upArrowImage = UIImage(named: "arrow_up_n")!.imageWithRenderingMode(.AlwaysTemplate)
+    private let filterImage = UIImage(named: "filter_n")!.imageWithRenderingMode(.AlwaysTemplate)
+    
+    var delegate: RadarConfigureTableViewControllerDelegate?
+
+    /// The current criteria set by the user on the UI
+    internal var currentCriteria: SearchCriteria = SearchCriteria() {
+        
+        didSet{
+            
+            ///Load the criteria to the Search Box UI
+            self.populateViewFromSearchCriteria(currentCriteria)
+            
+            ///Send Info to Criteria Summary View
+            self.delegate?.onCriteriaChanged(currentCriteria)
+        }
+    }
+    
+    @IBOutlet weak var priceArrow: UIImageView! {
+        didSet {
+            priceArrow.image = downArrowImage
+            priceArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
+        }
+    }
+    
+    @IBOutlet weak var sizeArrow: UIImageView! {
+        didSet {
+            sizeArrow.image = downArrowImage
+            sizeArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
+        }
+    }
+    
+    @IBOutlet weak var filtersImage: UIImageView!{
+        didSet {
+            self.filtersImage.image = filterImage
+            self.filtersImage.tintColor = UIColor.blackColor()
+            //self.filtersImage.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
+        }
+    }
+    
+    @IBOutlet weak var typeButtonContainer: UIView! {
+        didSet {
+            let views = typeButtonContainer.subviews
+            
+            selectAllButton = typeButtonContainer.viewWithTag(UIControlTag.NOT_LIMITED_BUTTON_TAG) as? ToggleButton
+            
+            if(selectAllButton != nil) {
+                selectAllButton!.toggleButtonState()
+                
+                //Other type buttons are controlled by "select all" button
+                for view in views {
+                    if let typeButton = view as? ToggleButton {
+                        if(typeButton.tag !=
+                            UIControlTag.NOT_LIMITED_BUTTON_TAG){
+                                selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
+                        }
+                        
+                        typeButton.addTarget(self, action: "onTypeButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBOutlet weak var cityRegionLabel: UILabel!
+    @IBOutlet weak var sizeLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var sizePicker: UIPickerView!
+    @IBOutlet weak var pricePicker: UIPickerView!
+    @IBOutlet weak var filterLabel: UILabel!
+    
+    // MARK: - Private Utils
+
     private func updateRegionLabel(regionSelection: [City]?) {
         
         var regionLabel = "不限"
@@ -141,79 +208,6 @@ class RadarConfigureTableViewController: UITableViewController {
         
         self.filterLabel.text = filterLabel
     }
-    
-    /// The current criteria set by the user on the UI
-    internal var currentCriteria: SearchCriteria = SearchCriteria() {
-        
-        didSet{
-            
-            ///Load the criteria to the Search Box UI
-            self.populateViewFromSearchCriteria(currentCriteria)
-            
-            ///Send Info to Criteria Summary View
-            self.delegate?.onCriteriaChanged(currentCriteria)
-        }
-    }
-    
-    var selectAllButton:ToggleButton!
-    
-    let downArrowImage = UIImage(named: "arrow_down_n")!.imageWithRenderingMode(.AlwaysTemplate)
-    let upArrowImage = UIImage(named: "arrow_up_n")!.imageWithRenderingMode(.AlwaysTemplate)
-    let filterImage = UIImage(named: "filter_n")!.imageWithRenderingMode(.AlwaysTemplate)
-    @IBOutlet weak var priceArrow: UIImageView! {
-        didSet {
-            priceArrow.image = downArrowImage
-            priceArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
-        }
-    }
-    
-    @IBOutlet weak var sizeArrow: UIImageView! {
-        didSet {
-            sizeArrow.image = downArrowImage
-            sizeArrow.tintColor = UIColor.colorWithRGB(0xBABABA)
-        }
-    }
-    
-    @IBOutlet weak var filtersImage: UIImageView!{
-        didSet {
-            self.filtersImage.image = filterImage
-            self.filtersImage.tintColor = UIColor.blackColor()
-            //self.filtersImage.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
-        }
-    }
-    
-    @IBOutlet weak var typeButtonContainer: UIView! {
-        didSet {
-            let views = typeButtonContainer.subviews
-            
-            selectAllButton = typeButtonContainer.viewWithTag(UIControlTag.NOT_LIMITED_BUTTON_TAG) as? ToggleButton
-            
-            if(selectAllButton != nil) {
-                selectAllButton!.toggleButtonState()
-                
-                //Other type buttons are controlled by "select all" button
-                for view in views {
-                    if let typeButton = view as? ToggleButton {
-                        if(typeButton.tag !=
-                            UIControlTag.NOT_LIMITED_BUTTON_TAG){
-                                selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
-                        }
-                        
-                        typeButton.addTarget(self, action: "onTypeButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-                    }
-                }
-            }
-        }
-    }
-    
-    @IBOutlet weak var cityRegionLabel: UILabel!
-    @IBOutlet weak var sizeLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var sizePicker: UIPickerView!
-    @IBOutlet weak var pricePicker: UIPickerView!
-    @IBOutlet weak var filterLabel: UILabel!
-    
-    // MARK: - Private Utils
     
     private func pickerRangeToString(pickerView: UIPickerView, pickerFrom:(component:Int, row:Int), pickerTo:(component:Int, row:Int)) -> String{
         
@@ -659,26 +653,6 @@ class RadarConfigureTableViewController: UITableViewController {
 extension RadarConfigureTableViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // MARK: - Private Utils
-    /// Should create a common util for managing cached data
-    private func getItemCountByRegion() -> [String: Int]? {
-        
-        do {
-            let cache = try Cache<NSData>(name: cacheName)
-            
-            ///Return cached data if there is cached data
-            if let cachedData = cache.objectForKey(cacheKey),
-                let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) as? [String: Int] {
-                    
-                    return result
-                    
-            }
-            
-        } catch _ {
-            Log.debug("Something went wrong with the cache")
-        }
-        
-        return nil
-    }
     
     private static func loadPickerData(resourceName: String, criteriaLabel: String) ->  [[(label:String, value:Int)]]{
         
@@ -1020,47 +994,6 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
     }
 }
 
-
-// MARK: - FilterTableViewControllerDelegate
-internal func convertFilterGroupToIdentifier(filterGroups: [FilterGroup]) -> [String: Set<FilterIdentifier>]{
-    
-    var filterIdSet = [String: Set<FilterIdentifier>]()
-    for filterGroup in filterGroups{
-        filterIdSet[filterGroup.id] = []
-        for filter in filterGroup.filters {
-            filterIdSet[filterGroup.id]?.insert(filter.identifier)
-        }
-    }
-    
-    return filterIdSet
-}
-
-internal func convertIdentifierToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
-    
-    var filterGroupResult = [FilterGroup]()
-    
-    ///Walk through all items to generate the list of selected FilterGroup
-    for section in FilterTableViewController.filterSections {
-        for group in section.filterGroups {
-            if let selectedFilterId = selectedFilterIdSet[group.id] {
-                let groupCopy = group.copy() as! FilterGroup
-                
-                let selectedFilters = group.filters.filter({ (filter) -> Bool in
-                    selectedFilterId.contains(filter.identifier)
-                })
-                
-                if(!selectedFilters.isEmpty) {
-                    groupCopy.filters = selectedFilters
-                    
-                    filterGroupResult.append(groupCopy)
-                }
-            }
-        }
-    }
-    
-    return filterGroupResult
-}
-
 // MARK: - FilterTableViewControllerDelegate
 extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     
@@ -1070,7 +1003,6 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
         /// Update currentCriteria
         self.currentCriteria = self.stateToSearhCriteria()
     }
-    
     
     func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
         //Do nothing

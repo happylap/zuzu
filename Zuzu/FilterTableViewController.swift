@@ -11,6 +11,47 @@ import SwiftyJSON
 
 private let Log = Logger.defaultLogger
 
+// MARK: - Public Utils
+internal func convertFilterGroupToIdentifier(filterGroups: [FilterGroup]) -> [String: Set<FilterIdentifier>]{
+    
+    var filterIdSet = [String: Set<FilterIdentifier>]()
+    for filterGroup in filterGroups{
+        filterIdSet[filterGroup.id] = []
+        for filter in filterGroup.filters {
+            filterIdSet[filterGroup.id]?.insert(filter.identifier)
+        }
+    }
+    
+    return filterIdSet
+}
+
+internal func convertIdentifierToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
+    
+    var filterGroupResult = [FilterGroup]()
+    
+    ///Walk through all items to generate the list of selected FilterGroup
+    for section in FilterTableViewController.filterSections {
+        for group in section.filterGroups {
+            if let selectedFilterId = selectedFilterIdSet[group.id] {
+                let groupCopy = group.copy() as! FilterGroup
+                
+                let selectedFilters = group.filters.filter({ (filter) -> Bool in
+                    selectedFilterId.contains(filter.identifier)
+                })
+                
+                if(!selectedFilters.isEmpty) {
+                    groupCopy.filters = selectedFilters
+                    
+                    filterGroupResult.append(groupCopy)
+                }
+            }
+        }
+    }
+    
+    return filterGroupResult
+}
+
+// MARK: - FilterTableViewControllerDelegate
 protocol FilterTableViewControllerDelegate {
     
     func onFiltersSelected(newFilterIdSet: [String : Set<FilterIdentifier>])

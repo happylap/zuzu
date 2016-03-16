@@ -470,30 +470,6 @@ class SearchResultViewController: UIViewController {
         return state
     }
     
-    private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
-        
-        var filterGroupResult = [FilterGroup]()
-        
-        ///Walk through all items to generate the list of selected FilterGroup
-        for section in FilterTableViewController.filterSections {
-            for group in section.filterGroups {
-                if let selectedFilterId = selectedFilterIdSet[group.id] {
-                    let groupCopy = group.copy() as! FilterGroup
-                    
-                    let selectedFilters = group.filters.filter({ (filter) -> Bool in
-                        selectedFilterId.contains(filter.identifier)
-                    })
-                    
-                    groupCopy.filters = selectedFilters
-                    
-                    filterGroupResult.append(groupCopy)
-                }
-            }
-        }
-        
-        return filterGroupResult
-    }
-    
     private func updateSelectedFilterIdSet(newFilterIdSet : [String : Set<FilterIdentifier>]) {
         
         ///Remove filters not included in the newFilterIdSet
@@ -1129,7 +1105,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
     
     private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
         
-        let filterGroups = self.convertToFilterGroup(filteridSet)
+        let filterGroups = convertIdentifierToFilterGroup(filteridSet)
         
         var allFiltersDic = [String:String]()
         
