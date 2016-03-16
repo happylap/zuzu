@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xcL-ff-LIC">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="12" width="375" height="167.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="當前條件設定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8e-qv-mlE">
-                                                <rect key="frame" x="20" y="0.0" width="335" height="16"/>
+                                                <rect key="frame" x="20" y="0.0" width="355" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -50,7 +50,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4W-N0-hHF" userLabel="regionLabel">
-                                                <rect key="frame" x="20" y="22" width="335" height="20.5"/>
+                                                <rect key="frame" x="20" y="22" width="355" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -59,7 +59,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="整層住家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lo2-T6-otx" userLabel="houseInfoLabel">
-                                                <rect key="frame" x="20" y="46" width="335" height="16"/>
+                                                <rect key="frame" x="20" y="46" width="355" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -68,7 +68,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不限金額" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rt8-Dr-kwW" userLabel="priceSizeLabel">
-                                                <rect key="frame" x="20" y="66" width="335" height="16"/>
+                                                <rect key="frame" x="20" y="66" width="355" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -77,7 +77,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="其他6個過濾條件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXu-2G-XaY" userLabel="otherCriteriaLabel">
-                                                <rect key="frame" x="20" y="86" width="335" height="16"/>
+                                                <rect key="frame" x="20" y="86" width="355" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -116,7 +116,7 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="dKm-Gp-BBg" firstAttribute="top" secondItem="iXu-2G-XaY" secondAttribute="bottom" constant="4" id="0f8-YS-b9X"/>
-                                            <constraint firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" constant="20" symbolic="YES" id="1L8-0Z-ScU"/>
+                                            <constraint firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" id="1L8-0Z-ScU"/>
                                             <constraint firstItem="Lo2-T6-otx" firstAttribute="trailing" secondItem="z8e-qv-mlE" secondAttribute="trailing" id="3sT-cb-Gaa"/>
                                             <constraint firstItem="iXu-2G-XaY" firstAttribute="leading" secondItem="z8e-qv-mlE" secondAttribute="leading" id="76P-aF-dA1"/>
                                             <constraint firstItem="dKm-Gp-BBg" firstAttribute="width" secondItem="OR3-TS-FF5" secondAttribute="width" id="CCC-Rl-Gq9"/>
