@@ -401,8 +401,6 @@ extension RadarViewController{
     }
     
     private func gotoDisplayRadar(zuzuCriteria: ZuzuCriteria?){
-        
-        //self.navigationView?.showRetryRadarView(true)
         self.purchaseViewController?.dismissViewControllerAnimated(true){
             if zuzuCriteria != nil{
                 RadarService.sharedInstance.startLoading(self)

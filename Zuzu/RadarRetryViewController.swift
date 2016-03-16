@@ -66,8 +66,6 @@ class RadarRetryViewController: UIViewController {
         else{
             self.hideComponents()
         }
-        
-        RadarService.sharedInstance.stopLoading(self)
     }
 
     func imageTapped(sender: UITapGestureRecognizer){
