@@ -14,10 +14,7 @@ private let Log = Logger.defaultLogger
 
 
 class RadarNavigationController: UINavigationController {
-    
-    var isShowRadar = false
-    // MARK: - view life cycle
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         self.showRetryRadarView(true) // Use retry view as blank page
@@ -25,12 +22,15 @@ class RadarNavigationController: UINavigationController {
     }
 
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         Log.debug("viewDidAppear")
     }
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         Log.debug("viewDidAppear")
     }
+    
     
     // MARK: - show radar page
     

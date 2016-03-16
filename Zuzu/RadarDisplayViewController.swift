@@ -183,6 +183,8 @@ class RadarDisplayViewController: UIViewController {
         
         self.tabBarController?.tabBarHidden = false
         
+        self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
+        
         if self.isCheckService == false{
             self.isCheckService = true
             RadarService.sharedInstance.stopLoading(self)

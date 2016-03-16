@@ -18,7 +18,7 @@ class RadarViewController: UIViewController {
     
     var hasValidService = false
     
-    
+    var needCheckService = false
     
     var unfinishedTranscations: [SKPaymentTransaction]?
     
@@ -61,9 +61,13 @@ class RadarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         if self.isUpdateMode == true{
             self.activateButton.setTitle("設定完成", forState: .Normal)
         }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
+        
         
         self.updateCriteriaTextLabel()
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
@@ -75,6 +79,12 @@ class RadarViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("viewWillAppear")
+        
+        if self.needCheckService == true{
+            self.needCheckService = false
+            self.checkService()
+            return
+        }
         
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
@@ -91,7 +101,12 @@ class RadarViewController: UIViewController {
         
         Log.debug("viewDidAppear")
     }
-        
+    
+    func handleUserLogin(notification: NSNotification){
+        Log.debug("handleUserLogin")
+        self.needCheckService = true
+    }
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -386,9 +401,11 @@ extension RadarViewController{
     }
     
     private func gotoDisplayRadar(zuzuCriteria: ZuzuCriteria?){
+        
         //self.navigationView?.showRetryRadarView(true)
         self.purchaseViewController?.dismissViewControllerAnimated(true){
             if zuzuCriteria != nil{
+                RadarService.sharedInstance.startLoading(self)
                 self.navigationView?.showDisplayRadarView(zuzuCriteria!)
             }
         }
