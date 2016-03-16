@@ -41,6 +41,7 @@ class SearchResultViewController: UIViewController {
     
     // MARK: - Private Fields
     private static var alertViewResponder: SCLAlertViewResponder?
+    private var networkErrorAlertView:SCLAlertView? = SCLAlertView()
     
     private let filterSettingOnImage = UIImage(named: "filter_on_n")
     private let filterSettingNormalImage = UIImage(named: "filter_n")
@@ -56,8 +57,6 @@ class SearchResultViewController: UIViewController {
     private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
     
     private var duplicateHouseItem: HouseItem?
-    
-    private var alertView:SCLAlertView? = SCLAlertView()
     
     // MARK: - Public Fields
     
@@ -274,7 +273,7 @@ class SearchResultViewController: UIViewController {
             
             if(SearchResultViewController.alertViewResponder == nil) {
                 
-                if let alertView = self.alertView {
+                if let alertView = self.networkErrorAlertView {
                     let msgTitle = NSLocalizedString("unable_to_get_data.alert.title", comment: "")
                     let subTitle = NSLocalizedString("unable_to_get_data.alert.msg", comment: "")
                     let okButton = NSLocalizedString("unable_to_get_data.alert.button.ok", comment: "")
@@ -817,7 +816,7 @@ class SearchResultViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.alertView = nil
+        self.networkErrorAlertView = nil
         
         Log.debug("\(self) [[viewWillDisappear]]")
     }

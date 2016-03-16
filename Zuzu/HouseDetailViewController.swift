@@ -23,15 +23,32 @@ protocol HouseDetailViewDelegate {
 
 class HouseDetailViewController: UIViewController {
     
-    let PhoneExtensionChar = ","
-    let DisplayPhoneExtensionChar = "轉"
+    // MARK: - Private Fields
+    private static var alertViewResponder: SCLAlertViewResponder?
+    private var networkErrorAlertView:SCLAlertView? = SCLAlertView()
     
-    var phoneNumberDic = [String:String]() /// display string : original number
+    private let PhoneExtensionChar = ","
+    private let DisplayPhoneExtensionChar = "轉"
+    
+    private var phoneNumberDic = [String:String]() /// display string : original number
+    
+    private let cacheName = "houseDetailCache"
+    private let cacheTime:Double = 3 * 60 * 60 //3 hours
+    
+    private let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+    
+    private let cellIdentifier = "houseDetailTitleCell"
+    private var tableRows:[Int: CellInfo]!
+    
+    private var photos = [MWPhoto]()
+    
+    // MARK: - Public Fields
+    var houseItem:HouseItem?
+    
+    ///The full house detail in AnyObject
+    var houseItemDetail: AnyObject?
     
     var delegate:HouseDetailViewDelegate?
-    
-    let cacheName = "houseDetailCache"
-    let cacheTime:Double = 3 * 60 * 60 //3 hours
     
     class HouseUrl: NSObject, UIActivityItemSource{
         
@@ -80,15 +97,6 @@ class HouseDetailViewController: UIViewController {
     @IBOutlet weak var contactBarView: HouseDetailContactBarView!
     @IBOutlet weak var tableView: UITableView!
     
-    let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
-    
-    var photos = [MWPhoto]()
-    
-    var houseItem:HouseItem?
-    
-    ///The full house detail in AnyObject
-    var houseItemDetail: AnyObject?
-    
     enum CellIdentifier: String {
         case HouseDetailTitleCell = "houseDetailTitleCell"
         case PriceSizeCell = "priceSizeCell"
@@ -106,9 +114,6 @@ class HouseDetailViewController: UIViewController {
         let handler: (UITableViewCell) -> ()
     }
     
-    let cellIdentifier = "houseDetailTitleCell"
-    
-    var tableRows:[Int: CellInfo]!
     
     // MARK: - Private Utils
     
@@ -161,10 +166,11 @@ class HouseDetailViewController: UIViewController {
                 if let error = error {
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
                     
-                    let alertView = SCLAlertView()
-                    let subTitle = "您目前可能處於飛航模式或是無網路狀態，暫時無法檢視詳細資訊。"
-                    alertView.showCloseButton = true
-                    alertView.showInfo("網路無法連線", subTitle: subTitle, closeButtonTitle: "知道了",colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                    if let alertView = self.networkErrorAlertView {
+                        let subTitle = "您目前可能處於飛航模式或是無網路狀態，暫時無法檢視詳細資訊。"
+                        alertView.showCloseButton = true
+                        alertView.showInfo("網路無法連線", subTitle: subTitle, closeButtonTitle: "知道了",colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                    }
                     
                     return
                 }
@@ -224,7 +230,7 @@ class HouseDetailViewController: UIViewController {
                     
                     var priceDetail:String?
                     if let houseItemDetail = self.houseItemDetail {
-
+                        
                         let attributes = [
                             NSBackgroundColorAttributeName: UIColor.colorWithRGB(0xFFFFFF),
                             NSForegroundColorAttributeName: UIColor.colorWithRGB(0xFF6666),
@@ -1166,6 +1172,9 @@ class HouseDetailViewController: UIViewController {
         ///Display tab bar
         self.tabBarController?.tabBarHidden = false
         
+        ///Do not need to display alert once the view controller is not in the foreground
+        self.networkErrorAlertView = nil
+        
         LoadingSpinner.shared.stop()
     }
     
@@ -1456,7 +1465,7 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         if let houseItemDetail = self.houseItemDetail,
             let imgList = houseItemDetail.valueForKey("img") as? [String]{
                 
-            return UInt(imgList.count)
+                return UInt(imgList.count)
         } else {
             return 0
         }
@@ -1469,12 +1478,12 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         
         if let houseItemDetail = self.houseItemDetail,
             let imgList = houseItemDetail.valueForKey("img") as? [String]{
-            
-            if (photoIndex < imgList.endIndex) {
-                return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
-            } else {
-                return nil
-            }
+                
+                if (photoIndex < imgList.endIndex) {
+                    return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
+                } else {
+                    return nil
+                }
         } else {
             return nil
         }
@@ -1486,12 +1495,12 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         
         if let houseItemDetail = self.houseItemDetail,
             let imgList = houseItemDetail.valueForKey("img") as? [String] {
-            
-            if (photoIndex < imgList.endIndex) {
-                return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
-            } else {
-                return nil
-            }
+                
+                if (photoIndex < imgList.endIndex) {
+                    return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
+                } else {
+                    return nil
+                }
         } else {
             return nil
         }
