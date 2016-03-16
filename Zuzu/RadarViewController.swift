@@ -60,8 +60,13 @@ class RadarViewController: UIViewController {
     
     var isUpdateMode = false
     
-    // MARK: - View Life cycle
+    // MARK: - Action Handlers
+    func handleUserLogin(notification: NSNotification){
+        Log.debug("handleUserLogin")
+        self.needCheckService = true
+    }
     
+    // MARK: - View Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         Log.enter()
@@ -100,7 +105,7 @@ class RadarViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.debug("viewWillAppear")
+        Log.enter()
         
         if self.needCheckService == true{
             self.needCheckService = false
@@ -120,13 +125,12 @@ class RadarViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        Log.debug("viewDidAppear")
+        Log.enter()
     }
     
-    func handleUserLogin(notification: NSNotification){
-        Log.debug("handleUserLogin")
-        self.needCheckService = true
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        Log.enter()
     }
     
     // MARK: - Navigation
@@ -134,7 +138,7 @@ class RadarViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let identifier = segue.identifier{
             
-            Log.debug("prepareForSegue: \(identifier) \(self)")
+            Log.error("prepareForSegue: \(identifier) \(self)")
             
             switch identifier{
             case ViewTransConst.showCriteriaConfigureTable:
@@ -163,7 +167,7 @@ class RadarViewController: UIViewController {
     }
     
     private func updateCriteriaTextLabel(){
-        Log.enter()
+        Log.error("")
         
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
         self.regionLabel?.text = displayItem.title

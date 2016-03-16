@@ -14,29 +14,30 @@ private let Log = Logger.defaultLogger
 
 
 class RadarNavigationController: UINavigationController {
-        
+    
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.showRetryRadarView(true) // Use retry view as blank page
         self.showRadar()
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.debug("viewDidAppear")
+        Log.enter()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        Log.debug("viewDidAppear")
+        Log.enter()
     }
     
     
-    // MARK: - show radar page
+    // MARK: - Show radar page
     
     func showRadar(){
         Log.enter()
-
+        
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView()
             return
@@ -73,6 +74,8 @@ class RadarNavigationController: UINavigationController {
     }
     
     func showConfigureRadarView(){
+        Log.enter()
+        
         if self.viewControllers.count > 0 {
             let vc = self.viewControllers[0] as? RadarViewController
             if vc != nil{
@@ -85,12 +88,17 @@ class RadarNavigationController: UINavigationController {
             vc.navigationView = self
             self.setViewControllers([vc], animated: false)
         }
+        
+        Log.exit()
     }
     
     func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
+        Log.enter()
+        
         if self.viewControllers.count > 0 {
             let vc = self.viewControllers[0] as? RadarDisplayViewController
             if vc != nil{
+                Log.exit()
                 return
             }
         }
@@ -101,15 +109,20 @@ class RadarNavigationController: UINavigationController {
             vc.zuzuCriteria = zuzuCriteria
             self.setViewControllers([vc], animated: false)
         }
+        Log.exit()
     }
     
     func showRetryRadarView(isBlank: Bool){
+        Log.enter()
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             vc.navigationView = self
             vc.isBlank = isBlank
             self.setViewControllers([vc], animated: false)
         }
+        
+        Log.exit()
     }
 }
 
