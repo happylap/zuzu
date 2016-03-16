@@ -47,11 +47,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     private var purchaseData:[ZuzuPurchase]?
     
     private let cellID = "purchaseHistoryRecord"
-    
-    let dummyRecord = ZuzuPurchase(transactionId: "", userId: "", productId: "", productPrice: 0)
-    
-    private let cellHeadrID = "purchaseHistoryHeader"
-    
+        
     private let uiViewController: RadarDisplayViewController!
     
     init(uiViewController: RadarDisplayViewController) {
@@ -59,11 +55,10 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     }
     
     func refresh(){
-        self.purchaseData = [self.dummyRecord]
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.getPurchaseByUserId(userId){
                 (totalNum, result, error) -> Void in
-                self.purchaseData = [self.dummyRecord]
+                self.purchaseData = []
                 if error != nil{
                     return
                 }
@@ -94,7 +89,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
  
         let emptyLabel = self.uiViewController.emptyLabel
         
-        if (itemSize <= 1) {
+        if (itemSize < 1) {
             emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
             emptyLabel.sizeToFit()
             emptyLabel.hidden = false
@@ -109,28 +104,18 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        if indexPath.row == 0{
-            if let cell = tableView.dequeueReusableCellWithIdentifier(cellHeadrID){
-                cell.textLabel!.text = "購買紀錄"
-                cell.textLabel!.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-                return cell
-            } else {
-                assert(false, "Failed to prepare purchase cell instance")
-            }
-        }else{
-            if let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as? RadarPurchaseRecordTableViewCell{
+        if let cell = tableView.dequeueReusableCellWithIdentifier(cellID) as? RadarPurchaseRecordTableViewCell{
+            
+            if let purchaseData = self.purchaseData {
                 
-                if let purchaseData = self.purchaseData {
-                    
-                    let purchase = purchaseData[indexPath.row]
-                    
-                    cell.recordItem = purchase
-                    
-                    return cell
-                }
-            } else {
-                assert(false, "Failed to prepare purchase cell instance")
+                let purchase = purchaseData[indexPath.row]
+                
+                cell.recordItem = purchase
+                
+                return cell
             }
+        } else {
+            assert(false, "Failed to prepare purchase cell instance")
         }
         
         return UITableViewCell()
