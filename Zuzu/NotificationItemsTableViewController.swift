@@ -166,14 +166,15 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             return
         }
         
-        Log.debug("showSpinner: \(showSpinner)")
-            
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if showSpinner == true{
+                Log.debug("refresh data with loading")
                 LoadingSpinner.shared.stop()
                 LoadingSpinner.shared.setImmediateAppear(true)
                 LoadingSpinner.shared.setOpacity(0.3)
                 LoadingSpinner.shared.startOnView(self.tableView)
+            }else{
+                Log.debug("refresh data without loading")
             }
             
             var lastUpdateTime: NSDate?

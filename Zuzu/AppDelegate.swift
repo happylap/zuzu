@@ -129,9 +129,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
             let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
             tabItem.badgeValue = "\(badgeNumber)"
-            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
+            Log.debug("set tab bar badge number as \(badgeNumber)")
+            
+            Log.debug("post receiveNotifyItems notifications")
             NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+
+            return
         }
+        Log.debug("don't need to set tab bar badge number")
         Log.exit()
     }
     
@@ -147,6 +152,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        Log.enter()
         
         ZuzuStore.sharedInstance.start()
         
@@ -175,6 +182,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
         
+        Log.exit()
+        
         return true
     }
 
@@ -198,16 +207,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        Log.enter()
         let rootViewController = self.window?.rootViewController as! UITabBarController!
         let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
         
         if application.applicationState == UIApplicationState.Active {
+            Log.debug("user receive notification while app is in the foreground")
             if rootViewController.selectedIndex == notifyTabIndex{
                 Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
                 NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
                     if let badge = aps["badge"] as? Int {
+                        Log.debug("set badge number")
                         application.applicationIconBadgeNumber = badge
                         updateTabBarBadge(application)
                     }
@@ -215,8 +227,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         }else{
+            Log.debug("set notification tab as selected")
             rootViewController.selectedIndex = notifyTabIndex
         }
+        
+        Log.exit()
     }
     
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
@@ -236,22 +251,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        let badgeNumber = application.applicationIconBadgeNumber
-        if badgeNumber > 0 {
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            if rootViewController.selectedIndex == notifyTabIndex{
-                let tabArray = rootViewController?.tabBar.items as NSArray!
-                application.applicationIconBadgeNumber = 0
-                let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
-                tabItem.badgeValue = nil
-            }
-        }
+        Log.enter()
+        updateTabBarBadge(application)
+        Log.exit()
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        updateTabBarBadge(application)
     }
     
     func applicationWillTerminate(application: UIApplication) {
