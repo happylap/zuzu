@@ -77,8 +77,8 @@ class RadarNavigationController: UINavigationController {
         Log.enter()
         
         if self.viewControllers.count > 0 {
-            let vc = self.viewControllers[0] as? RadarViewController
-            if vc != nil{
+            if let _ = self.viewControllers[0] as? RadarViewController {
+                Log.exit()
                 return
             }
         }
@@ -96,8 +96,7 @@ class RadarNavigationController: UINavigationController {
         Log.enter()
         
         if self.viewControllers.count > 0 {
-            let vc = self.viewControllers[0] as? RadarDisplayViewController
-            if vc != nil{
+            if let _ = self.viewControllers[0] as? RadarDisplayViewController {
                 Log.exit()
                 return
             }

@@ -205,6 +205,7 @@ class UserDefaultsFilterSettingDataStore: FilterSettingDataStore {
     
     static let instance = UserDefaultsFilterSettingDataStore()
     
+    static let radarFilterKey = "radarFilterSetting"
     static let advancedFilterKey = "advancedFilterSetting"
     static let smartFilterKey = "smartFilterSetting"
     
@@ -224,6 +225,12 @@ class UserDefaultsFilterSettingDataStore: FilterSettingDataStore {
         userDefaults.setObject(data, forKey: UserDefaultsFilterSettingDataStore.smartFilterKey)
     }
     
+    func saveRadarFilterSetting(filterSetting: [String:Set<FilterIdentifier>]) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let data = NSKeyedArchiver.archivedDataWithRootObject(filterSetting)
+        userDefaults.setObject(data, forKey: UserDefaultsFilterSettingDataStore.radarFilterKey)
+    }
+    
     func loadAdvancedFilterSetting() -> [String:Set<FilterIdentifier>]? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let data = userDefaults.objectForKey(UserDefaultsFilterSettingDataStore.advancedFilterKey) as? NSData
@@ -238,9 +245,21 @@ class UserDefaultsFilterSettingDataStore: FilterSettingDataStore {
         return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [String:Set<FilterIdentifier>]
     }
     
+    func loadRadarFilterSetting() -> [String:Set<FilterIdentifier>]? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let data = userDefaults.objectForKey(UserDefaultsFilterSettingDataStore.radarFilterKey) as? NSData
+        
+        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? [String:Set<FilterIdentifier>]
+    }
+    
     func clearFilterSetting() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(UserDefaultsFilterSettingDataStore.advancedFilterKey)
         userDefaults.removeObjectForKey(UserDefaultsFilterSettingDataStore.smartFilterKey)
+    }
+    
+    func clearRadarFilterSetting() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(UserDefaultsFilterSettingDataStore.radarFilterKey)
     }
 }

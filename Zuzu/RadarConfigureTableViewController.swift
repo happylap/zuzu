@@ -22,8 +22,6 @@ protocol RadarConfigureTableViewControllerDelegate: class {
 
 class RadarConfigureTableViewController: UITableViewController {
     
-    var delegate: RadarConfigureTableViewControllerDelegate?
-    
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
     }
@@ -52,6 +50,12 @@ class RadarConfigureTableViewController: UITableViewController {
         static let lowerCompIdx = 0
         static let upperCompIdx = 1
     }
+    
+    var delegate: RadarConfigureTableViewControllerDelegate?
+    
+    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    
+    private var selectedFilterIdSet = [String : Set<FilterIdentifier>]()
     
     var regionSelectionState: [City]? {
         didSet {
@@ -138,16 +142,16 @@ class RadarConfigureTableViewController: UITableViewController {
         self.filterLabel.text = filterLabel
     }
     
-    /// The criteria passsed in from RadarViewController (Loaded from Web or Cache)
-    var loadedCriteria: SearchCriteria?
-    
     /// The current criteria set by the user on the UI
-    private var currentCriteria: SearchCriteria = SearchCriteria() {
+    internal var currentCriteria: SearchCriteria = SearchCriteria() {
         
         didSet{
             
             ///Load the criteria to the Search Box UI
             self.populateViewFromSearchCriteria(currentCriteria)
+            
+            ///Send Info to Criteria Summary View
+            self.delegate?.onCriteriaChanged(currentCriteria)
         }
     }
     
@@ -516,7 +520,6 @@ class RadarConfigureTableViewController: UITableViewController {
         
         searchCriteria.filterGroups = self.filterSelectionState
         
-        self.delegate?.onCriteriaChanged(searchCriteria)
         return searchCriteria
     }
     
@@ -575,18 +578,11 @@ class RadarConfigureTableViewController: UITableViewController {
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             let ftvc = storyboard.instantiateViewControllerWithIdentifier("FilterTableView") as! FilterTableViewController
             
-            var filterIdSet = [String: Set<FilterIdentifier>]()
-            if let filterGroups = self.currentCriteria.filterGroups{
-                for filterGroup in filterGroups{
-                    //var newFilterIdSet = [String: Set<FilterIdentifier>]()
-                    filterIdSet[filterGroup.id] = []
-                    for filter in filterGroup.filters {
-                        filterIdSet[filterGroup.id]?.insert(filter.identifier)
-                    }
-                }
+            
+            if let filterGroups = self.currentCriteria.filterGroups {
+                ftvc.selectedFilterIdSet = convertFilterGroupToIdentifier(filterGroups)
             }
             
-            ftvc.selectedFilterIdSet = filterIdSet
             ftvc.filterDelegate = self
             self.parentViewController?.navigationItem.backBarButtonItem?.title = "完成"
             self.showViewController(ftvc, sender: self)
@@ -635,11 +631,6 @@ class RadarConfigureTableViewController: UITableViewController {
         priceUpperRange = (PickerConst.upperBoundStartZero...self.priceItems[1].count - 1)
         
         self.configurePricePicker()
-        
-        ///Update the criteria to the Search Box UI
-        if let radarCriteria = self.loadedCriteria {
-            self.currentCriteria = radarCriteria
-        }
         
         Log.exit()
     }
@@ -1029,48 +1020,66 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
     }
 }
 
+
 // MARK: - FilterTableViewControllerDelegate
-extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
+internal func convertFilterGroupToIdentifier(filterGroups: [FilterGroup]) -> [String: Set<FilterIdentifier>]{
     
-    private func getFilterDic(filteridSet: [String : Set<FilterIdentifier>]) -> [String:String] {
-        return [String:String]()
+    var filterIdSet = [String: Set<FilterIdentifier>]()
+    for filterGroup in filterGroups{
+        filterIdSet[filterGroup.id] = []
+        for filter in filterGroup.filters {
+            filterIdSet[filterGroup.id]?.insert(filter.identifier)
+        }
     }
     
-    func onFiltersReset() {
-        // don't do anything
-    }
+    return filterIdSet
+}
+
+internal func convertIdentifierToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
     
+    var filterGroupResult = [FilterGroup]()
     
-    func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
-        // don't do anything
-    }
-    
-    func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
-        self.filterSelectionState = self.convertToFilterGroup(selectedFilterIdSet)
-        self.currentCriteria = self.stateToSearhCriteria()
-    }
-    
-    private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
-        
-        var filterGroupResult = [FilterGroup]()
-        
-        ///Walk through all items to generate the list of selected FilterGroup
-        for section in FilterTableViewController.filterSections {
-            for group in section.filterGroups {
-                if let selectedFilterId = selectedFilterIdSet[group.id] {
-                    let groupCopy = group.copy() as! FilterGroup
-                    
-                    let selectedFilters = group.filters.filter({ (filter) -> Bool in
-                        selectedFilterId.contains(filter.identifier)
-                    })
-                    
+    ///Walk through all items to generate the list of selected FilterGroup
+    for section in FilterTableViewController.filterSections {
+        for group in section.filterGroups {
+            if let selectedFilterId = selectedFilterIdSet[group.id] {
+                let groupCopy = group.copy() as! FilterGroup
+                
+                let selectedFilters = group.filters.filter({ (filter) -> Bool in
+                    selectedFilterId.contains(filter.identifier)
+                })
+                
+                if(!selectedFilters.isEmpty) {
                     groupCopy.filters = selectedFilters
                     
                     filterGroupResult.append(groupCopy)
                 }
             }
         }
+    }
+    
+    return filterGroupResult
+}
+
+// MARK: - FilterTableViewControllerDelegate
+extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
+    
+    func onFiltersReset() {
+        self.filterSelectionState = nil
         
-        return filterGroupResult
+        /// Update currentCriteria
+        self.currentCriteria = self.stateToSearhCriteria()
+    }
+    
+    
+    func onFiltersSelected(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        //Do nothing
+    }
+    
+    func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
+        self.filterSelectionState = convertIdentifierToFilterGroup(selectedFilterIdSet)
+        
+        /// Update currentCriteria
+        self.currentCriteria = self.stateToSearhCriteria()
     }
 }

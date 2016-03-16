@@ -448,7 +448,7 @@ class RadarDisplayViewController: UIViewController {
                     vc.delegate = self
                     vc.displayRadarViewController = self
                     vc.isUpdateMode = true
-                    vc.searchCriteria = self.zuzuCriteria.criteria!
+                    vc.radarSearchCriteria = self.zuzuCriteria.criteria!
                 }
             default: break
                 
