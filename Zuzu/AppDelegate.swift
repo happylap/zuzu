@@ -168,34 +168,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return AmazonClientManager.sharedInstance.application(app, openURL: url, options: options)
     }
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
-        ZuzuStore.sharedInstance.start()
-        
-        // Initialize sign-in
-        AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
-        
-        AmazonSNSService.sharedInstance.start()
-        
-        CollectionItemService.sharedInstance.start()
-        
-        RadarService.sharedInstance.start()
-        
-        //reachability = Reachability.reachabilityForInternetConnection();
-        //reachability?.startNotifier();
-        
-        commonServiceSetup()
-        
-        customUISetup()
-        
-        Fabric.with([MoPub.self])
-        
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
-        Log.debug(url.absoluteString)
-        
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
         return true
     }
 
+    // MARK: UIApplicationDelegate Register Notification Response
     // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         
@@ -264,11 +241,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             rootViewController.selectedIndex = notifyTabIndex
         }
     }
-    
-    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+
+    // MARK: UIApplicationDelegate App Life Cycle
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        ZuzuStore.sharedInstance.start()
+        
+        // Initialize sign-in
+        AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        AmazonSNSService.sharedInstance.start()
+        
+        CollectionItemService.sharedInstance.start()
+        
+        RadarService.sharedInstance.start()
+        
+        //reachability = Reachability.reachabilityForInternetConnection();
+        //reachability?.startNotifier();
+        
+        commonServiceSetup()
+        
+        customUISetup()
+        
+        Fabric.with([MoPub.self])
+        
+        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
+        Log.debug(url.absoluteString)
+        
         return true
     }
-    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
