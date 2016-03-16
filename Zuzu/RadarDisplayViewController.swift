@@ -183,6 +183,8 @@ class RadarDisplayViewController: UIViewController {
         
         self.tabBarController?.tabBarHidden = false
         
+        self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
+        
         if self.isCheckService == false{
             self.isCheckService = true
             RadarService.sharedInstance.stopLoading(self)
@@ -686,6 +688,8 @@ extension RadarDisplayViewController{
                     self.zuzuService = result
                 }
             }
+        }else{
+            RadarService.sharedInstance.stopLoading(self)
         }
     }
 }
@@ -710,6 +714,7 @@ extension RadarDisplayViewController{
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
+        RadarService.sharedInstance.stopLoading(self)
         RadarService.sharedInstance.startLoadingText(self, text:"重新設定租屋雷達服務...")
         self.performFinishTransactions()
         Log.exit()

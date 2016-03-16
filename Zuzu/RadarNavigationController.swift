@@ -14,41 +14,23 @@ private let Log = Logger.defaultLogger
 
 
 class RadarNavigationController: UINavigationController {
-    
-    var isShowRadar = false
-    // MARK: - view life cycle
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         self.showRetryRadarView(true) // Use retry view as blank page
         self.showRadar()
     }
 
     override func viewWillAppear(animated: Bool) {
-
-        Log.debug("viewDidAppear")
         super.viewWillAppear(animated)
-        if self.isShowRadar == true{
-            self.isShowRadar = false
-            self.showRadar()
-        }
-        
-        
+        Log.debug("viewDidAppear")
     }
     
-    func handleUserLogin(notification: NSNotification){
-        Log.enter()
-        self.isShowRadar = true
-        if self.viewControllers.count > 0 {
-            let vc = self.viewControllers[0] as? RadarViewController
-            if vc != nil{
-                vc?.isCheckService = false
-            }
-        }
-        Log.exit()
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.debug("viewDidAppear")
     }
-
+    
     
     // MARK: - show radar page
     
