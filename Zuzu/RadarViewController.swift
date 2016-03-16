@@ -497,6 +497,8 @@ extension RadarViewController{
                     }
                 }
             }
+        }else{
+            RadarService.sharedInstance.stopLoading(self)
         }
 
         Log.exit()
@@ -531,6 +533,7 @@ extension RadarViewController{
         
         self.isOnLogging = true
         self.tabBarController?.tabBarHidden = true
+        RadarService.sharedInstance.stopLoading(self)
         AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, cancelHandler: self.cancelLoginHandler, withCompletionHandler: self.handleCompleteLoginForUnfinishTransaction)
     }
     
@@ -538,6 +541,7 @@ extension RadarViewController{
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
+        RadarService.sharedInstance.stopLoading(self)
         RadarService.sharedInstance.startLoadingText(self,text:"重新設定租屋雷達服務...")
         self.performFinishTransactions()
         Log.exit()
