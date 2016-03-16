@@ -47,12 +47,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
-    // Free Trial Product Info
-    private static let TrialProduct = ZuzuProduct(productIdentifier: ZuzuProducts.ProductRadarFreeTrial,
-        localizedTitle: "15天租屋雷達服務禮包",
-        price: 0.0,
-        priceLocale: NSLocale.currentLocale())
-    
     // Purchase Button UI
     let disabledColor = UIColor.colorWithRGB(0xE0E0E0, alpha: 0.8)
     
@@ -68,10 +62,19 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         ZuzuStore.sharedInstance.requestProducts { success, products in
             
             /// Provide free trial whether there are products from AppStroe or not
-            let productId = RadarPurchaseViewController.TrialProduct.productIdentifier
-            
-            if(!UserDefaultsUtils.hasUsedFreeTrial(productId)) {
-                self.products.append(RadarPurchaseViewController.TrialProduct)
+            let trialProduct = ZuzuProducts.TrialProduct
+            let productId = trialProduct.productIdentifier
+
+            if let expiryDate = ZuzuProducts.FreeTrialExpiry {
+                
+                Log.debug("Time to expire frmo now = \(expiryDate.timeIntervalSinceNow)")
+                
+                if(expiryDate.timeIntervalSinceNow >= 0) {
+                    if(!UserDefaultsUtils.hasUsedFreeTrial(productId)) {
+                        self.products.append(trialProduct)
+                    }
+                }
+                
             }
             
             if success {
@@ -87,10 +90,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 
                 self.products.appendContentsOf(storeProducts)
-                
-                RadarService.sharedInstance.stopLoading(self)
-                self.tableView.reloadData()
             }
+            
+            /// Display result no matter whether we get the products from AppStore successfully
+            RadarService.sharedInstance.stopLoading(self)
+            self.tableView.reloadData()
         }
     }
     
@@ -174,7 +178,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     return
                                 }
                                 
-                                /// The free trial is activated successfully 
+                                /// The free trial is activated successfully
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                 if let handler = self.purchaseSuccessHandler{
                                     handler(purchaseView: self)
@@ -321,7 +325,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
             cell.textLabel?.text = "\(product.localizedTitle)"
-            cell.detailTextLabel?.text = "免費"
+            
+            cell.detailTextLabel?.text = "免費，兌換期限：2016-06-30"
             
             button.setTitle("兌換", forState: .Normal)
             cell.textLabel?.textColor = UIColor.colorWithRGB(0xFF6666)
@@ -356,11 +361,11 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
         
-
+        
         if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
             AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
         }
-
+        
         RadarService.sharedInstance.createPurchase(transaction){
             (result: String?, error: NSError?) -> Void in
             if error != nil{
@@ -387,5 +392,5 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         
     }
     
-
+    
 }

@@ -317,6 +317,9 @@ extension ZuzuStore: SKProductsRequestDelegate {
     public func request(request: SKRequest, didFailWithError error: NSError) {
         Log.debug("Failed to load list of products.")
         Log.debug("Error: \(error)")
+        
+        productsRequestHandler?(success: false, products: [SKProduct]())
+        
         clearRequest()
     }
     

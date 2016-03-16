@@ -21,6 +21,17 @@ public struct ZuzuProducts {
     
     public static let ProductRadarFreeTrial = Prefix + "radarfree1"
     
+    // Free Trial Product
+    public static let TrialProduct = ZuzuProduct(productIdentifier: ProductRadarFreeTrial,
+        localizedTitle: "15天租屋雷達服務禮包",
+        price: 0.0,
+        priceLocale: NSLocale.currentLocale())
+    
+    public static let FreeTrialExpiry = CommonUtils.getCustomDateFromString("2016-06-30T16:00:00Z")
+    
+    // Free trial products
+    //public static let freeTrialProducts: [ProductIdentifier: ZuzuProduct] = [ProductRadarFreeTrial:TrialProduct]
+    
     // All of the products assembled into a set of product identifiers.
     public static let productIdentifiers: Set<ProductIdentifier> =
     [ZuzuProducts.ProductRadarFreeTrial, ZuzuProducts.ProductRadar1Month, ZuzuProducts.ProductRadar2Month, ZuzuProducts.ProductRadar3Month]
