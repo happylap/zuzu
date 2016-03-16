@@ -112,7 +112,31 @@ class RadarDisplayViewController: UIViewController {
     
     // MARK: - Private Utils
     
-    func toggleServiceStatusIcon(isValid: Bool) {
+    private func alertLocalNotificationDisabled() {
+        Log.enter()
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "請到：設定 > 通知 > 豬豬快租\n開啟「允許通知」選項\n才能接收租屋雷達通知物件"
+        
+        alertView.showCloseButton = true
+        
+        alertView.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
+    private func alertPushNotificationDisabled() {
+        Log.enter()
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "遠端通知功能開啟失敗，請您稍後再試，謝謝！"
+        
+        alertView.showCloseButton = true
+        
+        alertView.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
+    private func toggleServiceStatusIcon(isValid: Bool) {
         
         statusImageView.hidden = false
         
@@ -124,7 +148,7 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    func setChart(dataPoints: [String], values: [Double], info: String) {
+    private func setChart(dataPoints: [String], values: [Double], info: String) {
         
         var dataEntries: [ChartDataEntry] = []
         
@@ -170,6 +194,28 @@ class RadarDisplayViewController: UIViewController {
         self.configurePurchaseTableView()
         self.updateCriteriaTextLabel()
         self.purchaseHistotyTableDataSource.refresh()
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            
+            /// Enable Remote Notifications
+            appDelegate.setupPushNotifications({ (result) -> () in
+                
+                if(result) {
+                    
+                    /// Enable Local App Notifications
+                    appDelegate.setupLocalNotifications({ (result) -> () in
+                        if(!result) {
+                            self.alertLocalNotificationDisabled()
+                        }
+                    })
+                    
+                } else {
+                    self.alertPushNotificationDisabled()
+                }
+                
+            })
+        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -548,7 +594,7 @@ extension RadarDisplayViewController{
                 
                 if result != nil{
                     self.zuzuCriteria = result!
-
+                    
                     self.updateCriteria()
                 }else{
                     assert(false, "Criteria should not be nil")
@@ -566,7 +612,7 @@ extension RadarDisplayViewController{
                 
                 self.runOnMainThread(){
                     if error != nil{
-
+                        
                         RadarService.sharedInstance.stopLoading(self)
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
@@ -591,7 +637,7 @@ extension RadarDisplayViewController{
             self.criteriaEnableSwitch.on = true
             
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-
+                
                 ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                     (result, error) ->Void in
                     self.runOnMainThread(){
@@ -615,7 +661,7 @@ extension RadarDisplayViewController{
                 }
                 
             }
-
+            
             return
         }
         
@@ -663,7 +709,7 @@ extension RadarDisplayViewController{
             }
         }
     }
-
+    
 }
 
 // MARK: Check Radar service
@@ -672,7 +718,7 @@ extension RadarDisplayViewController{
     
     func checkService(){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
- 
+            
             RadarService.sharedInstance.startLoadingText(self, text:"更新服務狀態")
             
             ZuzuWebService.sharedInstance.getServiceByUserId(userId){

@@ -14,6 +14,7 @@ import AWSSNS
 import FBSDKCoreKit
 import FBSDKLoginKit
 import Fabric
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -35,6 +36,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         return urls[urls.count-1] as NSURL
     }()
+
+    internal typealias NotificationSetupHandler = (result:Bool) -> ()
+    
+    private var localNotificationSetupHandler: NotificationSetupHandler?
+    
+    private var pushNotificationSetupHandler: NotificationSetupHandler?
     
     // MARK: Private Utils
     private func commonServiceSetup() {
@@ -85,7 +92,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
-    private func pushNotificationsSetup(){
+    private func updateTabBarBadge(application: UIApplication){
+        Log.enter()
+        let badgeNumber = application.applicationIconBadgeNumber
+        Log.debug("badgeNumber: \(badgeNumber)")
+        if badgeNumber > 0{
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let tabArray = rootViewController?.tabBar.items as NSArray!
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
+            tabItem.badgeValue = "\(badgeNumber)"
+            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        }
+        Log.exit()
+    }
+    
+    // MARK: Public Utils
+    /// Setup for remote push notification
+    internal func setupPushNotifications(handler: NotificationSetupHandler? = nil){
+        Log.enter()
+        
+        self.pushNotificationSetupHandler = handler
+
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+    }
+    
+    /// Setup for local App notification permission
+    internal func setupLocalNotifications(handler: NotificationSetupHandler? = nil){
+        Log.enter()
+        
+        self.localNotificationSetupHandler = handler
+        
         // Sets up Mobile Push Notification
         let readAction = UIMutableUserNotificationAction()
         readAction.identifier = "READ_IDENTIFIER"
@@ -115,24 +153,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Badge, UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: (NSSet(array: [messageCategory])) as? Set<UIUserNotificationCategory>)
         
-        UIApplication.sharedApplication().registerForRemoteNotifications()
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-    }
-    
-    private func updateTabBarBadge(application: UIApplication){
-        Log.enter()
-        let badgeNumber = application.applicationIconBadgeNumber
-        Log.debug("badgeNumber: \(badgeNumber)")
-        if badgeNumber > 0{
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let tabArray = rootViewController?.tabBar.items as NSArray!
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
-            tabItem.badgeValue = "\(badgeNumber)"
-            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
-        }
-        Log.exit()
+        
     }
     
     // MARK: UIApplicationDelegate Methods
@@ -162,10 +184,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //reachability = Reachability.reachabilityForInternetConnection();
         //reachability?.startNotifier();
         
-        if FeatureOption.Radar.enableMain == true{
-            pushNotificationsSetup()
-        }
-        
         commonServiceSetup()
         
         customUISetup()
@@ -181,6 +199,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         
+        Log.error("notificationSettings = \(notificationSettings.types)")
+        
+        if let currentNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
+            let isRegisteredForLocalNotifications = (!currentNotificationSettings.types.isSubsetOf(UIUserNotificationType.None))
+        
+            
+            if(isRegisteredForLocalNotifications) {
+                
+                self.localNotificationSetupHandler?(result: true)
+                self.localNotificationSetupHandler = nil
+                
+            } else {
+                
+                self.localNotificationSetupHandler?(result: false)
+                self.localNotificationSetupHandler = nil
+            }
+            
+            return
+        }
+        
+        self.localNotificationSetupHandler?(result: false)
+        self.localNotificationSetupHandler = nil
     }
     
     // Response for  UIApplication.sharedApplication().registerForRemoteNotifications()
@@ -191,10 +231,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.debug("deviceTokenString: \(deviceTokenString)")
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
         NSNotificationCenter.defaultCenter().postNotificationName("deviceTokenChange", object: self, userInfo: ["deviceTokenString": deviceTokenString])
+        
+        self.pushNotificationSetupHandler?(result: true)
+        self.pushNotificationSetupHandler = nil
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         Log.debug("Error in registering for remote notifications: \(error.localizedDescription)")
+        
+        self.pushNotificationSetupHandler?(result: false)
+        self.pushNotificationSetupHandler = nil
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
