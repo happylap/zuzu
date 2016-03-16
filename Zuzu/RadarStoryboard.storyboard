@@ -23,7 +23,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HPa-0u-dhH">
                                 <rect key="frame" x="0.0" y="242" width="375" height="380.5"/>
                                 <connections>
-                                    <segue destination="JCF-a3-JtA" kind="embed" identifier="showRegionConfigureTable" id="c9I-6A-hSi"/>
+                                    <segue destination="JCF-a3-JtA" kind="embed" identifier="showCriteriaConfigureTable" id="c9I-6A-hSi"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qgH-TH-Bdj" userLabel="DisplayView">
@@ -1317,8 +1317,8 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ja-WW-gFx">
-                                                    <rect key="frame" x="150" y="25.5" width="409" height="0.0"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="不限" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="815-kp-FwM" userLabel="Filter Label">
+                                                    <rect key="frame" x="525" y="15.5" width="34" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -1328,12 +1328,11 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="5Ja-WW-gFx" firstAttribute="leading" secondItem="g9t-Th-dn2" secondAttribute="trailing" constant="8" id="HsK-l4-hnF"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="815-kp-FwM" secondAttribute="trailing" id="K95-01-tM3"/>
                                                 <constraint firstItem="g9t-Th-dn2" firstAttribute="centerY" secondItem="aRw-tk-AOS" secondAttribute="centerY" id="N38-UP-wks"/>
                                                 <constraint firstItem="g9t-Th-dn2" firstAttribute="leading" secondItem="lhf-y9-3xZ" secondAttribute="trailing" constant="8" id="XGF-Ol-VJW"/>
                                                 <constraint firstItem="g9t-Th-dn2" firstAttribute="top" secondItem="aRw-tk-AOS" secondAttribute="topMargin" constant="5" id="Zpa-BR-n3G"/>
-                                                <constraint firstItem="5Ja-WW-gFx" firstAttribute="centerY" secondItem="g9t-Th-dn2" secondAttribute="centerY" id="cK8-l6-PtJ"/>
-                                                <constraint firstItem="5Ja-WW-gFx" firstAttribute="trailing" secondItem="aRw-tk-AOS" secondAttribute="trailingMargin" id="frV-XO-UCP"/>
+                                                <constraint firstItem="815-kp-FwM" firstAttribute="centerY" secondItem="g9t-Th-dn2" secondAttribute="centerY" id="imB-Sw-v11"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="lhf-y9-3xZ" secondAttribute="leading" id="nxr-c8-QBw"/>
                                                 <constraint firstItem="lhf-y9-3xZ" firstAttribute="centerY" secondItem="aRw-tk-AOS" secondAttribute="centerY" id="sCx-OY-mkx"/>
                                             </constraints>
@@ -1355,6 +1354,7 @@
                     <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="cityRegionLabel" destination="vfa-a9-w4p" id="MWW-lQ-WlP"/>
+                        <outlet property="filterLabel" destination="815-kp-FwM" id="kZz-DC-Uaf"/>
                         <outlet property="filtersImage" destination="lhf-y9-3xZ" id="mAJ-F7-Dez"/>
                         <outlet property="priceArrow" destination="z7I-Er-QUv" id="lV6-zK-bFv"/>
                         <outlet property="priceLabel" destination="1QB-2l-ZjN" id="veK-lf-in2"/>
