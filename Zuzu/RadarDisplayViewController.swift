@@ -495,8 +495,10 @@ class RadarDisplayViewController: UIViewController {
                     self.runOnMainThread(){
                         if error != nil{
                             RadarService.sharedInstance.stopLoading(self)
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "\(text)雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                            self.criteriaEnableSwitch.on = !isEnabled
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "\(text)雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                                self.criteriaEnableSwitch.on = !isEnabled
+                            }
+                            
                             return
                         }
                         
