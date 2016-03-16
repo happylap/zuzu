@@ -14,6 +14,7 @@ import AWSSNS
 import FBSDKCoreKit
 import FBSDKLoginKit
 import Fabric
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -35,6 +36,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         return urls[urls.count-1] as NSURL
     }()
+
+    internal typealias NotificationSetupHandler = (result:Bool) -> ()
+    
+    private var localNotificationSetupHandler: NotificationSetupHandler?
+    
+    private var pushNotificationSetupHandler: NotificationSetupHandler?
     
     // MARK: Private Utils
     private func commonServiceSetup() {
@@ -85,7 +92,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
-    private func pushNotificationsSetup(){
+    private func updateTabBarBadge(application: UIApplication){
+        Log.enter()
+        let badgeNumber = application.applicationIconBadgeNumber
+        Log.debug("badgeNumber: \(badgeNumber)")
+        if badgeNumber > 0{
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let tabArray = rootViewController?.tabBar.items as NSArray!
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
+            tabItem.badgeValue = "\(badgeNumber)"
+            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        }
+        Log.exit()
+    }
+    
+    // MARK: Public Utils
+    /// Setup for remote push notification
+    internal func setupPushNotifications(handler: NotificationSetupHandler? = nil){
+        Log.enter()
+        
+        self.pushNotificationSetupHandler = handler
+
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+    }
+    
+    /// Setup for local App notification permission
+    internal func setupLocalNotifications(handler: NotificationSetupHandler? = nil){
+        Log.enter()
+        
+        self.localNotificationSetupHandler = handler
+        
         // Sets up Mobile Push Notification
         let readAction = UIMutableUserNotificationAction()
         readAction.identifier = "READ_IDENTIFIER"
@@ -115,29 +153,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Badge, UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: (NSSet(array: [messageCategory])) as? Set<UIUserNotificationCategory>)
         
-        UIApplication.sharedApplication().registerForRemoteNotifications()
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-    }
-    
-    private func updateTabBarBadge(application: UIApplication){
-        Log.enter()
-        let badgeNumber = application.applicationIconBadgeNumber
-        Log.debug("badgeNumber: \(badgeNumber)")
-        if badgeNumber > 0{
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let tabArray = rootViewController?.tabBar.items as NSArray!
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
-            tabItem.badgeValue = "\(badgeNumber)"
-            Log.debug("set tab bar badge number as \(badgeNumber)")
-            
-            Log.debug("post receiveNotifyItems notifications")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
-
-            return
-        }
-        Log.debug("don't need to set tab bar badge number")
-        Log.exit()
+        
     }
     
     // MARK: UIApplicationDelegate Methods
@@ -151,9 +168,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return AmazonClientManager.sharedInstance.application(app, openURL: url, options: options)
     }
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        return true
+    }
+
+    // MARK: UIApplicationDelegate Register Notification Response
+    // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         
-        Log.enter()
+        Log.error("notificationSettings = \(notificationSettings.types)")
+        
+        if let currentNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
+            let isRegisteredForLocalNotifications = (!currentNotificationSettings.types.isSubsetOf(UIUserNotificationType.None))
+        
+            
+            if(isRegisteredForLocalNotifications) {
+                
+                self.localNotificationSetupHandler?(result: true)
+                self.localNotificationSetupHandler = nil
+                
+            } else {
+                
+                self.localNotificationSetupHandler?(result: false)
+                self.localNotificationSetupHandler = nil
+            }
+            
+            return
+        }
+        
+        self.localNotificationSetupHandler?(result: false)
+        self.localNotificationSetupHandler = nil
+    }
+    
+    // Response for  UIApplication.sharedApplication().registerForRemoteNotifications()
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let deviceTokenString = "\(deviceToken)"
+            .stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString:"<>"))
+            .stringByReplacingOccurrencesOfString(" ", withString: "")
+        Log.debug("deviceTokenString: \(deviceTokenString)")
+        UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
+        NSNotificationCenter.defaultCenter().postNotificationName("deviceTokenChange", object: self, userInfo: ["deviceTokenString": deviceTokenString])
+        
+        self.pushNotificationSetupHandler?(result: true)
+        self.pushNotificationSetupHandler = nil
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        Log.debug("Error in registering for remote notifications: \(error.localizedDescription)")
+        
+        self.pushNotificationSetupHandler?(result: false)
+        self.pushNotificationSetupHandler = nil
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        let rootViewController = self.window?.rootViewController as! UITabBarController!
+        let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+        
+        if application.applicationState == UIApplicationState.Active {
+            if rootViewController.selectedIndex == notifyTabIndex{
+                Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
+            }else{
+                if let aps = userInfo["aps"] as? NSDictionary {
+                    if let badge = aps["badge"] as? Int {
+                        application.applicationIconBadgeNumber = badge
+                        updateTabBarBadge(application)
+                    }
+                }
+            }
+            
+        }else{
+            rootViewController.selectedIndex = notifyTabIndex
+        }
+    }
+
+    // MARK: UIApplicationDelegate App Life Cycle
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         ZuzuStore.sharedInstance.start()
         
@@ -169,10 +259,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //reachability = Reachability.reachabilityForInternetConnection();
         //reachability?.startNotifier();
         
-        if FeatureOption.Radar.enableMain == true{
-            pushNotificationsSetup()
-        }
-        
         commonServiceSetup()
         
         customUISetup()
@@ -182,62 +268,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
         
-        Log.exit()
-        
         return true
     }
-
-    // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        
-    }
-    
-    // Response for  UIApplication.sharedApplication().registerForRemoteNotifications()
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        let deviceTokenString = "\(deviceToken)"
-            .stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString:"<>"))
-            .stringByReplacingOccurrencesOfString(" ", withString: "")
-        Log.debug("deviceTokenString: \(deviceTokenString)")
-        UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
-        NSNotificationCenter.defaultCenter().postNotificationName("deviceTokenChange", object: self, userInfo: ["deviceTokenString": deviceTokenString])
-    }
-    
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        Log.debug("Error in registering for remote notifications: \(error.localizedDescription)")
-    }
-    
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        Log.enter()
-        let rootViewController = self.window?.rootViewController as! UITabBarController!
-        let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-        
-        if application.applicationState == UIApplicationState.Active {
-            Log.debug("user receive notification while app is in the foreground")
-            if rootViewController.selectedIndex == notifyTabIndex{
-                Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
-            }else{
-                if let aps = userInfo["aps"] as? NSDictionary {
-                    if let badge = aps["badge"] as? Int {
-                        Log.debug("set badge number")
-                        application.applicationIconBadgeNumber = badge
-                        updateTabBarBadge(application)
-                    }
-                }
-            }
-            
-        }else{
-            Log.debug("set notification tab as selected")
-            rootViewController.selectedIndex = notifyTabIndex
-        }
-        
-        Log.exit()
-    }
-    
-    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
-        return true
-    }
-    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -251,13 +283,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        Log.enter()
-        updateTabBarBadge(application)
-        Log.exit()
+        let badgeNumber = application.applicationIconBadgeNumber
+        if badgeNumber > 0 {
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            if rootViewController.selectedIndex == notifyTabIndex{
+                let tabArray = rootViewController?.tabBar.items as NSArray!
+                application.applicationIconBadgeNumber = 0
+                let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
+                tabItem.badgeValue = nil
+            }
+        }
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        updateTabBarBadge(application)
     }
     
     func applicationWillTerminate(application: UIApplication) {
