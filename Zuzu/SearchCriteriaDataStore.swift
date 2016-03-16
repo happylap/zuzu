@@ -14,6 +14,7 @@ protocol SearchCriteriaDataStore: class {
     func clear()
 }
 
+/// Data Store for Search Criteria
 class UserDefaultsSearchCriteriaDataStore: SearchCriteriaDataStore {
     
     static let instance = UserDefaultsSearchCriteriaDataStore()
@@ -42,5 +43,37 @@ class UserDefaultsSearchCriteriaDataStore: SearchCriteriaDataStore {
     func clear() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(UserDefaultsSearchCriteriaDataStore.userDefaultsKey)
+    }
+}
+
+/// Data Store for Radar Criteria
+class UserDefaultsRadarCriteriaDataStore: SearchCriteriaDataStore {
+    
+    static let instance = UserDefaultsRadarCriteriaDataStore()
+
+    static let userDefaultsKey = "RadarCriteria"
+    
+    class func getInstance() -> UserDefaultsRadarCriteriaDataStore {
+        return UserDefaultsRadarCriteriaDataStore.instance
+    }
+    
+    func saveSearchCriteria(criteria: SearchCriteria) {
+        //Save selection to user defaults
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let data = NSKeyedArchiver.archivedDataWithRootObject(criteria)
+        userDefaults.setObject(data, forKey: UserDefaultsRadarCriteriaDataStore.userDefaultsKey)
+    }
+    
+    func loadSearchCriteria() -> SearchCriteria? {
+        //Load selection from user defaults
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let data = userDefaults.objectForKey(UserDefaultsRadarCriteriaDataStore.userDefaultsKey) as? NSData
+        
+        return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? SearchCriteria
+    }
+    
+    func clear() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(UserDefaultsRadarCriteriaDataStore.userDefaultsKey)
     }
 }

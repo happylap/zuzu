@@ -39,16 +39,18 @@ struct HouseItemDocument {
 }
 
 class SearchCriteria: NSObject, NSCoding {
+    
+    /// Persisted Fields
     var keyword:String?
     var region: [City]?
     var price:(Int, Int)?
     var size:(Int, Int)?
     var types: [Int]?
-    var sorting:String?
-    
-    ///Additional Filters [Field:Value]
-    var filters: [String : String]?
     var filterGroups: [FilterGroup]?
+    
+    /// Transient Fields
+    var filters: [String : String]? /// TODO: This is for Solr Query specifically. Use filterGroups in the future
+    var sorting:String?
     
     convenience required init?(coder decoder: NSCoder) {
         
@@ -73,6 +75,9 @@ class SearchCriteria: NSObject, NSCoding {
         }
         
         types = decoder.decodeObjectForKey("types") as? [Int]
+        
+        //filterGroups = decoder.decodeObjectForKey("filterGroups") as? [FilterGroup]
+        
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
@@ -96,6 +101,10 @@ class SearchCriteria: NSObject, NSCoding {
         }
         
         aCoder.encodeObject(types, forKey:"types")
+        
+//        if let filterGroups = filterGroups {
+//            aCoder.encodeObject(filterGroups, forKey:"filterGroups")
+//        }
     }
     
     func isEmpty() ->Bool {

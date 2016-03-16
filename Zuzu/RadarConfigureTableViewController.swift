@@ -17,13 +17,12 @@ private let Log = Logger.defaultLogger
 
 
 protocol RadarConfigureTableViewControllerDelegate: class {
-    func onCriteriaConfigureDone(searchCriteria:SearchCriteria)
+    func onCriteriaChanged(searchCriteria:SearchCriteria)
 }
 
 class RadarConfigureTableViewController: UITableViewController {
     
     var delegate: RadarConfigureTableViewControllerDelegate?
-    var populateCriteria = false
     
     struct UIControlTag {
         static let NOT_LIMITED_BUTTON_TAG = 99
@@ -60,14 +59,17 @@ class RadarConfigureTableViewController: UITableViewController {
         }
     }
     
+    var filterSelectionState: [FilterGroup]? {
+        didSet {
+            updateFilterLabel(filterSelectionState)
+        }
+    }
+    
     var sizeUpperRange:Range<Int>?
     var priceUpperRange:Range<Int>?
     
     let sizeItems:[[(label:String, value:Int)]] = RadarConfigureTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "sizeRange")
     let priceItems:[[(label:String, value:Int)]] = RadarConfigureTableViewController.loadPickerData("searchCriteriaOptions", criteriaLabel: "priceRange")
-    
-    // Trigger the fetching of total number of items that meet the current criteria
-    var stateObservers = [SearchCriteriaObserver]()
     
     private func updateRegionLabel(regionSelection: [City]?) {
         
@@ -121,17 +123,31 @@ class RadarConfigureTableViewController: UITableViewController {
         
     }
     
-    var currentCriteria: SearchCriteria = SearchCriteria() {
+    private func updateFilterLabel(filterSelectionState: [FilterGroup]?) {
+        
+        var filterLabel = "不限"
+        
+        if let filterSelectionState = filterSelectionState {
+            
+            if(filterSelectionState.count > 0) {
+                filterLabel = "\(filterSelectionState.count)個"
+            }
+            
+        }
+        
+        self.filterLabel.text = filterLabel
+    }
+    
+    /// The criteria passsed in from RadarViewController (Loaded from Web or Cache)
+    var loadedCriteria: SearchCriteria?
+    
+    /// The current criteria set by the user on the UI
+    private var currentCriteria: SearchCriteria = SearchCriteria() {
         
         didSet{
-            if (populateCriteria == true){
-                if !(oldValue == currentCriteria) {
-                    ///Save search criteria and enable reset button
-                    ///Load the criteria to the Search Box UI
-                    self.populateViewFromSearchCriteria(currentCriteria)
-                    
-                }
-            }
+            
+            ///Load the criteria to the Search Box UI
+            self.populateViewFromSearchCriteria(currentCriteria)
         }
     }
     
@@ -191,6 +207,7 @@ class RadarConfigureTableViewController: UITableViewController {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var sizePicker: UIPickerView!
     @IBOutlet weak var pricePicker: UIPickerView!
+    @IBOutlet weak var filterLabel: UILabel!
     
     // MARK: - Private Utils
     
@@ -233,7 +250,7 @@ class RadarConfigureTableViewController: UITableViewController {
         //Configure cell height
         tableView.delegate = self
     }
-        
+    
     private func handlePicker(indexPath:NSIndexPath) {
         var picker:UIPickerView?
         var isHidePicker = false
@@ -422,12 +439,14 @@ class RadarConfigureTableViewController: UITableViewController {
             selectAllButton.setToggleState(true)
         }
         
+        /// Filters
+        self.filterSelectionState = criteria.filterGroups
     }
     
     private func stateToSearhCriteria() -> SearchCriteria {
         
         let searchCriteria = SearchCriteria()
-
+        
         ///Region
         searchCriteria.region = regionSelectionState
         
@@ -495,8 +514,9 @@ class RadarConfigureTableViewController: UITableViewController {
             }
         }
         
-        searchCriteria.filterGroups = self.currentCriteria.filterGroups
-        self.delegate?.onCriteriaConfigureDone(searchCriteria)
+        searchCriteria.filterGroups = self.filterSelectionState
+        
+        self.delegate?.onCriteriaChanged(searchCriteria)
         return searchCriteria
     }
     
@@ -550,11 +570,11 @@ class RadarConfigureTableViewController: UITableViewController {
             }
             self.parentViewController?.navigationItem.backBarButtonItem?.title = "取消"
             self.showViewController(cityRegionVC, sender: self)
-
+            
         case CellConst.moreFilters: //More Filters
             let storyboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             let ftvc = storyboard.instantiateViewControllerWithIdentifier("FilterTableView") as! FilterTableViewController
-        
+            
             var filterIdSet = [String: Set<FilterIdentifier>]()
             if let filterGroups = self.currentCriteria.filterGroups{
                 for filterGroup in filterGroups{
@@ -616,12 +636,9 @@ class RadarConfigureTableViewController: UITableViewController {
         
         self.configurePricePicker()
         
-        /// Init SearchCriteriaObservers
-        populateCriteria = true
-        ///Save search criteria and enable reset button
-        if(!self.currentCriteria.isEmpty()) {
-            ///Load the criteria to the Search Box UI
-            self.populateViewFromSearchCriteria(currentCriteria)
+        ///Update the criteria to the Search Box UI
+        if let radarCriteria = self.loadedCriteria {
+            self.currentCriteria = radarCriteria
         }
         
         Log.exit()
@@ -1022,7 +1039,7 @@ extension RadarConfigureTableViewController: FilterTableViewControllerDelegate {
     }
     
     func onFiltersSelectionDone(selectedFilterIdSet: [String : Set<FilterIdentifier>]) {
-        self.currentCriteria.filterGroups = self.convertToFilterGroup(selectedFilterIdSet)
+        self.filterSelectionState = self.convertToFilterGroup(selectedFilterIdSet)
         self.currentCriteria = self.stateToSearhCriteria()
     }
     

@@ -34,6 +34,8 @@ class RadarViewController: UIViewController {
     
     var delegate: RadarViewControllerDelegate?
     
+    // Data Store Insatance
+    private let criteriaDataStore = UserDefaultsRadarCriteriaDataStore.getInstance()
     
     @IBOutlet weak var radarBannerLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
@@ -47,29 +49,49 @@ class RadarViewController: UIViewController {
     @IBOutlet weak var activateButton: UIButton!
     
     struct ViewTransConst {
-        static let showRegionConfigureTable:String = "showRegionConfigureTable"
+        static let showCriteriaConfigureTable:String = "showCriteriaConfigureTable"
     }
     
-    var searchCriteria = SearchCriteria(){
+    var searchCriteria: SearchCriteria = SearchCriteria(){
         didSet{
             updateCriteriaTextLabel()
         }
     }
+    
     var isUpdateMode = false
     
     // MARK: - View Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if self.isUpdateMode == true{
-            self.activateButton.setTitle("設定完成", forState: .Normal)
-        }
+        Log.enter()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
         
         
-        self.updateCriteriaTextLabel()
+        if(self.isUpdateMode){
+            /// Update Existing Criteria
+            
+            self.activateButton.setTitle("設定完成", forState: .Normal)
+            
+            /// Refresh the criteria on UI
+            updateCriteriaTextLabel()
+            
+        } else {
+            /// Create New Criteria
+            
+            /// Use cached criteria for criteria creation if there is cached data
+            if let criteria = criteriaDataStore.loadSearchCriteria() {
+                
+                self.searchCriteria = criteria
+                
+            } else {
+                
+                /// Reset the criteria on UI
+                self.searchCriteria = SearchCriteria()
+            }
+        }
+        
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
         self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
         self.configureButton()
@@ -115,9 +137,9 @@ class RadarViewController: UIViewController {
             Log.debug("prepareForSegue: \(identifier) \(self)")
             
             switch identifier{
-            case ViewTransConst.showRegionConfigureTable:
+            case ViewTransConst.showCriteriaConfigureTable:
                 if let vc = segue.destinationViewController as? RadarConfigureTableViewController {
-                    vc.currentCriteria = searchCriteria
+                    vc.loadedCriteria = self.searchCriteria
                     vc.delegate  = self
                 }
                 
@@ -141,6 +163,8 @@ class RadarViewController: UIViewController {
     }
     
     private func updateCriteriaTextLabel(){
+        Log.enter()
+        
         let displayItem = RadarDisplayItem(criteria:self.searchCriteria)
         self.regionLabel?.text = displayItem.title
         self.houseInfoLabel?.text = displayItem.purpostString
@@ -158,7 +182,7 @@ class RadarViewController: UIViewController {
         
         // check critria first
         if RadarService.sharedInstance.checkCriteria(self.searchCriteria) == false{
-           return
+            return
         }
         
         // updateMode --> update criteria
@@ -216,8 +240,12 @@ class RadarViewController: UIViewController {
 
 // MARK: - RadarConfigureTableViewControllerDelegate
 extension RadarViewController : RadarConfigureTableViewControllerDelegate {
-    func onCriteriaConfigureDone(searchCriteria:SearchCriteria){
-        Log.debug("onCriteriaConfigureDone")
+    func onCriteriaChanged(searchCriteria:SearchCriteria){
+        Log.debug("onCriteriaChanged")
+        
+        ///Save search criteria and enable reset button
+        criteriaDataStore.saveSearchCriteria(searchCriteria)
+        
         self.searchCriteria = searchCriteria
     }
     
@@ -268,7 +296,7 @@ extension RadarViewController{
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-
+                
                 if error != nil{
                     self.runOnMainThread(){
                         
@@ -296,7 +324,7 @@ extension RadarViewController{
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-
+            
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.searchCriteria) { (result, error) -> Void in
                 
                 if error != nil{
@@ -310,7 +338,7 @@ extension RadarViewController{
                             self.gotoDisplayRadar(zuzuCriteria)
                         }
                     }
-
+                    
                     return
                 }
                 
@@ -370,14 +398,14 @@ extension RadarViewController{
     func createCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-
+            
             ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.searchCriteria){
                 (result, error) -> Void in
                 
                 self.runOnMainThread(){
                     
                     if error != nil{
-
+                        
                         RadarService.sharedInstance.stopLoading(self)
                         
                         Log.error("Cannot update criteria by user id:\(userId)")
@@ -441,7 +469,7 @@ extension RadarViewController{
     }
     
     func checkService(){
-
+        
         Log.enter()
         
         if self.isUpdateMode == true{
@@ -498,17 +526,17 @@ extension RadarViewController{
         }else{
             RadarService.sharedInstance.stopLoading(self)
         }
-
+        
         Log.exit()
     }
-
+    
     
 }
 
 // MARK: Handle unfinished transactions
 
 extension RadarViewController{
-
+    
     func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
         self.isOnLogging = false
         self.tabBarController!.tabBarHidden = false
@@ -598,7 +626,7 @@ extension RadarViewController{
                 }
             }
         }
-
+        
         alertView.addButton("取消") {
         }
         
