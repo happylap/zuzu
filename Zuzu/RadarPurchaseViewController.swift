@@ -49,7 +49,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     // Free Trial Product Info
     private static let TrialProduct = ZuzuProduct(productIdentifier: ZuzuProducts.ProductRadarFreeTrial,
-        localizedTitle: "14天的租屋雷達服務禮包",
+        localizedTitle: "15天租屋雷達服務禮包",
         price: 0.0,
         priceLocale: NSLocale.currentLocale())
     
@@ -60,6 +60,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     // Fetch the products from iTunes connect, redisplay the table on successful completion
     private func loadProducts() {
+        
+        RadarService.sharedInstance.startLoading(self)
         
         self.products.removeAll()
         
@@ -86,6 +88,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 self.products.appendContentsOf(storeProducts)
                 
+                RadarService.sharedInstance.stopLoading(self)
                 self.tableView.reloadData()
             }
         }
@@ -232,12 +235,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         loadProducts()
         
-        if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
-                (task: AWSTask!) -> AnyObject! in
-                return nil
-            }
-        }
     }
     
     override func didReceiveMemoryWarning() {
