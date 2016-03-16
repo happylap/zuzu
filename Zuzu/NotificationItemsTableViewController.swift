@@ -45,8 +45,9 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshOnViewLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setNeedRefresh:", name: "receiveNotifyItems", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setNeedRefresh:", name: UserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "willEnterForground", name: UIApplicationWillEnterForegroundNotification, object: nil)
+ 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItemsOnForeground:", name: "receiveNotifyItemsOnForeground", object: nil)
         
@@ -57,15 +58,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.enter()
+ 
+        if self.isNeedRefresh == true{
+            self.isNeedRefresh = false
+            self.refreshData(true)
+            return
+        }
         
         let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
         if badgeNumber > 0{
             self.refreshData(true)
-        }else{
-            if self.isNeedRefresh == true{
-                self.isNeedRefresh = false
-                self.refreshData(true)
-            }
         }
     
         Log.exit()
@@ -166,14 +168,15 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             return
         }
         
-        Log.debug("showSpinner: \(showSpinner)")
-            
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if showSpinner == true{
+                Log.debug("refresh data with loading")
                 LoadingSpinner.shared.stop()
                 LoadingSpinner.shared.setImmediateAppear(true)
                 LoadingSpinner.shared.setOpacity(0.3)
                 LoadingSpinner.shared.startOnView(self.tableView)
+            }else{
+                Log.debug("refresh data without loading")
             }
             
             var lastUpdateTime: NSDate?
@@ -231,12 +234,31 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         Log.exit()
     }
     
-    func setNeedRefresh(notification: NSNotification){
+    func handleUserLogin(notification: NSNotification){
         Log.enter()
         self.isNeedRefresh = true
         Log.exit()
     }
 
+    func willEnterForground(){
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+        if badgeNumber > 0 {
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            
+            let tabArray = self.tabBarController?.tabBar.items as NSArray!
+            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
+            
+            if self.tabBarController?.selectedIndex == notifyTabIndex{
+                UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+                tabItem.badgeValue = nil
+                self.refreshData(true)
+            }else{
+                tabItem.badgeValue = "\(badgeNumber)"
+            }
+            
+            AmazonSNSService.sharedInstance.setReceiveNotification()
+        }
+    }
 
     
     // MARK: - Pull update
