@@ -18,7 +18,9 @@ import Fabric
 private let Log = Logger.defaultLogger
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifier {
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
     
     static var tagContainer: TAGContainer?
     
@@ -28,8 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
     
     var window: UIWindow?
     
-    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    lazy var applicationDocumentsDirectory: NSURL = {
+        // The directory the application uses to store the Core Data store file. This code uses a directory named "RLopez.BORRAME" in the application's documents Application Support directory.
+        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        return urls[urls.count-1] as NSURL
+    }()
     
+    // MARK: Private Utils
     private func commonServiceSetup() {
         
         //Google Map
@@ -112,12 +119,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
     }
     
-    lazy var applicationDocumentsDirectory: NSURL = {
-        // The directory the application uses to store the Core Data store file. This code uses a directory named "RLopez.BORRAME" in the application's documents Application Support directory.
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as NSURL
-    }()
+    private func updateTabBarBadge(application: UIApplication){
+        Log.enter()
+        let badgeNumber = application.applicationIconBadgeNumber
+        Log.debug("badgeNumber: \(badgeNumber)")
+        if badgeNumber > 0{
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let tabArray = rootViewController?.tabBar.items as NSArray!
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
+            tabItem.badgeValue = "\(badgeNumber)"
+            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        }
+        Log.exit()
+    }
     
+    // MARK: UIApplicationDelegate Methods
     @available(iOS, introduced=8.0, deprecated=9.0)
     func application(app: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         return AmazonClientManager.sharedInstance.application(app, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
@@ -159,7 +177,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         return true
     }
+
+    // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        
+    }
     
+    // Response for  UIApplication.sharedApplication().registerForRemoteNotifications()
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         let deviceTokenString = "\(deviceToken)"
             .stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString:"<>"))
@@ -238,28 +262,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, TAGContainerOpenerNotifie
         
         ZuzuStore.sharedInstance.stop()
     }
-    
+}
+
+// MARK: TAGContainerOpenerNotifier
+extension AppDelegate: TAGContainerOpenerNotifier {
+
     func containerAvailable(container: TAGContainer!) {
         container.refresh()
         
         //Save tag container for later access
         AppDelegate.tagContainer = container
     }
-    
-    func updateTabBarBadge(application: UIApplication){
-        Log.enter()
-        let badgeNumber = application.applicationIconBadgeNumber
-        Log.debug("badgeNumber: \(badgeNumber)")
-        if badgeNumber > 0{
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let tabArray = rootViewController?.tabBar.items as NSArray!
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
-            tabItem.badgeValue = "\(badgeNumber)"
-            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
-        }
-        Log.exit()
-    }
-    
+
 }
