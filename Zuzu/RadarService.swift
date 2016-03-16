@@ -184,7 +184,7 @@ class RadarService : NSObject {
         self.isLoading = true
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.setMinShowTime(1.5)
+        LoadingSpinner.shared.setMinShowTime(1)
         LoadingSpinner.shared.startOnView(theViewController.view)
     }
     
