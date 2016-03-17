@@ -875,7 +875,7 @@
                     <size key="freeformSize" width="600" height="1500"/>
                     <connections>
                         <outlet property="criteriaEnableSwitch" destination="23a-c6-f3g" id="kss-Af-WzT"/>
-                        <outlet property="currentConditionLbel" destination="60w-GP-foy" id="U7K-BU-kCD"/>
+                        <outlet property="currentConditionBannerLabel" destination="60w-GP-foy" id="Zhy-9D-vGK"/>
                         <outlet property="houseInfoLabel" destination="GkN-Xn-yd1" id="VGa-Xd-ZvB"/>
                         <outlet property="modifyButtoon" destination="nQm-xW-OQB" id="N0C-XM-aH2"/>
                         <outlet property="otherFiltersLabel" destination="zpG-ZY-Ugx" id="mq3-YF-rxx"/>
