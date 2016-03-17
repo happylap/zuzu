@@ -663,16 +663,16 @@ extension RadarViewController{
     }
     
     func alertUnfinishError(){
-        let msgTitle = "重新設定租屋雷達服務失敗"
+        let msgTitle = "服務建立失敗"
         let okButton = "知道了"
-        let subTitle = "很抱歉！設定租屋雷達服務無法成功！"
+        let subTitle = "很抱歉！您已經成功購買了租屋雷達服務，但是目前無法成功建立租屋雷達服務，請您請稍候再試！\n若持續失敗，請與粉絲團客服聯繫!"
         let alertView = SCLAlertView()
         alertView.showCloseButton = false
         
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
-                alertView.addButton("重新再試") {
+                alertView.addButton("重試") {
                     self.doUnfinishTransactions(unfinishedTranscations)
                 }
             }

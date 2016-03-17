@@ -140,7 +140,7 @@ class RadarDisplayViewController: UIViewController {
         
         let alertView = SCLAlertView()
         
-        let subTitle = "遠端通知功能開啟失敗，請您稍後再試，謝謝！"
+        let subTitle = "遠端通知功能開啟失敗，請您重新開啟豬豬快租再試一次，謝謝！"
         
         alertView.showCloseButton = true
         
