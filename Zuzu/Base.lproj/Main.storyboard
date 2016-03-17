@@ -755,8 +755,8 @@
     <resources>
         <image name="cancel" width="30" height="30"/>
         <image name="checked_green" width="30" height="30"/>
-        <image name="leftRadarLanding" width="565" height="501"/>
+        <image name="leftRadarLanding" width="663" height="663"/>
         <image name="lock_icon" width="30" height="30"/>
-        <image name="rightRadarLanding" width="670" height="609"/>
+        <image name="rightRadarLanding" width="663" height="663"/>
     </resources>
 </document>
