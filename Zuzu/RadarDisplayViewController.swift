@@ -202,22 +202,36 @@ class RadarDisplayViewController: UIViewController {
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
             /// Enable Remote Notifications
-            appDelegate.setupPushNotifications({ (result) -> () in
+            if(UIApplication.sharedApplication().isRegisteredForRemoteNotifications()) {
+                Log.debug("Remote Notifications Registered = Y")
+                /// Enable Local App Notifications
+                appDelegate.setupLocalNotifications({ (result) -> () in
+                    if(!result) {
+                        self.alertLocalNotificationDisabled()
+                    }
+                })
                 
-                if(result) {
-                    
-                    /// Enable Local App Notifications
-                    appDelegate.setupLocalNotifications({ (result) -> () in
-                        if(!result) {
-                            self.alertLocalNotificationDisabled()
-                        }
-                    })
-                    
-                } else {
-                    self.alertPushNotificationDisabled()
-                }
+            } else {
+                Log.debug("Remote Notifications Registered = N")
                 
-            })
+                appDelegate.setupPushNotifications({ (result) -> () in
+                    
+                    if(result) {
+                        
+                        /// Enable Local App Notifications
+                        appDelegate.setupLocalNotifications({ (result) -> () in
+                            if(!result) {
+                                self.alertLocalNotificationDisabled()
+                            }
+                        })
+                        
+                    } else {
+                        self.alertPushNotificationDisabled()
+                    }
+                    
+                })
+                
+            }
         }
         
     }
