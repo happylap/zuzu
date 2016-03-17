@@ -59,13 +59,14 @@ public class LoadingSpinner{
     }
     
     public func setText(text:String) {
+        self.mode = .Text
         self.text = text
     }
     
     public func updateText(text:String) {
         self.dialog?.labelText = text
     }
-
+    
     
     public func startOnView(view: UIView, animated: Bool = true) {
         
@@ -79,18 +80,19 @@ public class LoadingSpinner{
             dialog.animationType = self.animationType
             dialog.taskInProgress = true
             
+            if let mode = mode {
+                dialog.mode = mode
+            }
+            
             if let minShowTime = self.minShowTime {
                 dialog.minShowTime = minShowTime
             }
             
-            if let mode = self.mode,
-                let customView = self.customView {
-                    dialog.mode = mode
-                    dialog.customView = customView
+            if let customView = self.customView {
+                dialog.customView = customView
             }
             
             if let text = self.text {
-                dialog.mode = .Text
                 dialog.labelFont = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
                 dialog.labelText = text
             }
