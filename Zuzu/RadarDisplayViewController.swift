@@ -406,6 +406,7 @@ class RadarDisplayViewController: UIViewController {
         //self.purchaseTableView.rowHeight = UIScreen.mainScreen().bounds.width * (500/1440)
         
         //Remove extra cells when the table height is smaller than the screen
+        self.purchaseTableView.allowsSelection = false
         self.purchaseTableView.tableFooterView = UIView(frame: CGRectZero)
         
         // configure empty label

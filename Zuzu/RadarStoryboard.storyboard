@@ -371,7 +371,7 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="1436"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nrn-N1-0Oc" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="1092"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="1131"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="byC-T9-SKw" userLabel="CriteriaView">
                                                 <rect key="frame" x="0.0" y="8" width="600" height="339.5"/>
@@ -685,7 +685,7 @@
                                                 </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wqi-Qo-jUC" userLabel="PurchaseView">
-                                                <rect key="frame" x="8" y="733.5" width="584" height="350.5"/>
+                                                <rect key="frame" x="8" y="733.5" width="584" height="389.5"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zH0-KO-cjI" userLabel="HistoryBannerView">
                                                         <rect key="frame" x="0.0" y="0.0" width="584" height="43"/>
@@ -709,7 +709,7 @@
                                                         </constraints>
                                                     </view>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kzV-PJ-lR5" userLabel="PurchaseTableView">
-                                                        <rect key="frame" x="0.0" y="43" width="584" height="307.5"/>
+                                                        <rect key="frame" x="0.0" y="43" width="584" height="346.5"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="kzV-PJ-lR5" secondAttribute="height" multiplier="1500:1200" id="W8T-DZ-bgd"/>
@@ -786,7 +786,7 @@
                                                     <constraint firstItem="zH0-KO-cjI" firstAttribute="centerX" secondItem="Wqi-Qo-jUC" secondAttribute="centerX" id="LaV-fj-PSt"/>
                                                     <constraint firstItem="kzV-PJ-lR5" firstAttribute="leading" secondItem="Wqi-Qo-jUC" secondAttribute="leading" id="SEh-Vn-O4w"/>
                                                     <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="zH0-KO-cjI" secondAttribute="top" id="Yx1-Tb-AAL"/>
-                                                    <constraint firstAttribute="width" secondItem="Wqi-Qo-jUC" secondAttribute="height" multiplier="1500:900" id="gmn-Lc-ADn"/>
+                                                    <constraint firstAttribute="width" secondItem="Wqi-Qo-jUC" secondAttribute="height" multiplier="1500:1000" id="gmn-Lc-ADn"/>
                                                     <constraint firstItem="kzV-PJ-lR5" firstAttribute="top" secondItem="zH0-KO-cjI" secondAttribute="bottom" id="h7d-u0-uIv"/>
                                                     <constraint firstAttribute="bottom" secondItem="kzV-PJ-lR5" secondAttribute="bottom" id="hnt-h3-4sF"/>
                                                     <constraint firstItem="zH0-KO-cjI" firstAttribute="top" secondItem="Wqi-Qo-jUC" secondAttribute="top" id="wJL-pT-Kbw"/>
