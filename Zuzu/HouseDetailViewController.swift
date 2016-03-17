@@ -11,7 +11,6 @@ import MessageUI
 import MWPhotoBrowser
 import MarqueeLabel
 import Social
-import MBProgressHUD
 import AwesomeCache
 import SCLAlertView
 

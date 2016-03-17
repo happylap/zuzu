@@ -8,7 +8,6 @@
 
 import Foundation
 import SCLAlertView
-import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
@@ -110,8 +109,7 @@ class RadarService : NSObject {
         }
     }
     
-    func checkPurchaseExist(transactionId: String, handler: (isExist: Bool, checkExistError: ErrorType?) -> Void)
-    {
+    func checkPurchaseExist(transactionId: String, handler: (isExist: Bool, checkExistError: ErrorType?) -> Void) {
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             ZuzuWebService.sharedInstance.getPurchaseByUserId(userId){
                 (totalNum, result, error) -> Void in
@@ -190,20 +188,21 @@ class RadarService : NSObject {
     
     func startLoadingText(theViewController: UIViewController, text: String, animated: Bool = true){
         if self.isLoadingText == true{
+            LoadingSpinner.shared.updateText(text)
             return
         }
         
         if self.isLoading == true{
+            LoadingSpinner.shared.updateText(text)
             return
         }
         
         self.isLoadingText = true
         
-        let dialog = MBProgressHUD.showHUDAddedTo(theViewController.view, animated: animated)
-        
-        dialog.animationType = .Fade
-        //dialog.dimBackground = true
-        dialog.labelText = text
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.setText(text)
+        LoadingSpinner.shared.startOnView(theViewController.view, animated: animated)
     }
     
     func stopLoading(theViewController: UIViewController, animated: Bool = true){
@@ -214,7 +213,8 @@ class RadarService : NSObject {
         
         if self.isLoadingText == true{
             self.isLoadingText = false
-            MBProgressHUD.hideHUDForView(theViewController.view, animated: animated)
+            
+            LoadingSpinner.shared.stop(animated)
         }
     }
     

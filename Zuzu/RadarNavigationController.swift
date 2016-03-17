@@ -8,7 +8,6 @@
 
 import UIKit
 import SCLAlertView
-import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
@@ -55,6 +54,8 @@ class RadarNavigationController: UINavigationController {
                         self.showRetryRadarView(false)
                         return
                     }
+                    
+                    RadarService.sharedInstance.stopLoading(self, animated: false)
                     
                     if result != nil{
                         // don't need to stop loading here, the next view to show may keep loading

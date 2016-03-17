@@ -8,7 +8,6 @@
 
 import UIKit
 import SCLAlertView
-import MBProgressHUD
 import Charts
 
 private let Log = Logger.defaultLogger
@@ -728,7 +727,7 @@ extension RadarDisplayViewController{
     func checkService(){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
-            RadarService.sharedInstance.startLoadingText(self, text:"更新服務狀態")
+            RadarService.sharedInstance.startLoading(self)
             
             ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                 (result: ZuzuServiceMapper?, error: NSError?) -> Void in
@@ -753,24 +752,12 @@ extension RadarDisplayViewController{
 
 extension RadarDisplayViewController{
     
-    func handleCompleteLoginForUnfinishTransaction(task: AWSTask!) -> AnyObject?{
-        self.isOnLogging = false
-        self.tabBarController!.tabBarHidden = false
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            self.doUnfinishTransactions(unfinishedTranscations)
-        }else{
-            self.checkService()
-        }
-        return nil
-    }
-    
     func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
-        RadarService.sharedInstance.stopLoading(self)
-        RadarService.sharedInstance.startLoadingText(self, text:"重新設定租屋雷達服務...")
+        //RadarService.sharedInstance.stopLoading(self, animated: false)
+        RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
         self.performFinishTransactions()
         Log.exit()
     }
