@@ -872,7 +872,8 @@ class AmazonClientManager : NSObject {
         Log.debug("Login FB")
         LoadingSpinner.shared.setDimBackground(true)
         LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setText("登入中")
         LoadingSpinner.shared.startOnView(theViewController.view)
         
         self.fbLoginManager.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: theViewController, handler: { (result: FBSDKLoginManagerLoginResult!, error : NSError!) -> Void in
@@ -1015,7 +1016,8 @@ class AmazonClientManager : NSObject {
         
         LoadingSpinner.shared.setDimBackground(true)
         LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.3)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setText("登入中")
         LoadingSpinner.shared.startOnView(theViewController.view)
         
         Log.debug("Login Google")
