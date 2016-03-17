@@ -164,26 +164,19 @@ class RadarDisplayViewController: UIViewController {
         
         statusPieChart.centerText = info
         
-        let usedDays = UIColor.colorWithRGB(0xFFCC66)//.colorWithRGB(0xFF6666)
-        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)//.colorWithRGB(0x66FFCC)//.colorWithRGB(0x4990E2)
+        let usedDays = UIColor.colorWithRGB(0xFFCC66)
+        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)
         
         pieChartDataSet.colors = [usedDays, remainingDays]
     }
     
-    // MARK: - View Life cycle
-    //    override func viewDidLayoutSubviews() {
-    //        super.viewDidLayoutSubviews()
-    //        Log.error("viewDidLayoutSubviews")
-    //        // Update Chart Size
-    //        let currentSize = statusPieChart.frame.size
-    //        let currentCenter = statusPieChart.center
-    //
-    //        let newFrame = CGSize(width: currentSize.width * 1.3, height: currentSize.height * 1.3)
-    //
-    //        statusPieChart.frame.size = newFrame
-    //        statusPieChart.center = currentCenter
-    //    }
-    
+    private func clearChart() {
+        
+        statusPieChart?.noDataText = "無法載入資料"
+        statusPieChart?.data = nil
+
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.serviceButton?.hidden = true
@@ -346,7 +339,7 @@ class RadarDisplayViewController: UIViewController {
         
         
         self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
-        self.statusPieChart.centerText = "無法取得資料"
+        self.clearChart()
         self.serviceExpireLabel?.text = ""
         self.serviceButton?.hidden = true
         self.enableModifyButton()
