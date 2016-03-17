@@ -95,16 +95,16 @@ class AmazonClientManager : NSObject {
             //}
             
             if let provider = UserDefaultsUtils.getLoginProvider() {
-                    switch(provider) {
-                    case Provider.FB:
-                        
-                        return (provider.rawValue, FBSDKAccessToken.currentAccessToken()?.tokenString)
-                        
-                    case Provider.GOOGLE:
-                        
-                        return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
-                        
-                    }
+                switch(provider) {
+                case Provider.FB:
+                    
+                    return (provider.rawValue, FBSDKAccessToken.currentAccessToken()?.tokenString)
+                    
+                case Provider.GOOGLE:
+                    
+                    return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
+                    
+                }
             } else {
                 
                 assert(false, "No previous login provider, but the user is logged in")
@@ -302,33 +302,33 @@ class AmazonClientManager : NSObject {
                         /// Create new user account
                         
                         if let _ = UserDefaultsUtils.getLoginProvider() {
+                            
+                            let zuzuUser = ZuzuUser()
+                            zuzuUser.email = userProfile.email
+                            zuzuUser.name = userProfile.name
+                            zuzuUser.gender = userProfile.gender
+                            if let birthday = userProfile.birthday {
+                                zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
+                            }
+                            zuzuUser.pictureUrl = userProfile.pictureUrl
+                            
+                            ZuzuWebService.sharedInstance.registerUser(zuzuUser){(userId, error) -> Void in
                                 
-                                let zuzuUser = ZuzuUser()
-                                zuzuUser.email = userProfile.email
-                                zuzuUser.name = userProfile.name
-                                zuzuUser.gender = userProfile.gender
-                                if let birthday = userProfile.birthday {
-                                    zuzuUser.birthday = CommonUtils.getUTCDateFromString(birthday)
-                                }
-                                zuzuUser.pictureUrl = userProfile.pictureUrl
+                                Log.debug("createUser")
                                 
-                                ZuzuWebService.sharedInstance.registerUser(zuzuUser){(userId, error) -> Void in
-                                    
-                                    Log.debug("createUser")
-                                    
-                                    if error != nil {
-                                        Log.debug("createUser, error = \(error)")
-                                        handler(user: nil, result: false)
-                                        return
-                                    }
-                                    
-                                    /// Update generated userID
-                                    zuzuUser.id = userId
-                                        
-                                    handler(user: zuzuUser, result: true)
-                                    
+                                if error != nil {
+                                    Log.debug("createUser, error = \(error)")
+                                    handler(user: nil, result: false)
+                                    return
                                 }
                                 
+                                /// Update generated userID
+                                zuzuUser.id = userId
+                                
+                                handler(user: zuzuUser, result: true)
+                                
+                            }
+                            
                         } else {
                             assert(false, "No login provider for current user")
                             handler(user: nil, result: false)
@@ -524,23 +524,23 @@ class AmazonClientManager : NSObject {
         if let profile = self.currentUserProfile {
             
             if let provider = UserDefaultsUtils.getLoginProvider(){
-                 
-                    Log.warning("Current Login: \(profile.id), \(provider)")
-                    
-                    switch(provider) {
-                    case Provider.FB:
-                        if(self.isLoggedInWithFacebook()) {
-                            self.reloadFBSession()
-                        } else {
-                            Log.error("Reloading Facebook Session: Failure")
-                        }
-                    case Provider.GOOGLE:
-                        if(self.isLoggedInWithGoogle()) {
-                            self.reloadGSession()
-                        } else {
-                            Log.error("Reloading Google Session: Failure")
-                        }
+                
+                Log.warning("Current Login: \(profile.id), \(provider)")
+                
+                switch(provider) {
+                case Provider.FB:
+                    if(self.isLoggedInWithFacebook()) {
+                        self.reloadFBSession()
+                    } else {
+                        Log.error("Reloading Facebook Session: Failure")
                     }
+                case Provider.GOOGLE:
+                    if(self.isLoggedInWithGoogle()) {
+                        self.reloadGSession()
+                    } else {
+                        Log.error("Reloading Google Session: Failure")
+                    }
+                }
             }
             
         } else {
@@ -1072,11 +1072,10 @@ extension AmazonClientManager: GIDSignInDelegate {
                     
                 } else {
                     
-                    /// Revert the login only if we are Not resuming the session
-                    if self.currentUserProfile == nil {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.failLogin(.GoogleFailure)
-                        }
+                    /// Revert the login if Google cannot resume successfully
+                    /// Google token would be nil after App is closed, so we need to get it again from the Google server
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.failLogin(.GoogleFailure)
                     }
                     
                     ///GA Tracker: Login failed
