@@ -26,6 +26,8 @@ class RadarViewController: UIViewController {
     
     var isOnLogging = false
     
+    var isServiceCheckAlerted = false
+    
     var navigationView: RadarNavigationController?
     
     var displayRadarViewController: RadarDisplayViewController?
@@ -135,9 +137,6 @@ class RadarViewController: UIViewController {
         
         /// Send Criteria to Config Table
         self.configTable?.currentCriteria = self.radarSearchCriteria
-    
-        
-        self.checkService()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -145,8 +144,9 @@ class RadarViewController: UIViewController {
         Log.enter()
         
         /// Try reload service status
-        if(AmazonClientManager.sharedInstance.isLoggedIn()){
+        if(!self.isServiceCheckAlerted && AmazonClientManager.sharedInstance.isLoggedIn()){
             self.checkService()
+            self.isServiceCheckAlerted = true
             return
         }
         
