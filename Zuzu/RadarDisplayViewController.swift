@@ -17,8 +17,6 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
-    var navigationView: RadarNavigationController?
-    
     private let secPerDay = 86400.0
     private let secPerHour = 3600.0
     
@@ -30,7 +28,10 @@ class RadarDisplayViewController: UIViewController {
     
     var porcessTransactionNum = -1
     
-    var purchaseViewController: RadarPurchaseViewController?
+    
+    var purchaseViewController: RadarPurchaseViewController? //Used for view transition in purchase flow. Ex: dismiss purchase view afetr purchase is successful and done!
+    
+    var navigationView: RadarNavigationController?  //Used for view transition. Ex: if user log out, let configure UI show up
     
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
@@ -73,10 +74,15 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
+    
+    // banner text label
+    @IBOutlet weak var currentConditionBannerionLbel: UILabel!
+    
     @IBOutlet weak var servieBannerLabel: UILabel!
     
-    @IBOutlet weak var currentConditionLbel: UILabel!
-    
+    @IBOutlet weak var purchaseHistoryBannerLabel: UILabel!
+   
+    // label in criteria
     @IBOutlet weak var regionLabel: UILabel!
     
     @IBOutlet weak var houseInfoLabel: UILabel!
@@ -85,12 +91,18 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var otherFiltersLabel: UILabel!
     
+    
+    // service status
     @IBOutlet weak var serviceStatusLabel: UILabel!
     
     @IBOutlet weak var serviceExpireLabel: UILabel!
     
+    
+    // purchase hstory
     @IBOutlet weak var purchaseTableView: UITableView!
     
+    
+    // buton
     @IBOutlet weak var modifyButtoon: UIButton!
     
     @IBOutlet weak var serviceButton: UIButton!
@@ -382,8 +394,10 @@ class RadarDisplayViewController: UIViewController {
     }
     
     private func configureBannerText(){
-        self.currentConditionLbel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-        self.servieBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
+        let color = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
+        self.currentConditionBannerionLbel.textColor = color
+        self.servieBannerLabel.textColor = color
+        self.purchaseHistoryBannerLabel.textColor = color
     }
     
     private func configurePurchaseTableView(){
