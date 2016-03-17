@@ -21,6 +21,10 @@ public class LoadingSpinner{
     private var dimBackground = false
     private var immediateAppear = false
     private var text:String?
+    private var animationType: MBProgressHUDAnimation = .Fade
+    private var mode: MBProgressHUDMode?
+    private var customView: UIView?
+    
     
     class var shared: LoadingSpinner {
         struct Static {
@@ -30,11 +34,11 @@ public class LoadingSpinner{
     }
     
     public func setDimBackground(status:Bool) {
-        dimBackground = status
+        self.dimBackground = status
     }
     
     public func setImmediateAppear(status:Bool) {
-        immediateAppear = status
+        self.immediateAppear = status
     }
     
     public func setOpacity(opacity:Float) {
@@ -49,23 +53,35 @@ public class LoadingSpinner{
         self.graceTime = second
     }
     
+    public func setCustomView(view: UIView) {
+        self.mode = .CustomView
+        self.customView = view
+    }
+    
     public func setText(text:String) {
         self.text = text
     }
     
-    public func startOnView(view: UIView) {
+    public func startOnView(view: UIView, animated: Bool = true) {
         
-        dialog = MBProgressHUD(view: view)
+        self.dialog = MBProgressHUD(view: view)
         
         if let dialog = dialog {
             dialog.removeFromSuperViewOnHide = true
-            dialog.dimBackground = dimBackground
-            dialog.opacity = opacity
+            dialog.dimBackground = self.dimBackground
+            dialog.opacity = self.opacity
+            dialog.animationType = self.animationType
+            dialog.taskInProgress = true
+            
             if let minShowTime = self.minShowTime {
                 dialog.minShowTime = minShowTime
             }
-            dialog.animationType = .Fade
-            dialog.taskInProgress = true
+            
+            if let mode = self.mode,
+                let customView = self.customView {
+                    dialog.mode = mode
+                    dialog.customView = customView
+            }
             
             if let text = self.text {
                 dialog.labelText = text
@@ -81,25 +97,34 @@ public class LoadingSpinner{
                 }
             }
             view.addSubview(dialog)
-            dialog.show(true)
+            
+            dialog.show(animated)
         }
     }
     
-    public func stop() {
+    public func stop(animated: Bool = true, afterDelay: NSTimeInterval = 0) {
         if let dialog = dialog {
             dialog.taskInProgress = false
-            dialog.hide(true)
+            
+            if(afterDelay > 0) {
+                dialog.hide(animated, afterDelay: afterDelay)
+            } else {
+                dialog.hide(animated)
+            }
+            
         }
         
         resetParams()
     }
     
     private func resetParams() {
-        text = nil
-        dimBackground = false
-        immediateAppear = false
-        opacity = LoadingSpinner.defaultOpacity
-        minShowTime = nil
-        graceTime = nil
+        self.text = nil
+        self.dimBackground = false
+        self.immediateAppear = false
+        self.opacity = LoadingSpinner.defaultOpacity
+        self.minShowTime = nil
+        self.graceTime = nil
+        self.customView = nil
+        self.mode = nil
     }
 }
