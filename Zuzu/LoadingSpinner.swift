@@ -62,11 +62,17 @@ public class LoadingSpinner{
         self.text = text
     }
     
+    public func updateText(text:String) {
+        self.dialog?.labelText = text
+    }
+
+    
     public func startOnView(view: UIView, animated: Bool = true) {
         
         self.dialog = MBProgressHUD(view: view)
         
         if let dialog = dialog {
+            dialog.square = true
             dialog.removeFromSuperViewOnHide = true
             dialog.dimBackground = self.dimBackground
             dialog.opacity = self.opacity
@@ -84,6 +90,8 @@ public class LoadingSpinner{
             }
             
             if let text = self.text {
+                dialog.mode = .Text
+                dialog.labelFont = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
                 dialog.labelText = text
             }
             

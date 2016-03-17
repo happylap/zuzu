@@ -195,7 +195,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         } else{
             
             //AppStore will pop up confirmation dialog
-            RadarService.sharedInstance.startLoading(self)
+            RadarService.sharedInstance.startLoadingText(self, text: "交易中...")
             
             if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
                 

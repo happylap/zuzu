@@ -232,7 +232,7 @@ class RadarViewController: UIViewController {
             if let zuzuCriteria = self.displayRadarViewController?.zuzuCriteria{
                 if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                     RadarService.sharedInstance.stopLoading(self)
-                    RadarService.sharedInstance.startLoadingText(self, text:"更新雷達條件")
+                    RadarService.sharedInstance.startLoadingText(self, text:"更新中...")
                     ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.radarSearchCriteria) { (result, error) -> Void in
                         self.runOnMainThread(){
                             if error != nil{
@@ -260,7 +260,7 @@ class RadarViewController: UIViewController {
         }
         
         if self.hasValidService == true{
-            RadarService.sharedInstance.startLoadingText(self, text:"重新設定租屋雷達服務...")
+            RadarService.sharedInstance.startLoadingText(self, text:"儲存中...")
             self.setUpCriteria()
             return
         }
@@ -619,7 +619,7 @@ extension RadarViewController{
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
         RadarService.sharedInstance.stopLoading(self)
-        RadarService.sharedInstance.startLoadingText(self,text:"重新設定租屋雷達服務...")
+        RadarService.sharedInstance.startLoadingText(self,text:"建立服務...")
         self.performFinishTransactions()
         Log.exit()
     }

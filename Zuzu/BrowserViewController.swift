@@ -7,7 +7,6 @@
 
 import UIKit
 import WebKit
-import MBProgressHUD
 
 private let Log = Logger.defaultLogger
 
@@ -135,20 +134,19 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: UrlPopoverViewControllerDelegate {
     
     func onUrlCopiedDone(status:Bool) {
-        
-        let dialog = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setMinShowTime(1.5)
+        LoadingSpinner.shared.setDimBackground(true)
+        LoadingSpinner.shared.setOpacity(0.5)
+        LoadingSpinner.shared.setText("已複製")
         if let image = UIImage(named: "checked_green"){
-            dialog.mode = .CustomView
-            dialog.customView = UIImageView(image: image)
+            
+            LoadingSpinner.shared.setCustomView(UIImageView(image: image))
+            
         }
-        dialog.animationType = .ZoomIn
-        dialog.dimBackground = true
-        dialog.labelText = "已複製"
+        LoadingSpinner.shared.startOnView(self.view)
         
-        self.runOnMainThreadAfter(1) { () -> Void in
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
-        }
+        LoadingSpinner.shared.stop()
     }
     
 }
