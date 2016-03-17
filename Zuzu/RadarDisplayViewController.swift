@@ -75,7 +75,7 @@ class RadarDisplayViewController: UIViewController {
     
     
     // banner text label
-    @IBOutlet weak var currentConditionBannerionLbel: UILabel!
+    @IBOutlet weak var currentConditionBannerLabel: UILabel!
     
     @IBOutlet weak var servieBannerLabel: UILabel!
     
@@ -394,7 +394,7 @@ class RadarDisplayViewController: UIViewController {
     
     private func configureBannerText(){
         let color = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
-        self.currentConditionBannerionLbel.textColor = color
+        self.currentConditionBannerLabel.textColor = color
         self.servieBannerLabel.textColor = color
         self.purchaseHistoryBannerLabel.textColor = color
     }
