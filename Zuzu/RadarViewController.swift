@@ -66,30 +66,6 @@ class RadarViewController: UIViewController {
     
     // MARK: - Private Utils
     
-    private func convertToFilterGroup(selectedFilterIdSet: [String: Set<FilterIdentifier>]) -> [FilterGroup] {
-        
-        var filterGroupResult = [FilterGroup]()
-        
-        ///Walk through all items to generate the list of selected FilterGroup
-        for section in FilterTableViewController.filterSections {
-            for group in section.filterGroups {
-                if let selectedFilterId = selectedFilterIdSet[group.id] {
-                    let groupCopy = group.copy() as! FilterGroup
-                    
-                    let selectedFilters = group.filters.filter({ (filter) -> Bool in
-                        selectedFilterId.contains(filter.identifier)
-                    })
-                    
-                    groupCopy.filters = selectedFilters
-                    
-                    filterGroupResult.append(groupCopy)
-                }
-            }
-        }
-        
-        return filterGroupResult
-    }
-    
     private func tryLoadCachedRadarCriteria() -> SearchCriteria {
         Log.enter()
         /// Use cached criteria for criteria creation if there is cached data
@@ -129,7 +105,7 @@ class RadarViewController: UIViewController {
             
             // Load Selected filters to search critea
             if let selectedFilterSetting = filterDataStore.loadRadarFilterSetting() {
-                radarSearchCriteria.filterGroups = self.convertToFilterGroup(selectedFilterSetting)
+                radarSearchCriteria.filterGroups = convertIdentifierToFilterGroup(selectedFilterSetting)
             }
             
             self.radarSearchCriteria = radarSearchCriteria
