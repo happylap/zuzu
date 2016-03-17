@@ -501,7 +501,7 @@ class RadarDisplayViewController: UIViewController {
                     self.runOnMainThread(){
                         if error != nil{
                             RadarService.sharedInstance.stopLoading(self)
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "\(text)雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍候再試，謝謝！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                                 self.criteriaEnableSwitch.on = !isEnabled
                             }
                             
@@ -566,7 +566,7 @@ extension RadarDisplayViewController{
         
         RadarService.sharedInstance.stopLoading(self)
         
-        SCLAlertView().showInfo("雷達服務", subTitle: "之前購買的雷達服務尚未完成設定", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF).setDismissBlock(){
+        SCLAlertView().showInfo("尚未建立服務", subTitle: "很抱歉！您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務。按下確認後開始建立租屋雷達服務", closeButtonTitle: "確定", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF).setDismissBlock(){
             () -> Void in
             self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
@@ -590,7 +590,7 @@ extension RadarDisplayViewController{
                         RadarService.sharedInstance.stopLoading(self)
                         
                         Log.error("Cannot get criteria by user id:\(userId)")
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件設定，請稍候再試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
                             self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
                         }
@@ -623,7 +623,7 @@ extension RadarDisplayViewController{
                         
                         RadarService.sharedInstance.stopLoading(self)
                         
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "更新雷達設定失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件設定，請稍候再試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
                             self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
                             self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
@@ -683,7 +683,7 @@ extension RadarDisplayViewController{
                             
                             RadarService.sharedInstance.stopLoading(self)
                             
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "啟動雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍候重試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                                 () -> Void in
                                 self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
                             }
@@ -800,9 +800,9 @@ extension RadarDisplayViewController{
     }
     
     func alertUnfinishError(){
-        let msgTitle = "重新設定租屋雷達服務失敗"
+        let msgTitle = "服務建立失敗"
         let okButton = "知道了"
-        let subTitle = "很抱歉！設定租屋雷達服務無法成功！"
+        let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您建立服務，請您請稍候再試！\n\n若持續發生失敗，請與粉絲團客服聯繫!"
         let alertView = SCLAlertView()
         alertView.showCloseButton = false
         

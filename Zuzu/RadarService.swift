@@ -145,24 +145,24 @@ class RadarService : NSObject {
         var subTitle = ""
         
         if region == nil || region?.count<=0{
-            subTitle  =  "\(subTitle)\n地區"
+            subTitle  =  "• 地區 "
         }
         
         if price == nil{
-            subTitle  =  "\(subTitle)\n租金範圍"
+            subTitle  =  "\(subTitle)\n•租金範圍"
         }
         
         if size == nil{
-            subTitle  =  "\(subTitle)\n坪數範圍"
+            subTitle  =  "\(subTitle)\n•坪數範圍"
         }
         
         if subTitle == ""{
             return true
         }
         
-        subTitle = "尚未設定以下條件:\(subTitle)"
+        subTitle = "請設定下列幾項必要條件，以達到租屋雷達最好的效果:\n\(subTitle)"
         
-        SCLAlertView().showInfo("設定雷達條件", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        SCLAlertView().showInfo("必要條件尚未設定", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
         
         return false
         
