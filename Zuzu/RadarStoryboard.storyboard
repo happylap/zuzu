@@ -880,6 +880,7 @@
                         <outlet property="modifyButtoon" destination="nQm-xW-OQB" id="N0C-XM-aH2"/>
                         <outlet property="otherFiltersLabel" destination="zpG-ZY-Ugx" id="mq3-YF-rxx"/>
                         <outlet property="priceSizeLabel" destination="uHP-bL-3Pa" id="kvA-QI-JJZ"/>
+                        <outlet property="purchaseHistoryBannerLabel" destination="ABG-LT-SrP" id="Ng1-m2-zwO"/>
                         <outlet property="purchaseTableView" destination="kzV-PJ-lR5" id="IKU-GQ-xsh"/>
                         <outlet property="regionLabel" destination="wkD-W0-Nni" id="cVX-6v-SN5"/>
                         <outlet property="serviceButton" destination="tQY-Zr-6Ob" id="EmM-yN-2f3"/>
