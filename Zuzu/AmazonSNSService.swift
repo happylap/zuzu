@@ -22,7 +22,12 @@ class AmazonSNSService : NSObject {
     }
     
     private struct AmazonSNSConstants {
-        static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
+        #if DEBUG
+            //static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
+            static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS/zuzurentals"
+        #else
+            static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS/zuzurentals"
+        #endif
     }
     
     // MARK: start
@@ -99,7 +104,7 @@ class AmazonSNSService : NSObject {
                         }
                     }
                     
-                    if let enabled = getEndpointResponse.attributes?["Enabled"]{
+                    /*if let enabled = getEndpointResponse.attributes?["Enabled"]{
                         Log.debug("enabled:\(enabled)")
                         if enabled == "false"{
                             isUpdate = true
@@ -110,7 +115,7 @@ class AmazonSNSService : NSObject {
                     if customUserData == nil{
                         customUserData = userId
                         isUpdate = true
-                    }
+                    }*/
                     
                     if isUpdate == true{
                         self.updateEndpoint(deviceTokenString, endpointArn:endpointArn!, userData: userId)
