@@ -292,7 +292,6 @@ extension RadarViewController{
     func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
         self.purchaseViewController = purchaseView
-        self.tabBarController?.tabBarHidden = false
         RadarService.sharedInstance.startLoading(self)
         self.setUpCriteria()
         Log.exit()
@@ -309,7 +308,9 @@ extension RadarViewController{
         
         SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF).setDismissBlock(){
             () -> Void in
-            self.purchaseViewController?.dismissViewControllerAnimated(true, completion: nil)
+            self.purchaseViewController?.dismissViewControllerAnimated(true){
+                self.tabBarController?.tabBarHidden = false
+            }
         }
         
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
@@ -383,12 +384,8 @@ extension RadarViewController{
         
         if isEnabled == true{
             RadarService.sharedInstance.stopLoading(self)
-            
-            SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                () ->Void in
-                zuzuCriteria.enabled = isEnabled
-                self.gotoDisplayRadar(zuzuCriteria)
-            }
+            zuzuCriteria.enabled = isEnabled
+            self.gotoDisplayRadar(zuzuCriteria)
             return
         }
         
@@ -446,10 +443,7 @@ extension RadarViewController{
                     
                     RadarService.sharedInstance.stopLoading(self)
                     
-                    SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                        () ->Void in
-                        self.gotoDisplayRadar(nil)
-                    }
+                    self.gotoDisplayRadar(nil)
                 }
             }
         }
@@ -458,6 +452,7 @@ extension RadarViewController{
     
     private func gotoDisplayRadar(zuzuCriteria: ZuzuCriteria?){
         self.purchaseViewController?.dismissViewControllerAnimated(true){
+            self.tabBarController?.tabBarHidden = false
             if zuzuCriteria != nil{
                 RadarService.sharedInstance.startLoading(self)
                 self.navigationView?.showDisplayRadarView(zuzuCriteria!)
