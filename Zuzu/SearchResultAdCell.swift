@@ -25,8 +25,7 @@ class SearchResultAdCell: UITableViewCell {
         // Do any additional setup after loading the view, typically from a nib.
         Log.debug("Google Mobile Ads SDK version: \(GADRequest.sdkVersion())")
         
-        let priority = DISPATCH_QUEUE_PRIORITY_HIGH
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+        dispatch_async(GlobalQueue.UserInteractive) {
             
             let delay = 0.1
             let delayInNanoSeconds = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))

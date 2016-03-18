@@ -1141,7 +1141,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
             searchCriteria.filters = self.getFilterDic(self.selectedFilterIdSet)
             
             ///GA Tracker
-            dispatch_async(GlobalBackgroundQueue) {
+            dispatch_async(GlobalQueue.Background) {
                 
                 if let filters = searchCriteria.filters {
                     for (key, value) in filters {

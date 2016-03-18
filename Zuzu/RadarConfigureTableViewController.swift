@@ -980,7 +980,7 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
         currentCriteria = self.stateToSearhCriteria()
         
         ///GA Tracker
-        dispatch_async(GlobalBackgroundQueue) {
+        dispatch_async(GlobalQueue.Background) {
             
             if let cities = self.regionSelectionState {
                 for city in cities {

@@ -1119,7 +1119,7 @@ class SearchBoxTableViewController: UITableViewController {
                 if let srtvc = segue.destinationViewController as? SearchResultViewController {
                     
                     ///GA Tracker
-                    dispatch_async(GlobalBackgroundQueue) {
+                    dispatch_async(GlobalQueue.Background) {
                         
                         if let keyword = self.currentCriteria.keyword {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
@@ -1611,7 +1611,7 @@ extension SearchBoxTableViewController : CityRegionContainerControllerDelegate {
         currentCriteria = self.stateToSearhCriteria()
         
         ///GA Tracker
-        dispatch_async(GlobalBackgroundQueue) {
+        dispatch_async(GlobalQueue.Background) {
             
             if let cities = self.regionSelectionState {
                 for city in cities {
