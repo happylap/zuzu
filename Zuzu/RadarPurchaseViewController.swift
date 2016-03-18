@@ -13,17 +13,23 @@ import StoreKit
 
 private let Log = Logger.defaultLogger
 
+protocol RadarPurchaseDelegate: class {
+    
+    func onPurchaseCancel() -> Void
+    
+    func onPurchaseSuccess() -> Void
+    
+    func onFindUnfinishedTransaction() -> Void
+}
+
 class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    var purchasedProduct: ZuzuProduct?
     
     // This list of available in-app purchases
     var products = [ZuzuProduct]()
     
-    var cancelPurchaseHandler: (() -> Void)?
-    
-    var purchaseSuccessHandler: ((purchaseView: RadarPurchaseViewController) -> Void)?
-    
-    var unfinishedTransactionHandler: ((purchaseView: RadarPurchaseViewController) -> Void)?
+    var purchaseDelegate: RadarPurchaseDelegate?
     
     deinit {
         // NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -100,6 +106,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     private func proceedTransaction(product: ZuzuProduct) {
         
+        self.purchasedProduct = product
+        
         if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
             //Alert redeem
             
@@ -164,9 +172,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     RadarService.sharedInstance.checkPurchaseExist(transId){
                                         (isExist, checkExistError) -> Void in
                                         if isExist == true{
-                                            if let handler = self.purchaseSuccessHandler{
-                                                handler(purchaseView: self)
-                                            }
+                                            self.purchaseDelegate?.onPurchaseSuccess()
                                             return
                                         }
                                         
@@ -181,9 +187,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 
                                 /// The free trial is activated successfully
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
-                                if let handler = self.purchaseSuccessHandler{
-                                    handler(purchaseView: self)
-                                }
+                                self.purchaseDelegate?.onPurchaseSuccess()
                             }
                         }
                         
@@ -207,9 +211,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 ///You have an unfinished transaction for the product or the product is not valid
                 Log.info("Find unfinished transaction")
-                if let handler = self.unfinishedTransactionHandler{
-                    handler(purchaseView: self)
-                }
+                
+                self.purchaseDelegate?.onFindUnfinishedTransaction()
             }
             
         }
@@ -250,10 +253,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
-        dismissViewControllerAnimated(true, completion: nil)
-        if let cancelPurchaseHandler = self.cancelPurchaseHandler {
-            cancelPurchaseHandler()
+        dismissViewControllerAnimated(true){
+            self.purchaseDelegate?.onPurchaseCancel()
         }
+        
     }
     
     // Purchase the product
@@ -266,6 +269,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     Log.warning("Login Failed: \(error)")
                     return nil
                 }
+                
                 self.runOnMainThread({ () -> Void in
                     
                     if(button.tag < self.products.count) {
@@ -367,20 +371,20 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
             AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
         }
         
-        RadarService.sharedInstance.createPurchase(transaction){
+        RadarService.sharedInstance.createPurchase(transaction, product:self.purchasedProduct){
             (purchaseTransaction, error) -> Void in
             if error != nil{
                 RadarService.sharedInstance.stopLoading(self)
                 Log.error("create purchase error")
+ 
                 SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您建立雷達服務，請您稍後重試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 return
+
             }
             
             ZuzuStore.sharedInstance.finishTransaction(transaction)
             
-            if let handler = self.purchaseSuccessHandler{
-                handler(purchaseView: self)
-            }
+            self.purchaseDelegate?.onPurchaseSuccess()
         }
     }
     

@@ -248,6 +248,15 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
+    // MARK: - Reload to RadarNavigationController
+    
+    func reloadRadarUI(){
+        if let navigation = self.navigationController as? RadarNavigationController{
+            navigation.showRadar()
+        }
+    }
+    
+    
     // MARK: - Enable / Disable Criteria action
     
     @IBAction func enableCriteria(sender: UISwitch) {
@@ -296,6 +305,7 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
+ 
     // MARK: - Show Purchase action
     
     @IBAction func onServiceButtonTapped(sender: AnyObject) {
@@ -309,9 +319,7 @@ class RadarDisplayViewController: UIViewController {
             self.tabBarController?.tabBarHidden = true
             
             vc.modalPresentationStyle = .OverCurrentContext
-            vc.cancelPurchaseHandler = self.cancelPurchaseHandler
-            vc.purchaseSuccessHandler = self.purchaseSuccessHandler
-            vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
+            vc.purchaseDelegate = self
             
             presentViewController(vc, animated: true, completion: nil)
         }
@@ -570,15 +578,15 @@ extension RadarDisplayViewController : RadarViewControllerDelegate {
     }
 }
 
-// MARK: - Purchase Handler
+// MARK: - RadarPurchaseDelegate
 
-extension RadarDisplayViewController{
+extension RadarDisplayViewController: RadarPurchaseDelegate{
     
-    func cancelPurchaseHandler() -> Void{
+    func onPurchaseCancel() -> Void{
         self.tabBarController?.tabBarHidden = false
     }
     
-    func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
+    func onPurchaseSuccess() -> Void{
         Log.enter()
         self.serviceButton.hidden = false
         RadarService.sharedInstance.startLoading(self)
@@ -586,7 +594,7 @@ extension RadarDisplayViewController{
         Log.exit()
     }
     
-    func unfinishedTransactionHandler(purchaseView: RadarPurchaseViewController) -> Void{
+    func onFindUnfinishedTransaction() -> Void{
         Log.enter()
         
         self.serviceButton.hidden = false
@@ -631,12 +639,6 @@ extension RadarDisplayViewController{
                     self.criteriaEnableSwitch.on = true
                     self.reloadRadarUI()
             }
-        }
-    }
-    
-    func reloadRadarUI(){
-        if let navigation = self.navigationController as? RadarNavigationController{
-            navigation.showRadar()
         }
     }
 }
