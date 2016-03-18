@@ -12,7 +12,13 @@ import UIKit
 extension UIViewController {
     
     private func getTrackerInstance() -> GAITracker?{
-        let tracker = GAI.sharedInstance().defaultTracker
+        
+        var tracker:GAITracker?
+        
+        #if !DEBUG
+            tracker = GAI.sharedInstance().defaultTracker
+        #endif
+        
         
         if let tracker = tracker {
             tracker.allowIDFACollection = true
