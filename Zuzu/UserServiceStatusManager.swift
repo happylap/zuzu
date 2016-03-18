@@ -99,14 +99,14 @@ class UserServiceStatusManager {
     // MARK: Public APIs
     // Cache service status only when there is valid service for the user
     // That is, we don't cache data when the user has no service or expired service
-    func getRadarServiceStatusByUserId(userId: String, onCompleteHndler: (result: ZuzuServiceMapper?, success: Bool) -> Void) {
+    func getRadarServiceStatusByUserId(userId: String, onCompleteHandler: (result: ZuzuServiceMapper?, success: Bool) -> Void) {
         Log.enter()
         
         if let serviceStatus = self.getCachedServiceStatus() {
             ///Hit Cache
             Log.debug("Hit service status cache")
             
-            onCompleteHndler(result: serviceStatus, success: true)
+            onCompleteHandler(result: serviceStatus, success: true)
             
         } else {
             /// Fetch from remote again
@@ -117,7 +117,7 @@ class UserServiceStatusManager {
                 
                 if error != nil{
                     Log.debug("getServiceByUserId error")
-                    onCompleteHndler(result: nil, success: false)
+                    onCompleteHandler(result: nil, success: false)
                     return
                 }
                 
@@ -136,12 +136,12 @@ class UserServiceStatusManager {
                             }
                     }
                     
-                    onCompleteHndler(result: serviceStatus, success: true)
+                    onCompleteHandler(result: serviceStatus, success: true)
                     
                 } else {
                     /// The user has no service
                     
-                    onCompleteHndler(result: nil, success: true)
+                    onCompleteHandler(result: nil, success: true)
                 }
             }
             
