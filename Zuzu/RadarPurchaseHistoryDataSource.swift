@@ -12,6 +12,13 @@ import UIKit
 private let Log = Logger.defaultLogger
 
 
+protocol RadarPurchaseHistoryTableDelegate: class {
+    func onRefreshData()
+    
+    func onEmptyData(isEmpty: Bool)
+}
+
+
 class RadarPurchaseRecordTableViewCell: UITableViewCell
 {
     @IBOutlet weak var purchaseDateLabel: UILabel!
@@ -47,12 +54,8 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     private var purchaseData:[ZuzuPurchase]?
     
     private let cellID = "purchaseHistoryRecord"
-        
-    private let uiViewController: RadarDisplayViewController!
     
-    init(uiViewController: RadarDisplayViewController) {
-        self.uiViewController = uiViewController
-    }
+    var purchaseHistoryTableDelegate: RadarPurchaseHistoryTableDelegate?
     
     func refresh(){
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
@@ -69,7 +72,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
                     }
                 }
                 
-                self.uiViewController?.purchaseTableView.reloadData()
+                self.purchaseHistoryTableDelegate?.onRefreshData()
             }
         }
     }
@@ -86,17 +89,8 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         
         Log.debug("Number of purchase history = \(itemSize)")
 
+        self.purchaseHistoryTableDelegate?.onEmptyData((itemSize<=0))
  
-        let emptyLabel = self.uiViewController.emptyPurchaseHistoryLabel
-        
-        if (itemSize < 1) {
-            emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
-            emptyLabel.sizeToFit()
-            emptyLabel.hidden = false
-        } else {
-            emptyLabel.hidden = true
-        }
-        
         return itemSize
     }
     
