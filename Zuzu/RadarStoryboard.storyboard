@@ -1404,23 +1404,6 @@
             </objects>
             <point key="canvasLocation" x="1177" y="815"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="eqH-gd-HWO">
-            <objects>
-                <viewController id="sKM-9T-gYB" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="9Dy-O2-Luy"/>
-                        <viewControllerLayoutGuide type="bottom" id="aqy-TE-Bjz"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="dpW-Z0-yUa">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Bi2-s9-BSe" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
     </scenes>
     <resources>
         <image name="arrow_down_n" width="15" height="15"/>
