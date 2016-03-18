@@ -35,8 +35,6 @@ class RadarDisplayViewController: UIViewController {
     // ZuzuService status variable
     
     var zuzuService: ZuzuServiceMapper?
-    private let secPerDay = 86400.0
-    private let secPerHour = 3600.0
     
     // Purchase History variables
     
