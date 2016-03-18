@@ -14,6 +14,8 @@ private let Log = Logger.defaultLogger
 
 class RadarDisplayViewController: UIViewController {
     
+    private let RenewalThresholdDays = 3
+    
     // segue to configure UI
     
     struct ViewTransConst {
@@ -28,7 +30,7 @@ class RadarDisplayViewController: UIViewController {
     
     
     // Zuzu criteria variable
-
+    
     var zuzuCriteria = ZuzuCriteria()
     
     // ZuzuService status variable
@@ -41,7 +43,7 @@ class RadarDisplayViewController: UIViewController {
     
     let emptyPurchaseHistoryLabel = UILabel()
     private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource(uiViewController: self)
-
+    
     
     // Criteria UI outlet
     
@@ -65,7 +67,7 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var otherFiltersLabel: UILabel!
     
-
+    
     
     // ZuzuService status UI outlet
     
@@ -78,7 +80,7 @@ class RadarDisplayViewController: UIViewController {
     @IBOutlet weak var servieBannerLabel: UILabel!
     
     @IBOutlet weak var purchaseHistoryBannerLabel: UILabel!
-
+    
     
     @IBOutlet weak var statusImageView: UIImageView!{
         
@@ -108,7 +110,7 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var purchaseTableView: UITableView!
     
-
+    
     // MARK: - Private Utils
     
     private func alertLocalNotificationDisabled() {
@@ -212,7 +214,7 @@ class RadarDisplayViewController: UIViewController {
         Log.debug("viewWillAppear")
         
         self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
-
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -405,7 +407,7 @@ class RadarDisplayViewController: UIViewController {
         
         /// Get rounded up remianings days
         /// e.g. 15.5 Days = Round-up Days: 16
-        let roundedRemainingDaysPart = UserServiceUtils.getRoundUpDays(remainingSeconds)
+        let roundUpRemainingDays = UserServiceUtils.getRoundUpDays(remainingSeconds)
         
         /// Get only hours part
         /// e.g. 15.5 Days = Hour Part: 12 (minutes are ignored)
@@ -418,8 +420,8 @@ class RadarDisplayViewController: UIViewController {
         if(remainingDays >= 1) {
             /// More than 1 day
             
-            infoText = "\(roundedRemainingDaysPart) 日"
-            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDaysPart) 日"
+            infoText = "\(roundUpRemainingDays) 日"
+            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundUpRemainingDays) 日"
             
         } else {
             /// Within 1 day
@@ -439,8 +441,10 @@ class RadarDisplayViewController: UIViewController {
             values: [usedDays, remainingDays],
             info: infoText ?? "")
         
+        if(remainingDays <= Double(RenewalThresholdDays)) {
+            self.serviceButton?.hidden = true
+        }
         
-        self.serviceButton?.hidden = true
         self.enableModifyButton()
         toggleServiceStatusIcon(true)
         
@@ -541,7 +545,7 @@ class RadarDisplayViewController: UIViewController {
         }
         
     }
-
+    
 }
 
 // MARK: - RadarViewControllerDelegate
@@ -630,7 +634,7 @@ extension RadarDisplayViewController{
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
- 
+        
         RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
         self.performFinishTransactions()
         Log.exit()
