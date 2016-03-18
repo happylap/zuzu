@@ -20,7 +20,6 @@ class RadarNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.showRetryRadarView(true) // Use retry view as blank page
-        self.showRadar()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -31,10 +30,8 @@ class RadarNavigationController: UINavigationController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        Log.enter()
-        self.showRadar() // decide which view to show
         super.viewDidAppear(animated)
-        Log.exit()
+        Log.debug("viewDidAppear")
     }
     
     

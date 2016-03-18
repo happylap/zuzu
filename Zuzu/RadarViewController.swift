@@ -207,6 +207,8 @@ class RadarViewController: UIViewController {
         
     }
     
+    // MARK: - Navigation
+    
     private func showPurchase(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
@@ -222,6 +224,12 @@ class RadarViewController: UIViewController {
         }
     }
     
+    
+    func reloadRadarUI(){
+        if let navigation = self.navigationController as? RadarNavigationController{
+            navigation.showRadar()
+        }
+    }
     
     // MARK: - Criteria View Update Function
 
@@ -274,12 +282,6 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
             }
         }
         
-    }
-    
-    func reloadRadarUI(){
-        if let navigation = self.navigationController as? RadarNavigationController{
-            navigation.showRadar()
-        }
     }
 }
 

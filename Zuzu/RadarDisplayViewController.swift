@@ -166,6 +166,7 @@ class RadarDisplayViewController: UIViewController {
         self.updateServiceUI()
         
         // purchase history only refresh in view load
+        self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
         self.purchaseHistotyTableDataSource.refresh()
         
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
