@@ -153,8 +153,6 @@
 		81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */; };
 		81FA28131BDA39B10038DD19 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28111BDA39B10038DD19 /* Note.swift */; };
 		81FA28141BDA39B10038DD19 /* NoteDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA28121BDA39B10038DD19 /* NoteDao.swift */; };
-		81FA281E1BDA39C20038DD19 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281D1BDA39C20038DD19 /* Router.swift */; };
-		81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */; };
 		DA89B16330C82981D5C2BCEA /* Pods_Zuzu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */; };
 /* End PBXBuildFile section */
 
@@ -335,8 +333,6 @@
 		81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyCollectionStoryboard.storyboard; sourceTree = "<group>"; };
 		81FA28111BDA39B10038DD19 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		81FA28121BDA39B10038DD19 /* NoteDao.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDao.swift; sourceTree = "<group>"; };
-		81FA281D1BDA39C20038DD19 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceApi.swift; sourceTree = "<group>"; };
 		BB78CF8BDE07388F2FD17FDF /* Pods-Zuzu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.debug.xcconfig"; sourceTree = "<group>"; };
 		DEA624876AF8AA4C806320C6 /* Pods-Zuzu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zuzu.release.xcconfig"; path = "Pods/Target Support Files/Pods-Zuzu/Pods-Zuzu.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -562,14 +558,12 @@
 				81390C761C365F9A00450761 /* AmazonClientManager.swift */,
 				14426ACD1C7B30B000C25440 /* AmazonSNSService.swift */,
 				81390C8A1C37B0E800450761 /* CollectionItemService.swift */,
-				14914FB11C2836DB00025AC1 /* NotificationItemService.swift */,
-				81FA281D1BDA39C20038DD19 /* Router.swift */,
-				81FA281F1BDA39CC0038DD19 /* ServiceApi.swift */,
-				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */,
 				81924E311C32D95100976EC7 /* FBLoginService.swift */,
-				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
+				14914FB11C2836DB00025AC1 /* NotificationItemService.swift */,
 				140250BD1C7C71B50009A076 /* RadarService.swift */,
+				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
+				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -1000,7 +994,6 @@
 				8166359A1C608838008C0AA3 /* ZuzuUser.swift in Sources */,
 				816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */,
 				14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */,
-				81FA28201BDA39CC0038DD19 /* ServiceApi.swift in Sources */,
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
@@ -1010,7 +1003,6 @@
 				81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */,
-				81FA281E1BDA39C20038DD19 /* Router.swift in Sources */,
 				2F5854D21BB3CBCF007FF85B /* CriteriaConst.swift in Sources */,
 				2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
