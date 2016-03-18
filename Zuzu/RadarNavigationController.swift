@@ -61,44 +61,45 @@ class RadarNavigationController: UINavigationController {
                     return
                 }
                 
-                if result == nil{
-                    Log.debug("No purchased service. This user has not purchased any service")
-                    self.showConfigureRadarView()
-                    RadarService.sharedInstance.stopLoading(self)
-                    return
-                }
                 
-                let zuzuService = result!
-                if self.zuzuCriteria != nil{
-                    self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!)
-                    RadarService.sharedInstance.stopLoading(self)
-                    return
-                }
-                
-                
-                ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
-                    (result, error) -> Void in
-                    
-                    if error != nil{
-                        Log.error("Cannot get criteria by user id:\(userId)")
-                        self.showRetryRadarView(false)
-                        //stop loading if it goes to retry page
+                if let zuzuService = result, _ = zuzuService.status, _ = zuzuService.expireTime{
+ 
+                    if self.zuzuCriteria != nil{
+                        self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!)
                         RadarService.sharedInstance.stopLoading(self)
                         return
                     }
                     
-                    
-                    if result == nil{
-                        // deliver emptry criteria to display
-                        // In display UI, it will tell users that they have not configured any criteria
-                        self.zuzuCriteria = result
-                        self.showDisplayRadarView(zuzuService, zuzuCriteria: ZuzuCriteria())
-                    }else{
-                        self.zuzuCriteria = result
-                        self.showDisplayRadarView(zuzuService, zuzuCriteria: result!)
+                    ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
+                        (result, error) -> Void in
+                        
+                        if error != nil{
+                            Log.error("Cannot get criteria by user id:\(userId)")
+                            self.showRetryRadarView(false)
+                            //stop loading if it goes to retry page
+                            RadarService.sharedInstance.stopLoading(self)
+                            return
+                        }
+                        
+                        
+                        if result == nil{
+                            // deliver emptry criteria to display
+                            // In display UI, it will tell users that they have not configured any criteria
+                            self.zuzuCriteria = result
+                            self.showDisplayRadarView(zuzuService, zuzuCriteria: ZuzuCriteria())
+                        }else{
+                            self.zuzuCriteria = result
+                            self.showDisplayRadarView(zuzuService, zuzuCriteria: result!)
+                        }
+                        
+                        RadarService.sharedInstance.stopLoading(self)
                     }
                     
+                }else{
+                    Log.debug("No purchased service. This user has not purchased any service")
+                    self.showConfigureRadarView()
                     RadarService.sharedInstance.stopLoading(self)
+                    return
                 }
             }
             
