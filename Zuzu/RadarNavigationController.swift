@@ -14,6 +14,8 @@ private let Log = Logger.defaultLogger
 
 class RadarNavigationController: UINavigationController {
     
+    var zuzuCriteria: ZuzuCriteria?
+    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,10 +52,11 @@ class RadarNavigationController: UINavigationController {
             
             RadarService.sharedInstance.startLoading(self)
             
-            ZuzuWebService.sharedInstance.getServiceByUserId(userId){
-                (result, error) ->Void in
+            UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
                 
-                if error != nil{
+                (result, success) -> Void in
+
+                if success == false{
                     Log.error("Cannot get Zuzu service by user id:\(userId)")
                     self.showRetryRadarView(false)
                     //stop loading if it goes to retry page
@@ -69,6 +72,12 @@ class RadarNavigationController: UINavigationController {
                 }
                 
                 let zuzuService = result!
+                if self.zuzuCriteria != nil{
+                    self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!)
+                    RadarService.sharedInstance.stopLoading(self)
+                    return
+                }
+                
                 
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
                     (result, error) -> Void in
@@ -81,11 +90,14 @@ class RadarNavigationController: UINavigationController {
                         return
                     }
                     
+                    
                     if result == nil{
                         // deliver emptry criteria to display
                         // In display UI, it will tell users that they have not configured any criteria
+                        self.zuzuCriteria = result
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: ZuzuCriteria())
                     }else{
+                        self.zuzuCriteria = result
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: result!)
                     }
                     
