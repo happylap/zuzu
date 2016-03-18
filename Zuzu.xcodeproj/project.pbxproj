@@ -495,9 +495,7 @@
 				2F5854D01BB3CBA9007FF85B /* Util */,
 				2FBC05541BDE6F600035652D /* View */,
 				81390C741C365F2600450761 /* Contants.swift */,
-				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
-				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
-				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
+				2FD8EA9B1C3FA9CC00C920D3 /* LocalConst.swift */,
 				2F9B25E51C08C251004CECAA /* FeatureOptions.swift */,
 				2F482E001BAFE09100C68670 /* LaunchScreen.storyboard */,
 				2F482DFE1BAFE09100C68670 /* Assets.xcassets */,
@@ -531,7 +529,6 @@
 				1446FA5F1C2D3C200073A8A7 /* SystemMessage.swift */,
 				2FBF52611C05A4AB00B3F47B /* ScaleExtensions.swift */,
 				2F33E0451BD918E300A7D6CD /* Extensions.swift */,
-				2FD8EA9B1C3FA9CC00C920D3 /* LocalConst.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -628,6 +625,9 @@
 		2FBC05531BDE6F0A0035652D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
+				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
+				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
 			);
 			name = Controller;
