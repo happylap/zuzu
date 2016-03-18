@@ -8,8 +8,11 @@
 
 import Foundation
 
-
+// MARK: CommonUtils
 class CommonUtils: NSObject{
+    
+    static let secPerDay = 86400.0
+    static let secPerHour = 3600.0
     
     static let UTCTimeZone = NSTimeZone(name: "UTC")!
     static let UTCFormat: String = "yyyy-MM-dd'T'HH:mm:ss'Z'"
@@ -62,6 +65,60 @@ class CommonUtils: NSObject{
             return plainString.base64EncodedStringWithOptions([])
         }
         return nil
+    }
+    
+    static func getDaysPart(seconds: Int) -> Int {
+        
+        return Int(ceil(convertSecondsToPreciseDays(seconds)))
+        
+    }
+    
+    static func getHoursPart(seconds: Int) -> Int {
+        
+        let hours = (Double(seconds) % secPerDay)/secPerHour
+        
+        return Int(floor(hours))
+        
+    }
+    
+    static func convertSecondsToPreciseDays(seconds: Int) -> Double {
+        
+        return Double(seconds)/secPerDay
+        
+    }
+}
+
+// MARK: UserServiceUtils
+/// Utils for calculating service subscription information
+class UserServiceUtils: NSObject{
+    
+    static let secPerDay = 86400.0
+    static let secPerHour = 3600.0
+    
+    static func getRoundUpDays(seconds: Int) -> Int {
+        
+        return Int(ceil(convertSecondsToPreciseDays(seconds)))
+        
+    }
+    
+    static func getDaysPart(seconds: Int) -> Int {
+        
+        return Int(floor(convertSecondsToPreciseDays(seconds)))
+        
+    }
+    
+    static func getHoursPart(seconds: Int) -> Int {
+        
+        let hours = (Double(seconds) % secPerDay)/secPerHour
+        
+        return Int(floor(hours))
+        
+    }
+    
+    static func convertSecondsToPreciseDays(seconds: Int) -> Double {
+        
+        return Double(seconds)/secPerDay
+        
     }
 }
 

@@ -84,13 +84,13 @@ class RadarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         Log.enter()
-
+        
         /// UI Configuration
         self.currentConditionsLabel.textColor = UIColor.colorWithRGB(0xf5a953, alpha: 1)
         self.radarBannerLabel.textColor = UIColor.colorWithRGB(0x6e6e70, alpha: 1)
         self.configureButton()
         
-
+        
         if(self.isUpdateMode){ /// [Criteria Update Mode]
             
             self.activateButton.setTitle("設定完成", forState: .Normal)
@@ -530,11 +530,12 @@ extension RadarViewController{
                             return
                         }
                         
-                        if result != nil{
-                            if result?.status == RadarStatusValid{
-                                self.hasValidService = true
-                                SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，請立即將租屋雷達條件設定並啟用，以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-                            }
+                        if let result = result
+                            where result.status == RadarStatus.Valid.rawValue {
+                                
+                            self.hasValidService = true
+                            SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，請立即將租屋雷達條件設定並啟用，以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                                
                         }
                     }
                 }
