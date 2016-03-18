@@ -31,54 +31,53 @@ class RadarService : NSObject {
 
     }
     
-    func composeZuzuPurchase(transaction: SKPaymentTransaction, purchaseReceipt:NSData, handler: (result: ZuzuPurchase?, error: NSError?) -> Void){
+
+    func composeZuzuPurchase(transaction: SKPaymentTransaction, product: ZuzuProduct?=nil, purchaseReceipt:NSData, handler: (result: ZuzuPurchase?, error: NSError?) -> Void){
         
-        let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id
-        let transId = transaction.transactionIdentifier
-        let productId = transaction.payment.productIdentifier
-        
-        if userId == nil{
-            assert(false, "user id is nil")
-            handler(result: nil, error: NSError(domain: "user id is nil", code: -1, userInfo: nil))
-            return
-        }
-        
-        if transId == nil{
-            assert(false, "transaction id is nil")
-            handler(result: nil, error: NSError(domain: "transId", code: -1, userInfo: nil))
-            return
-        }
-        
-        ZuzuStore.sharedInstance.requestProducts { success, products in
-            if success {
-                for product in products{
-                    if product.productIdentifier == productId{
-                        let purchase = ZuzuPurchase(transactionId: transId!, userId: userId!, productId: productId, productPrice: product.price, purchaseReceipt: purchaseReceipt)
-                        purchase.productTitle = product.localizedTitle
-                        handler(result: purchase, error: nil)
-                        return
-                    }
-                }
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, let transId = transaction.transactionIdentifier{
+            
+            if let purchaseProduct = product{
+                let purchase = ZuzuPurchase(transactionId: transId, userId: userId, productId: purchaseProduct.productIdentifier, productPrice: purchaseProduct.price, purchaseReceipt: purchaseReceipt)
                 
-                handler(result: nil, error: NSError(domain: "Cannot find any product associated with the transaction", code: -1, userInfo: nil))
-                
-            }else{
-                handler(result: nil, error: NSError(domain: "Can not request products from ZuzuStore", code: -1, userInfo: nil))
+                handler(result: purchase, error: nil)
+                return
             }
             
+            let productId = transaction.payment.productIdentifier
+            
+            ZuzuStore.sharedInstance.requestProducts { success, products in
+                if success {
+                    for product in products{
+                        if product.productIdentifier == productId{
+                            let purchase = ZuzuPurchase(transactionId: transId, userId: userId, productId: productId, productPrice: product.price, purchaseReceipt: purchaseReceipt)
+                            purchase.productTitle = product.localizedTitle
+                            handler(result: purchase, error: nil)
+                            return
+                        }
+                    }
+                    
+                    handler(result: nil, error: NSError(domain: "Cannot find any product associated with the transaction", code: -1, userInfo: nil))
+                    
+                }else{
+                    handler(result: nil, error: NSError(domain: "Can not request products from ZuzuStore", code: -1, userInfo: nil))
+                }
+                
+            }
+        }else{
+            handler(result: nil, error: NSError(domain: "Invalid parameters", code: -1, userInfo: nil))
         }
     }
 
-    func createPurchase(transaction: SKPaymentTransaction, handler: (purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void){
+    func createPurchase(transaction: SKPaymentTransaction, product: ZuzuProduct?=nil, handler: (purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void){
         
         if let receipt = ZuzuStore.sharedInstance.readReceipt(){
-            self.createPurchase(transaction, receipt: receipt, handler:handler)
+            self.createPurchase(transaction, product:product, receipt: receipt, handler:handler)
         }
         else {
             ZuzuStore.sharedInstance.fetchReceipt(){
                 (success, receiptData) -> () in
                 if receiptData != nil{
-                    self.createPurchase(transaction, receipt: receiptData!, handler:handler)
+                    self.createPurchase(transaction, product:product, receipt: receiptData!, handler:handler)
                 }
                 else{
                     Log.error("Fail to ftech receipt for the transaction")
@@ -88,11 +87,12 @@ class RadarService : NSObject {
         }
     }
     
-    func createPurchase(transaction: SKPaymentTransaction, receipt: NSData,handler: (purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void){
+    func createPurchase(transaction: SKPaymentTransaction, product: ZuzuProduct?, receipt: NSData,handler: (purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void){
         
-        self.composeZuzuPurchase(transaction, purchaseReceipt: receipt){
+        self.composeZuzuPurchase(transaction, product:product, purchaseReceipt: receipt){
             (result, error) -> Void in
             if let purchase = result{
+                
                 ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
                     if error != nil{
                         Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")

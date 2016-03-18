@@ -215,15 +215,12 @@ class RadarViewController: UIViewController {
             ///Hide tab bar
             self.tabBarController?.tabBarHidden = true
             vc.modalPresentationStyle = .OverCurrentContext
-            
-            vc.cancelPurchaseHandler = self.cancelPurchaseHandler
-            vc.purchaseSuccessHandler = self.purchaseSuccessHandler
-            vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
-            
+            vc.purchaseDelegate = self
             presentViewController(vc, animated: true, completion: nil)
         }
     }
     
+    // MARK: - Reload to RadarNavigationController
     
     func reloadRadarUI(){
         if let navigation = self.navigationController as? RadarNavigationController{
@@ -285,14 +282,14 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
     }
 }
 
-// MARK: - Purchase Radar Callback
+// MARK: - RadarPurchaseDelegate
 
-extension RadarViewController{
-    func cancelPurchaseHandler() -> Void{
+extension RadarViewController: RadarPurchaseDelegate{
+    func onPurchaseCancel() -> Void{
         self.tabBarController?.tabBarHidden = false
     }
     
-    func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
+    func onPurchaseSuccess() -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
         RadarService.sharedInstance.startLoading(self)
@@ -300,7 +297,7 @@ extension RadarViewController{
         Log.exit()
     }
     
-    func unfinishedTransactionHandler(purchaseView: RadarPurchaseViewController) -> Void{
+    func onFindUnfinishedTransaction() -> Void{
         Log.enter()
         
         self.tabBarController?.tabBarHidden = false
