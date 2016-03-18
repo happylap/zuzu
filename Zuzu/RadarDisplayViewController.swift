@@ -349,27 +349,6 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    private func getDaysPart(seconds: Int) -> Int {
-        
-        return Int(ceil(convertSecondsToPreciseDays(seconds)))
-        
-    }
-    
-    private func getHoursPart(seconds: Int) -> Int {
-        
-        let hours = (Double(seconds) % secPerDay)/secPerHour
-        
-        return Int(floor(hours))
-        
-    }
-    
-    private func convertSecondsToPreciseDays(seconds: Int) -> Double {
-        
-        return Double(seconds)/secPerDay
-        
-    }
-    
-    
     // MARK: - Update Service UI
     
     private func updateServiceUI(){
@@ -433,13 +412,16 @@ class RadarDisplayViewController: UIViewController {
         
         /// Get precise remianings days / used days
         /// e.g. 15.5 Days
-        let remainingDays = convertSecondsToPreciseDays(remainingSeconds)
-        let usedDays = convertSecondsToPreciseDays(usedSeconds)
+        let remainingDays = UserServiceUtils.convertSecondsToPreciseDays(remainingSeconds)
+        let usedDays = UserServiceUtils.convertSecondsToPreciseDays(usedSeconds)
         
-        /// Get rounded remianings days/hours part
-        /// e.g. 15.5 Days = Day Part: 15, Hour Part: 12
-        let roundedRemainingDaysPart = getDaysPart(remainingSeconds)
-        let roundedRemainingHoursPart  = getHoursPart(remainingSeconds)
+        /// Get rounded up remianings days
+        /// e.g. 15.5 Days = Round-up Days: 16
+        let roundedRemainingDaysPart = UserServiceUtils.getRoundUpDays(remainingSeconds)
+        
+        /// Get only hours part
+        /// e.g. 15.5 Days = Hour Part: 12 (minutes are ignored)
+        let roundedRemainingHoursPart  = UserServiceUtils.getHoursPart(remainingSeconds)
         
         
         /// Update UI for service valid
