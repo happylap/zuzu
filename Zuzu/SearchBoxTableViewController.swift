@@ -1192,6 +1192,10 @@ class SearchBoxTableViewController: UITableViewController {
                     if let regionSelectionState = currentCriteria.region {
                         vc.regionSelectionState = regionSelectionState
                     }
+                    
+                    if let itemCountByRegion = self.getItemCountByRegion() {
+                        vc.itemCountByRegion = itemCountByRegion
+                    }
                 }
                 
                 navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "onDismissCurrentView:")
@@ -1211,10 +1215,10 @@ extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSo
     private func getItemCountByRegion() -> [String: Int]? {
         
         do {
-            let cache = try Cache<NSData>(name: cacheName)
+            let cache = try Cache<NSData>(name: self.cacheName)
             
             ///Return cached data if there is cached data
-            if let cachedData = cache.objectForKey(cacheKey),
+            if let cachedData = cache.objectForKey(self.cacheKey),
                 let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) as? [String: Int] {
                     
                     return result
@@ -1731,7 +1735,7 @@ extension SearchBoxTableViewController : FastCountCriteriaObserverDelegate {
 extension SearchBoxTableViewController : RegionItemCountCriteriaObserverDelegate {
     
     func onBeforeQueryRegionItemCount() {
-        
+        // Do nothing
     }
     
     func onAfterQueryRegionItemCount(facetResult: [String: Int]?) {

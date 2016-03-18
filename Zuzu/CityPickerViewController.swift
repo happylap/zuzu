@@ -19,13 +19,12 @@ class CityPickerViewController:UIViewController {
     
     static let numberOfComponents = 1
     
-    var regionSelectionState: [City]?
-    
     @IBOutlet weak var cityPicker: UIPickerView!
     
+    /// @Controller Input Params
     weak var delegate: CitySelectionViewControllerDelegate?
-    
     var allCities = [City]()//Array of Cities
+    var regionSelectionState: [City]?
     
     private func configurePricePicker() {
         cityPicker.dataSource = self
