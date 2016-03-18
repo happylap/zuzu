@@ -455,7 +455,7 @@ class RadarDisplayViewController: UIViewController {
             info: infoText ?? "")
         
         if(remainingDays <= Double(RenewalThresholdDays)) {
-            self.serviceButton?.hidden = true
+            self.serviceButton?.hidden = false
         }
         
         self.enableModifyButton()
