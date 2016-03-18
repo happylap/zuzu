@@ -79,25 +79,26 @@ class UserServiceStatusManager {
     
     private func calculateCachedSecond(remainingSec: Int) -> Double? {
         
-            /// Get precise remianings days / used days
-            /// e.g. 15.5 Days
-            let remainingDays = UserServiceUtils.convertSecondsToPreciseDays(remainingSec)
-
-            if(remainingDays >= 1) {
-                /// More than 1 day
-                
-                return cacheOneDay
-                
-            } else {
-                /// Within 1 day
-                
-                return cacheTenMinute
-                
-            }
+        /// Get precise remianings days / used days
+        /// e.g. 15.5 Days
+        let remainingDays = UserServiceUtils.convertSecondsToPreciseDays(remainingSec)
+        
+        if(remainingDays >= 1) {
+            /// More than 1 day
+            
+            return cacheOneDay
+            
+        } else {
+            /// Within 1 day
+            
+            return cacheTenMinute
+            
+        }
     }
     
     // MARK: Public APIs
-    
+    // Cache service status only when there is valid service for the user
+    // That is, we don't cache data when the user has no service or expired service
     func getRadarServiceStatusByUserId(userId: String, onCompleteHndler: (result: ZuzuServiceMapper?, success: Bool) -> Void) {
         Log.enter()
         
@@ -120,24 +121,27 @@ class UserServiceStatusManager {
                     return
                 }
                 
+                /// Data retrieval succeeded
                 if let result = serviceStatus {
+                    /// The user has service
                     
+                    /// Try cache service status if the service is valid
                     if let status = result.status  where (status == RadarStatus.Valid.rawValue),
                         let remainingSec = result.remainingSecond {
                             
-                        if let cacheTime = self.calculateCachedSecond(remainingSec) {
-                            
-                            self.saveCachedServiceStatus(result, cacheTime: cacheTime)
-                            
-                        }
+                            if let cacheTime = self.calculateCachedSecond(remainingSec) {
+                                
+                                self.saveCachedServiceStatus(result, cacheTime: cacheTime)
+                                
+                            }
                     }
                     
                     onCompleteHndler(result: serviceStatus, success: true)
                     
                 } else {
-                    assert(false, "Service status should not be nil when there is no error")
+                    /// The user has no service
                     
-                    onCompleteHndler(result: nil, success: false)
+                    onCompleteHndler(result: nil, success: true)
                 }
             }
             
