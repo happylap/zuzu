@@ -162,13 +162,22 @@ class RadarDisplayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // initialize
         self.serviceButton?.hidden = true
         self.serviceStatusLabel?.text = ""
         self.serviceExpireLabel?.text = ""
         self.configureButton()
         self.configureBannerText()
         self.configurePurchaseTableView()
+        
+        // update criteria UI according to zuzuCriteria
         self.updateCriteriaTextLabel()
+        
+        // update service UI according to zuzuService
+        self.updateServiceUI()
+        
+        // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.refresh()
         
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
