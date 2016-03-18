@@ -31,20 +31,11 @@ class RadarDisplayViewController: UIViewController {
     
     // Zuzu criteria variable
 
-    var zuzuCriteria = ZuzuCriteria(){ // Zuzu criteria object - Zuzu criteria information is stored in this object
-        didSet{
-            self.updateCriteriaTextLabel()
-        }
-    }
+    var zuzuCriteria = ZuzuCriteria()
     
     // ZuzuService status variable
     
-    var zuzuService: ZuzuServiceMapper?{  // Zuzu service object - Zuzu service information is stored in this object
-        didSet{
-            self.updateServiceUI()
-        }
-    }
-    
+    var zuzuService: ZuzuServiceMapper?
     private let secPerDay = 86400.0
     private let secPerHour = 3600.0
     

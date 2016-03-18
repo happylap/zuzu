@@ -47,7 +47,9 @@ class RadarNavigationController: UINavigationController {
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
             RadarService.sharedInstance.startLoading(self)
+            
             ZuzuWebService.sharedInstance.getServiceByUserId(userId){
                 (result, error) ->Void in
                 
@@ -66,6 +68,8 @@ class RadarNavigationController: UINavigationController {
                     return
                 }
                 
+                let zuzuService = result!
+                
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
                     (result, error) -> Void in
                     
@@ -77,14 +81,12 @@ class RadarNavigationController: UINavigationController {
                         return
                     }
                     
-                    RadarService.sharedInstance.stopLoading(self, animated: false)
-                    
                     if result == nil{
                         // deliver emptry criteria to display
                         // In display UI, it will tell users that they have not configured any criteria
-                        self.showDisplayRadarView(ZuzuCriteria())
+                        self.showDisplayRadarView(zuzuService, zuzuCriteria: ZuzuCriteria())
                     }else{
-                        self.showDisplayRadarView(result!)
+                        self.showDisplayRadarView(zuzuService, zuzuCriteria: result!)
                     }
                     
                     RadarService.sharedInstance.stopLoading(self)
@@ -117,12 +119,13 @@ class RadarNavigationController: UINavigationController {
         Log.exit()
     }
     
-    func showDisplayRadarView(zuzuCriteria: ZuzuCriteria){
+    func showDisplayRadarView(zuzuService: ZuzuServiceMapper, zuzuCriteria: ZuzuCriteria){
         Log.enter()
         
         if self.viewControllers.count > 0 {
             if let vc = self.viewControllers[0] as? RadarDisplayViewController {
                 vc.zuzuCriteria = zuzuCriteria
+                vc.zuzuService = zuzuService
                 Log.exit()
                 return
             }
@@ -131,6 +134,7 @@ class RadarNavigationController: UINavigationController {
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
             vc.zuzuCriteria = zuzuCriteria
+            vc.zuzuService = zuzuService
             self.setViewControllers([vc], animated: false)
         }
         Log.exit()
@@ -138,7 +142,6 @@ class RadarNavigationController: UINavigationController {
     
     func showRetryRadarView(isBlank: Bool){
         Log.enter()
-        
         
         // initialize rety page every time
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
