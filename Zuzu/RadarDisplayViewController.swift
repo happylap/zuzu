@@ -12,8 +12,6 @@ import Charts
 
 private let Log = Logger.defaultLogger
 
-let RadarStatusValid = "valid"
-
 class RadarDisplayViewController: UIViewController {
     
     // segue to configure UI
@@ -241,12 +239,11 @@ class RadarDisplayViewController: UIViewController {
         let isEnabled = sender.on
         
         if let service = self.zuzuService{
-            if let status = service.status{
-                if status != RadarStatusValid{
+            if let status = service.status
+                where status != RadarStatus.Valid.rawValue {
                     //expired service -> show purchase modal
                     self.showPurchase()
                     return
-                }
             }
         }
         
@@ -354,10 +351,10 @@ class RadarDisplayViewController: UIViewController {
     private func updateServiceUI(){
         
         if let service = self.zuzuService,
-            let status = service.status, let remainingSeconds = service.remainingSecond, let totalSeconds = service.totalSecond {
+            status = service.status, remainingSeconds = service.remainingSecond, totalSeconds = service.totalSecond {
                 /// Service is valid
                 
-                if status == RadarStatusValid{
+                if(status == RadarStatus.Valid.rawValue) {
                     
                     let usedSeconds = totalSeconds - remainingSeconds
                     

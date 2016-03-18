@@ -11,6 +11,11 @@ import AwesomeCache
 
 private let Log = Logger.defaultLogger
 
+enum RadarStatus: String {
+    case Valid = "valid"
+    case Invalid = "invalid"
+}
+
 class UserServiceStatusManager {
     
     class var shared: UserServiceStatusManager {
@@ -117,7 +122,7 @@ class UserServiceStatusManager {
                 
                 if let result = serviceStatus {
                     
-                    if let status = result.status  where (status == RadarStatusValid),
+                    if let status = result.status  where (status == RadarStatus.Valid.rawValue),
                         let remainingSec = result.remainingSecond {
                             
                         if let cacheTime = self.calculateCachedSecond(remainingSec) {
