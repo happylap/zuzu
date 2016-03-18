@@ -16,9 +16,6 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
-    private let secPerDay = 86400.0
-    private let secPerHour = 3600.0
-    
     var isCheckService = true
     
     var isOnLogging = false
@@ -188,26 +185,6 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    private func getDaysPart(seconds: Int) -> Int {
-        
-        return Int(ceil(convertSecondsToPreciseDays(seconds)))
-        
-    }
-    
-    private func getHoursPart(seconds: Int) -> Int {
-        
-        let hours = (Double(seconds) % secPerDay)/secPerHour
-        
-        return Int(floor(hours))
-        
-    }
-    
-    private func convertSecondsToPreciseDays(seconds: Int) -> Double {
-        
-        return Double(seconds)/secPerDay
-        
-    }
-    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -351,13 +328,13 @@ class RadarDisplayViewController: UIViewController {
         
         /// Get precise remianings days / used days
         /// e.g. 15.5 Days
-        let remainingDays = convertSecondsToPreciseDays(remainingSeconds)
-        let usedDays = convertSecondsToPreciseDays(usedSeconds)
+        let remainingDays = UserServiceUtils.convertSecondsToPreciseDays(remainingSeconds)
+        let usedDays = UserServiceUtils.convertSecondsToPreciseDays(usedSeconds)
         
         /// Get rounded remianings days/hours part
-        /// e.g. 15.5 Days = Day Part: 15, Hour Part: 12
-        let roundedRemainingDaysPart = getDaysPart(remainingSeconds)
-        let roundedRemainingHoursPart  = getHoursPart(remainingSeconds)
+        /// e.g. 15.5 Days = Round-up Days: 16, Hour Part: 12
+        let roundupRemainingDays = UserServiceUtils.getRoundUpDays(remainingSeconds)
+        let remainingHoursPart  = UserServiceUtils.getHoursPart(remainingSeconds)
         
         
         /// Update UI for service valid
@@ -366,15 +343,15 @@ class RadarDisplayViewController: UIViewController {
         if(remainingDays >= 1) {
             /// More than 1 day
             
-            infoText = "\(roundedRemainingDaysPart) 日"
-            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDaysPart) 日"
+            infoText = "\(roundupRemainingDays) 日"
+            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundupRemainingDays) 日"
             
         } else {
             /// Within 1 day
             
-            if(roundedRemainingHoursPart > 0) {
-                infoText = "\(roundedRemainingHoursPart) 小時"
-                self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(roundedRemainingHoursPart) 小時"
+            if(remainingHoursPart > 0) {
+                infoText = "\(remainingHoursPart) 小時"
+                self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(remainingHoursPart) 小時"
             }else {
                 /// Last Hour
                 infoText = "將失效"

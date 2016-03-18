@@ -89,6 +89,7 @@
 		2FB16C541C48BDEC009738AC /* ZuzuStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C521C48BDEC009738AC /* ZuzuStore.swift */; };
 		2FB16C551C48BDEC009738AC /* ZuzuProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */; };
 		2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC05571BDF15710035652D /* SearchResultViewController.swift */; };
+		2FBCE9DB1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */; };
 		2FBDAB0B1C0C1CF900B45E5B /* ThreadUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */; };
 		2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */; };
 		2FBDAB0F1C0D7FC700B45E5B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBDAB0E1C0D7FC700B45E5B /* Logger.swift */; };
@@ -265,6 +266,7 @@
 		2FB16C521C48BDEC009738AC /* ZuzuStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuStore.swift; sourceTree = "<group>"; };
 		2FB16C531C48BDEC009738AC /* ZuzuProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuProducts.swift; sourceTree = "<group>"; };
 		2FBC05571BDF15710035652D /* SearchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserServiceStatusManager.swift; sourceTree = "<group>"; };
 		2FBDAB0A1C0C1CF900B45E5B /* ThreadUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadUtils.swift; sourceTree = "<group>"; };
 		2FBDAB0C1C0C4BDE00B45E5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FBDAB0E1C0D7FC700B45E5B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -564,6 +566,7 @@
 				140250BD1C7C71B50009A076 /* RadarService.swift */,
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
+				2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -989,6 +992,7 @@
 				1486A42A1C630CB800A6F7CA /* RadarDisplayViewController.swift in Sources */,
 				14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */,
 				81FA280E1BDA39880038DD19 /* CoreDataManager.swift in Sources */,
+				2FBCE9DB1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift in Sources */,
 				2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */,
 				810081D21C8E653100659BE2 /* ZuzuServiceMapper.swift in Sources */,
 				8166359A1C608838008C0AA3 /* ZuzuUser.swift in Sources */,
