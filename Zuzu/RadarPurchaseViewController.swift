@@ -155,7 +155,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
                             }
                             
-                            ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
+                            ZuzuWebService.sharedInstance.createPurchase(purchase){
+                                (result, error) -> Void in
                                 
                                 if error != nil{
                                     Log.error("Fail to createPurchase for product: \(productId)")
@@ -367,7 +368,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         }
         
         RadarService.sharedInstance.createPurchase(transaction){
-            (result: String?, error: NSError?) -> Void in
+            (purchaseTransaction, error) -> Void in
             if error != nil{
                 RadarService.sharedInstance.stopLoading(self)
                 Log.error("create purchase error")

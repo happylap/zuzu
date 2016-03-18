@@ -606,12 +606,14 @@ extension RadarViewController{
         }
     }
     
-    func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
+    func handleCompleteTransaction(purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void{
         if error != nil{
             self.transactionDone()
             self.alertUnfinishError()
             return
         }
+        
+        ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
         
         self.porcessTransactionNum = self.porcessTransactionNum + 1
         if let transactions = self.unfinishedTranscations{
