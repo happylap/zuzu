@@ -24,32 +24,11 @@ class RegionTableViewController: UITableViewController {
     
     var cityCodeSelected:Int = 100 //Default value
     var citySelected: City?
+    
+    /// @Controller Input Params
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var codeToCityMap = [Int : City]()//City dictionary by city code
-    
     var itemCountByRegion: [String: Int]?
-    
-    // MARK: - Private Utils
-    
-    private func getItemCountByRegion() -> [String: Int]? {
-        
-        do {
-            let cache = try Cache<NSData>(name: cacheName)
-            
-            ///Return cached data if there is cached data
-            if let cachedData = cache.objectForKey(cacheKey),
-                let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) as? [String: Int] {
-                    
-                    return result
-                    
-            }
-            
-        } catch _ {
-            Log.debug("Something went wrong with the cache")
-        }
-        
-        return nil
-    }
     
     private func validateCityRegionSelection(cityRegionStatus: [Int:[Bool]], selectedCity: Int) -> Bool {
         
@@ -281,8 +260,6 @@ class RegionTableViewController: UITableViewController {
         self.citySelected = codeToCityMap[cityCodeSelected]
         
         self.tableView.registerNib(UINib(nibName: "SimpleFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "simpleFilterTableCell")
-        
-        self.itemCountByRegion = self.getItemCountByRegion()
     }
     
     override func viewWillDisappear(animated: Bool) {

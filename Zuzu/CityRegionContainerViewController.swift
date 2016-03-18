@@ -21,6 +21,9 @@ class CityRegionContainerController: UIViewController {
     
     var isDataPrepared = false
 
+    /// @Controller Input Params
+    var itemCountByRegion: [String: Int]?
+    
     var checkedRegions: [Int:[Bool]] = [Int:[Bool]]()//Region selected grouped by city
     var regionSelectionState: [City] = [City]()
     
@@ -164,7 +167,9 @@ class CityRegionContainerController: UIViewController {
                     regionTable = vc
                     vc.checkedRegions = checkedRegions
                     vc.codeToCityMap = codeToCityMap
+                    vc.itemCountByRegion = self.itemCountByRegion
                 }
+                
             default: break
             }
         }
