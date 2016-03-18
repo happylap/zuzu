@@ -51,8 +51,19 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItemsOnForeground:", name: "receiveNotifyItemsOnForeground", object: nil)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didTabBarAgainSelectedNotification:", name: TabBarAgainSelectedNotification, object: nil)
+        
         configureTableView()
         Log.exit()
+    }
+    
+    func didTabBarAgainSelectedNotification(aNotification: NSNotification) {
+        Log.debug("didTabBarAgainSelectedNotification")
+        if let tabIndex = aNotification.userInfo?["tabIndex"] as? Int {
+            if tabIndex == MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX {
+                self.scrollToFirstRow()
+            }
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -361,5 +372,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 }
             }
         }
+    }
+    
+    func scrollToFirstRow() {
+        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
     }
 }

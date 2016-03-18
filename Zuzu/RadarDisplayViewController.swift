@@ -16,27 +16,80 @@ let RadarStatusValid = "valid"
 
 class RadarDisplayViewController: UIViewController {
     
-    var isCheckService = true
-    
-    var isOnLogging = false
-    
-    var unfinishedTranscations: [SKPaymentTransaction]?
-    
-    var porcessTransactionNum = -1
-    
-    
-    var purchaseViewController: RadarPurchaseViewController? //Used for view transition in purchase flow. Ex: dismiss purchase view afetr purchase is successful and done!
-    
-    var navigationView: RadarNavigationController?  //Used for view transition. Ex: if user log out, let configure UI show up
+    // segue to configure UI
     
     struct ViewTransConst {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
     
+    // unfinished transcation variables
+    
+    var isOnLogging = false
+    var unfinishedTranscations: [SKPaymentTransaction]?
+    var porcessTransactionNum = -1
+    
+    
+    // Zuzu criteria variable
+
+    var zuzuCriteria = ZuzuCriteria(){ // Zuzu criteria object - Zuzu criteria information is stored in this object
+        didSet{
+            self.updateCriteriaTextLabel()
+        }
+    }
+    
+    // ZuzuService status variable
+    
+    var zuzuService: ZuzuServiceMapper?{  // Zuzu service object - Zuzu service information is stored in this object
+        didSet{
+            self.updateServiceUI()
+        }
+    }
+    
+    private let secPerDay = 86400.0
+    private let secPerHour = 3600.0
+    
+    // Purchase History variables
+    
+    let emptyPurchaseHistoryLabel = UILabel()
     private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource(uiViewController: self)
+
     
-    let emptyLabel = UILabel()
+    // Criteria UI outlet
     
+    @IBOutlet weak var modifyButtoon: UIButton! // buton to update or configure criteria
+    
+    @IBOutlet weak var currentConditionBannerLabel: UILabel!
+    
+    @IBOutlet weak var criteriaEnableSwitch: UISwitch! {
+        didSet {
+            let ratio = getCurrentScale()
+            
+            criteriaEnableSwitch.transform = CGAffineTransformMakeScale(ratio, ratio)
+        }
+    }
+    
+    @IBOutlet weak var regionLabel: UILabel!
+    
+    @IBOutlet weak var houseInfoLabel: UILabel!
+    
+    @IBOutlet weak var priceSizeLabel: UILabel!
+    
+    @IBOutlet weak var otherFiltersLabel: UILabel!
+    
+
+    
+    // ZuzuService status UI outlet
+    
+    @IBOutlet weak var serviceButton: UIButton! // button to renew the ZuzuService if it is expired
+    
+    @IBOutlet weak var serviceStatusLabel: UILabel!
+    
+    @IBOutlet weak var serviceExpireLabel: UILabel!
+    
+    @IBOutlet weak var servieBannerLabel: UILabel!
+    
+    @IBOutlet weak var purchaseHistoryBannerLabel: UILabel!
+
     
     @IBOutlet weak var statusImageView: UIImageView!{
         
@@ -62,62 +115,11 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var criteriaEnableSwitch: UISwitch! {
-        didSet {
-            let ratio = getCurrentScale()
-            
-            criteriaEnableSwitch.transform = CGAffineTransformMakeScale(ratio, ratio)
-        }
-    }
+    // Purchase hstory UI outlet
     
-    
-    // banner text label
-    @IBOutlet weak var currentConditionBannerLabel: UILabel!
-    
-    @IBOutlet weak var servieBannerLabel: UILabel!
-    
-    @IBOutlet weak var purchaseHistoryBannerLabel: UILabel!
-    
-    // label in criteria
-    @IBOutlet weak var regionLabel: UILabel!
-    
-    @IBOutlet weak var houseInfoLabel: UILabel!
-    
-    @IBOutlet weak var priceSizeLabel: UILabel!
-    
-    @IBOutlet weak var otherFiltersLabel: UILabel!
-    
-    
-    // service status
-    @IBOutlet weak var serviceStatusLabel: UILabel!
-    
-    @IBOutlet weak var serviceExpireLabel: UILabel!
-    
-    
-    // purchase hstory
     @IBOutlet weak var purchaseTableView: UITableView!
     
-    
-    // buton
-    @IBOutlet weak var modifyButtoon: UIButton!
-    
-    @IBOutlet weak var serviceButton: UIButton!
-    
-    var zuzuService: ZuzuServiceMapper?{
-        didSet{
-            self.updateServiceUI()
-        }
-    }
-    
-    var zuzuCriteria = ZuzuCriteria(){
-        didSet{
-            if zuzuCriteria.criteria == nil{
-                zuzuCriteria.criteria = SearchCriteria()
-            }
-            self.updateCriteriaTextLabel()
-        }
-    }
-    
+
     // MARK: - Private Utils
     
     private func alertLocalNotificationDisabled() {
@@ -156,45 +158,26 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    /// Utils for controlling the service pie chart
-    private func setChart(dataPoints: [String], values: [Double], info: String) {
-        
-        var dataEntries: [ChartDataEntry] = []
-        
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
-            dataEntries.append(dataEntry)
-        }
-        
-        let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "服務狀態")
-        let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
-        pieChartDataSet.drawValuesEnabled = false
-        statusPieChart.data = pieChartData
-        statusPieChart.centerText = info
-        
-        let usedDays = UIColor.colorWithRGB(0xFFCC66)
-        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)
-        
-        pieChartDataSet.colors = [usedDays, remainingDays]
-    }
-    
-    private func clearChart(noDataText: String) {
-        
-        statusPieChart?.noDataText = noDataText
-        statusPieChart?.data = nil
-        
-    }
-    
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // initialize
         self.serviceButton?.hidden = true
         self.serviceStatusLabel?.text = ""
         self.serviceExpireLabel?.text = ""
         self.configureButton()
         self.configureBannerText()
         self.configurePurchaseTableView()
+        
+        // update criteria UI according to zuzuCriteria
         self.updateCriteriaTextLabel()
+        
+        // update service UI according to zuzuService
+        self.updateServiceUI()
+        
+        // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.refresh()
         
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
@@ -238,35 +221,157 @@ class RadarDisplayViewController: UIViewController {
         super.viewWillAppear(animated)
         
         Log.debug("viewWillAppear")
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            self.navigationView?.showConfigureRadarView()
-            return
-        }
-        
-        self.tabBarController?.tabBarHidden = false
         
         self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
-        
-        if self.isCheckService == false{
-            self.isCheckService = true
-            RadarService.sharedInstance.stopLoading(self)
-            return
-        }
-        
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            self.doUnfinishTransactions(unfinishedTranscations)
-        }else{
-            self.checkService()
-        }
+
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear")
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            self.doUnfinishTransactions(unfinishedTranscations)
+        }
     }
     
-    // MARK: - Update UI
+    // MARK: - Enable / Disable Criteria action
+    
+    @IBAction func enableCriteria(sender: UISwitch) {
+        let isEnabled = sender.on
+        
+        if let service = self.zuzuService{
+            if let status = service.status{
+                if status != RadarStatusValid{
+                    //expired service -> show purchase modal
+                    self.showPurchase()
+                    return
+                }
+            }
+        }
+        
+        self.setCriteriaEnabled(isEnabled)
+    }
+    
+    func setCriteriaEnabled(isEnabled: Bool){
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
+            var text = "啟用中"
+            if isEnabled == false{
+                text = "停用中"
+            }
+            
+            RadarService.sharedInstance.stopLoading(self)
+            RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
+            
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
+                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                    if error != nil{
+                        
+                        RadarService.sharedInstance.stopLoading(self)
+                        
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            self.criteriaEnableSwitch.on = !isEnabled
+                        }
+                        
+                        return
+                    }
+                    
+                    RadarService.sharedInstance.stopLoading(self)
+                    self.zuzuCriteria.enabled = isEnabled
+            }
+        }
+    }
+    
+    // MARK: - Show Purchase action
+    
+    @IBAction func onServiceButtonTapped(sender: AnyObject) {
+        self.showPurchase()
+    }
+    
+    func showPurchase(){
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
+            ///Hide tab bar
+            self.tabBarController?.tabBarHidden = true
+            
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.cancelPurchaseHandler = self.cancelPurchaseHandler
+            vc.purchaseSuccessHandler = self.purchaseSuccessHandler
+            vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
+            
+            presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
+    // MARK: - Update Criteria UI
+    
+    private func updateCriteriaTextLabel(){
+        let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
+        self.regionLabel?.text = displayItem.title
+        self.houseInfoLabel?.text = displayItem.purpostString
+        self.priceSizeLabel?.text = displayItem.priceSizeString
+        var filterNum = 0
+        if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
+            filterNum = filterGroups.count
+        }
+        self.otherFiltersLabel?.text = "其他 \(filterNum) 個過濾條件"
+    }
+    
+    // MARK: - Zuzu Service status chart functions
+    
+    /// Utils for controlling the service pie chart
+    private func setChart(dataPoints: [String], values: [Double], info: String) {
+        
+        var dataEntries: [ChartDataEntry] = []
+        
+        for i in 0..<dataPoints.count {
+            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
+            dataEntries.append(dataEntry)
+        }
+        
+        let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "服務狀態")
+        let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
+        pieChartDataSet.drawValuesEnabled = false
+        statusPieChart.data = pieChartData
+        statusPieChart.centerText = info
+        
+        let usedDays = UIColor.colorWithRGB(0xFFCC66)
+        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)
+        
+        pieChartDataSet.colors = [usedDays, remainingDays]
+    }
+    
+    private func clearChart(noDataText: String) {
+        
+        statusPieChart?.noDataText = noDataText
+        statusPieChart?.data = nil
+        
+    }
+    
+    private func getDaysPart(seconds: Int) -> Int {
+        
+        return Int(ceil(convertSecondsToPreciseDays(seconds)))
+        
+    }
+    
+    private func getHoursPart(seconds: Int) -> Int {
+        
+        let hours = (Double(seconds) % secPerDay)/secPerHour
+        
+        return Int(floor(hours))
+        
+    }
+    
+    private func convertSecondsToPreciseDays(seconds: Int) -> Double {
+        
+        return Double(seconds)/secPerDay
+        
+    }
+    
+    
+    // MARK: - Update Service UI
+    
     private func updateServiceUI(){
         
         if let service = self.zuzuService,
@@ -328,13 +433,13 @@ class RadarDisplayViewController: UIViewController {
         
         /// Get precise remianings days / used days
         /// e.g. 15.5 Days
-        let remainingDays = UserServiceUtils.convertSecondsToPreciseDays(remainingSeconds)
-        let usedDays = UserServiceUtils.convertSecondsToPreciseDays(usedSeconds)
+        let remainingDays = convertSecondsToPreciseDays(remainingSeconds)
+        let usedDays = convertSecondsToPreciseDays(usedSeconds)
         
         /// Get rounded remianings days/hours part
-        /// e.g. 15.5 Days = Round-up Days: 16, Hour Part: 12
-        let roundupRemainingDays = UserServiceUtils.getRoundUpDays(remainingSeconds)
-        let remainingHoursPart  = UserServiceUtils.getHoursPart(remainingSeconds)
+        /// e.g. 15.5 Days = Day Part: 15, Hour Part: 12
+        let roundedRemainingDaysPart = getDaysPart(remainingSeconds)
+        let roundedRemainingHoursPart  = getHoursPart(remainingSeconds)
         
         
         /// Update UI for service valid
@@ -343,15 +448,15 @@ class RadarDisplayViewController: UIViewController {
         if(remainingDays >= 1) {
             /// More than 1 day
             
-            infoText = "\(roundupRemainingDays) 日"
-            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundupRemainingDays) 日"
+            infoText = "\(roundedRemainingDaysPart) 日"
+            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDaysPart) 日"
             
         } else {
             /// Within 1 day
             
-            if(remainingHoursPart > 0) {
-                infoText = "\(remainingHoursPart) 小時"
-                self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(remainingHoursPart) 小時"
+            if(roundedRemainingHoursPart > 0) {
+                infoText = "\(roundedRemainingHoursPart) 小時"
+                self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(roundedRemainingHoursPart) 小時"
             }else {
                 /// Last Hour
                 infoText = "將失效"
@@ -372,16 +477,27 @@ class RadarDisplayViewController: UIViewController {
     }
     
     
-    private func updateCriteriaTextLabel(){
-        let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
-        self.regionLabel?.text = displayItem.title
-        self.houseInfoLabel?.text = displayItem.purpostString
-        self.priceSizeLabel?.text = displayItem.priceSizeString
-        var filterNum = 0
-        if let filterGroups = self.zuzuCriteria.criteria!.filterGroups{
-            filterNum = filterGroups.count
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier)")
+            
+            switch identifier{
+                
+            case ViewTransConst.showConfigureRadar:
+                if let vc = segue.destinationViewController as? RadarViewController {
+                    self.navigationItem.backBarButtonItem?.title = "返回"
+                    vc.delegate = self
+                    vc.displayRadarViewController = self
+                    vc.isUpdateMode = true
+                    vc.radarSearchCriteria = self.zuzuCriteria.criteria!
+                }
+            default: break
+                
+            }
         }
-        self.otherFiltersLabel?.text = "其他 \(filterNum) 個過濾條件"
     }
     
     // MARK: - Configure UI
@@ -429,25 +545,25 @@ class RadarDisplayViewController: UIViewController {
         
         // configure empty label
         if let contentView = self.purchaseTableView {
-            emptyLabel.translatesAutoresizingMaskIntoConstraints = false
-            emptyLabel.textAlignment = NSTextAlignment.Center
-            emptyLabel.numberOfLines = -1
-            emptyLabel.font = UIFont.systemFontOfSize(14)
-            emptyLabel.textColor = UIColor.grayColor()
-            emptyLabel.autoScaleFontSize = true
-            emptyLabel.hidden = true
-            contentView.addSubview(emptyLabel)
+            emptyPurchaseHistoryLabel.translatesAutoresizingMaskIntoConstraints = false
+            emptyPurchaseHistoryLabel.textAlignment = NSTextAlignment.Center
+            emptyPurchaseHistoryLabel.numberOfLines = -1
+            emptyPurchaseHistoryLabel.font = UIFont.systemFontOfSize(14)
+            emptyPurchaseHistoryLabel.textColor = UIColor.grayColor()
+            emptyPurchaseHistoryLabel.autoScaleFontSize = true
+            emptyPurchaseHistoryLabel.hidden = true
+            contentView.addSubview(emptyPurchaseHistoryLabel)
             
-            let xConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            let xConstraint = NSLayoutConstraint(item: emptyPurchaseHistoryLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
-            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+            let yConstraint = NSLayoutConstraint(item: emptyPurchaseHistoryLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
             yConstraint.priority = UILayoutPriorityRequired
             
-            let leftConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            let leftConstraint = NSLayoutConstraint(item: emptyPurchaseHistoryLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
             leftConstraint.priority = UILayoutPriorityDefaultLow
             
-            let rightConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            let rightConstraint = NSLayoutConstraint(item: emptyPurchaseHistoryLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
             rightConstraint.priority = UILayoutPriorityDefaultLow
             
             contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
@@ -455,98 +571,7 @@ class RadarDisplayViewController: UIViewController {
         }
         
     }
-    
-    
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier{
-            
-            Log.debug("prepareForSegue: \(identifier)")
-            
-            switch identifier{
-                
-            case ViewTransConst.showConfigureRadar:
-                if let vc = segue.destinationViewController as? RadarViewController {
-                    self.navigationItem.backBarButtonItem?.title = "返回"
-                    self.isCheckService = false
-                    vc.delegate = self
-                    vc.displayRadarViewController = self
-                    vc.isUpdateMode = true
-                    vc.radarSearchCriteria = self.zuzuCriteria.criteria!
-                }
-            default: break
-                
-            }
-        }
-    }
-    
-    // MARK: - Actions
-    
-    @IBAction func enableCriteria(sender: UISwitch) {
-        let isEnabled = sender.on
-        
-        if let service = self.zuzuService{
-            if let status = service.status{
-                if status != RadarStatusValid{
-                    //expired service -> show purchase modal
-                    self.showPurchase()
-                    return
-                }
-            }
-        }
-        
-        self.setCriteriaEnabled(isEnabled)
-    }
-    
-    @IBAction func onServiceButtonTapped(sender: AnyObject) {
-        self.showPurchase()
-    }
-    
-    func setCriteriaEnabled(isEnabled: Bool){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            
-            var text = "啟用中"
-            if isEnabled == false{
-                text = "停用中"
-            }
-            
-            RadarService.sharedInstance.stopLoading(self)
-            RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
-            
-            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
-                    self.runOnMainThread(){
-                        if error != nil{
-                            RadarService.sharedInstance.stopLoading(self)
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                                self.criteriaEnableSwitch.on = !isEnabled
-                            }
-                            
-                            return
-                        }
-                        
-                        RadarService.sharedInstance.stopLoading(self)
-                        self.zuzuCriteria.enabled = isEnabled
-                    }
-            }
-        }
-    }
-    
-    func showPurchase(){
-        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-            ///Hide tab bar
-            self.tabBarController?.tabBarHidden = true
-            vc.modalPresentationStyle = .OverCurrentContext
-            
-            vc.cancelPurchaseHandler = self.cancelPurchaseHandler
-            vc.purchaseSuccessHandler = self.purchaseSuccessHandler
-            vc.unfinishedTransactionHandler = self.unfinishedTransactionHandler
-            
-            presentViewController(vc, animated: true, completion: nil)
-        }
-    }
+
 }
 
 // MARK: - RadarViewControllerDelegate
@@ -557,104 +582,36 @@ extension RadarDisplayViewController : RadarViewControllerDelegate {
     }
 }
 
-// MARK: - Purchase Radar Callback
+// MARK: - Purchase Handler
 
 extension RadarDisplayViewController{
+    
     func cancelPurchaseHandler() -> Void{
         self.tabBarController?.tabBarHidden = false
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            self.navigationView?.showConfigureRadarView()
-        }
     }
     
     func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
-        self.purchaseViewController = purchaseView
         self.serviceButton.hidden = true
         RadarService.sharedInstance.startLoading(self)
-        self.setUpCriteria()
+        self.enableCriteriaForPurchase()
         Log.exit()
     }
     
     func unfinishedTransactionHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
-        self.tabBarController?.tabBarHidden = false
-        
-        self.purchaseViewController = purchaseView
         
         RadarService.sharedInstance.stopLoading(self)
         
         SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF).setDismissBlock(){
             () -> Void in
-            self.purchaseViewController?.dismissViewControllerAnimated(true){
-                () -> Void in
-                self.tabBarController?.tabBarHidden = false
+            
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            if unfinishedTranscations.count > 0{
+                self.doUnfinishTransactions(unfinishedTranscations)
             }
         }
         
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            self.doUnfinishTransactions(unfinishedTranscations)
-        }
-        
-        Log.exit()
-    }
-    
-    func setUpCriteria(){
-        Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
-                
-                if error != nil{
-                    self.runOnMainThread(){
-                        
-                        RadarService.sharedInstance.stopLoading(self)
-                        
-                        Log.error("Cannot get criteria by user id:\(userId)")
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件設定，請稍後再試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                            () -> Void in
-                            self.updateServiceAndPurchase(userId)
-                        }
-                    }
-                    return
-                }
-                
-                Log.info("get criteria successfully")
-                
-                if result != nil{
-                    self.zuzuCriteria = result!
-                    
-                    self.updateCriteria()
-                }else{
-                    assert(false, "Criteria should not be nil")
-                }
-            }
-        }
-        Log.exit()
-    }
-    
-    func updateCriteria(){
-        Log.enter()
-        
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: self.zuzuCriteria.criteriaId!, criteria: self.zuzuCriteria.criteria!) { (result, error) -> Void in
-                
-                self.runOnMainThread(){
-                    if error != nil{
-                        
-                        RadarService.sharedInstance.stopLoading(self)
-                        
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件設定，請稍後再試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                            () -> Void in
-                            self.criteriaEnableSwitch.on = self.zuzuCriteria.enabled ?? false
-                            self.updateServiceAndPurchase(userId)
-                        }
-                    }else{
-                        self.enableCriteriaForPurchase()
-                    }
-                }
-            }
-        }
         Log.exit()
     }
     
@@ -662,92 +619,38 @@ extension RadarDisplayViewController{
         
         let isEnabled = self.zuzuCriteria.enabled ?? false
         if isEnabled == true{
-            
-            self.criteriaEnableSwitch.on = true
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                self.updateServiceAndPurchase(userId)
-            }
-            
+            self.reload()
             return
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: self.zuzuCriteria.criteriaId!, enabled: true) { (result, error) -> Void in
                     
                     if error != nil{
-                        self.runOnMainThread(){
-                            self.criteriaEnableSwitch.on = false
-                            
-                            RadarService.sharedInstance.stopLoading(self)
-                            
-                            SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                                () -> Void in
-                                self.updateServiceAndPurchase(userId)
-                            }
+                        self.criteriaEnableSwitch.on = false
+                        
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            () -> Void in
+                            self.reload()
                         }
                         return
                     }
                     
                     self.criteriaEnableSwitch.on = true
-                    self.updateServiceAndPurchase(userId)
+                    self.reload()
             }
         }
     }
     
-    func updateServiceAndPurchase(userId: String){
-        self.clearChart("載入中")
-        self.purchaseViewController?.dismissViewControllerAnimated(true){
-            self.tabBarController?.tabBarHidden = false
-            ZuzuWebService.sharedInstance.getServiceByUserId(userId){
-                (result, error) ->Void in
-                
-                self.runOnMainThread(){
-                    
-                    self.purchaseHistotyTableDataSource.refresh()
-                    
-                    if error != nil{
-                        self.zuzuService = nil
-                        Log.error("get radar service error")
-                    }else{
-                        self.zuzuService = result
-                    }
-                    
-                    RadarService.sharedInstance.stopLoading(self)
-                }
-            }
-        }
-    }
-    
-}
-
-// MARK: Check Radar service
-
-extension RadarDisplayViewController{
-    
-    func checkService(){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            
-            RadarService.sharedInstance.startLoading(self)
-            
-            ZuzuWebService.sharedInstance.getServiceByUserId(userId){
-                (result: ZuzuServiceMapper?, error: NSError?) -> Void in
-                self.runOnMainThread(){
-                    RadarService.sharedInstance.stopLoading(self)
-                    if error != nil{
-                        self.zuzuService = nil
-                        Log.error("get radar service error")
-                        return
-                    }
-                    
-                    self.zuzuService = result
-                }
-            }
-        }else{
-            RadarService.sharedInstance.stopLoading(self)
+    func reload(){
+        if let navigation = self.navigationController as? RadarNavigationController{
+            navigation.showRadar()
         }
     }
 }
+
 
 // MARK: Handle unfinished transactions
 
@@ -757,7 +660,7 @@ extension RadarDisplayViewController{
         Log.enter()
         self.unfinishedTranscations = unfinishedTranscations
         self.porcessTransactionNum = 0
-        //RadarService.sharedInstance.stopLoading(self, animated: false)
+ 
         RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
         self.performFinishTransactions()
         Log.exit()
@@ -799,7 +702,6 @@ extension RadarDisplayViewController{
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
         RadarService.sharedInstance.stopLoading(self)
-        self.checkService()
         Log.exit()
     }
     
