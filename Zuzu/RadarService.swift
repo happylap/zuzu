@@ -68,44 +68,57 @@ class RadarService : NSObject {
             
         }
     }
-    
 
-    func createPurchase(transaction: SKPaymentTransaction, handler: (result: String?, error: NSError?) -> Void){
+    func createPurchase(transaction: SKPaymentTransaction, handler: (purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void){
+        
         if let receipt = ZuzuStore.sharedInstance.readReceipt(){
-            self.composeZuzuPurchase(transaction, purchaseReceipt: receipt){
-                (result, error) -> Void in
-                if let purchase = result{
-                    ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
-                        if error != nil{
-                            Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")
-                            
-                            self.checkPurchaseExist(purchase.transactionId){
-                                (isExist, checkExistError) -> Void in
-                                
-                                if isExist == true{
-                                    handler(result: "", error: nil)
-                                    return
-                                }
-                                
-                                handler(result: nil, error: error)
-                                
-                             }
-                            
-                            
-                            return
-                        }
-                        
-                        handler(result: result, error: nil)
-                    }
-                }else{
-                    Log.error("Fail to composeZuzuPurchase for transaction: \(transaction.transactionIdentifier)")
-                    handler(result: nil, error: error)
+            self.createPurchase(transaction, receipt: receipt, handler:handler)
+        }
+        else {
+            ZuzuStore.sharedInstance.fetchReceipt(){
+                (success, receiptData) -> () in
+                if receiptData != nil{
+                    self.createPurchase(transaction, receipt: receiptData!, handler:handler)
+                }
+                else{
+                    Log.error("Fail to ftech receipt for the transaction")
+                    handler(purchaseTransaction: transaction, error: NSError(domain: "Fail to ftech receipt for the transaction", code: -1, userInfo: nil))
                 }
             }
-        }else{
-            Log.error("Fail to read receipt for the transaction")
-            handler(result: nil, error: NSError(domain: "Fail to read receipt for the transaction", code: -1, userInfo: nil))
-            //
+        }
+    }
+    
+    func createPurchase(transaction: SKPaymentTransaction, receipt: NSData,handler: (purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void){
+        
+        self.composeZuzuPurchase(transaction, purchaseReceipt: receipt){
+            (result, error) -> Void in
+            if let purchase = result{
+                ZuzuWebService.sharedInstance.createPurchase(purchase){ (result, error) -> Void in
+                    if error != nil{
+                        Log.error("Fail to createPurchase for transaction: \(transaction.transactionIdentifier)")
+                        
+                        self.checkPurchaseExist(purchase.transactionId){
+                            (isExist, checkExistError) -> Void in
+                            
+                            if isExist == true{
+                                handler(purchaseTransaction: transaction, error: nil)
+                                return
+                            }
+                            
+                            handler(purchaseTransaction: transaction, error: error)
+                            
+                        }
+                        
+                        
+                        return
+                    }
+                    
+                    handler(purchaseTransaction: transaction, error: nil)
+                }
+            }else{
+                Log.error("Fail to composeZuzuPurchase for transaction: \(transaction.transactionIdentifier)")
+                handler(purchaseTransaction: transaction, error: error)
+            }
         }
     }
     
