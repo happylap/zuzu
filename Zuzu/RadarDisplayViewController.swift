@@ -483,19 +483,18 @@ class RadarDisplayViewController: UIViewController {
     
     @IBAction func enableCriteria(sender: UISwitch) {
         let isEnabled = sender.on
+        
         if let service = self.zuzuService{
-            
             if let status = service.status{
-                if status == RadarStatusValid{
-                    self.setCriteriaEnabled(isEnabled)
+                if status != RadarStatusValid{
+                    //expired service -> show purchase modal
+                    self.showPurchase()
                     return
                 }
             }
         }
         
-        sender.on = !isEnabled
-        self.showPurchase()
-        
+        self.setCriteriaEnabled(isEnabled)
     }
     
     @IBAction func onServiceButtonTapped(sender: AnyObject) {
