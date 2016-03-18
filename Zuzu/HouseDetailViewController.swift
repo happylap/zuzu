@@ -18,7 +18,7 @@ private let Log = Logger.defaultLogger
 
 @objc protocol HouseDetailViewDelegate {
     
-    func onHouseItemStateChanged()
+    optional func onHouseItemStateChanged()
     
     optional func onHouseItemLoaded(result: Bool)
     
@@ -1047,7 +1047,7 @@ class HouseDetailViewController: UIViewController {
                     }
                     
                     ///Notify the search result table to refresh the selected row
-                    delegate?.onHouseItemStateChanged()
+                    delegate?.onHouseItemStateChanged?()
                     
                 } else {
                     
@@ -1091,7 +1091,7 @@ class HouseDetailViewController: UIViewController {
                         self.alertAddingToCollectionSuccess()
                         
                         ///Notify the search result table to refresh the slected row
-                        self.delegate?.onHouseItemStateChanged()
+                        self.delegate?.onHouseItemStateChanged?()
                     }
                 }
                 
