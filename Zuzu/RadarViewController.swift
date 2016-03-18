@@ -447,7 +447,8 @@ extension RadarViewController{
             self.tabBarController?.tabBarHidden = false
             if zuzuCriteria != nil{
                 RadarService.sharedInstance.startLoading(self)
-                self.navigationView?.showDisplayRadarView(zuzuCriteria!)
+                //self.navigationView?.showDisplayRadarView(zuzuCriteria!)
+                self.navigationView?.showRadar()
             }
         }
     }
@@ -473,7 +474,8 @@ extension RadarViewController{
                     
                     Log.info("get criteria successfully")
                     if result != nil{
-                        self.navigationView?.showDisplayRadarView(result!)
+                        //self.navigationView?.showDisplayRadarView(result!)
+                        //self.navigationView?.showRadar()
                         Log.exit()
                         return
                     }
@@ -509,7 +511,7 @@ extension RadarViewController{
                 
                 Log.info("get criteria successfully")
                 if result != nil{
-                    self.navigationView?.showDisplayRadarView(result!)
+                    //self.navigationView?.showDisplayRadarView(result!)
                     Log.exit()
                     return
                 }
