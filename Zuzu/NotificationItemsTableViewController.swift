@@ -11,7 +11,7 @@ import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
-class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate {
+class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate, HouseDetailViewDelegate {
 
     var isNeedRefresh = false
     var notificationService: NotificationItemService!
@@ -211,17 +211,17 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         Log.exit()
     }
     
-    func setItemRead(item:NotificationHouseItem){
-        var updateData = Dictionary<String, AnyObject>()
-        updateData["isRead"] = true
-        self.notificationService.updateItem(item, dataToUpdate: updateData)
-        
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+    func setItemRead(item: NotificationHouseItem) {
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
             return
         }
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id){
-                (result, error) -> Void in
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+            ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id) { (result, error) -> Void in
+                if (result == true) {
+                    var updateData = Dictionary<String, AnyObject>()
+                    updateData["isRead"] = true
+                    self.notificationService.updateItem(item, dataToUpdate: updateData)
+                }
             }
         }
     }
@@ -286,15 +286,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if let item = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
-            if item.isRead == false{
-                item.isRead = true
-                self.setItemRead(item)
-            }
+//            if item.isRead == false{
+//                item.isRead = true
+//                self.setItemRead(item)
+//            }
 
             let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController{
                 if let houseItem: HouseItem = item.toHouseItem() {
                     houseDetailVC.houseItem = houseItem
+                    houseDetailVC.delegate = self
                     
                     //GA Tracker
                     self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
@@ -346,5 +347,19 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func controllerDidChangeContent(controller: TableResultsController) {
         self.tableView.endUpdates()
+    }
+    
+    
+    internal func onHouseItemLoaded(result: Bool) {
+        if (result == true) {
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                if let item = self.resultController.objectAtIndexPath(selectedIndexPath) as? NotificationHouseItem {
+                    if item.isRead == false {
+                        item.isRead = true
+                        self.setItemRead(item)
+                    }
+                }
+            }
+        }
     }
 }

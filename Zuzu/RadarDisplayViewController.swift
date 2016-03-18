@@ -508,19 +508,18 @@ class RadarDisplayViewController: UIViewController {
     
     @IBAction func enableCriteria(sender: UISwitch) {
         let isEnabled = sender.on
+        
         if let service = self.zuzuService{
-            
             if let status = service.status{
-                if status == RadarStatusValid{
-                    self.setCriteriaEnabled(isEnabled)
+                if status != RadarStatusValid{
+                    //expired service -> show purchase modal
+                    self.showPurchase()
                     return
                 }
             }
         }
         
-        sender.on = !isEnabled
-        self.showPurchase()
-        
+        self.setCriteriaEnabled(isEnabled)
     }
     
     @IBAction func onServiceButtonTapped(sender: AnyObject) {
@@ -797,14 +796,17 @@ extension RadarDisplayViewController{
         }
     }
     
-    func handleCompleteTransaction(result: String?, error: NSError?) -> Void{
+    func handleCompleteTransaction(purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void{
         if error != nil{
             self.transactionDone()
             self.alertUnfinishError()
             return
         }
         
+        ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
+        
         self.porcessTransactionNum = self.porcessTransactionNum + 1
+        
         if let transactions = self.unfinishedTranscations{
             if self.porcessTransactionNum  < transactions.count{
                 self.performFinishTransactions()
