@@ -80,7 +80,7 @@ class RadarDisplayViewController: UIViewController {
     @IBOutlet weak var servieBannerLabel: UILabel!
     
     @IBOutlet weak var purchaseHistoryBannerLabel: UILabel!
-   
+    
     // label in criteria
     @IBOutlet weak var regionLabel: UILabel!
     
@@ -159,6 +159,7 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
+    /// Utils for controlling the service pie chart
     private func setChart(dataPoints: [String], values: [Double], info: String) {
         
         var dataEntries: [ChartDataEntry] = []
@@ -172,7 +173,6 @@ class RadarDisplayViewController: UIViewController {
         let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
         pieChartDataSet.drawValuesEnabled = false
         statusPieChart.data = pieChartData
-        
         statusPieChart.centerText = info
         
         let usedDays = UIColor.colorWithRGB(0xFFCC66)
@@ -185,9 +185,30 @@ class RadarDisplayViewController: UIViewController {
         
         statusPieChart?.noDataText = noDataText
         statusPieChart?.data = nil
-
+        
     }
-
+    
+    private func getDaysPart(seconds: Int) -> Int {
+        
+        return Int(ceil(convertSecondsToPreciseDays(seconds)))
+        
+    }
+    
+    private func getHoursPart(seconds: Int) -> Int {
+        
+        let hours = (Double(seconds) % secPerDay)/secPerHour
+        
+        return Int(floor(hours))
+        
+    }
+    
+    private func convertSecondsToPreciseDays(seconds: Int) -> Double {
+        
+        return Double(seconds)/secPerDay
+        
+    }
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.serviceButton?.hidden = true
@@ -269,106 +290,110 @@ class RadarDisplayViewController: UIViewController {
     }
     
     // MARK: - Update UI
-    
     private func updateServiceUI(){
-        if let service = self.zuzuService{
-            if let status = service.status{
+        
+        if let service = self.zuzuService,
+            let status = service.status, let remainingSeconds = service.remainingSecond, let totalSeconds = service.totalSecond {
+                /// Service is valid
+                
                 if status == RadarStatusValid{
                     
-                    var remainingDays = 0.0
-                    var remainingHours = 0.0
-                    var usedDays = 0.0
+                    let usedSeconds = totalSeconds - remainingSeconds
                     
-                    if let remaining = service.remainingSecond,
-                        let total = service.totalSecond{
-                            
-                            let used = total - remaining
-                            
-                            remainingDays = Double(remaining)/secPerDay
-                            remainingHours = (Double(remaining) % secPerDay)/secPerHour
-                            
-                            usedDays = Double(used)/secPerDay
-                    }
-                    
-                    let roundedRemainingDays = Int(ceil(remainingDays))
-                    let roundedRemainingHours  = Int(floor(remainingHours))
-                    
-                    if(remainingDays >= 1) {
-                        
-                        self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDays) 日"
-                        
-                    } else {
-                        
-                        self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(roundedRemainingHours) 小時"
-                        
-                    }
-                    
-                    self.serviceButton?.hidden = true
-                    self.enableModifyButton()
-                    
-                    // Update Chart
-                    
-                    var infoText: String?
-                    if(roundedRemainingDays > 0) {
-                        infoText = "\(roundedRemainingDays) 日"
-                    } else {
-                        
-                        if(roundedRemainingHours > 0) {
-                            infoText = "\(roundedRemainingHours) 小時"
-                        }else {
-                            infoText = "已到期"
-                        }
-                    }
-                    
-                    // Update Chart
-                    self.setChart(["已使用天數","剩餘天數"],
-                        values: [Double(usedDays), Double(remainingDays)],
-                        info: infoText ?? "")
-                    
-                    toggleServiceStatusIcon(true)
+                    self.handleServiceValidForDuration(remainingSeconds, usedSeconds: usedSeconds)
                     
                 }else{
-                    self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
-                    self.criteriaEnableSwitch?.on = false
-                    self.serviceButton?.hidden = false
-                    self.disableModifyButton()
                     
-                    // Update Chart
-                    self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
+                    self.handleServiceExpired()
                     
-                    toggleServiceStatusIcon(false)
                 }
-            }else{
-                self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
-                self.criteriaEnableSwitch?.on = false
-                self.serviceButton?.hidden = false
-                self.disableModifyButton()
                 
-                // Update Chart
-                self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
-                
-                toggleServiceStatusIcon(false)
-            }
-            
-            // expiration date
-            var expireDateStr = "—"
-            if let expireDate = service.expireTime{
-                if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
-                    expireDateStr = dateString
+                // Display service expiration date
+                var expireDateStr = "—"
+                if let expireDate = service.expireTime{
+                    if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
+                        expireDateStr = dateString
+                    }
                 }
-            }
-            self.serviceExpireLabel?.text = "雷達服務到期日: \(expireDateStr)"
+                self.serviceExpireLabel?.text = "雷達服務到期日: \(expireDateStr)"
+                
+        } else {
+            /// Service is invalid or status info not available
             
-            return
+            self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
+            self.serviceExpireLabel?.text = ""
+            self.serviceButton?.hidden = true
+            
+            /// Clear Chart
+            self.clearChart("無法載入資料")
+            
+            self.enableModifyButton()
+            
+        }
+    }
+    
+    private func handleServiceExpired() {
+        
+        /// Update UI for service expiry
+        self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
+        self.criteriaEnableSwitch?.on = false
+        self.serviceButton?.hidden = false
+        self.disableModifyButton()
+        
+        // Update Chart
+        self.setChart(["已使用天數","剩餘天數"], values: [10.0, 0.0], info: "已到期")
+        
+        toggleServiceStatusIcon(false)
+        
+    }
+    
+    private func handleServiceValidForDuration(remainingSeconds: Int, usedSeconds: Int) {
+        
+        /// Get precise remianings days / used days
+        /// e.g. 15.5 Days
+        let remainingDays = convertSecondsToPreciseDays(remainingSeconds)
+        let usedDays = convertSecondsToPreciseDays(usedSeconds)
+        
+        /// Get rounded remianings days/hours part
+        /// e.g. 15.5 Days = Day Part: 15, Hour Part: 12
+        let roundedRemainingDaysPart = getDaysPart(remainingSeconds)
+        let roundedRemainingHoursPart  = getHoursPart(remainingSeconds)
+        
+        
+        /// Update UI for service valid
+        var infoText: String?
+        
+        if(remainingDays >= 1) {
+            /// More than 1 day
+            
+            infoText = "\(roundedRemainingDaysPart) 日"
+            self.serviceStatusLabel?.text = "您的租屋雷達服務尚有：\(roundedRemainingDaysPart) 日"
+            
+        } else {
+            /// Within 1 day
+            
+            if(roundedRemainingHoursPart > 0) {
+                infoText = "\(roundedRemainingHoursPart) 小時"
+                self.serviceStatusLabel?.text = "您的租屋雷達服務只剩：\(roundedRemainingHoursPart) 小時"
+            }else {
+                /// Last Hour
+                infoText = "將失效"
+                self.serviceStatusLabel?.text = "您的租屋雷達服務將在一小時內失效"
+            }
         }
         
+        // Update Chart
+        self.setChart(["已使用天數","剩餘天數"],
+            values: [usedDays, remainingDays],
+            info: infoText ?? "")
         
-        self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
-        self.clearChart("無法載入資料")
-        self.serviceExpireLabel?.text = ""
+        
         self.serviceButton?.hidden = true
         self.enableModifyButton()
+        toggleServiceStatusIcon(true)
+        
     }
+    
     
     private func updateCriteriaTextLabel(){
         let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
