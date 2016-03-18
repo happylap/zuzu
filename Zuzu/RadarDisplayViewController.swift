@@ -41,7 +41,7 @@ class RadarDisplayViewController: UIViewController {
     // Purchase History variables
     
     let emptyPurchaseHistoryLabel = UILabel()
-    private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource(uiViewController: self)
+    private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource()
     
     
     // Criteria UI outlet
@@ -717,4 +717,23 @@ extension RadarDisplayViewController{
         
         alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
+}
+
+extension RadarDisplayViewController: RadarPurchaseHistoryTableDelegate{
+    
+    func onRefreshData(){
+        self.purchaseTableView.reloadData()
+    }
+    
+    func onEmptyData(isEmpty: Bool){
+        if isEmpty == false{
+            self.emptyPurchaseHistoryLabel.hidden = true
+            return
+        }
+        
+        self.emptyPurchaseHistoryLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
+        self.emptyPurchaseHistoryLabel.sizeToFit()
+        self.emptyPurchaseHistoryLabel.hidden = false
+    }
+    
 }

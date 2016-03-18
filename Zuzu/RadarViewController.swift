@@ -64,21 +64,6 @@ class RadarViewController: UIViewController {
     
     @IBOutlet weak var activateButton: UIButton!
     
-    // MARK: - Radar Cache
-    
-    private func tryLoadCachedRadarCriteria() -> SearchCriteria {
-        Log.enter()
-        /// Use cached criteria for criteria creation if there is cached data
-        if let criteria = criteriaDataStore.loadSearchCriteria() {
-            
-            return criteria
-            
-        } else {
-            
-            /// Reset the criteria on UI
-            return SearchCriteria()
-        }
-    }
     
     // MARK: - View Life cycle
     
@@ -139,6 +124,22 @@ class RadarViewController: UIViewController {
             }else{
                 self.loginForUnfinishTransactions()
             }
+        }
+    }
+    
+    // MARK: - Radar Cache
+    
+    private func tryLoadCachedRadarCriteria() -> SearchCriteria {
+        Log.enter()
+        /// Use cached criteria for criteria creation if there is cached data
+        if let criteria = criteriaDataStore.loadSearchCriteria() {
+            
+            return criteria
+            
+        } else {
+            
+            /// Reset the criteria on UI
+            return SearchCriteria()
         }
     }
     
