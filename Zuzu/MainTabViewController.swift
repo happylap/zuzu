@@ -8,6 +8,10 @@
 
 import UIKit
 
+/// Notification that is generated when tab is selected.
+let TabBarSelectedNotification = "TabBarSelectedNotification"
+let TabBarAgainSelectedNotification = "TabBarAgainSelectedNotification"
+
 class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     
     struct MainTabConstants {
@@ -78,8 +82,26 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         //self.tabBar.hidden = true
     }
     
-    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
+    
+    var lastSelectedIndex: Int?
+    
+    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
         
+        let selectedIndex = tabBarController.selectedIndex
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(TabBarSelectedNotification, object: self, userInfo: ["tabIndex": selectedIndex])
+        
+        if let lastSelectedIndex = self.lastSelectedIndex {
+            if (lastSelectedIndex == selectedIndex) {
+                NSNotificationCenter.defaultCenter().postNotificationName(TabBarAgainSelectedNotification, object: self, userInfo: ["tabIndex": selectedIndex])
+            }
+        }
+        
+        self.lastSelectedIndex = selectedIndex
+    }
+    
+    func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
+            
         if let sb = viewController.storyboard {
             if let name: String = sb.valueForKey("name") as? String {
                 switch name {
@@ -117,6 +139,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
                 }
             }
         }
+        
         return true
     }
     
