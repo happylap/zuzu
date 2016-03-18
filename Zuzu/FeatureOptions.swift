@@ -16,7 +16,12 @@ struct FeatureOption {
         /// The sub module depending on the main function
         static let enableNote = false
         
-        static let enableLogout = true
+        #if DEBUG
+            static let enableLogout = true
+        #else
+            static let enableLogout = false
+        #endif
+        
     }
 
     struct Radar {
