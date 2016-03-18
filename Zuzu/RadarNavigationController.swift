@@ -112,7 +112,7 @@ class RadarNavigationController: UINavigationController {
         Log.exit()
     }
     
-    func showConfigureRadarView(){
+    private func showConfigureRadarView(){
         Log.enter()
         
         if self.viewControllers.count > 0 {
@@ -124,14 +124,13 @@ class RadarNavigationController: UINavigationController {
         
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {
-            vc.navigationView = self
             self.setViewControllers([vc], animated: false)
         }
         
         Log.exit()
     }
     
-    func showDisplayRadarView(zuzuService: ZuzuServiceMapper, zuzuCriteria: ZuzuCriteria){
+    private func showDisplayRadarView(zuzuService: ZuzuServiceMapper, zuzuCriteria: ZuzuCriteria){
         Log.enter()
         
         if self.viewControllers.count > 0 {
@@ -152,7 +151,7 @@ class RadarNavigationController: UINavigationController {
         Log.exit()
     }
     
-    func showRetryRadarView(isBlank: Bool){
+    private func showRetryRadarView(isBlank: Bool){
         Log.enter()
         
         // initialize rety page every time
