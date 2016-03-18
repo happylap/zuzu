@@ -16,8 +16,12 @@ import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
-protocol HouseDetailViewDelegate {
+@objc protocol HouseDetailViewDelegate {
+    
     func onHouseItemStateChanged()
+    
+    optional func onHouseItemLoaded(result: Bool)
+    
 }
 
 class HouseDetailViewController: UIViewController {
@@ -42,12 +46,31 @@ class HouseDetailViewController: UIViewController {
     private var photos = [MWPhoto]()
     
     // MARK: - Public Fields
+    
+    /// @Controller Input Params
     var houseItem:HouseItem?
     
-    ///The full house detail in AnyObject
+    ///The full house detail returned from remote server
     var houseItemDetail: AnyObject?
     
     var delegate:HouseDetailViewDelegate?
+    
+    enum CellIdentifier: String {
+        case HouseDetailTitleCell = "houseDetailTitleCell"
+        case PriceSizeCell = "priceSizeCell"
+        case RightDetailCell = "rightDetailCell"
+        case AddressCell = "addressCell"
+        case ExpandableHeaderCell = "expandableHeaderCell"
+        case ExpandableContentCell = "expandableContentCell"
+    }
+    
+    
+    struct CellInfo {
+        let cellIdentifier:CellIdentifier
+        var hidden:Bool
+        var cellHeight:CGFloat
+        let handler: (UITableViewCell) -> ()
+    }
     
     class HouseUrl: NSObject, UIActivityItemSource{
         
@@ -67,6 +90,7 @@ class HouseDetailViewController: UIViewController {
         }
     }
     
+    /// Wrapping classes for sharing
     class HouseText: NSObject, UIActivityItemSource {
         
         var houseText:String
@@ -95,23 +119,6 @@ class HouseDetailViewController: UIViewController {
     
     @IBOutlet weak var contactBarView: HouseDetailContactBarView!
     @IBOutlet weak var tableView: UITableView!
-    
-    enum CellIdentifier: String {
-        case HouseDetailTitleCell = "houseDetailTitleCell"
-        case PriceSizeCell = "priceSizeCell"
-        case RightDetailCell = "rightDetailCell"
-        case AddressCell = "addressCell"
-        case ExpandableHeaderCell = "expandableHeaderCell"
-        case ExpandableContentCell = "expandableContentCell"
-    }
-    
-    
-    struct CellInfo {
-        let cellIdentifier:CellIdentifier
-        var hidden:Bool
-        var cellHeight:CGFloat
-        let handler: (UITableViewCell) -> ()
-    }
     
     
     // MARK: - Private Utils
@@ -147,6 +154,7 @@ class HouseDetailViewController: UIViewController {
                     
                     LoadingSpinner.shared.stop()
                     
+                    self.delegate?.onHouseItemLoaded?(true)
                     handleHouseDetailResponse(result)
             }
             
@@ -171,10 +179,10 @@ class HouseDetailViewController: UIViewController {
                         alertView.showInfo("網路無法連線", subTitle: subTitle, closeButtonTitle: "知道了",colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
                     
+                    self.delegate?.onHouseItemLoaded?(false)
+                    
                     return
                 }
-                
-                
                 
                 if let result = result {
                     
@@ -188,6 +196,7 @@ class HouseDetailViewController: UIViewController {
                         Log.debug("Something went wrong with the cache")
                     }
                     
+                    self.delegate?.onHouseItemLoaded?(true)
                     self.handleHouseDetailResponse(result)
                 }
             }
@@ -1037,7 +1046,7 @@ class HouseDetailViewController: UIViewController {
                         barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
                     }
                     
-                    ///Notify the search result table to refresh the slected row
+                    ///Notify the search result table to refresh the selected row
                     delegate?.onHouseItemStateChanged()
                     
                 } else {
