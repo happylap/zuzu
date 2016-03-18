@@ -87,7 +87,7 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
         Log.debug("Number of purchase history = \(itemSize)")
 
  
-        let emptyLabel = self.uiViewController.emptyLabel
+        let emptyLabel = self.uiViewController.emptyPurchaseHistoryLabel
         
         if (itemSize < 1) {
             emptyLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
