@@ -295,6 +295,18 @@ class RadarDisplayViewController: UIViewController {
     // MARK: - Update Criteria UI
     
     private func updateCriteriaTextLabel(){
+        
+        if self.zuzuCriteria.criteria == nil{
+            let text = "您的租屋雷達服務已在作用中，請立即將租屋雷達條件設定並啟用"
+            self.regionLabel?.text = text
+            self.houseInfoLabel?.text = ""
+            self.priceSizeLabel?.text = ""
+            self.otherFiltersLabel?.text = ""
+            self.modifyButtoon?.setTitle("設定雷達", forState: .Normal)
+            return
+        }
+        
+        
         let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
         self.regionLabel?.text = displayItem.title
         self.houseInfoLabel?.text = displayItem.purpostString
@@ -304,6 +316,7 @@ class RadarDisplayViewController: UIViewController {
             filterNum = filterGroups.count
         }
         self.otherFiltersLabel?.text = "其他 \(filterNum) 個過濾條件"
+        self.modifyButtoon?.setTitle("更改條件", forState: .Normal)
     }
     
     // MARK: - Zuzu Service status chart functions

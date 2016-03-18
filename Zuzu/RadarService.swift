@@ -215,6 +215,7 @@ class RadarService : NSObject {
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.8)
         LoadingSpinner.shared.setText(text)
+        LoadingSpinner.shared.setGraceTime(0.5)
         LoadingSpinner.shared.startOnView(theViewController.view, animated: animated)
     }
     
