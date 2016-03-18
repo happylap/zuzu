@@ -117,16 +117,18 @@ class RadarViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.enter()
+        Log.debug("viewWillAppear")
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.debug("viewDidAppear")
+        /// When there are some unfinished transactions
         
-        /// Try reload service status
-        if(!self.isServiceCheckAlerted && AmazonClientManager.sharedInstance.isLoggedIn()){
-            self.checkService()
-            self.isServiceCheckAlerted = true
+        if self.isUpdateMode == false{
             return
         }
         
-        /// When there are some unfinished transactions
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             if AmazonClientManager.sharedInstance.isLoggedIn(){
@@ -135,16 +137,6 @@ class RadarViewController: UIViewController {
                 self.loginForUnfinishTransactions()
             }
         }
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        Log.enter()
-    }
-    
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        Log.enter()
     }
     
     // MARK: - Navigation
