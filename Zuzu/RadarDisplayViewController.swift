@@ -24,7 +24,6 @@ class RadarDisplayViewController: UIViewController {
     
     // unfinished transcation variables
     
-    var isOnLogging = false
     var unfinishedTranscations: [SKPaymentTransaction]?
     var porcessTransactionNum = -1
     
@@ -220,9 +219,33 @@ class RadarDisplayViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear")
+        
+         /// When there are some unfinished transactions
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.doUnfinishTransactions(unfinishedTranscations)
+        }
+    }
+    
+    // MARK: - Segue
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier)")
+            
+            switch identifier{
+                
+            case ViewTransConst.showConfigureRadar:
+                if let vc = segue.destinationViewController as? RadarViewController {
+                    self.navigationItem.backBarButtonItem?.title = "返回"
+                    vc.delegate = self
+                    vc.criteiraId = self.zuzuCriteria.criteriaId
+                    vc.radarSearchCriteria = self.zuzuCriteria.criteria!
+                }
+            default: break
+                
+            }
         }
     }
     
@@ -254,9 +277,10 @@ class RadarDisplayViewController: UIViewController {
             RadarService.sharedInstance.stopLoading(self)
             RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
             
-            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
-                    if error != nil{
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) {
+                (result, error) -> Void in
+                
+                if error != nil{
                         
                         RadarService.sharedInstance.stopLoading(self)
                         
@@ -294,12 +318,13 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    // MARK: - Update Criteria UI
+    // MARK: - Criteria View Update Function
     
     private func updateCriteriaTextLabel(){
         
         if self.zuzuCriteria.criteria == nil{
-            let text = "您的租屋雷達服務已在作用中，請立即將租屋雷達條件設定並啟用"
+            let text = "您的租屋雷達服務已在作用中\n請立即將租屋雷達條件設定並啟用"
+            self.regionLabel?.numberOfLines = 0
             self.regionLabel?.text = text
             self.houseInfoLabel?.text = ""
             self.priceSizeLabel?.text = ""
@@ -308,8 +333,8 @@ class RadarDisplayViewController: UIViewController {
             return
         }
         
-        
         let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
+        self.regionLabel?.numberOfLines = 1
         self.regionLabel?.text = displayItem.title
         self.houseInfoLabel?.text = displayItem.purpostString
         self.priceSizeLabel?.text = displayItem.priceSizeString
@@ -321,38 +346,24 @@ class RadarDisplayViewController: UIViewController {
         self.modifyButtoon?.setTitle("更改條件", forState: .Normal)
     }
     
-    // MARK: - Zuzu Service status chart functions
-    
-    /// Utils for controlling the service pie chart
-    private func setChart(dataPoints: [String], values: [Double], info: String) {
-        
-        var dataEntries: [ChartDataEntry] = []
-        
-        for i in 0..<dataPoints.count {
-            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
-            dataEntries.append(dataEntry)
-        }
-        
-        let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "服務狀態")
-        let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
-        pieChartDataSet.drawValuesEnabled = false
-        statusPieChart.data = pieChartData
-        statusPieChart.centerText = info
-        
-        let usedDays = UIColor.colorWithRGB(0xFFCC66)
-        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)
-        
-        pieChartDataSet.colors = [usedDays, remainingDays]
+    private func disableModifyButton(){
+        let disabledColor = UIColor.colorWithRGB(0xE0E0E0, alpha: 0.8)
+        modifyButtoon.enabled = false
+        modifyButtoon.setTitleColor(disabledColor, forState: .Normal)
+        modifyButtoon.tintColor = disabledColor
+        modifyButtoon.layer.borderColor = disabledColor.CGColor
     }
     
-    private func clearChart(noDataText: String) {
-        
-        statusPieChart?.noDataText = noDataText
-        statusPieChart?.data = nil
-        
+    private func enableModifyButton(){
+        let enbledColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        modifyButtoon.enabled = true
+        modifyButtoon.layer.borderColor = enbledColor.CGColor
+        modifyButtoon.tintColor = enbledColor
+        modifyButtoon.setTitleColor(enbledColor, forState: .Normal)
+        modifyButtoon.setTitleColor(enbledColor, forState: .Selected)
     }
     
-    // MARK: - Update Service UI
+    // MARK: - Service View Update Function
     
     private func updateServiceUI(){
         
@@ -463,28 +474,35 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
+    // MARK: - Zuzu Service status chart functions
     
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier{
-            
-            Log.debug("prepareForSegue: \(identifier)")
-            
-            switch identifier{
-                
-            case ViewTransConst.showConfigureRadar:
-                if let vc = segue.destinationViewController as? RadarViewController {
-                    self.navigationItem.backBarButtonItem?.title = "返回"
-                    vc.delegate = self
-                    vc.displayRadarViewController = self
-                    vc.isUpdateMode = true
-                    vc.radarSearchCriteria = self.zuzuCriteria.criteria!
-                }
-            default: break
-                
-            }
+    /// Utils for controlling the service pie chart
+    private func setChart(dataPoints: [String], values: [Double], info: String) {
+        
+        var dataEntries: [ChartDataEntry] = []
+        
+        for i in 0..<dataPoints.count {
+            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
+            dataEntries.append(dataEntry)
         }
+        
+        let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "服務狀態")
+        let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
+        pieChartDataSet.drawValuesEnabled = false
+        statusPieChart.data = pieChartData
+        statusPieChart.centerText = info
+        
+        let usedDays = UIColor.colorWithRGB(0xFFCC66)
+        let remainingDays = UIColor.colorWithRGB(0x1CD4C6)
+        
+        pieChartDataSet.colors = [usedDays, remainingDays]
+    }
+    
+    private func clearChart(noDataText: String) {
+        
+        statusPieChart?.noDataText = noDataText
+        statusPieChart?.data = nil
+        
     }
     
     // MARK: - Configure UI
@@ -492,23 +510,6 @@ class RadarDisplayViewController: UIViewController {
     private func configureButton() {
         modifyButtoon.layer.borderWidth = 1
         self.enableModifyButton()
-    }
-    
-    private func disableModifyButton(){
-        let disabledColor = UIColor.colorWithRGB(0xE0E0E0, alpha: 0.8)
-        modifyButtoon.enabled = false
-        modifyButtoon.setTitleColor(disabledColor, forState: .Normal)
-        modifyButtoon.tintColor = disabledColor
-        modifyButtoon.layer.borderColor = disabledColor.CGColor
-    }
-    
-    private func enableModifyButton(){
-        let enbledColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        modifyButtoon.enabled = true
-        modifyButtoon.layer.borderColor = enbledColor.CGColor
-        modifyButtoon.tintColor = enbledColor
-        modifyButtoon.setTitleColor(enbledColor, forState: .Normal)
-        modifyButtoon.setTitleColor(enbledColor, forState: .Selected)
     }
     
     private func configureBannerText(){
@@ -562,6 +563,7 @@ class RadarDisplayViewController: UIViewController {
 }
 
 // MARK: - RadarViewControllerDelegate
+
 extension RadarDisplayViewController : RadarViewControllerDelegate {
     func onCriteriaSettingDone(searchCriteria:SearchCriteria){
         self.zuzuCriteria.criteria = searchCriteria
@@ -579,7 +581,7 @@ extension RadarDisplayViewController{
     
     func purchaseSuccessHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
-        self.serviceButton.hidden = true
+        self.serviceButton.hidden = false
         RadarService.sharedInstance.startLoading(self)
         self.enableCriteriaForPurchase()
         Log.exit()
@@ -587,6 +589,8 @@ extension RadarDisplayViewController{
     
     func unfinishedTransactionHandler(purchaseView: RadarPurchaseViewController) -> Void{
         Log.enter()
+        
+        self.serviceButton.hidden = false
         
         RadarService.sharedInstance.stopLoading(self)
         
@@ -606,7 +610,7 @@ extension RadarDisplayViewController{
         
         let isEnabled = self.zuzuCriteria.enabled ?? false
         if isEnabled == true{
-            self.reload()
+            self.reloadRadarUI()
             return
         }
         
@@ -620,18 +624,18 @@ extension RadarDisplayViewController{
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
-                            self.reload()
+                            self.reloadRadarUI()
                         }
                         return
                     }
                     
                     self.criteriaEnableSwitch.on = true
-                    self.reload()
+                    self.reloadRadarUI()
             }
         }
     }
     
-    func reload(){
+    func reloadRadarUI(){
         if let navigation = self.navigationController as? RadarNavigationController{
             navigation.showRadar()
         }
