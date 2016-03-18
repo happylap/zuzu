@@ -177,6 +177,8 @@ struct GAConst {
         
         struct Blocking {
             
+            static let NetworkError = "NetworkError" // Label = API name + error message
+            
             static let NoSearchResult = "noSearchResult"
             
             static let LoginError = "loginError"
