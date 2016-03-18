@@ -359,7 +359,7 @@ extension RadarViewController{
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新租屋雷達條件，請您稍後再試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () ->Void in
-                            self.gotoDisplayRadar(zuzuCriteria)
+                            self.reloadRadarUI()
                         }
                     }
                     
@@ -380,7 +380,7 @@ extension RadarViewController{
         if isEnabled == true{
             RadarService.sharedInstance.stopLoading(self)
             zuzuCriteria.enabled = isEnabled
-            self.gotoDisplayRadar(zuzuCriteria)
+            self.reloadRadarUI()
             return
         }
         
@@ -397,7 +397,7 @@ extension RadarViewController{
                             SCLAlertView().showInfo("設定成功", subTitle: "很抱歉，租屋雷達條件儲存成功，但是尚無法成功啟用，請您稍後嘗試手動啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                                 () ->Void in
                                 zuzuCriteria.enabled = isEnabled
-                                self.gotoDisplayRadar(zuzuCriteria)
+                                self.reloadRadarUI()
                             }
                         }else{
                             Log.info("enable criteria success")
@@ -407,7 +407,7 @@ extension RadarViewController{
                             SCLAlertView().showInfo("設定成功", subTitle: "設定雷達成功", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                                 () ->Void in
                                 zuzuCriteria.enabled = isEnabled
-                                self.gotoDisplayRadar(zuzuCriteria)
+                                self.reloadRadarUI()
                             }
                         }
                     }
@@ -438,21 +438,12 @@ extension RadarViewController{
                     
                     RadarService.sharedInstance.stopLoading(self)
                     
-                    self.gotoDisplayRadar(nil)
+                    self.reloadRadarUI()
                 }
             }
         }
         Log.exit()
     }
-    
-    private func gotoDisplayRadar(zuzuCriteria: ZuzuCriteria?){
-        if zuzuCriteria != nil{
-            RadarService.sharedInstance.startLoading(self)
-            //self.navigationView?.showDisplayRadarView(zuzuCriteria!)
-            //self.navigationView?.showRadar()
-        }
-    }
-    
 }
 
 
