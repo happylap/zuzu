@@ -42,6 +42,7 @@ class CommonUtils: NSObject{
         return CommonUtils.getCustomStringFromDate(date, format: CommonUtils.shortDateFormat, timezone: NSTimeZone.localTimeZone())
     }
     
+    /// Convert between date and string with custom format
     static func getCustomDateFromString(value:String, format: String = CommonUtils.UTCFormat, timezone: NSTimeZone = UTCTimeZone) -> NSDate? {
         let df = NSDateFormatter()
         df.dateFormat = format
@@ -50,13 +51,31 @@ class CommonUtils: NSObject{
         return df.dateFromString(value)
     }
     
-    static func getCustomStringFromDate(date:NSDate, format: String = CommonUtils.UTCFormat, timezone: NSTimeZone = NSTimeZone.localTimeZone()) -> String? {
+    static func getCustomStringFromDate(date:NSDate, format: String = CommonUtils.UTCFormat, timezone: NSTimeZone = UTCTimeZone) -> String? {
         let df = NSDateFormatter()
         df.dateFormat = format
         df.timeZone = timezone
         df.locale = NSLocale.currentLocale()
         return df.stringFromDate(date)
-
+        
+    }
+    
+    /// Convert between local date and string with custom format
+    static func getLocalCustomDateFromString(value:String, format: String) -> NSDate? {
+        let df = NSDateFormatter()
+        df.dateFormat = format
+        df.timeZone = NSTimeZone.localTimeZone()
+        df.locale = NSLocale.currentLocale()
+        return df.dateFromString(value)
+    }
+    
+    static func getLocalCustomStringFromDate(date:NSDate, format: String) -> String? {
+        let df = NSDateFormatter()
+        df.dateFormat = format
+        df.timeZone = NSTimeZone.localTimeZone()
+        df.locale = NSLocale.currentLocale()
+        return df.stringFromDate(date)
+        
     }
     
     static func encodeToBase64(value: String) -> String? {
