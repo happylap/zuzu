@@ -39,6 +39,8 @@ class RadarService : NSObject {
             if let purchaseProduct = product{
                 let purchase = ZuzuPurchase(transactionId: transId, userId: userId, productId: purchaseProduct.productIdentifier, productPrice: purchaseProduct.price, purchaseReceipt: purchaseReceipt)
                 
+                purchase.productTitle = purchaseProduct.localizedTitle
+                
                 handler(result: purchase, error: nil)
                 return
             }
