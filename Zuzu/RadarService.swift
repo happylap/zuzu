@@ -185,7 +185,7 @@ class RadarService : NSObject {
     
     // MARK: - Loading
     
-    func startLoading(theViewController: UIViewController){
+    func startLoading(theViewController: UIViewController, animated: Bool = true){
         if self.isLoading == true{
             return
         }
@@ -200,7 +200,7 @@ class RadarService : NSObject {
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.setMinShowTime(1)
-        LoadingSpinner.shared.startOnView(theViewController.view)
+        LoadingSpinner.shared.startOnView(theViewController.view, animated: animated)
     }
     
     func startLoadingText(theViewController: UIViewController, text: String, animated: Bool = true, minShowTime: Float? = nil){
@@ -235,7 +235,7 @@ class RadarService : NSObject {
         LoadingSpinner.shared.startOnView(theViewController.view, animated: animated)
     }
     
-    func stopLoading(theViewController: UIViewController, animated: Bool = true){
+    func stopLoading(animated: Bool = true){
         Log.enter()
         self.isLoading = false
         self.isLoadingText = false

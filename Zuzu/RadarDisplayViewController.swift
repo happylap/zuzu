@@ -290,7 +290,7 @@ class RadarDisplayViewController: UIViewController {
                 text = "停用中"
             }
             
-            RadarService.sharedInstance.stopLoading(self)
+            RadarService.sharedInstance.stopLoading()
             RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) {
@@ -298,7 +298,7 @@ class RadarDisplayViewController: UIViewController {
                 
                 if error != nil{
                         
-                        RadarService.sharedInstance.stopLoading(self)
+                        RadarService.sharedInstance.stopLoading()
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             self.criteriaEnableSwitch.on = !isEnabled
@@ -307,7 +307,7 @@ class RadarDisplayViewController: UIViewController {
                         return
                     }
                     
-                    RadarService.sharedInstance.stopLoading(self)
+                    RadarService.sharedInstance.stopLoading()
                     self.zuzuCriteria.enabled = isEnabled
             }
         }
@@ -608,7 +608,7 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
         
         self.serviceButton.hidden = false
         
-        RadarService.sharedInstance.stopLoading(self)
+        RadarService.sharedInstance.stopLoading()
         
         SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
             () -> Void in
@@ -739,7 +739,7 @@ extension RadarDisplayViewController{
         Log.enter()
         self.unfinishedTranscations = nil
         self.porcessTransactionNum = -1
-        RadarService.sharedInstance.stopLoading(self)
+        RadarService.sharedInstance.stopLoading()
         Log.exit()
     }
     
