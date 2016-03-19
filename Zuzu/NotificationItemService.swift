@@ -8,8 +8,10 @@
 
 import Foundation
 
-class NotificationItemService: NSObject
-{
+private let Log = Logger.defaultLogger
+
+class NotificationItemService: NSObject {
+    
     let dao = NotificationHouseItemDao.sharedInstance
     
     var entityName: String{
@@ -23,7 +25,7 @@ class NotificationItemService: NSObject
         
         return Singleton.instance
     }
-
+    
     func add(item:NotifyItem, isCommit: Bool){
         if let newItem = self.dao.add(item.id){
             newItem.img = []
@@ -51,7 +53,7 @@ class NotificationItemService: NSObject
         self.dao.add(jsonObj, isCommit: true)
     }
     
-
+    
     func addAll(items: [AnyObject]){
         self.dao.addAll(items)
     }
@@ -63,7 +65,7 @@ class NotificationItemService: NSObject
     func updateItem(item: NotificationHouseItem, dataToUpdate: [String: AnyObject]){
         self.dao.updateByID(item.id, dataToUpdate: dataToUpdate)
     }
-
+    
     func getItem(id:String) -> NotificationHouseItem?{
         return self.dao.get(id) as? NotificationHouseItem
     }
@@ -75,11 +77,10 @@ class NotificationItemService: NSObject
     func removeExtra(isCommit: Bool){
         if let notifyItems = self.getAll(){
             if notifyItems.count > 200{
-                for (index, item) in notifyItems.reverse().enumerate() {
+                for (index, item) in notifyItems.enumerate() {
                     if index >= 200{
+                        Log.debug("Delete Item: \(item)")
                         self.dao.deleteByID(item.id)
-                    }else{
-                        //break
                     }
                 }
                 
@@ -94,6 +95,6 @@ class NotificationItemService: NSObject
     func isExist(id: String) -> Bool{
         return self.dao.isExist(id)
     }
-
+    
     
 }

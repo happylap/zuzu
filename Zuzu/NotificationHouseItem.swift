@@ -10,7 +10,11 @@ import Foundation
 import CoreData
 
 @objc(NotificationHouseItem)
-class NotificationHouseItem: AbstractHouseItem
-{
+class NotificationHouseItem: AbstractHouseItem {
 
+    override var description: String {
+        let string = "NotificationHouseItem: id = \(id)\n title = \(title)\n post_time = \(postTime)"
+        return string
+    }
+    
 }
