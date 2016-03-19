@@ -19,11 +19,13 @@ class RadarNavigationController: UINavigationController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.showTransitionRadarView() // blank page
     }
     
     override func viewWillAppear(animated: Bool) {
         Log.enter()
+        
         self.showRadar(){
             self.runOnMainThread(){
                 super.viewWillAppear(animated) // call show radar whenever appear to decide will view should be presented
@@ -54,7 +56,7 @@ class RadarNavigationController: UINavigationController {
             
             RadarService.sharedInstance.startLoading(self)
             
-            UserServiceStatusManager.shared.resetServiceStatusCache()
+            //UserServiceStatusManager.shared.resetServiceStatusCache()
             
             UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
                 
