@@ -11,6 +11,7 @@ import SCLAlertView
 private let Log = Logger.defaultLogger
 
 protocol RadarViewControllerDelegate: class {
+    
     func onCriteriaSettingDone(searchCriteria:SearchCriteria)
 }
 
@@ -31,6 +32,7 @@ class RadarViewController: UIViewController {
     weak var configTable: RadarConfigureTableViewController?
     
     // update criteria from radar status UI
+    var isUpdateMode = false
     var criteiraId: String?
     var delegate: RadarViewControllerDelegate?
     
@@ -77,7 +79,7 @@ class RadarViewController: UIViewController {
         self.configureButton()
         
         
-        if(self.criteiraId != nil){ /// [Criteria Update Mode]
+        if (isUpdateMode == true){ /// [Criteria Update Mode]
             
             self.activateButton.setTitle("設定完成", forState: .Normal)
             
@@ -111,7 +113,7 @@ class RadarViewController: UIViewController {
         Log.debug("viewDidAppear")
        
         
-        if self.criteiraId != nil{
+        if isUpdateMode == true{
             return
         }
         
@@ -173,34 +175,68 @@ class RadarViewController: UIViewController {
         
         // has criteriaId and user id --> update criteria
         
-        if let criteiraId = self.criteiraId{
+        if isUpdateMode == true{
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-                RadarService.sharedInstance.stopLoading(self)
-                RadarService.sharedInstance.startLoadingText(self, text:"更新中...")
-                ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: criteiraId, criteria: self.radarSearchCriteria) {
+                
+                if let criteiraId = self.criteiraId{
+                    
+                    RadarService.sharedInstance.startLoadingText(self, text:"更新中...")
+                    
+                    ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: criteiraId, criteria: self.radarSearchCriteria) {
+                        (result, error) -> Void in
+                        if error != nil{
+                            
+                            RadarService.sharedInstance.stopLoading(self)
+                            
+                            Log.error("Cannot update criteria by user id:\(userId)")
+                            
+                            SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            
+                            return
+                        }
+                        
+                        Log.info("update criteria success")
+                        
+                        self.delegate?.onCriteriaSettingDone(self.radarSearchCriteria)
+                        
+                        RadarService.sharedInstance.stopLoading(self)
+                        
+                        self.navigationController?.popViewControllerAnimated(true)
+                    }
+                    
+                    return
+                }
+                
+                RadarService.sharedInstance.startLoadingText(self, text:"設定中...")
+                
+                ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.radarSearchCriteria){
                     (result, error) -> Void in
+                    
                     if error != nil{
+                        
+                        Log.info("create criteria fails")
                         
                         RadarService.sharedInstance.stopLoading(self)
                         
                         Log.error("Cannot update criteria by user id:\(userId)")
                         
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        
                         return
                     }
                     
-                    Log.info("update criteria success")
+                    Log.info("create criteria success")
                     
-                    self.delegate?.onCriteriaSettingDone(self.radarSearchCriteria)
-                    
-                    RadarService.sharedInstance.stopLoading(self)
-                    
-                    self.navigationController?.popViewControllerAnimated(true)
+                    self.reloadRadarUI(nil){
+                        self.navigationController?.popViewControllerAnimated(true)
+                    }
                 }
                 
             }
+
             
             return
+            
         }else{
             self.showPurchase()
         }
@@ -273,7 +309,7 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
         self.radarSearchCriteria = searchCriteria
         
         /// Cache criteria here only for [New Critera Creation Mode]
-        if self.criteiraId == nil {
+        if isUpdateMode == false {
             ///Save search criteria when criteria is updated by the user
             criteriaDataStore.saveSearchCriteria(radarSearchCriteria)
             

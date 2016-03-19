@@ -64,8 +64,8 @@ class RadarNavigationController: UINavigationController {
                 
                 
                 if let zuzuService = result, _ = zuzuService.status, _ = zuzuService.expireTime{
-                    
-                    if self.zuzuCriteria != nil{
+ 
+                    if let criteria = self.zuzuCriteria, _ = criteria.criteriaId {
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!, onCompleteHandler:onCompleteHandler)
                         RadarService.sharedInstance.stopLoading(self)
                         return
