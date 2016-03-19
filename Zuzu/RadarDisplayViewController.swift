@@ -254,13 +254,14 @@ class RadarDisplayViewController: UIViewController {
     
     // MARK: - Reload to RadarNavigationController
     
-    func reloadRadarUI(criteria: ZuzuCriteria? ,onCompleteHandler: (() -> Void)? = nil){
+    func reloadRadarUI(criteria: ZuzuCriteria?){
         if let navigation = self.navigationController as? RadarNavigationController{
             // set configured criteria to navigation controller
             navigation.zuzuCriteria = criteria
             
             navigation.showRadar(){
-                onCompleteHandler?()
+                self.updateCriteriaTextLabel()
+                self.updateServiceUI()
             }
         }
     }
@@ -406,6 +407,7 @@ class RadarDisplayViewController: UIViewController {
                     }
                 }
                 self.serviceExpireLabel?.text = "雷達服務到期日: \(expireDateStr)"
+                self.serviceButton?.hidden = true
                 
         } else {
             /// Service is invalid or status info not available
@@ -596,18 +598,22 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
     
     func onPurchaseSuccess() -> Void{
         Log.enter()
+        
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
-        self.serviceButton.hidden = false
+        
+        self.tabBarController?.tabBarHidden = false
         RadarService.sharedInstance.startLoading(self)
+        
         self.enableCriteriaForPurchase()
+        
         Log.exit()
     }
     
     func onFindUnfinishedTransaction() -> Void{
         Log.enter()
         
-        self.serviceButton.hidden = false
-        
+        self.tabBarController?.tabBarHidden = false
+                
         RadarService.sharedInstance.stopLoading()
         
         SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
