@@ -287,6 +287,10 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
 extension RadarViewController: RadarPurchaseDelegate{
     func onPurchaseCancel() -> Void{
         self.tabBarController?.tabBarHidden = false
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            // If user is logged in and he has purchased service before -> Go to radar status page
+            self.reloadRadarUI()
+        }
     }
     
     func onPurchaseSuccess() -> Void{
@@ -319,15 +323,16 @@ extension RadarViewController: RadarPurchaseDelegate{
     func setUpCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
+            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
+                (result, error) -> Void in
                 
                 if error != nil{
-                    self.runOnMainThread(){
+                    RadarService.sharedInstance.stopLoading(self)
+                    
+                    Log.error("Cannot get criteria by user id:\(userId)")
+                    SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                         
-                        RadarService.sharedInstance.stopLoading(self)
-                        
-                        Log.error("Cannot get criteria by user id:\(userId)")
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        self.reloadRadarUI()
                     }
                     return
                 }
@@ -346,10 +351,6 @@ extension RadarViewController: RadarPurchaseDelegate{
     }
     
     func onLoggedInForPurchase() {
-        if AmazonClientManager.sharedInstance.isLoggedIn(){
-            // If user is logged in and he has purchased service before -> Go to radar status page
-            self.reloadRadarUI()
-        }
     }
 }
 

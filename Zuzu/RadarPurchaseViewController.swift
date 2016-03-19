@@ -211,6 +211,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
             } else {
                 
+                // create device here
+                if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
+                    AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
+                }
+                
                 ///You have an unfinished transaction for the product or the product is not valid
                 Log.info("Find unfinished transaction")
                 
@@ -370,7 +375,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
         
-        
+        // create device here
         if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
             AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
         }
@@ -388,7 +393,9 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
             
             ZuzuStore.sharedInstance.finishTransaction(transaction)
             
-            self.purchaseDelegate?.onPurchaseSuccess()
+            self.dismissViewControllerAnimated(true){
+                self.purchaseDelegate?.onPurchaseSuccess()
+            }
         }
     }
     
