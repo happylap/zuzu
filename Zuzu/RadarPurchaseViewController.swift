@@ -202,9 +202,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         } else{
             
             //AppStore will pop up confirmation dialog
-            // Need to set minimum show time, otherwise, the loading will disappear sometimes
-            RadarService.sharedInstance.startLoadingText(self, text: "交易中", minShowTime:5)
-            
+            RadarService.sharedInstance.startLoadingText(self, text: "交易中")
+
             if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
                 
                 ///Successfully sent out the payment request to Zuzu Backend. Wait for handler callback
@@ -288,10 +287,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     } else {
                         assert(false, "Access products array out of bound \(self.products.count)")
                     }
-                    
                 })
-                
-                
+
                 return nil
             }
         }else{
@@ -395,9 +392,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                             }
                             return
                         }
-                        
-                        // reset the minimum show time as 0 before stop the loading text: "交易中"
-                        RadarService.sharedInstance.startLoadingText(self, text: "交易中", minShowTime:0)
+
                         RadarService.sharedInstance.stopLoading(self)
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您建立雷達服務，\n請您稍後重試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
@@ -406,9 +401,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                     
                     return
                 }
-                
-                // reset the minimum show time as 0 before stop the loading text: "交易中"
-                RadarService.sharedInstance.startLoadingText(self, text: "交易中", minShowTime:0)
+
                 RadarService.sharedInstance.stopLoading(self)
                 Log.error("create purchase error")
  
@@ -416,6 +409,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                 return
 
             }
+            
+            RadarService.sharedInstance.stopLoading(self)
+            
+            Log.debug("finish transation")
             
             ZuzuStore.sharedInstance.finishTransaction(transaction)
             
@@ -427,9 +424,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
-        
-        // reset the minimum show time as 0 before stop the loading text: "交易中"
-        RadarService.sharedInstance.startLoadingText(self, text: "交易中", minShowTime:0)
+
         RadarService.sharedInstance.stopLoading(self)
         
         SCLAlertView().showInfo("交易失敗", subTitle: "很抱歉，您的交易並未成功，請您稍後重試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
