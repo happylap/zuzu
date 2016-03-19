@@ -368,7 +368,7 @@ extension RadarViewController{
             
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.radarSearchCriteria) { (result, error) -> Void in
                 
-                if error == nil{
+                if error != nil{
                     Log.error("Cannot update criteria by user id:\(userId)")
                     
                     RadarService.sharedInstance.stopLoading(self)
