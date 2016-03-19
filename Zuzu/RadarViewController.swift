@@ -222,9 +222,11 @@ class RadarViewController: UIViewController {
     
     // MARK: - Reload to RadarNavigationController
     
-    func reloadRadarUI(){
+    func reloadRadarUI(onCompleteHandler: (() -> Void)? = nil){
         if let navigation = self.navigationController as? RadarNavigationController{
-            navigation.showRadar()
+            navigation.showRadar(){
+                onCompleteHandler?()
+            }
         }
     }
     
@@ -296,6 +298,7 @@ extension RadarViewController: RadarPurchaseDelegate{
     func onPurchaseSuccess() -> Void{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
+        RadarService.sharedInstance.stopLoading(self)
         RadarService.sharedInstance.startLoading(self)
         self.setUpCriteria()
         Log.exit()
@@ -327,13 +330,11 @@ extension RadarViewController: RadarPurchaseDelegate{
                 (result, error) -> Void in
                 
                 if error != nil{
-                    RadarService.sharedInstance.stopLoading(self)
-                    
                     Log.error("Cannot get criteria by user id:\(userId)")
-                    SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                        
-                        self.reloadRadarUI()
+                    self.reloadRadarUI(){
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
+                
                     return
                 }
                 
