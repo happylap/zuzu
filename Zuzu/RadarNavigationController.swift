@@ -42,6 +42,7 @@ class RadarNavigationController: UINavigationController {
         
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView(onCompleteHandler)
+            RadarService.sharedInstance.stopLoading(self)
             return
         }
         
@@ -104,6 +105,7 @@ class RadarNavigationController: UINavigationController {
             }
             
         }else{
+            RadarService.sharedInstance.stopLoading(self)
             assert(false, "user id should not be nil")
         }
         
