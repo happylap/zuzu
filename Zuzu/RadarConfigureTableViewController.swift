@@ -631,21 +631,17 @@ class RadarConfigureTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Log.enter()
-        
-        //Restore hidden tab bar before apeearing
-        self.tabBarController?.tabBarHidden = false
-        
+        Log.debug("viewWillAppear")
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        Log.enter()
+        Log.debug("viewDidAppear")
     }
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        Log.enter()
+        Log.debug("viewDidDisappear")
     }
 }
 
