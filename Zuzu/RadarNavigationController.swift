@@ -123,7 +123,7 @@ class RadarNavigationController: UINavigationController {
         
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarViewController") as? RadarViewController {
-            self.setViewControllers([vc], animated: false)
+            self.setViewControllers([vc], animated: true)
             onCompleteHandler?()
         }
         
@@ -147,7 +147,7 @@ class RadarNavigationController: UINavigationController {
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDisplayViewController") as? RadarDisplayViewController {
             vc.zuzuCriteria = zuzuCriteria
             vc.zuzuService = zuzuService
-            self.setViewControllers([vc], animated: false)
+            self.setViewControllers([vc], animated: true)
             onCompleteHandler?()
         }
         Log.exit()
@@ -161,7 +161,7 @@ class RadarNavigationController: UINavigationController {
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarRetryViewController") as? RadarRetryViewController {
             vc.navigationView = self
             vc.isBlank = isBlank
-            self.setViewControllers([vc], animated: false)
+            self.setViewControllers([vc], animated: true)
         }
         
         onCompleteHandler?()
