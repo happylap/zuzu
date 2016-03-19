@@ -326,6 +326,14 @@ extension RadarViewController: RadarPurchaseDelegate{
         Log.exit()
     }
     
+    func onLoggedInForPurchase() {
+    }
+}
+
+// MARK: Criteria setting function for purchase
+
+extension RadarViewController{
+    
     func setUpCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
@@ -339,7 +347,7 @@ extension RadarViewController: RadarPurchaseDelegate{
                         
                         self.reloadRadarUI(nil)
                     }
-
+                    
                     return
                 }
                 
@@ -356,13 +364,6 @@ extension RadarViewController: RadarPurchaseDelegate{
         Log.exit()
     }
     
-    func onLoggedInForPurchase() {
-    }
-}
-
-// MARK: Criteria setting function for purchase
-
-extension RadarViewController{
     
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
         Log.enter()
