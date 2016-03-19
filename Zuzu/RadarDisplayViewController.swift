@@ -159,12 +159,6 @@ class RadarDisplayViewController: UIViewController {
         self.configureBannerText()
         self.configurePurchaseTableView()
         
-        // update criteria UI according to zuzuCriteria
-        self.updateCriteriaTextLabel()
-        
-        // update service UI according to zuzuService
-        self.updateServiceUI()
-        
         // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
         self.purchaseHistotyTableDataSource.refresh()
@@ -212,6 +206,12 @@ class RadarDisplayViewController: UIViewController {
         Log.debug("viewWillAppear")
         
         self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
+        
+        // update criteria UI according to zuzuCriteria
+        self.updateCriteriaTextLabel()
+        
+        // update service UI according to zuzuService
+        self.updateServiceUI()
         
     }
     
