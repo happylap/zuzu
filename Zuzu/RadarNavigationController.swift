@@ -19,7 +19,7 @@ class RadarNavigationController: UINavigationController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showRetryRadarView(true) // Use retry view as blank page
+        self.showTransitionRadarView() // blank page
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -53,7 +53,7 @@ class RadarNavigationController: UINavigationController {
             UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
                 
                 (result, success) -> Void in
-
+                
                 if success == false{
                     Log.error("Cannot get Zuzu service by user id:\(userId)")
                     self.showRetryRadarView(false, onCompleteHandler: onCompleteHandler)
@@ -64,7 +64,7 @@ class RadarNavigationController: UINavigationController {
                 
                 
                 if let zuzuService = result, _ = zuzuService.status, _ = zuzuService.expireTime{
- 
+                    
                     if self.zuzuCriteria != nil{
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!, onCompleteHandler:onCompleteHandler)
                         RadarService.sharedInstance.stopLoading(self)
@@ -167,6 +167,16 @@ class RadarNavigationController: UINavigationController {
         }
         
         onCompleteHandler?()
+        
+        Log.exit()
+    }
+    
+    private func showTransitionRadarView(){
+        Log.enter()
+
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("RadarTransitionViewController")
+        self.setViewControllers([vc], animated: true)
         
         Log.exit()
     }
