@@ -613,6 +613,15 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
         Log.exit()
     }
     
+    func onLoggedInForPurchase() {
+        assert(false, "onLoggedInForPurchase is impossible to be called-back in status UI purchase")
+    }
+}
+
+// MARK: Criteria seeting function for purchase
+
+extension RadarDisplayViewController{
+
     func enableCriteriaForPurchase(){
         
         let isEnabled = self.zuzuCriteria.enabled ?? false

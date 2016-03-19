@@ -345,6 +345,18 @@ extension RadarViewController: RadarPurchaseDelegate{
         Log.exit()
     }
     
+    func onLoggedInForPurchase() {
+        if AmazonClientManager.sharedInstance.isLoggedIn(){
+            // If user is logged in and he has purchased service before -> Go to radar status page
+            self.reloadRadarUI()
+        }
+    }
+}
+
+// MARK: Criteria seeting function for purchase
+
+extension RadarViewController{
+    
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{

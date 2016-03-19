@@ -20,6 +20,8 @@ protocol RadarPurchaseDelegate: class {
     func onPurchaseSuccess() -> Void
     
     func onFindUnfinishedTransaction() -> Void
+    
+    func onLoggedInForPurchase() -> Void
 }
 
 class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -271,6 +273,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 }
                 
                 self.runOnMainThread({ () -> Void in
+                    
+                    self.purchaseDelegate?.onLoggedInForPurchase()
                     
                     if(button.tag < self.products.count) {
                         let product = self.products[button.tag]
