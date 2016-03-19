@@ -194,6 +194,8 @@ class RadarService : NSObject {
             return
         }
         
+        Log.debug("startLoading")
+        
         self.isLoading = true
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
@@ -218,6 +220,8 @@ class RadarService : NSObject {
             return
         }
         
+        Log.debug("startLoadingText")
+        
         self.isLoadingText = true
         
         LoadingSpinner.shared.setImmediateAppear(true)
@@ -232,9 +236,11 @@ class RadarService : NSObject {
     }
     
     func stopLoading(theViewController: UIViewController, animated: Bool = true){
+        Log.enter()
         self.isLoading = false
         self.isLoadingText = false
         LoadingSpinner.shared.stop(animated)
+        Log.exit()
     }
     
 
