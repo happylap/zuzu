@@ -181,8 +181,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                             UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                             
                                             self.dismissViewControllerAnimated(true){
+                                                RadarService.sharedInstance.stopLoading(self)
+                                                
                                                 self.purchaseDelegate?.onPurchaseSuccess()
                                             }
+                                            
                                             return
                                         }
                                         
