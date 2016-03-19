@@ -191,6 +191,7 @@ class RadarViewController: UIViewController {
                             Log.error("Cannot update criteria by user id:\(userId)")
                             
                             SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                            
                             return
                         }
                         
@@ -219,18 +220,16 @@ class RadarViewController: UIViewController {
                         
                         Log.error("Cannot update criteria by user id:\(userId)")
                         
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                            
-                            // reload to get criteria
-                            self.reloadRadarUI(nil)
-                        }
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        
                         return
                     }
                     
                     Log.info("create criteria success")
                     
-                    RadarService.sharedInstance.stopLoading(self)
-
+                    self.reloadRadarUI(nil){
+                        self.navigationController?.popViewControllerAnimated(true)
+                    }
                 }
                 
             }
