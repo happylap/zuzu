@@ -161,6 +161,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
                             purchase.productTitle = product.localizedTitle
                             
+                            
                             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                                 AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
                             }
@@ -174,7 +175,14 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     RadarService.sharedInstance.checkPurchaseExist(transId){
                                         (isExist, checkExistError) -> Void in
                                         if isExist == true{
-                                            self.purchaseDelegate?.onPurchaseSuccess()
+                                            
+                                            /// The free trial is activated successfully
+                                            
+                                            UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                                            
+                                            self.dismissViewControllerAnimated(true){
+                                                self.purchaseDelegate?.onPurchaseSuccess()
+                                            }
                                             return
                                         }
                                         
@@ -186,10 +194,17 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     
                                     return
                                 }
-                                
+
                                 /// The free trial is activated successfully
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
-                                self.purchaseDelegate?.onPurchaseSuccess()
+                                
+                                self.dismissViewControllerAnimated(true){
+                                    
+                                    RadarService.sharedInstance.stopLoading(self)
+                                    
+                                    self.purchaseDelegate?.onPurchaseSuccess()
+                                }
+
                             }
                         }
                         
@@ -371,6 +386,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
 extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
+        
         Log.debug("\(transaction.transactionIdentifier)")
         
         // create device here
