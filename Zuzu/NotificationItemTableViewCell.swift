@@ -96,7 +96,7 @@ class NotificationItemTableViewCell: UITableViewCell
                 self.contentView.backgroundColor = UIColor.whiteColor()
             }
             
-            let placeholderImg = UIImage(named: "house_img")
+            let placeholderImg = UIImage(named: "house_no_img_small")
             
             self.houseImage.image = placeholderImg
             if let imgString = item.img?.first,
