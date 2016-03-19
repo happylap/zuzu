@@ -48,7 +48,6 @@ class RadarNavigationController: UINavigationController {
         
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView(onCompleteHandler)
-            RadarService.sharedInstance.stopLoading(self)
             return
         }
         
