@@ -24,8 +24,12 @@ class RadarNavigationController: UINavigationController {
     
     override func viewWillAppear(animated: Bool) {
         Log.enter()
-        self.showRadar() // call show radar whenever appear to decide will view should be presented
-        super.viewWillAppear(animated)
+        self.showRadar(){
+            self.runOnMainThread(){
+                super.viewWillAppear(animated) // call show radar whenever appear to decide will view should be presented
+            }
+        }
+        
         Log.exit()
     }
     
@@ -49,6 +53,8 @@ class RadarNavigationController: UINavigationController {
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
             RadarService.sharedInstance.startLoading(self)
+            
+            UserServiceStatusManager.shared.resetServiceStatusCache()
             
             UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
                 

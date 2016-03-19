@@ -254,12 +254,16 @@ class RadarDisplayViewController: UIViewController {
     
     // MARK: - Reload to RadarNavigationController
     
-    func reloadRadarUI(){
+    func reloadRadarUI(criteria: ZuzuCriteria? ,onCompleteHandler: (() -> Void)? = nil){
         if let navigation = self.navigationController as? RadarNavigationController{
-            navigation.showRadar()
+            // set configured criteria to navigation controller
+            navigation.zuzuCriteria = criteria
+            
+            navigation.showRadar(){
+                onCompleteHandler?()
+            }
         }
     }
-    
     
     // MARK: - Enable / Disable Criteria action
     
@@ -592,6 +596,7 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
     
     func onPurchaseSuccess() -> Void{
         Log.enter()
+        UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         self.serviceButton.hidden = false
         RadarService.sharedInstance.startLoading(self)
         self.enableCriteriaForPurchase()
@@ -658,7 +663,7 @@ extension RadarDisplayViewController{
         
         let isEnabled = self.zuzuCriteria.enabled ?? false
         if isEnabled == true{
-            self.reloadRadarUI()
+            self.reloadRadarUI(nil)
             return
         }
         
@@ -672,13 +677,13 @@ extension RadarDisplayViewController{
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
-                            self.reloadRadarUI()
+                            self.reloadRadarUI(nil)
                         }
                         return
                     }
                     
                     self.criteriaEnableSwitch.on = true
-                    self.reloadRadarUI()
+                    self.reloadRadarUI(nil)
             }
         }
     }
