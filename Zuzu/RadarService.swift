@@ -230,16 +230,9 @@ class RadarService : NSObject {
     }
     
     func stopLoading(theViewController: UIViewController, animated: Bool = true){
-        if self.isLoading == true{
-            self.isLoading = false
-            LoadingSpinner.shared.stop()
-        }
-        
-        if self.isLoadingText == true{
-            self.isLoadingText = false
-            
-            LoadingSpinner.shared.stop(animated)
-        }
+        self.isLoading = false
+        self.isLoadingText = false
+        LoadingSpinner.shared.stop(animated)
     }
     
 
