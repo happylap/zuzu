@@ -185,7 +185,7 @@ class RadarViewController: UIViewController {
                         
                         Log.error("Cannot update criteria by user id:\(userId)")
                         
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件，請您稍後再試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         return
                     }
                     
@@ -314,7 +314,7 @@ extension RadarViewController: RadarPurchaseDelegate{
         
         RadarService.sharedInstance.stopLoading(self)
         
-        SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, duration: 2.0, colorTextButton: 0xFFFFFF).setDismissBlock(){
+        SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
             () -> Void in
             
             let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
@@ -335,7 +335,7 @@ extension RadarViewController: RadarPurchaseDelegate{
                 if error != nil{
                     Log.error("Cannot get criteria by user id:\(userId)")
                     self.reloadRadarUI(nil){
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
                 
                     return
@@ -358,7 +358,7 @@ extension RadarViewController: RadarPurchaseDelegate{
     }
 }
 
-// MARK: Criteria seeting function for purchase
+// MARK: Criteria setting function for purchase
 
 extension RadarViewController{
     
@@ -368,13 +368,13 @@ extension RadarViewController{
             
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.radarSearchCriteria) { (result, error) -> Void in
                 
-                if error != nil{
+                if error == nil{
                     Log.error("Cannot update criteria by user id:\(userId)")
                     
                     RadarService.sharedInstance.stopLoading(self)
                     
                     self.reloadRadarUI(zuzuCriteria){
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新租屋雷達條件，請您稍後再試！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新租屋雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
                     
                     return
@@ -440,7 +440,7 @@ extension RadarViewController{
                     Log.error("Cannot update criteria by user id:\(userId)")
                     
                     self.reloadRadarUI(nil){
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                     }
                     
                     return
