@@ -101,7 +101,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             }
             
             /// Display result no matter whether we get the products from AppStore successfully
-            RadarService.sharedInstance.stopLoading(self)
+            RadarService.sharedInstance.stopLoading()
             self.tableView.reloadData()
         }
     }
@@ -127,7 +127,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, purchaseList, error) -> Void in
                         
                         if let _ = error {
-                            RadarService.sharedInstance.stopLoading(self)
+                            RadarService.sharedInstance.stopLoading()
                             
                             SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                             return
@@ -148,7 +148,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             /// The free trial is activated successfully
                             UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                             
-                            RadarService.sharedInstance.stopLoading(self)
+                            RadarService.sharedInstance.stopLoading()
                             
                             SCLAlertView().showInfo("您已經試用過此服務", subTitle: "若覺得滿意我們的服務，可以考慮購買正式服務，讓您輕鬆找租屋。豬豬快租非常感謝您的支持！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock({ () -> Void in
                                 self.loadProducts()
@@ -181,7 +181,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                             UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                             
                                             self.dismissViewControllerAnimated(true){
-                                                RadarService.sharedInstance.stopLoading(self)
+                                                RadarService.sharedInstance.stopLoading()
                                                 
                                                 self.purchaseDelegate?.onPurchaseSuccess()
                                             }
@@ -189,7 +189,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                             return
                                         }
                                         
-                                        RadarService.sharedInstance.stopLoading(self)
+                                        RadarService.sharedInstance.stopLoading()
                                         
                                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您建立雷達服務，\n請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                                         
@@ -203,7 +203,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 
                                 self.dismissViewControllerAnimated(true){
                                     
-                                    RadarService.sharedInstance.stopLoading(self)
+                                    RadarService.sharedInstance.stopLoading()
                                     
                                     self.purchaseDelegate?.onPurchaseSuccess()
                                 }
@@ -412,7 +412,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                             return
                         }
 
-                        RadarService.sharedInstance.stopLoading(self)
+                        RadarService.sharedInstance.stopLoading()
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您建立雷達服務，\n請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         
@@ -421,7 +421,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                     return
                 }
 
-                RadarService.sharedInstance.stopLoading(self)
+                RadarService.sharedInstance.stopLoading()
                 Log.error("create purchase error")
  
                 SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您建立雷達服務，\n請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
@@ -429,7 +429,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
 
             }
             
-            RadarService.sharedInstance.stopLoading(self)
+            RadarService.sharedInstance.stopLoading()
             
             Log.debug("finish transation")
             
@@ -444,7 +444,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
 
-        RadarService.sharedInstance.stopLoading(self)
+        RadarService.sharedInstance.stopLoading()
         
         SCLAlertView().showInfo("交易失敗", subTitle: "很抱歉，您的交易並未成功，請您稍後重試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         

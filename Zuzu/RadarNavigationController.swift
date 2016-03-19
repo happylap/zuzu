@@ -19,13 +19,19 @@ class RadarNavigationController: UINavigationController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.showTransitionRadarView() // blank page
     }
     
     override func viewWillAppear(animated: Bool) {
         Log.enter()
-        self.showRadar() // call show radar whenever appear to decide will view should be presented
-        super.viewWillAppear(animated)
+        
+        self.showRadar(){
+            self.runOnMainThread(){
+                super.viewWillAppear(animated) // call show radar whenever appear to decide will view should be presented
+            }
+        }
+        
         Log.exit()
     }
     
@@ -42,13 +48,14 @@ class RadarNavigationController: UINavigationController {
         
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView(onCompleteHandler)
-            RadarService.sharedInstance.stopLoading(self)
             return
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
             RadarService.sharedInstance.startLoading(self)
+            
+            //UserServiceStatusManager.shared.resetServiceStatusCache()
             
             UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
                 
@@ -58,7 +65,7 @@ class RadarNavigationController: UINavigationController {
                     Log.error("Cannot get Zuzu service by user id:\(userId)")
                     self.showRetryRadarView(false, onCompleteHandler: onCompleteHandler)
                     //stop loading if it goes to retry page
-                    RadarService.sharedInstance.stopLoading(self)
+                    RadarService.sharedInstance.stopLoading()
                     return
                 }
                 
@@ -67,7 +74,7 @@ class RadarNavigationController: UINavigationController {
  
                     if let criteria = self.zuzuCriteria, _ = criteria.criteriaId {
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!, onCompleteHandler:onCompleteHandler)
-                        RadarService.sharedInstance.stopLoading(self)
+                        RadarService.sharedInstance.stopLoading()
                         return
                     }
                     
@@ -78,7 +85,7 @@ class RadarNavigationController: UINavigationController {
                             Log.error("Cannot get criteria by user id:\(userId)")
                             self.showRetryRadarView(false, onCompleteHandler:onCompleteHandler)
                             //stop loading if it goes to retry page
-                            RadarService.sharedInstance.stopLoading(self)
+                            RadarService.sharedInstance.stopLoading()
                             return
                         }
                         
@@ -93,19 +100,19 @@ class RadarNavigationController: UINavigationController {
                             self.showDisplayRadarView(zuzuService, zuzuCriteria: result!, onCompleteHandler:onCompleteHandler)
                         }
                         
-                        RadarService.sharedInstance.stopLoading(self)
+                        RadarService.sharedInstance.stopLoading()
                     }
                     
                 }else{
                     Log.debug("No purchased service. This user has not purchased any service")
                     self.showConfigureRadarView(onCompleteHandler)
-                    RadarService.sharedInstance.stopLoading(self)
+                    RadarService.sharedInstance.stopLoading()
                     return
                 }
             }
             
         }else{
-            RadarService.sharedInstance.stopLoading(self)
+            RadarService.sharedInstance.stopLoading()
             assert(false, "user id should not be nil")
         }
         
