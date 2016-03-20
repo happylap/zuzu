@@ -407,7 +407,7 @@ class RadarDisplayViewController: UIViewController {
                     }
                 }
                 self.serviceExpireLabel?.text = "雷達服務到期日: \(expireDateStr)"
-                self.serviceButton?.hidden = true
+
                 
         } else {
             /// Service is invalid or status info not available
@@ -484,6 +484,8 @@ class RadarDisplayViewController: UIViewController {
         
         if(remainingDays <= Double(RenewalThresholdDays)) {
             self.serviceButton?.hidden = false
+        }else{
+            self.serviceButton?.hidden = true
         }
         
         self.enableModifyButton()
