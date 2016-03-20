@@ -289,7 +289,7 @@ class RadarDisplayViewController: UIViewController {
     }
     
     func setCriteriaEnabled(isEnabled: Bool){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteriaId = self.zuzuCriteria.criteriaId{
             
             var text = "啟用中"
             if isEnabled == false{
@@ -299,7 +299,7 @@ class RadarDisplayViewController: UIViewController {
             RadarService.sharedInstance.stopLoading()
             RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
             
-            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) {
+            ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: criteriaId, enabled: isEnabled) {
                 (result, error) -> Void in
                 
                 if error != nil{
@@ -688,10 +688,10 @@ extension RadarDisplayViewController{
             return
         }
         
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteiraId = self.zuzuCriteria.criteriaId{
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
+                criteriaId: criteiraId, enabled: isEnabled) { (result, error) -> Void in
                     
                     if error != nil{
                         self.setCriteriaSwitch(!isEnabled)
