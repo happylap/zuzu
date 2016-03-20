@@ -12,6 +12,8 @@ private let Log = Logger.defaultLogger
 
 class NotificationItemService: NSObject {
     
+    private let maxNotificationItems = 200
+    
     let dao = NotificationHouseItemDao.sharedInstance
     
     var entityName: String{
@@ -76,7 +78,7 @@ class NotificationItemService: NSObject {
     
     func removeExtra(isCommit: Bool){
         if let notifyItems = self.getAll(){
-            if notifyItems.count > 200{
+            if notifyItems.count > maxNotificationItems{
                 for (index, item) in notifyItems.enumerate() {
                     if index >= 200{
                         Log.debug("Delete Item: \(item)")
@@ -89,7 +91,17 @@ class NotificationItemService: NSObject {
                 }
             }
         }
+    }
+    
+    func getLatestNotificationItem() -> NotificationHouseItem? {
         
+        if let notifyItems = self.getAll() {
+            
+            return notifyItems.first
+            
+        }
+        
+        return nil
     }
     
     func isExist(id: String) -> Bool{

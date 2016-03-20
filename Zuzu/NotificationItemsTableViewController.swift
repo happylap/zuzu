@@ -12,18 +12,18 @@ import SCLAlertView
 private let Log = Logger.defaultLogger
 
 class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate, HouseDetailViewDelegate {
-
+    
     var isNeedRefresh = false
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
-
+    
     // UILabel for empty collection list
     let emptyLabel = UILabel()
-
+    
     private struct Storyboard{
         static let CellReuseIdentifier = "NotificationItemCell"
     }
-
+    
     struct TableConst {
         static let sectionNum:Int = 1
     }
@@ -46,9 +46,9 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.refreshOnViewLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "willEnterForground", name: UIApplicationWillEnterForegroundNotification, object: nil)
- 
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
-
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItemsOnForeground:", name: "receiveNotifyItemsOnForeground", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didTabBarAgainSelectedNotification:", name: TabBarAgainSelectedNotification, object: nil)
@@ -65,11 +65,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             }
         }
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.enter()
- 
+        
         if self.isNeedRefresh == true{
             self.isNeedRefresh = false
             self.refreshData(true)
@@ -80,7 +80,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         if badgeNumber > 0{
             self.refreshData(true)
         }
-    
+        
         Log.exit()
     }
     
@@ -125,7 +125,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
             
         }
-
+        
     }
     
     func showEmpty(){
@@ -136,11 +136,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
     
     // MARK: - UITableViewDataSource
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return TableConst.sectionNum
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let rowNum = self.resultController.getNumberOfRowInSection(section)
         if rowNum == 0{
@@ -150,13 +150,13 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         }
         return rowNum
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath) as! NotificationItemTableViewCell
         
         // Configure the cell...
         cell.notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem
-
+        
         return cell
     }
     
@@ -190,13 +190,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 Log.debug("refresh data without loading")
             }
             
+            /// Get latest notification item post_time
             var lastUpdateTime: NSDate?
             
-            if let houseItems = NotificationHouseItemDao.sharedInstance.getAll() as? [NotificationHouseItem] {
-                
-                if let newestItem = houseItems.first {
-                    lastUpdateTime = newestItem.postTime
-                }
+            if let houseItem = self.notificationService.getLatestNotificationItem() {
+                lastUpdateTime = houseItem.postTime
             }
             
             Log.debug("getNotificationItemsByUserId: \(userId), \(lastUpdateTime)")
@@ -209,12 +207,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                 }
                 
                 if totalNum > 0 {
+                    
+                    /// Try to remove old items if max number of items is reached
+                    self.notificationService.removeExtra(true)
+                    
+                    /// Insert new notification items
                     if let notifyItems: [NotifyItem] = result {
                         for notifyItem: NotifyItem in notifyItems {
                             self.notificationService.add(notifyItem, isCommit: true)
                         }
                     }
-                    self.notificationService.removeExtra(true)
                 }
                 LoadingSpinner.shared.stop()
             }
@@ -236,7 +238,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             }
         }
     }
-
+    
     // MARK: - handle notification
     
     func handleReceiveNotifyItemsOnForeground(notification:NSNotification) {
@@ -250,7 +252,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.isNeedRefresh = true
         Log.exit()
     }
-
+    
     func willEnterForground(){
         let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
         if badgeNumber > 0 {
@@ -270,7 +272,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             AmazonSNSService.sharedInstance.setReceiveNotification()
         }
     }
-
+    
     
     // MARK: - Pull update
     
@@ -285,23 +287,23 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     // MARK: - swipe-left-to-delete
     
     /*override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if(editingStyle == .Delete) {
-            if let notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
-                self.notificationService.deleteItem(notificationItem)
-            }
-        }
+    if(editingStyle == .Delete) {
+    if let notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
+    self.notificationService.deleteItem(notificationItem)
+    }
+    }
     }*/
-
+    
     // MARK: - select item action
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if let item = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
-//            if item.isRead == false{
-//                item.isRead = true
-//                self.setItemRead(item)
-//            }
-
+            //            if item.isRead == false{
+            //                item.isRead = true
+            //                self.setItemRead(item)
+            //            }
+            
             let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
             if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController{
                 if let houseItem: HouseItem = item.toHouseItem() {
@@ -321,7 +323,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                         action: GAConst.Action.UIActivity.ViewItemType,
                         label: String(houseItem.purposeType))
                 }
-                                
+                
                 self.showViewController(houseDetailVC, sender: self)
             }
         }
@@ -349,7 +351,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             //let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as! NotificationItemTableViewCell
             //cell.notificationItem = self.resultController.objectAtIndexPath(indexPath!) as? NotificationHouseItem
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.None)
-
+            
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
             self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
