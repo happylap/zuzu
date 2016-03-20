@@ -215,7 +215,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 }
             })
             
-            freeTrialAlertView.showNotice("租屋雷達免費兌換", subTitle: subTitle, closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            freeTrialAlertView.showInfo("租屋雷達免費兌換", subTitle: subTitle, closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             
         } else{
             
