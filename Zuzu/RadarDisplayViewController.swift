@@ -162,7 +162,12 @@ class RadarDisplayViewController: UIViewController {
         // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
         self.purchaseHistotyTableDataSource.refresh(nil)
-            
+
+        if self.zuzuCriteria.criteriaId == nil{
+            SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，請立即將租屋雷達條件設定並啟用，以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return
+        }
+        
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
             /// Enable Remote Notifications
@@ -335,11 +340,6 @@ class RadarDisplayViewController: UIViewController {
     }
     
     func showPurchase(){
-        
-        if self.zuzuCriteria.criteriaId == nil{
-            SCLAlertView().showInfo("尚未設定租屋雷達", subTitle: "感謝您的續訂\n請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            return
-        }
         
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
@@ -690,15 +690,21 @@ extension RadarDisplayViewController{
     func enableCriteriaForPurchase(){
         
         let isEnabled = self.zuzuCriteria.enabled ?? false
-        if isEnabled == true{
-            self.setCriteriaSwitch(isEnabled)
-            self.purchaseHistotyTableDataSource.refresh(){
-                self.reloadRadarUI(nil)
-            }
+        
+        if self.zuzuCriteria.criteriaId == nil{
+            SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，請立即將租屋雷達條件設定並啟用，以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             return
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteiraId = self.zuzuCriteria.criteriaId{
+ 
+            if isEnabled == true{
+                self.setCriteriaSwitch(isEnabled)
+                self.purchaseHistotyTableDataSource.refresh(){
+                    self.reloadRadarUI(nil)
+                }
+                return
+            }
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: criteiraId, enabled: isEnabled) { (result, error) -> Void in
