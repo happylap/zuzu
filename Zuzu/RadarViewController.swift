@@ -113,10 +113,10 @@ class RadarViewController: UIViewController {
         Log.debug("viewWillAppear")
         
         Log.debug("presentedViewController: \(self.presentedViewController)")
-        if self.presentedViewController == nil{
-            self.tabBarController?.tabBarHidden = false
-        }else{
+        if let _ = self.presentedViewController as? RadarPurchaseViewController{
             self.tabBarController?.tabBarHidden = true
+        }else{
+            self.tabBarController?.tabBarHidden = false
         }
         
     }
