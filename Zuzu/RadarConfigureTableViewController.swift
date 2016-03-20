@@ -579,6 +579,7 @@ class RadarConfigureTableViewController: UITableViewController {
             
             ftvc.filterDelegate = self
             self.parentViewController?.navigationItem.backBarButtonItem?.title = "完成"
+            self.tabBarController?.tabBarHidden = true
             self.showViewController(ftvc, sender: self)
             
         default: break
