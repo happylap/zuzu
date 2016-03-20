@@ -280,6 +280,7 @@ class RadarDisplayViewController: UIViewController {
             SCLAlertView().showInfo("尚未設定租屋雷達", subTitle: "啟用前請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                     sender.on = !isEnabled
                 }
+            
             return
         }
         
@@ -287,7 +288,9 @@ class RadarDisplayViewController: UIViewController {
             if let status = service.status
                 where status != RadarStatus.Valid.rawValue {
                     //expired service -> show purchase modal
+                    sender.on = !isEnabled
                     self.showPurchase()
+                    
                     return
             }
         }
@@ -679,8 +682,7 @@ extension RadarDisplayViewController{
                 
                 return
             }
-            
-
+                        
             isEnabled = true
             
             RadarService.sharedInstance.startLoading(self)
