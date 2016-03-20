@@ -199,11 +199,8 @@ class RadarViewController: UIViewController {
                         
                         self.delegate?.onCriteriaSettingDone(self.radarSearchCriteria)
                         
-                        RadarService.sharedInstance.stopLoading()
-                        
                         self.reloadRadarUI(){
                             self.navigationController?.popViewControllerAnimated(true)
-
                         }
                     }
                     
