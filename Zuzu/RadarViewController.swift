@@ -100,12 +100,6 @@ class RadarViewController: UIViewController {
         /// Send Criteria to Config Table
         self.configTable?.currentCriteria = self.radarSearchCriteria
         
-        /// When there are some unfinished transactions
-        
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            self.alertCompleteUnfinishTransactions(unfinishedTranscations)
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -130,7 +124,13 @@ class RadarViewController: UIViewController {
             return
         }
         
-
+        /// When there are some unfinished transactions
+        
+        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+        if unfinishedTranscations.count > 0{
+            self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+        }
+        
     }
     
     // MARK: - Radar Cache
