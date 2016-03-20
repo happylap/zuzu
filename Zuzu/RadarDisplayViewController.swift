@@ -624,8 +624,6 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
         
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
-        RadarService.sharedInstance.startLoading(self)
-        
         self.enableCriteriaForPurchase()
         
         Log.exit()
@@ -700,11 +698,17 @@ extension RadarDisplayViewController{
  
             if isEnabled == true{
                 self.setCriteriaSwitch(isEnabled)
+                
+                RadarService.sharedInstance.startLoading(self)
+                
                 self.purchaseHistotyTableDataSource.refresh(){
                     self.reloadRadarUI(nil)
                 }
+                
                 return
             }
+            
+            RadarService.sharedInstance.startLoading(self)
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: criteiraId, enabled: isEnabled) { (result, error) -> Void in
