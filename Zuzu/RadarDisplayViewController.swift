@@ -307,19 +307,23 @@ class RadarDisplayViewController: UIViewController {
                         RadarService.sharedInstance.stopLoading()
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                            self.criteriaEnableSwitch.on = !isEnabled
+                            self.setCriteriaSwitch(!isEnabled)
                         }
                         
                         return
                     }
-                    
+                
+                    self.setCriteriaSwitch(isEnabled)
                     RadarService.sharedInstance.stopLoading()
-                    self.zuzuCriteria.enabled = isEnabled
             }
         }
     }
     
- 
+    func setCriteriaSwitch(isEnabled: Bool){
+        self.zuzuCriteria.enabled = isEnabled
+        self.criteriaEnableSwitch.on = isEnabled
+    }
+    
     // MARK: - Show Purchase action
     
     @IBAction func onServiceButtonTapped(sender: AnyObject) {
@@ -680,16 +684,17 @@ extension RadarDisplayViewController{
         let isEnabled = self.zuzuCriteria.enabled ?? false
         if isEnabled == true{
             self.reloadRadarUI(nil)
+            self.setCriteriaSwitch(isEnabled)
             return
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: self.zuzuCriteria.criteriaId!, enabled: true) { (result, error) -> Void in
+                criteriaId: self.zuzuCriteria.criteriaId!, enabled: isEnabled) { (result, error) -> Void in
                     
                     if error != nil{
-                        self.criteriaEnableSwitch.on = false
+                        self.setCriteriaSwitch(!isEnabled)
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
@@ -698,7 +703,7 @@ extension RadarDisplayViewController{
                         return
                     }
                     
-                    self.criteriaEnableSwitch.on = true
+                    self.setCriteriaSwitch(isEnabled)
                     self.reloadRadarUI(nil)
             }
         }
