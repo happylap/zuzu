@@ -176,10 +176,11 @@ class ZuzuCriteria: NSObject, Mappable {
                 if filterGroup.type == DisplayType.DetailView && filterGroup.choiceType == ChoiceType.MultiChoice {
                     
                     if let filterKey = filters.first?.key,
-                        let jsonValueArray = json[filterKey]["value"].arrayObject as? [Int] {
+                        let jsonValueArray = json[filterKey]["value"].arrayObject as? [String] {
                             
                             for filter: Filter in filters {
                             
+                                /*
                                 // Special: 格局 (5房以上)
                                 if filter.key == "num_bedroom" && filter.value == "[5 TO *]" && jsonValueArray.contains(5) {
                                     selectedFilters.append(filter)
@@ -190,6 +191,11 @@ class ZuzuCriteria: NSObject, Mappable {
                                     if jsonValueArray.contains(filterValue) {
                                         selectedFilters.append(filter)
                                     }
+                                }
+                                */
+                                
+                                if jsonValueArray.contains(filter.value) {
+                                    selectedFilters.append(filter)
                                 }
                             }
                         
@@ -315,7 +321,7 @@ class ZuzuCriteria: NSObject, Mappable {
                         if let filterKey: String = filterGroup.filters.first?.key,
                             let logicType = filterGroup.logicType?.rawValue {
                                 
-                                var valueArray = [Int]()
+                                var valueArray = [String]()
                                 
                                 for filter: Filter in filterGroup.filters {
                                     
@@ -330,6 +336,7 @@ class ZuzuCriteria: NSObject, Mappable {
                                         continue
                                     }
                                     
+                                    /*
                                     // Special: 格局 (5房以上)
                                     if filter.key == "num_bedroom" && filter.value == "[5 TO *]" {
                                         valueArray.append(5)
@@ -339,6 +346,9 @@ class ZuzuCriteria: NSObject, Mappable {
                                     if let value: Int = Int(filter.value) {
                                         valueArray.append(value)
                                     }
+                                    */
+                                    
+                                    valueArray.append(filter.value)
                                 }
                                 
                                 if valueArray.count > 0 {
