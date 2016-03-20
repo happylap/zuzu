@@ -161,27 +161,15 @@ class RadarDisplayViewController: UIViewController {
         
         // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
-        self.purchaseHistotyTableDataSource.refresh()
-        
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+        self.purchaseHistotyTableDataSource.refresh(){
             
-            /// Enable Remote Notifications
-            if(UIApplication.sharedApplication().isRegisteredForRemoteNotifications()) {
-                Log.debug("Remote Notifications Registered = Y")
-                /// Enable Local App Notifications
-                appDelegate.setupLocalNotifications({ (result) -> () in
-                    if(!result) {
-                        self.alertLocalNotificationDisabled()
-                    }
-                })
-                
-            } else {
-                Log.debug("Remote Notifications Registered = N")
-                
-                appDelegate.setupPushNotifications({ (result) -> () in
+            self.runOnMainThread(){
+            
+                if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
                     
-                    if(result) {
-                        
+                    /// Enable Remote Notifications
+                    if(UIApplication.sharedApplication().isRegisteredForRemoteNotifications()) {
+                        Log.debug("Remote Notifications Registered = Y")
                         /// Enable Local App Notifications
                         appDelegate.setupLocalNotifications({ (result) -> () in
                             if(!result) {
@@ -190,14 +178,31 @@ class RadarDisplayViewController: UIViewController {
                         })
                         
                     } else {
-                        self.alertPushNotificationDisabled()
+                        Log.debug("Remote Notifications Registered = N")
+                        
+                        appDelegate.setupPushNotifications({ (result) -> () in
+                            
+                            if(result) {
+                                
+                                /// Enable Local App Notifications
+                                appDelegate.setupLocalNotifications({ (result) -> () in
+                                    if(!result) {
+                                        self.alertLocalNotificationDisabled()
+                                    }
+                                })
+                                
+                            } else {
+                                self.alertPushNotificationDisabled()
+                            }
+                            
+                        })
+                        
                     }
-                    
-                })
-                
+                }
+            
             }
+            
         }
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -601,12 +606,15 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
     func onPurchaseSuccess() -> Void{
         Log.enter()
         
+        self.tabBarController?.tabBarHidden = false
+        
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
-        self.tabBarController?.tabBarHidden = false
         RadarService.sharedInstance.startLoading(self)
         
-        self.enableCriteriaForPurchase()
+        self.purchaseHistotyTableDataSource.refresh(){
+            self.enableCriteriaForPurchase()
+        }
         
         Log.exit()
     }
