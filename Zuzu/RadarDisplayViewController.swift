@@ -729,11 +729,11 @@ extension RadarDisplayViewController{
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
         
+        UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
+        
         if fail <= 0{
             SCLAlertView().showInfo("服務建立成功", subTitle: "所有服務已經建立完成", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                
-                UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
-                
+                                
                 self.reloadRadarUI()
                 
             }
@@ -747,7 +747,7 @@ extension RadarDisplayViewController{
             let okButton = "知道了"
             let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您建立服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
             let alertView = SCLAlertView()
-            alertView.showCloseButton = false
+            alertView.showCloseButton = true
             
             alertView.addButton("重新再試") {
                 
@@ -761,15 +761,6 @@ extension RadarDisplayViewController{
                         RadarService.sharedInstance.stopLoading()
                         
                         self.alertUnfinishTransactionsStatus(success, fail: fail)
-                    }
-                }
-            }
-            
-            alertView.addButton("取消") {
-                if success > 0{
-                    self.runOnMainThread(){
-                        UserServiceStatusManager.shared.resetServiceStatusCache()
-                        self.reloadRadarUI()
                     }
                 }
             }

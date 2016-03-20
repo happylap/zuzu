@@ -301,11 +301,42 @@ extension RadarService {
             self.currentTransactionIdx = self.currentTransactionIdx + 1
             
             if error != nil{
+                
                 Log.error("Encounter error while finish the transaction: \(tranId)")
                 
                 Log.error("error info: \(error)")
                 
-                self.failTransaction = self.failTransaction + 1
+                if let transactionId = transaction.transactionIdentifier{
+                    
+                    RadarService.sharedInstance.checkPurchaseExist(transactionId){
+                        (isExist, checkExistError) -> Void in
+                        if isExist == true{
+                            
+                            Log.info("transation \(tranId) is alreadt existing")
+                            
+                            ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
+                            self.successTransaction = self.successTransaction + 1
+                            
+                        }else{
+                            
+                            Log.error("transation \(tranId) is alreadt not successful")
+                            
+                            self.failTransaction = self.failTransaction + 1
+                        }
+
+                        self.performFinishTransactions(unfinishedTranscations, completeHandler:completeHandler)
+                    }
+                    
+                }else{
+                    
+                    Log.error("transation \(tranId) is alreadt not successful")
+                    
+                    self.failTransaction = self.failTransaction + 1
+                    
+                    self.performFinishTransactions(unfinishedTranscations, completeHandler:completeHandler)
+                }
+
+                
                 return
             }
             
