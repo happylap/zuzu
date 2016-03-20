@@ -240,7 +240,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
                 
-                self.purchaseDelegate?.onFindUnfinishedTransaction(unfinishedTranscations)
+                self.dismissViewControllerAnimated(true){
+                    self.purchaseDelegate?.onFindUnfinishedTransaction(unfinishedTranscations)
+                }
             }
             
         }

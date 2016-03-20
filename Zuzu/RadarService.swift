@@ -14,6 +14,13 @@ private let Log = Logger.defaultLogger
 
 class RadarService : NSObject {
     
+    var successTransaction = 0
+    
+    var failTransaction = 0
+    
+    var currentTransactionIdx = 0
+    
+    
     var isLoading = false
     var isLoadingText = false
     //Share Instance for interacting with the ZuzuStore
@@ -242,52 +249,75 @@ class RadarService : NSObject {
         Log.exit()
     }
     
+}
+
+extension RadarService {
+
     /// unfinished transactions
     func tryCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction],
         completeHandler: ((success: Int, fail: Int) -> Void)?){
             
             Log.enter()
             
-            var success = 0
-            var fail = 0
-            
+            self.currentTransactionIdx = 0
+            self.successTransaction = 0
+            self.failTransaction = 0
             
             if unfinishedTranscations.count <= 0{
                 Log.error("no unfinished transactions")
                 return
             }
             
-            for transaction in unfinishedTranscations{
-                
-                RadarService.sharedInstance.createPurchase(transaction){
-                    
-                    (purchaseTransaction, error) -> Void in
-                    
-                    let tranId = purchaseTransaction.transactionIdentifier ?? "nil"
-                    
-                    if error != nil{
-                        Log.error("Encounter error while finish the transaction: \(tranId)")
-                        
-                        Log.error("error info: \(error)")
-                        
-                        fail = fail + 1
-                        return
-                    }
-                    
-                    Log.debug("Successfully finish trnasaction: \(tranId)")
-                    
-                    ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
-                    
-                    success = success + 1
-                }
-                
-            }
+            Log.debug("unfinishedTranscations count: \(unfinishedTranscations.count)")
             
-            if let handler = completeHandler{
-                handler(success:success, fail:fail)
-            }
-            
+            self.performFinishTransactions(unfinishedTranscations, completeHandler:completeHandler)
+        
             Log.exit()
     }
     
+    func performFinishTransactions(unfinishedTranscations:[SKPaymentTransaction],
+        completeHandler: ((success: Int, fail: Int) -> Void)?){
+        
+        if self.currentTransactionIdx >= unfinishedTranscations.count{
+            if let handler = completeHandler{
+                handler(success:self.successTransaction, fail:self.failTransaction)
+            }
+            
+            self.currentTransactionIdx = 0
+            self.successTransaction = 0
+            self.failTransaction = 0
+            
+            return
+        }
+        
+        let transaction = unfinishedTranscations[self.currentTransactionIdx]
+        
+        let tranId = transaction.transactionIdentifier ?? "nil"
+        
+        RadarService.sharedInstance.createPurchase(transaction){
+            
+            (purchaseTransaction, error) -> Void in
+            
+            self.currentTransactionIdx = self.currentTransactionIdx + 1
+            
+            if error != nil{
+                Log.error("Encounter error while finish the transaction: \(tranId)")
+                
+                Log.error("error info: \(error)")
+                
+                self.failTransaction = self.failTransaction + 1
+                return
+            }
+            
+            Log.debug("Successfully finish trnasaction: \(tranId)")
+            
+            ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
+            
+            self.successTransaction = self.successTransaction + 1
+            
+            self.performFinishTransactions(unfinishedTranscations, completeHandler:completeHandler)
+        }
+    }
+    
 }
+
