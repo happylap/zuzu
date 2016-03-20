@@ -433,7 +433,7 @@ extension RadarViewController{
                 
                 Log.info("update criteria success")
                 
-                self.setCriteriaEnabled(zuzuCriteria, isEnabled:true)
+                self.setCriteriaEnabled(zuzuCriteria)
                 
             }
         }
@@ -441,7 +441,9 @@ extension RadarViewController{
         Log.exit()
     }
     
-    func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria, isEnabled: Bool){
+    func setCriteriaEnabled(zuzuCriteria: ZuzuCriteria){
+        
+        var isEnabled = zuzuCriteria.enabled ?? false
         
         if isEnabled == true{
             RadarService.sharedInstance.stopLoading()
@@ -450,6 +452,8 @@ extension RadarViewController{
             return
         }
         
+        isEnabled = true
+                
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
