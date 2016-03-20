@@ -687,7 +687,7 @@ extension RadarDisplayViewController{
     
     func enableCriteriaForPurchase(){
         
-        let isEnabled = self.zuzuCriteria.enabled ?? false
+        var isEnabled = self.zuzuCriteria.enabled ?? false
         
         if self.zuzuCriteria.criteriaId == nil{
             SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
@@ -707,6 +707,8 @@ extension RadarDisplayViewController{
                 
                 return
             }
+            
+            isEnabled = true
             
             RadarService.sharedInstance.startLoading(self)
             
