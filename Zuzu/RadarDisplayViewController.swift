@@ -656,34 +656,6 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
 // MARK: Criteria seeting function for purchase
 
 extension RadarDisplayViewController{
-
-    func setUpCriteria(){
-        Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
-                (result, error) -> Void in
-                
-                if error != nil{
-                    Log.error("Cannot get criteria by user id:\(userId)")
-                    
-                    SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                    }
-                    
-                    return
-                }
-                
-                Log.info("get criteria successfully")
-                if result != nil{
-                    self.zuzuCriteria = result!
-                    self.enableCriteriaForPurchase()
-                }else{
-                    self.zuzuCriteria = ZuzuCriteria()
-                }
-                
-            }
-        }
-        Log.exit()
-    }
     
     func enableCriteriaForPurchase(){
         
@@ -708,6 +680,7 @@ extension RadarDisplayViewController{
                 return
             }
             
+
             isEnabled = true
             
             RadarService.sharedInstance.startLoading(self)
