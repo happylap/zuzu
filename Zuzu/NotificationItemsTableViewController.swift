@@ -376,7 +376,8 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func scrollToFirstRow() {
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        if let _ = self.tableView.cellForRowAtIndexPath(indexPath) {
+        let rowNum = self.tableView.numberOfRowsInSection(0)
+        if rowNum > 0 {
             self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         }
     }
