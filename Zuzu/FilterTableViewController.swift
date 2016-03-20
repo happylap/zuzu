@@ -121,17 +121,14 @@ class FilterTableViewController: UITableViewController {
     }
     
     private func updateStatusBar() {
-        var filtersCount = 0
-        for filterIdSet in selectedFilterIdSet.values {
-            filtersCount += filterIdSet.count
-        }
+        let filtersCount = selectedFilterIdSet.count
         
         if let filterStatusBarView = self.filterStatusBarView {
             
             if(filtersCount > 0) {
-                filterStatusBarView.statusText.text = "已經選擇 \(filtersCount) 個過濾條件"
+                filterStatusBarView.statusText.text = "已經設定 \(filtersCount) 個過濾條件"
             } else {
-                filterStatusBarView.statusText.text = "尚未選擇任何過濾條件"
+                filterStatusBarView.statusText.text = "尚未設定任何過濾條件"
             }
             
         }
