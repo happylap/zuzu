@@ -581,6 +581,8 @@ extension RadarViewController{
         if fail <= 0{
             SCLAlertView().showInfo("服務建立成功", subTitle: "所有服務已經建立完成", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
 
+                RadarService.sharedInstance.stopLoading()
+                
                 self.reloadRadarUI()
                 
             }
