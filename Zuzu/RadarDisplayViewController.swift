@@ -161,15 +161,27 @@ class RadarDisplayViewController: UIViewController {
         
         // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
-        self.purchaseHistotyTableDataSource.refresh(){
+        self.purchaseHistotyTableDataSource.refresh(nil)
             
-            self.runOnMainThread(){
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
-                if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            /// Enable Remote Notifications
+            if(UIApplication.sharedApplication().isRegisteredForRemoteNotifications()) {
+                Log.debug("Remote Notifications Registered = Y")
+                /// Enable Local App Notifications
+                appDelegate.setupLocalNotifications({ (result) -> () in
+                    if(!result) {
+                        self.alertLocalNotificationDisabled()
+                    }
+                })
+                
+            } else {
+                Log.debug("Remote Notifications Registered = N")
+                
+                appDelegate.setupPushNotifications({ (result) -> () in
                     
-                    /// Enable Remote Notifications
-                    if(UIApplication.sharedApplication().isRegisteredForRemoteNotifications()) {
-                        Log.debug("Remote Notifications Registered = Y")
+                    if(result) {
+                        
                         /// Enable Local App Notifications
                         appDelegate.setupLocalNotifications({ (result) -> () in
                             if(!result) {
@@ -178,30 +190,12 @@ class RadarDisplayViewController: UIViewController {
                         })
                         
                     } else {
-                        Log.debug("Remote Notifications Registered = N")
-                        
-                        appDelegate.setupPushNotifications({ (result) -> () in
-                            
-                            if(result) {
-                                
-                                /// Enable Local App Notifications
-                                appDelegate.setupLocalNotifications({ (result) -> () in
-                                    if(!result) {
-                                        self.alertLocalNotificationDisabled()
-                                    }
-                                })
-                                
-                            } else {
-                                self.alertPushNotificationDisabled()
-                            }
-                            
-                        })
-                        
+                        self.alertPushNotificationDisabled()
                     }
-                }
-            
+                    
+                })
+                
             }
-            
         }
     }
     
@@ -632,9 +626,7 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
         
         RadarService.sharedInstance.startLoading(self)
         
-        self.purchaseHistotyTableDataSource.refresh(){
-            self.enableCriteriaForPurchase()
-        }
+        self.enableCriteriaForPurchase()
         
         Log.exit()
     }
@@ -699,8 +691,10 @@ extension RadarDisplayViewController{
         
         let isEnabled = self.zuzuCriteria.enabled ?? false
         if isEnabled == true{
-            self.reloadRadarUI(nil)
             self.setCriteriaSwitch(isEnabled)
+            self.purchaseHistotyTableDataSource.refresh(){
+                self.reloadRadarUI(nil)
+            }
             return
         }
         
@@ -714,13 +708,18 @@ extension RadarDisplayViewController{
                         
                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
-                            self.reloadRadarUI(nil)
+                            self.purchaseHistotyTableDataSource.refresh(){
+                                self.reloadRadarUI(nil)
+                            }
                         }
                         return
                     }
                     
                     self.setCriteriaSwitch(isEnabled)
-                    self.reloadRadarUI(nil)
+                    self.purchaseHistotyTableDataSource.refresh(){
+                        self.reloadRadarUI(nil)
+                    }
+                    
             }
         }
     }
