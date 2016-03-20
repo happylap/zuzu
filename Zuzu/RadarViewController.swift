@@ -347,6 +347,8 @@ extension RadarViewController: RadarPurchaseDelegate{
         Log.enter()
         self.tabBarController?.tabBarHidden = false
         
+        UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
+        
         RadarService.sharedInstance.startLoading(self)
         self.setUpCriteria()
         Log.exit()
