@@ -106,6 +106,14 @@ class RadarViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("viewWillAppear")
+        
+        Log.debug("presentedViewController: \(self.presentedViewController)")
+        if let _ = self.presentedViewController as? RadarPurchaseViewController{
+            self.tabBarController?.tabBarHidden = true
+        }else{
+            self.tabBarController?.tabBarHidden = false
+        }
+        
     }
     
     override func viewDidAppear(animated: Bool) {
