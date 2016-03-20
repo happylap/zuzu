@@ -331,6 +331,12 @@ class RadarDisplayViewController: UIViewController {
     }
     
     func showPurchase(){
+        
+        if self.zuzuCriteria.criteriaId == nil{
+            SCLAlertView().showInfo("尚未設定租屋雷達", subTitle: "感謝您的續訂\n請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            return
+        }
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
             ///Hide tab bar
