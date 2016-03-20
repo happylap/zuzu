@@ -274,7 +274,15 @@ class RadarDisplayViewController: UIViewController {
     // MARK: - Enable / Disable Criteria action
     
     @IBAction func enableCriteria(sender: UISwitch) {
+        
         let isEnabled = sender.on
+        
+        if self.zuzuCriteria.criteriaId == nil{
+            SCLAlertView().showInfo("尚未設定租屋雷達", subTitle: "啟用前請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                    sender.on = !isEnabled
+                }
+            return
+        }
         
         if let service = self.zuzuService{
             if let status = service.status
@@ -316,6 +324,8 @@ class RadarDisplayViewController: UIViewController {
                     self.setCriteriaSwitch(isEnabled)
                     RadarService.sharedInstance.stopLoading()
             }
+        }else{
+            self.setCriteriaSwitch(!isEnabled)
         }
     }
     
