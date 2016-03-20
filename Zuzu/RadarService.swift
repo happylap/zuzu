@@ -11,7 +11,6 @@ import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
-let ResetCriteriaNotification = "ResetCriteriaNotification"
 
 class RadarService : NSObject {
     
@@ -243,6 +242,52 @@ class RadarService : NSObject {
         Log.exit()
     }
     
-
+    /// unfinished transactions
+    func tryCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction],
+        completeHandler: ((success: Int, fail: Int) -> Void)?){
+            
+            Log.enter()
+            
+            var success = 0
+            var fail = 0
+            
+            
+            if unfinishedTranscations.count <= 0{
+                Log.error("no unfinished transactions")
+                return
+            }
+            
+            for transaction in unfinishedTranscations{
+                
+                RadarService.sharedInstance.createPurchase(transaction){
+                    
+                    (purchaseTransaction, error) -> Void in
+                    
+                    let tranId = purchaseTransaction.transactionIdentifier ?? "nil"
+                    
+                    if error != nil{
+                        Log.error("Encounter error while finish the transaction: \(tranId)")
+                        
+                        Log.error("error info: \(error)")
+                        
+                        fail = fail + 1
+                        return
+                    }
+                    
+                    Log.debug("Successfully finish trnasaction: \(tranId)")
+                    
+                    ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
+                    
+                    success = success + 1
+                }
+                
+            }
+            
+            if let handler = completeHandler{
+                handler(success:success, fail:fail)
+            }
+            
+            Log.exit()
+    }
     
 }

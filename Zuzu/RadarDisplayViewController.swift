@@ -22,12 +22,6 @@ class RadarDisplayViewController: UIViewController {
         static let showConfigureRadar:String = "showConfigureRadar"
     }
     
-    // unfinished transcation variables
-    
-    var unfinishedTranscations: [SKPaymentTransaction]?
-    var porcessTransactionNum = -1
-    
-    
     // Zuzu criteria variable
     
     var zuzuCriteria = ZuzuCriteria()
@@ -226,7 +220,7 @@ class RadarDisplayViewController: UIViewController {
          /// When there are some unfinished transactions
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
-            self.doUnfinishTransactions(unfinishedTranscations)
+            self.alertCompleteUnfinishTransactions(unfinishedTranscations)
         }
     }
     
@@ -632,21 +626,14 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
         Log.exit()
     }
     
-    func onFindUnfinishedTransaction() -> Void{
+    func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
         
         self.tabBarController?.tabBarHidden = false
                 
         RadarService.sharedInstance.stopLoading()
         
-        SCLAlertView().showInfo("尚未建立服務", subTitle: "您之前已經成功購買租屋雷達服務，但是我們發現還沒為您建立服務", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-            () -> Void in
-            
-            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            if unfinishedTranscations.count > 0{
-                self.doUnfinishTransactions(unfinishedTranscations)
-            }
-        }
+        self.alertCompleteUnfinishTransactions(unfinishedTranscations)
         
         Log.exit()
     }
@@ -717,76 +704,81 @@ extension RadarDisplayViewController{
 
 extension RadarDisplayViewController{
     
-    func doUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
-        Log.enter()
-        self.unfinishedTranscations = unfinishedTranscations
-        self.porcessTransactionNum = 0
+    func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
-        RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
-        self.performFinishTransactions()
-        Log.exit()
-    }
-    
-    func performFinishTransactions(){
-        if let transactions = self.unfinishedTranscations{
-            if self.porcessTransactionNum  < transactions.count{
-                RadarService.sharedInstance.createPurchase(transactions[self.porcessTransactionNum], handler: self.handleCompleteTransaction)
+        let alertView = SCLAlertView()
+        
+        alertView.addButton("重新建立", action: {
+            () -> Void in
+            
+            RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
+            
+            RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+                
+                (success, fail) -> Void in
+                
+                RadarService.sharedInstance.stopLoading()
+                
+                self.alertUnfinishTransactionsStatus(success, fail: fail)
             }
-        }else{
-            self.transactionDone()
-        }
+        })
+        
+        
+        alertView.showNotice("重新建立服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未建立完成，請重新建立服務", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
-    func handleCompleteTransaction(purchaseTransaction: SKPaymentTransaction, error: NSError?) -> Void{
-        if error != nil{
-            self.transactionDone()
-            self.alertUnfinishError()
-            return
-        }
+    func alertUnfinishTransactionsStatus(success: Int, fail: Int){
         
-        ZuzuStore.sharedInstance.finishTransaction(purchaseTransaction)
-        
-        self.porcessTransactionNum = self.porcessTransactionNum + 1
-        
-        if let transactions = self.unfinishedTranscations{
-            if self.porcessTransactionNum  < transactions.count{
-                self.performFinishTransactions()
-                return
+        if fail <= 0{
+            SCLAlertView().showInfo("服務建立成功", subTitle: "所有服務已經建立完成", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                
+                UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
+                
+                self.reloadRadarUI()
+                
             }
             
-            self.transactionDone()
+            return
         }
-    }
     
-    func transactionDone(){
-        Log.enter()
-        self.unfinishedTranscations = nil
-        self.porcessTransactionNum = -1
-        RadarService.sharedInstance.stopLoading()
-        Log.exit()
-    }
-    
-    func alertUnfinishError(){
-        let msgTitle = "服務建立失敗"
-        let okButton = "知道了"
-        let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您建立服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
-        let alertView = SCLAlertView()
-        alertView.showCloseButton = false
-        
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            if AmazonClientManager.sharedInstance.isLoggedIn(){
-                alertView.addButton("重新再試") {
-                    self.doUnfinishTransactions(unfinishedTranscations)
+        if fail > 0{
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            let msgTitle = "服務建立失敗"
+            let okButton = "知道了"
+            let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您建立服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
+            let alertView = SCLAlertView()
+            alertView.showCloseButton = false
+            
+            alertView.addButton("重新再試") {
+                
+                RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
+                
+                RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+                    
+                    (success, fail) -> Void in
+                    
+                    self.runOnMainThread(){
+                        RadarService.sharedInstance.stopLoading()
+                        
+                        self.alertUnfinishTransactionsStatus(success, fail: fail)
+                    }
                 }
             }
+            
+            alertView.addButton("取消") {
+                if success > 0{
+                    self.runOnMainThread(){
+                        UserServiceStatusManager.shared.resetServiceStatusCache()
+                        self.reloadRadarUI()
+                    }
+                }
+            }
+            
+            alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
         }
-        
-        alertView.addButton("取消") {
-        }
-        
-        alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    
     }
+    
 }
 
 extension RadarDisplayViewController: RadarPurchaseHistoryTableDelegate{
