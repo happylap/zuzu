@@ -55,7 +55,7 @@ class RadarNavigationController: UINavigationController {
             
             RadarService.sharedInstance.startLoading(self)
             
-            //UserServiceStatusManager.shared.resetServiceStatusCache()
+            //UserServiceStatusManager.shared.resetServiceStatusCache() cleart cache for testing
             
             UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
                 
@@ -64,8 +64,9 @@ class RadarNavigationController: UINavigationController {
                 if success == false{
                     Log.error("Cannot get Zuzu service by user id:\(userId)")
                     self.showRetryRadarView(false, onCompleteHandler: onCompleteHandler)
-                    //stop loading if it goes to retry page
+                    
                     RadarService.sharedInstance.stopLoading()
+                    
                     return
                 }
                 
@@ -74,7 +75,9 @@ class RadarNavigationController: UINavigationController {
  
                     if let criteria = self.zuzuCriteria, _ = criteria.criteriaId {
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!, onCompleteHandler:onCompleteHandler)
+                        
                         RadarService.sharedInstance.stopLoading()
+                        
                         return
                     }
                     
@@ -84,8 +87,9 @@ class RadarNavigationController: UINavigationController {
                         if error != nil{
                             Log.error("Cannot get criteria by user id:\(userId)")
                             self.showRetryRadarView(false, onCompleteHandler:onCompleteHandler)
-                            //stop loading if it goes to retry page
+                            
                             RadarService.sharedInstance.stopLoading()
+                            
                             return
                         }
                         
@@ -106,13 +110,14 @@ class RadarNavigationController: UINavigationController {
                 }else{
                     Log.debug("No purchased service. This user has not purchased any service")
                     self.showConfigureRadarView(onCompleteHandler)
+                    
                     RadarService.sharedInstance.stopLoading()
+                    
                     return
                 }
             }
             
         }else{
-            RadarService.sharedInstance.stopLoading()
             assert(false, "user id should not be nil")
         }
         
