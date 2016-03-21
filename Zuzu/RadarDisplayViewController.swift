@@ -109,30 +109,24 @@ class RadarDisplayViewController: UIViewController {
     private func alertLocalNotificationDisabled() {
         Log.enter()
         
-        let alertView = RadarDisplayViewController.getAlertView()
+        let alertView = SCLAlertView()
         
         let subTitle = "請到：設定 > 通知 > 豬豬快租\n開啟「允許通知」選項\n才能接收租屋雷達通知物件"
         
-        alertView?.showCloseButton = true
+        alertView.showCloseButton = true
         
-        alertView?.showInfo("尚未授權通知功能", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-            RadarDisplayViewController.resetAlertView()
-        }
-    }
+        alertView.showInfo("尚未授權通知功能", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)    }
     
     private func alertPushNotificationDisabled() {
         Log.enter()
         
-        let alertView = RadarDisplayViewController.getAlertView()
+        let alertView = SCLAlertView()
         
         let subTitle = "遠端通知功能開啟失敗，請您重新開啟豬豬快租，並再次進入「租屋雷達」，謝謝！"
         
-        alertView?.showCloseButton = true
+        alertView.showCloseButton = true
         
-        alertView?.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-            RadarDisplayViewController.resetAlertView()
-        }
-
+        alertView.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     private func toggleServiceStatusIcon(isValid: Bool) {
@@ -165,9 +159,7 @@ class RadarDisplayViewController: UIViewController {
         self.purchaseHistotyTableDataSource.refresh(nil)
 
         if self.zuzuCriteria.criteriaId == nil{
-            RadarDisplayViewController.getAlertView()?.showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                RadarDisplayViewController.resetAlertView()
-            }
+            SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             return
         }
         
@@ -281,8 +273,7 @@ class RadarDisplayViewController: UIViewController {
         
         if self.zuzuCriteria.criteriaId == nil{
             
-            RadarDisplayViewController.getAlertView()?.showInfo("尚未設定租屋雷達", subTitle: "啟用前請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                    RadarDisplayViewController.resetAlertView()
+            SCLAlertView().showInfo("尚未設定租屋雷達", subTitle: "啟用前請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                     sender.on = !isEnabled
                 }
             
@@ -320,9 +311,8 @@ class RadarDisplayViewController: UIViewController {
                         
                     RadarService.sharedInstance.stopLoading()
                     
-                    RadarDisplayViewController.getAlertView()?.showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                    SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                         
-                        RadarDisplayViewController.resetAlertView()
                         self.setCriteriaSwitch(!isEnabled)
                     }
                         
@@ -656,15 +646,28 @@ extension RadarDisplayViewController{
         var isEnabled = self.zuzuCriteria.enabled ?? false
         
         if self.zuzuCriteria.criteriaId == nil{
-            RadarDisplayViewController.getAlertView()?.showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                RadarDisplayViewController.resetAlertView()
+            
+            if RadarDisplayViewController.alertViewResponder == nil{
+                RadarDisplayViewController.alertViewResponder = SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                
+                RadarDisplayViewController.alertViewResponder?.setDismissBlock(){
+                    RadarDisplayViewController.alertViewResponder = nil
+                }
             }
+            
+            
             return
+            
         }
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteiraId = self.zuzuCriteria.criteriaId{
  
             if isEnabled == true{
+                
+                //GA tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
+                
                 self.setCriteriaSwitch(isEnabled)
 
                 RadarService.sharedInstance.startLoading(self)
@@ -685,11 +688,15 @@ extension RadarDisplayViewController{
                 criteriaId: criteiraId, enabled: isEnabled) { (result, error) -> Void in
                     
                     if error != nil{
+                        
+                        //GA tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                            action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                        
                         self.setCriteriaSwitch(!isEnabled)
                         
-                        RadarDisplayViewController.getAlertView()?.showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
-                            RadarDisplayViewController.resetAlertView()
                             
                             self.purchaseHistotyTableDataSource.refresh(){
                                 // don't need stop loading here because it is going to reloa ui
@@ -698,6 +705,10 @@ extension RadarDisplayViewController{
                         }
                         return
                     }
+                    
+                    //GA tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
                     
                     self.setCriteriaSwitch(isEnabled)
                     
@@ -721,27 +732,34 @@ extension RadarDisplayViewController{
     
     func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
-        let alertView = RadarDisplayViewController.getAlertView()
-        
-        alertView?.addButton("啟用服務", action: {
-            () -> Void in
+        if RadarDisplayViewController.alertViewResponder == nil{
             
-            RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
+            let alertView = SCLAlertView()
             
-            RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+            alertView.addButton("啟用服務", action: {
+                () -> Void in
                 
-                (success, fail) -> Void in
+                RadarDisplayViewController.alertViewResponder = nil
                 
-                RadarService.sharedInstance.stopLoading()
+                RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                 
-                self.alertUnfinishTransactionsStatus(success, fail: fail)
+                RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+                    
+                    (success, fail) -> Void in
+                    
+                    RadarService.sharedInstance.stopLoading()
+                    
+                    self.alertUnfinishTransactionsStatus(success, fail: fail)
+                }
+            })
+            
+            RadarDisplayViewController.alertViewResponder = alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            
+            RadarDisplayViewController.alertViewResponder?.setDismissBlock(){
+                RadarDisplayViewController.alertViewResponder = nil
             }
-        })
-        
-        
-        alertView?.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-            RadarDisplayViewController.resetAlertView()
         }
+
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
@@ -749,15 +767,7 @@ extension RadarDisplayViewController{
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         if fail <= 0{
-            RadarDisplayViewController.getAlertView()?.showInfo("服務啟用成功", subTitle: "所有服務已經完成啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                
-                RadarDisplayViewController.resetAlertView()
-                
-                self.purchaseHistotyTableDataSource.refresh(){
-                    self.reloadRadarUI()
-                }
-                
-            }
+                SCLAlertView().showInfo("服務啟用成功", subTitle: "所有服務已經完成啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             
             return
         }
@@ -767,10 +777,10 @@ extension RadarDisplayViewController{
             let msgTitle = "服務啟用失敗"
             let okButton = "知道了"
             let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您啟用服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
-            let alertView = RadarDisplayViewController.getAlertView()
-            alertView?.showCloseButton = true
+            let alertView = SCLAlertView()
+            alertView.showCloseButton = true
             
-            alertView?.addButton("重新再試") {
+            alertView.addButton("重新再試") {
                 
                 RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                 
@@ -779,7 +789,7 @@ extension RadarDisplayViewController{
                     (success, fail) -> Void in
                     
                     self.runOnMainThread(){
-
+                        
                         RadarService.sharedInstance.stopLoading()
                         
                         self.alertUnfinishTransactionsStatus(success, fail: fail)
@@ -787,24 +797,12 @@ extension RadarDisplayViewController{
                 }
             }
             
-            alertView?.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                RadarDisplayViewController.resetAlertView()
-            }
+            alertView.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+
         }
     
     }
-  
-    private static func getAlertView() -> SCLAlertView?{
-        if RadarDisplayViewController.alertViewResponder == nil{
-            return SCLAlertView()
-        }
-        
-        return nil
-    }
-    
-    private static func resetAlertView(){
-        RadarDisplayViewController.alertViewResponder = nil
-    }
+
 }
 
 extension RadarDisplayViewController: RadarPurchaseHistoryTableDelegate{
