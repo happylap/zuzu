@@ -27,6 +27,12 @@ class LoginDebugViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var generateTransButton: UIButton!{
+        didSet {
+            generateTransButton.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
+        }
+    }
+    
     @IBOutlet weak var finishTransButton: UIButton!{
         didSet {
             finishTransButton.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
@@ -79,12 +85,12 @@ class LoginDebugViewController: UIViewController {
                 if(status == LoginStatus.Resume.rawValue) {
                     
                     if let provider = UserDefaultsUtils.getLoginProvider(){
-                            switch(provider) {
-                            case .FB:
-                                self.popupFacebookStatus()
-                            case .GOOGLE:
-                                self.popupGoogleStatus()
-                            }
+                        switch(provider) {
+                        case .FB:
+                            self.popupFacebookStatus()
+                        case .GOOGLE:
+                            self.popupGoogleStatus()
+                        }
                     }
                     
                 }
@@ -143,6 +149,23 @@ class LoginDebugViewController: UIViewController {
         
     }
     
+    
+    @IBAction func onGenerateTransButtonTouched(sender: UIButton) {
+        ZuzuStore.sharedInstance.requestProducts { (success, products) -> () in
+            
+            if let firstProduct = products.first {
+                
+                let zuzuProduct = ZuzuProduct(productIdentifier: firstProduct.productIdentifier, localizedTitle: firstProduct.localizedTitle, price: firstProduct.price, priceLocale: firstProduct.priceLocale)
+                
+                ZuzuStore.sharedInstance.makePurchase(zuzuProduct, handler: nil)
+                
+            } else {
+                
+                SCLAlertView().showInfo("Purchase Error", subTitle: "No available product")
+                
+            }
+        }
+    }
     
     @IBAction func onFinishTransaction(sender: AnyObject) {
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
