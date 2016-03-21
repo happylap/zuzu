@@ -97,13 +97,13 @@ class CommonLoginViewController: UIViewController {
         
         if loginMode == 1 {
             titleText.text = "登入使用我的收藏"
-            subTitleText.text = "請登入使用我的收藏功能，日後更換裝置，收藏的物件才不會消失喔！"
+            subTitleText.text = "請登入使用「我的收藏」，收藏的物件將會被儲存在雲端，日後更換裝置也不會不見喔！"
         } else if loginMode == 2 {
             titleText.text = "登入使用租屋雷達"
             subTitleText.text = "請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務"
         } else if loginMode == 3 {
-            titleText.text = "登入個人帳號"
-            subTitleText.text = "偵測到購買的租屋雷達尚未完成設定，\n請您使用下列帳號登入，\n豬豬快租便能為您完成設定"
+            titleText.text = "登入建立租屋雷達服務"
+            subTitleText.text = "我們發現您有購買的租屋雷達尚未完成設定，請您使用下列帳號登入建立服務，以維護您的權益"
         }
         
         self.maskView.alpha = 0.0
