@@ -28,6 +28,14 @@ enum LoginStatus: Int {
     case Resume
 }
 
+enum LoginErrorType: Int {
+    case FacebookFailure = 1
+    case FacebookCancel = 2
+    case GoogleFailure = 3
+    case GoogleCancel = 4
+    case ZuzuFailure = 5
+}
+
 class AmazonClientManager : NSObject {
     
     //Share Instance for interacting with the ZuzuStore
@@ -48,12 +56,6 @@ class AmazonClientManager : NSObject {
         static let S3_SERVICE_REGIONTYPE = AWSRegionType.APSoutheast1
         static let S3_COLLECTION_BUCKET = "zuzu.mycollection"
         static let S3_ERROR_BUCKET = "zuzu.error"
-    }
-    
-    private enum ErrorType: Int {
-        case FacebookFailure
-        case GoogleFailure
-        case ZuzuFailure
     }
     
     //Properties
@@ -586,15 +588,17 @@ class AmazonClientManager : NSObject {
         self.currentTimer?.invalidate()
     }
     
-    private func cancelLogin() {
+    private func cancelLogin(type: LoginErrorType) {
         
         LoadingSpinner.shared.stop()
         
         /// Revert the sing-in
         self.logOutAll()
+        
+        AWSTask(error: NSError(domain: "zuzu.com", code: type.rawValue, userInfo: nil)).continueWithBlock(self.completionHandler!)
     }
     
-    private func failLogin(type: ErrorType) {
+    private func failLogin(type: LoginErrorType) {
         
         Log.debug("Error = \(type)")
         
@@ -611,7 +615,8 @@ class AmazonClientManager : NSObject {
             subTitle = "很抱歉！無法為您登入Google，請稍候再試！"
         case .ZuzuFailure:
             subTitle = "很抱歉！由於網路問題目前無法為您登入，請稍候再試！"
-            
+        default:
+            assert(false, "Invalid Error Type")
         }
         
         if let subTitle = subTitle {
@@ -897,7 +902,7 @@ class AmazonClientManager : NSObject {
                 
                 Log.warning("FB Login Cancelled")
                 
-                self.cancelLogin()
+                self.cancelLogin(LoginErrorType.FacebookCancel)
                 
             } else {
                 self.requestFBUserData() { (result: AnyObject!, error : NSError!) -> Void in
@@ -1070,7 +1075,7 @@ extension AmazonClientManager: GIDSignInDelegate {
                     
                     Log.warning("Google Login Cancelled: \(error.userInfo), \(error.description)")
                     
-                    self.cancelLogin()
+                    self.cancelLogin(LoginErrorType.GoogleCancel)
                     
                 } else {
                     
