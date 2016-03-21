@@ -592,7 +592,11 @@ extension RadarViewController{
         }
 
         alertView?.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            
             RadarViewController.resetAlertView()
+            
+            self.reloadRadarUI() // if user is logged in on purchase
+        
         }
     }
     
