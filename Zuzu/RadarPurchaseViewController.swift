@@ -130,6 +130,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         if let _ = error {
                             RadarService.sharedInstance.stopLoading()
                             
+                            /// GA tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
+                            
                             SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                             return
                         }
@@ -192,6 +196,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                             return
                                         }
                                         
+                                        /// GA tracker
+                                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                            action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
+                                        
                                         RadarService.sharedInstance.stopLoading()
                                         
                                         SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您建立雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
@@ -201,6 +209,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     return
                                 }
 
+                                /// GA tracker
+                                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                    action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
+                                
                                 /// The free trial is activated successfully
                                 UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
                                 
@@ -314,6 +326,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     
                     if(button.tag < self.products.count) {
                         let product = self.products[button.tag]
+                        
+                        //GA tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                            action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: String(product.productIdentifier))
+                        
                         self.proceedTransaction(product)
                     } else {
                         assert(false, "Access products array out of bound \(self.products.count)")
@@ -325,6 +342,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         }else{
             if(button.tag < self.products.count) {
                 let product = self.products[button.tag]
+                
+                //GA tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                    action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: String(product.productIdentifier))
+                
                 self.proceedTransaction(product)
             } else {
                 assert(false, "Access products array out of bound \(self.products.count)")
@@ -403,6 +425,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction){
         
+        //GA tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+            action: GAConst.Action.ZuzuRadarPurchase.MakePaymentSuccess, label: self.purchasedProduct?.productIdentifier)
+        
         Log.debug("\(transaction.transactionIdentifier)")
         
         // create device here
@@ -413,6 +439,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         RadarService.sharedInstance.createPurchase(transaction, product:self.purchasedProduct){
             (purchaseTransaction, error) -> Void in
             if error != nil{
+                
+                /// GA tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                    action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
                 
                 RadarService.sharedInstance.stopLoading()
                 Log.error("create purchase error")
@@ -431,6 +461,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         
         Log.debug("finish transation")
         
+        /// GA tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+            action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
+        
         ZuzuStore.sharedInstance.finishTransaction(transaction)
         
         self.dismissViewControllerAnimated(true){
@@ -445,6 +479,11 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
 
+        /// GA tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+            action: GAConst.Action.ZuzuRadarPurchase.MakePaymentFailure, label: self.purchasedProduct?.productIdentifier)
+        
+        
         RadarService.sharedInstance.stopLoading()
         
         SCLAlertView().showInfo("交易失敗", subTitle: "很抱歉，您的交易並未成功，請您稍後重試!", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
