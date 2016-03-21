@@ -116,9 +116,15 @@ class RadarViewController: UIViewController {
        
         /// When there are some unfinished transactions
         if isUpdateMode == false && isOnLoggingForUnfinishTransaction == false{
-            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            if unfinishedTranscations.count > 0{
-                self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+            
+            if let _ = self.presentedViewController as? RadarPurchaseViewController{
+                //do not alert unfinish while showPurchase
+            }else{
+                let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+                
+                if unfinishedTranscations.count > 0{
+                    self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+                }
             }
         }
         
