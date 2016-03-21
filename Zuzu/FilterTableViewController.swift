@@ -121,7 +121,12 @@ class FilterTableViewController: UITableViewController {
     }
     
     private func updateStatusBar() {
-        let filtersCount = selectedFilterIdSet.count
+        
+        let nonEmptyFilterGroup = selectedFilterIdSet.values.filter { (filters) -> Bool in
+            return (filters.count > 0)
+        }
+        
+        let filtersCount = nonEmptyFilterGroup.count
         
         if let filterStatusBarView = self.filterStatusBarView {
             
