@@ -82,7 +82,7 @@ class RadarViewController: UIViewController {
         
         if (isUpdateMode == true){ /// [Criteria Update Mode]
             
-            self.activateButton.setTitle("設定完成", forState: .Normal)
+            self.activateButton.setTitle("完成設定", forState: .Normal)
             
             /// Refresh criteria summary on UI
             updateCriteriaTextLabel()

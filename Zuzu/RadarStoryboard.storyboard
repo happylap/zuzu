@@ -409,6 +409,12 @@
                                                                     <constraint firstItem="23a-c6-f3g" firstAttribute="top" secondItem="36N-BY-w6f" secondAttribute="top" constant="6" id="yFY-Ok-aFJ"/>
                                                                 </constraints>
                                                             </view>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xgh-NN-XLt" userLabel="message">
+                                                                <rect key="frame" x="20" y="49" width="544" height="20"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <color key="textColor" red="0.29803921568627451" green="0.29803921568627451" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北市(信義,大安)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wkD-W0-Nni" userLabel="regionLabel">
                                                                 <rect key="frame" x="20" y="49" width="564" height="19.5"/>
                                                                 <constraints>
@@ -495,11 +501,15 @@
                                                             <constraint firstItem="uHP-bL-3Pa" firstAttribute="trailing" secondItem="wkD-W0-Nni" secondAttribute="trailing" id="T0k-Eo-FWm"/>
                                                             <constraint firstItem="ZRq-hq-1aB" firstAttribute="top" secondItem="zpG-ZY-Ugx" secondAttribute="bottom" constant="4" id="WSg-F8-C1s"/>
                                                             <constraint firstItem="ZRq-hq-1aB" firstAttribute="width" secondItem="9Xp-wk-oY1" secondAttribute="width" id="X9H-rg-RsZ"/>
+                                                            <constraint firstItem="Xgh-NN-XLt" firstAttribute="top" secondItem="36N-BY-w6f" secondAttribute="bottom" constant="6" id="YYv-nP-tsq"/>
                                                             <constraint firstItem="36N-BY-w6f" firstAttribute="width" secondItem="9Xp-wk-oY1" secondAttribute="width" id="YrR-Xl-V8w"/>
                                                             <constraint firstAttribute="trailing" secondItem="wkD-W0-Nni" secondAttribute="trailing" id="cLn-QA-odn"/>
                                                             <constraint firstItem="zpG-ZY-Ugx" firstAttribute="leading" secondItem="wkD-W0-Nni" secondAttribute="leading" id="gUD-FC-u1S"/>
                                                             <constraint firstAttribute="bottom" secondItem="ZRq-hq-1aB" secondAttribute="bottom" constant="4" id="hrX-02-nkh"/>
+                                                            <constraint firstItem="Xgh-NN-XLt" firstAttribute="centerY" secondItem="wkD-W0-Nni" secondAttribute="centerY" id="jZ9-lN-4zG"/>
                                                             <constraint firstItem="uHP-bL-3Pa" firstAttribute="top" secondItem="GkN-Xn-yd1" secondAttribute="bottom" constant="4" id="kOx-mh-y7M"/>
+                                                            <constraint firstItem="Xgh-NN-XLt" firstAttribute="leading" secondItem="9Xp-wk-oY1" secondAttribute="leading" constant="20" symbolic="YES" id="lgm-Hn-H6B"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Xgh-NN-XLt" secondAttribute="trailing" constant="20" symbolic="YES" id="oLW-NM-ZGh"/>
                                                             <constraint firstItem="uHP-bL-3Pa" firstAttribute="leading" secondItem="wkD-W0-Nni" secondAttribute="leading" id="qFQ-MU-32y"/>
                                                             <constraint firstItem="36N-BY-w6f" firstAttribute="centerX" secondItem="9Xp-wk-oY1" secondAttribute="centerX" id="yp6-Sd-jiL"/>
                                                         </constraints>
@@ -875,6 +885,7 @@
                     <size key="freeformSize" width="600" height="1500"/>
                     <connections>
                         <outlet property="criteriaEnableSwitch" destination="23a-c6-f3g" id="kss-Af-WzT"/>
+                        <outlet property="criteriaMessage" destination="Xgh-NN-XLt" id="rIz-0Z-jvV"/>
                         <outlet property="currentConditionBannerLabel" destination="60w-GP-foy" id="Zhy-9D-vGK"/>
                         <outlet property="houseInfoLabel" destination="GkN-Xn-yd1" id="VGa-Xd-ZvB"/>
                         <outlet property="modifyButtoon" destination="nQm-xW-OQB" id="N0C-XM-aH2"/>

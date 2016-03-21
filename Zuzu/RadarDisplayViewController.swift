@@ -54,6 +54,12 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var criteriaMessage: UILabel! {
+        didSet {
+            self.criteriaMessage.hidden = true
+        }
+    }
+    
     @IBOutlet weak var regionLabel: UILabel!
     
     @IBOutlet weak var houseInfoLabel: UILabel!
@@ -381,15 +387,18 @@ class RadarDisplayViewController: UIViewController {
     private func updateCriteriaTextLabel(){
         
         if self.zuzuCriteria.criteria == nil{
-            let text = "您的租屋雷達服務已在作用中\n請立即將租屋雷達條件設定並啟用"
-            self.regionLabel?.numberOfLines = 0
-            self.regionLabel?.text = text
+            let text = "您的租屋雷達服務已在作用中\n請立即設定租屋條件並啟用，才能開始收到通知。"
+            self.criteriaMessage.hidden = false
+            self.criteriaMessage.text = text
+            self.regionLabel?.text = ""
             self.houseInfoLabel?.text = ""
             self.priceSizeLabel?.text = ""
             self.otherFiltersLabel?.text = ""
             self.modifyButtoon?.setTitle("設定雷達", forState: .Normal)
             return
         }
+        
+        self.criteriaMessage.hidden = true
         
         let displayItem = RadarDisplayItem(criteria:self.zuzuCriteria.criteria!)
         self.regionLabel?.numberOfLines = 1
