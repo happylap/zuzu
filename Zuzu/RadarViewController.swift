@@ -24,7 +24,7 @@ class RadarViewController: UIViewController {
     }
     
     // unfinished transcation variables
-    var isOnLogging = false
+    var isOnLoggingForUnfinishTransaction = false
 
     
     weak var configTable: RadarConfigureTableViewController?
@@ -105,30 +105,18 @@ class RadarViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("viewWillAppear")
-        
-        Log.debug("presentedViewController: \(self.presentedViewController)")
-        if let _ = self.presentedViewController as? RadarPurchaseViewController{
-            self.tabBarController?.tabBarHidden = true
-        }else{
-            self.tabBarController?.tabBarHidden = false
-        }
-        
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear")
        
-        
-        if isUpdateMode == true{
-            return
-        }
-        
         /// When there are some unfinished transactions
-        
-        let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-        if unfinishedTranscations.count > 0{
-            self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+        if isUpdateMode == false && isOnLoggingForUnfinishTransaction == false{
+            let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
+            if unfinishedTranscations.count > 0{
+                self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+            }
         }
         
     }
@@ -252,8 +240,6 @@ class RadarViewController: UIViewController {
     private func showPurchase(){
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-            ///Hide tab bar
-            self.tabBarController?.tabBarHidden = true
             vc.modalPresentationStyle = .OverCurrentContext
             vc.purchaseDelegate = self
             presentViewController(vc, animated: true, completion: nil)
@@ -332,7 +318,6 @@ extension RadarViewController : RadarConfigureTableViewControllerDelegate {
 
 extension RadarViewController: RadarPurchaseDelegate{
     func onPurchaseCancel() -> Void{
-        self.tabBarController?.tabBarHidden = false
         if AmazonClientManager.sharedInstance.isLoggedIn(){
             // If user is logged in and he has purchased service before -> Go to radar status page
             self.reloadRadarUI()
@@ -341,7 +326,6 @@ extension RadarViewController: RadarPurchaseDelegate{
     
     func onPurchaseSuccess() -> Void{
         Log.enter()
-        self.tabBarController?.tabBarHidden = false
         
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
@@ -352,9 +336,7 @@ extension RadarViewController: RadarPurchaseDelegate{
     
     func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
-        
-        self.tabBarController?.tabBarHidden = false
-        
+
         RadarService.sharedInstance.stopLoading()
         
         self.alertCompleteUnfinishTransactions(unfinishedTranscations)
@@ -511,12 +493,12 @@ extension RadarViewController{
 extension RadarViewController{
     
     func cancelLoginHandler() -> Void{
-        self.tabBarController?.tabBarHidden = false
+        self.isOnLoggingForUnfinishTransaction = false
     }
     
     func loginForUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
-        self.tabBarController?.tabBarHidden = true
+        self.isOnLoggingForUnfinishTransaction = true
         
         AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, cancelHandler: self.cancelLoginHandler){
             
@@ -529,8 +511,8 @@ extension RadarViewController{
                 (success, fail) -> Void in
                 
                 RadarService.sharedInstance.stopLoading()
-                
-                self.tabBarController?.tabBarHidden = false
+                                
+                self.isOnLoggingForUnfinishTransaction = false
                 
                 self.alertUnfinishTransactionsStatus(success, fail: fail)
                 

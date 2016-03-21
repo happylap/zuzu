@@ -222,6 +222,7 @@ class FilterTableViewController: UITableViewController {
         notifyFilterChange()
         
         //Google Analytics Tracker
+        
         self.trackScreen()
     }
     
@@ -243,7 +244,7 @@ class FilterTableViewController: UITableViewController {
         super.willMoveToParentViewController(parent)
         
         if(parent == nil) {
-            
+            self.tabBarController?.tabBarHidden = false
             /// Filter Setting Finished
             self.filterDelegate?.onFiltersSelectionDone(self.selectedFilterIdSet)
         }

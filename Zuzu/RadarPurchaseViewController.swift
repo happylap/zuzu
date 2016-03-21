@@ -271,12 +271,15 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        Log.debug("\(self.presentingViewController)")
+        self.presentingViewController?.tabBarController?.tabBarHidden = true
+        
         loadProducts()
         
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    override func viewWillDisappear(animated: Bool) {
+        self.presentingViewController?.tabBarController?.tabBarHidden = false
     }
     
     // MARK: - Action Handlers

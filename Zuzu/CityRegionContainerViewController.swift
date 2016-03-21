@@ -136,6 +136,14 @@ class CityRegionContainerController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        super.willMoveToParentViewController(parent)
+        Log.debug("parents view controller: \(parent)")
+        if(parent == nil) {
+            self.tabBarController?.tabBarHidden = false
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         
         super.didReceiveMemoryWarning()
