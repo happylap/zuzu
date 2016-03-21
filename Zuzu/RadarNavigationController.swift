@@ -56,7 +56,7 @@ class RadarNavigationController: UINavigationController {
         
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             
-            RadarService.sharedInstance.startLoading(self)
+            RadarService.sharedInstance.startLoading(self, graceTime: 0.6)
             
             //UserServiceStatusManager.shared.resetServiceStatusCache() cleart cache for testing
             

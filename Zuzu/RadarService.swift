@@ -191,7 +191,7 @@ class RadarService : NSObject {
     
     // MARK: - Loading
     
-    func startLoading(theViewController: UIViewController, animated: Bool = true){
+    func startLoading(theViewController: UIViewController, animated: Bool = true, minShowTime: Float? = nil, graceTime: Float? = nil){
         if self.isLoading == true{
             return
         }
@@ -203,13 +203,23 @@ class RadarService : NSObject {
         Log.debug("startLoading")
         
         self.isLoading = true
-        LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.3)
-        LoadingSpinner.shared.setMinShowTime(1)
+        
+        if let graceTime = graceTime {
+            LoadingSpinner.shared.setGraceTime(graceTime)
+        } else {
+            LoadingSpinner.shared.setImmediateAppear(true)
+        }
+        
+        if let min = minShowTime{
+            LoadingSpinner.shared.setMinShowTime(min)
+        }
+        
+        
         LoadingSpinner.shared.startOnView(theViewController.view, animated: animated)
     }
     
-    func startLoadingText(theViewController: UIViewController, text: String, animated: Bool = true, minShowTime: Float? = nil){
+    func startLoadingText(theViewController: UIViewController, text: String, animated: Bool = true, minShowTime: Float? = nil, graceTime: Float? = nil){
         if self.isLoadingText == true{
             LoadingSpinner.shared.updateText(text)
             if let min = minShowTime{
@@ -230,10 +240,15 @@ class RadarService : NSObject {
         
         self.isLoadingText = true
         
-        LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.8)
         LoadingSpinner.shared.setText(text)
-        LoadingSpinner.shared.setGraceTime(0.5)
+        
+        if let graceTime = graceTime {
+            LoadingSpinner.shared.setGraceTime(graceTime)
+        } else {
+            LoadingSpinner.shared.setImmediateAppear(true)
+        }
+        
         if let min = minShowTime{
             LoadingSpinner.shared.setMinShowTime(min)
         }
