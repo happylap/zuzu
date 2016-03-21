@@ -70,7 +70,7 @@ class RadarConfigureTableViewController: UITableViewController {
     
     private let downArrowImage = UIImage(named: "arrow_down_n")!.imageWithRenderingMode(.AlwaysTemplate)
     private let upArrowImage = UIImage(named: "arrow_up_n")!.imageWithRenderingMode(.AlwaysTemplate)
-    private let filterImage = UIImage(named: "filter_n")!.imageWithRenderingMode(.AlwaysTemplate)
+    private let filterImage = UIImage(named: "radar_filter")!.imageWithRenderingMode(.AlwaysTemplate)
     
     var delegate: RadarConfigureTableViewControllerDelegate?
 
@@ -103,9 +103,8 @@ class RadarConfigureTableViewController: UITableViewController {
     
     @IBOutlet weak var filtersImage: UIImageView!{
         didSet {
-            self.filtersImage.image = filterImage
-            self.filtersImage.tintColor = UIColor.blackColor()
-            //self.filtersImage.tintColor = UIColor.colorWithRGB(0x808080, alpha: 1)
+            self.filtersImage.image = self.filterImage
+            self.filtersImage.tintColor = UIColor.colorWithRGB(0x2E2E2E, alpha: 1)
         }
     }
     
