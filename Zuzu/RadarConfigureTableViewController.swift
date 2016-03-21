@@ -981,8 +981,8 @@ extension RadarConfigureTableViewController : CityRegionContainerControllerDeleg
             if let cities = self.regionSelectionState {
                 for city in cities {
                     for region in city.regions {
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                            action: GAConst.Action.SearchHouse.Region + String(city.code), label: String(region.code))
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                            action: GAConst.Action.ZuzuRadarSetting.Region + String(city.code), label: String(region.code))
                     }
                 }
             }

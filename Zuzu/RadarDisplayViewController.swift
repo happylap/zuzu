@@ -209,6 +209,9 @@ class RadarDisplayViewController: UIViewController {
         // update service UI according to zuzuService
         self.updateServiceUI()
         
+        //Google Analytics Tracker
+        self.trackScreen()
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -308,6 +311,10 @@ class RadarDisplayViewController: UIViewController {
                     return
             }
         }
+        
+        /// GA
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+            action: GAConst.Action.UIActivity.ChangeRadarStatus, label: String(isEnabled))
         
         self.setCriteriaEnabled(isEnabled)
     }

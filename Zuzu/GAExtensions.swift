@@ -9,6 +9,39 @@
 import Foundation
 import UIKit
 
+struct GAUtils {
+
+    static private func getTrackerInstance() -> GAITracker?{
+        
+        var tracker:GAITracker?
+        
+        #if !DEBUG
+            tracker = GAI.sharedInstance().defaultTracker
+        #endif
+        
+        
+        if let tracker = tracker {
+            tracker.allowIDFACollection = true
+        }
+        
+        return tracker
+    }
+    
+    /// Track event not associated to a screen
+    static func trackEvent(category:String, action: String, label: String? = nil, value: NSNumber? = nil) {
+        let tracker = getTrackerInstance()
+        
+        if let tracker = tracker {
+            tracker.set(kGAIScreenName, value: nil)
+            
+            let eventBuilder = GAIDictionaryBuilder.createEventWithCategory(category, action: action, label: label, value: value)
+            
+            tracker.send(eventBuilder.build() as [NSObject : AnyObject])
+        }
+    }
+    
+}
+
 extension UIViewController {
     
     private func getTrackerInstance() -> GAITracker?{

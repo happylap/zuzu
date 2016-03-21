@@ -231,15 +231,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if application.applicationState == UIApplicationState.Active {
             Log.debug("user receive notification while app is in the foreground")
-
+            
             if rootViewController.selectedIndex == notifyTabIndex{
                 Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
                 NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
+                
+                if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
+                    GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
+                        action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+                }
+                
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
                     if let badge = aps["badge"] as? Int {
                         application.applicationIconBadgeNumber = badge
                         updateTabBarBadge(application)
+                        
+                        GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
+                            action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
                     }
                 }
             }

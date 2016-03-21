@@ -293,6 +293,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         loadProducts()
         
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func viewWillDisappear(animated: Bool) {

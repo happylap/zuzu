@@ -68,6 +68,11 @@ class RadarRetryViewController: UIViewController {
         }
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        //Google Analytics Tracker
+        self.trackScreen()
+    }
     func imageTapped(sender: UITapGestureRecognizer){
         
         self.hideComponents()

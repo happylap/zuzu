@@ -302,6 +302,9 @@ extension RadarService {
             
             if error != nil{
                 
+                GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarPurchase,
+                    action: GAConst.Action.ZuzuRadarPurchase.ResumeTransactionFailure, label: transaction.payment.productIdentifier)
+                
                 Log.error("Encounter error while finish the transaction: \(tranId)")
                 
                 Log.error("error info: \(error)")
@@ -314,6 +317,9 @@ extension RadarService {
                 
                 return
             }
+            
+            GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarPurchase,
+                action: GAConst.Action.ZuzuRadarPurchase.ResumeTransactionSuccess, label: transaction.payment.productIdentifier)
             
             Log.debug("Successfully finish trnasaction: \(tranId)")
             

@@ -108,6 +108,14 @@ class RadarViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("viewWillAppear")
+        
+        //Google Analytics Tracker
+        if self.isUpdateMode{
+            self.trackScreenWithTitle("\(self.title)_Update")
+        }else{
+            self.trackScreenWithTitle("\(self.title)_Create")
+        }
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -176,6 +184,41 @@ class RadarViewController: UIViewController {
         
         // has criteriaId and user id --> update criteria
         
+        //
+        dispatch_async(GlobalQueue.Background) {
+
+            if let priceRange = self.radarSearchCriteria.price {
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                    action: GAConst.Action.ZuzuRadarSetting.PriceMin,
+                    label: String(priceRange.0))
+                
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                    action: GAConst.Action.ZuzuRadarSetting.PriceMax,
+                    label: String(priceRange.1))
+            }
+            
+            if let sizeRange = self.radarSearchCriteria.size {
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                    action: GAConst.Action.ZuzuRadarSetting.SizeMin,
+                    label: String(sizeRange.0))
+                
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                    action: GAConst.Action.ZuzuRadarSetting.SizeMax,
+                    label: String(sizeRange.1))
+            }
+            
+            if let types = self.radarSearchCriteria.types {
+                for type in types {
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                        action: GAConst.Action.ZuzuRadarSetting.Type, label: String(type))
+                }
+            } else {
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting, action:
+                    GAConst.Action.ZuzuRadarSetting.Type, label: "99")
+            }
+            
+        }
+        
         if isUpdateMode == true{
             if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
                 
@@ -188,6 +231,9 @@ class RadarViewController: UIViewController {
                         
                         if error != nil{
                             
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                                action: GAConst.Action.ZuzuRadarSetting.UpdateCriteriaError, label: userId)
+                            
                             RadarService.sharedInstance.stopLoading()
                             
                             Log.error("Cannot update criteria by user id:\(userId)")
@@ -196,6 +242,9 @@ class RadarViewController: UIViewController {
                             
                             return
                         }
+                        
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
+                            action: GAConst.Action.ZuzuRadarSetting.UpdateCriteriaSuccess, label: userId)
                         
                         Log.info("update criteria success")
                         
