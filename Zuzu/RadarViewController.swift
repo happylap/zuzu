@@ -504,6 +504,13 @@ extension RadarViewController{
             
             (task: AWSTask!) -> AnyObject! in
             
+            self.isOnLoggingForUnfinishTransaction = false
+            
+            if let error = task.error {
+                Log.warning("Login Failed or cancelled: \(error)")
+                return nil
+            }
+            
             RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
             
             RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
@@ -511,8 +518,6 @@ extension RadarViewController{
                 (success, fail) -> Void in
                 
                 RadarService.sharedInstance.stopLoading()
-                                
-                self.isOnLoggingForUnfinishTransaction = false
                 
                 self.alertUnfinishTransactionsStatus(success, fail: fail)
                 

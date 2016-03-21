@@ -299,7 +299,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 (task: AWSTask!) -> AnyObject! in
                 
                 if let error = task.error {
-                    Log.warning("Login Failed: \(error)")
+                    Log.warning("Login Failed  or cancelled: \(error)")
                     return nil
                 }
                 
