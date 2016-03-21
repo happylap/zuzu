@@ -70,6 +70,7 @@ public class LoadingSpinner{
     
     public func startOnView(view: UIView, animated: Bool = true) {
         
+        self.dialog?.hide(false)
         self.dialog = MBProgressHUD(view: view)
         
         if let dialog = dialog {
@@ -124,6 +125,7 @@ public class LoadingSpinner{
             
         }
         
+        self.dialog = nil
         resetParams()
     }
     
