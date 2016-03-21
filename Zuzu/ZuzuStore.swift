@@ -216,7 +216,7 @@ public class ZuzuStore: NSObject  {
     /// Make purchase of a product.
     /// return false: if there exists an unfinished transaction for the product to purchase
     /// return true: if the payment is sent to the server successfully
-    internal func makePurchase(product: ZuzuProduct, handler: ZuzuStorePurchaseHandler) -> Bool {
+    internal func makePurchase(product: ZuzuProduct, handler: ZuzuStorePurchaseHandler?) -> Bool {
         
         purchaseHandler = handler
         
