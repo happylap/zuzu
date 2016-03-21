@@ -256,6 +256,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }else{
             Log.debug("set notification tab as selected")
 
+            if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
+                GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
+                    action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+            }
+            
             rootViewController.selectedIndex = notifyTabIndex
         }
         
