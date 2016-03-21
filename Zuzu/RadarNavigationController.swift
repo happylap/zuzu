@@ -48,6 +48,12 @@ class RadarNavigationController: UINavigationController {
         
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
             self.showConfigureRadarView(onCompleteHandler)
+            
+            // it's beteer to check if it is loading now and then stop it.
+            if (RadarService.sharedInstance.isLoading || RadarService.sharedInstance.isLoadingText){
+                RadarService.sharedInstance.stopLoading()
+            }
+            
             return
         }
         

@@ -667,7 +667,10 @@ extension RadarDisplayViewController{
             if isEnabled == true{
                 self.setCriteriaSwitch(isEnabled)
 
+                RadarService.sharedInstance.startLoading(self)
+
                 self.purchaseHistotyTableDataSource.refresh(){
+                    // don't need to stop loading here because it is going to reload ui
                     self.reloadRadarUI()
                 }
                 

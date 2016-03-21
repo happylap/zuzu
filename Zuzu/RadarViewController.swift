@@ -176,6 +176,7 @@ class RadarViewController: UIViewController {
                     
                     ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: criteiraId, criteria: self.radarSearchCriteria) {
                         (result, error) -> Void in
+                        
                         if error != nil{
                             
                             RadarService.sharedInstance.stopLoading()
@@ -191,6 +192,8 @@ class RadarViewController: UIViewController {
                         
                         self.delegate?.onCriteriaSettingDone(self.radarSearchCriteria)
                         
+                        
+                        //don't need to stop loading here because it is going ti reload ui
                         self.reloadRadarUI(){
                             self.navigationController?.popViewControllerAnimated(true)
                         }
@@ -219,6 +222,7 @@ class RadarViewController: UIViewController {
                     
                     Log.info("create criteria success")
                     
+                    //don't need to stop loading here because it is going ti reload ui
                     self.reloadRadarUI(){
                         self.navigationController?.popViewControllerAnimated(true)
                     }
@@ -329,7 +333,6 @@ extension RadarViewController: RadarPurchaseDelegate{
         
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
-        RadarService.sharedInstance.startLoading(self)
         self.setUpCriteria()
         Log.exit()
     }
@@ -337,8 +340,6 @@ extension RadarViewController: RadarPurchaseDelegate{
     func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
 
-        RadarService.sharedInstance.stopLoading()
-        
         self.alertCompleteUnfinishTransactions(unfinishedTranscations)
         
         Log.exit()
@@ -355,11 +356,16 @@ extension RadarViewController{
     func setUpCriteria(){
         Log.enter()
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
+            RadarService.sharedInstance.startLoading(self)
+            
             ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
                 (result, error) -> Void in
                 
                 if error != nil{
                     Log.error("Cannot get criteria by user id:\(userId)")
+                    
+                    RadarService.sharedInstance.stopLoading()
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                         
@@ -397,10 +403,11 @@ extension RadarViewController{
                     RadarService.sharedInstance.stopLoading()
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新租屋雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        
                         self.reloadRadarUI()
+                    
                     }
 
-                    
                     return
                 }
                 
@@ -419,7 +426,7 @@ extension RadarViewController{
         var isEnabled = zuzuCriteria.enabled ?? false
         
         if isEnabled == true{
-            RadarService.sharedInstance.stopLoading()
+            //don't need to stop loading here because it is going ti reload ui
             zuzuCriteria.enabled = isEnabled
             self.reloadRadarUI()
             return
@@ -440,7 +447,9 @@ extension RadarViewController{
                         RadarService.sharedInstance.stopLoading()
                         
                         SCLAlertView().showInfo("設定成功", subTitle: "很抱歉，租屋雷達條件儲存成功，但是尚無法成功啟用，請您稍後嘗試手動啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                            
                             self.reloadRadarUI()
+                        
                         }
                         
                         return
@@ -448,7 +457,7 @@ extension RadarViewController{
                     
                     Log.info("enable criteria success")
                     
-                    RadarService.sharedInstance.stopLoading()
+                    //don't need to stop loading here because it is going ti reload ui
                     
                     self.reloadRadarUI()
             }
@@ -471,14 +480,16 @@ extension RadarViewController{
                     Log.error("Cannot update criteria by user id:\(userId)")
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        
                         self.reloadRadarUI()
+                    
                     }
                     return
                 }
                 
                 Log.info("create criteria success")
                 
-                RadarService.sharedInstance.stopLoading()
+                //don't need to stop loading here because it is going ti reload ui
                 
                 self.reloadRadarUI()
             }
@@ -566,10 +577,9 @@ extension RadarViewController{
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         if fail <= 0{
+
             SCLAlertView().showInfo("服務建立成功", subTitle: "所有服務已經建立完成", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
 
-                RadarService.sharedInstance.stopLoading()
-                
                 self.reloadRadarUI()
                 
             }
