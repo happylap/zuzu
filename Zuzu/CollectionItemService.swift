@@ -242,7 +242,10 @@ class CollectionItemService: NSObject
                     }
                 }
             }
-            LoadingSpinner.shared.stop()
+            
+            if self.parentViewController != nil {
+                LoadingSpinner.shared.stop()
+            }
         }
     }
 
