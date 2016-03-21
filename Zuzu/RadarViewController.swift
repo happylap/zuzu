@@ -387,6 +387,10 @@ extension RadarViewController{
                 if error != nil{
                     Log.error("Cannot get criteria by user id:\(userId)")
                     
+                    //GA tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+            
                     RadarService.sharedInstance.stopLoading()
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
@@ -422,6 +426,10 @@ extension RadarViewController{
                 if error != nil{
                     Log.error("Cannot update criteria by user id:\(userId)")
                     
+                    //GA tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                    
                     RadarService.sharedInstance.stopLoading()
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新租屋雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
@@ -448,6 +456,11 @@ extension RadarViewController{
         var isEnabled = zuzuCriteria.enabled ?? false
         
         if isEnabled == true{
+            
+            //GA tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: zuzuCriteria.userId)
+            
             //don't need to stop loading here because it is going ti reload ui
             zuzuCriteria.enabled = isEnabled
             self.reloadRadarUI()
@@ -466,6 +479,10 @@ extension RadarViewController{
                     if error != nil{
                         Log.error("Cannot enable criteria by user id:\(userId)")
                         
+                        //GA tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                            action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                        
                         RadarService.sharedInstance.stopLoading()
                         
                         SCLAlertView().showInfo("設定成功", subTitle: "很抱歉，租屋雷達條件儲存成功，但是尚無法成功啟用，請您稍後嘗試手動啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
@@ -476,6 +493,10 @@ extension RadarViewController{
                         
                         return
                     }
+                    
+                    //GA tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
                     
                     Log.info("enable criteria success")
                     
@@ -495,6 +516,10 @@ extension RadarViewController{
                 
                 if error != nil{
                     
+                    //GA tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                    
                     Log.info("create criteria fails")
                     
                     RadarService.sharedInstance.stopLoading()
@@ -508,6 +533,10 @@ extension RadarViewController{
                     }
                     return
                 }
+                
+                //GA tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
                 
                 Log.info("create criteria success")
                 

@@ -665,6 +665,11 @@ extension RadarDisplayViewController{
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteiraId = self.zuzuCriteria.criteriaId{
  
             if isEnabled == true{
+                
+                //GA tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
+                
                 self.setCriteriaSwitch(isEnabled)
 
                 RadarService.sharedInstance.startLoading(self)
@@ -685,6 +690,11 @@ extension RadarDisplayViewController{
                 criteriaId: criteiraId, enabled: isEnabled) { (result, error) -> Void in
                     
                     if error != nil{
+                        
+                        //GA tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                            action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                        
                         self.setCriteriaSwitch(!isEnabled)
                         
                         RadarDisplayViewController.getAlertView()?.showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
@@ -698,6 +708,10 @@ extension RadarDisplayViewController{
                         }
                         return
                     }
+                    
+                    //GA tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
                     
                     self.setCriteriaSwitch(isEnabled)
                     

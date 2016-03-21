@@ -329,7 +329,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         
                         //GA tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                            action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: String(product.productIdentifier))
+                            action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                         
                         self.proceedTransaction(product)
                     } else {
@@ -345,7 +345,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 //GA tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                    action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: String(product.productIdentifier))
+                    action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                 
                 self.proceedTransaction(product)
             } else {
