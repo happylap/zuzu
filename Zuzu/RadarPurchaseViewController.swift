@@ -406,29 +406,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
             (purchaseTransaction, error) -> Void in
             if error != nil{
                 
-                if let transId = transaction.transactionIdentifier{
-                    RadarService.sharedInstance.checkPurchaseExist(transId){
-                        (isExist, checkExistError) -> Void in
-                        if isExist == true{
-                            
-                            self.finishTransaction(transaction)
-                            
-                            return
-                        }
-
-                        RadarService.sharedInstance.stopLoading()
-                        
-                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您建立雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                        
-                    }
-                    
-                    return
-                }
-
                 RadarService.sharedInstance.stopLoading()
                 Log.error("create purchase error")
  
-                SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您建立雷達服務，\n請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您建立雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 
                 return
 
