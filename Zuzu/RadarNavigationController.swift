@@ -26,11 +26,8 @@ class RadarNavigationController: UINavigationController {
     override func viewWillAppear(animated: Bool) {
         Log.enter()
         
-        self.showRadar(){
-            self.runOnMainThread(){
-                super.viewWillAppear(animated) // call show radar whenever appear to decide will view should be presented
-            }
-        }
+        self.showRadar()
+        super.viewWillAppear(animated)
         
         Log.exit()
     }
