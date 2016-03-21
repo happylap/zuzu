@@ -706,6 +706,8 @@ class AmazonClientManager : NSObject {
                 
                 self.triggerTokenRefreshingTimer()
                 
+                task.continueWithBlock(self.completionHandler!)
+                
                 return nil
             }
             
