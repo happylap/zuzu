@@ -17,6 +17,9 @@ protocol RadarViewControllerDelegate: class {
 
 class RadarViewController: UIViewController {
     
+    
+    private static var alertViewResponder: SCLAlertViewResponder?
+    
     // segue to configure UI
     
     struct ViewTransConst {
@@ -294,6 +297,17 @@ class RadarViewController: UIViewController {
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
 
+    private static func getAlertView() -> SCLAlertView?{
+        if RadarViewController.alertViewResponder == nil{
+            return SCLAlertView()
+        }
+        
+        return nil
+    }
+    
+    private static func resetAlertView(){
+        RadarViewController.alertViewResponder = nil
+    }
 }
 
 // MARK: - RadarConfigureTableViewControllerDelegate
@@ -340,7 +354,9 @@ extension RadarViewController: RadarPurchaseDelegate{
     func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
 
-        self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+        if isUpdateMode == false && isOnLoggingForUnfinishTransaction == false{
+            self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+        }
         
         Log.exit()
     }
@@ -540,11 +556,11 @@ extension RadarViewController{
  
     func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
-        let alertView = SCLAlertView()
+        let alertView = RadarViewController.getAlertView()
         
         if AmazonClientManager.sharedInstance.isLoggedIn(){
 
-            alertView.addButton("啟用服務", action: {
+            alertView?.addButton("啟用服務", action: {
                 () -> Void in
                 
                 RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
@@ -561,7 +577,7 @@ extension RadarViewController{
 
         }else{
             
-            alertView.addButton("啟用服務", action: {
+            alertView?.addButton("啟用服務", action: {
                 () -> Void in
                 
                 self.loginForUnfinishTransactions(unfinishedTranscations)
@@ -569,7 +585,9 @@ extension RadarViewController{
             
         }
 
-        alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView?.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            RadarViewController.resetAlertView()
+        }
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
