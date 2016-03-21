@@ -689,8 +689,9 @@ extension RadarDisplayViewController{
                         
                         RadarDisplayViewController.getAlertView()?.showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您啟動雷達服務，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             () -> Void in
+                            RadarDisplayViewController.resetAlertView()
+                            
                             self.purchaseHistotyTableDataSource.refresh(){
-                                RadarDisplayViewController.resetAlertView()
                                 self.reloadRadarUI()
                             }
                         }
@@ -698,6 +699,7 @@ extension RadarDisplayViewController{
                     }
                     
                     self.setCriteriaSwitch(isEnabled)
+                    
                     self.purchaseHistotyTableDataSource.refresh(){
                         self.reloadRadarUI()
                     }
@@ -714,9 +716,9 @@ extension RadarDisplayViewController{
     
     func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
-        let alertView = SCLAlertView()
+        let alertView = RadarDisplayViewController.getAlertView()
         
-        alertView.addButton("啟用服務", action: {
+        alertView?.addButton("啟用服務", action: {
             () -> Void in
             
             RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
@@ -732,7 +734,9 @@ extension RadarDisplayViewController{
         })
         
         
-        alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView?.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            RadarDisplayViewController.resetAlertView()
+        }
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
@@ -740,9 +744,13 @@ extension RadarDisplayViewController{
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         if fail <= 0{
-            SCLAlertView().showInfo("服務啟用成功", subTitle: "所有服務已經完成啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                                
-                self.reloadRadarUI()
+            RadarDisplayViewController.getAlertView()?.showInfo("服務啟用成功", subTitle: "所有服務已經完成啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                
+                RadarDisplayViewController.resetAlertView()
+                
+                self.purchaseHistotyTableDataSource.refresh(){
+                    self.reloadRadarUI()
+                }
                 
             }
             
@@ -754,10 +762,10 @@ extension RadarDisplayViewController{
             let msgTitle = "服務啟用失敗"
             let okButton = "知道了"
             let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您啟用服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
-            let alertView = SCLAlertView()
-            alertView.showCloseButton = true
+            let alertView = RadarDisplayViewController.getAlertView()
+            alertView?.showCloseButton = true
             
-            alertView.addButton("重新再試") {
+            alertView?.addButton("重新再試") {
                 
                 RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                 
@@ -766,6 +774,7 @@ extension RadarDisplayViewController{
                     (success, fail) -> Void in
                     
                     self.runOnMainThread(){
+
                         RadarService.sharedInstance.stopLoading()
                         
                         self.alertUnfinishTransactionsStatus(success, fail: fail)
@@ -773,7 +782,7 @@ extension RadarDisplayViewController{
                 }
             }
             
-            RadarDisplayViewController.getAlertView()?.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            alertView?.showInfo(msgTitle, subTitle: subTitle, closeButtonTitle: okButton, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                 RadarDisplayViewController.resetAlertView()
             }
         }
