@@ -17,6 +17,8 @@ class CommonLoginViewController: UIViewController {
     
     var loginMode: Int = 1
     
+    var isOriginallyHideTabBar = true
+    
     @IBOutlet weak var cancelButton: UIButton!{
         didSet {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
@@ -108,6 +110,14 @@ class CommonLoginViewController: UIViewController {
         
         self.maskView.alpha = 0.0
         self.maskView.hidden = false
+        
+        if let tabBar = self.presentingViewController?.tabBarController{
+            self.isOriginallyHideTabBar = tabBar.tabBarHidden
+            
+            if isOriginallyHideTabBar == false{
+                tabBar.tabBarHidden = true
+            }
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -122,6 +132,10 @@ class CommonLoginViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         self.maskView.hidden = true
+        
+        if let tabBar = self.presentingViewController?.tabBarController{
+            tabBar.tabBarHidden = self.isOriginallyHideTabBar
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -133,6 +147,7 @@ class CommonLoginViewController: UIViewController {
     
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
+
         dismissViewControllerAnimated(true, completion: self.cancelHandler)
     }
     

@@ -340,9 +340,7 @@ class RadarDisplayViewController: UIViewController {
         
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarPurchaseView") as? RadarPurchaseViewController {
-            ///Hide tab bar
-            self.tabBarController?.tabBarHidden = true
-            
+
             vc.modalPresentationStyle = .OverCurrentContext
             vc.purchaseDelegate = self
             
@@ -611,14 +609,11 @@ extension RadarDisplayViewController : RadarViewControllerDelegate {
 extension RadarDisplayViewController: RadarPurchaseDelegate{
     
     func onPurchaseCancel() -> Void{
-        self.tabBarController?.tabBarHidden = false
+        // do nothing
     }
     
     func onPurchaseSuccess() -> Void{
         Log.enter()
-        
-        self.tabBarController?.tabBarHidden = false
-        
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         self.enableCriteriaForPurchase()
@@ -628,8 +623,6 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
     
     func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
-        
-        self.tabBarController?.tabBarHidden = false
                 
         RadarService.sharedInstance.stopLoading()
         
