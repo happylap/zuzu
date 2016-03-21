@@ -16,6 +16,8 @@ class RadarDisplayViewController: UIViewController {
     
     private static var alertViewResponder: SCLAlertViewResponder?
     
+    private var alertNoCriteria = false
+    
     private let RenewalThresholdDays = 3
     
     // segue to configure UI
@@ -157,11 +159,6 @@ class RadarDisplayViewController: UIViewController {
         // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
         self.purchaseHistotyTableDataSource.refresh(nil)
-
-        if self.zuzuCriteria.criteriaId == nil{
-            SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            return
-        }
         
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
@@ -222,7 +219,28 @@ class RadarDisplayViewController: UIViewController {
         let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
         if unfinishedTranscations.count > 0{
             self.alertCompleteUnfinishTransactions(unfinishedTranscations)
+        }else{
+            if self.zuzuCriteria.criteriaId == nil{
+                
+                if self.alertNoCriteria == true{
+                    return
+                }
+                
+                // only show once
+                self.alertNoCriteria = true
+                
+                if RadarDisplayViewController.alertViewResponder == nil{
+                    RadarDisplayViewController.alertViewResponder = SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    RadarDisplayViewController.alertViewResponder?.setDismissBlock(){
+                        RadarDisplayViewController.alertViewResponder
+                    }
+                }
+                
+                return
+            }
         }
+        
+        
     }
     
     // MARK: - Segue
@@ -654,7 +672,6 @@ extension RadarDisplayViewController{
                     RadarDisplayViewController.alertViewResponder = nil
                 }
             }
-            
             
             return
             
