@@ -202,7 +202,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                         
                                         RadarService.sharedInstance.stopLoading()
                                         
-                                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您建立雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您啟用雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                                         
                                     }
                                     
@@ -447,7 +447,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                 RadarService.sharedInstance.stopLoading()
                 Log.error("create purchase error")
  
-                SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您建立雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您啟用雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 
                 return
 

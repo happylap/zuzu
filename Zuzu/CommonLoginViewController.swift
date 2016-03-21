@@ -104,8 +104,8 @@ class CommonLoginViewController: UIViewController {
             titleText.text = "登入使用租屋雷達"
             subTitleText.text = "請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務"
         } else if loginMode == 3 {
-            titleText.text = "登入建立租屋雷達服務"
-            subTitleText.text = "我們發現您有購買的租屋雷達尚未完成設定，請您使用下列帳號登入建立服務，以維護您的權益"
+            titleText.text = "登入啟用租屋雷達服務"
+            subTitleText.text = "我們發現您有購買的租屋雷達尚未完成啟用，請您使用下列帳號登入啟用服務，以維護您的權益"
         }
         
         self.maskView.alpha = 0.0
