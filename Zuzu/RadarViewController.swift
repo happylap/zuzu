@@ -303,13 +303,6 @@ class RadarViewController: UIViewController {
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
 
-    private static func getAlertView() -> SCLAlertView?{
-        if RadarViewController.alertViewResponder == nil{
-            return SCLAlertView()
-        }
-        
-        return nil
-    }
     
     private static func resetAlertView(){
         RadarViewController.alertViewResponder = nil
@@ -591,42 +584,47 @@ extension RadarViewController{
  
     func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
-        let alertView = RadarViewController.getAlertView()
-        
-        if AmazonClientManager.sharedInstance.isLoggedIn(){
-
-            alertView?.addButton("啟用服務", action: {
-                () -> Void in
-                
-                RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
-                
-                RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
-                    
-                    (success, fail) -> Void in
-                    
-                    RadarService.sharedInstance.stopLoading()
-  
-                    self.alertUnfinishTransactionsStatus(success, fail: fail)
-                }
-            })
-
-        }else{
+        if RadarViewController.alertViewResponder == nil{
+            let alertView = SCLAlertView()
             
-            alertView?.addButton("啟用服務", action: {
-                () -> Void in
+            if AmazonClientManager.sharedInstance.isLoggedIn(){
                 
-                self.loginForUnfinishTransactions(unfinishedTranscations)
-            })
+                alertView.addButton("啟用服務", action: {
+                    () -> Void in
+                    
+                    RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
+                    
+                    RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+                        
+                        (success, fail) -> Void in
+                        
+                        RadarService.sharedInstance.stopLoading()
+                        
+                        self.alertUnfinishTransactionsStatus(success, fail: fail)
+                    }
+                })
+                
+            }else{
+                
+                alertView.addButton("啟用服務", action: {
+                    () -> Void in
+                    
+                    self.loginForUnfinishTransactions(unfinishedTranscations)
+                })
+                
+            }
             
+            RadarViewController.alertViewResponder = alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            
+            RadarViewController.alertViewResponder?.setDismissBlock(){
+                
+                RadarViewController.alertViewResponder = nil
+                
+                self.reloadRadarUI() // if user is logged in on purchase
+                
+            }
         }
 
-        alertView?.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-            
-            RadarViewController.resetAlertView()
-            
-            self.reloadRadarUI() // if user is logged in on purchase
-        
-        }
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
