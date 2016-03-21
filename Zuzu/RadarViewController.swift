@@ -528,10 +528,10 @@ extension RadarViewController{
         
         if AmazonClientManager.sharedInstance.isLoggedIn(){
 
-            alertView.addButton("重新建立", action: {
+            alertView.addButton("啟用服務", action: {
                 () -> Void in
                 
-                RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
+                RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                 
                 RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
                     
@@ -545,7 +545,7 @@ extension RadarViewController{
 
         }else{
             
-            alertView.addButton("重新建立", action: {
+            alertView.addButton("啟用服務", action: {
                 () -> Void in
                 
                 self.loginForUnfinishTransactions(unfinishedTranscations)
@@ -553,7 +553,7 @@ extension RadarViewController{
             
         }
 
-        alertView.showNotice("重新建立服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未建立完成，請重新建立服務", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){

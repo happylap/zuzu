@@ -701,10 +701,10 @@ extension RadarDisplayViewController{
         
         let alertView = SCLAlertView()
         
-        alertView.addButton("重新建立", action: {
+        alertView.addButton("啟用服務", action: {
             () -> Void in
             
-            RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
+            RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
             
             RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
                 
@@ -717,7 +717,7 @@ extension RadarDisplayViewController{
         })
         
         
-        alertView.showNotice("重新建立服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未建立完成，請重新建立服務", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
@@ -725,7 +725,7 @@ extension RadarDisplayViewController{
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         if fail <= 0{
-            SCLAlertView().showInfo("服務建立成功", subTitle: "所有服務已經建立完成", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            SCLAlertView().showInfo("服務啟用成功", subTitle: "所有服務已經完成啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                                 
                 self.reloadRadarUI()
                 
@@ -736,15 +736,15 @@ extension RadarDisplayViewController{
     
         if fail > 0{
             let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
-            let msgTitle = "服務建立失敗"
+            let msgTitle = "服務啟用失敗"
             let okButton = "知道了"
-            let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您建立服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
+            let subTitle = "您已經成功購買過租屋雷達，但是目前無法成功為您啟用服務，請您請稍後再試！ 若持續發生失敗，請與臉書粉絲團客服聯繫!"
             let alertView = SCLAlertView()
             alertView.showCloseButton = true
             
             alertView.addButton("重新再試") {
                 
-                RadarService.sharedInstance.startLoadingText(self, text:"建立服務...")
+                RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                 
                 RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
                     
