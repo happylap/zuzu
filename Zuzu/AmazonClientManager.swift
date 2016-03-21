@@ -690,8 +690,8 @@ class AmazonClientManager : NSObject {
             Log.info("Credential Provider With Login")
             self.dumpCognitoCredentialProviderInfo()
             
-            if (task.error != nil) {
-                assert(false, "Log in failed. Cannot get Cognito IdentityId")
+            if let error = task.error {
+                assert(false, "Log in failed. Cannot get Cognito IdentityId, error = \(error)")
                 return nil
             }
             
