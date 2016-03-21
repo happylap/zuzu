@@ -202,7 +202,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
                 if error != nil{
                     Log.debug("getNotificationItemsByUserId fails")
-                    LoadingSpinner.shared.stop()
+                    
+                    if showSpinner == true{
+                        LoadingSpinner.shared.stop()
+                    }
+                    
                     return
                 }
                 
@@ -218,7 +222,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                         }
                     }
                 }
-                LoadingSpinner.shared.stop()
+                
+                if showSpinner == true{
+                    LoadingSpinner.shared.stop()
+                }
             }
         }
         Log.exit()
@@ -311,7 +318,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                     houseDetailVC.delegate = self
                     
                     dispatch_async(GlobalQueue.Background) {
-
+                        
                         //GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
                             action: GAConst.Action.ZuzuRadarNotification.ReadNotificationPrice,
@@ -326,7 +333,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                             label: String(houseItem.purposeType))
                         
                     }
-
+                    
                 }
                 
                 self.showViewController(houseDetailVC, sender: self)
