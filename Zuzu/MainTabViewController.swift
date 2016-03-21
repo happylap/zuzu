@@ -12,7 +12,7 @@ import UIKit
 let TabBarSelectedNotification = "TabBarSelectedNotification"
 let TabBarAgainSelectedNotification = "TabBarAgainSelectedNotification"
 
-class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
+class MainTabViewController: UITabBarController {
     
     struct MainTabConstants {
         static let SEARCH_TAB_INDEX = 0
@@ -21,6 +21,11 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         static let NOTIFICATION_TAB_INDEX = 3
     }
     
+    private var tabViewControllers = [UIViewController]()
+    
+    private var lastSelectedIndex: Int?
+    
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,6 +37,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
             return nil
         }
         
+        /// Init View Controllers for each Tab
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!
         
@@ -44,8 +50,12 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         let notificationStoryboard:UIStoryboard = UIStoryboard(name: "NotificationStoryboard", bundle: nil)
         let notificationViewController:UIViewController = notificationStoryboard.instantiateInitialViewController()!
         
-        var tabViewControllers = [UIViewController]()
+        #if DEBUG
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginDebugViewController:UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("loginDebugPage")
+        #endif
         
+        /// Append needed view controllers to Tab View
         tabViewControllers.append(searchViewController)
         
         if(FeatureOption.Collection.enableMain) {
@@ -60,9 +70,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         
         #if DEBUG
-            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let loginDebugViewController:UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("loginDebugPage")
-            
             tabViewControllers.append(loginDebugViewController)
         #endif
         
@@ -72,8 +79,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         
         self.initTabBar()
         
-        
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,8 +87,26 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         //self.tabBar.hidden = true
     }
     
-    
-    var lastSelectedIndex: Int?
+    func dismissAllViewControllers(notification: NSNotification) {
+        
+        if let userInfo = notification.userInfo,
+            let tabIndex = userInfo["targetTab"] as? Int{
+                
+                // dismiss all view controllers in the navigation stack
+                if let viewControllers = self.viewControllers as? [UINavigationController] {
+                    for vc in viewControllers {
+                        vc.dismissViewControllerAnimated(true, completion: nil)
+                        //vc.popToRootViewControllerAnimated(false)
+                    }
+                }
+                
+                self.selectedIndex = tabIndex
+        }
+    }
+}
+
+// MARK: - UITabBarControllerDelegate
+extension MainTabViewController:  UITabBarControllerDelegate {
     
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
         
@@ -101,7 +124,7 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-            
+        
         if let sb = viewController.storyboard {
             if let name: String = sb.valueForKey("name") as? String {
                 switch name {
@@ -141,23 +164,6 @@ class MainTabViewController: UITabBarController, UITabBarControllerDelegate {
         }
         
         return true
-    }
-    
-    func dismissAllViewControllers(notification: NSNotification) {
-        
-        if let userInfo = notification.userInfo,
-            let tabIndex = userInfo["targetTab"] as? Int{
-                
-                // dismiss all view controllers in the navigation stack
-                if let viewControllers = self.viewControllers as? [UINavigationController] {
-                    for vc in viewControllers {
-                        vc.dismissViewControllerAnimated(true, completion: nil)
-                        //vc.popToRootViewControllerAnimated(false)
-                    }
-                }
-                
-                self.selectedIndex = tabIndex
-        }
     }
 }
 
