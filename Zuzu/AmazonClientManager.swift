@@ -108,8 +108,6 @@ class AmazonClientManager : NSObject {
                     
                 }
             } else {
-                
-                assert(false, "No previous login provider, but the user is logged in")
                 return (nil, nil)
             }
         }
