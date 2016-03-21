@@ -102,6 +102,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             
             /// Display result no matter whether we get the products from AppStore successfully
             RadarService.sharedInstance.stopLoading()
+            
             self.tableView.reloadData()
         }
     }
@@ -165,6 +166,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                                 AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
                             }
+                            
                             
                             ZuzuWebService.sharedInstance.createPurchase(purchase){
                                 (result, error) -> Void in
@@ -241,6 +243,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 let unfinishedTranscations = ZuzuStore.sharedInstance.getUnfinishedTransactions()
                 
                 self.dismissViewControllerAnimated(true){
+                    
+                    RadarService.sharedInstance.stopLoading()
+                    
                     self.purchaseDelegate?.onFindUnfinishedTransaction(unfinishedTranscations)
                 }
             }

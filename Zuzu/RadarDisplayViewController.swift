@@ -311,7 +311,6 @@ class RadarDisplayViewController: UIViewController {
                 text = "停用中"
             }
             
-            RadarService.sharedInstance.stopLoading()
             RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: criteriaId, enabled: isEnabled) {
@@ -319,18 +318,20 @@ class RadarDisplayViewController: UIViewController {
                 
                 if error != nil{
                         
-                        RadarService.sharedInstance.stopLoading()
-                    
-                        RadarDisplayViewController.getAlertView()?.showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                            RadarDisplayViewController.resetAlertView()
-                            self.setCriteriaSwitch(!isEnabled)
-                        }
-                        
-                        return
-                    }
-                
-                    self.setCriteriaSwitch(isEnabled)
                     RadarService.sharedInstance.stopLoading()
+                    
+                    RadarDisplayViewController.getAlertView()?.showInfo("網路連線失敗", subTitle: "很抱歉，目前暫時無法為您完成此操作，請稍後再試，謝謝！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        
+                        RadarDisplayViewController.resetAlertView()
+                        self.setCriteriaSwitch(!isEnabled)
+                    }
+                        
+                    return
+                }
+                
+                self.setCriteriaSwitch(isEnabled)
+                
+                RadarService.sharedInstance.stopLoading()
             }
         }else{
             self.setCriteriaSwitch(!isEnabled)
@@ -635,9 +636,7 @@ extension RadarDisplayViewController: RadarPurchaseDelegate{
     
     func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
-                
-        RadarService.sharedInstance.stopLoading()
-        
+
         self.alertCompleteUnfinishTransactions(unfinishedTranscations)
         
         Log.exit()
@@ -667,9 +666,7 @@ extension RadarDisplayViewController{
  
             if isEnabled == true{
                 self.setCriteriaSwitch(isEnabled)
-                
-                RadarService.sharedInstance.startLoading(self)
-                
+
                 self.purchaseHistotyTableDataSource.refresh(){
                     self.reloadRadarUI()
                 }
@@ -692,6 +689,7 @@ extension RadarDisplayViewController{
                             RadarDisplayViewController.resetAlertView()
                             
                             self.purchaseHistotyTableDataSource.refresh(){
+                                // don't need stop loading here because it is going to reloa ui
                                 self.reloadRadarUI()
                             }
                         }
@@ -701,7 +699,11 @@ extension RadarDisplayViewController{
                     self.setCriteriaSwitch(isEnabled)
                     
                     self.purchaseHistotyTableDataSource.refresh(){
+                        
+                        // don't need stop loading here because it is going to reloa ui
+                        
                         self.reloadRadarUI()
+                        
                     }
                     
             }
