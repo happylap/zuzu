@@ -8,10 +8,10 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--通知條件設定-->
+        <!--Radar Setting-->
         <scene sceneID="siC-n1-MI9">
             <objects>
-                <viewController storyboardIdentifier="RadarViewController" automaticallyAdjustsScrollViewInsets="NO" id="OaS-ny-kO8" customClass="RadarViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RadarViewController" title="Radar Setting" automaticallyAdjustsScrollViewInsets="NO" id="OaS-ny-kO8" customClass="RadarViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3MF-we-hIY"/>
                         <viewControllerLayoutGuide type="bottom" id="Wm7-aH-seM"/>
@@ -213,10 +213,10 @@
             </objects>
             <point key="canvasLocation" x="430" y="763"/>
         </scene>
-        <!--租屋雷達-->
+        <!--Radar navigation-->
         <scene sceneID="qM5-6S-MSc">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xcL-ff-LIC" customClass="RadarNavigationController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController title="Radar navigation" automaticallyAdjustsScrollViewInsets="NO" id="xcL-ff-LIC" customClass="RadarNavigationController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="租屋雷達" image="main_radar_n" id="7Iv-3p-dfX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="EOK-K2-3ns" customClass="UINavigationBarTaller" customModule="Zuzu" customModuleProvider="target">
@@ -232,7 +232,7 @@
         <!--購買雷達-->
         <scene sceneID="OTR-zm-P7k">
             <objects>
-                <viewController storyboardIdentifier="RadarPurchaseView" hidesBottomBarWhenPushed="YES" id="f9r-QB-1sI" userLabel="購買雷達" customClass="RadarPurchaseViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RadarPurchaseView" title="Radar Purchase" hidesBottomBarWhenPushed="YES" id="f9r-QB-1sI" userLabel="購買雷達" customClass="RadarPurchaseViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="za1-R6-KCL"/>
                         <viewControllerLayoutGuide type="bottom" id="0us-by-knx"/>
@@ -358,7 +358,7 @@
         <!--檢視雷達-->
         <scene sceneID="qDs-hj-oEa">
             <objects>
-                <viewController storyboardIdentifier="RadarDisplayViewController" automaticallyAdjustsScrollViewInsets="NO" id="bGU-pi-D72" userLabel="檢視雷達" customClass="RadarDisplayViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RadarDisplayViewController" title="Radar Status" automaticallyAdjustsScrollViewInsets="NO" id="bGU-pi-D72" userLabel="檢視雷達" customClass="RadarDisplayViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Rg7-dX-Lpg"/>
                         <viewControllerLayoutGuide type="bottom" id="Prs-5K-bGT"/>
@@ -999,10 +999,10 @@
             </objects>
             <point key="canvasLocation" x="1108" y="1802"/>
         </scene>
-        <!--Search Box-->
+        <!--Radar Criteria-->
         <scene sceneID="CZW-Zc-zwm">
             <objects>
-                <tableViewController title="Search Box" id="JCF-a3-JtA" customClass="RadarConfigureTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Radar Criteria" id="JCF-a3-JtA" customClass="RadarConfigureTableViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="5fc-1E-qri">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
