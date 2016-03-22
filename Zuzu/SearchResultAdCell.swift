@@ -11,12 +11,15 @@ import UIKit
 import Foundation
 import Dollar
 import GoogleMobileAds
+import FBAudienceNetwork
 
 private let Log = Logger.defaultLogger
 
 class SearchResultAdCell: UITableViewCell {
     
     private let testDevice = ["a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "6889c4bd976a58bd447f1e7eab997323"]
+    
+    private let fbTestDevice = ["0d5e4441357c49679cace1707412a6b516d3bb36", "9a44f4d536f52e37ba572e672e81ba0b9eb5bdd6", "4c0f7234ac32176ccd83ffb8dbd03a54cce8f9ce"]
     
     var bannerView: GADBannerView = GADBannerView()
     
@@ -40,6 +43,8 @@ class SearchResultAdCell: UITableViewCell {
     }
     
     func setupBanner(controller: SearchResultViewController) {
+        
+        FBAdSettings.addTestDevices(fbTestDevice)
         
         #if DEBUG
             //Test adUnit
@@ -84,7 +89,7 @@ extension SearchResultAdCell: GADBannerViewDelegate {
         Log.debug("Banner adapter class name: \(bannerView.adNetworkClassName)")
     }
     internal func adView(bannerView: GADBannerView!, didFailToReceiveAdWithError error: GADRequestError!) {
-        Log.enter()
+        Log.error("\(error)")
     }
     internal func adViewWillPresentScreen(bannerView: GADBannerView!) {
         Log.enter()
