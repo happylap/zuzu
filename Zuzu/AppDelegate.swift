@@ -95,7 +95,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func updateTabBarBadge(application: UIApplication){
         Log.enter()
         let badgeNumber = application.applicationIconBadgeNumber
-        Log.debug("badgeNumber: \(badgeNumber)")
+        Log.warning("badgeNumber: \(badgeNumber)")
+        
         if badgeNumber > 0{
             let rootViewController = self.window?.rootViewController as! UITabBarController!
             let tabArray = rootViewController?.tabBar.items as NSArray!
@@ -114,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Public Utils
     /// Setup for remote push notification
     internal func setupPushNotifications(handler: NotificationSetupHandler? = nil){
-        Log.enter()
+        Log.warning("setupPushNotifications")
         
         self.pushNotificationSetupHandler = handler
 
@@ -123,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     /// Setup for local App notification permission
     internal func setupLocalNotifications(handler: NotificationSetupHandler? = nil){
-        Log.enter()
+        Log.warning("setupLocalNotifications")
         
         self.localNotificationSetupHandler = handler
         
@@ -179,7 +180,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         
-        Log.error("notificationSettings = \(notificationSettings.types)")
+        Log.warning("didRegisterUserNotificationSettings Settings = \(notificationSettings.types)")
         
         if let currentNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
             let isRegisteredForLocalNotifications = (!currentNotificationSettings.types.isSubsetOf(UIUserNotificationType.None))
@@ -208,7 +209,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let deviceTokenString = "\(deviceToken)"
             .stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString:"<>"))
             .stringByReplacingOccurrencesOfString(" ", withString: "")
-        Log.debug("deviceTokenString: \(deviceTokenString)")
+        
+        Log.warning("didRegisterForRemoteNotificationsWithDeviceToken tokenString: \(deviceTokenString)")
+        
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
         NSNotificationCenter.defaultCenter().postNotificationName("deviceTokenChange", object: self, userInfo: ["deviceTokenString": deviceTokenString])
         
@@ -217,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        Log.debug("Error in registering for remote notifications: \(error.localizedDescription)")
+        Log.error("Error in registering for remote notifications: \(error.localizedDescription)")
         
         self.pushNotificationSetupHandler?(result: false)
         self.pushNotificationSetupHandler = nil
