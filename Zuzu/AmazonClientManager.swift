@@ -52,7 +52,6 @@ class AmazonClientManager : NSObject {
         static let DEFAULT_SERVICE_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_REGIONTYPE = AWSRegionType.APNortheast1
         static let COGNITO_IDENTITY_POOL_ID = "ap-northeast-1:7e09fc17-5f4b-49d9-bb50-5ca5a9e34b8a"
-        static let PLATFORM_APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:994273935857:app/APNS_SANDBOX/zuzurentals_development"
         static let S3_SERVICE_REGIONTYPE = AWSRegionType.APSoutheast1
         static let S3_COLLECTION_BUCKET = "zuzu.mycollection"
         static let S3_ERROR_BUCKET = "zuzu.error"
