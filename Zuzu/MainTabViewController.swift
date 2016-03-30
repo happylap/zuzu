@@ -31,12 +31,6 @@ class MainTabViewController: UITabBarController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismissAllViewControllers:", name: "switchToTab", object: nil)
         
-        AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
-            dispatch_async(dispatch_get_main_queue()) {
-            }
-            return nil
-        }
-        
         /// Init View Controllers for each Tab
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
         let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!

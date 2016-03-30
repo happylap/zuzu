@@ -500,13 +500,58 @@ class AmazonClientManager : NSObject {
     
     // MARK: Public General Login
     
+    /// Setup a timer that trigger token refreshing just after the token times out
+    internal func triggerTokenRefreshingTimer() {
+        
+        var interval = 0.0
+        var refreshTime: NSDate?
+        var timerProvider:String?
+        
+        self.currentTimer?.invalidate()
+        
+        if let provider = UserDefaultsUtils.getLoginProvider(){
+            switch(provider) {
+            case .FB:
+                if let expiryTime = FBSDKAccessToken.currentAccessToken()?.expirationDate {
+                    refreshTime = expiryTime.add(seconds: 1)
+                }
+                timerProvider = provider.rawValue
+            case .GOOGLE:
+                if let expiryTime = self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate {
+                    refreshTime = expiryTime.add(seconds: 1)
+                }
+                
+                timerProvider = provider.rawValue
+            }
+        }
+        
+        if let refreshTime = refreshTime, let timerProvider = timerProvider {
+            Log.debug("Start token refreshing timer, trigger time = \(refreshTime)")
+
+            /// If the interval is less than 0 (refresh time has passed), the timer will be triggered almost immediately
+            interval = refreshTime.timeIntervalSinceNow
+            
+            self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: "onTokenNeedRefreshing:", userInfo: ["provider", timerProvider], repeats: false)
+        }
+        
+    }
+    
+    /// Cancel the timer
+    internal func stopTokenRefreshingTimer() {
+        
+        self.currentTimer?.invalidate()
+        
+    }
+    
     // Token refreshing timer callback method
     func onTokenNeedRefreshing(timer:NSTimer) {
         
         Log.enter()
         
         self.resumeSession { (task) -> AnyObject? in
-            nil
+            
+            Log.debug("The login session is resumed")
+            return nil
         }
         
     }
@@ -628,39 +673,6 @@ class AmazonClientManager : NSObject {
         self.logOutAll()
         
         AWSTask(error: NSError(domain: "zuzu.com", code: type.rawValue, userInfo: nil)).continueWithBlock(self.completionHandler!)
-        
-    }
-    
-    private func triggerTokenRefreshingTimer() {
-        
-        var interval = 0.0
-        var refreshTime: NSDate?
-        var timerProvider:String?
-        
-        self.currentTimer?.invalidate()
-        
-        if let provider = UserDefaultsUtils.getLoginProvider(){
-            switch(provider) {
-            case .FB:
-                if let expiryTime = FBSDKAccessToken.currentAccessToken()?.expirationDate {
-                    refreshTime = expiryTime.add(seconds: 1)
-                }
-                timerProvider = provider.rawValue
-            case .GOOGLE:
-                if let expiryTime = self.googleSignIn.currentUser?.authentication?.idTokenExpirationDate {
-                    refreshTime = expiryTime.add(seconds: 1)
-                }
-                timerProvider = provider.rawValue
-            }
-        }
-        
-        if let refreshTime = refreshTime, let timerProvider = timerProvider {
-            Log.debug("Start token refreshing timer, trigger time = \(refreshTime)")
-            
-            interval = refreshTime.timeIntervalSinceNow
-            
-            self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: "onTokenNeedRefreshing:", userInfo: ["provider", timerProvider], repeats: false)
-        }
         
     }
     
