@@ -13,6 +13,8 @@ import MarqueeLabel
 import Social
 import AwesomeCache
 import SCLAlertView
+import GoogleMobileAds
+import FBAudienceNetwork
 
 private let Log = Logger.defaultLogger
 
@@ -27,6 +29,12 @@ private let Log = Logger.defaultLogger
 class HouseDetailViewController: UIViewController {
     
     // MARK: - Private Fields
+    private let testDevice = ["cca2dd7bf0e491df7d78b7ba80c8d113","a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "6889c4bd976a58bd447f1e7eab997323"]
+    
+    private let fbTestDevice = ["0d5e4441357c49679cace1707412a6b516d3bb36", "9a44f4d536f52e37ba572e672e81ba0b9eb5bdd6", "4c0f7234ac32176ccd83ffb8dbd03a54cce8f9ce"]
+    
+    private var bannerView: GADBannerView = GADBannerView()
+    
     private static var alertViewResponder: SCLAlertViewResponder?
     private var networkErrorAlertView:SCLAlertView? = SCLAlertView()
     
@@ -694,6 +702,33 @@ class HouseDetailViewController: UIViewController {
         self.configureContactBarView()
     }
     
+    private func getAdBannerFooterView() -> UIView {
+        self.bannerView.rootViewController = self
+        self.bannerView.adSize = kGADAdSizeBanner
+        self.bannerView.delegate = self
+        
+        FBAdSettings.addTestDevices(fbTestDevice)
+        
+        #if DEBUG
+            //Test adUnit
+            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        #else
+            //Real adUnit
+            self.bannerView.adUnitID = "ca-app-pub-7083975197863528/3785388890"
+        #endif
+        
+        let request = GADRequest()
+        request.testDevices = self.testDevice
+        self.bannerView.loadRequest(request)
+        
+        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))
+        footerView.addSubview(self.bannerView)
+        self.bannerView.center.x = footerView.center.x
+        self.bannerView.center.y = self.bannerView.center.y + 8.0
+        
+        return footerView
+    }
+    
     private func configureTableView() {
         //Configure cell height
         tableView.estimatedRowHeight = 213//tableView.rowHeight
@@ -706,8 +741,11 @@ class HouseDetailViewController: UIViewController {
         self.tableView.setNeedsLayout()
         self.tableView.layoutIfNeeded()
         
+        
         //Remove extra cells with some padding height
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
+        tableView.tableFooterView = self.getAdBannerFooterView()
+            //UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
+        
     }
     
     private func configureNavigationBarItems() {
@@ -1462,6 +1500,38 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         }
     }
     
+//    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        
+//        self.bannerView.rootViewController = self
+//        self.bannerView.adSize = kGADAdSizeBanner
+//        //self.bannerView.delegate = self
+//        
+//        //FBAdSettings.addTestDevices(fbTestDevice)
+//        
+//        #if DEBUG
+//            //Test adUnit
+//            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+//        #else
+//            //Real adUnit
+//            //self.bannerView.adUnitID = "ca-app-pub-7083975197863528/2369456093"
+//            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+//        #endif
+//        
+//        let request = GADRequest()
+//        
+//        self.bannerView.loadRequest(request)
+//        
+//        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))
+//        footerView.addSubview(self.bannerView)
+//        
+//        return footerView
+//    }
+//    
+//    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 120.0
+//    }
+
+    
     
 }
 
@@ -1515,3 +1585,26 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
     }
 }
 
+// MARK: - GADBannerViewDelegate
+extension HouseDetailViewController: GADBannerViewDelegate {
+    
+    internal func adViewDidReceiveAd(bannerView: GADBannerView!) {
+        Log.enter()
+        Log.error("Banner adapter class name: \(bannerView.adNetworkClassName)")
+    }
+    internal func adView(bannerView: GADBannerView!, didFailToReceiveAdWithError error: GADRequestError!) {
+        Log.error("\(error)")
+    }
+    internal func adViewWillPresentScreen(bannerView: GADBannerView!) {
+        Log.enter()
+    }
+    internal func adViewWillDismissScreen(bannerView: GADBannerView!) {
+        Log.enter()
+    }
+    internal func adViewDidDismissScreen(bannerView: GADBannerView!) {
+        Log.enter()
+    }
+    internal func adViewWillLeaveApplication(bannerView: GADBannerView!) {
+        Log.enter()
+    }
+}
