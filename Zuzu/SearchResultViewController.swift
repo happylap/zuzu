@@ -763,7 +763,7 @@ class SearchResultViewController: UIViewController {
         //Try preload Ad
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.adItem) as! SearchResultAdCell
         cell.setupBanner(self)
-        cell.loadAdForController(self)
+        cell.loadBanner()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -962,7 +962,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let cell =  cell as? SearchResultAdCell {
-            cell.loadAdForController(self)
+            cell.loadBanner()
         }
     }
     
