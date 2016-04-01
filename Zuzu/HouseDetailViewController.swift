@@ -29,11 +29,7 @@ private let Log = Logger.defaultLogger
 class HouseDetailViewController: UIViewController {
     
     // MARK: - Private Fields
-    private let testDevice = ["cca2dd7bf0e491df7d78b7ba80c8d113","a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "6889c4bd976a58bd447f1e7eab997323"]
-    
-    private let fbTestDevice = ["0d5e4441357c49679cace1707412a6b516d3bb36", "9a44f4d536f52e37ba572e672e81ba0b9eb5bdd6", "4c0f7234ac32176ccd83ffb8dbd03a54cce8f9ce"]
-    
-    private var bannerView: GADBannerView = GADBannerView()
+    private var bannerView: GADBannerView = ADFactory.sharedInstance.getHouseDetailBanner()
     
     private static var alertViewResponder: SCLAlertViewResponder?
     private var networkErrorAlertView:SCLAlertView? = SCLAlertView()
@@ -707,18 +703,8 @@ class HouseDetailViewController: UIViewController {
         self.bannerView.adSize = kGADAdSizeBanner
         self.bannerView.delegate = self
         
-        FBAdSettings.addTestDevices(fbTestDevice)
-        
-        #if DEBUG
-            //Test adUnit
-            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        #else
-            //Real adUnit
-            self.bannerView.adUnitID = "ca-app-pub-7083975197863528/3785388890"
-        #endif
-        
         let request = GADRequest()
-        request.testDevices = self.testDevice
+        request.testDevices = ADFactory.testDevice
         self.bannerView.loadRequest(request)
         
         let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))

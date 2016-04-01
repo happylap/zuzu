@@ -22,35 +22,18 @@
                             <constraint firstAttribute="width" secondItem="4Kj-C3-5Kw" secondAttribute="height" multiplier="1440:698" id="dgW-eq-4un"/>
                         </constraints>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uMK-2B-Kjy" customClass="GADBannerView">
-                        <rect key="frame" x="0.0" y="0.5" width="414" height="199.5"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="4Kj-C3-5Kw" firstAttribute="leading" secondItem="vpv-9D-43R" secondAttribute="leadingMargin" id="1C8-x7-70j"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="uMK-2B-Kjy" secondAttribute="bottom" id="1fY-sJ-Zc3"/>
-                    <constraint firstItem="uMK-2B-Kjy" firstAttribute="top" secondItem="vpv-9D-43R" secondAttribute="topMargin" id="9e5-YC-geb"/>
-                    <constraint firstItem="uMK-2B-Kjy" firstAttribute="width" secondItem="vpv-9D-43R" secondAttribute="width" id="9lC-nB-Y8W"/>
                     <constraint firstItem="4Kj-C3-5Kw" firstAttribute="top" secondItem="vpv-9D-43R" secondAttribute="top" id="Pvm-UO-LlB"/>
-                    <constraint firstItem="uMK-2B-Kjy" firstAttribute="height" secondItem="vpv-9D-43R" secondAttribute="height" placeholder="YES" id="ebj-oS-SlS"/>
                     <constraint firstAttribute="trailingMargin" secondItem="4Kj-C3-5Kw" secondAttribute="trailing" id="hNp-Ht-M49"/>
                     <constraint firstAttribute="bottomMargin" secondItem="4Kj-C3-5Kw" secondAttribute="bottom" priority="999" id="kuB-uR-Rlw"/>
-                    <constraint firstItem="uMK-2B-Kjy" firstAttribute="leading" secondItem="vpv-9D-43R" secondAttribute="leadingMargin" id="pjl-dz-ZhL"/>
                 </constraints>
                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="9e5-YC-geb"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-            <connections>
-                <outlet property="bannerView" destination="uMK-2B-Kjy" id="5Q3-bv-xbt"/>
-            </connections>
             <point key="canvasLocation" x="298" y="241.5"/>
         </tableViewCell>
     </objects>

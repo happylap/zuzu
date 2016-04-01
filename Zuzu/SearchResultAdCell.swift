@@ -19,39 +19,28 @@ class SearchResultAdCell: UITableViewCell {
     
     private var parentBound: CGRect?
     
-    private let testDevice = ["cca2dd7bf0e491df7d78b7ba80c8d113","a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "6889c4bd976a58bd447f1e7eab997323"]
-    
-    private let fbTestDevice = ["0d5e4441357c49679cace1707412a6b516d3bb36", "9a44f4d536f52e37ba572e672e81ba0b9eb5bdd6", "4c0f7234ac32176ccd83ffb8dbd03a54cce8f9ce"]
-    
-    @IBOutlet weak var bannerView: GADBannerView!
+    private var bannerView: GADBannerView?
     
     private func loadAdForController() {
         
         Log.error("Google Mobile Ads SDK version: \(GADRequest.sdkVersion())")
         
         let request = GADRequest()
-        request.testDevices = self.testDevice
+        request.testDevices = ADFactory.testDevice
         
-        self.bannerView.loadRequest(request)
+        self.bannerView?.loadRequest(request)
     }
     
     func setupBanner(controller: SearchResultViewController) {
         
         Log.enter()
         
-        if(self.bannerView.rootViewController == nil) {
-            self.bannerView.rootViewController = controller
-            self.bannerView.delegate = self
-            
-            FBAdSettings.addTestDevices(fbTestDevice)
-            
-            #if DEBUG
-                //Test adUnit
-                self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-            #else
-                //Real adUnit
-                self.bannerView.adUnitID = "ca-app-pub-7083975197863528/2369456093"
-            #endif
+        self.bannerView = ADFactory.sharedInstance.getSearchResultBanner()
+        
+        if let bannerView = self.bannerView {
+            bannerView.rootViewController = controller
+            bannerView.delegate = self
+            self.contentView.addSubview(bannerView)
         }
     }
     
@@ -59,11 +48,9 @@ class SearchResultAdCell: UITableViewCell {
         
         Log.enter()
         
-        if let _ = self.bannerView.rootViewController {
+        if let _  = self.bannerView?.rootViewController {
             self.loadAdForController()
         }
-        
-        
     }
     
     override func layoutSubviews() {
@@ -82,7 +69,7 @@ class SearchResultAdCell: UITableViewCell {
                 let width = round(parentBound.size.width)
                 let height = round(parentBound.size.height)
                 
-                self.bannerView.adSize = GADAdSizeFromCGSize(CGSize(width: width, height: height))
+                self.bannerView?.adSize = GADAdSizeFromCGSize(CGSize(width: width, height: height))
             }
         }
     }
