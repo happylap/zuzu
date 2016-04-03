@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  @abstract
  Represents the ad size.
  */
-typedef struct FB_OBJC_BOXABLE FBAdSize {
+typedef struct FBAdSize {
   CGSize size;
 } FBAdSize;
 

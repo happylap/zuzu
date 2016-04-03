@@ -243,7 +243,7 @@ FB_CLASS_EXPORT
  @abstract
  Represents the Facebook ad star rating, which contains the rating value and rating scale.
  */
-FB_EXPORT FB_OBJC_BOXABLE struct FBAdStarRating {
+FB_EXPORT struct FBAdStarRating {
     CGFloat value;
     NSInteger scale;
 } FBAdStarRating;
