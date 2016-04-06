@@ -103,25 +103,8 @@ public class HouseItemTableDataSource {
     public init() {
         
         // A/B Testing flags
-        if let tagContainer = AppDelegate.tagContainer {
-            let showADString = tagContainer.stringForKey(TagConst.showADs)
-            
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(showADString)")
-            
-            if(showADString == "y") {
-                
-                isDisplayADs = true
-                
-            } else if(showADString == "n"){
-                
-                isDisplayADs = false
-                
-            } else {
-                
-                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showADs)")
-            }
-            
-        }
+        self.isDisplayADs = ADFactory.shouldDisplayADs()
+        
     }
     
     //** MARK: - APIs

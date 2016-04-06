@@ -728,9 +728,15 @@ class HouseDetailViewController: UIViewController {
         self.tableView.layoutIfNeeded()
         
         
-        //Remove extra cells with some padding height
-        tableView.tableFooterView = self.getAdBannerFooterView()
-            //UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
+        if(ADFactory.shouldDisplayADs()) {
+            
+            tableView.tableFooterView = self.getAdBannerFooterView()
+            
+        } else {
+            
+            //Remove extra cells with some padding height
+            tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
+        }
         
     }
     
