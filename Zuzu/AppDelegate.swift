@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         return urls[urls.count-1] as NSURL
     }()
-
+    
     internal typealias NotificationSetupHandler = (result:Bool) -> ()
     
     private var localNotificationSetupHandler: NotificationSetupHandler?
@@ -49,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Google Map
         GMSServices.provideAPIKey(googleMapsApiKey)
         
-        //Google Analytics
         #if !DEBUG
+            //Google Analytics
             // Configure tracker from GoogleService-Info.plist.
             var configureError:NSError?
             GGLContext.sharedInstance().configureWithError(&configureError)
@@ -60,10 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let gai = GAI.sharedInstance()
             gai.trackUncaughtExceptions = true  // report uncaught exceptions
             gai.logger.logLevel = GAILogLevel.Error  // remove before app release
-        #endif
-        
-        //Google Tag Manager
-        #if !DEBUG
+            
+            //Google Tag Manager
             let GTM = TAGManager.instance()
             GTM.logger.setLogLevel(kTAGLoggerLogLevelVerbose)
             
@@ -108,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
         }
         Log.debug("don't need to set tab bar badge number")
-
+        
         Log.exit()
     }
     
@@ -118,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.warning("setupPushNotifications")
         
         self.pushNotificationSetupHandler = handler
-
+        
         UIApplication.sharedApplication().registerForRemoteNotifications()
     }
     
@@ -175,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
         return true
     }
-
+    
     // MARK: UIApplicationDelegate Register Notification Response
     // Response for UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
@@ -184,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let currentNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
             let isRegisteredForLocalNotifications = (!currentNotificationSettings.types.isSubsetOf(UIUserNotificationType.None))
-        
+            
             
             if(isRegisteredForLocalNotifications) {
                 
@@ -228,7 +226,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         Log.enter()
-
+        
         let rootViewController = self.window?.rootViewController as! UITabBarController!
         let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
         
@@ -258,7 +256,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }else{
             Log.debug("set notification tab as selected")
-
+            
             if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
                 GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
                     action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
@@ -268,9 +266,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Log.exit()
-
+        
     }
-
+    
     // MARK: UIApplicationDelegate App Life Cycle
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         Log.enter()
@@ -338,7 +336,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             /// Installation tracking for FB ADs
             FBSDKAppEvents.activateApp()
         #endif
-
+        
     }
     
     func applicationWillTerminate(application: UIApplication) {
@@ -354,12 +352,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // MARK: TAGContainerOpenerNotifier
 extension AppDelegate: TAGContainerOpenerNotifier {
-
+    
     func containerAvailable(container: TAGContainer!) {
         container.refresh()
         
         //Save tag container for later access
         AppDelegate.tagContainer = container
     }
-
+    
 }
