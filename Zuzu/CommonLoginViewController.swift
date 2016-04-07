@@ -28,7 +28,58 @@ class CommonLoginViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var maskView: UIView!
+    @IBOutlet weak var userRegisterButton: UIButton! {
+        
+        didSet {
+            //userRegisterButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+            userRegisterButton.layer.borderWidth = 2
+            userRegisterButton.layer.borderColor =
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+            userRegisterButton.tintColor =
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+            
+            //userRegisterButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            
+        }
+        
+    }
+    
+    @IBOutlet weak var userLoginButton: UIButton! {
+        
+        didSet {
+            //userLoginButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+            userLoginButton.layer.borderWidth = 2
+            userLoginButton.layer.borderColor =
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+            userLoginButton.tintColor =
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+            
+            //userLoginButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            
+        }
+        
+    }
+    
+    @IBOutlet weak var customLoginView: UIView! {
+        
+        didSet {
+            
+            let thickness:CGFloat = 0.5
+            
+            let upperBorder = CALayer()
+            upperBorder.backgroundColor = UIColor.lightGrayColor().CGColor
+            
+            //border.frame = CGRectMake(0, CGRectGetHeight(self.frame) - thickness, CGRectGetWidth(self.frame), thickness);
+            
+            upperBorder.frame = CGRect(x: 0, y: 0, width: customLoginView.frame.width, height: thickness)
+            
+            //upperBorder.frame = CGRect(x: 0, y: customLoginView.frame.height - thickness, width: customLoginView.frame.width, height: thickness)
+            
+            customLoginView.layer.addSublayer(upperBorder)
+        }
+        
+    }
+    //@IBOutlet weak var maskView: UIView!
     
     @IBOutlet weak var titleText: UILabel!
     
@@ -108,8 +159,8 @@ class CommonLoginViewController: UIViewController {
             subTitleText.text = "我們發現您有購買的租屋雷達尚未完成啟用，請您使用下列帳號登入啟用服務，以維護您的權益"
         }
         
-        self.maskView.alpha = 0.0
-        self.maskView.hidden = false
+        //        self.maskView.alpha = 0.0
+        //        self.maskView.hidden = false
         
         if let tabBar = self.presentingViewController?.tabBarController{
             self.isOriginallyHideTabBar = tabBar.tabBarHidden
@@ -123,15 +174,15 @@ class CommonLoginViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        UIView.animateWithDuration(0.5, animations: {
-            self.maskView.alpha = 0.3
-        })
+        //        UIView.animateWithDuration(0.5, animations: {
+        //            self.maskView.alpha = 0.3
+        //        })
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        self.maskView.hidden = true
+        //self.maskView.hidden = true
         
         if let tabBar = self.presentingViewController?.tabBarController{
             tabBar.tabBarHidden = self.isOriginallyHideTabBar
@@ -147,7 +198,7 @@ class CommonLoginViewController: UIViewController {
     
     func onCancelButtonTouched(sender: UIButton) {
         Log.debug("\(self) onCancelButtonTouched")
-
+        
         dismissViewControllerAnimated(true, completion: self.cancelHandler)
     }
     
