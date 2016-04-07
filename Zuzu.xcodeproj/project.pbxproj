@@ -83,6 +83,7 @@
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FAAAFA51CB6268300B954EF /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA41CB6268300B954EF /* Login.storyboard */; };
+		2FAAAFA71CB663ED00B954EF /* InputEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA61CB663ED00B954EF /* InputEmailViewController.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */; };
 		2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */; };
@@ -261,6 +262,7 @@
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FAAAFA41CB6268300B954EF /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		2FAAAFA61CB663ED00B954EF /* InputEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputEmailViewController.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCityPickerView.xib; sourceTree = "<group>"; };
 		2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCityPickerView.swift; sourceTree = "<group>"; };
@@ -631,6 +633,7 @@
 				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
+				2FAAAFA61CB663ED00B954EF /* InputEmailViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -1035,6 +1038,7 @@
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
+				2FAAAFA71CB663ED00B954EF /* InputEmailViewController.swift in Sources */,
 				816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
 				2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */,
