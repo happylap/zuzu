@@ -145,6 +145,7 @@
 		81924E341C33AB4C00976EC7 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserProfile.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81B467941C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */; };
+		81CAAFE31CB6419F00F42A36 /* ZuzuUserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAAFE21CB6419F00F42A36 /* ZuzuUserMapper.swift */; };
 		81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */; };
 		81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */; };
 		81F05D651BF0E75C00441A84 /* HouseDaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */; };
@@ -326,6 +327,7 @@
 		81924E331C33AB4C00976EC7 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchaseMapper.swift; sourceTree = "<group>"; };
+		81CAAFE21CB6419F00F42A36 /* ZuzuUserMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuUserMapper.swift; sourceTree = "<group>"; };
 		81D585941C7B12A200B8FD11 /* ZuzuPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchase.swift; sourceTree = "<group>"; };
 		81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionDetailViewController.swift; sourceTree = "<group>"; };
 		81F05D641BF0E75C00441A84 /* HouseDaoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HouseDaoTests.swift; path = ZuzuTests/HouseDaoTests.swift; sourceTree = "<group>"; };
@@ -711,6 +713,7 @@
 			children = (
 				81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */,
 				810081D11C8E653100659BE2 /* ZuzuServiceMapper.swift */,
+				81CAAFE21CB6419F00F42A36 /* ZuzuUserMapper.swift */,
 			);
 			name = ObjectMapper;
 			sourceTree = "<group>";
@@ -1008,6 +1011,7 @@
 				81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */,
+				81CAAFE31CB6419F00F42A36 /* ZuzuUserMapper.swift in Sources */,
 				2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,
 				14914FB21C2836DB00025AC1 /* NotificationItemService.swift in Sources */,

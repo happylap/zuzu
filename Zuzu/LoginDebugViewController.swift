@@ -90,6 +90,8 @@ class LoginDebugViewController: UIViewController {
                             self.popupFacebookStatus()
                         case .GOOGLE:
                             self.popupGoogleStatus()
+                        case .ZUZU:
+                            Log.info("UserDefaultsUtils.getLoginProvider is ZUZU")
                         }
                     }
                     
@@ -269,7 +271,7 @@ class LoginDebugViewController: UIViewController {
     
     let apiNameArray = [
         "--- Tester ---",
-        "isExistEmail",
+        "checkEmail",
         "registerUser",
         "getUserByEmail",
         "updateUser",
@@ -307,9 +309,9 @@ class LoginDebugViewController: UIViewController {
         
         switch self.seletedApiName {
             
-        case "isExistEmail":
+        case "checkEmail":
             
-            ZuzuWebService.sharedInstance.isExistEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+            ZuzuWebService.sharedInstance.checkEmail(ApiTestConst.email, handler: { (emailExisted, provider, error) -> Void in
                 
                 let title = "Tester"
                 let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
@@ -317,7 +319,7 @@ class LoginDebugViewController: UIViewController {
                 if let error = error {
                     self.showAlert(title, subTitle: "\(subTitle) \(error)")
                 } else {
-                    self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                    self.showAlert(title, subTitle: "\(subTitle) emailExisted: \(emailExisted), provider: \(provider)")
                 }
             })
             

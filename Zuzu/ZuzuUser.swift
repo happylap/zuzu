@@ -10,10 +10,10 @@ import Foundation
 import ObjectMapper
 
 enum Provider: String {
-    case FB, GOOGLE
+    case FB, GOOGLE, ZUZU
 }
 
-class ZuzuUser: NSObject, NSCoding, Mappable {
+class ZuzuUser: NSObject, NSCoding {
     var id: String!
     var registerTime: NSDate?
     var email: String?
@@ -21,35 +21,31 @@ class ZuzuUser: NSObject, NSCoding, Mappable {
     var gender: String?
     var birthday: NSDate?
     var pictureUrl: String?
+    var provider: Provider?
     
     
     override init() {
         
     }
     
-    required init?(_ map: Map) {
-        
-    }
-    
-    
     convenience required init?(coder decoder: NSCoder) {
         
-            let id = decoder.decodeObjectForKey("id") as? String
-            let registerTime = decoder.decodeObjectForKey("registerTime") as? NSDate
-            let email = decoder.decodeObjectForKey("email") as? String
-            let name = decoder.decodeObjectForKey("name") as? String
-            let gender = decoder.decodeObjectForKey("gender") as? String
-            let birthday = decoder.decodeObjectForKey("birthday") as? NSDate
-            let pictureUrl = decoder.decodeObjectForKey("pictureUrl") as? String
-            
-            self.init()
-            self.registerTime = registerTime
-            self.id = id
-            self.email = email
-            self.name = name
-            self.gender = gender
-            self.birthday = birthday
-            self.pictureUrl = pictureUrl
+        let id = decoder.decodeObjectForKey("id") as? String
+        let registerTime = decoder.decodeObjectForKey("registerTime") as? NSDate
+        let email = decoder.decodeObjectForKey("email") as? String
+        let name = decoder.decodeObjectForKey("name") as? String
+        let gender = decoder.decodeObjectForKey("gender") as? String
+        let birthday = decoder.decodeObjectForKey("birthday") as? NSDate
+        let pictureUrl = decoder.decodeObjectForKey("pictureUrl") as? String
+        
+        self.init()
+        self.registerTime = registerTime
+        self.id = id
+        self.email = email
+        self.name = name
+        self.gender = gender
+        self.birthday = birthday
+        self.pictureUrl = pictureUrl
         
     }
     
@@ -62,28 +58,4 @@ class ZuzuUser: NSObject, NSCoding, Mappable {
         aCoder.encodeObject(birthday, forKey:"birthday")
         aCoder.encodeObject(pictureUrl, forKey:"pictureUrl")
     }
-    
-    // Mappable
-    func mapping(map: Map) {
-        id                  <- map["user_id"]
-        registerTime        <- (map["register_time"], timeTransform)
-        email               <- map["email"]
-        name                <- map["name"]
-        gender              <- map["gender"]
-        birthday            <- (map["birthday"], timeTransform)
-        pictureUrl          <- map["picture_url"]
-    }
-    
-    //
-    let timeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
-        if let dateString = values {
-            return CommonUtils.getUTCDateFromString(dateString)
-        }
-        return nil
-        }, toJSON: { (values: NSDate?) -> String? in
-            if let date = values {
-                return CommonUtils.getUTCStringFromDate(date)
-            }
-            return nil
-    })
 }

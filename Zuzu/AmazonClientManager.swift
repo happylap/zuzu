@@ -264,19 +264,19 @@ class AmazonClientManager : NSObject {
         
         if let userEmail = userProfile.email {
             
-            ZuzuWebService.sharedInstance.isExistEmail(userEmail){(result, error) -> Void in
+            ZuzuWebService.sharedInstance.checkEmail(userEmail){(emailExisted, provider, error) -> Void in
                 
                 let delay =  0 //* Double(NSEC_PER_SEC)
                 let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
                 
                 dispatch_after(time, dispatch_get_main_queue(), {
                     if error != nil{
-                        Log.debug("isExistEmail, error = \(error)")
+                        Log.debug("checkEmail, error = \(error)")
                         handler(user: nil, result: false)
                         return
                     }
                     
-                    if(result) {
+                    if(emailExisted) {
                         
                         ZuzuWebService.sharedInstance.getUserByEmail(userEmail, handler: { (result, error) -> Void in
                             

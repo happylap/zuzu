@@ -41,30 +41,40 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Register
     
-    func isExistEmail(email: String, handler: (result: Bool, error: ErrorType?) -> Void) {
+    func checkEmail(email: String, handler: (emailExisted: Bool?, provider: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
-        let resource = "/register/valid/\(email)"
+        let resource = "/public/user/check/\(email)"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
-                handler(result: false, error: error)
-                return;
+                handler(emailExisted: false, provider: nil, error: error)
+                return
             }
             
-            if let result = result {
-                handler(result: result as! Bool, error: nil)
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
+                
+                handler(emailExisted: json["emailExisted"].bool, provider: json["provider"].string, error: error)
             }
         }
         
         Log.exit()
     }
     
-    func registerUser(user: ZuzuUser, handler: (userId: String?, error: ErrorType?) -> Void) {
+    func registerUser(user: ZuzuUser, password: String? = nil, handler: (userId: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
-        let resource = "/register"
-        let payload = Mapper<ZuzuUser>().toJSON(user)
+        let userMapper = ZuzuUserMapper()
+        userMapper.fromUser(user)
+        
+        if user.provider == Provider.ZUZU {
+            userMapper.password = password
+        }
+        
+        let resource = "/public/user/register"
+        let payload = Mapper<ZuzuUserMapper>().toJSON(userMapper)
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             
@@ -78,40 +88,69 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    // MARK: - Public APIs - User
-    
-    // @Deprecated
-    func isExistUser(userId: String, handler: (result: Bool, error: ErrorType?) -> Void) {
-        Log.debug("Input parameters [userId: \(userId)]")
+    func loginByEmail(email: String, password: String, handler: (userToken: String?, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [email: \(email), password: \(password)]")
         
-        let resource = "/user/\(userId)"
+        let resource = "/public/user/login"
+        let payload = ["email": email, "password": password]
         
-        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             if let error = error {
-                handler(result: false, error: error)
-            } else if let _ = result {
-                handler(result: true, error: nil)
+                handler(userToken: nil, error: error)
             } else {
-                handler(result: false, error: nil)
+                handler(userToken: result as? String, error: nil)
             }
         }
         
         Log.exit()
     }
     
-    // @Deprecated
-    func createUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
-        Log.debug("Input parameters [user: \(user)]")
+    func forgotPassword(email: String, handler: (error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [email: \(email)]")
         
-        let resource = "/register"
-        let payload = Mapper<ZuzuUser>().toJSON(user)
+        let resource = "/public/user/password/forget/\(email)"
         
-        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
-            handler(result: (error == nil), error: error)
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            handler(error: error)
         }
         
         Log.exit()
     }
+    
+    func checkVerificationCode(email: String, verificationCode: String, handler: (result: Bool?, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [email: \(email), verificationCode: \(verificationCode)]")
+        
+        let resource = "/public/user/check/\(email)/\(verificationCode)"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else {
+                handler(result: result as? Bool, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    func resetPassword(email: String, password: String, verificationCode: String, handler: (result: Bool?, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [email: \(email), password: \(password), verificationCode: \(verificationCode)]")
+        
+        let resource = "/public/user/password/reset"
+        let payload = ["email": email, "password": password]
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            if let error = error {
+                handler(result: nil, error: error)
+            } else {
+                handler(result: result as? Bool, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    // MARK: - Public APIs - User
     
     func getUserByEmail(email: String, handler: (result: ZuzuUser?, error: NSError?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
@@ -122,8 +161,8 @@ class ZuzuWebService: NSObject
             if let error = error {
                 handler(result: nil, error: error)
             } else if let value = result {
-                if let userMapper = Mapper<ZuzuUser>().map(value) {
-                    handler(result: userMapper, error: nil)
+                if let userMapper = Mapper<ZuzuUserMapper>().map(value) {
+                    handler(result: userMapper.toUser(), error: nil)
                 } else {
                     Log.debug("Can not transfor to ZuzuUser")
                     handler(result: nil, error: NSError(domain: "Can not transfor to ZuzuUser", code: -1, userInfo: nil))
@@ -146,8 +185,8 @@ class ZuzuWebService: NSObject
             if let error = error {
                 handler(result: nil, error: error)
             } else if let value = result {
-                if let userMapper = Mapper<ZuzuUser>().map(value) {
-                    handler(result: userMapper, error: nil)
+                if let userMapper = Mapper<ZuzuUserMapper>().map(value) {
+                    handler(result: userMapper.toUser(), error: nil)
                 } else {
                     Log.debug("Can not transfor to ZuzuUser")
                     handler(result: nil, error: NSError(domain: "Can not transfor to ZuzuUser", code: -1, userInfo: nil))
@@ -164,8 +203,11 @@ class ZuzuWebService: NSObject
     func updateUser(user: ZuzuUser, handler: (result: Bool, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [user: \(user)]")
         
+        let userMapper = ZuzuUserMapper()
+        userMapper.fromUser(user)
+        
         let resource = "/user"
-        let payload = Mapper<ZuzuUser>().toJSON(user)
+        let payload = Mapper<ZuzuUserMapper>().toJSON(userMapper)
         
         self.responseJSON(.PUT , resource: resource, payload: payload) { (result, error) -> Void in
             handler(result: (error == nil), error: error)
