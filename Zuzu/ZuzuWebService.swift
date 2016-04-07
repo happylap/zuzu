@@ -41,10 +41,27 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Register
     
-    func checkEmail(email: String, handler: (emailExisted: Bool?, provider: String?, error: ErrorType?) -> Void) {
+    func checkEmail(email: String, handler: (emailExisted: Bool, provider: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
-        let resource = "/public/user/check/\(email)"
+//        let resource = "/public/user/check/\(email)"
+//        
+//        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+//            if let error = error {
+//                handler(emailExisted: false, provider: nil, error: error)
+//                return
+//            }
+//            
+//            if let value = result {
+//                let json = JSON(value)
+//                Log.debug("Result: \(json)")
+//                
+//                handler(emailExisted: json["emailExisted"].bool, provider: json["provider"].string, error: error)
+//            }
+//        }
+
+        
+        let resource = "/register/valid/\(email)"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
@@ -52,11 +69,8 @@ class ZuzuWebService: NSObject
                 return
             }
             
-            if let value = result {
-                let json = JSON(value)
-                Log.debug("Result: \(json)")
-                
-                handler(emailExisted: json["emailExisted"].bool, provider: json["provider"].string, error: error)
+            if let result = result {
+                handler(emailExisted: result as! Bool, provider: nil, error: nil)
             }
         }
         
@@ -73,7 +87,9 @@ class ZuzuWebService: NSObject
             userMapper.password = password
         }
         
-        let resource = "/public/user/register"
+        //let resource = "/public/user/register"
+        let resource = "/register"
+
         let payload = Mapper<ZuzuUserMapper>().toJSON(userMapper)
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in

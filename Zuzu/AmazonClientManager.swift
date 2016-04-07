@@ -105,6 +105,9 @@ class AmazonClientManager : NSObject {
                     
                     return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
                     
+                case Provider.ZUZU:
+                    // TODO
+                    return (provider.rawValue, nil)
                 }
             } else {
                 return (nil, nil)
@@ -522,6 +525,10 @@ class AmazonClientManager : NSObject {
                 }
                 
                 timerProvider = provider.rawValue
+            case Provider.ZUZU:
+                // TODO
+                Log.info("provider is \(provider.rawValue)")
+                timerProvider = provider.rawValue
             }
         }
         
@@ -584,6 +591,9 @@ class AmazonClientManager : NSObject {
                     } else {
                         Log.error("Reloading Google Session: Failure")
                     }
+                case Provider.ZUZU:
+                    // TODO
+                    Log.info("provider is \(provider.rawValue)")
                 }
             }
             
