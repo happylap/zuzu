@@ -82,6 +82,7 @@
 		2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B25E51C08C251004CECAA /* FeatureOptions.swift */; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
+		2FAAAFA51CB6268300B954EF /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA41CB6268300B954EF /* Login.storyboard */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */; };
 		2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */; };
@@ -258,6 +259,7 @@
 		2F9B25E51C08C251004CECAA /* FeatureOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureOptions.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		2FAAAFA41CB6268300B954EF /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCityPickerView.xib; sourceTree = "<group>"; };
 		2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCityPickerView.swift; sourceTree = "<group>"; };
@@ -622,6 +624,7 @@
 		2FBC05531BDE6F0A0035652D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2FAAAFA41CB6268300B954EF /* Login.storyboard */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
 				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
@@ -858,6 +861,7 @@
 				2FDCA0D51BE0721800498FC0 /* resultFilters.json in Resources */,
 				81FA28101BDA39A50038DD19 /* MyCollectionStoryboard.storyboard in Resources */,
 				2FD49B6F1C58AE0F00857EAE /* SearchResultAdCell.xib in Resources */,
+				2FAAAFA51CB6268300B954EF /* Login.storyboard in Resources */,
 				2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */,
 				2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */,
 				2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */,

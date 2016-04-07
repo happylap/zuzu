@@ -774,7 +774,7 @@ class AmazonClientManager : NSObject {
         self.loginViewController = theViewController
         
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("commonLoginView") as? CommonLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             vc.loginMode = mode
