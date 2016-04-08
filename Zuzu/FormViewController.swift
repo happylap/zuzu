@@ -55,11 +55,13 @@ class FormViewController: UIViewController {
         }
     }
     
-    var emailFormView:EmailFormView?
-    var passwordFormView:PasswordFormView?
-    var continueSocialLoginView: ContinueSocialLoginView?
-    
     var formMode:FormMode = .Login
+    
+    var emailFormView:EmailFormView?
+    
+    var passwordFormView:PasswordFormView?
+    
+    var continueSocialLoginView: ContinueSocialLoginView?
     
     @IBOutlet weak var modalTitle: UILabel!
     
@@ -86,13 +88,13 @@ class FormViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Utils
     private func setupUIForLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         self.mainTitleLabel.text = Message.Login.Email.mainTitle
         self.subTitleLabel.text = Message.Login.Email.subTitle
         
         emailFormView = EmailFormView(frame: self.formContainerView.bounds)
-        
         emailFormView?.delegate = self
         
         if let emailFormView = emailFormView {
@@ -102,7 +104,6 @@ class FormViewController: UIViewController {
         }
     }
     
-    // MARK: - Private Utils
     private func continueLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         self.mainTitleLabel.text = Message.Login.Password.mainTitle
@@ -111,6 +112,7 @@ class FormViewController: UIViewController {
         emailFormView?.removeFromSuperview()
         
         passwordFormView = PasswordFormView(frame: self.formContainerView.bounds)
+        passwordFormView?.delegate = self
         
         if let passwordFormView = passwordFormView{
             passwordFormView.formMode = .Login
@@ -142,6 +144,7 @@ class FormViewController: UIViewController {
         emailFormView?.removeFromSuperview()
         
         passwordFormView = PasswordFormView(frame: self.formContainerView.bounds)
+        passwordFormView?.delegate = self
         
         if let passwordFormView = passwordFormView{
             passwordFormView.formMode = .Register
@@ -185,7 +188,6 @@ class FormViewController: UIViewController {
         case .Register:
             setupUIForRegister()
         }
-        // Do any additional setup after loading the view.
     }
     
     override func didReceiveMemoryWarning() {
@@ -204,19 +206,19 @@ extension FormViewController: EmailFormDelegate {
         // Check user type
         
         // Existing socail login user
-        self.continueSocialLogin()
+        //self.continueSocialLogin()
         
         // Existing login user
         
         
         // New user
         
-        //        switch(self.formMode) {
-        //        case .Login:
-        //            self.continueLogin()
-        //        case .Register:
-        //            self.continueRegister()
-        //        }
+        switch(self.formMode) {
+        case .Login:
+            self.continueLogin()
+        case .Register:
+            self.continueRegister()
+        }
         
         
     }
@@ -229,6 +231,7 @@ extension FormViewController: PasswordFormDelegate {
         // Validate password
         
         // Finish login or register
+        dismissModalStack(self, animated: true, completionBlock: nil)
     }
 }
 
@@ -243,5 +246,19 @@ extension FormViewController: SocialLoginDelegate {
     }
 }
 
+
+func dismissModalStack(viewController: UIViewController, animated: Bool, completionBlock: (() -> Void)?) {
+    if viewController.presentingViewController != nil {
+        var vc = viewController.presentingViewController!
+        while (vc.presentingViewController != nil) {
+            vc = vc.presentingViewController!
+        }
+        vc.dismissViewControllerAnimated(animated, completion: nil)
+        
+        if let c = completionBlock {
+            c()
+        }
+    }
+}
 
 

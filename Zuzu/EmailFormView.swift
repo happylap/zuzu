@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import SwiftValidator
 
 protocol EmailFormDelegate: class {
     func onEmailEntered(email:String?)
 }
 
 class EmailFormView: UIView {
+    
+    @IBOutlet var formValidationError: UILabel!
+    
+    let validator = Validator()
     
     var view:UIView!
     
@@ -24,7 +29,7 @@ class EmailFormView: UIView {
         didSet {
             
             emailTextField.tintColor = UIColor.grayColor()
-            
+            emailTextField.addTarget(self, action: #selector(EmailFormView.textFieldDidChange(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -55,7 +60,6 @@ class EmailFormView: UIView {
     }
     
     private func setup() {
-        
         view = loadViewFromNib()
         view.frame = bounds
         view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
@@ -64,9 +68,27 @@ class EmailFormView: UIView {
     
     // MARK: - Action Handlers
     func onContinueButtonTouched(sender: UIButton) {
-
-        delegate?.onEmailEntered(self.emailTextField.text)
         
+        validator.validate(self)
+        
+    }
+    
+    func textFieldDidChange(sender: UITextField) {
+        
+        for (field, error) in validator.errors {
+            if(field == sender) {
+                field.layer.borderColor = UIColor.clearColor().CGColor
+                field.layer.borderWidth = 0.0
+                error.errorLabel?.hidden = true
+            }
+        }
+        
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        validator.registerField(emailTextField, errorLabel: formValidationError, rules: [RequiredRule(message: "請輸入電子郵件"), EmailRule(message: "電子郵件格式錯誤")])
     }
     
     override init(frame: CGRect) {
@@ -77,6 +99,26 @@ class EmailFormView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
+    }
+    
+}
+
+extension EmailFormView: ValidationDelegate {
+    
+    func validationSuccessful() {
+        
+        delegate?.onEmailEntered(self.emailTextField.text)
+        
+    }
+    
+    func validationFailed(errors:[UITextField:ValidationError]) {
+        // turn the fields to red
+        for (field, error) in validator.errors {
+            field.layer.borderColor = UIColor.redColor().CGColor
+            field.layer.borderWidth = 1.0
+            error.errorLabel?.text = error.errorMessage // works if you added labels
+            error.errorLabel?.hidden = false
+        }
     }
     
 }

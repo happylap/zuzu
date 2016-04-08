@@ -6,6 +6,17 @@
 //
 
 import UIKit
+import SwiftValidator
+
+public class CustomPasswordRule : RegexRule {
+    
+    /// Regular express string to be used in validation.
+    static let regex = "^[a-zA-Z0-9]*$"
+    
+    public convenience init(message : String = "Must be 8 characters or numbers") {
+        self.init(regex: CustomPasswordRule.regex, message : message)
+    }
+}
 
 protocol PasswordFormDelegate: class {
     func onPasswordEntered(password:String?)
@@ -13,11 +24,15 @@ protocol PasswordFormDelegate: class {
 
 class PasswordFormView: UIView {
     
+    let validator = Validator()
+    
     var view:UIView!
     
     var delegate: PasswordFormDelegate?
     
     var formMode:FormMode = .Register
+    
+    @IBOutlet var formValidationError: UILabel!
     
     @IBOutlet weak var forgotPasswordLabel: UILabel! {
         didSet {
@@ -33,7 +48,7 @@ class PasswordFormView: UIView {
         didSet {
             
             passwordTextField.tintColor = UIColor.grayColor()
-            
+            passwordTextField.addTarget(self, action: #selector(PasswordFormView.textFieldDidChange(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -80,8 +95,28 @@ class PasswordFormView: UIView {
     // MARK: - Action Handlers
     func onContinueButtonTouched(sender: UIButton) {
         
-        delegate?.onPasswordEntered(self.passwordTextField.text)
+        validator.validate(self)
         
+    }
+    
+    func textFieldDidChange(sender: UITextField) {
+        
+        for (field, error) in validator.errors {
+            if(field == sender) {
+                field.layer.borderColor = UIColor.clearColor().CGColor
+                field.layer.borderWidth = 0.0
+                error.errorLabel?.hidden = true
+            }
+        }
+        
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        validator.registerField(passwordTextField, errorLabel: formValidationError, rules: [RequiredRule(message: "請輸入密碼"),
+            MinLengthRule(length: 8, message: "密碼必須要8個字元以上"),
+            CustomPasswordRule(message: "密碼必須由英文字母、數字組成，不能有空白")])
     }
     
     override init(frame: CGRect) {
@@ -92,6 +127,26 @@ class PasswordFormView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
+    }
+    
+}
+
+extension PasswordFormView: ValidationDelegate {
+    
+    func validationSuccessful() {
+        
+        delegate?.onPasswordEntered(self.passwordTextField.text)
+        
+    }
+    
+    func validationFailed(errors:[UITextField:ValidationError]) {
+        // turn the fields to red
+        for (field, error) in validator.errors {
+            field.layer.borderColor = UIColor.redColor().CGColor
+            field.layer.borderWidth = 1.0
+            error.errorLabel?.text = error.errorMessage // works if you added labels
+            error.errorLabel?.hidden = false
+        }
     }
     
 }
