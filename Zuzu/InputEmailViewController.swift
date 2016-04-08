@@ -9,6 +9,14 @@ import UIKit
 
 class InputEmailViewController: UIViewController {
 
+    @IBOutlet weak var privacyAgreementImage: UIImageView! {
+    
+        didSet{
+            privacyAgreementImage.image = UIImage(named: "comment-check-outline")?.imageWithRenderingMode(.AlwaysTemplate)
+        }
+        
+    }
+    
     @IBOutlet weak var emailTextField: UITextField! {
     
         didSet {
@@ -30,6 +38,7 @@ class InputEmailViewController: UIViewController {
     @IBOutlet weak var continueButton: UIButton! {
 
         didSet {
+            continueButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             continueButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             continueButton.layer.borderWidth = 2
             continueButton.layer.borderColor =
