@@ -66,6 +66,8 @@
 		2F66375F1CB77D9900A51095 /* PasswordFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66375E1CB77D9900A51095 /* PasswordFormView.swift */; };
 		2F6637611CB7859100A51095 /* EmailFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6637601CB7859100A51095 /* EmailFormView.swift */; };
 		2F6637631CB785BC00A51095 /* EmailFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F6637621CB785BC00A51095 /* EmailFormView.xib */; };
+		2F6637651CB7A26300A51095 /* ContinueSocialLoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */; };
+		2F6637671CB7A27000A51095 /* ContinueSocialLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */; };
 		2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */; };
 		2F7181EF1C5F120E00C56B5F /* libAdapterSDKMoPub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */; };
 		2F7181F31C607D3A00C56B5F /* GTM-PLP77J in Resources */ = {isa = PBXBuildFile; fileRef = 2F7181F21C607D3A00C56B5F /* GTM-PLP77J */; };
@@ -248,6 +250,8 @@
 		2F66375E1CB77D9900A51095 /* PasswordFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordFormView.swift; sourceTree = "<group>"; };
 		2F6637601CB7859100A51095 /* EmailFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailFormView.swift; sourceTree = "<group>"; };
 		2F6637621CB785BC00A51095 /* EmailFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmailFormView.xib; sourceTree = "<group>"; };
+		2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContinueSocialLoginView.xib; sourceTree = "<group>"; };
+		2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueSocialLoginView.swift; sourceTree = "<group>"; };
 		2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterStatusBarView.swift; sourceTree = "<group>"; };
 		2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterSDKMoPub.a; sourceTree = "<group>"; };
 		2F7181F21C607D3A00C56B5F /* GTM-PLP77J */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTM-PLP77J"; sourceTree = "<group>"; };
@@ -557,8 +561,10 @@
 			children = (
 				2F66375C1CB77B8900A51095 /* PasswordFormView.xib */,
 				2F6637621CB785BC00A51095 /* EmailFormView.xib */,
+				2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */,
 				2F66375E1CB77D9900A51095 /* PasswordFormView.swift */,
 				2F6637601CB7859100A51095 /* EmailFormView.swift */,
+				2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -879,6 +885,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F6637651CB7A26300A51095 /* ContinueSocialLoginView.xib in Resources */,
 				2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */,
 				2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */,
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
@@ -1107,6 +1114,7 @@
 				2F99890D1C8F1286005ED6E0 /* LoginDebugViewController.swift in Sources */,
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
+				2F6637671CB7A27000A51095 /* ContinueSocialLoginView.swift in Sources */,
 				2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */,
 				14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */,
 				2FCD15FF1C54906F00A9C1E2 /* LoggerExtensions.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  LoginFormView.swift
+//  PasswordFormView.swift
 //  Zuzu
 //
 //Copyright © LAP Inc. All rights reserved
@@ -12,6 +12,8 @@ protocol PasswordFormDelegate: class {
 }
 
 class PasswordFormView: UIView {
+    
+    var view:UIView!
     
     var delegate: PasswordFormDelegate?
     
@@ -58,24 +60,7 @@ class PasswordFormView: UIView {
         
     }
     
-    func onContinueButtonTouched(sender: UIButton) {
-        
-        delegate?.onPasswordEntered(self.passwordTextField.text)
-        
-    }
-    
-    var view:UIView!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setup()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.setup()
-    }
-    
+    // MARK: - Private Utils
     private func loadViewFromNib() -> UIView {
         let bundle = NSBundle(forClass:self.dynamicType)
         let nib = UINib(nibName: "PasswordFormView", bundle: bundle)
@@ -90,6 +75,23 @@ class PasswordFormView: UIView {
         view.frame = bounds
         view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
         self.addSubview(view)
+    }
+    
+    // MARK: - Action Handlers
+    func onContinueButtonTouched(sender: UIButton) {
+        
+        delegate?.onPasswordEntered(self.passwordTextField.text)
+        
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.setup()
     }
     
 }

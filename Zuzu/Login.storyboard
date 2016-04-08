@@ -285,10 +285,10 @@
             </objects>
             <point key="canvasLocation" x="-931" y="63"/>
         </scene>
-        <!--Input Email-->
+        <!--Form View-->
         <scene sceneID="J0z-y8-TmU">
             <objects>
-                <viewController storyboardIdentifier="inputEmailView" title="Input Email" id="RRS-2N-4Fs" customClass="FormViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="inputEmailView" title="Form View" id="RRS-2N-4Fs" customClass="FormViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="U25-d4-ESr"/>
                         <viewControllerLayoutGuide type="bottom" id="PiQ-Iv-alu"/>
@@ -356,8 +356,8 @@
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="享受更多、更好的服務" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rpm-Rr-35j" userLabel="Sub Title Label">
-                                                <rect key="frame" x="41" y="45" width="160" height="19.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="享受更多、更好的服務" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rpm-Rr-35j" userLabel="Sub Title Label">
+                                                <rect key="frame" x="41" y="45" width="331" height="19.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -367,6 +367,7 @@
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="Rpm-Rr-35j" secondAttribute="bottom" constant="8" id="GXG-0e-Tcy"/>
                                             <constraint firstItem="qz6-Rx-CQf" firstAttribute="centerX" secondItem="mur-qQ-Fs3" secondAttribute="centerX" id="LcO-wV-MTb"/>
+                                            <constraint firstItem="Rpm-Rr-35j" firstAttribute="width" secondItem="qz6-Rx-CQf" secondAttribute="width" id="Rsz-lA-0z4"/>
                                             <constraint firstItem="qz6-Rx-CQf" firstAttribute="top" secondItem="mur-qQ-Fs3" secondAttribute="top" constant="16" id="Ttb-uI-MJX"/>
                                             <constraint firstItem="Rpm-Rr-35j" firstAttribute="leading" secondItem="qz6-Rx-CQf" secondAttribute="leading" id="ULW-Hs-Bft"/>
                                             <constraint firstItem="Rpm-Rr-35j" firstAttribute="top" secondItem="qz6-Rx-CQf" secondAttribute="bottom" constant="8" id="XTN-nj-Y2Z"/>

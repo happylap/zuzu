@@ -25,7 +25,17 @@ class FormViewController: UIViewController {
             
             struct Password {
                 static let mainTitle = "歡迎你回來！"
-                static let subTitle = "請輸入密碼以登入"
+                static let subTitle = "請輸入密碼登入"
+            }
+            
+            struct ExistingSocial {
+                static let mainTitle = "歡迎你回來！"
+                static let subTitle = "帳號已經存在\n請直接使用GOOGLE 或 FACEBOOK 登入"
+            }
+            
+            struct Existing {
+                static let mainTitle = "歡迎你回來！"
+                static let subTitle = "帳號已經存在，請輸入密碼登入"
             }
         }
         
@@ -47,6 +57,7 @@ class FormViewController: UIViewController {
     
     var emailFormView:EmailFormView?
     var passwordFormView:PasswordFormView?
+    var continueSocialLoginView: ContinueSocialLoginView?
     
     var formMode:FormMode = .Login
     
@@ -61,6 +72,7 @@ class FormViewController: UIViewController {
     }
     
     @IBOutlet weak var formContainerView: UIView!
+    
     @IBOutlet weak var mainTitleLabel: UILabel!
     
     @IBOutlet weak var subTitleLabel: UILabel!
@@ -70,7 +82,7 @@ class FormViewController: UIViewController {
             backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             backButton.tintColor = UIColor.whiteColor()
             
-            backButton.addTarget(self, action: Selector("onCancelButtonTouched:"), forControlEvents: UIControlEvents.TouchDown)
+            backButton.addTarget(self, action: #selector(FormViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -90,6 +102,7 @@ class FormViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Utils
     private func continueLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         self.mainTitleLabel.text = Message.Login.Password.mainTitle
@@ -136,8 +149,25 @@ class FormViewController: UIViewController {
             self.formContainerView.addSubview(passwordFormView)
         }
     }
-
     
+    private func continueSocialLogin() {
+        self.modalTitle.text = Message.Login.modalTitle
+        self.mainTitleLabel.text = Message.Login.ExistingSocial.mainTitle
+        self.subTitleLabel.text = Message.Login.ExistingSocial.subTitle
+        
+        emailFormView?.removeFromSuperview()
+        
+        continueSocialLoginView = ContinueSocialLoginView(frame: self.formContainerView.bounds)
+        continueSocialLoginView?.delegate = self
+        
+        if let continueSocialLoginView = continueSocialLoginView {
+            continueSocialLoginView.formMode = .Register
+            continueSocialLoginView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+            self.formContainerView.addSubview(continueSocialLoginView)
+        }
+    }
+    
+    // MARK: - Action Handlers
     func onCancelButtonTouched(sender: UIButton) {
         
         self.dismissViewControllerAnimated(true) { () -> Void in
@@ -145,6 +175,7 @@ class FormViewController: UIViewController {
         
     }
     
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -164,20 +195,53 @@ class FormViewController: UIViewController {
     
 }
 
-
+// MARK: - EmailFormDelegate
 extension FormViewController: EmailFormDelegate {
     
     func onEmailEntered(email:String?) {
         // Validate email
         
+        // Check user type
         
-        switch(self.formMode) {
-        case .Login:
-            self.continueLogin()
-        case .Register:
-            self.continueRegister()
-        }
+        // Existing socail login user
+        self.continueSocialLogin()
+        
+        // Existing login user
+        
+        
+        // New user
+        
+        //        switch(self.formMode) {
+        //        case .Login:
+        //            self.continueLogin()
+        //        case .Register:
+        //            self.continueRegister()
+        //        }
         
         
     }
 }
+
+// MARK: - PasswordFormDelegate
+extension FormViewController: PasswordFormDelegate {
+    
+    func onPasswordEntered(password:String?) {
+        // Validate password
+        
+        // Finish login or register
+    }
+}
+
+// MARK: - SocialLoginDelegate
+extension FormViewController: SocialLoginDelegate {
+    
+    func onContinue() {
+        
+        /// Back to common login form
+        self.dismissViewControllerAnimated(true) { () -> Void in
+        }
+    }
+}
+
+
+
