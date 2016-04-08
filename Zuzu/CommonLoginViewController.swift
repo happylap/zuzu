@@ -11,6 +11,13 @@ private let Log = Logger.defaultLogger
 
 class CommonLoginViewController: UIViewController {
     
+    // segue to configure UI
+    
+    struct ViewTransConst {
+        static let displayLoginForm:String = "displayLoginForm"
+        static let displayRegisterForm:String = "displayRegisterForm"
+    }
+    
     var cancelHandler: (() -> Void)?
     var fbLoginHandler: (() -> Void)?
     var googleLoginHandler: (() -> Void)?
@@ -193,6 +200,34 @@ class CommonLoginViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     */
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier{
+            
+            Log.debug("prepareForSegue: \(identifier)")
+            
+            switch identifier{
+                
+            case ViewTransConst.displayLoginForm:
+                if let vc = segue.destinationViewController as? FormViewController {
+                    vc.formMode = .Login
+                    
+                }
+                
+            case ViewTransConst.displayRegisterForm:
+                if let vc = segue.destinationViewController as? FormViewController {
+                    vc.formMode = .Register
+                    
+                }
+            default: break
+                
+            }
+        }
+    }
     
     // MARK: - Private Util
     

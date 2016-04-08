@@ -62,6 +62,10 @@
 		2F5854CF1BB3A9E5007FF85B /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */; };
 		2F6155591BD888660024145E /* SearchItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6155581BD888660024145E /* SearchItemService.swift */; };
 		2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */; };
+		2F66375D1CB77B8900A51095 /* PasswordFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F66375C1CB77B8900A51095 /* PasswordFormView.xib */; };
+		2F66375F1CB77D9900A51095 /* PasswordFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66375E1CB77D9900A51095 /* PasswordFormView.swift */; };
+		2F6637611CB7859100A51095 /* EmailFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6637601CB7859100A51095 /* EmailFormView.swift */; };
+		2F6637631CB785BC00A51095 /* EmailFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F6637621CB785BC00A51095 /* EmailFormView.xib */; };
 		2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */; };
 		2F7181EF1C5F120E00C56B5F /* libAdapterSDKMoPub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */; };
 		2F7181F31C607D3A00C56B5F /* GTM-PLP77J in Resources */ = {isa = PBXBuildFile; fileRef = 2F7181F21C607D3A00C56B5F /* GTM-PLP77J */; };
@@ -83,7 +87,7 @@
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FAAAFA51CB6268300B954EF /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA41CB6268300B954EF /* Login.storyboard */; };
-		2FAAAFA71CB663ED00B954EF /* InputEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA61CB663ED00B954EF /* InputEmailViewController.swift */; };
+		2FAAAFA71CB663ED00B954EF /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA61CB663ED00B954EF /* FormViewController.swift */; };
 		2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */; };
 		2FB16C4E1C477770009738AC /* CustomCityPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */; };
 		2FB16C501C4777ED009738AC /* CustomCityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */; };
@@ -240,6 +244,10 @@
 		2F5854CE1BB3A9E5007FF85B /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		2F6155581BD888660024145E /* SearchItemService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemService.swift; sourceTree = "<group>"; };
 		2F61555A1BD8C1DF0024145E /* SearchCriteriaObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCriteriaObserver.swift; sourceTree = "<group>"; };
+		2F66375C1CB77B8900A51095 /* PasswordFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PasswordFormView.xib; sourceTree = "<group>"; };
+		2F66375E1CB77D9900A51095 /* PasswordFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordFormView.swift; sourceTree = "<group>"; };
+		2F6637601CB7859100A51095 /* EmailFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailFormView.swift; sourceTree = "<group>"; };
+		2F6637621CB785BC00A51095 /* EmailFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmailFormView.xib; sourceTree = "<group>"; };
 		2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterStatusBarView.swift; sourceTree = "<group>"; };
 		2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterSDKMoPub.a; sourceTree = "<group>"; };
 		2F7181F21C607D3A00C56B5F /* GTM-PLP77J */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTM-PLP77J"; sourceTree = "<group>"; };
@@ -262,7 +270,7 @@
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FAAAFA41CB6268300B954EF /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
-		2FAAAFA61CB663ED00B954EF /* InputEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputEmailViewController.swift; sourceTree = "<group>"; };
+		2FAAAFA61CB663ED00B954EF /* FormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseItemTableDataSource.swift; sourceTree = "<group>"; };
 		2FB16C4D1C477770009738AC /* CustomCityPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCityPickerView.xib; sourceTree = "<group>"; };
 		2FB16C4F1C4777ED009738AC /* CustomCityPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCityPickerView.swift; sourceTree = "<group>"; };
@@ -544,6 +552,17 @@
 			name = Service;
 			sourceTree = "<group>";
 		};
+		2F66375B1CB77B1500A51095 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2F66375C1CB77B8900A51095 /* PasswordFormView.xib */,
+				2F6637621CB785BC00A51095 /* EmailFormView.xib */,
+				2F66375E1CB77D9900A51095 /* PasswordFormView.swift */,
+				2F6637601CB7859100A51095 /* EmailFormView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		2FB16C511C48BDCF009738AC /* InAppPurchase */ = {
 			isa = PBXGroup;
 			children = (
@@ -628,12 +647,13 @@
 		2FBC05531BDE6F0A0035652D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2F66375B1CB77B1500A51095 /* View */,
 				2FAAAFA41CB6268300B954EF /* Login.storyboard */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
 				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
-				2FAAAFA61CB663ED00B954EF /* InputEmailViewController.swift */,
+				2FAAAFA61CB663ED00B954EF /* FormViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -870,9 +890,11 @@
 				2FAAAFA51CB6268300B954EF /* Login.storyboard in Resources */,
 				2FEC14CC1C15F41C000E652D /* .travis.yml in Resources */,
 				2FBF526C1C06E79C00B3F47B /* SimpleFilterTableViewCell.xib in Resources */,
+				2F66375D1CB77B8900A51095 /* PasswordFormView.xib in Resources */,
 				2FBF526A1C06E64D00B3F47B /* FilterTableViewCell.xib in Resources */,
 				2F31F5131BC2BC4400054355 /* .gitignore in Resources */,
 				2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */,
+				2F6637631CB785BC00A51095 /* EmailFormView.xib in Resources */,
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
 				2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */,
@@ -1007,6 +1029,7 @@
 				14914FA51C27D26D00025AC1 /* AbstractHouseItem+CoreDataProperties.swift in Sources */,
 				81F05D5C1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift in Sources */,
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
+				2F6637611CB7859100A51095 /* EmailFormView.swift in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
 				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
 				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
@@ -1031,6 +1054,7 @@
 				2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */,
 				2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */,
 				2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */,
+				2F66375F1CB77D9900A51095 /* PasswordFormView.swift in Sources */,
 				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
 				2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */,
@@ -1038,7 +1062,7 @@
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
-				2FAAAFA71CB663ED00B954EF /* InputEmailViewController.swift in Sources */,
+				2FAAAFA71CB663ED00B954EF /* FormViewController.swift in Sources */,
 				816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
 				2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */,
