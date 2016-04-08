@@ -55,12 +55,16 @@ class ZuzuUserMapper: NSObject, Mappable {
     })
     
     func toUser() -> ZuzuUser? {
-        if let userId = self.userId, email = self.email, provider = self.provider {
+        if let userId = self.userId, email = self.email {
             let user = ZuzuUser()
             user.id = userId
             user.email = email
             
-            user.provider = Provider(rawValue: provider)
+            if let _provider = self.provider {
+                if let provider = Provider(rawValue: _provider) {
+                    user.provider = provider
+                }
+            }
             
             user.registerTime = self.registerTime
             user.name = self.name
