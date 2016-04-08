@@ -451,7 +451,7 @@
                                         <rect key="frame" x="0.0" y="226" width="414" height="426"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我同意豬豬快租的隱私權條款" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMi-w6-r83">
-                                                <rect key="frame" x="122.5" y="45" width="169" height="16"/>
+                                                <rect key="frame" x="122.5" y="16" width="169" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.28627450980000002" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -460,7 +460,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="comment-check-outline" translatesAutoresizingMaskIntoConstraints="NO" id="pMn-Fa-ItN" userLabel="agree privacy">
-                                                <rect key="frame" x="94.5" y="43" width="20" height="20"/>
+                                                <rect key="frame" x="94.5" y="14" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="IXO-gz-rUx"/>
                                                     <constraint firstAttribute="width" secondItem="pMn-Fa-ItN" secondAttribute="height" multiplier="1:1" id="UZI-dJ-BT1"/>
@@ -469,9 +469,9 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="sMi-w6-r83" firstAttribute="centerX" secondItem="qKI-xb-m6R" secondAttribute="centerX" id="5bK-Bf-GoU"/>
-                                            <constraint firstItem="sMi-w6-r83" firstAttribute="top" secondItem="qKI-xb-m6R" secondAttribute="top" constant="45" id="B1J-Sv-Tin"/>
+                                            <constraint firstItem="sMi-w6-r83" firstAttribute="top" secondItem="qKI-xb-m6R" secondAttribute="top" constant="16" id="B1J-Sv-Tin"/>
                                             <constraint firstItem="pMn-Fa-ItN" firstAttribute="trailing" secondItem="sMi-w6-r83" secondAttribute="trailing" id="Mat-42-YGO"/>
-                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sMi-w6-r83" secondAttribute="bottom" constant="8" id="pNH-Iq-Rp8"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sMi-w6-r83" secondAttribute="bottom" constant="16" id="pNH-Iq-Rp8"/>
                                             <constraint firstItem="sMi-w6-r83" firstAttribute="leading" secondItem="pMn-Fa-ItN" secondAttribute="trailing" constant="8" id="sT8-zB-Vw8"/>
                                             <constraint firstItem="pMn-Fa-ItN" firstAttribute="centerY" secondItem="sMi-w6-r83" secondAttribute="centerY" id="ySS-v5-DiK"/>
                                         </constraints>
