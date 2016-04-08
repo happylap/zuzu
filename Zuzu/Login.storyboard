@@ -390,21 +390,17 @@
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" 請輸入電子郵件" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="6Kx-3s-5aB">
                                                 <rect key="frame" x="41" y="0.0" width="331" height="44"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="2Yp-d6-RCi"/>
+                                                    <constraint firstAttribute="width" secondItem="6Kx-3s-5aB" secondAttribute="height" multiplier="331:44" id="apy-Vf-afg"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="2Yp-d6-RCi"/>
-                                                    </mask>
-                                                </variation>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fir-1r-riM" userLabel="facebookButton">
                                                 <rect key="frame" x="41" y="60" width="331" height="44"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="1P4-Aq-pwg"/>
+                                                    <constraint firstAttribute="width" secondItem="fir-1r-riM" secondAttribute="height" multiplier="331:44" id="SKk-wm-Rt9"/>
                                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="290" id="aNt-er-JKD"/>
                                                 </constraints>
                                                 <state key="normal" title="繼續">
@@ -520,6 +516,12 @@
                             <constraint firstItem="QF6-Pg-sOm" firstAttribute="top" secondItem="ffg-xq-2o9" secondAttribute="topMargin" id="rIZ-SQ-m1R"/>
                             <constraint firstItem="QF6-Pg-sOm" firstAttribute="width" secondItem="ffg-xq-2o9" secondAttribute="width" id="zeN-Nf-13m"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="kWi-co-Nka"/>
+                                <exclude reference="2Q9-EW-lHL"/>
+                            </mask>
+                        </variation>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="736"/>
@@ -569,9 +571,9 @@
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">
+                                    <exclude reference="Dy2-mD-CDO"/>
                                     <exclude reference="osM-yt-2al"/>
                                     <exclude reference="tsQ-W6-fBF"/>
-                                    <exclude reference="Dy2-mD-CDO"/>
                                     <exclude reference="4Xy-Ai-Jxv"/>
                                     <exclude reference="xKB-P7-Ol9"/>
                                 </mask>
