@@ -399,7 +399,10 @@
                                         <rect key="frame" x="0.0" y="189" width="414" height="463"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我同意豬豬快租的隱私權條款" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMi-w6-r83">
-                                                <rect key="frame" x="122.5" y="16" width="169" height="16"/>
+                                                <rect key="frame" x="122.5" y="16" width="169" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="32" id="nfV-9S-HVQ"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.28627450980000002" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -408,7 +411,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="comment-check-outline" translatesAutoresizingMaskIntoConstraints="NO" id="pMn-Fa-ItN" userLabel="agree privacy">
-                                                <rect key="frame" x="94.5" y="14" width="20" height="20"/>
+                                                <rect key="frame" x="94.5" y="22" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="IXO-gz-rUx"/>
                                                     <constraint firstAttribute="width" secondItem="pMn-Fa-ItN" secondAttribute="height" multiplier="1:1" id="UZI-dJ-BT1"/>
@@ -470,6 +473,7 @@
                         <outlet property="formContainerView" destination="qBH-J8-iT3" id="2wn-dg-vNo"/>
                         <outlet property="mainTitleLabel" destination="qz6-Rx-CQf" id="Vm3-Rj-ZHW"/>
                         <outlet property="modalTitle" destination="zZ1-Tu-Azq" id="rLe-ll-xdL"/>
+                        <outlet property="privacyAgreement" destination="sMi-w6-r83" id="yV8-lS-nbS"/>
                         <outlet property="privacyAgreementImage" destination="pMn-Fa-ItN" id="pgm-Et-VZa"/>
                         <outlet property="subTitleLabel" destination="Rpm-Rr-35j" id="S4s-Gz-Wtg"/>
                     </connections>

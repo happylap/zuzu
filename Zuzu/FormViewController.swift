@@ -73,6 +73,15 @@ class FormViewController: UIViewController {
         
     }
     
+    @IBOutlet weak var privacyAgreement: UILabel! {
+        didSet {
+            
+            privacyAgreement.userInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(FormViewController.onPrivacyAgreementTouched(_:)))
+            privacyAgreement.addGestureRecognizer(tap)
+        }
+    }
+    
     @IBOutlet weak var formContainerView: UIView!
     
     @IBOutlet weak var mainTitleLabel: UILabel!
@@ -175,6 +184,23 @@ class FormViewController: UIViewController {
         
         self.dismissViewControllerAnimated(true) { () -> Void in
         }
+        
+    }
+    
+    func onPrivacyAgreementTouched(sender:UITapGestureRecognizer) {
+        
+        let privacyUrl = "https://zuzurentals.wordpress.com/zuzu-rentals-privacy-policy/"
+        
+        ///Open by Facebook App
+        if let url = NSURL(string: privacyUrl) {
+            
+            if (UIApplication.sharedApplication().canOpenURL(url)) {
+                
+                UIApplication.sharedApplication().openURL(url)
+
+            }
+        }
+
         
     }
     
