@@ -38,7 +38,7 @@ class UrlPopoverViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        copyUrlButton.addTarget(self, action: "onCopybuttonTouched:", forControlEvents: .TouchDown)
+        copyUrlButton.addTarget(self, action: #selector(UrlPopoverViewController.onCopybuttonTouched(_:)), forControlEvents: .TouchDown)
         self.urlLabel.text = urlLabelText
     }
     

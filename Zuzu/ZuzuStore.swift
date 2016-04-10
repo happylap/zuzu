@@ -12,7 +12,7 @@ private let Log = Logger.defaultLogger
 @objc public protocol ZuzuStorePurchaseHandler : NSObjectProtocol {
     
     func onPurchased(store: ZuzuStore, transaction: SKPaymentTransaction)
-
+    
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction)
 }
 
@@ -139,13 +139,17 @@ public class ZuzuStore: NSObject  {
             }
             
             do {
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options:[])
-                print(json)
-                guard let statusCode = json["status"] as? Int else {
+                if let json = try NSJSONSerialization.JSONObjectWithData(data, options:[]) as? [String: AnyObject] {
+                    print(json)
+                    
+                    guard let statusCode = json["status"] as? Int else {
+                        onCompletion(nil)
+                        return
+                    }
+                    onCompletion(statusCode)
+                } else {
                     onCompletion(nil)
-                    return
                 }
-                onCompletion(statusCode)
             }
             catch let error as NSError {
                 print(error)
@@ -236,7 +240,7 @@ public class ZuzuStore: NSObject  {
             
             if let products = self.validSKProducts,
                 let targetProduct = products.filter({ (skProduct) -> Bool in
-                return (skProduct.productIdentifier == productIdentifier) }).first {
+                    return (skProduct.productIdentifier == productIdentifier) }).first {
                 
                 let payment = SKPayment(product: targetProduct)
                 
@@ -345,7 +349,7 @@ extension ZuzuStore: SKPaymentTransactionObserver {
             case .Failed:
                 failedTransaction(transaction)
                 break
-                ///For now, we do not handle transactions with the following states
+            ///For now, we do not handle transactions with the following states
             case .Restored:
                 break
             case .Deferred:
@@ -368,7 +372,7 @@ extension ZuzuStore: SKPaymentTransactionObserver {
     
     private func completeTransaction(transaction: SKPaymentTransaction) {
         Log.warning("completeTransaction... \(transaction.transactionIdentifier), product = \(transaction.payment.productIdentifier)")
-
+        
         purchaseHandler?.onPurchased(self, transaction: transaction)
     }
     
@@ -376,7 +380,7 @@ extension ZuzuStore: SKPaymentTransactionObserver {
         Log.warning("restoreTransaction... \(transaction.transactionIdentifier), product = \(transaction.payment.productIdentifier)")
         
         //let productIdentifier = transaction.originalTransaction!.payment.productIdentifier
-
+        
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     

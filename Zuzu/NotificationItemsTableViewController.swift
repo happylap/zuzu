@@ -42,16 +42,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         Log.enter()
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
-        self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(NotificationItemsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         self.refreshOnViewLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "willEnterForground", name: UIApplicationWillEnterForegroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.willEnterForground), name: UIApplicationWillEnterForegroundNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItemsOnForeground:", name: "receiveNotifyItemsOnForeground", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnForeground(_:)), name: "receiveNotifyItemsOnForeground", object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didTabBarAgainSelectedNotification:", name: TabBarAgainSelectedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.didTabBarAgainSelectedNotification(_:)), name: TabBarAgainSelectedNotification, object: nil)
         
         configureTableView()
         Log.exit()

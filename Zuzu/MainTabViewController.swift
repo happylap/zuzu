@@ -29,7 +29,7 @@ class MainTabViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismissAllViewControllers:", name: "switchToTab", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.dismissAllViewControllers(_:)), name: "switchToTab", object: nil)
         
         /// Init View Controllers for each Tab
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)

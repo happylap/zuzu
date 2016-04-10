@@ -125,7 +125,7 @@ class RadarConfigureTableViewController: UITableViewController {
                                 selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
                         }
                         
-                        typeButton.addTarget(self, action: "onTypeButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                        typeButton.addTarget(self, action: #selector(RadarConfigureTableViewController.onTypeButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                     }
                 }
             }
@@ -181,7 +181,7 @@ class RadarConfigureTableViewController: UITableViewController {
                     if(labelStr.count < 3) {
                         labelStr.append("\(city.name) (\(city.regions.count))")
                     }
-                    numOfCity++
+                    numOfCity += 1
                 }
                 
                 regionLabel = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")

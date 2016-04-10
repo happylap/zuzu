@@ -436,7 +436,7 @@ class AmazonClientManager : NSObject {
         
         /// IdentityId will be changed when a new provider login is set
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector:"identityDidChange:",
+            selector:#selector(AmazonClientManager.identityDidChange(_:)),
             name:AWSCognitoIdentityIdChangedNotification,
             object:nil)
     }
@@ -538,7 +538,7 @@ class AmazonClientManager : NSObject {
             /// If the interval is less than 0 (refresh time has passed), the timer will be triggered almost immediately
             interval = refreshTime.timeIntervalSinceNow
             
-            self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: "onTokenNeedRefreshing:", userInfo: ["provider", timerProvider], repeats: false)
+            self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: #selector(AmazonClientManager.onTokenNeedRefreshing(_:)), userInfo: ["provider", timerProvider], repeats: false)
         }
         
     }

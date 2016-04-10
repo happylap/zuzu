@@ -79,7 +79,7 @@ class FilterTableViewController: UITableViewController {
             resetAllButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
             resetAllButton.enabled = false
             
-            resetAllButton.addTarget(self, action: "onFilterResetButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+            resetAllButton.addTarget(self, action: #selector(FilterTableViewController.onFilterResetButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         }
     }
     

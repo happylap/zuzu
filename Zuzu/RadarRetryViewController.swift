@@ -51,15 +51,15 @@ class RadarRetryViewController: UIViewController {
     
     override func viewDidLoad() {
         if isBlank == false{
-            let tapGuesture = UITapGestureRecognizer(target: self, action: "imageTapped:")
+            let tapGuesture = UITapGestureRecognizer(target: self, action: #selector(RadarRetryViewController.imageTapped(_:)))
             self.refreshImageView.addGestureRecognizer(tapGuesture)
             self.refreshImageView.userInteractionEnabled = true
             
-            let tapGuesture2 = UITapGestureRecognizer(target: self, action: "imageTapped:")
+            let tapGuesture2 = UITapGestureRecognizer(target: self, action: #selector(RadarRetryViewController.imageTapped(_:)))
             self.refreshTextLabel.addGestureRecognizer(tapGuesture2)
             self.refreshTextLabel.userInteractionEnabled = true
             
-            let tapGuesture3 = UITapGestureRecognizer(target: self, action: "imageTapped:")
+            let tapGuesture3 = UITapGestureRecognizer(target: self, action: #selector(RadarRetryViewController.imageTapped(_:)))
             self.offlineStateImage.addGestureRecognizer(tapGuesture3)
             self.offlineStateImage.userInteractionEnabled = true
         }

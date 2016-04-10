@@ -190,7 +190,7 @@ class SearchResultTableViewCell: UITableViewCell {
                 prefixedButton.image = UIImage(named: "uncheck")
             }
             self.prefixedButton.userInteractionEnabled = true
-            self.prefixedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onContactTouched:")))
+            self.prefixedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchResultTableViewCell.onContactTouched(_:))))
             
             
             self.addToCollectionButton.image = UIImage(named: "note_n")
@@ -293,7 +293,7 @@ class SearchResultTableViewCell: UITableViewCell {
         self.addToCollectionButton.userInteractionEnabled = true
         
         /// Add default touch event handler
-        self.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("onAddToCollectionTouched:")))
+        self.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchResultTableViewCell.onAddToCollectionTouched(_:))))
         
         /// Set to collected state
         self.isCollected = isCollected

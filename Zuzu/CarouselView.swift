@@ -141,7 +141,7 @@ class CarouselView: UIView {
     func addFirstImageView(imageViewFrame: CGRect, imageURL: String) {
         let url = NSURL(string: imageURL)!
         let size = imageViewFrame.size
-        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CarouselView.imageTapped(_:)))
         let firstImageView = UIImageView(frame: imageViewFrame)
         firstImageView.clipsToBounds = true
         firstImageView.contentMode = UIViewContentMode.ScaleAspectFill
@@ -156,7 +156,7 @@ class CarouselView: UIView {
     func addSubImageView(imageViewFrame: CGRect, imageURL: String, lazyLoading: Bool) {
         let url = NSURL(string: imageURL)!
         let size = imageViewFrame.size
-        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CarouselView.imageTapped(_:)))
         let imageView = UIImageView(frame: imageViewFrame)
         imageView.clipsToBounds = true
         imageView.contentMode = UIViewContentMode.ScaleAspectFill

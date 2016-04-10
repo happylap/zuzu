@@ -34,7 +34,7 @@ class RadarLandingViewController: UIViewController {
             continueButton.tintColor =
                 UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             
-            continueButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            continueButton.addTarget(self, action: #selector(RadarLandingViewController.onContinueButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
             
         }
     }
@@ -44,7 +44,7 @@ class RadarLandingViewController: UIViewController {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             cancelButton.tintColor = UIColor.whiteColor()
             
-            cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            cancelButton.addTarget(self, action: #selector(RadarLandingViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     

@@ -51,7 +51,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             cancelButton.tintColor = UIColor.whiteColor()
             
-            cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            cancelButton.addTarget(self, action: #selector(RadarPurchaseViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -282,7 +282,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         self.tableView.allowsSelection = false
         
         // Subscribe to a notification that fires when a product is purchased.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "productPurchased:", name: ProductPurchasedNotification, object: nil)
+        // NSNotificationCenter.defaultCenter().addObserver(self, selector: "productPurchased:", name: ProductPurchasedNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -412,7 +412,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         }
         
         button.tag = indexPath.row
-        button.addTarget(self, action: "onBuyButtonTapped:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(RadarPurchaseViewController.onBuyButtonTapped(_:)), forControlEvents: .TouchUpInside)
         
         cell.accessoryType = .None
         cell.accessoryView = button

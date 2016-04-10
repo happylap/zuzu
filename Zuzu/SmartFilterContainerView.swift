@@ -169,7 +169,7 @@ class SmartFilterContainerView: UIView {
         
         self.controlButtonView.clipsToBounds = false
         self.controlButtonView.userInteractionEnabled = true
-        let tapGuesture = UITapGestureRecognizer(target: self, action: "onSmartFilterControlButtonTouched:")
+        let tapGuesture = UITapGestureRecognizer(target: self, action: #selector(SmartFilterContainerView.onSmartFilterControlButtonTouched(_:)))
         self.controlButtonView.addGestureRecognizer(tapGuesture)
         self.addGestureRecognizer(tapGuesture)
         

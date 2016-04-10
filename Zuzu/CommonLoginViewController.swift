@@ -31,7 +31,7 @@ class CommonLoginViewController: UIViewController {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             cancelButton.tintColor = UIColor.whiteColor()
             
-            cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            cancelButton.addTarget(self, action: #selector(CommonLoginViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -117,7 +117,7 @@ class CommonLoginViewController: UIViewController {
             fbButton.setTitleColor(UIColor.colorWithRGB(0x4990E2, alpha: 1), forState: .Normal)
             fbButton.layer.cornerRadius = CGFloat(5.0)
             
-            fbButton.addTarget(self, action: "onFBButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            fbButton.addTarget(self, action: #selector(CommonLoginViewController.onFBButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -139,7 +139,7 @@ class CommonLoginViewController: UIViewController {
             googleButton.setTitleColor(UIColor.colorWithRGB(0xF3364C, alpha: 1), forState: .Normal)
             googleButton.layer.cornerRadius = CGFloat(5.0)
             
-            googleButton.addTarget(self, action: "onGoogleButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            googleButton.addTarget(self, action: #selector(CommonLoginViewController.onGoogleButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     

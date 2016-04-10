@@ -32,9 +32,9 @@ class AmazonSNSService : NSObject {
     // MARK: start
     
     func start(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUserLogin:", name: UserLoginNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleDeviceTokenChange:", name: "deviceTokenChange", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleReceiveNotifyItems:", name: "receiveNotifyItems", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleDeviceTokenChange(_:)), name: "deviceTokenChange", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleReceiveNotifyItems(_:)), name: "receiveNotifyItems", object: nil)
     }
     
     // MARK: SNS Push Notifications

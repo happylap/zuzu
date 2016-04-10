@@ -116,7 +116,7 @@ class CityRegionContainerController: UIViewController {
         super.viewDidLoad()
         Log.debug("viewDidLoad: \(self)")
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CityRegionContainerController.onRegionSelectionUpdated(_:)), name: "regionSelectionChanged", object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {

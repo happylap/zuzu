@@ -745,12 +745,12 @@ class HouseDetailViewController: UIViewController {
         ///Prepare custom UIButton for UIBarButtonItem
         let gotoSourceButton: UIButton = UIButton(type: UIButtonType.Custom)
         gotoSourceButton.setImage(UIImage(named: "web_n"), forState: UIControlState.Normal)
-        gotoSourceButton.addTarget(self, action: "gotoSourceButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        gotoSourceButton.addTarget(self, action: #selector(HouseDetailViewController.gotoSourceButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         gotoSourceButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         
         let shareButton: UIButton = UIButton(type: UIButtonType.Custom)
         shareButton.setImage(UIImage(named: "share_n"), forState: UIControlState.Normal)
-        shareButton.addTarget(self, action: "shareButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        shareButton.addTarget(self, action: #selector(HouseDetailViewController.shareButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         shareButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         
         let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
@@ -767,7 +767,7 @@ class HouseDetailViewController: UIViewController {
             }
         }
         
-        collectButton.addTarget(self, action: "collectButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        collectButton.addTarget(self, action: #selector(HouseDetailViewController.collectButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         
         let collectItem = UIBarButtonItem(customView: collectButton)
@@ -830,18 +830,18 @@ class HouseDetailViewController: UIViewController {
             
             if let _ = houseDetail.valueForKey("email") as? String {
                 contactBarView.contactByMailButton
-                    .addTarget(self, action: "contactByMailButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                    .addTarget(self, action: #selector(HouseDetailViewController.contactByMailButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 contactBarView.contactByMailButton.enabled = true
             }
             
             if let _ = houseDetail.valueForKey("phone") as? [String] {
                 
-                let tapGuesture = UITapGestureRecognizer(target: self, action: "contactNameTouched:")
+                let tapGuesture = UITapGestureRecognizer(target: self, action: #selector(HouseDetailViewController.contactNameTouched(_:)))
                 contactBarView.contactName.addGestureRecognizer(tapGuesture)
                 contactBarView.contactName.enabled = true
                 
                 contactBarView.contactByPhoneButton
-                    .addTarget(self, action: "contactByPhoneButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                    .addTarget(self, action: #selector(HouseDetailViewController.contactByPhoneButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 contactBarView.contactByPhoneButton.enabled = true
             }
         }
@@ -1237,7 +1237,7 @@ class HouseDetailViewController: UIViewController {
                 if let mvc = segue.destinationViewController as? MapViewController {
                     
                     // Config navigation left bar
-                    mvc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: "onCloseMap:")
+                    mvc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: #selector(HouseDetailViewController.onCloseMap(_:)))
                     
                     if let houseItemDetail = self.houseItemDetail {
                         let coordinateStr = houseItemDetail.valueForKey("coordinate") as? String
@@ -1429,7 +1429,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 let browser = MWPhotoBrowser(delegate: self)
                 
                 // Config navigation left bar
-                browser.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: "onClosePhotoBrowser:")
+                browser.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: #selector(HouseDetailViewController.onClosePhotoBrowser(_:)))
                 
                 // Action button to allow sharing, copying, etc (default: true)
                 browser.displayActionButton = true

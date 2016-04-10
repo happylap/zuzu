@@ -156,7 +156,7 @@ class SearchBoxTableViewController: UITableViewController {
                     if(labelStr.count < 3) {
                         labelStr.append("\(city.name) (\(city.regions.count))")
                     }
-                    numOfCity++
+                    numOfCity += 1
                 }
                 
                 regionLabel = labelStr.joinWithSeparator("，") + ((numOfCity > 3) ? " ..." : "")
@@ -225,7 +225,7 @@ class SearchBoxTableViewController: UITableViewController {
             clearCriteriaButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
             clearCriteriaButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
             clearCriteriaButton.enabled = false
-            clearCriteriaButton.addTarget(self, action: "onClearCriteriaButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+            clearCriteriaButton.addTarget(self, action: #selector(SearchBoxTableViewController.onClearCriteriaButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
         }
     }
@@ -247,7 +247,7 @@ class SearchBoxTableViewController: UITableViewController {
                                 selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
                         }
                         
-                        typeButton.addTarget(self, action: "onTypeButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+                        typeButton.addTarget(self, action: #selector(SearchBoxTableViewController.onTypeButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                     }
                 }
             }
@@ -272,7 +272,7 @@ class SearchBoxTableViewController: UITableViewController {
     }
     @IBOutlet weak var searchButton: UIButton! {
         didSet {
-            searchButton.addTarget(self, action: "onSearchButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+            searchButton.addTarget(self, action: #selector(SearchBoxTableViewController.onSearchButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         }
     }
     
@@ -384,7 +384,7 @@ class SearchBoxTableViewController: UITableViewController {
     }
     
     private func configureGestureRecognizer() {
-        let tap = UITapGestureRecognizer(target: self, action: "onTableViewTapped:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SearchBoxTableViewController.onTableViewTapped(_:)))
         /// Setting this property to false will enable forward the touch event
         /// to the original UI after handled by UITapGestureRecognizer
         tap.cancelsTouchesInView = false
@@ -1198,7 +1198,7 @@ class SearchBoxTableViewController: UITableViewController {
                     }
                 }
                 
-                navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: "onDismissCurrentView:")
+                navigationItem.backBarButtonItem = UIBarButtonItem(title: "取消", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SearchBoxTableViewController.onDismissCurrentView(_:)))
                 
             default: break
             }

@@ -47,7 +47,7 @@ class RegionTableViewController: UITableViewController {
                 })
                 
                 if(selectionCountInCity > 0) {
-                    count++
+                    count += 1
                     
                     ///Selection within the city which already has selected regions is allowed
                     if(cityCode == selectedCity) {
@@ -162,7 +162,7 @@ class RegionTableViewController: UITableViewController {
                     
                     //Clear other selection
                     var indexPaths = [NSIndexPath]()
-                    for var index = row + 1; index < checkedRegions[cityCodeSelected]?.count; ++index {
+                    for var index = row + 1; index < checkedRegions[cityCodeSelected]?.count; index += 1 {
                         checkedRegions[cityCodeSelected]![index] = false
                         indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
                     }

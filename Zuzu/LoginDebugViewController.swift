@@ -63,7 +63,7 @@ class LoginDebugViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleTokenRefreshed:", name: UserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDebugViewController.handleTokenRefreshed(_:)), name: UserLoginNotification, object: nil)
         // Do any additional setup after loading the view.
         
         self.webApiPickerView.dataSource = self;

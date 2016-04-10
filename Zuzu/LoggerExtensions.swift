@@ -58,35 +58,35 @@ public extension XCGLogger {
     // MARK: - Convenience logging methods
     
     // MARK: * Verbose: convenience functions for logging function enter & exit
-    public class func enter(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public class func enter(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let closure:()-> String? = {return "Enter"}
         self.defaultInstance().logln(.Debug, functionName: functionName, fileName: fileName, lineNumber: lineNumber, closure: closure)
     }
     
-    public func enter(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func enter(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let closure:()-> String? = {return "Enter"}
         self.logln(.Debug, functionName: functionName, fileName: fileName, lineNumber: lineNumber, closure: closure)
     }
     
-    public class func exit(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public class func exit(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let closure:()-> String? = {return "Exit"}
         self.defaultInstance().logln(.Debug, functionName: functionName, fileName: fileName, lineNumber: lineNumber, closure: closure)
     }
     
-    public func exit(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func exit(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let closure:()-> String? = {return "Exit"}
         self.logln(.Debug, functionName: functionName, fileName: fileName, lineNumber: lineNumber, closure: closure)
     }
     
     // MARK: * Verbose
     
-    public func verbose(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func verbose(@autoclosure closure: () -> String?, label: String, functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let level = LogLevel.Verbose
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func verbose(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func verbose(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Verbose
         
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
@@ -94,13 +94,13 @@ public extension XCGLogger {
 
     // MARK: * Debug
 
-    public func debug(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func debug(@autoclosure closure: () -> String?, label: String, functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let level = LogLevel.Debug
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func debug(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func debug(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Debug
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
@@ -108,13 +108,13 @@ public extension XCGLogger {
     
     // MARK: * Info
     
-    public func info(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func info(@autoclosure closure: () -> String?, label: String, functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let level = LogLevel.Info
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func info(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func info(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Info
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
@@ -122,13 +122,13 @@ public extension XCGLogger {
     
     // MARK: * Warning
     
-    public func warning(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func warning(@autoclosure closure: () -> String?, label: String, functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let level = LogLevel.Warning
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func warning(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func warning(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Warning
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
@@ -136,13 +136,13 @@ public extension XCGLogger {
     
     // MARK: * Error
     
-    public func error(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func error(@autoclosure closure: () -> String?, label: String, functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let level = LogLevel.Error
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func error(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func error(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Error
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
@@ -150,13 +150,13 @@ public extension XCGLogger {
     
     // MARK: * Severe
     
-    public func severe(@autoclosure closure: () -> String?, label: String, functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+    public func severe(@autoclosure closure: () -> String?, label: String, functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
         let level = LogLevel.Severe
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)
     }
     
-    public func severe(functionName: String = __FUNCTION__, fileName: String = __FILE__, lineNumber: Int = __LINE__, label:String,  @noescape closure: () -> String?) {
+    public func severe(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, label:String,  @noescape closure: () -> String?) {
         let level = LogLevel.Severe
 
         outputLog(label, level: level, functionName: functionName, fileName:fileName, lineNumber:lineNumber, closure: closure)

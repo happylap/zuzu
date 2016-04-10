@@ -54,7 +54,7 @@ class DuplicateHouseViewController: UIViewController {
     
     @IBOutlet weak var continueButton: UIButton! {
         didSet {
-            continueButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            continueButton.addTarget(self, action: #selector(DuplicateHouseViewController.onContinueButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
             
             var title = String(format: "繼續")
             
@@ -74,7 +74,7 @@ class DuplicateHouseViewController: UIViewController {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             cancelButton.tintColor = UIColor.whiteColor()
             
-            cancelButton.addTarget(self, action: "onCancelButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            cancelButton.addTarget(self, action: #selector(DuplicateHouseViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -231,7 +231,7 @@ class DuplicateHouseViewController: UIViewController {
     
     func onCheckForwardTriggered() {
         
-        countDown--
+        countDown -= 1
         
         if(countDown <= 0) {
             currentTimer?.invalidate()
@@ -266,7 +266,7 @@ class DuplicateHouseViewController: UIViewController {
         /// Setup Timer for auto forwarding
         
         if(enableAutoForward) {
-            currentTimer = NSTimer.scheduledTimerWithTimeInterval(countDownInterval, target: self, selector: "onCheckForwardTriggered", userInfo: nil, repeats: true)
+            currentTimer = NSTimer.scheduledTimerWithTimeInterval(countDownInterval, target: self, selector: #selector(DuplicateHouseViewController.onCheckForwardTriggered), userInfo: nil, repeats: true)
         }
     }
     

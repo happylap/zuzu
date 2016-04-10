@@ -163,7 +163,7 @@ class SearchResultViewController: UIViewController {
             for subView in smartFilterViews {
                 if let smartFilterView = subView as? SmartFilterView {
                     for button in smartFilterView.filterButtons {
-                        button.addTarget(self, action: "onSmartFilterButtonToggled:", forControlEvents: UIControlEvents.TouchDown)
+                        button.addTarget(self, action: #selector(SearchResultViewController.onSmartFilterButtonToggled(_:)), forControlEvents: UIControlEvents.TouchDown)
                         
                         ///Check selection state
                         if let filterGroup : FilterGroup = smartFilterView.filtersByButton[button] {
@@ -726,7 +726,7 @@ class SearchResultViewController: UIViewController {
         Log.debug("\(self) [[viewDidLoad]]")
         
         // Config navigation left bar
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"search_toolbar_n"), style: UIBarButtonItemStyle.Plain, target: self, action: "onSearchButtonTouched:")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"search_toolbar_n"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(SearchResultViewController.onSearchButtonTouched(_:)))
         
         // Load Selected filters
         if let selectedFilterSetting = filterDataStore.loadAdvancedFilterSetting() {

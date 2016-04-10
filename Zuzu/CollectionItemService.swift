@@ -47,36 +47,36 @@ class CollectionItemService: NSObject
     func start() {
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "didFinishUserLoginNotification:",
+            selector: #selector(CollectionItemService.didFinishUserLoginNotification(_:)),
             name: UserLoginNotification,
             object:nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "startSynchronizeNotification:",
+            selector: #selector(CollectionItemService.startSynchronizeNotification(_:)),
             name: AWSCognitoDidStartSynchronizeNotification,
             object:nil)
         
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "endSynchronizeNotification:",
+            selector: #selector(CollectionItemService.endSynchronizeNotification(_:)),
             name: AWSCognitoDidEndSynchronizeNotification,
             object:nil)
         
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "failToSynchronizeNotification:",
+            selector: #selector(CollectionItemService.failToSynchronizeNotification(_:)),
             name: AWSCognitoDidFailToSynchronizeNotification,
             object:nil)
         
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "changeRemoteValueNotification:",
+            selector: #selector(CollectionItemService.changeRemoteValueNotification(_:)),
             name: AWSCognitoDidChangeRemoteValueNotification,
             object:nil)
         
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "changeLocalValueFromRemoteNotification:",
+            selector: #selector(CollectionItemService.changeLocalValueFromRemoteNotification(_:)),
             name: AWSCognitoDidChangeLocalValueFromRemoteNotification,
             object:nil)
     }
@@ -282,7 +282,7 @@ class CollectionItemService: NSObject
 
     func _syncDataset(delay:Double) {
         self._syncTimer?.invalidate()
-        _syncTimer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: "syncTimeUp", userInfo: nil, repeats: true)
+        _syncTimer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: #selector(CollectionItemService.syncTimeUp), userInfo: nil, repeats: true)
     }
 
     

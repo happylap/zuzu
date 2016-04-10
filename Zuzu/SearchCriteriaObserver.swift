@@ -89,7 +89,7 @@ class FastCountCriteriaObserver: NSObject, SearchCriteriaObserver {
         
         delegate?.onBeforeQueryItemCount()
         
-        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "onFetchNumberOfItems", userInfo: nil, repeats: false)
+        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: #selector(FastCountCriteriaObserver.onFetchNumberOfItems), userInfo: nil, repeats: false)
     }
     
     func onFetchNumberOfItems() {
@@ -155,7 +155,7 @@ class RegionItemCountCriteriaObserver: NSObject, SearchCriteriaObserver {
         
         delegate?.onBeforeQueryRegionItemCount()
         
-        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: "onFetchNumberOfItems", userInfo: nil, repeats: false)
+        currentTimer = NSTimer.scheduledTimerWithTimeInterval(allowedIdleTime, target: self, selector: #selector(FastCountCriteriaObserver.onFetchNumberOfItems), userInfo: nil, repeats: false)
     }
     
     func onFetchNumberOfItems() {

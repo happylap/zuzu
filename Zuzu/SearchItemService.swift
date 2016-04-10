@@ -73,7 +73,7 @@ class SearchItemService {
                         break
                     }
                     
-                    indexForType++
+                    indexForType += 1
                 }
             }
             self.searchItemsDataStore.saveSearchItems(itemList)

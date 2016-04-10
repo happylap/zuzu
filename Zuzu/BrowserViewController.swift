@@ -30,7 +30,7 @@ class BrowserViewController: UIViewController {
             ///Prepare custom UIButton for UIBarButtonItem
             let copyLinkButton: UIButton = UIButton(type: UIButtonType.Custom)
             copyLinkButton.setImage(UIImage(named: "copy_link")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-            copyLinkButton.addTarget(self, action: "copyLinkButtonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+            copyLinkButton.addTarget(self, action: #selector(BrowserViewController.copyLinkButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             copyLinkButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             copyLinkButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
             

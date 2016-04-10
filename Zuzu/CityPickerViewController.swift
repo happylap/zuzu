@@ -70,7 +70,7 @@ class CityPickerViewController:UIViewController {
         
         self.configurePricePicker()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onRegionSelectionUpdated:", name: "regionSelectionChanged", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CityPickerViewController.onRegionSelectionUpdated(_:)), name: "regionSelectionChanged", object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
