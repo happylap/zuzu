@@ -405,7 +405,7 @@ class HouseDetailViewController: UIViewController {
                                 self.houseTypeLabelMaker.fromCodeForField("furniture", code: code, defaultValue: "—")
                             }
                             
-                            resultString += furnitureStringList.joinWithSeparator("; ") + "\n"
+                            resultString += furnitureStringList.joinWithSeparator("; ") + "\n\n"
                         }
                         
                         if let facilityList = houseDetail.valueForKey("facility") as? [Int]  {
@@ -418,6 +418,7 @@ class HouseDetailViewController: UIViewController {
                         
                         if(resultString.characters.count > 0) {
                             cell.contentLabel.text = resultString
+                            cell.contentLabel.text = "\(resultString)\n"
                         } else {
                             cell.contentLabel.text = "無資訊\n"
                         }
