@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SCLAlertView
 
 enum FormMode {
     case Login
@@ -55,13 +56,15 @@ class FormViewController: UIViewController {
         }
     }
     
+    private var emailFormView:EmailFormView?
+    
+    private var passwordFormView:PasswordFormView?
+    
+    private var continueSocialLoginView: ContinueSocialLoginView?
+    
+    var userAccount: String?
+    
     var formMode:FormMode = .Login
-    
-    var emailFormView:EmailFormView?
-    
-    var passwordFormView:PasswordFormView?
-    
-    var continueSocialLoginView: ContinueSocialLoginView?
     
     @IBOutlet weak var modalTitle: UILabel!
     
@@ -98,6 +101,17 @@ class FormViewController: UIViewController {
     }
     
     // MARK: - Private Utils
+    
+    private func alertRegisterFailure() {
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "由於系統錯誤，暫時無法註冊，請您稍後再試，或者嘗試其他註冊方式，謝謝！"
+        
+        alertView.showInfo("註冊失敗", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        
+    }
+    
     private func setupUIForLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         self.mainTitleLabel.text = Message.Login.Email.mainTitle
@@ -197,10 +211,10 @@ class FormViewController: UIViewController {
             if (UIApplication.sharedApplication().canOpenURL(url)) {
                 
                 UIApplication.sharedApplication().openURL(url)
-
+                
             }
         }
-
+        
         
     }
     
@@ -243,6 +257,8 @@ extension FormViewController: EmailFormDelegate {
         case .Login:
             self.continueLogin()
         case .Register:
+            userAccount = email
+            
             self.continueRegister()
         }
         
@@ -254,10 +270,47 @@ extension FormViewController: EmailFormDelegate {
 extension FormViewController: PasswordFormDelegate {
     
     func onPasswordEntered(password:String?) {
-        // Validate password
         
-        // Finish login or register
-        dismissModalStack(self, animated: true, completionBlock: nil)
+        switch(self.formMode) {
+        case .Login:
+            break
+        //self.continueLogin()
+        case .Register:
+            
+            let user = ZuzuUser()
+            user.email = self.userAccount
+            
+            LoadingSpinner.shared.setDimBackground(true)
+            LoadingSpinner.shared.setImmediateAppear(true)
+            LoadingSpinner.shared.setOpacity(0.8)
+            LoadingSpinner.shared.setText("註冊中")
+            LoadingSpinner.shared.startOnView(self.view)
+            
+            if let password = password, email = user.email {
+                ZuzuWebService.sharedInstance.registerUser(user, password: password, handler: { (userId, error) in
+                    
+                    if let _ = error {
+                        
+                        LoadingSpinner.shared.stop()
+                        
+                        self.alertRegisterFailure()
+                        
+                        return
+                    }
+                    
+                    LoadingSpinner.shared.setText("登入中")
+
+                    ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
+                        
+                        LoadingSpinner.shared.stop()
+                        
+                        // Finish register
+                        dismissModalStack(self, animated: true, completionBlock: nil)
+                    })
+                    
+                })
+            }
+        }
     }
 }
 

@@ -24,9 +24,9 @@ protocol PasswordFormDelegate: class {
 
 class PasswordFormView: UIView {
     
-    let validator = Validator()
+    private let validator = Validator()
     
-    var view:UIView!
+    private var view:UIView!
     
     var delegate: PasswordFormDelegate?
     
@@ -66,9 +66,9 @@ class PasswordFormView: UIView {
             
             switch(self.formMode) {
             case .Login:
-                continueButton.titleLabel?.text = "登入"
+                continueButton.setTitle("登入", forState: .Normal)
             case .Register:
-                continueButton.titleLabel?.text = "註冊"
+                continueButton.setTitle("註冊", forState: .Normal)
             }
             
         }
