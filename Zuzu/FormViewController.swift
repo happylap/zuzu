@@ -67,8 +67,9 @@ class FormViewController: UIViewController {
     
     private var continueSocialLoginView: ContinueSocialLoginView?
     
-    var userAccount: String?
+    private var userAccount: String?
     
+    /// Passed in params
     var formMode:FormMode = .Login
     
     @IBOutlet weak var modalTitle: UILabel!
@@ -291,7 +292,7 @@ class FormViewController: UIViewController {
 extension FormViewController: EmailFormDelegate {
     
     func onEmailEntered(email:String?) {
-
+        
         LoadingSpinner.shared.setDimBackground(true)
         LoadingSpinner.shared.setGraceTime(0.6)
         LoadingSpinner.shared.setMinShowTime(1.0)

@@ -59,6 +59,7 @@ class AmazonClientManager : NSObject {
     
     //Properties
     private var completionHandler: AWSContinuationBlock?
+    private var cancelHandler: (() -> Void)?
     
     //The custom Cognito auth provider name
     private let providerName = "com.lap.zuzu.login"
@@ -790,9 +791,12 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    func loginFromView(theViewController: UIViewController, mode: Int = 1, cancelHandler:(() -> Void)? = nil,withCompletionHandler completionHandler: AWSContinuationBlock) {
+    func loginFromView(theViewController: UIViewController, mode: Int = 1,
+                       withCancelHandler:(() -> Void)? = nil, withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
         
+        /// Store cancel & complete callback
+        self.cancelHandler = withCancelHandler
         self.completionHandler = completionHandler
         self.loginViewController = theViewController
         
@@ -801,22 +805,7 @@ class AmazonClientManager : NSObject {
         if let vc = storyboard.instantiateViewControllerWithIdentifier("commonLoginView") as? CommonLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             vc.loginMode = mode
-            
-            vc.cancelHandler = { () -> Void in
-                ///GA Tracker: Login cancelled
-                theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                                                             action: GAConst.Action.Blocking.loginReject)
-                if let handler = cancelHandler{
-                    handler()
-                }
-            }
-            
-            vc.fbLoginHandler = { () -> Void in
-                self.fbLogin(theViewController)
-            }
-            vc.googleLoginHandler = { () -> Void in
-                self.googleLogin(theViewController)
-            }
+            vc.delegate = self
             theViewController.presentViewController(vc, animated: true, completion: nil)
         }
         
@@ -1219,3 +1208,32 @@ extension AmazonClientManager: GIDSignInUIDelegate {
     }
     
 }
+
+// MARK: Google CommonLoginViewDelegate
+extension AmazonClientManager: CommonLoginViewDelegate {
+    
+    func onPerformUserLogin(provider: Provider) {
+        
+        switch(provider) {
+        case .FB:
+            if let loginViewController = self.loginViewController {
+                self.fbLogin(loginViewController)
+            }
+        case .GOOGLE:
+            if let loginViewController = self.loginViewController {
+                self.googleLogin(loginViewController)
+            }
+        case .ZUZU: break
+            
+        }
+    }
+    
+    func onCancelUserLogin() {
+        ///GA Tracker: Login cancelled
+        self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                                                            action: GAConst.Action.Blocking.loginReject)
+        
+        self.cancelHandler?()
+    }
+}
+

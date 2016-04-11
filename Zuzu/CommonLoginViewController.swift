@@ -9,6 +9,14 @@ import UIKit
 
 private let Log = Logger.defaultLogger
 
+protocol CommonLoginViewDelegate {
+    
+    func onPerformUserLogin(provider: Provider)
+    
+    func onCancelUserLogin()
+    
+}
+
 class CommonLoginViewController: UIViewController {
     
     // segue to configure UI
@@ -18,11 +26,9 @@ class CommonLoginViewController: UIViewController {
         static let displayRegisterForm:String = "displayRegisterForm"
     }
     
-    var cancelHandler: (() -> Void)?
-    var fbLoginHandler: (() -> Void)?
-    var googleLoginHandler: (() -> Void)?
+    var delegate:CommonLoginViewDelegate?
     
-    var loginMode: Int = 1
+    var loginMode:Int = 1
     
     var isOriginallyHideTabBar = true
     
@@ -144,6 +150,33 @@ class CommonLoginViewController: UIViewController {
     }
     
     
+    // MARK: - Action Handler
+    
+    func onCancelButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onCancelButtonTouched")
+        
+        self.dismissViewControllerAnimated(true) {
+            self.delegate?.onCancelUserLogin()
+        }
+    }
+    
+    func onFBButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onFBButtonTouched")
+        
+        self.dismissViewControllerAnimated(true) {
+            self.delegate?.onPerformUserLogin(.FB)
+        }
+    }
+    
+    func onGoogleButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onGoogleButtonTouched")
+        
+        self.dismissViewControllerAnimated(true) {
+            self.delegate?.onPerformUserLogin(.GOOGLE)
+        }
+        
+    }
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
@@ -227,23 +260,5 @@ class CommonLoginViewController: UIViewController {
                 
             }
         }
-    }
-    
-    // MARK: - Private Util
-    
-    func onCancelButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onCancelButtonTouched")
-        
-        dismissViewControllerAnimated(true, completion: self.cancelHandler)
-    }
-    
-    func onFBButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onFBButtonTouched")
-        dismissViewControllerAnimated(true, completion: self.fbLoginHandler)
-    }
-    
-    func onGoogleButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onGoogleButtonTouched")
-        dismissViewControllerAnimated(true, completion: self.googleLoginHandler)
     }
 }

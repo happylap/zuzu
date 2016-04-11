@@ -604,7 +604,7 @@ extension RadarViewController{
         
         self.isOnLoggingForUnfinishTransaction = true
         
-        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, cancelHandler: self.cancelLoginHandler){
+        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCancelHandler: self.cancelLoginHandler){
             
             (task: AWSTask!) -> AnyObject! in
             
