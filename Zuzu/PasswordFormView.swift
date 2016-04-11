@@ -11,7 +11,7 @@ import SwiftValidator
 public class CustomPasswordRule : RegexRule {
     
     /// Regular express string to be used in validation.
-    static let regex = "^[a-zA-Z0-9]*$"
+    static let regex = "^[a-zA-Z0-9@#$%^&+=]*$"
     
     public convenience init(message : String = "Must be 8 characters or numbers") {
         self.init(regex: CustomPasswordRule.regex, message : message)
@@ -116,11 +116,12 @@ class PasswordFormView: UIView {
         
         validator.registerField(passwordTextField, errorLabel: formValidationError, rules: [RequiredRule(message: "請輸入密碼"),
             MinLengthRule(length: 8, message: "密碼必須要8個字元以上"),
-            CustomPasswordRule(message: "密碼必須由英文字母、數字組成，不能有空白")])
+            CustomPasswordRule(message: "密碼須由英文字母、數字或@#$%^&+=等非空白符號組成")])
     }
     
-    override init(frame: CGRect) {
+    init(formMode:FormMode, frame: CGRect) {
         super.init(frame: frame)
+        self.formMode = formMode
         self.setup()
     }
     

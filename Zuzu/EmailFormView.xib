@@ -27,8 +27,8 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
                 </textField>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="錯誤訊息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hVT-fu-Tnr">
-                    <rect key="frame" x="47" y="58" width="56" height="17"/>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="錯誤訊息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="hVT-fu-Tnr">
+                    <rect key="frame" x="47" y="58" width="415" height="17"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -52,6 +52,7 @@
                 <constraint firstItem="5Mi-sw-v0z" firstAttribute="centerX" secondItem="1dS-8A-4wo" secondAttribute="centerX" id="0k0-t3-Mjl"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="owM-3r-BV4" secondAttribute="bottom" constant="16" id="EHc-2o-0lZ"/>
                 <constraint firstItem="hVT-fu-Tnr" firstAttribute="leading" secondItem="5Mi-sw-v0z" secondAttribute="leading" id="JdV-Lp-nVA"/>
+                <constraint firstAttribute="trailing" secondItem="hVT-fu-Tnr" secondAttribute="trailing" constant="8" id="QCZ-kJ-4ju"/>
                 <constraint firstItem="5Mi-sw-v0z" firstAttribute="width" secondItem="1dS-8A-4wo" secondAttribute="width" multiplier="80:100" id="REA-6Y-n50"/>
                 <constraint firstItem="owM-3r-BV4" firstAttribute="top" secondItem="5Mi-sw-v0z" secondAttribute="bottom" constant="32" id="TIZ-gJ-pZz"/>
                 <constraint firstItem="hVT-fu-Tnr" firstAttribute="top" secondItem="5Mi-sw-v0z" secondAttribute="bottom" constant="8" id="aZa-pw-n2w"/>
