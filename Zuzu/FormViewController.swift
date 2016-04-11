@@ -109,7 +109,15 @@ class FormViewController: UIViewController {
         let subTitle = "由於系統錯誤，暫時無法註冊，請您稍後再試，或者嘗試其他註冊方式，謝謝！"
         
         alertView.showInfo("註冊失敗", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
+    private func alertLoginFailure() {
         
+        let alertView = SCLAlertView()
+        
+        let subTitle = "由於系統錯誤，暫時無法登入，請您稍後再試，或者嘗試其他登入方式，謝謝！"
+        
+        alertView.showInfo("登入失敗", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     private func setupUIForLogin() {
@@ -244,24 +252,59 @@ extension FormViewController: EmailFormDelegate {
         // Validate email
         
         // Check user type
-        
-        // Existing socail login user
-        //self.continueSocialLogin()
+        if let email = email {
+            
+            self.userAccount = email
+            
+            ZuzuWebService.sharedInstance.checkEmail(email) { (emailExisted, provider, error) in
+                
+                if let _ = error {
+                    
+                    switch(self.formMode) {
+                    case .Login:
+                        self.alertLoginFailure()
+                    case .Register:
+                        self.alertRegisterFailure()
+                    }
+                    
+                    return
+                }
+                
+                if(emailExisted) {
+                    
+                    if let provider = provider where provider != Provider.ZUZU.rawValue {
+                        
+                        // Existing socail login user
+                        self.continueSocialLogin()
+                        
+                    } else {
+                        
+                        switch(self.formMode) {
+                        case .Login:
+                            self.continueLogin()
+                        case .Register: break
+                            /// Go to login with custom message
+                        }
+                        
+                    }
+                    
+                } else {
+                    
+                    switch(self.formMode) {
+                    case .Login: break
+                        /// Go to register with custom message
+                        
+                    case .Register:
+                        self.continueRegister()
+                    }
+                }
+            }
+        }
         
         // Existing login user
         
         
         // New user
-        
-        switch(self.formMode) {
-        case .Login:
-            self.continueLogin()
-        case .Register:
-            userAccount = email
-            
-            self.continueRegister()
-        }
-        
         
     }
 }
@@ -299,7 +342,7 @@ extension FormViewController: PasswordFormDelegate {
                     }
                     
                     LoadingSpinner.shared.setText("登入中")
-
+                    
                     ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
                         
                         LoadingSpinner.shared.stop()
