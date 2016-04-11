@@ -20,7 +20,6 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         
         self.authenticator = authenticator
         self._providerName = providerName
-        
         super.init(regionType: regionType, identityId: identityId, accountId: nil, identityPoolId: identityPoolId, logins: logins)
     }
     

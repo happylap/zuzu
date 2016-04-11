@@ -412,6 +412,8 @@ class AmazonClientManager : NSObject {
             self.credentialsProvider?.clearKeychain()
         }
         
+        self.credentialsProvider?.logins = logins
+        
         self.dumpCognitoCredentialProviderInfo()
         
         ///Init Default AWSServiceConfiguration
