@@ -41,9 +41,9 @@ class CommonLoginViewController: UIViewController {
             //userRegisterButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             userRegisterButton.layer.borderWidth = 2
             userRegisterButton.layer.borderColor =
-                UIColor.colorWithRGB(0x00CEB6, alpha: 1).CGColor
+                UIColor.colorWithRGB(0x00CD96, alpha: 1).CGColor
             userRegisterButton.tintColor =
-                UIColor.colorWithRGB(0x00CEB6, alpha: 1)
+                UIColor.colorWithRGB(0x00CD96, alpha: 1)
             
             //userRegisterButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
             
@@ -57,9 +57,9 @@ class CommonLoginViewController: UIViewController {
             //userLoginButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             userLoginButton.layer.borderWidth = 2
             userLoginButton.layer.borderColor =
-                UIColor.colorWithRGB(0x00CEB6, alpha: 1).CGColor
+                UIColor.colorWithRGB(0x00CD96, alpha: 1).CGColor
             userLoginButton.tintColor =
-                UIColor.colorWithRGB(0x00CEB6, alpha: 1)
+                UIColor.colorWithRGB(0x00CD96, alpha: 1)
             
             //userLoginButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
             
