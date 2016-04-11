@@ -60,6 +60,9 @@ class AmazonClientManager : NSObject {
     //Properties
     private var completionHandler: AWSContinuationBlock?
     
+    //The custom Cognito auth provider name
+    private let providerName = "com.lap.zuzu.login"
+    
     //Login Managers
     private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
@@ -212,9 +215,9 @@ class AmazonClientManager : NSObject {
         
         if let jsonString = Mapper().toJSONString(userData),
             let localFile = prepareLocalFile(s3UploadKeyName, stringContent: jsonString) {
-                
-                uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_COLLECTION_BUCKET)
-                
+            
+            uploadToS3(s3UploadKeyName, body: localFile, bucket: AWSConstants.S3_COLLECTION_BUCKET)
+            
         }
         
         Log.exit()
@@ -383,8 +386,16 @@ class AmazonClientManager : NSObject {
             AWSLogger.defaultLogger().logLevel = AWSLogLevel.Info
         #endif
         
+        let authenticator = DeveloperAuthenticator()
+        let identityProvider = ZuzuAuthenticatedIdentityProvider(providerName: self.providerName, authenticator: authenticator, regionType: AWSConstants.COGNITO_REGIONTYPE, identityId: nil, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID, logins: logins)
+        
+        
         ///Init AWSCognitoCredentialsProvider
-        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType: AWSConstants.COGNITO_REGIONTYPE, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID)
+        self.credentialsProvider = AWSCognitoCredentialsProvider(
+            regionType: AWSConstants.COGNITO_REGIONTYPE,
+            identityProvider: identityProvider,
+            unauthRoleArn:nil,
+            authRoleArn:nil)
         
         /// Clear previous IdentityId when we find the user has never logged to Cognito for
         // this installation. This would avoid the use of previous IdentityId
@@ -395,9 +406,6 @@ class AmazonClientManager : NSObject {
             Log.debug("Clear previous identityId")
             self.credentialsProvider?.clearKeychain()
         }
-        
-        self.credentialsProvider?.logins = logins
-        
         
         if logins == nil{
             self.credentialsProvider?.clearKeychain()
@@ -436,9 +444,9 @@ class AmazonClientManager : NSObject {
         
         /// IdentityId will be changed when a new provider login is set
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector:#selector(AmazonClientManager.identityDidChange(_:)),
-            name:AWSCognitoIdentityIdChangedNotification,
-            object:nil)
+                                                         selector:#selector(AmazonClientManager.identityDidChange(_:)),
+                                                         name:AWSCognitoIdentityIdChangedNotification,
+                                                         object:nil)
     }
     
     // MARK: AppDelegate Handlers
@@ -455,8 +463,8 @@ class AmazonClientManager : NSObject {
         var language = "zh-TW"
         if let langId = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as? String,
             let countryId = NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as? String {
-                language = "\(langId)-\(countryId)" // en-US on my machine
-                Log.debug("current language = \(language)")
+            language = "\(langId)-\(countryId)" // en-US on my machine
+            Log.debug("current language = \(language)")
         }
         
         GIDSignIn.sharedInstance().language = language
@@ -468,37 +476,37 @@ class AmazonClientManager : NSObject {
     //Sends the appropriate URL based on login provider
     @available(iOS 9.0, *)
     func application(application: UIApplication,
-        openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-            
-            let sourceApplication: String? = options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String
-            let annotation: String? = options[UIApplicationOpenURLOptionsAnnotationKey] as? String
-            
-            if FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation) {
-                return true
-            }
-            
-            if GIDSignIn.sharedInstance().handleURL(url,
-                sourceApplication: sourceApplication,
-                annotation: annotation) {
-                    return true
-            }
-            return false
+                     openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        
+        let sourceApplication: String? = options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String
+        let annotation: String? = options[UIApplicationOpenURLOptionsAnnotationKey] as? String
+        
+        if FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation) {
+            return true
+        }
+        
+        if GIDSignIn.sharedInstance().handleURL(url,
+                                                sourceApplication: sourceApplication,
+                                                annotation: annotation) {
+            return true
+        }
+        return false
     }
     
     @available(iOS, introduced=8.0, deprecated=9.0)
     func application(application: UIApplication,
-        openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-            
-            if FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation) {
-                return true
-            }
-            
-            if GIDSignIn.sharedInstance().handleURL(url,
-                sourceApplication: sourceApplication,
-                annotation: annotation) {
-                    return true
-            }
-            return false
+                     openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        
+        if FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation) {
+            return true
+        }
+        
+        if GIDSignIn.sharedInstance().handleURL(url,
+                                                sourceApplication: sourceApplication,
+                                                annotation: annotation) {
+            return true
+        }
+        return false
     }
     
     // MARK: Public General Login
@@ -534,7 +542,7 @@ class AmazonClientManager : NSObject {
         
         if let refreshTime = refreshTime, let timerProvider = timerProvider {
             Log.debug("Start token refreshing timer, trigger time = \(refreshTime)")
-
+            
             /// If the interval is less than 0 (refresh time has passed), the timer will be triggered almost immediately
             interval = refreshTime.timeIntervalSinceNow
             
@@ -792,7 +800,7 @@ class AmazonClientManager : NSObject {
             vc.cancelHandler = { () -> Void in
                 ///GA Tracker: Login cancelled
                 theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                    action: GAConst.Action.Blocking.loginReject)
+                                                             action: GAConst.Action.Blocking.loginReject)
                 if let handler = cancelHandler{
                     handler()
                 }
@@ -1081,70 +1089,70 @@ class AmazonClientManager : NSObject {
 extension AmazonClientManager: GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
-        withError error: NSError!) {
-            Log.enter()
+                withError error: NSError!) {
+        Log.enter()
+        
+        if (error != nil) {
             
-            if (error != nil) {
+            if(error.code == -5) {
                 
-                if(error.code == -5) {
-                    
-                    ///GA Tracker: Login failed
-                    if let viewController = signIn.uiDelegate as? UIViewController {
-                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                            action: GAConst.Action.Blocking.LoginCancel, label: "\(GAConst.Label.LoginType.Google), \(error.description)")
-                    }
-                    
-                    Log.warning("Google Login Cancelled: \(error.userInfo), \(error.description)")
-                    
-                    self.cancelLogin(LoginErrorType.GoogleCancel)
-                    
-                } else {
-                    
-                    /// Revert the login if Google cannot resume successfully
-                    /// Google token would be nil after App is closed, so we need to get it again from the Google server
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.failLogin(.GoogleFailure)
-                    }
-                    
-                    ///GA Tracker: Login failed
-                    if let viewController = signIn.uiDelegate as? UIViewController {
-                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                            action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Google), \(error.localizedDescription), \(error.userInfo)")
-                    }
-                    
-                    Log.warning("Google Login Error: \(error.userInfo), \(error.localizedDescription)")
+                ///GA Tracker: Login failed
+                if let viewController = signIn.uiDelegate as? UIViewController {
+                    viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                                                              action: GAConst.Action.Blocking.LoginCancel, label: "\(GAConst.Label.LoginType.Google), \(error.description)")
                 }
+                
+                Log.warning("Google Login Cancelled: \(error.userInfo), \(error.description)")
+                
+                self.cancelLogin(LoginErrorType.GoogleCancel)
                 
             } else {
                 
-                // Perform any operations on signed in user here.
-                
-                if let _ = user.authentication.idToken { // Safe to send to the server
-                    
-                    //Save Google User Data
-                    let userProfile = UserProfile(provider: Provider.GOOGLE)
-                    userProfile.id = user.userID // For client-side use only!
-                    
-                    userProfile.name = user.profile.name
-                    
-                    userProfile.email = user.profile.email
-                    
-                    if let pictureUrl = user.profile.imageURLWithDimension(200) {
-                        userProfile.pictureUrl = pictureUrl.URLString
-                    }
-                    
-                    self.transientUserProfile = userProfile
-                    
-                    self.completeGoogleLogin()
-                    
-                    ///GA Tracker: Login successful
-                    if let viewController = signIn.uiDelegate as? UIViewController {
-                        viewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                            action: GAConst.Action.UIActivity.Login, label: GAConst.Label.LoginType.Google)
-                    }
+                /// Revert the login if Google cannot resume successfully
+                /// Google token would be nil after App is closed, so we need to get it again from the Google server
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.failLogin(.GoogleFailure)
                 }
                 
+                ///GA Tracker: Login failed
+                if let viewController = signIn.uiDelegate as? UIViewController {
+                    viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                                                              action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Google), \(error.localizedDescription), \(error.userInfo)")
+                }
+                
+                Log.warning("Google Login Error: \(error.userInfo), \(error.localizedDescription)")
             }
+            
+        } else {
+            
+            // Perform any operations on signed in user here.
+            
+            if let _ = user.authentication.idToken { // Safe to send to the server
+                
+                //Save Google User Data
+                let userProfile = UserProfile(provider: Provider.GOOGLE)
+                userProfile.id = user.userID // For client-side use only!
+                
+                userProfile.name = user.profile.name
+                
+                userProfile.email = user.profile.email
+                
+                if let pictureUrl = user.profile.imageURLWithDimension(200) {
+                    userProfile.pictureUrl = pictureUrl.URLString
+                }
+                
+                self.transientUserProfile = userProfile
+                
+                self.completeGoogleLogin()
+                
+                ///GA Tracker: Login successful
+                if let viewController = signIn.uiDelegate as? UIViewController {
+                    viewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                                              action: GAConst.Action.UIActivity.Login, label: GAConst.Label.LoginType.Google)
+                }
+            }
+            
+        }
     }
 }
 
@@ -1158,17 +1166,17 @@ extension AmazonClientManager: GIDSignInUIDelegate {
     
     // Present a view that prompts the user to sign in with Google
     func signIn(signIn: GIDSignIn!,
-        presentViewController viewController: UIViewController!) {
-            Log.enter()
-            viewController.modalPresentationStyle = .OverCurrentContext
-            self.loginViewController?.presentViewController(viewController, animated: true, completion: nil)
+                presentViewController viewController: UIViewController!) {
+        Log.enter()
+        viewController.modalPresentationStyle = .OverCurrentContext
+        self.loginViewController?.presentViewController(viewController, animated: true, completion: nil)
     }
     
     // Dismiss the "Sign in with Google" view
     func signIn(signIn: GIDSignIn!,
-        dismissViewController viewController: UIViewController!) {
-            Log.enter()
-            self.loginViewController?.dismissViewControllerAnimated(true, completion: nil)
+                dismissViewController viewController: UIViewController!) {
+        Log.enter()
+        self.loginViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }

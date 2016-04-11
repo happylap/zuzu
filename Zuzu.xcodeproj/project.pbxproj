@@ -68,6 +68,8 @@
 		2F6637631CB785BC00A51095 /* EmailFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F6637621CB785BC00A51095 /* EmailFormView.xib */; };
 		2F6637651CB7A26300A51095 /* ContinueSocialLoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */; };
 		2F6637671CB7A27000A51095 /* ContinueSocialLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */; };
+		2F66376A1CBB772300A51095 /* ZuzuAuthenticatedIdentityProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6637691CBB772300A51095 /* ZuzuAuthenticatedIdentityProvider.swift */; };
+		2F66376C1CBB7A9D00A51095 /* DeveloperAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F66376B1CBB7A9D00A51095 /* DeveloperAuthenticator.swift */; };
 		2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */; };
 		2F7181EF1C5F120E00C56B5F /* libAdapterSDKMoPub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */; };
 		2F7181F31C607D3A00C56B5F /* GTM-PLP77J in Resources */ = {isa = PBXBuildFile; fileRef = 2F7181F21C607D3A00C56B5F /* GTM-PLP77J */; };
@@ -252,6 +254,8 @@
 		2F6637621CB785BC00A51095 /* EmailFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmailFormView.xib; sourceTree = "<group>"; };
 		2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContinueSocialLoginView.xib; sourceTree = "<group>"; };
 		2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueSocialLoginView.swift; sourceTree = "<group>"; };
+		2F6637691CBB772300A51095 /* ZuzuAuthenticatedIdentityProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuAuthenticatedIdentityProvider.swift; sourceTree = "<group>"; };
+		2F66376B1CBB7A9D00A51095 /* DeveloperAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeveloperAuthenticator.swift; sourceTree = "<group>"; };
 		2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterStatusBarView.swift; sourceTree = "<group>"; };
 		2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterSDKMoPub.a; sourceTree = "<group>"; };
 		2F7181F21C607D3A00C56B5F /* GTM-PLP77J */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTM-PLP77J"; sourceTree = "<group>"; };
@@ -524,6 +528,7 @@
 		2F5854D01BB3CBA9007FF85B /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				2F6637681CBB76EF00A51095 /* Auth */,
 				81B467921C7DD36F007B5EAA /* ObjectMapper */,
 				1430E3231C7C94570079E32C /* Reachability */,
 				2FCD15FD1C548FD800A9C1E2 /* Logger */,
@@ -567,6 +572,15 @@
 				2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		2F6637681CBB76EF00A51095 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				2F6637691CBB772300A51095 /* ZuzuAuthenticatedIdentityProvider.swift */,
+				2F66376B1CBB7A9D00A51095 /* DeveloperAuthenticator.swift */,
+			);
+			name = Auth;
 			sourceTree = "<group>";
 		};
 		2FB16C511C48BDCF009738AC /* InAppPurchase */ = {
@@ -1015,6 +1029,7 @@
 				14426ACE1C7B30B000C25440 /* AmazonSNSService.swift in Sources */,
 				2FE28A1B1BE70B8A00ABBA14 /* FilterTableViewCell.swift in Sources */,
 				816635961C5F17F6008C0AA3 /* ZuzuWebService.swift in Sources */,
+				2F66376A1CBB772300A51095 /* ZuzuAuthenticatedIdentityProvider.swift in Sources */,
 				144195381C62EBDC00C8779A /* RadarConfigureTableViewController.swift in Sources */,
 				14914FA61C27D26D00025AC1 /* AbstractHouseItem.swift in Sources */,
 				2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */,
@@ -1077,6 +1092,7 @@
 				14914FA11C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift in Sources */,
 				2F482DFA1BAFE09100C68670 /* MyCollectionViewController.swift in Sources */,
 				81390C751C365F2600450761 /* Contants.swift in Sources */,
+				2F66376C1CBB7A9D00A51095 /* DeveloperAuthenticator.swift in Sources */,
 				2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */,
 				8166359C1C60B67D008C0AA3 /* ZuzuCriteria.swift in Sources */,
 				2FE912741BFF796C00019053 /* LoadingSpinner.swift in Sources */,
