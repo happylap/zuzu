@@ -2,8 +2,12 @@ import Foundation
 import AWSCore
 import Alamofire
 
+private let Log = Logger.defaultLogger
+
 protocol CognitoAuthenticator {
-    func retrieveToken(success: (identityId: String?, token: String?, userIdentifier: String?) -> Void, failure: (error: NSError) -> Void)
+    func retrieveToken(userIdentifier: String, identityId: String?,
+                       success: (identityId: String?, token: String?, userIdentifier: String?) -> Void,
+                       failure: (error: NSError) -> Void)
 }
 
 class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
@@ -63,26 +67,25 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         
         // Try to get token from Zuzu backend
         let task = AWSTaskCompletionSource()
-        self.authenticator.retrieveToken(
-            { (identityId, token, userIdentifier) in
-                
-                if let identityId = identityId, token = token, userIdentifier = userIdentifier {
-                    
-                    self.logins = [self.providerName: userIdentifier]
-                    self.identityId = identityId
-                    self._token = token
-                    task.setResult(self.identityId)
-                    
-                } else {
-                    
-                    task.setError(self.errorWithCode(5000, failureReason: "CognitoAuthenicator returned no token"))
-                    
-                }
-                
+        self.authenticator.retrieveToken("", identityId: "",
+                                         success: { (identityId, token, userIdentifier) in
+                                            
+                                            if let identityId = identityId, token = token, userIdentifier = userIdentifier {
+                                                
+                                                self.logins = [self.providerName: userIdentifier]
+                                                self.identityId = identityId
+                                                self._token = token
+                                                task.setResult(self.identityId)
+                                                
+                                            } else {
+                                                
+                                                task.setError(self.errorWithCode(5000, failureReason: "CognitoAuthenicator returned no token"))
+                                                
+                                            }
             }, failure: { error in
                 task.setError(error)
-            }
-        )
+        })
+        
         return task.task
     }
     

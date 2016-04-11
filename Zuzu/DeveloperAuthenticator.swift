@@ -15,13 +15,42 @@ class DeveloperAuthenticator: CognitoAuthenticator {
     
     private static let endpoint = "HTTP endpoint that retrieves a cognito developer token"
     
+    typealias LoginCompletionHandler = (success: Bool, username: String) -> ()
+    
+    /// Check if authenticated against Zuzu
+    func isAuthenticated() -> Bool {
+        return false
+    }
+    
+    /// Login with Zuzu
+    func login(username: String, password: String, handler: LoginCompletionHandler){
+        
+        handler(success: true, username: username)
+        
+    }
+    
+    /// Logout Zuzu account
+    func logout() {
+        
+    }
+    
     func retrieveToken(
+        userIdentifier: String,
+        identityId: String?,
         success: (identityId: String?, token: String?, userIdentifier: String?) -> Void,
         failure: (error: NSError) -> Void) {
         
+        
+        /// Make sure is autenticated
+        
+        /// Retrive tokens from Zuzu backend
         let endpoint = DeveloperAuthenticator.endpoint
         
-        Alamofire.request(.POST, endpoint, parameters: tokenParams(), encoding: .JSON).validate().responseJSON(completionHandler: { (request, response, result) in
+        var params = Dictionary<String, AnyObject>()
+        params["userIdentifier"] = userIdentifier
+        params["identityId"] = identityId
+        
+        Alamofire.request(.POST, endpoint, parameters: params, encoding: .JSON).validate().responseJSON(completionHandler: { (request, response, result) in
             
             switch result {
             case.Success(let data):
@@ -32,13 +61,5 @@ class DeveloperAuthenticator: CognitoAuthenticator {
             }
             
         })
-    }
-    
-    private func tokenParams() -> Dictionary<String, AnyObject> {
-        // these values should come from keychain or some type of internal app storage
-        var params = Dictionary<String, AnyObject>()
-        params["userIdentifier"] = "KEY THAT IDENTIFIES THE USER THAT WILL LOOKUP AND GENERATE TOKEN FROM SERVER"
-        params["identityId"] = "COGNITO IDENTITYID | USED IF GOING FROM UNAUTHED TO AUTHED OTHERWISE CAN BE REMOVED"
-        return params
     }
 }

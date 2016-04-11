@@ -66,6 +66,7 @@ class AmazonClientManager : NSObject {
     //Login Managers
     private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
+    private var zuzuAuthClient: CognitoAuthenticator?
     
     //Login View Controller
     private var loginViewController: UIViewController?
@@ -1079,6 +1080,40 @@ class AmazonClientManager : NSObject {
             self.completeLogin(["accounts.google.com": idToken])
         } else {
             assert(false, "IdToken should not be nil")
+        }
+        
+    }
+    
+    // MARK: Public Zuzu Login
+    
+    func isLoggedInWithZuzu() -> Bool {
+        
+        return false
+        
+    }
+    
+    func reloadZuzuSession() {
+        Log.debug("Reloading Zuzu Session")
+    }
+    
+    func zuzuLogin(theViewController: UIViewController) {
+        
+        ///Check if already signed in
+
+        ///Bring-up sign-in UI
+    }
+    
+    func zuzuLogout() {
+        Log.enter()
+        Log.exit()
+    }
+    
+    private func completeZuzuLogin(username: String?, password: String?) {
+        
+        /// Do login
+        if let username = username, password = password {
+            
+            
         }
         
     }
