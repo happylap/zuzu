@@ -316,7 +316,7 @@
                                             <constraint firstAttribute="width" constant="25" id="FpO-UC-2Kw"/>
                                             <constraint firstAttribute="width" secondItem="otT-2M-5k5" secondAttribute="height" multiplier="1:1" id="veq-j3-C2O"/>
                                         </constraints>
-                                        <state key="normal" image="cancel"/>
+                                        <state key="normal" image="back_arrow_n"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                         </userDefinedRuntimeAttributes>
@@ -484,6 +484,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="back_arrow_n" width="30" height="30"/>
         <image name="cancel" width="30" height="30"/>
         <image name="comment-check-outline" width="30" height="30"/>
         <image name="lock_icon" width="30" height="30"/>

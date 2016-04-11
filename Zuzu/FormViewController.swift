@@ -53,6 +53,11 @@ class FormViewController: UIViewController {
                 static let mainTitle = "歡迎加入豬豬快租"
                 static let subTitle = "為你的帳號選擇一組密碼"
             }
+            
+            struct NonExisting {
+                static let mainTitle = "您還不是會員"
+                static let subTitle = "選擇一組密碼後，立即成為會員"
+            }
         }
     }
     
@@ -93,10 +98,10 @@ class FormViewController: UIViewController {
     
     @IBOutlet weak var backButton: UIButton!{
         didSet {
-            backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             backButton.tintColor = UIColor.whiteColor()
             
-            backButton.addTarget(self, action: #selector(FormViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            backButton.addTarget(self, action: #selector(FormViewController.onBackButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -135,6 +140,23 @@ class FormViewController: UIViewController {
         }
     }
     
+    private func registerToLogin() {
+        self.modalTitle.text = Message.Login.modalTitle
+        self.mainTitleLabel.text = Message.Login.Existing.mainTitle
+        self.subTitleLabel.text = Message.Login.Existing.subTitle
+        
+        emailFormView?.removeFromSuperview()
+        
+        passwordFormView = PasswordFormView(frame: self.formContainerView.bounds)
+        passwordFormView?.delegate = self
+        
+        if let passwordFormView = passwordFormView{
+            passwordFormView.formMode = .Login
+            passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+            self.formContainerView.addSubview(passwordFormView)
+        }
+    }
+    
     private func continueLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         self.mainTitleLabel.text = Message.Login.Password.mainTitle
@@ -165,6 +187,24 @@ class FormViewController: UIViewController {
             emailFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
             self.formContainerView.addSubview(emailFormView)
         }
+    }
+    
+    private func loginToRegister() {
+        self.modalTitle.text = Message.Register.modalTitle
+        self.mainTitleLabel.text = Message.Register.NonExisting.mainTitle
+        self.subTitleLabel.text = Message.Register.NonExisting.subTitle
+        
+        emailFormView?.removeFromSuperview()
+        
+        passwordFormView = PasswordFormView(frame: self.formContainerView.bounds)
+        passwordFormView?.delegate = self
+        
+        if let passwordFormView = passwordFormView{
+            passwordFormView.formMode = .Register
+            passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+            self.formContainerView.addSubview(passwordFormView)
+        }
+        
     }
     
     private func continueRegister() {
@@ -202,7 +242,7 @@ class FormViewController: UIViewController {
     }
     
     // MARK: - Action Handlers
-    func onCancelButtonTouched(sender: UIButton) {
+    func onBackButtonTouched(sender: UIButton) {
         
         self.dismissViewControllerAnimated(true) { () -> Void in
         }
@@ -249,7 +289,13 @@ class FormViewController: UIViewController {
 extension FormViewController: EmailFormDelegate {
     
     func onEmailEntered(email:String?) {
-        // Validate email
+
+        LoadingSpinner.shared.setDimBackground(true)
+        LoadingSpinner.shared.setGraceTime(0.6)
+        LoadingSpinner.shared.setMinShowTime(1.0)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setText("處理中")
+        LoadingSpinner.shared.startOnView(self.view)
         
         // Check user type
         if let email = email {
@@ -257,6 +303,8 @@ extension FormViewController: EmailFormDelegate {
             self.userAccount = email
             
             ZuzuWebService.sharedInstance.checkEmail(email) { (emailExisted, provider, error) in
+                
+                LoadingSpinner.shared.stop()
                 
                 if let _ = error {
                     
@@ -282,8 +330,9 @@ extension FormViewController: EmailFormDelegate {
                         switch(self.formMode) {
                         case .Login:
                             self.continueLogin()
-                        case .Register: break
+                        case .Register:
                             /// Go to login with custom message
+                            self.registerToLogin()
                         }
                         
                     }
@@ -291,9 +340,9 @@ extension FormViewController: EmailFormDelegate {
                 } else {
                     
                     switch(self.formMode) {
-                    case .Login: break
+                    case .Login:
                         /// Go to register with custom message
-                        
+                        self.loginToRegister()
                     case .Register:
                         self.continueRegister()
                     }
