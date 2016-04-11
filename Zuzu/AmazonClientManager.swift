@@ -387,8 +387,7 @@ class AmazonClientManager : NSObject {
             AWSLogger.defaultLogger().logLevel = AWSLogLevel.Info
         #endif
         
-        let authenticator = DeveloperAuthenticator()
-        let identityProvider = ZuzuAuthenticatedIdentityProvider(providerName: self.providerName, authenticator: authenticator, regionType: AWSConstants.COGNITO_REGIONTYPE, identityId: nil, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID, logins: logins)
+        let identityProvider = ZuzuAuthenticatedIdentityProvider(providerName: self.providerName, authenticator: self.zuzuAuthClient, regionType: AWSConstants.COGNITO_REGIONTYPE, identityId: nil, identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID, logins: nil)
         
         
         ///Init AWSCognitoCredentialsProvider
@@ -444,6 +443,9 @@ class AmazonClientManager : NSObject {
     
     override init() {
         super.init()
+        
+        /// Init Zuzu Authenticator for logging in
+        self.zuzuAuthClient = DeveloperAuthenticator()
         
         /// IdentityId will be changed when a new provider login is set
         NSNotificationCenter.defaultCenter().addObserver(self,
@@ -1101,7 +1103,7 @@ class AmazonClientManager : NSObject {
     func zuzuLogin(theViewController: UIViewController) {
         
         ///Check if already signed in
-
+        
         ///Bring-up sign-in UI
     }
     
@@ -1112,7 +1114,7 @@ class AmazonClientManager : NSObject {
     
     private func completeZuzuLogin(username: String?, password: String?) {
         
-        /// Do login
+        /// Do login with Zuzu backend
         if let username = username, password = password {
             
             
