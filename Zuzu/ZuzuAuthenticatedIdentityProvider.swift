@@ -27,9 +27,13 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         return _providerName
     }
     
-//    override var token: String {
-//        return _token
-//    }
+    override var token: String {
+        if (!authenticatedWithProvider) {
+            return super.token
+        } else {
+            return _token
+        }
+    }
     
     /// Check if current logins contain custom authentication
     private var authenticatedWithProvider: Bool {
@@ -61,7 +65,7 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         
         // not authenticated with our developer provider
         if (!authenticatedWithProvider) {
-            return super.getIdentityId()
+            return super.refresh()
         }
         
         // Try to get token from Zuzu backend
