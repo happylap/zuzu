@@ -149,41 +149,6 @@ class FormViewController: UIViewController {
         }
     }
     
-    private func registerToLogin() {
-        
-        self.formMode = .Login
-        
-        self.modalTitle.text = Message.Login.modalTitle
-        self.mainTitleLabel.text = Message.Login.Existing.mainTitle
-        self.subTitleLabel.text = Message.Login.Existing.subTitle
-        
-        emailFormView?.removeFromSuperview()
-        
-        passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
-        passwordFormView?.delegate = self
-        
-        if let passwordFormView = passwordFormView{
-            passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
-            self.formContainerView.addSubview(passwordFormView)
-        }
-    }
-    
-    private func continueLogin() {
-        self.modalTitle.text = Message.Login.modalTitle
-        self.mainTitleLabel.text = Message.Login.Password.mainTitle
-        self.subTitleLabel.text = Message.Login.Password.subTitle
-        
-        emailFormView?.removeFromSuperview()
-        
-        passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
-        passwordFormView?.delegate = self
-        
-        if let passwordFormView = passwordFormView{
-            passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
-            self.formContainerView.addSubview(passwordFormView)
-        }
-    }
-    
     private func setupUIForRegister() {
         self.modalTitle.text = Message.Register.modalTitle
         self.mainTitleLabel.text = Message.Register.Email.mainTitle
@@ -199,6 +164,42 @@ class FormViewController: UIViewController {
         }
     }
     
+    // MARK: - State Transition
+    private func registerToLogin() {
+        
+        self.formMode = .Login
+        
+        self.modalTitle.text = Message.Login.modalTitle
+        self.mainTitleLabel.text = Message.Login.Existing.mainTitle
+        self.subTitleLabel.text = Message.Login.Existing.subTitle
+        
+        self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        
+        if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
+            
+            emailFormView.removeFromSuperview()
+            passwordFormView.delegate = self
+            passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+            self.formContainerView.addSubview(passwordFormView)
+        }
+    }
+    
+    private func continueLogin() {
+        self.modalTitle.text = Message.Login.modalTitle
+        self.mainTitleLabel.text = Message.Login.Password.mainTitle
+        self.subTitleLabel.text = Message.Login.Password.subTitle
+        
+        self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        
+        if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
+            
+            emailFormView.removeFromSuperview()
+            passwordFormView.delegate = self
+            passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+            self.formContainerView.addSubview(passwordFormView)
+        }
+    }
+    
     private func loginToRegister() {
         
         self.formMode = .Register
@@ -207,31 +208,43 @@ class FormViewController: UIViewController {
         self.mainTitleLabel.text = Message.Register.NonExisting.mainTitle
         self.subTitleLabel.text = Message.Register.NonExisting.subTitle
         
-        emailFormView?.removeFromSuperview()
+        self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
         
-        passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
-        passwordFormView?.delegate = self
-        
-        if let passwordFormView = passwordFormView{
+        if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
+            
+            emailFormView.removeFromSuperview()
+            passwordFormView.delegate = self
             passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
             self.formContainerView.addSubview(passwordFormView)
         }
-        
     }
     
     private func continueRegister() {
+        
         self.modalTitle.text = Message.Register.modalTitle
-        self.mainTitleLabel.text = Message.Register.Password.mainTitle
-        self.subTitleLabel.text = Message.Register.Password.subTitle
         
-        emailFormView?.removeFromSuperview()
         
-        passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
-        passwordFormView?.delegate = self
+        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.mainTitleLabel.text = Message.Register.Password.mainTitle
+            }, completion: nil)
         
-        if let passwordFormView = passwordFormView{
+        UIView.transitionWithView(self.subTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.subTitleLabel.text = Message.Register.Password.subTitle
+            }, completion: nil)
+        
+        self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        
+        if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
+            
+            passwordFormView.delegate = self
             passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
-            self.formContainerView.addSubview(passwordFormView)
+            
+            //emailFormView.removeFromSuperview()
+            //self.formContainerView.addSubview(passwordFormView)
+            
+            UIView.transitionFromView(emailFormView,
+                                      toView: passwordFormView,
+                                      duration: 0.6, options: .TransitionFlipFromRight, completion: nil)
         }
     }
     
@@ -376,7 +389,7 @@ extension FormViewController: PasswordFormDelegate {
         
         switch(self.formMode) {
         case .Login:
-
+            
             LoadingSpinner.shared.setDimBackground(true)
             LoadingSpinner.shared.setImmediateAppear(true)
             LoadingSpinner.shared.setOpacity(0.8)
