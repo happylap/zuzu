@@ -153,9 +153,6 @@
                                                         <exclude reference="rJJ-iP-1cV"/>
                                                     </mask>
                                                 </variation>
-                                                <connections>
-                                                    <segue destination="RRS-2N-4Fs" kind="presentation" identifier="displayLoginForm" id="BQm-cC-Yzp"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dS6-BF-XPh">
                                                 <rect key="frame" x="186" y="16" width="130.5" height="50"/>
@@ -288,7 +285,7 @@
         <!--Form View-->
         <scene sceneID="J0z-y8-TmU">
             <objects>
-                <viewController storyboardIdentifier="inputEmailView" title="Form View" id="RRS-2N-4Fs" customClass="FormViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="inputFormView" title="Form View" id="RRS-2N-4Fs" customClass="FormViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="U25-d4-ESr"/>
                         <viewControllerLayoutGuide type="bottom" id="PiQ-Iv-alu"/>
@@ -489,7 +486,4 @@
         <image name="comment-check-outline" width="30" height="30"/>
         <image name="lock_icon" width="30" height="30"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="5dz-8F-Ahk"/>
-    </inferredMetricsTieBreakers>
 </document>

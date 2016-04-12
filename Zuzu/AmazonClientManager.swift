@@ -1094,6 +1094,17 @@ class AmazonClientManager : NSObject {
         ///Check if already signed in
         
         ///Bring-up sign-in UI
+        
+        ///TODO: Consider putting the logic to DeveloperAuthenticator
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.formMode = .Login
+            
+            ///TODO: Add a delegate to get the response for Zuzu Login onZuzuLogin
+            
+            theViewController.presentViewController(vc, animated: true, completion: nil)
+        }
     }
     
     func zuzuLogout() {
@@ -1101,13 +1112,9 @@ class AmazonClientManager : NSObject {
         Log.exit()
     }
     
-    private func completeZuzuLogin(username: String?, password: String?) {
+    private func completeZuzuLogin() {
         
-        /// Do login with Zuzu backend
-        if let username = username, password = password {
-            
-            
-        }
+        /// Add new entry to logins
         
     }
 }
@@ -1212,6 +1219,9 @@ extension AmazonClientManager: GIDSignInUIDelegate {
 // MARK: Google CommonLoginViewDelegate
 extension AmazonClientManager: CommonLoginViewDelegate {
     
+    /// onPerformSocialLogin(provider: Provider)
+    
+    /// onPerformZuzuLogin(isNewUser: Bool)
     func onPerformUserLogin(provider: Provider) {
         
         switch(provider) {
@@ -1223,15 +1233,17 @@ extension AmazonClientManager: CommonLoginViewDelegate {
             if let loginViewController = self.loginViewController {
                 self.googleLogin(loginViewController)
             }
-        case .ZUZU: break
-            
+        case .ZUZU:
+            if let loginViewController = self.loginViewController {
+                self.zuzuLogin(loginViewController)
+            }
         }
     }
     
     func onCancelUserLogin() {
         ///GA Tracker: Login cancelled
         self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                                                            action: GAConst.Action.Blocking.loginReject)
+                                                             action: GAConst.Action.Blocking.loginReject)
         
         self.cancelHandler?()
     }

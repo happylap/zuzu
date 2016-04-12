@@ -99,7 +99,15 @@ class FormViewController: UIViewController {
     
     @IBOutlet weak var backButton: UIButton!{
         didSet {
-            backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            
+            switch(self.formMode) {
+            case .Login:
+                backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            case .Register:
+                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            }
+            
+            
             backButton.tintColor = UIColor.whiteColor()
             
             backButton.addTarget(self, action: #selector(FormViewController.onBackButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
@@ -368,8 +376,27 @@ extension FormViewController: PasswordFormDelegate {
         
         switch(self.formMode) {
         case .Login:
-            break
-        //self.continueLogin()
+
+            LoadingSpinner.shared.setDimBackground(true)
+            LoadingSpinner.shared.setImmediateAppear(true)
+            LoadingSpinner.shared.setOpacity(0.8)
+            LoadingSpinner.shared.setText("登入中")
+            LoadingSpinner.shared.startOnView(self.view)
+            
+            if let password = password, email = self.userAccount {
+                
+                ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
+                    
+                    LoadingSpinner.shared.stop()
+                    
+                    // Finish login
+                    dismissModalStack(self, animated: true, completionBlock: nil)
+                    
+                    // TODO: Callback onZuzuLogin
+                })
+                
+            }
+            
         case .Register:
             
             let user = ZuzuUser()
@@ -401,6 +428,8 @@ extension FormViewController: PasswordFormDelegate {
                         
                         // Finish register
                         dismissModalStack(self, animated: true, completionBlock: nil)
+                        
+                        // TODO: Callback onZuzuLogin
                     })
                     
                 })

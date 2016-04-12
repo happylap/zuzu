@@ -67,7 +67,7 @@ class CommonLoginViewController: UIViewController {
             userLoginButton.tintColor =
                 UIColor.colorWithRGB(0x00CD96, alpha: 1)
             
-            //userLoginButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
+            userLoginButton.addTarget(self, action: #selector(CommonLoginViewController.onZuzuLoginButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
             
         }
         
@@ -173,6 +173,15 @@ class CommonLoginViewController: UIViewController {
         
         self.dismissViewControllerAnimated(true) {
             self.delegate?.onPerformUserLogin(.GOOGLE)
+        }
+        
+    }
+    
+    func onZuzuLoginButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onZuzuLoginButtonTouched")
+        
+        self.dismissViewControllerAnimated(true) {
+            self.delegate?.onPerformUserLogin(.ZUZU)
         }
         
     }
