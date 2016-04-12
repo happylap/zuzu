@@ -11,7 +11,9 @@ private let Log = Logger.defaultLogger
 
 protocol CommonLoginViewDelegate {
     
-    func onPerformUserLogin(provider: Provider)
+    func onPerformSocialLogin(provider: Provider)
+    
+    func onPerformZuzuLogin(needRegister: Bool)
     
     func onCancelUserLogin()
     
@@ -51,8 +53,7 @@ class CommonLoginViewController: UIViewController {
             userRegisterButton.tintColor =
                 UIColor.colorWithRGB(0x00CD96, alpha: 1)
             
-            //userRegisterButton.addTarget(self, action: "onContinueButtonTouched:", forControlEvents: UIControlEvents.TouchDown)
-            
+            userRegisterButton.addTarget(self, action: #selector(CommonLoginViewController.onZuzuRegisterButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
         
     }
@@ -68,7 +69,6 @@ class CommonLoginViewController: UIViewController {
                 UIColor.colorWithRGB(0x00CD96, alpha: 1)
             
             userLoginButton.addTarget(self, action: #selector(CommonLoginViewController.onZuzuLoginButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
-            
         }
         
     }
@@ -161,27 +161,36 @@ class CommonLoginViewController: UIViewController {
     }
     
     func onFBButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onFBButtonTouched")
+        Log.enter()
         
         self.dismissViewControllerAnimated(true) {
-            self.delegate?.onPerformUserLogin(.FB)
+            self.delegate?.onPerformSocialLogin(.FB)
         }
     }
     
     func onGoogleButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onGoogleButtonTouched")
+        Log.enter()
         
         self.dismissViewControllerAnimated(true) {
-            self.delegate?.onPerformUserLogin(.GOOGLE)
+            self.delegate?.onPerformSocialLogin(.GOOGLE)
         }
         
     }
     
     func onZuzuLoginButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onZuzuLoginButtonTouched")
+        Log.enter()
         
         self.dismissViewControllerAnimated(true) {
-            self.delegate?.onPerformUserLogin(.ZUZU)
+            self.delegate?.onPerformZuzuLogin(false)
+        }
+        
+    }
+    
+    func onZuzuRegisterButtonTouched(sender: UIButton) {
+        Log.enter()
+        
+        self.dismissViewControllerAnimated(true) {
+            self.delegate?.onPerformZuzuLogin(true)
         }
         
     }

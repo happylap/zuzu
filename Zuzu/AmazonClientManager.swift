@@ -1107,6 +1107,22 @@ class AmazonClientManager : NSObject {
         }
     }
     
+    func zuzuRegister(theViewController: UIViewController) {
+        
+        ///Bring-up register UI
+        
+        ///TODO: Consider putting the logic to DeveloperAuthenticator
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
+            vc.modalPresentationStyle = .OverCurrentContext
+            vc.formMode = .Register
+            
+            ///TODO: Add a delegate to get the response for Zuzu Login onZuzuLogin
+            
+            theViewController.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
     func zuzuLogout() {
         Log.enter()
         Log.exit()
@@ -1219,10 +1235,7 @@ extension AmazonClientManager: GIDSignInUIDelegate {
 // MARK: Google CommonLoginViewDelegate
 extension AmazonClientManager: CommonLoginViewDelegate {
     
-    /// onPerformSocialLogin(provider: Provider)
-    
-    /// onPerformZuzuLogin(isNewUser: Bool)
-    func onPerformUserLogin(provider: Provider) {
+    func onPerformSocialLogin(provider: Provider) {
         
         switch(provider) {
         case .FB:
@@ -1233,7 +1246,18 @@ extension AmazonClientManager: CommonLoginViewDelegate {
             if let loginViewController = self.loginViewController {
                 self.googleLogin(loginViewController)
             }
-        case .ZUZU:
+        default: break
+        }
+        
+    }
+    
+    func onPerformZuzuLogin(needRegister: Bool) {
+        
+        if(needRegister) {
+            if let loginViewController = self.loginViewController {
+                self.zuzuRegister(loginViewController)
+            }
+        } else {
             if let loginViewController = self.loginViewController {
                 self.zuzuLogin(loginViewController)
             }
