@@ -87,6 +87,7 @@ PODS:
   - SwiftDate (2.0.2)
   - SwiftValidator (3.0.3)
   - SwiftyJSON (2.3.0)
+  - SwiftyStateMachine (0.3.0)
   - UICKeyChainStore (2.0.7)
   - XCGLogger (3.2)
 
@@ -123,6 +124,7 @@ DEPENDENCIES:
   - SwiftDate (= 2.0.2)
   - SwiftValidator (= 3.0.3)
   - SwiftyJSON (= 2.3.0)
+  - SwiftyStateMachine (= 0.3.0)
   - UICKeyChainStore (= 2.0.7)
   - XCGLogger (= 3.2)
 
@@ -168,6 +170,7 @@ SPEC CHECKSUMS:
   SwiftDate: b4f4d0962afe48365ad2800c9850a6626deb9359
   SwiftValidator: 0b6a48bf10364411b0d64c97f78665ff87ca9f8b
   SwiftyJSON: 8d6b61a70277ef2a5d710d372e06e7e2d87fb9e4
+  SwiftyStateMachine: 064b3983708aea40169ea60adabbe4ae08885198
   UICKeyChainStore: 696cd35083f7c8fb5e201d909b7e6aea6b478575
   XCGLogger: da1f341f4bb8979db6e1df64232f04d9698402d4
 

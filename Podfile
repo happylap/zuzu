@@ -39,6 +39,7 @@ pod 'UICKeyChainStore', '2.0.7'
 pod 'XCGLogger', '3.2'
 pod 'Charts', '2.2.3'
 pod 'SwiftValidator', '3.0.3'
+pod 'SwiftyStateMachine', '0.3.0'
 end
 
 target 'ZuzuTests' do
