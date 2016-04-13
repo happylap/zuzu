@@ -7,11 +7,13 @@
 
 import UIKit
 import SCLAlertView
+import SwiftyStateMachine
 
 enum FormMode {
     case Login
     case Register
 }
+
 
 class FormViewController: UIViewController {
     
@@ -60,6 +62,19 @@ class FormViewController: UIViewController {
             }
         }
     }
+    
+    private enum FormState {
+        case Init, LoginEmail, LoginPassword, RegisterEmail, RegisterPassword, LoginDone, RegisterDone}
+    
+    private enum FormStateEvent {
+        case OnStartLogin, OnStartRegister,
+        OnInputEmail, OnInputPassword,
+        OnLoginSuccess, OnLoginFailure,
+        OnRegisterSuccess, OnRegisterFailure
+        
+    }
+    
+    private var machine: StateMachine<StateMachineSchema<FormState, FormStateEvent, Void>>!
     
     private var emailFormView:EmailFormView?
     
@@ -294,11 +309,58 @@ class FormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let stateSchema = StateMachineSchema<FormState, FormStateEvent, Void>(initialState: .Init) {
+            (state, event) in
+            switch state {
+                
+            case .Init:
+                switch event {
+                case .OnStartLogin: return (.LoginEmail, { _ in print("LoginEmail")})
+                case .OnStartRegister: return (.RegisterEmail, { _ in print("RegisterEmail")})
+                default: return nil
+                }
+                
+            case .LoginEmail:
+                switch event {
+                case .OnInputEmail: return (.LoginPassword, { _ in print("LoginPassword")})
+                default: return nil
+                }
+                
+            case .LoginPassword:
+                switch event {
+                case .OnInputPassword: return (.LoginPassword, { _ in print("LoginPassword")})
+                case .OnLoginSuccess: return (.LoginDone, { _ in print("LoginDone")})
+                case .OnLoginFailure: return (.LoginDone, { _ in print("LoginDone")})
+                default: return nil
+                }
+                
+            case .RegisterEmail:
+                switch event {
+                case .OnInputEmail: return (.RegisterPassword, { _ in print("RegisterEmail")})
+                default: return nil
+                }
+                
+            case .RegisterPassword:
+                switch event {
+                case .OnInputPassword: return nil
+                case .OnRegisterSuccess: return (.RegisterDone, { _ in print("RegisterDone")})
+                case .OnRegisterFailure: return (.RegisterDone, { _ in print("RegisterDone")})
+                default: return nil
+                }
+            default: return nil
+            }
+        }
+        
+        self.machine = StateMachine(schema: stateSchema, subject: ())
+        
         switch(self.formMode) {
         case .Login:
-            setupUIForLogin()
+            self.setupUIForLogin()
+            machine.handleEvent(.OnStartLogin)
+            
         case .Register:
-            setupUIForRegister()
+            self.setupUIForRegister()
+            machine.handleEvent(.OnStartRegister)
         }
     }
     
