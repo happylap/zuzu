@@ -20,7 +20,12 @@ class ZuzuWebService: NSObject
 {
     private static let instance = ZuzuWebService()
     
+    #if DEBUG
+    var host = HostConst.ZuzuBackendStage
+    #else
     var host = HostConst.ZuzuBackend
+    #endif
+    
     
     var alamoFireManager = Alamofire.Manager.sharedInstance
     
@@ -61,7 +66,7 @@ class ZuzuWebService: NSObject
                 handler(emailExisted: false, provider: nil, error: nil)
             }
         }
-
+        
         
         Log.exit()
     }
@@ -77,7 +82,7 @@ class ZuzuWebService: NSObject
         }
         
         let resource = "/public/user/register"
-
+        
         let payload = Mapper<ZuzuUserMapper>().toJSON(userMapper)
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
