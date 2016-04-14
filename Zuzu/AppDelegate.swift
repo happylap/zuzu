@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let gai = GAI.sharedInstance()
             gai.trackUncaughtExceptions = true  // report uncaught exceptions
             gai.logger.logLevel = GAILogLevel.Error  // remove before app release
-            
+        #endif
             //Google Tag Manager
             let GTM = TAGManager.instance()
             GTM.logger.setLogLevel(kTAGLoggerLogLevelVerbose)
@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                    tagManager: GTM, openType: kTAGOpenTypePreferFresh,
                                                    timeout: nil,
                                                    notifier: self)
-        #endif
+
     }
     
     private func customUISetup() {
