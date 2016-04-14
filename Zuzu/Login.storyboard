@@ -124,13 +124,13 @@
                                             <constraint firstItem="1oL-Ub-kE6" firstAttribute="top" secondItem="WWM-6I-rFC" secondAttribute="bottom" constant="8" id="ynq-eh-9dS"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="或使用豬豬快租帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jSu-0X-Fx9">
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="或使用豬豬快租帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jSu-0X-Fx9">
                                         <rect key="frame" x="143.5" y="299.5" width="126" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0g-Jt-DMB" userLabel="Custom Login">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0g-Jt-DMB" userLabel="Custom Login">
                                         <rect key="frame" x="32" y="320.5" width="349" height="82"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D2u-tz-dkJ">
@@ -179,7 +179,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cf4-Sw-cWD" userLabel="Privacy View">
-                                        <rect key="frame" x="0.0" y="403" width="414" height="248.5"/>
+                                        <rect key="frame" x="0.0" y="403" width="414" height="241"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock_icon" translatesAutoresizingMaskIntoConstraints="NO" id="nwT-nM-L0s" userLabel="privacy">
                                                 <rect key="frame" x="137" y="19" width="20" height="20"/>
@@ -232,6 +232,7 @@
                                     <constraint firstItem="cf4-Sw-cWD" firstAttribute="centerX" secondItem="R0g-Jt-DMB" secondAttribute="centerX" id="1nf-nk-e76"/>
                                     <constraint firstItem="R0g-Jt-DMB" firstAttribute="centerX" secondItem="G6I-5v-Ck9" secondAttribute="centerX" id="4gb-sl-xK6"/>
                                     <constraint firstItem="cf4-Sw-cWD" firstAttribute="width" secondItem="Ldg-Uf-ieZ" secondAttribute="width" id="5Te-Ci-cbq"/>
+                                    <constraint firstItem="cf4-Sw-cWD" firstAttribute="centerX" secondItem="Ldg-Uf-ieZ" secondAttribute="centerX" id="6Cc-3w-44h"/>
                                     <constraint firstItem="R0g-Jt-DMB" firstAttribute="centerX" secondItem="G6I-5v-Ck9" secondAttribute="centerX" id="7WZ-Xe-wzg"/>
                                     <constraint firstItem="D2u-tz-dkJ" firstAttribute="height" secondItem="WWM-6I-rFC" secondAttribute="height" id="BRr-dv-7ld"/>
                                     <constraint firstItem="G6I-5v-Ck9" firstAttribute="top" secondItem="0Aq-sS-D20" secondAttribute="bottom" id="Bls-lJ-gLK"/>
@@ -245,8 +246,13 @@
                                     <constraint firstItem="R0g-Jt-DMB" firstAttribute="bottom" secondItem="cf4-Sw-cWD" secondAttribute="top" id="iCH-OI-4wA"/>
                                     <constraint firstItem="jSu-0X-Fx9" firstAttribute="centerX" secondItem="Ldg-Uf-ieZ" secondAttribute="centerX" id="iIh-6U-Rdf"/>
                                     <constraint firstItem="G6I-5v-Ck9" firstAttribute="width" secondItem="Ldg-Uf-ieZ" secondAttribute="width" id="omN-5l-xrK"/>
-                                    <constraint firstAttribute="bottom" secondItem="cf4-Sw-cWD" secondAttribute="bottom" id="q7b-0F-rrs"/>
+                                    <constraint firstAttribute="bottom" secondItem="cf4-Sw-cWD" secondAttribute="bottom" constant="8" id="q7b-0F-rrs"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="1nf-nk-e76"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -265,6 +271,7 @@
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
                         <outlet property="cancelButton" destination="NS4-0L-3O9" id="V2Z-Ho-Yax"/>
+                        <outlet property="customLoginLabel" destination="jSu-0X-Fx9" id="QFs-oi-YkQ"/>
                         <outlet property="customLoginView" destination="R0g-Jt-DMB" id="6Zo-kh-acG"/>
                         <outlet property="faceImageView" destination="nwT-nM-L0s" id="8c9-b5-Lp0"/>
                         <outlet property="fbButton" destination="WWM-6I-rFC" id="bEW-5h-DOi"/>

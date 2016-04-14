@@ -21,6 +21,8 @@ struct TagConst {
     
     static let showADs = "showADs"
     
+    static let zuzuLogin = "zuzuLogin"
+    
 }
 
 // MARK: Constants for Criteria

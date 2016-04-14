@@ -31,35 +31,6 @@ class ADFactory : NSObject {
     
     static let fbTestDevice = ["0d5e4441357c49679cace1707412a6b516d3bb36", "9a44f4d536f52e37ba572e672e81ba0b9eb5bdd6", "4c0f7234ac32176ccd83ffb8dbd03a54cce8f9ce"]
     
-    static func shouldDisplayADs() -> Bool {
-        
-        var isDisplayADs = false
-        
-        // A/B Testing flags
-        if let tagContainer = AppDelegate.tagContainer {
-            let showADString = tagContainer.stringForKey(TagConst.showADs)
-            
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(showADString)")
-            
-            if(showADString == "y") {
-                
-                isDisplayADs = true
-                
-            } else if(showADString == "n"){
-                
-                isDisplayADs = false
-                
-            } else {
-                
-                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showADs)")
-            }
-            
-        }
-        
-        return isDisplayADs
-        
-    }
-    
     override init() {
         FBAdSettings.addTestDevices(ADFactory.fbTestDevice)
     }

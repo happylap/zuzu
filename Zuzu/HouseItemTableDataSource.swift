@@ -103,7 +103,7 @@ public class HouseItemTableDataSource {
     public init() {
         
         // A/B Testing flags
-        self.isDisplayADs = ADFactory.shouldDisplayADs()
+        self.isDisplayADs = TagUtils.shouldDisplayADs()
         
     }
     

@@ -8,6 +8,8 @@
 
 import Foundation
 
+private let Log = Logger.defaultLogger
+
 // MARK: CommonUtils
 class CommonUtils: NSObject{
     
@@ -105,6 +107,68 @@ class CommonUtils: NSObject{
         return Double(seconds)/secPerDay
         
     }
+}
+
+class TagUtils: NSObject{
+
+    static func shouldDisplayADs() -> Bool {
+        
+        var isDisplayADs = false
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let showADString = tagContainer.stringForKey(TagConst.showADs)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(showADString)")
+            
+            if(showADString == "y") {
+                
+                isDisplayADs = true
+                
+            } else if(showADString == "n"){
+                
+                isDisplayADs = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showADs)")
+            }
+            
+        }
+        
+        return isDisplayADs
+        
+    }
+    
+    static func shouldAllowZuzuLogin() -> Bool {
+        
+        var isEnableZuzuLogin = false
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let zuzuLoginString = tagContainer.stringForKey(TagConst.zuzuLogin)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(zuzuLoginString)")
+            
+            if(zuzuLoginString == "y") {
+                
+                isEnableZuzuLogin = true
+                
+            } else if(zuzuLoginString == "n"){
+                
+                isEnableZuzuLogin = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showADs)")
+            }
+            
+        }
+        
+        return isEnableZuzuLogin
+        
+    }
+    
 }
 
 // MARK: UserServiceUtils

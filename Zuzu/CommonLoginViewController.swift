@@ -73,22 +73,36 @@ class CommonLoginViewController: UIViewController {
         
     }
     
+    @IBOutlet weak var customLoginLabel: UILabel! {
+        
+        didSet {
+            if(TagUtils.shouldAllowZuzuLogin()) {
+                customLoginLabel.hidden = false
+            }
+        }
+    }
+    
     @IBOutlet weak var customLoginView: UIView! {
         
         didSet {
             
-            let thickness:CGFloat = 0.5
-            
-            let upperBorder = CALayer()
-            upperBorder.backgroundColor = UIColor.lightGrayColor().CGColor
-            
-            //border.frame = CGRectMake(0, CGRectGetHeight(self.frame) - thickness, CGRectGetWidth(self.frame), thickness);
-            
-            upperBorder.frame = CGRect(x: 0, y: 0, width: customLoginView.frame.width, height: thickness)
-            
-            //upperBorder.frame = CGRect(x: 0, y: customLoginView.frame.height - thickness, width: customLoginView.frame.width, height: thickness)
-            
-            customLoginView.layer.addSublayer(upperBorder)
+            if(TagUtils.shouldAllowZuzuLogin()) {
+                customLoginView.hidden = false
+                
+                let thickness:CGFloat = 0.5
+                
+                let upperBorder = CALayer()
+                upperBorder.backgroundColor = UIColor.lightGrayColor().CGColor
+                
+                upperBorder.frame = CGRect(x: 0, y: 0, width: customLoginView.frame.width, height: thickness)
+                
+                customLoginView.layer.addSublayer(upperBorder)
+                
+            } else {
+                
+                customLoginView.removeFromSuperview()
+
+            }
         }
         
     }

@@ -66,9 +66,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GTM.logger.setLogLevel(kTAGLoggerLogLevelVerbose)
             
             TAGContainerOpener.openContainerWithId("GTM-PLP77J",
-                tagManager: GTM, openType: kTAGOpenTypePreferFresh,
-                timeout: nil,
-                notifier: self)
+                                                   tagManager: GTM, openType: kTAGOpenTypePreferFresh,
+                                                   timeout: nil,
+                                                   notifier: self)
         #endif
     }
     
@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().titleTextAttributes =
             [NSForegroundColorAttributeName:UIColor.whiteColor(),
-                NSFontAttributeName : font]
+             NSFontAttributeName : font]
         UINavigationBar.appearance().barTintColor = bgColor
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         
@@ -239,7 +239,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
                     GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                        action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+                                       action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
                 }
                 
             }else{
@@ -249,7 +249,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         updateTabBarBadge(application)
                         
                         GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                            action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+                                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
                     }
                 }
             }
@@ -259,7 +259,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
                 GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                    action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+                                   action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
             }
             
             rootViewController.selectedIndex = notifyTabIndex

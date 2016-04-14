@@ -729,7 +729,7 @@ class HouseDetailViewController: UIViewController {
         self.tableView.layoutIfNeeded()
         
         
-        if(ADFactory.shouldDisplayADs()) {
+        if(TagUtils.shouldDisplayADs()) {
             
             tableView.tableFooterView = self.getAdBannerFooterView()
             
