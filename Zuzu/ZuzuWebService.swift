@@ -44,24 +44,7 @@ class ZuzuWebService: NSObject
     func checkEmail(email: String, handler: (emailExisted: Bool, provider: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
-//        let resource = "/public/user/check/\(email)"
-//        
-//        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
-//            if let error = error {
-//                handler(emailExisted: false, provider: nil, error: error)
-//                return
-//            }
-//            
-//            if let value = result {
-//                let json = JSON(value)
-//                Log.debug("Result: \(json)")
-//                
-//                handler(emailExisted: json["emailExisted"].bool, provider: json["provider"].string, error: error)
-//            }
-//        }
-
-        
-        let resource = "/register/valid/\(email)"
+        let resource = "/public/user/check/\(email)"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
@@ -69,10 +52,16 @@ class ZuzuWebService: NSObject
                 return
             }
             
-            if let result = result {
-                handler(emailExisted: result as! Bool, provider: nil, error: nil)
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
+                
+                handler(emailExisted: true, provider: json["provider"].string, error: error)
+            } else {
+                handler(emailExisted: false, provider: nil, error: nil)
             }
         }
+
         
         Log.exit()
     }
@@ -87,8 +76,7 @@ class ZuzuWebService: NSObject
             userMapper.password = password
         }
         
-        //let resource = "/public/user/register"
-        let resource = "/register"
+        let resource = "/public/user/register"
 
         let payload = Mapper<ZuzuUserMapper>().toJSON(userMapper)
         
@@ -96,25 +84,30 @@ class ZuzuWebService: NSObject
             
             if let error = error {
                 handler(userId: nil, error: error)
-            } else {
-                handler(userId: result as? String, error: nil)
+            }
+            
+            if let result = result {
+                handler(userId: result as? String, error: error)
             }
         }
         
         Log.exit()
     }
     
-    func loginByEmail(email: String, password: String, handler: (userToken: String?, error: ErrorType?) -> Void) {
+    func loginByEmail(email: String, password: String, handler: (zuzuToken: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email), password: \(password)]")
         
+        let timestamp = NSDate().timeIntervalSince1970.description
+        let signature = ""
+        
         let resource = "/public/user/login"
-        let payload = ["email": email, "password": password]
+        let payload = ["email": email, "timestamp": timestamp, "signature": signature, "password": password]
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             if let error = error {
-                handler(userToken: nil, error: error)
+                handler(zuzuToken: nil, error: error)
             } else {
-                handler(userToken: result as? String, error: nil)
+                handler(zuzuToken: result as? String, error: nil)
             }
         }
         
@@ -167,6 +160,35 @@ class ZuzuWebService: NSObject
     }
     
     // MARK: - Public APIs - User
+    func retrieveCognitoToken(userId: String, zuzuToken: String, identityId: String?, logins: [String: String], handler: (identityId: String?, token: String?, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), zuzuToken: \(zuzuToken), identityId: \(identityId), logins: \(logins)]")
+        
+        let timestamp = NSDate().timeIntervalSince1970.description
+        
+        let signature = zuzuToken
+        
+        let resource = "/cognito/token"
+        var payload = ["userId": userId, "signature": signature, "timestamp": timestamp, "logins": logins] as [String : AnyObject]
+        if let identityId = identityId {
+            payload["identityId"] = identityId
+        }
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            if let error = error {
+                handler(identityId: nil, token: nil, error: error)
+                return
+            }
+            
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
+                
+                handler(identityId: json["identityId"].stringValue, token: json["token"].stringValue, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
     
     func getUserByEmail(email: String, handler: (result: ZuzuUser?, error: NSError?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")

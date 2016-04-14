@@ -76,20 +76,15 @@ class ZuzuUserMapper: NSObject, Mappable {
         return nil
     }
     
-    func fromUser(user: ZuzuUser) -> ZuzuUserMapper {
-        let mapper = ZuzuUserMapper()
-        mapper.userId = user.id
-        mapper.email = user.email
-        
-        mapper.provider = user.provider?.rawValue
-        
-        mapper.registerTime = user.registerTime
-        mapper.name = user.name
-        mapper.gender = user.gender
-        mapper.birthday = user.birthday
-        mapper.pictureUrl = user.pictureUrl
-
-        return mapper
+    func fromUser(user: ZuzuUser) {
+        self.provider = user.provider?.rawValue
+        self.userId = user.id
+        self.email = user.email
+        self.registerTime = user.registerTime
+        self.name = user.name
+        self.gender = user.gender
+        self.birthday = user.birthday
+        self.pictureUrl = user.pictureUrl
     }
     
 }

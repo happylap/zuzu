@@ -273,12 +273,16 @@ class LoginDebugViewController: UIViewController {
         "--- Tester ---",
         "checkEmail",
         "registerUser",
+        "registerUser2",
         "getUserByEmail",
         "updateUser",
         "removeUser",
+        "removeUser2",
+        "loginUser2",
         " ",
         " ",
         "--- User ---",
+        "retrieveCognitoToken",
         "getUserById",
         "createDeviceByUserId",
         "isExistDeviceByUserId",
@@ -326,14 +330,15 @@ class LoginDebugViewController: UIViewController {
         case "registerUser":
             
             let user = ZuzuUser()
+            user.provider = Provider.FB
             user.email = ApiTestConst.email
-            user.name = "Tester2"
+            user.name = ApiTestConst.email
             user.gender = "男性"
             
             ZuzuWebService.sharedInstance.registerUser(user, handler: { (userId, error) -> Void in
                 
                 let title = "Tester"
-                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(user.email) \n\n result: \n"
                 
                 if let error = error {
                     self.showAlert(title, subTitle: "\(subTitle) \(error)")
@@ -342,6 +347,30 @@ class LoginDebugViewController: UIViewController {
                 if let userId = userId {
                     self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)")
                 }
+                
+            })
+            
+        case "registerUser2":
+            
+            let user = ZuzuUser()
+            user.provider = Provider.ZUZU
+            user.email = ApiTestConst.email2
+            user.name = ApiTestConst.email2
+            user.gender = "男性"
+            
+            ZuzuWebService.sharedInstance.registerUser(user, password: ApiTestConst.password2, handler: { (userId, error) -> Void in
+                
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(user.email) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let userId = userId {
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)")
+                }
+                
             })
             
             
@@ -384,6 +413,28 @@ class LoginDebugViewController: UIViewController {
                 }
             })
             
+        case "removeUser2":
+            
+            ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email2, handler: { (result, error) -> Void in
+                
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
+                    ZuzuWebService.sharedInstance.removeUserById(user.id, email: user.email!, handler: { (result, error) -> Void in
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        } else {
+                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                        }
+                    })
+                }
+            })
+            
         case "updateUser":
             ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
                 let title = "Tester"
@@ -408,23 +459,72 @@ class LoginDebugViewController: UIViewController {
                 }
             })
             
-        case "getUserById":
             
-            self.checkLogin({ (userId, email) -> Void in
-                ZuzuWebService.sharedInstance.getUserById(userId, handler: { (result, error) -> Void in
-                    
-                    let title = "User"
-                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
-                    
-                    if let error = error {
-                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                    }
-                    
-                    if let user: ZuzuUser = result {
-                        self.showAlert(title, subTitle: "\(subTitle) userId: \(user.id)\n email: \(user.email)\n registerTime: \(user.registerTime)\n name: \(user.name)\n gender: \(user.gender)\n birthday: \(user.birthday)")
-                    }
-                })
+        case "removeUser":
+            
+            ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
+                
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let user: ZuzuUser = result {
+                    ZuzuWebService.sharedInstance.removeUserById(user.id, email: user.email!, handler: { (result, error) -> Void in
+                        if let error = error {
+                            self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                        } else {
+                            self.showAlert(title, subTitle: "\(subTitle) \(result)")
+                        }
+                    })
+                }
             })
+            
+        case "loginUser2":
+            
+            ZuzuWebService.sharedInstance.loginByEmail(ApiTestConst.email2, password: ApiTestConst.password2, handler: { (zuzuToken, error) in
+                let title = "User"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n password: \(ApiTestConst.password2) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let zuzuToken = zuzuToken {
+                    self.showAlert(title, subTitle: "zuzuToken: \(zuzuToken)")
+                }
+            })
+            
+        case "retrieveCognitoToken":
+            ZuzuWebService.sharedInstance.loginByEmail(ApiTestConst.email2, password: ApiTestConst.password2, handler: { (zuzuToken, error) in
+                
+                
+                if let zuzuToken = zuzuToken {
+                    ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email2, handler: { (result, error) in
+                        
+                        if let user: ZuzuUser = result {
+                            
+                            let logins = ["com.lap.zuzu.login2":ApiTestConst.email2]
+                            ZuzuWebService.sharedInstance.retrieveCognitoToken(user.id, zuzuToken: zuzuToken, identityId: nil, logins: logins, handler: { (identityId, token, error) in
+                                
+                                let title = "User"
+                                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n userId: \(user.id) \n\n zuzuToken: \(zuzuToken) \n\n logins: \(logins) \n\n result: \n"
+                
+                                if let error = error {
+                                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                                }
+                                
+                                if let identityId = identityId, let token = token {
+                                    self.showAlert(title, subTitle: "\(subTitle) identityId: \(identityId), token: \(token)")
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+            
             
         case "createDeviceByUserId":
             
