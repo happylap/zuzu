@@ -165,7 +165,7 @@ class ZuzuWebService: NSObject
     }
     
     // MARK: - Public APIs - User
-    func retrieveCognitoToken(userId: String, zuzuToken: String, identityId: String?, logins: [String: String], handler: (identityId: String?, token: String?, error: ErrorType?) -> Void) {
+    func retrieveCognitoToken(userId: String, zuzuToken: String, identityId: String?, logins: [NSObject : AnyObject], handler: (identityId: String?, token: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [userId: \(userId), zuzuToken: \(zuzuToken), identityId: \(identityId), logins: \(logins)]")
         
         let timestamp = NSDate().timeIntervalSince1970.description

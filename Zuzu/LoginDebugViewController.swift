@@ -506,7 +506,7 @@ class LoginDebugViewController: UIViewController {
                         
                         if let user: ZuzuUser = result {
                             
-                            let logins = ["com.lap.zuzu.login2":ApiTestConst.email2]
+                            let logins = ["com.lap.zuzu.login": user.id]
                             ZuzuWebService.sharedInstance.retrieveCognitoToken(user.id, zuzuToken: zuzuToken, identityId: nil, logins: logins, handler: { (identityId, token, error) in
                                 
                                 let title = "User"
