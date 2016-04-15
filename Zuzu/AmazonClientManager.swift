@@ -1118,6 +1118,9 @@ class AmazonClientManager : NSObject {
             switch(result) {
             case .Success:
                 
+                //Set current login provider
+                UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
+                
                 if let userId = userId {
                     ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
                         
@@ -1213,8 +1216,6 @@ class AmazonClientManager : NSObject {
         Log.debug("Zuzu token: \(ZuzuAccessToken.currentAccessToken.token)")
         
         if let userId = ZuzuAccessToken.currentAccessToken.userId, let _ = ZuzuAccessToken.currentAccessToken.token {
-            //Set current login provider
-            UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
             
             self.completeLogin([self.providerName: userId])
             
