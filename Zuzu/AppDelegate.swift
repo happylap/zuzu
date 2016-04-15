@@ -16,7 +16,8 @@ import FBSDKLoginKit
 import Fabric
 import SCLAlertView
 
-private let Log = Logger.defaultLogger
+//private let Log = Logger.defaultLogger
+private let Log = Logger.fileLogger
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -125,9 +126,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal func isEnabledLocalNotification() -> Bool{
         if let grantedSettings = UIApplication.sharedApplication().currentUserNotificationSettings(){
             if grantedSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
-                
+                Log.warning("user notifications is enabled")
                 return true
+            }else{
+                Log.warning("user notifications is not enabled")
             }
+        }else{
+            Log.error("grantedSettings is nil")
         }
         
         return false
@@ -168,6 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Badge, UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: (NSSet(array: [messageCategory])) as? Set<UIUserNotificationCategory>)
         
+        Log.warning("registerUserNotificationSettings")
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         
     }
@@ -196,7 +202,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let currentNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
             let isRegisteredForLocalNotifications = (!currentNotificationSettings.types.isSubsetOf(UIUserNotificationType.None))
             
-            
+            Log.warning("isRegisteredForLocalNotifications: \(isRegisteredForLocalNotifications)")
             if(isRegisteredForLocalNotifications) {
                 
                 self.localNotificationSetupHandler?(result: true)
@@ -299,6 +305,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //reachability = Reachability.reachabilityForInternetConnection();
         //reachability?.startNotifier();
         
+        Log.warning("registerForRemoteNotifications")
         UIApplication.sharedApplication().registerForRemoteNotifications()
         
         commonServiceSetup()

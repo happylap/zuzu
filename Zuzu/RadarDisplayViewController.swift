@@ -10,7 +10,8 @@ import UIKit
 import SCLAlertView
 import Charts
 
-private let Log = Logger.defaultLogger
+//private let Log = Logger.defaultLogger
+private let Log = Logger.fileLogger
 
 class RadarDisplayViewController: UIViewController {
     
@@ -135,6 +136,8 @@ class RadarDisplayViewController: UIViewController {
                         self.alertLocalNotificationDisabled()
                     }
                 })
+            }else{
+                Log.error("appDelegate is nil")
             }
         }
         
@@ -197,9 +200,12 @@ class RadarDisplayViewController: UIViewController {
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
             if appDelegate.isEnabledLocalNotification() == false{
+                Log.warning("alertRegisterLocalNotification")
                 self.alertRegisterLocalNotification()
             }
             
+        }else{
+            Log.error("appDelegate is nil")
         }
     }
     
