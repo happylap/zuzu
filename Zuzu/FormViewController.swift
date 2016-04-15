@@ -486,7 +486,7 @@ extension FormViewController: PasswordFormDelegate {
                     dismissModalStack(self, animated: true, completionBlock: nil)
 
                     if let _ = error {
-                        self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: userToken)
+                        self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
                         return
                     }
                     
@@ -518,30 +518,20 @@ extension FormViewController: PasswordFormDelegate {
                     
                     self.delegate?.onRegisterDone(FormResult.Success)
                     
-                    /// Login with registered user
-//                    ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
-//                        
-//                        ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (zuzuUser, error) in
-//                            
-//                            // Finish register
-//                            dismissModalStack(self, animated: true, completionBlock: nil)
-//                            
-//                            // Callback onZuzuLogin
-//                            if let _ = error {
-//                                self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
-//                                
-//                                return
-//                            }
-//                            
-//                            if let zuzuUser = zuzuUser, let userToken = userToken {
-//                                self.delegate?.onLoginDone(LoginResult.Success, zuzuUser: zuzuUser, zuzuToken: userToken)
-//                            } else {
-//                                self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
-//                            }
-//                            
-//                        })
-//                        
-//                    })
+                    /// Do login
+                    ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
+                        
+                        // Finish login
+                        dismissModalStack(self, animated: true, completionBlock: nil)
+                        
+                        if let _ = error {
+                            self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
+                            return
+                        }
+                        
+                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                        
+                    })
                     
                 })
             }
