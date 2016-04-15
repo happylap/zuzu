@@ -834,7 +834,7 @@ class AmazonClientManager : NSObject {
     
     func isLoggedIn() -> Bool {
         if let _ = self.currentUserProfile {
-            return self.isLoggedInWithFacebook() || self.isLoggedInWithGoogle()
+            return self.isLoggedInWithFacebook() || self.isLoggedInWithGoogle() || self.isLoggedInWithZuzu()
         } else {
             return false
         }
@@ -1096,6 +1096,7 @@ class AmazonClientManager : NSObject {
     
     func reloadZuzuSession() {
         Log.debug("Reloading Zuzu Session")
+        self.completeZuzuLogin()
     }
     
     func zuzuLogin(theViewController: UIViewController) {
