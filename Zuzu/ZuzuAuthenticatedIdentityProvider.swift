@@ -4,19 +4,13 @@ import Alamofire
 
 private let Log = Logger.defaultLogger
 
-protocol CognitoAuthenticator {
-    func retrieveToken(userIdentifier: String, identityId: String?,
-                       success: (identityId: String?, token: String?, userIdentifier: String?) -> Void,
-                       failure: (error: NSError) -> Void)
-}
-
 class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
     private static let errorDomain: String = "com.zuzu"
-    private let authenticator: CognitoAuthenticator!
+    private let authenticator: ZuzuAuthenticator!
     private let _providerName: String!
     private var _token: String!
     
-    init!(providerName: String!, authenticator: CognitoAuthenticator!, regionType: AWSRegionType, identityId: String!, identityPoolId: String!, logins: [NSObject : AnyObject]!) {
+    init!(providerName: String!, authenticator: ZuzuAuthenticator!, regionType: AWSRegionType, identityId: String!, identityPoolId: String!, logins: [NSObject : AnyObject]!) {
         
         self.authenticator = authenticator
         self._providerName = providerName
@@ -70,24 +64,22 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         
         // Try to get token from Zuzu backend
         let task = AWSTaskCompletionSource()
-        self.authenticator.retrieveToken("", identityId: "",
-                                         success: { (identityId, token, userIdentifier) in
-                                            
-                                            if let identityId = identityId, token = token, userIdentifier = userIdentifier {
+        
+        if let userId = ZuzuAccessToken.currentAccessToken.userId,
+        let token = ZuzuAccessToken.currentAccessToken.token {
+            self.authenticator.retrieveToken(userId, zuzuToken: token,
+                                             identityId: self.identityId, logins: self.logins) { (identityId, token, error) in
                                                 
-                                                self.logins = [self.providerName: userIdentifier]
-                                                self.identityId = identityId
-                                                self._token = token
-                                                task.setResult(self.identityId)
+                                                if let identityId = identityId, token = token {
+                                                    self.identityId = identityId
+                                                    self._token = token
+                                                }
                                                 
-                                            } else {
-                                                
-                                                task.setError(self.errorWithCode(5000, failureReason: "CognitoAuthenicator returned no token"))
-                                                
-                                            }
-            }, failure: { error in
-                task.setError(error)
-        })
+            }
+        }  else {
+            task.setError(self.errorWithCode(5000, failureReason: "Not authorized to retrieve token"))
+            
+        }
         
         return task.task
     }

@@ -14,6 +14,19 @@ enum FormMode {
     case Register
 }
 
+enum LoginResult {
+    case Success
+    case Failed
+    case Cancelled
+}
+
+protocol FormViewControllerDelegate {
+    
+    func onLoginDone(success: LoginResult, zuzuUser: ZuzuUser?, zuzuToken: String?)
+    
+    func onRegisterDone(success: Bool)
+    
+}
 
 class FormViewController: UIViewController {
     
@@ -85,6 +98,8 @@ class FormViewController: UIViewController {
     private var userAccount: String?
     
     /// Passed in params
+    var delegate: FormViewControllerDelegate?
+    
     var formMode:FormMode = .Login
     
     @IBOutlet weak var modalTitle: UILabel!
@@ -284,6 +299,9 @@ class FormViewController: UIViewController {
     func onBackButtonTouched(sender: UIButton) {
         
         self.dismissViewControllerAnimated(true) { () -> Void in
+            
+            self.delegate?.onLoginDone(LoginResult.Cancelled, zuzuUser: nil, zuzuToken: nil)
+            
         }
         
     }
@@ -462,12 +480,28 @@ extension FormViewController: PasswordFormDelegate {
                 
                 ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
                     
-                    LoadingSpinner.shared.stop()
+                    ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (zuzuUser, error) in
+                        
+                        LoadingSpinner.shared.stop()
+                        
+                        // Finish login
+                        dismissModalStack(self, animated: true, completionBlock: nil)
+                        
+                        // Callback onZuzuLogin
+                        if let _ = error {
+                            self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
+                            
+                            return
+                        }
+                        
+                        if let zuzuUser = zuzuUser, let userToken = userToken {
+                            self.delegate?.onLoginDone(LoginResult.Success, zuzuUser: zuzuUser, zuzuToken: userToken)
+                        } else {
+                            self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
+                        }
+                        
+                    })
                     
-                    // Finish login
-                    dismissModalStack(self, animated: true, completionBlock: nil)
-                    
-                    // TODO: Callback onZuzuLogin
                 })
                 
             }
@@ -492,19 +526,39 @@ extension FormViewController: PasswordFormDelegate {
                         
                         self.alertRegisterFailure()
                         
+                        self.delegate?.onRegisterDone(false)
+                        
                         return
                     }
+                    
+                    self.delegate?.onRegisterDone(true)
                     
                     LoadingSpinner.shared.setText("登入中")
                     
                     ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
                         
-                        LoadingSpinner.shared.stop()
+                        ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (zuzuUser, error) in
+                            
+                            LoadingSpinner.shared.stop()
+                            
+                            // Finish register
+                            dismissModalStack(self, animated: true, completionBlock: nil)
+                            
+                            // Callback onZuzuLogin
+                            if let _ = error {
+                                self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
+                                
+                                return
+                            }
+                            
+                            if let zuzuUser = zuzuUser, let userToken = userToken {
+                                self.delegate?.onLoginDone(LoginResult.Success, zuzuUser: zuzuUser, zuzuToken: userToken)
+                            } else {
+                                self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
+                            }
+                            
+                        })
                         
-                        // Finish register
-                        dismissModalStack(self, animated: true, completionBlock: nil)
-                        
-                        // TODO: Callback onZuzuLogin
                     })
                     
                 })

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserDefaultsUtils{
+struct UserDefaultsUtils {
     
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
@@ -47,7 +47,7 @@ struct UserDefaultsUtils{
     
     // MARK: Login
     /// UserProfile UserDefaults persistence APIs
-    static let userLoginUserDefaultKey = "userLoginStatus"
+    static let userLoginTokenKey = "userLoginToken"
     static let userProfileUserDefaultKey = "loginUserData"
     static let loginProviderUserDefaultKey = "loginProvider"
     static let userLastCognitoIdentityUserDefaultKey = "userLastCognitoIdentityUserDefaultKey"
@@ -96,21 +96,6 @@ struct UserDefaultsUtils{
         return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? ZuzuUser
     }
     
-    // User Login
-    //    static func setUserLoggedIn(userId: String) {
-    //        let userDefaults = NSUserDefaults.standardUserDefaults()
-    //        userDefaults.setObject(userId, forKey: userLoginUserDefaultKey)
-    //        userDefaults.synchronize()
-    //    }
-    //
-    //    static func isUserLoggedIn() -> Bool{
-    //        let userDefaults = NSUserDefaults.standardUserDefaults()
-    //
-    //        let currentUserId = userDefaults.objectForKey(userLoginUserDefaultKey) as? String
-    //
-    //        return (currentUserId != nil)
-    //    }
-    
     /// Check if the user has ever loggin for this installation
     static func setCognitoIdentityId(identityId : String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -121,6 +106,27 @@ struct UserDefaultsUtils{
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.objectForKey(userLastCognitoIdentityUserDefaultKey) as? String
     }
+    
+    // MARK: Zuzu Login
+    static func saveZuzuToken(token: String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(token, forKey: userLoginTokenKey)
+        userDefaults.synchronize()
+    }
+    
+    static func clearZuzuToken() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(userLoginTokenKey)
+        userDefaults.synchronize()
+    }
+    
+    static func getZuzuToken() -> String? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let currentUserId = userDefaults.objectForKey(userLoginTokenKey) as? String
+        
+        return currentUserId
+    }
+    
     
     // MARK: My Collection
     

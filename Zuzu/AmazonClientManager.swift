@@ -67,7 +67,7 @@ class AmazonClientManager : NSObject {
     //Login Managers
     private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
-    private var zuzuAuthClient: CognitoAuthenticator?
+    private var zuzuAuthClient: ZuzuAuthenticator?
     
     //Login View Controller
     private var loginViewController: UIViewController?
@@ -446,7 +446,7 @@ class AmazonClientManager : NSObject {
         super.init()
         
         /// Init Zuzu Authenticator for logging in
-        self.zuzuAuthClient = DeveloperAuthenticator()
+        self.zuzuAuthClient = ZuzuAuthenticator()
         
         /// IdentityId will be changed when a new provider login is set
         NSNotificationCenter.defaultCenter().addObserver(self,
@@ -632,6 +632,10 @@ class AmazonClientManager : NSObject {
         
         if self.isLoggedInWithGoogle() {
             self.googleLogout()
+        }
+        
+        if self.isLoggedInWithZuzu() {
+            self.zuzuLogout()
         }
         
         // Clear free trial history
@@ -1081,7 +1085,11 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithZuzu() -> Bool {
         
-        return false
+        if let _ = self.currentUserProfile {
+            return ZuzuAccessToken.currentAccessToken.token != nil
+        } else {
+            return false
+        }
         
     }
     
@@ -1094,43 +1102,40 @@ class AmazonClientManager : NSObject {
         ///Check if already signed in
         
         ///Bring-up sign-in UI
-        
-        ///TODO: Consider putting the logic to DeveloperAuthenticator
-        let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
-            vc.modalPresentationStyle = .OverCurrentContext
-            vc.formMode = .Login
+        self.zuzuAuthClient?.loginWithZuzu(theViewController, handler: { (result, zuzuUser) in
             
-            ///TODO: Add a delegate to get the response for Zuzu Login onZuzuLogin
-            
-            theViewController.presentViewController(vc, animated: true, completion: nil)
-        }
+        })
     }
     
     func zuzuRegister(theViewController: UIViewController) {
         
         ///Bring-up register UI
-        
-        ///TODO: Consider putting the logic to DeveloperAuthenticator
-        let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
-            vc.modalPresentationStyle = .OverCurrentContext
-            vc.formMode = .Register
+        self.zuzuAuthClient?.registerWithZuzu(theViewController, handler: { (result, zuzuUser) in
             
-            ///TODO: Add a delegate to get the response for Zuzu Login onZuzuLogin
-            
-            theViewController.presentViewController(vc, animated: true, completion: nil)
-        }
+        })
+
     }
     
     func zuzuLogout() {
         Log.enter()
+        self.zuzuAuthClient?.logout()
         Log.exit()
     }
     
     private func completeZuzuLogin() {
         
         /// Add new entry to logins
+        Log.debug("Zuzu token: \(ZuzuAccessToken.currentAccessToken.token)")
+        
+        if let userId = ZuzuAccessToken.currentAccessToken.userId, let _ = ZuzuAccessToken.currentAccessToken.token {
+            //Set current login provider
+            UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
+            
+            self.completeLogin([self.providerName: userId])
+            
+        } else {
+            assert(false, "zuzuToken should not be nil")
+        }
         
     }
 }
