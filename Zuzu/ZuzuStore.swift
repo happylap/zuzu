@@ -383,7 +383,7 @@ extension ZuzuStore: SKPaymentTransactionObserver {
     private func failedTransaction(transaction: SKPaymentTransaction) {
         Log.warning("failedTransaction...\(transaction.transactionIdentifier), product = \(transaction.payment.productIdentifier)")
         
-        if transaction.error!.code != SKErrorPaymentCancelled {
+        if transaction.error!.code != SKErrorCode.PaymentCancelled.rawValue {
             Log.warning("Transaction error: \(transaction.error!.localizedDescription)")
         }
         

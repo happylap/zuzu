@@ -11,7 +11,7 @@ import UIKit
 import Foundation
 import Dollar
 import GoogleMobileAds
-import FBAudienceNetwork
+//import FBAudienceNetwork
 
 private let Log = Logger.defaultLogger
 
@@ -44,7 +44,7 @@ class SearchResultAdCell: UITableViewCell {
     
     func setupBanner(controller: SearchResultViewController) {
         
-        FBAdSettings.addTestDevices(fbTestDevice)
+        //FBAdSettings.addTestDevices(fbTestDevice)
         
         #if DEBUG
             //Test adUnit

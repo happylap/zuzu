@@ -122,6 +122,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().registerForRemoteNotifications()
     }
     
+    internal func isEnabledLocalNotification() -> Bool{
+        if let grantedSettings = UIApplication.sharedApplication().currentUserNotificationSettings(){
+            if grantedSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
+                
+                return true
+            }
+        }
+        
+        return false
+    }
+    
     /// Setup for local App notification permission
     internal func setupLocalNotifications(handler: NotificationSetupHandler? = nil){
         Log.warning("setupLocalNotifications")
@@ -184,7 +195,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let currentNotificationSettings = UIApplication.sharedApplication().currentUserNotificationSettings() {
             let isRegisteredForLocalNotifications = (!currentNotificationSettings.types.isSubsetOf(UIUserNotificationType.None))
-        
+            
             
             if(isRegisteredForLocalNotifications) {
                 
@@ -287,6 +298,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //reachability = Reachability.reachabilityForInternetConnection();
         //reachability?.startNotifier();
+        
+        UIApplication.sharedApplication().registerForRemoteNotifications()
         
         commonServiceSetup()
         

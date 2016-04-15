@@ -113,6 +113,32 @@ class RadarDisplayViewController: UIViewController {
     
     
     // MARK: - Private Utils
+ 
+    private func alertRegisterLocalNotification() {
+        Log.enter()
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務"
+        
+        alertView.showCloseButton = true
+        
+        alertView.showInfo("開啟傳送通知", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock() {
+            
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                /// Enable Local App Notifications
+                appDelegate.setupLocalNotifications({ (result) -> () in
+                    
+                    Log.warning("setupLocalNotifications = \(result)")
+                    
+                    if(!result) {
+                        self.alertLocalNotificationDisabled()
+                    }
+                })
+            }
+        }
+        
+    }
     
     private func alertLocalNotificationDisabled() {
         Log.enter()
@@ -123,7 +149,8 @@ class RadarDisplayViewController: UIViewController {
         
         alertView.showCloseButton = true
         
-        alertView.showInfo("尚未授權通知功能", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)    }
+        alertView.showInfo("尚未授權通知功能", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
     
     private func alertPushNotificationDisabled() {
         Log.enter()
@@ -166,31 +193,13 @@ class RadarDisplayViewController: UIViewController {
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
         self.purchaseHistotyTableDataSource.refresh(nil)
         
+        
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
-            /// Enable Remote Notifications
+            if appDelegate.isEnabledLocalNotification() == false{
+                self.alertRegisterLocalNotification()
+            }
             
-            appDelegate.setupPushNotifications({ (result) -> () in
-                
-                Log.warning("setupPushNotifications = \(result)")
-                
-                if(result) {
-                    
-                    /// Enable Local App Notifications
-                    appDelegate.setupLocalNotifications({ (result) -> () in
-                        
-                        Log.warning("setupLocalNotifications = \(result)")
-                        
-                        if(!result) {
-                            self.alertLocalNotificationDisabled()
-                        }
-                    })
-                    
-                } else {
-                    self.alertPushNotificationDisabled()
-                }
-                
-            })
         }
     }
     
