@@ -506,6 +506,7 @@ extension FormViewController: PasswordFormDelegate {
             
             let user = ZuzuUser()
             user.email = self.userAccount
+            user.provider = Provider.ZUZU
             
             if let password = password, email = user.email {
                 ZuzuWebService.sharedInstance.registerUser(user, password: password, handler: { (userId, error) in
