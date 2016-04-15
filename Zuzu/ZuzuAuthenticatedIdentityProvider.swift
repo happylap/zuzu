@@ -65,6 +65,7 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         // Try to get token from Zuzu backend
         let task = AWSTaskCompletionSource()
         
+        
         if let userId = ZuzuAccessToken.currentAccessToken.userId,
             token = ZuzuAccessToken.currentAccessToken.token,
             logins = self.logins {
@@ -76,6 +77,8 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
                                                     
                                                     self.identityId = identityId
                                                     self._token = token
+                                                    
+                                                    task.setResult(self.identityId)
                                                     
                                                 } else {
                                                     
