@@ -112,8 +112,8 @@ class AmazonClientManager : NSObject {
                     return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
                     
                 case Provider.ZUZU:
-                    // TODO
-                    return (provider.rawValue, nil)
+
+                    return (provider.rawValue, ZuzuAccessToken.currentAccessToken.token)
                 }
             } else {
                 return (nil, nil)
@@ -1113,17 +1113,28 @@ class AmazonClientManager : NSObject {
         LoadingSpinner.shared.startOnView(theViewController.view)
         
         ///Bring-up sign-in UI
-        self.zuzuAuthClient.loginWithZuzu(theViewController, handler: { (result, zuzuUser) in
+        self.zuzuAuthClient.loginWithZuzu(theViewController, handler: { (result, userId) in
             
             switch(result) {
             case .Success:
-                if let zuzuUser = zuzuUser {
-                    UserDefaultsUtils.setUserProfile(zuzuUser)
-                    self.completeZuzuLogin()
+                
+                if let userId = userId {
+                    ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
+                        
+                        if let zuzuUser = zuzuUser {
+                            UserDefaultsUtils.setUserProfile(zuzuUser)
+                            self.completeZuzuLogin()
+                        } else {
+                            self.failLogin(.ZuzuFailure)
+                        }
+                        
+                    })
                 } else {
-                    assert(false, "ZuzuUser should not be nil after login")
+                    
+                    assert(false, "userId should not be nil after login")
                     self.failLogin(.ZuzuFailure)
                 }
+                
             case .Failed:
                 
                 Log.warning("Zuzu Login Failed")
@@ -1153,17 +1164,28 @@ class AmazonClientManager : NSObject {
                 LoadingSpinner.shared.stop()
             }
                                                 
-            }, loginHandler: { (result, zuzuUser) in
+            }, loginHandler: { (result, userId) in
         
                 switch(result) {
                 case .Success:
-                    if let zuzuUser = zuzuUser {
-                        UserDefaultsUtils.setUserProfile(zuzuUser)
-                        self.completeZuzuLogin()
+
+                    if let userId = userId {
+                        ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
+                            
+                            if let zuzuUser = zuzuUser {
+                                UserDefaultsUtils.setUserProfile(zuzuUser)
+                                self.completeZuzuLogin()
+                            } else {
+                                self.failLogin(.ZuzuFailure)
+                            }
+                            
+                        })
                     } else {
-                        assert(false, "ZuzuUser should not be nil after login")
+                        
+                        assert(false, "userId should not be nil after login")
                         self.failLogin(.ZuzuFailure)
                     }
+                    
                 case .Failed:
                     
                     Log.warning("Zuzu Login Failed")
