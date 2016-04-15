@@ -47,7 +47,6 @@ struct UserDefaultsUtils {
     
     // MARK: Login
     /// UserProfile UserDefaults persistence APIs
-    static let userLoginTokenKey = "userLoginToken"
     static let userProfileUserDefaultKey = "loginUserData"
     static let loginProviderUserDefaultKey = "loginProvider"
     static let userLastCognitoIdentityUserDefaultKey = "userLastCognitoIdentityUserDefaultKey"
@@ -105,26 +104,6 @@ struct UserDefaultsUtils {
     static func getCognitoIdentityId() -> String? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.objectForKey(userLastCognitoIdentityUserDefaultKey) as? String
-    }
-    
-    // MARK: Zuzu Login
-    static func saveZuzuToken(token: String) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(token, forKey: userLoginTokenKey)
-        userDefaults.synchronize()
-    }
-    
-    static func clearZuzuToken() {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey(userLoginTokenKey)
-        userDefaults.synchronize()
-    }
-    
-    static func getZuzuToken() -> String? {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        let currentUserId = userDefaults.objectForKey(userLoginTokenKey) as? String
-        
-        return currentUserId
     }
     
     

@@ -13,6 +13,45 @@ import SwiftyJSON
 
 private let Log = Logger.defaultLogger
 
+// MARK: Zuzu Auth Data Storage
+private func saveZuzuToken(token: String) {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    userDefaults.setObject(token, forKey: ZuzuAuthenticator.userLoginTokenKey)
+    userDefaults.synchronize()
+}
+
+private func clearZuzuToken() {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    userDefaults.removeObjectForKey(ZuzuAuthenticator.userLoginTokenKey)
+    userDefaults.synchronize()
+}
+
+private func getZuzuToken() -> String? {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let currentUserId = userDefaults.objectForKey(ZuzuAuthenticator.userLoginTokenKey) as? String
+    
+    return currentUserId
+}
+
+private func saveUserId(token: String) {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    userDefaults.setObject(token, forKey: ZuzuAuthenticator.userLoginIdKey)
+    userDefaults.synchronize()
+}
+
+private func clearUserId() {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    userDefaults.removeObjectForKey(ZuzuAuthenticator.userLoginIdKey)
+    userDefaults.synchronize()
+}
+
+private func getUserId() -> String? {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let currentUserId = userDefaults.objectForKey(ZuzuAuthenticator.userLoginIdKey) as? String
+    
+    return currentUserId
+}
+
 /// ZuzuAccessToken
 class ZuzuAccessToken {
     
@@ -26,13 +65,13 @@ class ZuzuAccessToken {
     
     var userId: String? {
         get {
-            return UserDefaultsUtils.getUserProfile()?.id
+            return getUserId()
         }
     }
     
     var token:String? {
         get {
-            return UserDefaultsUtils.getZuzuToken()
+            return getZuzuToken()
         }
     }
     
@@ -42,14 +81,22 @@ class ZuzuAccessToken {
 /// ZuzuAuthenticator
 class ZuzuAuthenticator {
     
-    typealias LoginCompletionHandler = (result: LoginResult, zuzuUser: ZuzuUser?) -> ()
+    typealias LoginCompletionHandler = (result: FormResult, zuzuUser: ZuzuUser?) -> ()
     
-    private var onComplete: LoginCompletionHandler?
+    typealias RegisterCompletionHandler = (result: FormResult) -> ()
+    
+    private static let userLoginTokenKey = "zuzuUserLoginToken"
+    
+    private static let userLoginIdKey = "zuzuUserLoginId"
+    
+    private var onLoginComplete: LoginCompletionHandler?
+    
+    private var onRegisterComplete: RegisterCompletionHandler?
     
     /// Bring Up Zuzu login/Register UI
     func loginWithZuzu(fromViewController: UIViewController, handler: LoginCompletionHandler) {
         
-        onComplete = handler
+        onLoginComplete = handler
         
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
@@ -61,9 +108,11 @@ class ZuzuAuthenticator {
         }
     }
     
-    func registerWithZuzu(fromViewController: UIViewController, handler: LoginCompletionHandler) {
+    func registerWithZuzu(fromViewController: UIViewController,
+                          registerHandler: RegisterCompletionHandler, loginHandler: LoginCompletionHandler) {
         
-        onComplete = handler
+        onLoginComplete = loginHandler
+        onRegisterComplete = registerHandler
         
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
@@ -77,7 +126,8 @@ class ZuzuAuthenticator {
     
     /// Logout Zuzu account
     func logout() {
-        UserDefaultsUtils.clearZuzuToken()
+        clearZuzuToken()
+        clearUserId()
     }
     
     func retrieveToken(userIdentifier: String, zuzuToken: String,
@@ -92,27 +142,32 @@ class ZuzuAuthenticator {
         }
         
     }
+    
 }
 
 extension ZuzuAuthenticator: FormViewControllerDelegate {
     
-    func onLoginDone(result: LoginResult, zuzuUser: ZuzuUser?, zuzuToken: String?) {
+    func onLoginDone(result: FormResult, zuzuUser: ZuzuUser?, zuzuToken: String?) {
         
         Log.debug("zuzuToken = \(zuzuToken)")
         
         switch(result) {
         case .Success:
             if let zuzuUser = zuzuUser, let zuzuToken = zuzuToken {
-                UserDefaultsUtils.saveZuzuToken(zuzuToken)
-                UserDefaultsUtils.setUserProfile(zuzuUser)
+                
+                saveZuzuToken(zuzuToken)
+                saveUserId(zuzuUser.id)
+                
             }
         default: break
         }
         
-        self.onComplete?(result: result, zuzuUser: zuzuUser)
+        self.onLoginComplete?(result: result, zuzuUser: zuzuUser)
     }
     
-    func onRegisterDone(success: Bool) {
-        Log.debug("status = \(success)")
+    func onRegisterDone(result: FormResult) {
+        Log.debug("status = \(result)")
+        
+        self.onRegisterComplete?(result: result)
     }
 }

@@ -34,6 +34,7 @@ enum LoginErrorType: Int {
     case GoogleFailure = 3
     case GoogleCancel = 4
     case ZuzuFailure = 5
+    case ZuzuCancel = 6
 }
 
 class AmazonClientManager : NSObject {
@@ -67,7 +68,7 @@ class AmazonClientManager : NSObject {
     //Login Managers
     private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
-    private var zuzuAuthClient: ZuzuAuthenticator?
+    private var zuzuAuthClient: ZuzuAuthenticator = ZuzuAuthenticator()
     
     //Login View Controller
     private var loginViewController: UIViewController?
@@ -444,9 +445,6 @@ class AmazonClientManager : NSObject {
     
     override init() {
         super.init()
-        
-        /// Init Zuzu Authenticator for logging in
-        self.zuzuAuthClient = ZuzuAuthenticator()
         
         /// IdentityId will be changed when a new provider login is set
         NSNotificationCenter.defaultCenter().addObserver(self,
@@ -1108,24 +1106,82 @@ class AmazonClientManager : NSObject {
             return
         }
         
+        LoadingSpinner.shared.setDimBackground(true)
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setText("登入中")
+        LoadingSpinner.shared.startOnView(theViewController.view)
+        
         ///Bring-up sign-in UI
-        self.zuzuAuthClient?.loginWithZuzu(theViewController, handler: { (result, zuzuUser) in
+        self.zuzuAuthClient.loginWithZuzu(theViewController, handler: { (result, zuzuUser) in
+            
+            switch(result) {
+            case .Success:
+                if let zuzuUser = zuzuUser {
+                    UserDefaultsUtils.setUserProfile(zuzuUser)
+                    self.completeZuzuLogin()
+                } else {
+                    assert(false, "ZuzuUser should not be nil after login")
+                    self.failLogin(.ZuzuFailure)
+                }
+            case .Failed:
+                
+                Log.warning("Zuzu Login Failed")
+                self.failLogin(.ZuzuFailure)
+                
+            case .Cancelled:
+                
+                Log.warning("Zuzu Login Cancelled")
+                self.cancelLogin(.ZuzuCancel)
+            }
             
         })
     }
     
     func zuzuRegister(theViewController: UIViewController) {
         
+        LoadingSpinner.shared.setDimBackground(true)
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setText("註冊中")
+        LoadingSpinner.shared.startOnView(theViewController.view)
+        
         ///Bring-up register UI
-        self.zuzuAuthClient?.registerWithZuzu(theViewController, handler: { (result, zuzuUser) in
+        self.zuzuAuthClient.registerWithZuzu(theViewController, registerHandler: { (result) in
             
+            if(result == .Cancelled) {
+                LoadingSpinner.shared.stop()
+            }
+                                                
+            }, loginHandler: { (result, zuzuUser) in
+        
+                switch(result) {
+                case .Success:
+                    if let zuzuUser = zuzuUser {
+                        UserDefaultsUtils.setUserProfile(zuzuUser)
+                        self.completeZuzuLogin()
+                    } else {
+                        assert(false, "ZuzuUser should not be nil after login")
+                        self.failLogin(.ZuzuFailure)
+                    }
+                case .Failed:
+                    
+                    Log.warning("Zuzu Login Failed")
+                    self.failLogin(.ZuzuFailure)
+                    
+                case .Cancelled:
+                    
+                    Log.warning("Zuzu Login Cancelled")
+                    self.cancelLogin(.ZuzuCancel)
+                }
+        
         })
-
+        
     }
     
     func zuzuLogout() {
         Log.enter()
-        self.zuzuAuthClient?.logout()
+        self.zuzuAuthClient.logout()
         Log.exit()
     }
     
