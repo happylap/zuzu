@@ -113,16 +113,14 @@ class ZuzuWebService: NSObject
                 handler(userId: nil, zuzuToken: nil, error: error)
             }
             
-            if let zuzuToken = result as? String {
-                ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (result, error) in
-                    if let error = error {
-                        handler(userId: nil, zuzuToken: nil, error: error)
-                    }
-                    
-                    if let user = result {
-                        handler(userId: user.id, zuzuToken: zuzuToken, error: nil)
-                    }
-                })
+            
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
+                
+                handler(userId: json["userId"].string, zuzuToken: json["zuzuToken"].string, error: nil)
+            } else {
+                handler(userId: nil, zuzuToken: nil, error: error)
             }
         }
         
