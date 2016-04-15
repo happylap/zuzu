@@ -99,7 +99,7 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func loginByEmail(email: String, password: String, handler: (zuzuToken: String?, error: ErrorType?) -> Void) {
+    func loginByEmail(email: String, password: String, handler: (userId: String?, zuzuToken: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email), password: \(password)]")
         
         let timestamp = NSDate().timeIntervalSince1970.description
@@ -110,9 +110,19 @@ class ZuzuWebService: NSObject
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             if let error = error {
-                handler(zuzuToken: nil, error: error)
-            } else {
-                handler(zuzuToken: result as? String, error: nil)
+                handler(userId: nil, zuzuToken: nil, error: error)
+            }
+            
+            if let zuzuToken = result as? String {
+                ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (result, error) in
+                    if let error = error {
+                        handler(userId: nil, zuzuToken: nil, error: error)
+                    }
+                    
+                    if let user = result {
+                        handler(userId: user.id, zuzuToken: zuzuToken, error: nil)
+                    }
+                })
             }
         }
         

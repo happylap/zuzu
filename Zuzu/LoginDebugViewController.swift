@@ -484,7 +484,7 @@ class LoginDebugViewController: UIViewController {
             
         case "loginUser2":
             
-            ZuzuWebService.sharedInstance.loginByEmail(ApiTestConst.email2, password: ApiTestConst.password2, handler: { (zuzuToken, error) in
+            ZuzuWebService.sharedInstance.loginByEmail(ApiTestConst.email2, password: ApiTestConst.password2, handler: { (userId, zuzuToken, error) in
                 let title = "User"
                 let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n password: \(ApiTestConst.password2) \n\n result: \n"
                 
@@ -493,12 +493,12 @@ class LoginDebugViewController: UIViewController {
                 }
                 
                 if let zuzuToken = zuzuToken {
-                    self.showAlert(title, subTitle: "zuzuToken: \(zuzuToken)")
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(userId) zuzuToken: \(zuzuToken)")
                 }
             })
             
         case "retrieveCognitoToken":
-            ZuzuWebService.sharedInstance.loginByEmail(ApiTestConst.email2, password: ApiTestConst.password2, handler: { (zuzuToken, error) in
+            ZuzuWebService.sharedInstance.loginByEmail(ApiTestConst.email2, password: ApiTestConst.password2, handler: { (userId, zuzuToken, error) in
                 
                 
                 if let zuzuToken = zuzuToken {
