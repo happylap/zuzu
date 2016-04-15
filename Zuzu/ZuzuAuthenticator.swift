@@ -81,7 +81,7 @@ class ZuzuAccessToken {
 /// ZuzuAuthenticator
 class ZuzuAuthenticator {
     
-    typealias LoginCompletionHandler = (result: FormResult, zuzuUser: ZuzuUser?) -> ()
+    typealias LoginCompletionHandler = (result: FormResult, userId: String?) -> ()
     
     typealias RegisterCompletionHandler = (result: FormResult) -> ()
     
@@ -147,22 +147,22 @@ class ZuzuAuthenticator {
 
 extension ZuzuAuthenticator: FormViewControllerDelegate {
     
-    func onLoginDone(result: FormResult, zuzuUser: ZuzuUser?, zuzuToken: String?) {
+    func onLoginDone(result: FormResult, userId: String?, zuzuToken: String?) {
         
         Log.debug("zuzuToken = \(zuzuToken)")
         
         switch(result) {
         case .Success:
-            if let zuzuUser = zuzuUser, let zuzuToken = zuzuToken {
+            if let userId = userId, let zuzuToken = zuzuToken {
                 
                 saveZuzuToken(zuzuToken)
-                saveUserId(zuzuUser.id)
+                saveUserId(userId)
                 
             }
         default: break
         }
         
-        self.onLoginComplete?(result: result, zuzuUser: zuzuUser)
+        self.onLoginComplete?(result: result, userId: userId)
     }
     
     func onRegisterDone(result: FormResult) {

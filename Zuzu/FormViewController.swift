@@ -22,7 +22,7 @@ enum FormResult {
 
 protocol FormViewControllerDelegate {
     
-    func onLoginDone(result: FormResult, zuzuUser: ZuzuUser?, zuzuToken: String?)
+    func onLoginDone(result: FormResult, userId: String?, zuzuToken: String?)
     
     func onRegisterDone(result: FormResult)
     
@@ -204,6 +204,7 @@ class FormViewController: UIViewController {
         self.subTitleLabel.text = Message.Login.Existing.subTitle
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        self.passwordFormView?.formMode = .Login
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -220,6 +221,7 @@ class FormViewController: UIViewController {
         self.subTitleLabel.text = Message.Login.Password.subTitle
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        self.passwordFormView?.formMode = .Login
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -239,6 +241,7 @@ class FormViewController: UIViewController {
         self.subTitleLabel.text = Message.Register.NonExisting.subTitle
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        self.passwordFormView?.formMode = .Register
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -263,6 +266,7 @@ class FormViewController: UIViewController {
             }, completion: nil)
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
+        self.passwordFormView?.formMode = .Register
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -302,7 +306,7 @@ class FormViewController: UIViewController {
             
             switch(self.formMode) {
             case .Login:
-                self.delegate?.onLoginDone(FormResult.Cancelled, zuzuUser: nil, zuzuToken: nil)
+                self.delegate?.onLoginDone(FormResult.Cancelled, userId: nil, zuzuToken: nil)
             case .Register:
                 self.delegate?.onRegisterDone(FormResult.Cancelled)
             }
@@ -476,27 +480,17 @@ extension FormViewController: PasswordFormDelegate {
             
             if let password = password, email = self.userAccount {
                 
-                ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
+                ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
                     
-                    ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (zuzuUser, error) in
-                        
-                        // Finish login
-                        dismissModalStack(self, animated: true, completionBlock: nil)
-                        
-                        // Callback onZuzuLogin
-                        if let _ = error {
-                            self.delegate?.onLoginDone(.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
-                            
-                            return
-                        }
-                        
-                        if let zuzuUser = zuzuUser, let userToken = userToken {
-                            self.delegate?.onLoginDone(.Success, zuzuUser: zuzuUser, zuzuToken: userToken)
-                        } else {
-                            self.delegate?.onLoginDone(.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
-                        }
-                        
-                    })
+                    // Finish login
+                    dismissModalStack(self, animated: true, completionBlock: nil)
+
+                    if let _ = error {
+                        self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
+                        return
+                    }
+                    
+                    self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
                     
                 })
                 
@@ -524,30 +518,20 @@ extension FormViewController: PasswordFormDelegate {
                     
                     self.delegate?.onRegisterDone(FormResult.Success)
                     
-                    /// Login with registered user
-//                    ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userToken, error) in
-//                        
-//                        ZuzuWebService.sharedInstance.getUserByEmail(email, handler: { (zuzuUser, error) in
-//                            
-//                            // Finish register
-//                            dismissModalStack(self, animated: true, completionBlock: nil)
-//                            
-//                            // Callback onZuzuLogin
-//                            if let _ = error {
-//                                self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
-//                                
-//                                return
-//                            }
-//                            
-//                            if let zuzuUser = zuzuUser, let userToken = userToken {
-//                                self.delegate?.onLoginDone(LoginResult.Success, zuzuUser: zuzuUser, zuzuToken: userToken)
-//                            } else {
-//                                self.delegate?.onLoginDone(LoginResult.Failed, zuzuUser: zuzuUser, zuzuToken: userToken)
-//                            }
-//                            
-//                        })
-//                        
-//                    })
+                    /// Do login
+                    ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
+                        
+                        // Finish login
+                        dismissModalStack(self, animated: true, completionBlock: nil)
+                        
+                        if let _ = error {
+                            self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
+                            return
+                        }
+                        
+                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                        
+                    })
                     
                 })
             }
