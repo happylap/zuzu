@@ -81,12 +81,9 @@ class ZuzuAuthenticator {
     }
     
     func retrieveToken(userIdentifier: String, zuzuToken: String,
-                       identityId: String?, logins: [String: String],
+                       identityId: String?, logins: [NSObject : AnyObject],
                        handler: (identityId: String?, token: String?, error: ErrorType?) -> Void) {
-        
-        
-        /// Make sure is autenticated
-        
+
         /// Retrive tokens from Zuzu backend
         ZuzuWebService.sharedInstance.retrieveCognitoToken(userIdentifier, zuzuToken: zuzuToken, identityId: identityId, logins: logins) { (identityId, token, error) in
             

@@ -66,19 +66,26 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         let task = AWSTaskCompletionSource()
         
         if let userId = ZuzuAccessToken.currentAccessToken.userId,
-        let token = ZuzuAccessToken.currentAccessToken.token {
+            token = ZuzuAccessToken.currentAccessToken.token,
+            logins = self.logins {
+            
             self.authenticator.retrieveToken(userId, zuzuToken: token,
-                                             identityId: self.identityId, logins: self.logins) { (identityId, token, error) in
+                                             identityId: self.identityId, logins: logins) { (identityId, token, error) in
                                                 
                                                 if let identityId = identityId, token = token {
+                                                    
                                                     self.identityId = identityId
                                                     self._token = token
+                                                    
+                                                } else {
+                                                    
+                                                    task.setError(self.errorWithCode(5000, failureReason: "No Cognito token"))
                                                 }
                                                 
             }
+            
         }  else {
             task.setError(self.errorWithCode(5000, failureReason: "Not authorized to retrieve token"))
-            
         }
         
         return task.task

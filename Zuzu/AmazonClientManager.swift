@@ -606,8 +606,11 @@ class AmazonClientManager : NSObject {
                         Log.error("Reloading Google Session: Failure")
                     }
                 case Provider.ZUZU:
-                    // TODO
-                    Log.info("provider is \(provider.rawValue)")
+                    if(self.isLoggedInWithZuzu()) {
+                        self.reloadZuzuSession()
+                    } else {
+                        Log.error("Reloading Zuzu Session: Failure")
+                    }
                 }
             }
             
@@ -1100,6 +1103,10 @@ class AmazonClientManager : NSObject {
     func zuzuLogin(theViewController: UIViewController) {
         
         ///Check if already signed in
+        if self.isLoggedInWithZuzu() {
+            Log.debug("Zuzu Already Sign-in")
+            return
+        }
         
         ///Bring-up sign-in UI
         self.zuzuAuthClient?.loginWithZuzu(theViewController, handler: { (result, zuzuUser) in
