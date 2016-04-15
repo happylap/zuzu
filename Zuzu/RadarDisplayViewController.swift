@@ -122,9 +122,9 @@ class RadarDisplayViewController: UIViewController {
         
         let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務"
         
-        alertView.showCloseButton = true
+        alertView.showCloseButton = false
         
-        alertView.showInfo("開啟傳送通知", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock() {
+        alertView.addButton("知道了") {
             
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
                 /// Enable Local App Notifications
@@ -139,8 +139,10 @@ class RadarDisplayViewController: UIViewController {
             }else{
                 Log.error("appDelegate is nil")
             }
+
         }
-        
+
+        alertView.showInfo("開啟傳送通知", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     private func alertLocalNotificationDisabled() {
