@@ -528,16 +528,10 @@
                                 <color key="backgroundColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="ZCf-MP-qrQ" firstAttribute="leading" secondItem="yKK-2e-cms" secondAttribute="leading" constant="16" id="DDT-Ha-Npa"/>
-                                    <constraint firstItem="qjh-Ti-JPh" firstAttribute="centerY" secondItem="yKK-2e-cms" secondAttribute="centerY" id="Kfg-3x-A8j"/>
                                     <constraint firstItem="qjh-Ti-JPh" firstAttribute="centerX" secondItem="yKK-2e-cms" secondAttribute="centerX" id="WUr-hJ-E06"/>
                                     <constraint firstItem="ZCf-MP-qrQ" firstAttribute="centerY" secondItem="yKK-2e-cms" secondAttribute="centerY" constant="10" id="WYH-QR-bwu"/>
                                     <constraint firstItem="qjh-Ti-JPh" firstAttribute="centerY" secondItem="ZCf-MP-qrQ" secondAttribute="centerY" id="ZED-SD-ZsK"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="Kfg-3x-A8j"/>
-                                    </mask>
-                                </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f60-V5-59D" userLabel="Body View">
                                 <rect key="frame" x="0.0" y="84" width="414" height="652"/>
@@ -559,6 +553,9 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -578,9 +575,9 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="Oxg-ze-zp6"/>
                                                 <exclude reference="Dr3-YG-YDo"/>
                                                 <exclude reference="KtU-IF-Tb7"/>
+                                                <exclude reference="Oxg-ze-zp6"/>
                                                 <exclude reference="IZE-Te-gYw"/>
                                                 <exclude reference="ZTL-ND-4VY"/>
                                             </mask>
@@ -626,11 +623,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
-                        <outlet property="backButton" destination="ZCf-MP-qrQ" id="Kny-Cd-Hal"/>
-                        <outlet property="formContainerView" destination="IkU-sg-kmS" id="DYc-AC-wE1"/>
-                        <outlet property="mainTitleLabel" destination="sJQ-ww-LdG" id="t0L-tF-tzB"/>
-                        <outlet property="modalTitle" destination="qjh-Ti-JPh" id="TOm-5Q-y2r"/>
-                        <outlet property="subTitleLabel" destination="27c-c8-Az2" id="osy-ao-lNC"/>
+                        <outlet property="formContainerView" destination="IkU-sg-kmS" id="uqV-n4-5yQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dJN-ku-CU8" userLabel="First Responder" sceneMemberID="firstResponder"/>

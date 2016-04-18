@@ -48,6 +48,7 @@
 		2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegion.swift */; };
 		2F3B4AFD1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */; };
 		2F3B4AFF1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */; };
+		2F3B4B011CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B4B001CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift */; };
 		2F3F23AB1CAE181900D8C044 /* ADUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3F23AA1CAE181900D8C044 /* ADUtils.swift */; };
 		2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */; };
 		2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */; };
@@ -232,6 +233,7 @@
 		2F3901E11BD4C69A00B806B8 /* CityRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegion.swift; sourceTree = "<group>"; };
 		2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResetPasswordValidationFormView.xib; sourceTree = "<group>"; };
 		2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		2F3B4B001CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordValidationFormView.swift; sourceTree = "<group>"; };
 		2F3F23AA1CAE181900D8C044 /* ADUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADUtils.swift; sourceTree = "<group>"; };
 		2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailViewController.swift; sourceTree = "<group>"; };
 		2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailTitleViewCell.swift; sourceTree = "<group>"; };
@@ -574,6 +576,7 @@
 				2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */,
 				2F66375E1CB77D9900A51095 /* PasswordFormView.swift */,
 				2F6637601CB7859100A51095 /* EmailFormView.swift */,
+				2F3B4B001CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift */,
 				2F6637661CB7A27000A51095 /* ContinueSocialLoginView.swift */,
 			);
 			name = View;
@@ -1139,6 +1142,7 @@
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
 				2F6637671CB7A27000A51095 /* ContinueSocialLoginView.swift in Sources */,
+				2F3B4B011CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift in Sources */,
 				2FBC05581BDF15710035652D /* SearchResultViewController.swift in Sources */,
 				14914FAE1C28304200025AC1 /* CollectionHouseItemDao.swift in Sources */,
 				2FCD15FF1C54906F00A9C1E2 /* LoggerExtensions.swift in Sources */,
