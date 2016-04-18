@@ -46,6 +46,7 @@
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
 		2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F33E0451BD918E300A7D6CD /* Extensions.swift */; };
 		2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegion.swift */; };
+		2F3B4AFD1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */; };
 		2F3F23AB1CAE181900D8C044 /* ADUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3F23AA1CAE181900D8C044 /* ADUtils.swift */; };
 		2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */; };
 		2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */; };
@@ -228,6 +229,7 @@
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F33E0451BD918E300A7D6CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2F3901E11BD4C69A00B806B8 /* CityRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegion.swift; sourceTree = "<group>"; };
+		2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResetPasswordValidationFormView.xib; sourceTree = "<group>"; };
 		2F3F23AA1CAE181900D8C044 /* ADUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADUtils.swift; sourceTree = "<group>"; };
 		2F4234141BF1CB5D00385C9A /* HouseDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailViewController.swift; sourceTree = "<group>"; };
 		2F4234161BF1CD2900385C9A /* HouseDetailTitleViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailTitleViewCell.swift; sourceTree = "<group>"; };
@@ -566,6 +568,7 @@
 			children = (
 				2F66375C1CB77B8900A51095 /* PasswordFormView.xib */,
 				2F6637621CB785BC00A51095 /* EmailFormView.xib */,
+				2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */,
 				2F6637641CB7A26300A51095 /* ContinueSocialLoginView.xib */,
 				2F66375E1CB77D9900A51095 /* PasswordFormView.swift */,
 				2F6637601CB7859100A51095 /* EmailFormView.swift */,
@@ -900,6 +903,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F6637651CB7A26300A51095 /* ContinueSocialLoginView.xib in Resources */,
+				2F3B4AFD1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib in Resources */,
 				2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */,
 				2FBF52581C04BFF000B3F47B /* InfoPlist.strings in Resources */,
 				2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */,
