@@ -87,16 +87,18 @@ class MainTabViewController: UITabBarController {
         
         if let userInfo = notification.userInfo,
             let tabIndex = userInfo["targetTab"] as? Int{
-                
-                // dismiss all view controllers in the navigation stack
-                if let viewControllers = self.viewControllers as? [UINavigationController] {
+            
+                if let viewControllers = self.viewControllers{
                     for vc in viewControllers {
-                        vc.dismissViewControllerAnimated(true, completion: nil)
-                        //vc.popToRootViewControllerAnimated(false)
+                        if vc is UINavigationController{
+                            vc.dismissViewControllerAnimated(true, completion: nil)
+                            //vc.popToRootViewControllerAnimated(false)
+                        }
                     }
                 }
-                
-                self.selectedIndex = tabIndex
+            
+            // dismiss all view controllers in the navigation stack
+            self.selectedIndex = tabIndex
         }
     }
 }
