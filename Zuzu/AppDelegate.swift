@@ -283,8 +283,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if badgeNumber > 0 {
                 if rootViewController.selectedIndex != notifyTabIndex{
                     updateTabBarBadge(application)
-                    Log.debug("set notification tab as selected")
-                    rootViewController.selectedIndex = notifyTabIndex
+                    Log.debug("postNotificationName: switchToTab")
+                    NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : notifyTabIndex])
+                    
+                    //Log.debug("set notification tab as selected")
+                    //rootViewController.selectedIndex = notifyTabIndex
                 }
             }
             

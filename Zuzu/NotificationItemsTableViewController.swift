@@ -86,6 +86,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        self.tabBarController?.tabBarHidden = false
         Log.enter()
         Log.debug("set badge as 0")
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
