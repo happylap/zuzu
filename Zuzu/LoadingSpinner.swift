@@ -9,7 +9,7 @@
 import Foundation
 import MBProgressHUD
 
-public class LoadingSpinner{
+public class LoadingSpinner {
     
     var dialog : MBProgressHUD?
     private static let defaultGraceTime:Float = 0.6
@@ -25,12 +25,32 @@ public class LoadingSpinner{
     private var mode: MBProgressHUDMode?
     private var customView: UIView?
     
+    var tag:String
+    
+    static var instanceMap = [String : LoadingSpinner]()
     
     class var shared: LoadingSpinner {
         struct Static {
             static let instance = LoadingSpinner()
         }
         return Static.instance
+    }
+    
+    init(tag:String = "Global") {
+        self.tag = tag
+    }
+    
+    public static func getInstance(tag:String) -> LoadingSpinner {
+        
+        if let instance = instanceMap[tag] {
+            return instance
+        } else {
+            let instance = LoadingSpinner(tag: tag)
+            instance.tag = tag
+            instanceMap[tag] = instance
+            return instance
+        }
+        
     }
     
     public func setDimBackground(status:Bool) {
@@ -111,6 +131,12 @@ public class LoadingSpinner{
             
             dialog.show(animated)
         }
+    }
+    
+    public func stopAndRemove(animated: Bool = true, afterDelay: NSTimeInterval = 0) {
+        self.stop(animated, afterDelay: afterDelay)
+        
+        LoadingSpinner.instanceMap.removeValueForKey(self.tag)
     }
     
     public func stop(animated: Bool = true, afterDelay: NSTimeInterval = 0) {
