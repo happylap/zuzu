@@ -1119,6 +1119,8 @@ class AmazonClientManager : NSObject {
             switch(result) {
             case .Success:
                 
+                LoadingSpinner.shared.stop(afterDelay: 1.0)
+                
                 //Set current login provider
                 UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
                 
@@ -1158,7 +1160,7 @@ class AmazonClientManager : NSObject {
         LoadingSpinner.shared.setDimBackground(true)
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setOpacity(0.8)
-        LoadingSpinner.shared.setText("註冊中")
+        LoadingSpinner.shared.setText("處理中")
         LoadingSpinner.shared.startOnView(theViewController.view)
         
         ///Bring-up register UI
@@ -1172,7 +1174,9 @@ class AmazonClientManager : NSObject {
         
                 switch(result) {
                 case .Success:
-
+                    
+                    LoadingSpinner.shared.stop(afterDelay: 1.0)
+                    
                     //Set current login provider
                     UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
                     

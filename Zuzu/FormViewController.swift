@@ -398,12 +398,12 @@ extension FormViewController: EmailFormDelegate {
     
     func onEmailEntered(email:String?) {
         
-        LoadingSpinner.shared.setDimBackground(true)
-        LoadingSpinner.shared.setGraceTime(0.6)
-        LoadingSpinner.shared.setMinShowTime(1.0)
-        LoadingSpinner.shared.setOpacity(0.8)
-        LoadingSpinner.shared.setText("處理中")
-        LoadingSpinner.shared.startOnView(self.view)
+        let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
+        loadingSpinner.setDimBackground(true)
+        loadingSpinner.setGraceTime(0.6)
+        loadingSpinner.setMinShowTime(1.0)
+        loadingSpinner.setOpacity(0.8)
+        loadingSpinner.startOnView(self.view)
         
         // Check user type
         if let email = email {
@@ -412,7 +412,7 @@ extension FormViewController: EmailFormDelegate {
             
             ZuzuWebService.sharedInstance.checkEmail(email) { (emailExisted, provider, error) in
                 
-                LoadingSpinner.shared.stop()
+                loadingSpinner.stopAndRemove()
                 
                 if let _ = error {
                     
@@ -474,18 +474,18 @@ extension FormViewController: PasswordFormDelegate {
         switch(self.formMode) {
         case .Login:
             
-            LoadingSpinner.shared.setDimBackground(true)
-            LoadingSpinner.shared.setGraceTime(0.6)
-            LoadingSpinner.shared.setMinShowTime(1.0)
-            LoadingSpinner.shared.setOpacity(0.8)
-            LoadingSpinner.shared.setText("驗證中")
-            LoadingSpinner.shared.startOnView(self.view)
+            let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
+            loadingSpinner.setDimBackground(true)
+            loadingSpinner.setGraceTime(0.6)
+            loadingSpinner.setMinShowTime(1.0)
+            loadingSpinner.setOpacity(0.8)
+            loadingSpinner.startOnView(self.view)
             
             if let password = password, email = self.userAccount {
                 
                 ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
                     
-                    LoadingSpinner.shared.stop()
+                    loadingSpinner.stopAndRemove()
                     
                     /// Incorrect password
                     if let myerror = error where myerror._code == 500 {
@@ -501,8 +501,9 @@ extension FormViewController: PasswordFormDelegate {
                     }
                     
                     // Finish login
-                    dismissModalStack(self, animated: true, completionBlock: nil)
-                    self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                    dismissModalStack(self, animated: true, completionBlock: {
+                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                    })
                     
                 })
                 
@@ -514,12 +515,19 @@ extension FormViewController: PasswordFormDelegate {
             user.email = self.userAccount
             user.provider = Provider.ZUZU
             
+            let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
+            loadingSpinner.setDimBackground(true)
+            loadingSpinner.setGraceTime(0.6)
+            loadingSpinner.setMinShowTime(1.0)
+            loadingSpinner.setOpacity(0.8)
+            loadingSpinner.startOnView(self.view)
+            
             if let password = password, email = user.email {
                 ZuzuWebService.sharedInstance.registerUser(user, password: password, handler: { (userId, error) in
                     
                     if let _ = error {
                         
-                        LoadingSpinner.shared.stop()
+                        loadingSpinner.stopAndRemove()
                         
                         self.alertRegisterFailure()
                         
@@ -534,14 +542,17 @@ extension FormViewController: PasswordFormDelegate {
                     ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
                         
                         // Finish login
-                        dismissModalStack(self, animated: true, completionBlock: nil)
-                        
+                        loadingSpinner.stopAndRemove()
+
                         if let _ = error {
                             self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
                             return
                         }
                         
-                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                        // Finish login
+                        dismissModalStack(self, animated: true, completionBlock: {
+                            self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                        })
                         
                     })
                     

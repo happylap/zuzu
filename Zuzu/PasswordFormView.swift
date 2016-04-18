@@ -48,7 +48,8 @@ class PasswordFormView: UIView {
         didSet {
             
             passwordTextField.tintColor = UIColor.grayColor()
-            passwordTextField.addTarget(self, action: #selector(PasswordFormView.textFieldDidChange(_:)), forControlEvents: UIControlEvents.TouchDown)
+            passwordTextField.addTarget(self, action: #selector(PasswordFormView.textFieldDidChange(_:)),
+                                        forControlEvents: UIControlEvents.EditingChanged)
         }
     }
     
@@ -95,7 +96,7 @@ class PasswordFormView: UIView {
     // MARK: - Public APIs
     func alertIncorrectPassword() {
         let errors = [self.passwordTextField : ValidationError(textField: self.passwordTextField, errorLabel: self.formValidationError, error: "您輸入的密碼有誤，請再試一次，謝謝")]
-        
+        validator.errors = errors
         self.validationFailed(errors)
     }
     
