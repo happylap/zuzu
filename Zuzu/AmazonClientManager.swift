@@ -1173,6 +1173,9 @@ class AmazonClientManager : NSObject {
                 switch(result) {
                 case .Success:
 
+                    //Set current login provider
+                    UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
+                    
                     if let userId = userId {
                         ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
                             

@@ -478,14 +478,13 @@ extension FormViewController: PasswordFormDelegate {
                 
                 ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
                     
-                    // Finish login
-                    dismissModalStack(self, animated: true, completionBlock: nil)
-
                     if let _ = error {
                         self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
                         return
                     }
                     
+                    // Finish login
+                    dismissModalStack(self, animated: true, completionBlock: nil)
                     self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
                     
                 })
