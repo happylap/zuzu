@@ -203,8 +203,7 @@ class FormViewController: UIViewController {
         self.mainTitleLabel.text = Message.Login.Existing.mainTitle
         self.subTitleLabel.text = Message.Login.Existing.subTitle
         
-        self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
-        self.passwordFormView?.formMode = .Login
+        self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -220,8 +219,7 @@ class FormViewController: UIViewController {
         self.mainTitleLabel.text = Message.Login.Password.mainTitle
         self.subTitleLabel.text = Message.Login.Password.subTitle
         
-        self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
-        self.passwordFormView?.formMode = .Login
+        self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -241,7 +239,6 @@ class FormViewController: UIViewController {
         self.subTitleLabel.text = Message.Register.NonExisting.subTitle
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
-        self.passwordFormView?.formMode = .Register
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
@@ -266,7 +263,6 @@ class FormViewController: UIViewController {
             }, completion: nil)
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
-        self.passwordFormView?.formMode = .Register
         
         if let emailFormView = emailFormView, let passwordFormView = self.passwordFormView {
             
