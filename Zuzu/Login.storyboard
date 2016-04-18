@@ -623,6 +623,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
+                        <outlet property="backButton" destination="ZCf-MP-qrQ" id="uWW-TR-g55"/>
                         <outlet property="formContainerView" destination="IkU-sg-kmS" id="uqV-n4-5yQ"/>
                     </connections>
                 </viewController>

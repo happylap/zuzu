@@ -11,6 +11,17 @@ class ForgotPasswordViewController: UIViewController {
 
     @IBOutlet weak var formContainerView: UIView!
     
+    @IBOutlet weak var backButton: UIButton! {
+        
+        didSet {
+            
+            backButton.tintColor = UIColor.whiteColor()
+            
+            backButton.addTarget(self, action: #selector(ForgotPasswordViewController.onBackButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            
+        }
+        
+    }
     private var resetPasswordValidationFormView:ResetPasswordValidationFormView?
     
     // MARK: Private Utils
@@ -22,6 +33,15 @@ class ForgotPasswordViewController: UIViewController {
             resetPasswordValidationFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
             self.formContainerView.addSubview(resetPasswordValidationFormView)
         }
+    }
+    
+    // MARK: - Action Handlers
+    func onBackButtonTouched(sender: UIButton) {
+        
+        self.dismissViewControllerAnimated(true) { () -> Void in
+
+        }
+        
     }
     
     // MARK: - Life Cycle
