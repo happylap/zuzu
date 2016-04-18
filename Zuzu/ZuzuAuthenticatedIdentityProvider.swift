@@ -22,7 +22,7 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
     }
     
     override var token: String {
-        if (!authenticatedWithProvider) {
+        if (!authenticatedWithZuzuProvider) {
             return super.token
         } else {
             return _token
@@ -30,7 +30,7 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
     }
     
     /// Check if current logins contain custom authentication
-    private var authenticatedWithProvider: Bool {
+    private var authenticatedWithZuzuProvider: Bool {
         get {
             return self.logins[self.providerName] != nil
         }
@@ -40,12 +40,12 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         
         if (self.identityId != nil) {
             // already has identityId, just return it
-            
+            Log.debug("Return cached identityId = \(self.identityId)")
             return AWSTask(result: self.identityId)
             
-        } else if (!authenticatedWithProvider) {
+        } else if (!authenticatedWithZuzuProvider) {
             // not authenticated with our developer provider
-            
+            Log.debug("Get social identityId = \(self.identityId)")
             return super.getIdentityId()
             
         }
@@ -58,7 +58,8 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
     override func refresh() -> AWSTask! {
         
         // not authenticated with our developer provider
-        if (!authenticatedWithProvider) {
+        if (!authenticatedWithZuzuProvider) {
+            Log.debug("Refresh social token")
             return super.refresh()
         }
         
@@ -69,6 +70,8 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
         if let userId = ZuzuAccessToken.currentAccessToken.userId,
             token = ZuzuAccessToken.currentAccessToken.token,
             logins = self.logins {
+            
+            Log.info("retrieveToken: userId = \(userId), token = \(token), logins = \(logins)")
             
             self.authenticator.retrieveToken(userId, zuzuToken: token,
                                              identityId: self.identityId, logins: logins) { (identityId, token, error) in
@@ -82,12 +85,17 @@ class ZuzuAuthenticatedIdentityProvider : AWSAbstractCognitoIdentityProvider {
                                                     
                                                 } else {
                                                     
+                                                    Log.error("retrieveToken error: error = \(error)")
+                                                    
                                                     task.setError(self.errorWithCode(5000, failureReason: "No Cognito token"))
                                                 }
                                                 
             }
             
         }  else {
+            
+            Log.error("Not authorized: userId = \(ZuzuAccessToken.currentAccessToken.userId), token = \(ZuzuAccessToken.currentAccessToken.token), logins = \(self.logins)")
+            
             task.setError(self.errorWithCode(5000, failureReason: "Not authorized to retrieve token"))
         }
         

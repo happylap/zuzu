@@ -14,6 +14,7 @@ import SwiftyJSON
 private let Log = Logger.defaultLogger
 
 // MARK: Zuzu Auth Data Storage
+/// Zuzu Token
 private func saveZuzuToken(token: String) {
     let userDefaults = NSUserDefaults.standardUserDefaults()
     userDefaults.setObject(token, forKey: ZuzuAuthenticator.userLoginTokenKey)
@@ -33,6 +34,7 @@ private func getZuzuToken() -> String? {
     return currentUserId
 }
 
+/// Zuzu Id
 private func saveUserId(token: String) {
     let userDefaults = NSUserDefaults.standardUserDefaults()
     userDefaults.setObject(token, forKey: ZuzuAuthenticator.userLoginIdKey)
@@ -75,6 +77,7 @@ class ZuzuAccessToken {
         }
     }
     
+    //Not in use yet
     var expirationDate:NSDate?
 }
 
@@ -95,6 +98,7 @@ class ZuzuAuthenticator {
     
     /// Bring Up Zuzu login/Register UI
     func loginWithZuzu(fromViewController: UIViewController, handler: LoginCompletionHandler) {
+        Log.enter()
         
         onLoginComplete = handler
         
@@ -106,10 +110,13 @@ class ZuzuAuthenticator {
             vc.delegate = self
             fromViewController.presentViewController(vc, animated: true, completion: nil)
         }
+        
+        Log.exit()
     }
     
     func registerWithZuzu(fromViewController: UIViewController,
                           registerHandler: RegisterCompletionHandler, loginHandler: LoginCompletionHandler) {
+        Log.enter()
         
         onLoginComplete = loginHandler
         onRegisterComplete = registerHandler
@@ -122,34 +129,45 @@ class ZuzuAuthenticator {
             vc.delegate = self
             fromViewController.presentViewController(vc, animated: true, completion: nil)
         }
+        
+        Log.exit()
     }
     
     /// Logout Zuzu account
     func logout() {
+        Log.enter()
+        
         clearZuzuToken()
         clearUserId()
+        
+        Log.exit()
+
     }
     
+    /// Retrive tokens from Zuzu backend
     func retrieveToken(userIdentifier: String, zuzuToken: String,
                        identityId: String?, logins: [NSObject : AnyObject],
                        handler: (identityId: String?, token: String?, error: ErrorType?) -> Void) {
-
-        /// Retrive tokens from Zuzu backend
+        Log.enter()
+        
         ZuzuWebService.sharedInstance.retrieveCognitoToken(userIdentifier, zuzuToken: zuzuToken, identityId: identityId, logins: logins) { (identityId, token, error) in
             
             handler(identityId: identityId, token: token, error: error)
             
         }
         
+        Log.exit()
+
     }
     
 }
 
+// MARK: FormViewControllerDelegate
 extension ZuzuAuthenticator: FormViewControllerDelegate {
     
     func onLoginDone(result: FormResult, userId: String?, zuzuToken: String?) {
         
-        Log.debug("zuzuToken = \(zuzuToken)")
+        Log.debug("userId = \(userId), zuzuToken = \(zuzuToken)")
         
         switch(result) {
         case .Success:
@@ -166,7 +184,7 @@ extension ZuzuAuthenticator: FormViewControllerDelegate {
     }
     
     func onRegisterDone(result: FormResult) {
-        Log.debug("status = \(result)")
+        Log.debug("result = \(result)")
         
         self.onRegisterComplete?(result: result)
     }
