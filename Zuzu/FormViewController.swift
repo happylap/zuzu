@@ -134,7 +134,8 @@ class FormViewController: UIViewController {
             case .Login:
                 backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             case .Register:
-                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+                backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+//                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             }
             
             
@@ -216,8 +217,14 @@ class FormViewController: UIViewController {
     
     private func continueLogin() {
         self.modalTitle.text = Message.Login.modalTitle
-        self.mainTitleLabel.text = Message.Login.Password.mainTitle
-        self.subTitleLabel.text = Message.Login.Password.subTitle
+        
+        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.mainTitleLabel.text = Message.Register.Password.mainTitle
+            }, completion: nil)
+        
+        UIView.transitionWithView(self.subTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.subTitleLabel.text = Message.Register.Password.subTitle
+            }, completion: nil)
         
         self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
         
@@ -269,12 +276,12 @@ class FormViewController: UIViewController {
             passwordFormView.delegate = self
             passwordFormView.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
             
-            //emailFormView.removeFromSuperview()
-            //self.formContainerView.addSubview(passwordFormView)
+            emailFormView.removeFromSuperview()
+            self.formContainerView.addSubview(passwordFormView)
             
-            UIView.transitionFromView(emailFormView,
-                                      toView: passwordFormView,
-                                      duration: 0.6, options: .TransitionFlipFromRight, completion: nil)
+            //            UIView.transitionFromView(emailFormView,
+            //                                      toView: passwordFormView,
+            //                                      duration: 0.6, options: .TransitionFlipFromRight, completion: nil)
         }
     }
     
@@ -543,7 +550,7 @@ extension FormViewController: PasswordFormDelegate {
                         
                         // Finish login
                         loadingSpinner.stopAndRemove()
-
+                        
                         if let _ = error {
                             self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
                             return
