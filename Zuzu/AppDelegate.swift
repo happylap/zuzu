@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func updateTabBarBadge(application: UIApplication){
         Log.enter()
         let badgeNumber = application.applicationIconBadgeNumber
-        Log.warning("badgeNumber: \(badgeNumber)")
+        Log.debug("badgeNumber: \(badgeNumber)")
         
         if badgeNumber > 0{
             let rootViewController = self.window?.rootViewController as! UITabBarController!
@@ -102,10 +102,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
             Log.debug("set tab bar badge number as \(badgeNumber)")
             tabItem.badgeValue = "\(badgeNumber)"
-            Log.debug("post notification: receiveNotifyItems in updateTabBarBadge()")
+            Log.debug("post notification: receiveNotifyItems")
             NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        }else{
+            Log.debug("badgeNumber <=0 ")
         }
-        Log.debug("don't need to set tab bar badge number")
         
         Log.exit()
     }
@@ -237,6 +238,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         Log.enter()
+        Log.debug("application badge = \(application.applicationIconBadgeNumber)")
         
         let rootViewController = self.window?.rootViewController as! UITabBarController!
         let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
@@ -246,6 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             if rootViewController.selectedIndex == notifyTabIndex{
                 Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
+                
                 NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
                 
                 if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
@@ -256,6 +259,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
                     if let badge = aps["badge"] as? Int {
+                        Log.debug("aps[badge] = \(badge)")
                         application.applicationIconBadgeNumber = badge
                         updateTabBarBadge(application)
                         
@@ -266,14 +270,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         }else{
-            Log.debug("set notification tab as selected")
-            
             if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
                 GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
                                    action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
             }
             
-            rootViewController.selectedIndex = notifyTabIndex
+            
+            let rootViewController = self.window?.rootViewController as! UITabBarController!
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+            
+            if badgeNumber > 0 {
+                if rootViewController.selectedIndex != notifyTabIndex{
+                    updateTabBarBadge(application)
+                    Log.debug("set notification tab as selected")
+                    rootViewController.selectedIndex = notifyTabIndex
+                }
+            }
+            
         }
         
         Log.exit()
@@ -282,6 +296,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: UIApplicationDelegate App Life Cycle
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
         Log.enter()
         
         /// Initial Setup
@@ -334,7 +349,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        
         Log.enter()
+        
+        let rootViewController = self.window?.rootViewController as! UITabBarController!
+        let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+        
+        if badgeNumber > 0 {
+            if rootViewController.selectedIndex == notifyTabIndex{
+                UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+            }else{
+                self.updateTabBarBadge(application)
+            }
+        }
         
         /// Try to trigger the timer for refreshing token
         AmazonClientManager.sharedInstance.triggerTokenRefreshingTimer()
