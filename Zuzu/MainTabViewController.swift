@@ -73,6 +73,8 @@ class MainTabViewController: UITabBarController {
         
         self.initTabBar()
         
+        self.showBadgeNumber()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -158,6 +160,15 @@ extension MainTabViewController:  UITabBarControllerDelegate {
         }
         
         return true
+    }
+    
+    func showBadgeNumber() -> Void {
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+        if badgeNumber > 0 {
+            let tabArray = self.tabBar.items as NSArray!
+            let tabItem = tabArray.objectAtIndex(MainTabConstants.NOTIFICATION_TAB_INDEX) as! UITabBarItem
+            tabItem.badgeValue = "\(badgeNumber)"
+        }
     }
 }
 
