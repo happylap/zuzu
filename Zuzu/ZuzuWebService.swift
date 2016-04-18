@@ -111,16 +111,19 @@ class ZuzuWebService: NSObject
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             if let error = error {
                 handler(userId: nil, zuzuToken: nil, error: error)
+                return
             }
             
+            if(result == nil) {
+                Log.debug("HTTP no data")
+                handler(userId: nil, zuzuToken: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
+                return
+            }
             
             if let value = result {
                 let json = JSON(value)
                 Log.debug("Result: \(json)")
-                
                 handler(userId: json["userId"].string, zuzuToken: json["zuzuToken"].string, error: nil)
-            } else {
-                handler(userId: nil, zuzuToken: nil, error: error)
             }
         }
         
