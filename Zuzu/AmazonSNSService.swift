@@ -96,14 +96,16 @@ class AmazonSNSService : NSObject {
                     Log.debug("token: \(getEndpointResponse.attributes!["Token"])")
                     Log.debug("Enabled: \(getEndpointResponse.attributes!["Enabled"])")
                     Log.debug("CustomUserData: \(getEndpointResponse.attributes!["CustomUserData"])")
-                    var isUpdate = false
+                    self.updateEndpoint(deviceTokenString, endpointArn:endpointArn!, userData: userId)
+                    
+                    /*var isUpdate = false
                     if let lastToken = getEndpointResponse.attributes?["Token"]{
                         if deviceTokenString != lastToken{
                             isUpdate = true
                         }
                     }
                     
-                    /*if let enabled = getEndpointResponse.attributes?["Enabled"]{
+                    if let enabled = getEndpointResponse.attributes?["Enabled"]{
                         Log.debug("enabled:\(enabled)")
                         if enabled == "false"{
                             isUpdate = true
@@ -114,11 +116,11 @@ class AmazonSNSService : NSObject {
                     if customUserData == nil{
                         customUserData = userId
                         isUpdate = true
-                    }*/
+                    }
                     
                     if isUpdate == true{
                         self.updateEndpoint(deviceTokenString, endpointArn:endpointArn!, userData: userId)
-                    }
+                    }*/
                 }
                 
                 return nil
@@ -154,6 +156,7 @@ class AmazonSNSService : NSObject {
             if task.error != nil {
                 Log.debug("Error: \(task.error)")
             } else {
+                Log.debug("update result: \(task.result)")
                 Log.debug("update SNS endpoint successful")
             }
             Log.exit()
