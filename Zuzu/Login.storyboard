@@ -486,7 +486,7 @@
         <!--Form View-->
         <scene sceneID="Hxq-ze-8aj">
             <objects>
-                <viewController storyboardIdentifier="forgotPasswordFormView" title="Form View" id="UD1-RS-2g6" customClass="FormViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="forgotPasswordFormView" title="Form View" id="UD1-RS-2g6" customClass="ForgotPasswordViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="F1P-SO-bxr"/>
                         <viewControllerLayoutGuide type="bottom" id="3Ut-bl-vA1"/>
