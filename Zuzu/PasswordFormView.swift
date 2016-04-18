@@ -92,6 +92,13 @@ class PasswordFormView: UIView {
         self.addSubview(view)
     }
     
+    // MARK: - Public APIs
+    func alertIncorrectPassword() {
+        let errors = [self.passwordTextField : ValidationError(textField: self.passwordTextField, errorLabel: self.formValidationError, error: "您輸入的密碼有誤，請再試一次，謝謝")]
+        
+        self.validationFailed(errors)
+    }
+    
     // MARK: - Action Handlers
     func onContinueButtonTouched(sender: UIButton) {
         
@@ -142,7 +149,7 @@ extension PasswordFormView: ValidationDelegate {
     
     func validationFailed(errors:[UITextField:ValidationError]) {
         // turn the fields to red
-        for (field, error) in validator.errors {
+        for (field, error) in errors {
             field.layer.borderColor = UIColor.redColor().CGColor
             field.layer.borderWidth = 1.0
             error.errorLabel?.text = error.errorMessage // works if you added labels

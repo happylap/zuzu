@@ -474,10 +474,27 @@ extension FormViewController: PasswordFormDelegate {
         switch(self.formMode) {
         case .Login:
             
+            LoadingSpinner.shared.setDimBackground(true)
+            LoadingSpinner.shared.setGraceTime(0.6)
+            LoadingSpinner.shared.setMinShowTime(1.0)
+            LoadingSpinner.shared.setOpacity(0.8)
+            LoadingSpinner.shared.setText("驗證中")
+            LoadingSpinner.shared.startOnView(self.view)
+            
             if let password = password, email = self.userAccount {
                 
                 ZuzuWebService.sharedInstance.loginByEmail(email, password: password, handler: { (userId, userToken, error) in
                     
+                    LoadingSpinner.shared.stop()
+                    
+                    /// Incorrect password
+                    if let myerror = error where myerror._code == 500 {
+                        
+                        self.passwordFormView?.alertIncorrectPassword()
+                        return
+                    }
+                    
+                    /// Other abnormal server state
                     if let _ = error {
                         self.delegate?.onLoginDone(.Failed, userId: nil, zuzuToken: nil)
                         return
