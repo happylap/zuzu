@@ -47,6 +47,7 @@ class PasswordFormView: UIView {
     @IBOutlet weak var passwordTextField: UITextField! {
         didSet {
             
+            passwordTextField.becomeFirstResponder()
             passwordTextField.tintColor = UIColor.grayColor()
             passwordTextField.addTarget(self, action: #selector(PasswordFormView.textFieldDidChange(_:)),
                                         forControlEvents: UIControlEvents.EditingChanged)

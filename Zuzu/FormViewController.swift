@@ -204,10 +204,12 @@ class FormViewController: UIViewController {
         
         self.modalTitle.text = Message.Login.modalTitle
         
-        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.mainTitleLabel.text = Message.Login.Existing.mainTitle
-            self.subTitleLabel.text = Message.Login.Existing.subTitle
-            }, completion: nil)
+        if let parentView = self.mainTitleLabel.superview {
+            UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                self.mainTitleLabel.text = Message.Login.Existing.mainTitle
+                self.subTitleLabel.text = Message.Login.Existing.subTitle
+                }, completion: nil)
+        }
         
         self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
         
@@ -223,10 +225,12 @@ class FormViewController: UIViewController {
     private func continueLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         
-        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.mainTitleLabel.text = Message.Login.Password.mainTitle
-            self.subTitleLabel.text = Message.Login.Password.subTitle
-            }, completion: nil)
+        if let parentView = self.mainTitleLabel.superview {
+            UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                self.mainTitleLabel.text = Message.Login.Password.mainTitle
+                self.subTitleLabel.text = Message.Login.Password.subTitle
+                }, completion: nil)
+        }
         
         self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
         
@@ -245,10 +249,12 @@ class FormViewController: UIViewController {
         
         self.modalTitle.text = Message.Register.modalTitle
         
-        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.mainTitleLabel.text = Message.Register.NonExisting.mainTitle
-            self.subTitleLabel.text = Message.Register.NonExisting.subTitle
-            }, completion: nil)
+        if let parentView = self.mainTitleLabel.superview {
+            UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                self.mainTitleLabel.text = Message.Register.NonExisting.mainTitle
+                self.subTitleLabel.text = Message.Register.NonExisting.subTitle
+                }, completion: nil)
+        }
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
         
@@ -265,10 +271,12 @@ class FormViewController: UIViewController {
         
         self.modalTitle.text = Message.Register.modalTitle
         
-        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.mainTitleLabel.text = Message.Register.Password.mainTitle
-            self.subTitleLabel.text = Message.Register.Password.subTitle
-            }, completion: nil)
+        if let parentView = self.mainTitleLabel.superview {
+            UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                self.mainTitleLabel.text = Message.Register.Password.mainTitle
+                self.subTitleLabel.text = Message.Register.Password.subTitle
+                }, completion: nil)
+        }
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
         
@@ -289,10 +297,12 @@ class FormViewController: UIViewController {
     private func continueSocialLogin() {
         self.modalTitle.text = Message.Login.modalTitle
         
-        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.mainTitleLabel.text = Message.Login.ExistingSocial.mainTitle
-            self.subTitleLabel.text = Message.Login.ExistingSocial.subTitle
-            }, completion: nil)
+        if let parentView = self.mainTitleLabel.superview {
+            UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                self.mainTitleLabel.text = Message.Login.ExistingSocial.mainTitle
+                self.subTitleLabel.text = Message.Login.ExistingSocial.subTitle
+                }, completion: nil)
+        }
         
         emailFormView?.removeFromSuperview()
         
@@ -412,10 +422,10 @@ extension FormViewController: EmailFormDelegate {
     func onEmailEntered(email:String?) {
         
         let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
-        loadingSpinner.setDimBackground(true)
+        loadingSpinner.setDimBackground(false)
         loadingSpinner.setGraceTime(0.6)
-        loadingSpinner.setMinShowTime(1.0)
-        loadingSpinner.setOpacity(0.8)
+        loadingSpinner.setMinShowTime(0.6)
+        loadingSpinner.setOpacity(0.6)
         loadingSpinner.startOnView(self.view)
         
         // Check user type
@@ -485,10 +495,10 @@ extension FormViewController: PasswordFormDelegate {
         case .Login:
             
             let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
-            loadingSpinner.setDimBackground(true)
+            loadingSpinner.setDimBackground(false)
             loadingSpinner.setGraceTime(0.6)
-            loadingSpinner.setMinShowTime(1.0)
-            loadingSpinner.setOpacity(0.8)
+            loadingSpinner.setMinShowTime(0.6)
+            loadingSpinner.setOpacity(0.6)
             loadingSpinner.startOnView(self.view)
             
             if let password = password, email = self.userAccount {
@@ -526,10 +536,10 @@ extension FormViewController: PasswordFormDelegate {
             user.provider = Provider.ZUZU
             
             let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
-            loadingSpinner.setDimBackground(true)
+            loadingSpinner.setDimBackground(false)
             loadingSpinner.setGraceTime(0.6)
-            loadingSpinner.setMinShowTime(1.0)
-            loadingSpinner.setOpacity(0.8)
+            loadingSpinner.setMinShowTime(0.6)
+            loadingSpinner.setOpacity(0.6)
             loadingSpinner.startOnView(self.view)
             
             if let password = password, email = user.email {
