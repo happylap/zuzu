@@ -135,7 +135,7 @@ class FormViewController: UIViewController {
                 backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             case .Register:
                 backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-//                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+                //                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             }
             
             
@@ -464,12 +464,6 @@ extension FormViewController: EmailFormDelegate {
                 }
             }
         }
-        
-        // Existing login user
-        
-        
-        // New user
-        
     }
 }
 
@@ -574,8 +568,22 @@ extension FormViewController: SocialLoginDelegate {
     
     func onContinue() {
         
+        let presentingViewController = self.presentingViewController
+        
         /// Back to common login form
         self.dismissViewControllerAnimated(true) { () -> Void in
+            
+            self.delegate?.onLoginDone(FormResult.Cancelled, userId: nil, zuzuToken: nil)
+            
+            if(!AmazonClientManager.sharedInstance.isLoggedIn()) {
+                
+                if let presentingViewController = presentingViewController {
+                    AmazonClientManager.sharedInstance.loginFromView(presentingViewController) {
+                        (task: AWSTask!) -> AnyObject! in
+                        return nil
+                    }
+                }
+            }
         }
     }
 }
