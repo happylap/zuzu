@@ -70,6 +70,8 @@ class PasswordFormView: UIView {
                 continueButton.setTitle("登入", forState: .Normal)
             case .Register:
                 continueButton.setTitle("註冊", forState: .Normal)
+            default:
+                continueButton.setTitle("繼續", forState: .Normal)
             }
             
         }

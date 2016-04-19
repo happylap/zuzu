@@ -625,6 +625,8 @@
                     <connections>
                         <outlet property="backButton" destination="ZCf-MP-qrQ" id="uWW-TR-g55"/>
                         <outlet property="formContainerView" destination="IkU-sg-kmS" id="uqV-n4-5yQ"/>
+                        <outlet property="mainTitleLabel" destination="sJQ-ww-LdG" id="6e0-05-mwv"/>
+                        <outlet property="subTitleLabel" destination="27c-c8-Az2" id="MSA-p7-Q4O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dJN-ku-CU8" userLabel="First Responder" sceneMemberID="firstResponder"/>
