@@ -112,7 +112,7 @@ class AmazonClientManager : NSObject {
                     return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
                     
                 case Provider.ZUZU:
-
+                    
                     return (provider.rawValue, ZuzuAccessToken.currentAccessToken.token)
                 }
             } else {
@@ -1114,64 +1114,14 @@ class AmazonClientManager : NSObject {
         LoadingSpinner.shared.startOnView(theViewController.view)
         
         ///Bring-up sign-in UI
-        self.zuzuAuthClient.loginWithZuzu(theViewController, handler: { (result, userId) in
-            
-            switch(result) {
-            case .Success:
-                
-                LoadingSpinner.shared.stop(afterDelay: 1.0)
-                
-                //Set current login provider
-                UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
-                
-                if let userId = userId {
-                    ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
-                        
-                        if let zuzuUser = zuzuUser {
-                            UserDefaultsUtils.setUserProfile(zuzuUser)
-                            self.completeZuzuLogin()
-                        } else {
-                            self.failLogin(.ZuzuFailure)
-                        }
-                        
-                    })
-                } else {
-                    
-                    assert(false, "userId should not be nil after login")
-                    self.failLogin(.ZuzuFailure)
-                }
-                
-            case .Failed:
-                
-                Log.warning("Zuzu Login Failed")
-                self.failLogin(.ZuzuFailure)
-                
-            case .Cancelled:
-                
-                Log.warning("Zuzu Login Cancelled")
-                self.cancelLogin(.ZuzuCancel)
-            }
-            
-        })
-    }
-    
-    func zuzuRegister(theViewController: UIViewController) {
-        
-        LoadingSpinner.shared.setDimBackground(true)
-        LoadingSpinner.shared.setImmediateAppear(true)
-        LoadingSpinner.shared.setOpacity(0.8)
-        LoadingSpinner.shared.setText("處理中")
-        LoadingSpinner.shared.startOnView(theViewController.view)
-        
-        ///Bring-up register UI
-        self.zuzuAuthClient.registerWithZuzu(theViewController, registerHandler: { (result) in
+        self.zuzuAuthClient.loginWithZuzu(theViewController, registerHandler: { (result) in
             
             if(result == .Cancelled) {
                 LoadingSpinner.shared.stop()
             }
-                                                
+            
             }, loginHandler: { (result, userId) in
-        
+                
                 switch(result) {
                 case .Success:
                     
@@ -1207,7 +1157,63 @@ class AmazonClientManager : NSObject {
                     Log.warning("Zuzu Login Cancelled")
                     self.cancelLogin(.ZuzuCancel)
                 }
+                
+        })
+    }
+    
+    func zuzuRegister(theViewController: UIViewController) {
         
+        LoadingSpinner.shared.setDimBackground(true)
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setOpacity(0.8)
+        LoadingSpinner.shared.setText("處理中")
+        LoadingSpinner.shared.startOnView(theViewController.view)
+        
+        ///Bring-up register UI
+        self.zuzuAuthClient.registerWithZuzu(theViewController, registerHandler: { (result) in
+            
+            if(result == .Cancelled) {
+                LoadingSpinner.shared.stop()
+            }
+            
+            }, loginHandler: { (result, userId) in
+                
+                switch(result) {
+                case .Success:
+                    
+                    LoadingSpinner.shared.stop(afterDelay: 1.0)
+                    
+                    //Set current login provider
+                    UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
+                    
+                    if let userId = userId {
+                        ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
+                            
+                            if let zuzuUser = zuzuUser {
+                                UserDefaultsUtils.setUserProfile(zuzuUser)
+                                self.completeZuzuLogin()
+                            } else {
+                                self.failLogin(.ZuzuFailure)
+                            }
+                            
+                        })
+                    } else {
+                        
+                        assert(false, "userId should not be nil after login")
+                        self.failLogin(.ZuzuFailure)
+                    }
+                    
+                case .Failed:
+                    
+                    Log.warning("Zuzu Login Failed")
+                    self.failLogin(.ZuzuFailure)
+                    
+                case .Cancelled:
+                    
+                    Log.warning("Zuzu Login Cancelled")
+                    self.cancelLogin(.ZuzuCancel)
+                }
+                
         })
         
     }

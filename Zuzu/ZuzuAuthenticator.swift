@@ -97,10 +97,12 @@ class ZuzuAuthenticator {
     private var onRegisterComplete: RegisterCompletionHandler?
     
     /// Bring Up Zuzu login/Register UI
-    func loginWithZuzu(fromViewController: UIViewController, handler: LoginCompletionHandler) {
+    func loginWithZuzu(fromViewController: UIViewController,
+                       registerHandler: RegisterCompletionHandler, loginHandler: LoginCompletionHandler) {
         Log.enter()
         
-        onLoginComplete = handler
+        onLoginComplete = loginHandler
+        onRegisterComplete = registerHandler
         
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
