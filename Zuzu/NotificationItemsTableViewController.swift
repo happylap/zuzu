@@ -51,7 +51,7 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnForeground(_:)), name: "receiveNotifyItemsOnForeground", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnNotifyTab(_:)), name: "receiveNotifyItemsOnNotifyTab", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.didTabBarAgainSelectedNotification(_:)), name: TabBarAgainSelectedNotification, object: nil)
         
@@ -275,10 +275,12 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     }
     
     // MARK: - handle notification
-    
-    func handleReceiveNotifyItemsOnForeground(notification:NSNotification) {
+    func handleReceiveNotifyItemsOnNotifyTab(notification:NSNotification) {
         Log.enter()
-        Log.debug("handleReceiveNotifyItemsOnForeground")
+        
+        Log.debug("handleReceiveNotifyItemsOnNotifyTab")
+        
+        self.refreshData(false)
         
         Log.exit()
     }
