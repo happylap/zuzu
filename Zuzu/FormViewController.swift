@@ -12,6 +12,7 @@ import SwiftyStateMachine
 enum FormMode {
     case Login
     case Register
+    case Custom
 }
 
 enum FormResult {
@@ -135,7 +136,8 @@ class FormViewController: UIViewController {
                 backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             case .Register:
                 backButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-                //                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            //                backButton.setImage(UIImage(named: "back_arrow_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            default: break
             }
             
             
@@ -314,6 +316,7 @@ class FormViewController: UIViewController {
                 self.delegate?.onLoginDone(FormResult.Cancelled, userId: nil, zuzuToken: nil)
             case .Register:
                 self.delegate?.onRegisterDone(FormResult.Cancelled)
+            default: break
             }
         }
         
@@ -392,6 +395,7 @@ class FormViewController: UIViewController {
         case .Register:
             self.setupUIForRegister()
             machine.handleEvent(.OnStartRegister)
+        default: break
         }
     }
     
@@ -430,6 +434,7 @@ extension FormViewController: EmailFormDelegate {
                         self.alertLoginFailure()
                     case .Register:
                         self.alertRegisterFailure()
+                    default: break
                     }
                     
                     return
@@ -450,6 +455,7 @@ extension FormViewController: EmailFormDelegate {
                         case .Register:
                             /// Go to login with custom message
                             self.registerToLogin()
+                        default: break
                         }
                         
                     }
@@ -462,6 +468,7 @@ extension FormViewController: EmailFormDelegate {
                         self.loginToRegister()
                     case .Register:
                         self.continueRegister()
+                    default: break
                     }
                 }
             }
@@ -561,6 +568,7 @@ extension FormViewController: PasswordFormDelegate {
                     
                 })
             }
+        default: break
         }
     }
 }
