@@ -105,9 +105,11 @@ class ZuzuAuthenticator {
         onRegisterComplete = registerHandler
         
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("forgotPasswordFormView") as? ForgotPasswordViewController {
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("inputFormView") as? FormViewController {
             vc.modalPresentationStyle = .OverCurrentContext
-
+            vc.formMode = .Login
+            
+            vc.delegate = self
             fromViewController.presentViewController(vc, animated: true, completion: nil)
         }
         
