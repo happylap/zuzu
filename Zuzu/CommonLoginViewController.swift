@@ -78,6 +78,8 @@ class CommonLoginViewController: UIViewController {
         didSet {
             if(TagUtils.shouldAllowZuzuLogin()) {
                 customLoginLabel.hidden = false
+            } else {
+                customLoginLabel.hidden = true
             }
         }
     }
@@ -99,7 +101,7 @@ class CommonLoginViewController: UIViewController {
                 customLoginView.layer.addSublayer(upperBorder)
                 
             } else {
-                
+                customLoginView.hidden = true
                 customLoginView.removeFromSuperview()
 
             }

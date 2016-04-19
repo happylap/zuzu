@@ -142,7 +142,7 @@ class TagUtils: NSObject{
     
     static func shouldAllowZuzuLogin() -> Bool {
         
-        var isEnableZuzuLogin = false
+        var isEnableZuzuLogin = true
         
         // A/B Testing flags
         if let tagContainer = AppDelegate.tagContainer {
