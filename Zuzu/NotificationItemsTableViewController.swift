@@ -13,7 +13,8 @@ private let Log = Logger.defaultLogger
 
 class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate, HouseDetailViewDelegate {
     
-    var isNeedRefresh = false
+    var pendingRefreshOnViewLoad = false
+    var refreshForUserLogin = false
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
     
@@ -43,7 +44,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
         self.refreshControl?.addTarget(self, action: #selector(NotificationItemsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        
         self.refreshOnViewLoad()
+        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
         
@@ -68,10 +72,11 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         super.viewWillAppear(animated)
         Log.enter()
         
-        if self.isNeedRefresh == true{
-            self.isNeedRefresh = false
-            Log.debug("isNeedRefresh -> refreshData")
+        if self.refreshForUserLogin == true{
+            self.refreshForUserLogin = false
+            Log.debug("refreshForUserLogin")
             self.refreshData(true)
+            Log.exit()
             return
         }
         
@@ -166,6 +171,20 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     
     func refreshOnViewLoad(){
         Log.enter()
+ 
+        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            Log.debug("Cannot refresh data because user is not logged in")
+            self.pendingRefreshOnViewLoad = true
+            return
+        }
+        
+        let userToken = AmazonClientManager.sharedInstance.currentUserToken
+        if userToken.token == nil{
+            Log.debug("Cannot refresh data because user token is gone")
+            self.pendingRefreshOnViewLoad = true
+            return
+        }
+        
         /// Load local data first
         self.resultController.refreshData()
         self.tableView.reloadData()
@@ -179,9 +198,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         Log.enter()
         Log.debug("refreshData, showSpinner: \(showSpinner)")
         if !AmazonClientManager.sharedInstance.isLoggedIn(){
+            Log.debug("Cannot refresh data because user is not logged in")
             return
         }
-        
+
         if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
             if showSpinner == true{
                 Log.debug("refresh data with loading")
@@ -204,10 +224,15 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             
             ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
                 if error != nil{
+
                     Log.debug("getNotificationItemsByUserId fails")
                     
                     if showSpinner == true{
                         LoadingSpinner.shared.stop()
+                    }
+                    
+                    if let nsError = error as? NSError where nsError.code == 403{
+                        Log.debug("forbidden to getNotificationItemsByUserId")
                     }
                     
                     return
@@ -254,14 +279,23 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
     func handleReceiveNotifyItemsOnForeground(notification:NSNotification) {
         Log.enter()
         Log.debug("handleReceiveNotifyItemsOnForeground")
-        self.refreshData(false)
+        
         Log.exit()
     }
     
     func handleUserLogin(notification: NSNotification){
         Log.enter()
         Log.debug("handleUserLogin")
-        self.isNeedRefresh = true
+        
+        if self.pendingRefreshOnViewLoad == true{
+            Log.debug("pendingRefreshOnViewLoad == true")
+            self.pendingRefreshOnViewLoad = false
+            self.refreshOnViewLoad()
+        }else{
+            Log.debug("set refreshForUserLogin as true")
+            self.refreshForUserLogin = true
+        }
+        
         Log.exit()
     }
     

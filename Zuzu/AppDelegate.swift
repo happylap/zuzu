@@ -243,6 +243,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootViewController = self.window?.rootViewController as! UITabBarController!
         let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
         
+        if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
+            GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
+                               action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+        }
+        
         if application.applicationState == UIApplicationState.Active {
             Log.debug("user receive notification while app is in the foreground")
             
@@ -251,31 +256,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
                 
-                if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
-                    GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                                       action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
-                }
-                
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
                     if let badge = aps["badge"] as? Int {
                         Log.debug("aps[badge] = \(badge)")
                         application.applicationIconBadgeNumber = badge
                         updateTabBarBadge(application)
-                        
-                        GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
                     }
                 }
             }
             
         }else{
-            if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
-                GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                                   action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
-            }
-            
-            
             let rootViewController = self.window?.rootViewController as! UITabBarController!
             let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
             let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
@@ -285,7 +276,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     updateTabBarBadge(application)
                     Log.debug("postNotificationName: switchToTab")
                     NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : notifyTabIndex])
-                    
                     //Log.debug("set notification tab as selected")
                     //rootViewController.selectedIndex = notifyTabIndex
                 }
