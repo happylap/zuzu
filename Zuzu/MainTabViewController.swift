@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BWWalkthrough
 
 /// Notification that is generated when tab is selected.
 let TabBarSelectedNotification = "TabBarSelectedNotification"
@@ -21,9 +22,27 @@ class MainTabViewController: UITabBarController {
         static let NOTIFICATION_TAB_INDEX = 3
     }
     
+    private var walkthrough:BWWalkthroughViewController!
+    
     private var tabViewControllers = [UIViewController]()
     
     private var lastSelectedIndex: Int?
+    
+    private func presentWalkthrough() {
+        let mainStory = UIStoryboard(name: "Main", bundle: nil)
+        let vc = mainStory.instantiateViewControllerWithIdentifier("walkthroughMaster")
+        self.walkthrough =  vc as! BWWalkthroughViewController
+        let page_one = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage1")
+        let page_two = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage2")
+        
+        // Attach the pages to the master
+        walkthrough.delegate = self
+        walkthrough.addViewController(page_one)
+        walkthrough.addViewController(page_two)
+        self.presentViewController(vc, animated: false) {
+            
+        }
+    }
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -74,7 +93,14 @@ class MainTabViewController: UITabBarController {
         self.initTabBar()
         
         self.checkNotification()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
+        //self.presentWalkthrough()
+        
+        //self.tabBar.hidden = true
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -88,14 +114,14 @@ class MainTabViewController: UITabBarController {
         if let userInfo = notification.userInfo,
             let tabIndex = userInfo["targetTab"] as? Int{
             
-                if let viewControllers = self.viewControllers{
-                    for vc in viewControllers {
-                        if vc is UINavigationController{
-                            vc.dismissViewControllerAnimated(true, completion: nil)
-                            //vc.popToRootViewControllerAnimated(false)
-                        }
+            if let viewControllers = self.viewControllers{
+                for vc in viewControllers {
+                    if vc is UINavigationController{
+                        vc.dismissViewControllerAnimated(true, completion: nil)
+                        //vc.popToRootViewControllerAnimated(false)
                     }
                 }
+            }
             
             // dismiss all view controllers in the navigation stack
             self.selectedIndex = tabIndex
@@ -204,3 +230,20 @@ extension UITabBarController {
         
     }
 }
+
+extension MainTabViewController: BWWalkthroughViewControllerDelegate {
+    
+    func walkthroughCloseButtonPressed() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func walkthroughPageDidChange(pageNumber: Int) {
+        if (self.walkthrough.numberOfPages - 1) == pageNumber{
+            self.walkthrough.closeButton?.hidden = false
+        }else{
+            self.walkthrough.closeButton?.hidden = true
+        }
+    }
+    
+}
+

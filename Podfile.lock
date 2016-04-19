@@ -16,6 +16,7 @@ PODS:
   - Bolts/AppLinks (1.7.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.7.0)
+  - BWWalkthrough (1.1.0)
   - Charts (2.2.3):
     - Charts/Core (= 2.2.3)
   - Charts/Core (2.2.3)
@@ -99,6 +100,7 @@ DEPENDENCIES:
   - AWSCore (= 2.3.5)
   - AWSS3 (= 2.3.5)
   - AWSSNS (= 2.3.5)
+  - BWWalkthrough (= 1.1.0)
   - Charts (= 2.2.3)
   - Device (= 0.0.4)
   - Dollar (= 4.0.1)
@@ -137,6 +139,7 @@ SPEC CHECKSUMS:
   AWSS3: 967f4ad3c91f1ed2c9dca09a9dcf905111232a87
   AWSSNS: d95b17f039776ec0dd9cd9237313779d174b0215
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
+  BWWalkthrough: 0c27ad2773a25c8f4fb9004bc7d6685deb35fecc
   Charts: f54267bb3f0f0e74520c6f248517cf5074dfd6fc
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
