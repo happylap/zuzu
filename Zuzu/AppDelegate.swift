@@ -102,8 +102,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
             Log.debug("set tab bar badge number as \(badgeNumber)")
             tabItem.badgeValue = "\(badgeNumber)"
-            Log.debug("post notification: receiveNotifyItems")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
         }else{
             Log.debug("badgeNumber <=0 ")
         }
@@ -251,9 +249,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if application.applicationState == UIApplicationState.Active {
             Log.debug("user receive notification while app is in the foreground")
             
+            Log.debug("post notification: receiveNotifyItems")
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+            
             if rootViewController.selectedIndex == notifyTabIndex{
                 Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
-                
                 NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
                 
             }else{
@@ -318,6 +318,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
         
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+        
+        if badgeNumber > 0 {
+            Log.debug("post notification: receiveNotifyItems")
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        }
+        
         /// Resume Login Session when the app is launched
         AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
@@ -350,6 +357,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
         
         if badgeNumber > 0 {
+            Log.debug("post notification: receiveNotifyItems")
+            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+            
             if rootViewController.selectedIndex == notifyTabIndex{
                 UIApplication.sharedApplication().applicationIconBadgeNumber = 0
             }else{
