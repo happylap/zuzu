@@ -253,8 +253,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
             
             if rootViewController.selectedIndex == notifyTabIndex{
-                Log.debug("post notification: receiveNotifyItems in didReceiveRemoteNotification")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnForeground", object: self, userInfo: userInfo)
+                Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: userInfo)
                 
             }else{
                 if let aps = userInfo["aps"] as? NSDictionary {
@@ -362,6 +362,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             if rootViewController.selectedIndex == notifyTabIndex{
                 UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+                Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: nil)
             }else{
                 self.updateTabBarBadge(application)
             }
