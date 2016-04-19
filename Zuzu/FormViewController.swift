@@ -201,8 +201,11 @@ class FormViewController: UIViewController {
         self.formMode = .Login
         
         self.modalTitle.text = Message.Login.modalTitle
-        self.mainTitleLabel.text = Message.Login.Existing.mainTitle
-        self.subTitleLabel.text = Message.Login.Existing.subTitle
+        
+        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.mainTitleLabel.text = Message.Login.Existing.mainTitle
+            self.subTitleLabel.text = Message.Login.Existing.subTitle
+            }, completion: nil)
         
         self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
         
@@ -219,11 +222,8 @@ class FormViewController: UIViewController {
         self.modalTitle.text = Message.Login.modalTitle
         
         UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.mainTitleLabel.text = Message.Register.Password.mainTitle
-            }, completion: nil)
-        
-        UIView.transitionWithView(self.subTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
-            self.subTitleLabel.text = Message.Register.Password.subTitle
+            self.mainTitleLabel.text = Message.Login.Password.mainTitle
+            self.subTitleLabel.text = Message.Login.Password.subTitle
             }, completion: nil)
         
         self.passwordFormView = PasswordFormView(formMode: .Login, frame: self.formContainerView.bounds)
@@ -242,8 +242,11 @@ class FormViewController: UIViewController {
         self.formMode = .Register
         
         self.modalTitle.text = Message.Register.modalTitle
-        self.mainTitleLabel.text = Message.Register.NonExisting.mainTitle
-        self.subTitleLabel.text = Message.Register.NonExisting.subTitle
+        
+        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.mainTitleLabel.text = Message.Register.NonExisting.mainTitle
+            self.subTitleLabel.text = Message.Register.NonExisting.subTitle
+            }, completion: nil)
         
         self.passwordFormView = PasswordFormView(formMode: .Register, frame: self.formContainerView.bounds)
         
@@ -260,12 +263,8 @@ class FormViewController: UIViewController {
         
         self.modalTitle.text = Message.Register.modalTitle
         
-        
         UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
             self.mainTitleLabel.text = Message.Register.Password.mainTitle
-            }, completion: nil)
-        
-        UIView.transitionWithView(self.subTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
             self.subTitleLabel.text = Message.Register.Password.subTitle
             }, completion: nil)
         
@@ -287,8 +286,11 @@ class FormViewController: UIViewController {
     
     private func continueSocialLogin() {
         self.modalTitle.text = Message.Login.modalTitle
-        self.mainTitleLabel.text = Message.Login.ExistingSocial.mainTitle
-        self.subTitleLabel.text = Message.Login.ExistingSocial.subTitle
+        
+        UIView.transitionWithView(self.mainTitleLabel, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+            self.mainTitleLabel.text = Message.Login.ExistingSocial.mainTitle
+            self.subTitleLabel.text = Message.Login.ExistingSocial.subTitle
+            }, completion: nil)
         
         emailFormView?.removeFromSuperview()
         
