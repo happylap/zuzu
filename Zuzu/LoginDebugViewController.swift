@@ -280,6 +280,10 @@ class LoginDebugViewController: UIViewController {
         "removeUser2",
         "loginUser2",
         " ",
+        "forgetPassword",
+        "resetPassword",
+        "checkVerificationCode",
+        " ",
         " ",
         "--- User ---",
         "retrieveCognitoToken",
@@ -479,6 +483,52 @@ class LoginDebugViewController: UIViewController {
                             self.showAlert(title, subTitle: "\(subTitle) \(result)")
                         }
                     })
+                }
+            })
+            
+        case "forgetPassword":
+            ZuzuWebService.sharedInstance.forgotPassword(ApiTestConst.email2, handler: { (error) in
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                } else {
+                    self.showAlert(title, subTitle: "\(subTitle) success")
+                }
+                
+            })
+            
+            
+        case "resetPassword":
+            
+            ZuzuWebService.sharedInstance.resetPassword(ApiTestConst.email2, password: "12345678", verificationCode: "4132", handler: { (userId, error) in
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n password: 12345678 \n\n verificationCode: 4132 \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let userId = userId {
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)")
+                }
+            })
+            
+            
+        case "checkVerificationCode":
+            
+            ZuzuWebService.sharedInstance.checkVerificationCode(ApiTestConst.email2, verificationCode: "4132", handler: { (result, error) in
+                
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n verificationCode: 4132 \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                }
+                
+                if let result = result {
+                    self.showAlert(title, subTitle: "\(subTitle) result: \(result)")
                 }
             })
             

@@ -145,7 +145,7 @@ class ZuzuWebService: NSObject
     func checkVerificationCode(email: String, verificationCode: String, handler: (result: Bool?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email), verificationCode: \(verificationCode)]")
         
-        let resource = "/public/user/check/\(email)/\(verificationCode)"
+        let resource = "/public/user/verify/\(email)/\(verificationCode)"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             if let error = error {
@@ -158,17 +158,17 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    func resetPassword(email: String, password: String, verificationCode: String, handler: (result: Bool?, error: ErrorType?) -> Void) {
+    func resetPassword(email: String, password: String, verificationCode: String, handler: (userId: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email), password: \(password), verificationCode: \(verificationCode)]")
         
         let resource = "/public/user/password/reset"
-        let payload = ["email": email, "password": password]
+        let payload = ["email": email, "password": password, "verification_code": verificationCode]
         
         self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
             if let error = error {
-                handler(result: nil, error: error)
+                handler(userId: nil, error: error)
             } else {
-                handler(result: result as? Bool, error: nil)
+                handler(userId: result as? String, error: nil)
             }
         }
         
