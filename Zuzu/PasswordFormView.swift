@@ -18,8 +18,10 @@ public class CustomPasswordRule : RegexRule {
     }
 }
 
-protocol PasswordFormDelegate: class {
+@objc protocol PasswordFormDelegate: class {
     func onPasswordEntered(password:String?)
+    
+    @objc optional func onForgotPassword()
 }
 
 class PasswordFormView: UIView {
@@ -38,9 +40,22 @@ class PasswordFormView: UIView {
         didSet {
             
             if(self.formMode == .Register) {
+                
                 forgotPasswordLabel.hidden = true
+                
+            } else if(self.formMode == .Custom) {
+                
+                forgotPasswordLabel.hidden = true
+                
+            } else {
+                
+                forgotPasswordLabel.hidden = false
+                
             }
             
+            forgotPasswordLabel.userInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(PasswordFormView.onForgotPasswordLabelTouched(_:)))
+            forgotPasswordLabel.addGestureRecognizer(tap)
         }
     }
     
@@ -107,6 +122,12 @@ class PasswordFormView: UIView {
     func onContinueButtonTouched(sender: UIButton) {
         
         validator.validate(self)
+        
+    }
+    
+    func onForgotPasswordLabelTouched(sender:UITapGestureRecognizer) {
+        
+        self.delegate?.onForgotPassword?()
         
     }
     

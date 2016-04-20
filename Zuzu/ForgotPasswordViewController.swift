@@ -97,6 +97,9 @@ class ForgotPasswordViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        
+        /// Send reset password validation code
+
     }
     
     override func didReceiveMemoryWarning() {

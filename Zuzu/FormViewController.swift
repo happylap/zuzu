@@ -346,7 +346,6 @@ class FormViewController: UIViewController {
             }
         }
         
-        
     }
     
     // MARK: - View Life Cycle
@@ -488,6 +487,16 @@ extension FormViewController: EmailFormDelegate {
 
 // MARK: - PasswordFormDelegate
 extension FormViewController: PasswordFormDelegate {
+    
+    func onForgotPassword() {
+        
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("forgotPasswordFormView") as? ForgotPasswordViewController {
+            vc.modalPresentationStyle = .OverCurrentContext
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+        
+    }
     
     func onPasswordEntered(password:String?) {
         
