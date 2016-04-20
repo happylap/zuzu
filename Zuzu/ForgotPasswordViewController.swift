@@ -65,7 +65,7 @@ class ForgotPasswordViewController: UIViewController {
     
     private var currentTimer:NSTimer?
     
-    private var countDownSec = 60
+    private var currentCountDownSec = 60
     
     // Passed-In Params
     var userEmail:String?
@@ -185,7 +185,7 @@ class ForgotPasswordViewController: UIViewController {
                 }
                 /// Start countdown timer
                 self.resetPasswordValidationFormView?.resendCodeButton.enabled = false
-                let title = String(format: "倒數 %d 秒", self.countDownSec)
+                let title = String(format: "倒數 %d 秒", self.currentCountDownSec)
                 self.resetPasswordValidationFormView?.resendCodeButton.setTitle(title, forState: .Normal)
                 
                 self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ForgotPasswordViewController.onResendCountdownTriggered), userInfo: nil, repeats: true)
@@ -199,17 +199,17 @@ class ForgotPasswordViewController: UIViewController {
     
     func onResendCountdownTriggered() {
         
-        countDownSec -= 1
+        currentCountDownSec -= 1
         
-        if(countDownSec <= 0) {
+        if(currentCountDownSec <= 0) {
             currentTimer?.invalidate()
-            
+            self.currentCountDownSec = 60
             self.resetPasswordValidationFormView?.resendCodeButton.enabled = true
             self.resetPasswordValidationFormView?.resendCodeButton.setTitle("重送驗證碼", forState: .Normal)
             
         } else {
             
-            let title = String(format: "倒數 %02d 秒", self.countDownSec)
+            let title = String(format: "倒數 %02d 秒", self.currentCountDownSec)
             self.resetPasswordValidationFormView?.resendCodeButton.setTitle(title, forState: .Normal)
         }
         
