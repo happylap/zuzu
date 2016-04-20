@@ -11,10 +11,23 @@ import SCLAlertView
 class ForgotPasswordViewController: UIViewController {
     
     struct  Message {
+        
         struct ValidationCode {
             
-            static let mainTitle = "已寄送驗證碼至您的電子信箱"
-            static let subTitle = "請輸入信件中的驗證碼以重設密碼"
+            struct Sending {
+                static let mainTitle = "寄送驗證碼至您的電子信箱中..."
+                static let subTitle = "請稍候"
+            }
+            
+            struct Sent {
+                static let mainTitle = "驗證碼已寄送至您的電子信箱"
+                static let subTitle = "請輸入信件中的驗證碼以重設密碼"
+            }
+            
+            struct Error {
+                static let mainTitle = "暫時無法寄送驗證碼"
+                static let subTitle = "請稍後點選\"重送驗證碼\""
+            }
             
         }
         
@@ -50,6 +63,10 @@ class ForgotPasswordViewController: UIViewController {
     
     private var validationCode:String?
     
+    private var currentTimer:NSTimer?
+    
+    private var countDownSec = 60
+    
     // Passed-In Params
     var userEmail:String?
     
@@ -75,9 +92,6 @@ class ForgotPasswordViewController: UIViewController {
     }
     
     private func setupUI() {
-        
-        self.mainTitleLabel.text = Message.ValidationCode.mainTitle
-        self.subTitleLabel.text = Message.ValidationCode.subTitle
         
         resetPasswordValidationFormView = ResetPasswordValidationFormView(frame: self.formContainerView.bounds)
         
@@ -127,7 +141,80 @@ class ForgotPasswordViewController: UIViewController {
         }
     }
     
+    private func sendValidationCode() {
+        
+        /// Sending
+        self.mainTitleLabel.text = Message.ValidationCode.Sending.mainTitle
+        self.subTitleLabel.text = Message.ValidationCode.Sending.subTitle
+        
+        self.resetPasswordValidationFormView?.resendCodeButton.enabled = true
+        self.resetPasswordValidationFormView?.resendCodeButton.setTitle("發送中", forState: .Normal)
+        
+        let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
+        loadingSpinner.setDimBackground(true)
+        loadingSpinner.setGraceTime(0.6)
+        loadingSpinner.setMinShowTime(0.6)
+        loadingSpinner.setOpacity(0.6)
+        loadingSpinner.setText("寄送中")
+        loadingSpinner.startOnView(self.view)
+        
+        if let userEmail = self.userEmail {
+            ZuzuWebService.sharedInstance.forgotPassword(userEmail) { (error) in
+                
+                loadingSpinner.stop()
+                
+                if let error = error {
+                    self.alertServerError(String(error))
+                    
+                    if let parentView = self.mainTitleLabel.superview {
+                        UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                            self.mainTitleLabel.text = Message.ValidationCode.Error.mainTitle
+                            self.subTitleLabel.text = Message.ValidationCode.Error.subTitle
+                            }, completion: nil)
+                    }
+                    
+                    return
+                }
+                
+                /// Update title message
+                if let parentView = self.mainTitleLabel.superview {
+                    UIView.transitionWithView(parentView, duration: 0.6, options: [.TransitionCrossDissolve], animations: {
+                        self.mainTitleLabel.text = Message.ValidationCode.Sent.mainTitle
+                        self.subTitleLabel.text = Message.ValidationCode.Sent.subTitle
+                        }, completion: nil)
+                }
+                /// Start countdown timer
+                self.resetPasswordValidationFormView?.resendCodeButton.enabled = false
+                let title = String(format: "倒數 %d 秒", self.countDownSec)
+                self.resetPasswordValidationFormView?.resendCodeButton.setTitle(title, forState: .Normal)
+                
+                self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ForgotPasswordViewController.onResendCountdownTriggered), userInfo: nil, repeats: true)
+                
+            }
+        }
+        
+    }
+    
     // MARK: - Action Handlers
+    
+    func onResendCountdownTriggered() {
+        
+        countDownSec -= 1
+        
+        if(countDownSec <= 0) {
+            currentTimer?.invalidate()
+            
+            self.resetPasswordValidationFormView?.resendCodeButton.enabled = true
+            self.resetPasswordValidationFormView?.resendCodeButton.setTitle("重送驗證碼", forState: .Normal)
+            
+        } else {
+            
+            let title = String(format: "倒數 %02d 秒", self.countDownSec)
+            self.resetPasswordValidationFormView?.resendCodeButton.setTitle(title, forState: .Normal)
+        }
+        
+    }
+    
     func onBackButtonTouched(sender: UIButton) {
         
         self.dismissViewControllerAnimated(true) { () -> Void in
@@ -152,24 +239,7 @@ class ForgotPasswordViewController: UIViewController {
         super.viewWillAppear(animated)
         
         /// Send reset password validation code
-        let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
-        loadingSpinner.setGraceTime(0.6)
-        loadingSpinner.setMinShowTime(0.6)
-        loadingSpinner.setOpacity(0.6)
-        loadingSpinner.startOnView(self.view)
-        
-        if let userEmail = self.userEmail {
-            ZuzuWebService.sharedInstance.forgotPassword(userEmail) { (error) in
-                
-                loadingSpinner.stop()
-                
-                if let error = error {
-                    self.alertServerError(String(error))
-                    return
-                }
-                
-            }
-        }
+        self.sendValidationCode()
     }
     
     override func didReceiveMemoryWarning() {
@@ -184,24 +254,7 @@ extension ForgotPasswordViewController: ResetPasswordFormDelegate {
     func onResendValidationCode() {
         
         /// Send reset password validation code
-        let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
-        loadingSpinner.setGraceTime(0.6)
-        loadingSpinner.setMinShowTime(0.6)
-        loadingSpinner.setOpacity(0.6)
-        loadingSpinner.startOnView(self.view)
-        
-        if let userEmail = self.userEmail {
-            ZuzuWebService.sharedInstance.forgotPassword(userEmail) { (error) in
-                
-                if let error = error {
-                    self.alertServerError(String(error))
-                    return
-                }
-                
-                loadingSpinner.stop()
-                
-            }
-        }
+        self.sendValidationCode()
         
     }
     
@@ -211,7 +264,6 @@ extension ForgotPasswordViewController: ResetPasswordFormDelegate {
         
         /// Check if validation code is valid
         let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
-        loadingSpinner.setGraceTime(0.6)
         loadingSpinner.setMinShowTime(0.6)
         loadingSpinner.setOpacity(0.6)
         loadingSpinner.startOnView(self.view)
@@ -266,9 +318,14 @@ extension ForgotPasswordViewController: PasswordFormDelegate {
                 
                 loadingSpinner.stop()
                 
-                self.dismissViewControllerAnimated(true) { () -> Void in
+                self.runOnMainThreadAfter(1.0, block: {
                     
-                }
+                    self.dismissViewControllerAnimated(true) { () -> Void in
+                        
+                    }
+                    
+                })
+                
             })
         }
         
