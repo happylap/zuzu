@@ -147,8 +147,7 @@ class ForgotPasswordViewController: UIViewController {
         self.mainTitleLabel.text = Message.ValidationCode.Sending.mainTitle
         self.subTitleLabel.text = Message.ValidationCode.Sending.subTitle
         
-        self.resetPasswordValidationFormView?.resendCodeButton.enabled = true
-        self.resetPasswordValidationFormView?.resendCodeButton.setTitle("發送中", forState: .Normal)
+        self.resetPasswordValidationFormView?.setProcessingStateForResendButton()
         
         let loadingSpinner = LoadingSpinner.getInstance(String(self.dynamicType))
         loadingSpinner.setDimBackground(true)
@@ -183,10 +182,10 @@ class ForgotPasswordViewController: UIViewController {
                         self.subTitleLabel.text = Message.ValidationCode.Sent.subTitle
                         }, completion: nil)
                 }
+                
                 /// Start countdown timer
-                self.resetPasswordValidationFormView?.resendCodeButton.enabled = false
                 let title = String(format: "倒數 %d 秒", self.currentCountDownSec)
-                self.resetPasswordValidationFormView?.resendCodeButton.setTitle(title, forState: .Normal)
+                self.resetPasswordValidationFormView?.setProcessingStateForResendButton(title)
                 
                 self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(ForgotPasswordViewController.onResendCountdownTriggered), userInfo: nil, repeats: true)
                 
@@ -204,8 +203,7 @@ class ForgotPasswordViewController: UIViewController {
         if(currentCountDownSec <= 0) {
             currentTimer?.invalidate()
             self.currentCountDownSec = 60
-            self.resetPasswordValidationFormView?.resendCodeButton.enabled = true
-            self.resetPasswordValidationFormView?.resendCodeButton.setTitle("重送驗證碼", forState: .Normal)
+            self.resetPasswordValidationFormView?.setNormalStateForResendButton()
             
         } else {
             

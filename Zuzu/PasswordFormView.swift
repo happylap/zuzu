@@ -96,6 +96,45 @@ class PasswordFormView: UIView {
     }
     
     // MARK: - Private Utils
+    
+    private func setTextFieldErrorStyle(field: UITextField) {
+        field.layer.borderColor = UIColor.redColor().CGColor
+        field.layer.borderWidth = 1.0
+    }
+    
+    private func setTextFieldNormalStyle(field: UITextField) {
+        field.layer.borderColor = UIColor.clearColor().CGColor
+        field.layer.borderWidth = 0.0
+    }
+    
+    private func setProcessingStateForButton(button: UIButton) {
+        
+        button.enabled = false
+        
+        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5)
+        button.layer.borderWidth = 2
+        button.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5).CGColor
+        button.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5)
+        
+    }
+    
+    private func setNormalStateForButton(button: UIButton) {
+        
+        button.enabled = true
+        
+        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        button.layer.borderWidth = 2
+        button.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        button.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        
+    }
+    
     private func loadViewFromNib() -> UIView {
         let bundle = NSBundle(forClass:self.dynamicType)
         let nib = UINib(nibName: "PasswordFormView", bundle: bundle)
@@ -144,6 +183,7 @@ class PasswordFormView: UIView {
         
     }
     
+    
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
@@ -171,6 +211,10 @@ extension PasswordFormView: ValidationDelegate {
         
         self.passwordTextField.resignFirstResponder()
         
+        self.setProcessingStateForButton(self.continueButton)
+        
+        self.setTextFieldNormalStyle(self.passwordTextField)
+        
         delegate?.onPasswordEntered(self.passwordTextField.text)
         
     }
@@ -178,8 +222,7 @@ extension PasswordFormView: ValidationDelegate {
     func validationFailed(errors:[UITextField:ValidationError]) {
         // turn the fields to red
         for (field, error) in errors {
-            field.layer.borderColor = UIColor.redColor().CGColor
-            field.layer.borderWidth = 1.0
+            self.setTextFieldErrorStyle(field)
             error.errorLabel?.text = error.errorMessage // works if you added labels
             error.errorLabel?.hidden = false
         }

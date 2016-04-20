@@ -29,13 +29,8 @@ class ResetPasswordValidationFormView: UIView {
     @IBOutlet weak var resendCodeButton: UIButton! {
         
         didSet {
-            resendCodeButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-            resendCodeButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-            resendCodeButton.layer.borderWidth = 2
-            resendCodeButton.layer.borderColor =
-                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-            resendCodeButton.tintColor =
-                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+            
+            self.setNormalStateForButton(resendCodeButton)
             
             resendCodeButton.addTarget(self, action: #selector(ResetPasswordValidationFormView.onResendCodeButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -45,13 +40,8 @@ class ResetPasswordValidationFormView: UIView {
     @IBOutlet weak var continueResetButton: UIButton! {
         
         didSet {
-            continueResetButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-            continueResetButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-            continueResetButton.layer.borderWidth = 2
-            continueResetButton.layer.borderColor =
-                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-            continueResetButton.tintColor =
-                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+
+            self.setNormalStateForButton(continueResetButton)
             
             continueResetButton.addTarget(self, action: #selector(ResetPasswordValidationFormView.onContinueResetButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -65,6 +55,58 @@ class ResetPasswordValidationFormView: UIView {
     var view:UIView!
     
     // MARK: - Private Utils
+    internal func setProcessingStateForResendButton(title: String? = "發送中") {
+        
+        self.resendCodeButton.setTitle(title, forState: .Normal)
+        self.setProcessingStateForButton(self.resendCodeButton)
+        
+    }
+    
+    internal func setNormalStateForResendButton(title: String? = "重送驗證碼") {
+        
+        self.resendCodeButton.setTitle(title, forState: .Normal)
+        self.setNormalStateForButton(self.resendCodeButton)
+        
+    }
+    
+    
+    // MARK: - Private Utils
+    private func setProcessingStateForButton(button: UIButton) {
+        
+        button.enabled = false
+        
+//        button.setTitleColor(UIColor.colorWithRGB(0xCCCCCC, alpha: 1), forState: UIControlState.Normal)
+//        button.backgroundColor = UIColor.colorWithRGB(0x7F7F7F, alpha: 1)
+//        button.layer.borderWidth = 2
+//        button.layer.borderColor =
+//            UIColor.colorWithRGB(0x999999, alpha: 1).CGColor
+//        button.tintColor =
+//            UIColor.colorWithRGB(0x7F7F7F, alpha: 1)
+        
+        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5)
+        button.layer.borderWidth = 2
+        button.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5).CGColor
+        button.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5)
+        
+    }
+    
+    private func setNormalStateForButton(button: UIButton) {
+     
+        button.enabled = true
+        
+        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        button.layer.borderWidth = 2
+        button.layer.borderColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
+        button.tintColor =
+            UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+        
+    }
+    
     private func loadViewFromNib() -> UIView {
         let bundle = NSBundle(forClass:self.dynamicType)
         let nib = UINib(nibName: "ResetPasswordValidationFormView", bundle: bundle)
@@ -117,6 +159,8 @@ class ResetPasswordValidationFormView: UIView {
     
     func onResendCodeButtonTouched(sender: UIButton) {
         
+        self.setProcessingStateForButton(sender)
+        
         self.delegate?.onResendValidationCode()
         
     }
@@ -163,6 +207,8 @@ extension ResetPasswordValidationFormView: ValidationDelegate {
     func validationSuccessful() {
         
         self.validationCodeTextField.resignFirstResponder()
+        
+        self.setProcessingStateForButton(self.continueResetButton)
         
         self.setTextFieldNormalStyle(self.validationCodeTextField)
         
