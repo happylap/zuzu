@@ -587,7 +587,7 @@
                                         <rect key="frame" x="0.0" y="90" width="414" height="100"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" priority="750" constant="100" id="9sR-YM-uCM"/>
+                                            <constraint firstAttribute="height" priority="250" constant="100" id="9sR-YM-uCM"/>
                                         </constraints>
                                     </view>
                                 </subviews>

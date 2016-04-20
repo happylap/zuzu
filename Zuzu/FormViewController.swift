@@ -493,6 +493,7 @@ extension FormViewController: PasswordFormDelegate {
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("forgotPasswordFormView") as? ForgotPasswordViewController {
             vc.modalPresentationStyle = .OverCurrentContext
+            vc.userEmail = self.userAccount
             self.presentViewController(vc, animated: true, completion: nil)
         }
         

@@ -10,6 +10,7 @@ import SwiftValidator
 
 protocol ResetPasswordFormDelegate: class {
     func onValidationCodeEntered(code:String?)
+    func onResendValidationCode()
 }
 
 class ResetPasswordValidationFormView: UIView {
@@ -35,7 +36,6 @@ class ResetPasswordValidationFormView: UIView {
                 UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
             resendCodeButton.tintColor =
                 UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-            
             
             resendCodeButton.addTarget(self, action: #selector(ResetPasswordValidationFormView.onResendCodeButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -76,8 +76,26 @@ class ResetPasswordValidationFormView: UIView {
     private func setup() {
         view = loadViewFromNib()
         view.frame = bounds
-        view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
+        //view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
         self.addSubview(view)
+        
+        
+        /// Set constrains between subview and superview to make superview expand to the size of the subviews
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        let leftConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0)
+        leftConstraint.priority = UILayoutPriorityRequired
+        
+        let rightConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0)
+        rightConstraint.priority = UILayoutPriorityRequired
+        
+        let topConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0)
+        topConstraint.priority = UILayoutPriorityDefaultHigh
+        
+        let bottomConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0)
+        bottomConstraint.priority = UILayoutPriorityDefaultHigh
+        
+        self.addConstraints([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
     }
     
     private func setTextFieldErrorStyle(field: UITextField) {
@@ -99,6 +117,8 @@ class ResetPasswordValidationFormView: UIView {
     
     func onResendCodeButtonTouched(sender: UIButton) {
         
+        self.delegate?.onResendValidationCode()
+        
     }
     
     func textFieldDidChange(sender: UITextField) {
@@ -113,6 +133,12 @@ class ResetPasswordValidationFormView: UIView {
         
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        //self.view.frame = self.bounds
+        
+    }
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
