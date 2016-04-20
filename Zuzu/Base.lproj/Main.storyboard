@@ -36,24 +36,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="xFA-Bz-dgv">
-                                <rect key="frame" x="281" y="563" width="39" height="37"/>
+                                <rect key="frame" x="281" y="405" width="39" height="37"/>
                             </pageControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alp-SS-Q2J">
+                                <rect key="frame" x="270" y="506" width="60" height="30"/>
+                                <state key="normal" title="開始使用"/>
+                                <connections>
+                                    <action selector="close:" destination="E03-Be-D77" eventType="touchUpInside" id="zMa-tJ-fOj"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="xFA-Bz-dgv" firstAttribute="bottom" secondItem="4RV-rB-Yfc" secondAttribute="top" id="SS1-gt-uaP"/>
-                            <constraint firstItem="xFA-Bz-dgv" firstAttribute="centerX" secondItem="oN7-L6-nz4" secondAttribute="centerX" id="qSV-Uc-xDq"/>
+                            <constraint firstItem="4RV-rB-Yfc" firstAttribute="top" secondItem="alp-SS-Q2J" secondAttribute="bottom" constant="64" id="586-Oc-0d7"/>
+                            <constraint firstItem="alp-SS-Q2J" firstAttribute="centerX" secondItem="oN7-L6-nz4" secondAttribute="centerX" id="6Ry-eZ-Wd2"/>
+                            <constraint firstItem="alp-SS-Q2J" firstAttribute="top" secondItem="xFA-Bz-dgv" secondAttribute="bottom" constant="64" id="Vdo-g9-utv"/>
+                            <constraint firstItem="xFA-Bz-dgv" firstAttribute="centerX" secondItem="alp-SS-Q2J" secondAttribute="centerX" id="lxq-oX-H8a"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="closeButton" destination="alp-SS-Q2J" id="Heh-e9-W9m"/>
+                        <outlet property="pageControl" destination="xFA-Bz-dgv" id="pk8-fC-Jia"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V3j-v5-12t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1534" y="647"/>
+            <point key="canvasLocation" x="-1238" y="653"/>
         </scene>
         <!--Walkthrough Page View Controller-->
         <scene sceneID="HTI-yU-y18">
             <objects>
-                <viewController storyboardIdentifier="walkthroughPage2" id="fwY-Jk-7dy" customClass="BWWalkthroughPageViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="walkthroughPage2" id="fwY-Jk-7dy" customClass="BWWalkthroughPageViewController" customModule="BWWalkthrough" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zwG-Fm-UhG"/>
                         <viewControllerLayoutGuide type="bottom" id="dMn-Gk-Lfz"/>
@@ -69,7 +81,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="xI0-tM-5iy" firstAttribute="centerY" secondItem="2wu-li-uxb" secondAttribute="centerY" id="etH-Vg-7k7"/>
                             <constraint firstItem="xI0-tM-5iy" firstAttribute="centerX" secondItem="2wu-li-uxb" secondAttribute="centerX" id="pou-Rw-vOa"/>
@@ -81,18 +93,18 @@
                             <point key="value" x="1" y="0.0"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="point" keyPath="speedVariance">
-                            <point key="value" x="0.5" y="0.0"/>
+                            <point key="value" x="2" y="0.0"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mhO-hp-qAO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1174" y="1317"/>
+            <point key="canvasLocation" x="-1238" y="1317"/>
         </scene>
         <!--Walkthrough Page View Controller-->
         <scene sceneID="2tF-Qq-4gv">
             <objects>
-                <viewController storyboardIdentifier="walkthroughPage1" id="s98-l3-xta" customClass="BWWalkthroughPageViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="walkthroughPage1" id="s98-l3-xta" customClass="BWWalkthroughPageViewController" customModule="BWWalkthrough" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1gy-Xs-RsE"/>
                         <viewControllerLayoutGuide type="bottom" id="lOO-ol-ox0"/>
@@ -108,7 +120,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.40000000600000002" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="e5t-Fj-rK0" firstAttribute="centerY" secondItem="U30-Ab-EzW" secondAttribute="centerY" id="NAf-zg-68o"/>
                             <constraint firstItem="e5t-Fj-rK0" firstAttribute="centerX" secondItem="U30-Ab-EzW" secondAttribute="centerX" id="OZU-UG-ApZ"/>
@@ -119,7 +131,7 @@
                             <point key="value" x="1" y="0.0"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="point" keyPath="speedVariance">
-                            <point key="value" x="0.5" y="0.0"/>
+                            <point key="value" x="2" y="0.0"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="string" keyPath="animationType" value="Linear"/>
                     </userDefinedRuntimeAttributes>
@@ -648,6 +660,45 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iRW-Zc-G7x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="82" y="-82"/>
+        </scene>
+        <!--Walkthrough Page View Controller-->
+        <scene sceneID="Rki-s2-z5W">
+            <objects>
+                <viewController storyboardIdentifier="walkthroughPage3" id="Gh3-z4-xYZ" customClass="BWWalkthroughPageViewController" customModule="BWWalkthrough" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tby-0V-bKA"/>
+                        <viewControllerLayoutGuide type="bottom" id="iau-p8-3UT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AxF-zl-1TD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Page3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t3M-8B-CsC">
+                                <rect key="frame" x="275.5" y="289" width="49" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="t3M-8B-CsC" firstAttribute="centerX" secondItem="AxF-zl-1TD" secondAttribute="centerX" id="VY6-dn-S7e"/>
+                            <constraint firstItem="t3M-8B-CsC" firstAttribute="centerY" secondItem="AxF-zl-1TD" secondAttribute="centerY" id="qwc-0M-vGO"/>
+                        </constraints>
+                    </view>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="animationType" value="Linear"/>
+                        <userDefinedRuntimeAttribute type="point" keyPath="speed">
+                            <point key="value" x="1" y="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="point" keyPath="speedVariance">
+                            <point key="value" x="2" y="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lq5-EP-liB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-583" y="1317"/>
         </scene>
     </scenes>
     <resources>

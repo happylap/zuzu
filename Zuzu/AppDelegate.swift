@@ -15,19 +15,22 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import Fabric
 import SCLAlertView
+import BWWalkthrough
 
 private let Log = Logger.defaultLogger
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    internal typealias NotificationSetupHandler = (result:Bool) -> ()
+    
     private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
     
-    static var tagContainer: TAGContainer?
+    internal static var tagContainer: TAGContainer?
+    
+    private static let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
     
     //var reachability:Reachability?
-    
-    let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
     
     var window: UIWindow?
     
@@ -37,17 +40,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return urls[urls.count-1] as NSURL
     }()
     
-    internal typealias NotificationSetupHandler = (result:Bool) -> ()
-    
     private var localNotificationSetupHandler: NotificationSetupHandler?
     
     private var pushNotificationSetupHandler: NotificationSetupHandler?
     
+    private var walkthrough:BWWalkthroughViewController!
+    
     // MARK: Private Utils
     private func commonServiceSetup() {
         
-        //Google Map
-        GMSServices.provideAPIKey(googleMapsApiKey)
+        // Google Map
+        GMSServices.provideAPIKey(AppDelegate.googleMapsApiKey)
         
         #if !DEBUG
             //Google Analytics
@@ -61,15 +64,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             gai.trackUncaughtExceptions = true  // report uncaught exceptions
             gai.logger.logLevel = GAILogLevel.Error  // remove before app release
         #endif
-            //Google Tag Manager
-            let GTM = TAGManager.instance()
-            GTM.logger.setLogLevel(kTAGLoggerLogLevelVerbose)
-            
-            TAGContainerOpener.openContainerWithId("GTM-PLP77J",
-                                                   tagManager: GTM, openType: kTAGOpenTypePreferFresh,
-                                                   timeout: nil,
-                                                   notifier: self)
-
+        //Google Tag Manager
+        let GTM = TAGManager.instance()
+        GTM.logger.setLogLevel(kTAGLoggerLogLevelVerbose)
+        
+        TAGContainerOpener.openContainerWithId("GTM-PLP77J",
+                                               tagManager: GTM, openType: kTAGOpenTypePreferFresh,
+                                               timeout: nil,
+                                               notifier: self)
+        
     }
     
     private func customUISetup() {
@@ -107,6 +110,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Log.exit()
+    }
+    
+    private func presentWalkthrough() {
+        let mainStory = UIStoryboard(name: "Main", bundle: nil)
+        let vc = mainStory.instantiateViewControllerWithIdentifier("walkthroughMaster")
+        self.walkthrough =  vc as! BWWalkthroughViewController
+        let pageOne = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage1")
+        let pageTwo = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage2")
+        let pageThree = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage3")
+        
+        // Attach the pages to the master
+        walkthrough.delegate = self
+        walkthrough.addViewController(pageOne)
+        walkthrough.addViewController(pageTwo)
+        walkthrough.addViewController(pageThree)
+        
+        self.window?.rootViewController = walkthrough
     }
     
     // MARK: Public Utils
@@ -292,11 +312,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.enter()
         
-        /// Initial Setup
-        ZuzuStore.sharedInstance.start()
+        self.presentWalkthrough()
         
-        // Initialize sign-in
+        // Initialize Amazon Auth Client
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        /// Start services
+        ZuzuStore.sharedInstance.start()
         
         AmazonSNSService.sharedInstance.start()
         
@@ -404,6 +426,29 @@ extension AppDelegate: TAGContainerOpenerNotifier {
         
         //Save tag container for later access
         AppDelegate.tagContainer = container
+    }
+    
+}
+
+// MARK: - BWWalkthroughViewControllerDelegate
+extension AppDelegate: BWWalkthroughViewControllerDelegate {
+    
+    func walkthroughCloseButtonPressed() {
+        
+        let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let mainTab = mainStoryboard.instantiateInitialViewController()
+        
+        if let window = self.window {
+            window.backgroundColor = UIColor.whiteColor()
+            UIView.transitionWithView(window, duration: 0.3, options: [.TransitionCrossDissolve], animations: {
+                window.rootViewController = mainTab
+                }, completion: nil)
+        }
+        
+    }
+    
+    func walkthroughPageDidChange(pageNumber: Int) {
+
     }
     
 }
