@@ -63,6 +63,7 @@ class PasswordFormView: UIView {
         didSet {
             
             passwordTextField.becomeFirstResponder()
+            
             passwordTextField.tintColor = UIColor.grayColor()
             passwordTextField.addTarget(self, action: #selector(PasswordFormView.textFieldDidChange(_:)),
                                         forControlEvents: UIControlEvents.EditingChanged)
@@ -148,7 +149,7 @@ class PasswordFormView: UIView {
         
         validator.registerField(passwordTextField, errorLabel: formValidationError, rules: [RequiredRule(message: "請輸入密碼"),
             MinLengthRule(length: 8, message: "密碼必須要8個字元以上"),
-            CustomPasswordRule(message: "密碼須由英文字母、數字或@#$%^&+=等非空白符號組成")])
+            CustomPasswordRule(message: "密碼須由英文、數字或@#$%^&+=等符號組成")])
     }
     
     init(formMode:FormMode, frame: CGRect) {
@@ -167,6 +168,8 @@ class PasswordFormView: UIView {
 extension PasswordFormView: ValidationDelegate {
     
     func validationSuccessful() {
+        
+        self.passwordTextField.resignFirstResponder()
         
         delegate?.onPasswordEntered(self.passwordTextField.text)
         

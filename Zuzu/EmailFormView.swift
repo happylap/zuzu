@@ -28,6 +28,8 @@ class EmailFormView: UIView {
         
         didSet {
             
+            emailTextField.becomeFirstResponder()
+            
             emailTextField.tintColor = UIColor.grayColor()
             emailTextField.addTarget(self, action: #selector(EmailFormView.textFieldDidChange(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -106,6 +108,8 @@ class EmailFormView: UIView {
 extension EmailFormView: ValidationDelegate {
     
     func validationSuccessful() {
+        
+        self.emailTextField.resignFirstResponder()
         
         delegate?.onEmailEntered(self.emailTextField.text)
         
