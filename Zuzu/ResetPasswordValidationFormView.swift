@@ -54,7 +54,7 @@ class ResetPasswordValidationFormView: UIView {
     
     var view:UIView!
     
-    // MARK: - Private Utils
+    // MARK: - Public Utils
     internal func setProcessingStateForResendButton(title: String? = "發送中") {
         
         self.resendCodeButton.setTitle(title, forState: .Normal)
@@ -66,6 +66,20 @@ class ResetPasswordValidationFormView: UIView {
         
         self.resendCodeButton.setTitle(title, forState: .Normal)
         self.setNormalStateForButton(self.resendCodeButton)
+        
+    }
+    
+    internal func setProcessingStateForResetButton(title: String? = "重設密碼") {
+        
+        self.continueResetButton.setTitle(title, forState: .Normal)
+        self.setProcessingStateForButton(self.continueResetButton)
+        
+    }
+    
+    internal func setNormalStateForResetButton(title: String? = "重設密碼") {
+        
+        self.continueResetButton.setTitle(title, forState: .Normal)
+        self.setNormalStateForButton(self.continueResetButton)
         
     }
     

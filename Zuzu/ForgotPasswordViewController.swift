@@ -270,6 +270,8 @@ extension ForgotPasswordViewController: ResetPasswordFormDelegate {
             
             ZuzuWebService.sharedInstance.checkVerificationCode(userEmail, verificationCode: userCode, handler: { (result, error) in
                 
+                self.resetPasswordValidationFormView?.setNormalStateForResetButton()
+                
                 loadingSpinner.stop()
                 
                 if let error = error {
