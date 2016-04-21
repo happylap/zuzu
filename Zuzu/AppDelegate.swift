@@ -127,6 +127,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             walkthrough.addViewController(pageThree)
             
             self.window?.rootViewController = walkthrough
+            
+            // Onboarding pages have been displayed.
+            UserDefaultsUtils.setDisplayOnboardingPages()
         }
     }
     
@@ -315,7 +318,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.enter()
         
-        self.presentWalkthrough()
+        if(UserDefaultsUtils.needsDisplayOnboardingPages()) {
+            self.presentWalkthrough()
+        }
         
         // Initialize Amazon Auth Client
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)

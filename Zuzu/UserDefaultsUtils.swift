@@ -10,6 +10,23 @@ import Foundation
 
 struct UserDefaultsUtils {
     
+    // MARK: Walkthrough Pages
+    static let onboardingPagesUserDefaultKey = "displayOnboardingPages"
+    
+    static func setDisplayOnboardingPages() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(true, forKey: onboardingPagesUserDefaultKey)
+    }
+    
+    static func needsDisplayOnboardingPages() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _ = userDefaults.objectForKey(onboardingPagesUserDefaultKey) {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     // MARK: Radar
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
     
