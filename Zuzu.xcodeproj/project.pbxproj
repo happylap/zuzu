@@ -76,6 +76,7 @@
 		2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */; };
 		2F7181EF1C5F120E00C56B5F /* libAdapterSDKMoPub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */; };
 		2F7181F31C607D3A00C56B5F /* GTM-PLP77J in Resources */ = {isa = PBXBuildFile; fileRef = 2F7181F21C607D3A00C56B5F /* GTM-PLP77J */; };
+		2F7ADC6F1CC8B10A009726B2 /* WalkthroughMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ADC6E1CC8B10A009726B2 /* WalkthroughMasterViewController.swift */; };
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
 		2F8DB45B1C50B95F006C4B21 /* SmartFilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */; };
@@ -265,6 +266,7 @@
 		2F6F609A1C5740DC004BCA45 /* FilterStatusBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterStatusBarView.swift; sourceTree = "<group>"; };
 		2F7181EE1C5F120E00C56B5F /* libAdapterSDKMoPub.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterSDKMoPub.a; sourceTree = "<group>"; };
 		2F7181F21C607D3A00C56B5F /* GTM-PLP77J */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTM-PLP77J"; sourceTree = "<group>"; };
+		2F7ADC6E1CC8B10A009726B2 /* WalkthroughMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughMasterViewController.swift; sourceTree = "<group>"; };
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
 		2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterContainerView.swift; sourceTree = "<group>"; };
@@ -683,6 +685,7 @@
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
 				2FAAAFA61CB663ED00B954EF /* FormViewController.swift */,
 				2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */,
+				2F7ADC6E1CC8B10A009726B2 /* WalkthroughMasterViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -1092,6 +1095,7 @@
 				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
 				2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */,
 				81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */,
+				2F7ADC6F1CC8B10A009726B2 /* WalkthroughMasterViewController.swift in Sources */,
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,

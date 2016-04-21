@@ -113,19 +113,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func presentWalkthrough() {
         let mainStory = UIStoryboard(name: "Main", bundle: nil)
-        let vc = mainStory.instantiateViewControllerWithIdentifier("walkthroughMaster")
-        self.walkthrough =  vc as! BWWalkthroughViewController
-        let pageOne = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage1")
-        let pageTwo = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage2")
-        let pageThree = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage3")
         
-        // Attach the pages to the master
-        walkthrough.delegate = self
-        walkthrough.addViewController(pageOne)
-        walkthrough.addViewController(pageTwo)
-        walkthrough.addViewController(pageThree)
-        
-        self.window?.rootViewController = walkthrough
+        if let vc = mainStory.instantiateViewControllerWithIdentifier("walkthroughMaster") as? BWWalkthroughViewController {
+            self.walkthrough =  vc
+            let pageOne = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage1")
+            let pageTwo = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage2")
+            let pageThree = mainStory.instantiateViewControllerWithIdentifier("walkthroughPage3")
+            
+            // Attach the pages to the master
+            walkthrough.delegate = self
+            walkthrough.addViewController(pageOne)
+            walkthrough.addViewController(pageTwo)
+            walkthrough.addViewController(pageThree)
+            
+            self.window?.rootViewController = walkthrough
+        }
     }
     
     // MARK: Public Utils
