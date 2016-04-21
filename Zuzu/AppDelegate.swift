@@ -93,14 +93,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
-    private func updateTabBarBadge(application: UIApplication){
+    private func updateTabBarBadge(application: UIApplication, tabController: UITabBarController){
         Log.enter()
         let badgeNumber = application.applicationIconBadgeNumber
         Log.debug("badgeNumber: \(badgeNumber)")
         
         if badgeNumber > 0{
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let tabArray = rootViewController?.tabBar.items as NSArray!
+            let tabArray = tabController.tabBar.items as NSArray!
             let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
             let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
             Log.debug("set tab bar badge number as \(badgeNumber)")
@@ -258,49 +257,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.enter()
         Log.debug("application badge = \(application.applicationIconBadgeNumber)")
         
-        let rootViewController = self.window?.rootViewController as! UITabBarController!
-        let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-        
-        if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
-            GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                               action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
-        }
-        
-        if application.applicationState == UIApplicationState.Active {
-            Log.debug("user receive notification while app is in the foreground")
+        if let rootViewController = self.window?.rootViewController as? UITabBarController {
             
-            Log.debug("post notification: receiveNotifyItems")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
             
-            if rootViewController.selectedIndex == notifyTabIndex{
-                Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: userInfo)
+            if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
+                GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
+                                   action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
+            }
+            
+            if application.applicationState == UIApplicationState.Active {
+                Log.debug("user receive notification while app is in the foreground")
                 
-            }else{
-                if let aps = userInfo["aps"] as? NSDictionary {
-                    if let badge = aps["badge"] as? Int {
-                        Log.debug("aps[badge] = \(badge)")
-                        application.applicationIconBadgeNumber = badge
-                        updateTabBarBadge(application)
+                Log.debug("post notification: receiveNotifyItems")
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+                
+                if rootViewController.selectedIndex == notifyTabIndex{
+                    Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
+                    NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: userInfo)
+                    
+                }else{
+                    if let aps = userInfo["aps"] as? NSDictionary {
+                        if let badge = aps["badge"] as? Int {
+                            Log.debug("aps[badge] = \(badge)")
+                            application.applicationIconBadgeNumber = badge
+                            updateTabBarBadge(application, tabController: rootViewController)
+                        }
                     }
                 }
-            }
-            
-        }else{
-            let rootViewController = self.window?.rootViewController as! UITabBarController!
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-            
-            if badgeNumber > 0 {
-                if rootViewController.selectedIndex != notifyTabIndex{
-                    updateTabBarBadge(application)
-                    Log.debug("postNotificationName: switchToTab")
-                    NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : notifyTabIndex])
-                    //Log.debug("set notification tab as selected")
-                    //rootViewController.selectedIndex = notifyTabIndex
+                
+            }else{
+                
+                let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+                let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+                
+                if badgeNumber > 0 {
+                    if rootViewController.selectedIndex != notifyTabIndex{
+                        updateTabBarBadge(application, tabController: rootViewController)
+                        Log.debug("postNotificationName: switchToTab")
+                        NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : notifyTabIndex])
+                        //Log.debug("set notification tab as selected")
+                        //rootViewController.selectedIndex = notifyTabIndex
+                    }
                 }
+                
             }
-            
         }
         
         Log.exit()
@@ -374,20 +375,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.enter()
         
-        let rootViewController = self.window?.rootViewController as! UITabBarController!
-        let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-        
-        if badgeNumber > 0 {
-            Log.debug("post notification: receiveNotifyItems")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        if let rootViewController = self.window?.rootViewController as? UITabBarController {
+            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
             
-            if rootViewController.selectedIndex == notifyTabIndex{
-                UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-                Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: nil)
-            }else{
-                self.updateTabBarBadge(application)
+            if badgeNumber > 0 {
+                Log.debug("post notification: receiveNotifyItems")
+                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+                
+                if rootViewController.selectedIndex == notifyTabIndex{
+                    UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+                    Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
+                    NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: nil)
+                }else{
+                    self.updateTabBarBadge(application, tabController: rootViewController)
+                }
             }
         }
         
@@ -448,7 +450,7 @@ extension AppDelegate: BWWalkthroughViewControllerDelegate {
     }
     
     func walkthroughPageDidChange(pageNumber: Int) {
-
+        
     }
     
 }
