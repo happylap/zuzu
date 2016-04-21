@@ -36,6 +36,17 @@ internal func getCurrentScale() -> CGFloat{
         scale = ScaleConst.largeScale
     case .Simulator:
         Log.debug("It's an simulator")
+        
+        switch(Device.size()) {
+        case .Screen5_5Inch:
+            scale = ScaleConst.largeScale
+        case .Screen4_7Inch:
+            break
+        case .Screen4Inch, .Screen3_5Inch:
+            scale = ScaleConst.smallScale
+        default: break
+        }
+        
     default:
         Log.debug("It's an unknown device")
     }
