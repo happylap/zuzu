@@ -79,6 +79,7 @@
 		2F7ADC6F1CC8B10A009726B2 /* WalkthroughMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ADC6E1CC8B10A009726B2 /* WalkthroughMasterViewController.swift */; };
 		2F7B5F821BD609610024E88A /* HistoryTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */; };
 		2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */; };
+		2F8320AF1CCF20BF00C19476 /* MyCommonLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8320AE1CCF20BF00C19476 /* MyCommonLoginViewController.swift */; };
 		2F8DB45B1C50B95F006C4B21 /* SmartFilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */; };
 		2F9139EB1C7334C5004325B1 /* RadarLandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */; };
 		2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */; };
@@ -269,6 +270,7 @@
 		2F7ADC6E1CC8B10A009726B2 /* WalkthroughMasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughMasterViewController.swift; sourceTree = "<group>"; };
 		2F7B5F811BD609610024E88A /* HistoryTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewDataSource.swift; sourceTree = "<group>"; };
 		2F7B5F851BD62B950024E88A /* SearchItemDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchItemDataStore.swift; sourceTree = "<group>"; };
+		2F8320AE1CCF20BF00C19476 /* MyCommonLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCommonLoginViewController.swift; sourceTree = "<group>"; };
 		2F8DB45A1C50B95F006C4B21 /* SmartFilterContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterContainerView.swift; sourceTree = "<group>"; };
 		2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarLandingViewController.swift; sourceTree = "<group>"; };
 		2F9410531BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailBasicInfoCell.swift; sourceTree = "<group>"; };
@@ -683,6 +685,7 @@
 				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
+				2F8320AE1CCF20BF00C19476 /* MyCommonLoginViewController.swift */,
 				2FAAAFA61CB663ED00B954EF /* FormViewController.swift */,
 				2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */,
 				2F7ADC6E1CC8B10A009726B2 /* WalkthroughMasterViewController.swift */,
@@ -1066,6 +1069,7 @@
 				8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */,
 				2F6637611CB7859100A51095 /* EmailFormView.swift in Sources */,
 				2F4234171BF1CD2900385C9A /* HouseDetailTitleViewCell.swift in Sources */,
+				2F8320AF1CCF20BF00C19476 /* MyCommonLoginViewController.swift in Sources */,
 				2F9791C01BF59C4D0056B721 /* BrowserViewController.swift in Sources */,
 				2FBDAB131C0E988300B45E5B /* ConfigLoader.swift in Sources */,
 				2F9410541BF396BE00BA12B5 /* HouseDetailBasicInfoCell.swift in Sources */,
