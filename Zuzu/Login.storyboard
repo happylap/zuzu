@@ -29,9 +29,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NS4-0L-3O9">
-                                        <rect key="frame" x="16" y="32" width="25" height="25"/>
+                                        <rect key="frame" x="16" y="32" width="30" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="25" id="Al9-7b-j2w"/>
+                                            <constraint firstAttribute="width" constant="30" id="Al9-7b-j2w"/>
                                             <constraint firstAttribute="height" constant="35" id="MgE-cS-qFt"/>
                                             <constraint firstAttribute="width" secondItem="NS4-0L-3O9" secondAttribute="height" multiplier="1:1" id="aNF-wV-xdN"/>
                                         </constraints>
@@ -45,8 +45,8 @@
                                             </mask>
                                         </variation>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="豬豬快租" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QAl-oD-4Qz">
-                                        <rect key="frame" x="143" y="350" width="128" height="38.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬快租" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QAl-oD-4Qz">
+                                        <rect key="frame" x="143" y="352.5" width="128" height="38.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -54,14 +54,14 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G6I-5v-Ck9" userLabel="Social Login View">
-                                        <rect key="frame" x="0.0" y="425" width="414" height="119.5"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G6I-5v-Ck9" userLabel="Social Login View">
+                                        <rect key="frame" x="0.0" y="427.5" width="414" height="128.5"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWM-6I-rFC" userLabel="facebookButton">
-                                                <rect key="frame" x="62" y="0.0" width="290" height="44"/>
+                                                <rect key="frame" x="41.5" y="0.0" width="331" height="59"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" secondItem="WWM-6I-rFC" secondAttribute="height" multiplier="359:54" id="MMl-f0-yxK"/>
+                                                    <constraint firstAttribute="width" secondItem="WWM-6I-rFC" secondAttribute="height" multiplier="359:64" id="MMl-f0-yxK"/>
                                                 </constraints>
                                                 <state key="normal" title="Facebook 帳號登入">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -75,9 +75,9 @@
                                                 </userDefinedRuntimeAttributes>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1oL-Ub-kE6" userLabel="googleButton">
-                                                <rect key="frame" x="62" y="60" width="290" height="43.5"/>
+                                                <rect key="frame" x="41.5" y="69.5" width="331" height="59"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <state key="normal" title="    Google   帳號登入">
+                                                <state key="normal" title="Google 帳號登入">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
@@ -91,26 +91,29 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="WWM-6I-rFC" firstAttribute="leading" secondItem="1oL-Ub-kE6" secondAttribute="leading" id="4pn-sN-0Lx"/>
-                                            <constraint firstItem="1oL-Ub-kE6" firstAttribute="top" secondItem="WWM-6I-rFC" secondAttribute="bottom" constant="16" id="6jn-6z-HLq"/>
+                                            <constraint firstItem="1oL-Ub-kE6" firstAttribute="top" secondItem="WWM-6I-rFC" secondAttribute="bottom" multiplier="450:434" constant="8" symbolic="YES" id="6jn-6z-HLq"/>
                                             <constraint firstItem="WWM-6I-rFC" firstAttribute="top" secondItem="G6I-5v-Ck9" secondAttribute="top" id="BQw-XW-pha"/>
                                             <constraint firstItem="1oL-Ub-kE6" firstAttribute="width" secondItem="WWM-6I-rFC" secondAttribute="width" id="GZO-mX-isf"/>
                                             <constraint firstItem="WWM-6I-rFC" firstAttribute="centerX" secondItem="G6I-5v-Ck9" secondAttribute="centerX" id="Uav-AL-aPv"/>
                                             <constraint firstItem="1oL-Ub-kE6" firstAttribute="height" secondItem="WWM-6I-rFC" secondAttribute="height" id="eYb-Ce-1q3"/>
-                                            <constraint firstItem="WWM-6I-rFC" firstAttribute="width" secondItem="G6I-5v-Ck9" secondAttribute="width" multiplier="7:10" id="vKB-nG-rai"/>
-                                            <constraint firstAttribute="bottom" secondItem="1oL-Ub-kE6" secondAttribute="bottom" constant="16" id="xKm-uh-JL9"/>
+                                            <constraint firstItem="WWM-6I-rFC" firstAttribute="width" secondItem="G6I-5v-Ck9" secondAttribute="width" multiplier="8:10" id="vKB-nG-rai"/>
+                                            <constraint firstAttribute="bottom" secondItem="1oL-Ub-kE6" secondAttribute="bottom" id="xKm-uh-JL9"/>
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="或使用豬豬快租帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jSu-0X-Fx9">
-                                        <rect key="frame" x="144" y="556.5" width="126" height="17"/>
+                                        <rect key="frame" x="144" y="564" width="126" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0g-Jt-DMB" userLabel="Custom Login">
-                                        <rect key="frame" x="32" y="577.5" width="349" height="75.5"/>
+                                        <rect key="frame" x="42" y="585" width="329" height="68"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D2u-tz-dkJ">
-                                                <rect key="frame" x="32" y="16" width="131" height="43.5"/>
+                                                <rect key="frame" x="0.0" y="8" width="157" height="52"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="131" id="L4S-kr-GLr"/>
                                                     <constraint firstAttribute="width" constant="30" id="a9j-eQ-rrI"/>
@@ -133,7 +136,7 @@
                                                 </variation>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dS6-BF-XPh">
-                                                <rect key="frame" x="186" y="16" width="131" height="43.5"/>
+                                                <rect key="frame" x="172" y="8" width="157" height="52"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <state key="normal" title="註冊"/>
                                                 <userDefinedRuntimeAttributes>
@@ -149,15 +152,19 @@
                                             <constraint firstItem="D2u-tz-dkJ" firstAttribute="baseline" secondItem="dS6-BF-XPh" secondAttribute="firstBaseline" id="9N5-Zh-zRV"/>
                                             <constraint firstItem="D2u-tz-dkJ" firstAttribute="centerY" secondItem="R0g-Jt-DMB" secondAttribute="centerY" id="9uZ-W1-dSl"/>
                                             <constraint firstItem="D2u-tz-dkJ" firstAttribute="top" secondItem="dS6-BF-XPh" secondAttribute="top" id="E2v-ND-gRu"/>
-                                            <constraint firstItem="D2u-tz-dkJ" firstAttribute="leading" secondItem="R0g-Jt-DMB" secondAttribute="leading" constant="32" id="TQs-qW-jxk"/>
-                                            <constraint firstAttribute="trailing" secondItem="dS6-BF-XPh" secondAttribute="trailing" constant="32" id="a1v-l8-1sl"/>
+                                            <constraint firstItem="dS6-BF-XPh" firstAttribute="centerY" secondItem="D2u-tz-dkJ" secondAttribute="centerY" id="L2f-qz-m66"/>
+                                            <constraint firstItem="D2u-tz-dkJ" firstAttribute="leading" secondItem="R0g-Jt-DMB" secondAttribute="leading" id="TQs-qW-jxk"/>
+                                            <constraint firstAttribute="trailing" secondItem="dS6-BF-XPh" secondAttribute="trailing" id="a1v-l8-1sl"/>
                                             <constraint firstItem="dS6-BF-XPh" firstAttribute="height" secondItem="D2u-tz-dkJ" secondAttribute="height" id="abE-g1-uKK"/>
-                                            <constraint firstItem="dS6-BF-XPh" firstAttribute="leading" secondItem="D2u-tz-dkJ" secondAttribute="trailing" constant="23" id="e0u-0J-zap"/>
+                                            <constraint firstItem="dS6-BF-XPh" firstAttribute="leading" secondItem="D2u-tz-dkJ" secondAttribute="trailing" constant="15" id="e0u-0J-zap"/>
                                             <constraint firstItem="dS6-BF-XPh" firstAttribute="baseline" secondItem="D2u-tz-dkJ" secondAttribute="firstBaseline" id="fQN-b4-nKe"/>
-                                            <constraint firstItem="D2u-tz-dkJ" firstAttribute="top" secondItem="R0g-Jt-DMB" secondAttribute="top" constant="16" id="gjS-ZV-ods"/>
+                                            <constraint firstItem="D2u-tz-dkJ" firstAttribute="top" secondItem="R0g-Jt-DMB" secondAttribute="top" constant="8" id="gjS-ZV-ods"/>
                                         </constraints>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="9N5-Zh-zRV"/>
+                                                <exclude reference="E2v-ND-gRu"/>
                                                 <exclude reference="fQN-b4-nKe"/>
                                             </mask>
                                         </variation>
@@ -168,6 +175,7 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_icon_privacy" translatesAutoresizingMaskIntoConstraints="NO" id="nwT-nM-L0s" userLabel="privacy">
                                                 <rect key="frame" x="137" y="25" width="20" height="20"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="width" secondItem="nwT-nM-L0s" secondAttribute="height" multiplier="1:1" id="0A7-zx-EFo"/>
                                                     <constraint firstAttribute="width" constant="20" id="yrx-rM-hsZ"/>
                                                 </constraints>
                                             </imageView>
@@ -185,6 +193,7 @@
                                                 </userDefinedRuntimeAttributes>
                                                 <variation key="default">
                                                     <mask key="constraints">
+                                                        <exclude reference="7WA-q8-GCV"/>
                                                         <exclude reference="nNl-gQ-iWN"/>
                                                     </mask>
                                                 </variation>
@@ -203,12 +212,17 @@
                                             <constraint firstItem="DJV-7g-wil" firstAttribute="top" secondItem="SQT-t1-MQO" secondAttribute="bottom" constant="8" symbolic="YES" id="4kh-xA-WwS"/>
                                             <constraint firstItem="nwT-nM-L0s" firstAttribute="centerY" secondItem="SQT-t1-MQO" secondAttribute="centerY" id="7mN-x4-pjf"/>
                                             <constraint firstItem="DJV-7g-wil" firstAttribute="top" secondItem="nwT-nM-L0s" secondAttribute="bottom" constant="6" id="9Nu-3c-3Ni"/>
-                                            <constraint firstItem="nwT-nM-L0s" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cf4-Sw-cWD" secondAttribute="top" constant="8" id="BuI-Pg-imK"/>
+                                            <constraint firstItem="nwT-nM-L0s" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cf4-Sw-cWD" secondAttribute="top" id="BuI-Pg-imK"/>
                                             <constraint firstItem="SQT-t1-MQO" firstAttribute="centerX" secondItem="DJV-7g-wil" secondAttribute="centerX" id="CV8-1m-HfR"/>
                                             <constraint firstItem="SQT-t1-MQO" firstAttribute="centerX" secondItem="cf4-Sw-cWD" secondAttribute="centerX" id="HYd-b8-sVr"/>
                                             <constraint firstItem="SQT-t1-MQO" firstAttribute="leading" secondItem="nwT-nM-L0s" secondAttribute="trailing" constant="8" symbolic="YES" id="rOX-56-vgH"/>
                                             <constraint firstAttribute="bottom" secondItem="DJV-7g-wil" secondAttribute="bottom" constant="8" id="sut-WK-oMY"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="9Nu-3c-3Ni"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -218,13 +232,13 @@
                                     <constraint firstItem="R0g-Jt-DMB" firstAttribute="top" secondItem="jSu-0X-Fx9" secondAttribute="bottom" constant="4" id="6Yy-Z3-aIn"/>
                                     <constraint firstItem="cf4-Sw-cWD" firstAttribute="width" secondItem="G6I-5v-Ck9" secondAttribute="width" id="82U-cs-Bg6"/>
                                     <constraint firstItem="cf4-Sw-cWD" firstAttribute="top" secondItem="R0g-Jt-DMB" secondAttribute="bottom" id="Bsc-Yb-Hmx"/>
-                                    <constraint firstItem="jSu-0X-Fx9" firstAttribute="top" secondItem="G6I-5v-Ck9" secondAttribute="bottom" constant="12" id="CMS-7Y-eCR"/>
+                                    <constraint firstItem="jSu-0X-Fx9" firstAttribute="top" secondItem="G6I-5v-Ck9" secondAttribute="bottom" constant="8" id="CMS-7Y-eCR"/>
                                     <constraint firstItem="cf4-Sw-cWD" firstAttribute="bottom" secondItem="Ldg-Uf-ieZ" secondAttribute="bottomMargin" id="DFC-xd-alx"/>
                                     <constraint firstAttribute="bottom" secondItem="Ym7-Tx-s6I" secondAttribute="bottom" id="ETE-WT-RhF"/>
-                                    <constraint firstItem="D2u-tz-dkJ" firstAttribute="height" secondItem="WWM-6I-rFC" secondAttribute="height" id="G7P-WP-fM1"/>
+                                    <constraint firstItem="D2u-tz-dkJ" firstAttribute="height" secondItem="WWM-6I-rFC" secondAttribute="height" multiplier="96:108" id="G7P-WP-fM1"/>
                                     <constraint firstItem="G6I-5v-Ck9" firstAttribute="top" secondItem="Ldg-Uf-ieZ" secondAttribute="top" constant="360" id="Ivn-JQ-L19"/>
                                     <constraint firstItem="Ym7-Tx-s6I" firstAttribute="trailing" secondItem="cf4-Sw-cWD" secondAttribute="trailing" id="LHV-FW-JH9"/>
-                                    <constraint firstItem="D2u-tz-dkJ" firstAttribute="width" secondItem="WWM-6I-rFC" secondAttribute="width" multiplier="9:20" id="N66-rD-HVJ"/>
+                                    <constraint firstItem="D2u-tz-dkJ" firstAttribute="width" secondItem="WWM-6I-rFC" secondAttribute="width" multiplier="9.5:20" id="N66-rD-HVJ"/>
                                     <constraint firstItem="Ym7-Tx-s6I" firstAttribute="leading" secondItem="cf4-Sw-cWD" secondAttribute="leading" id="P8p-kc-ttx"/>
                                     <constraint firstItem="cf4-Sw-cWD" firstAttribute="centerX" secondItem="G6I-5v-Ck9" secondAttribute="centerX" id="Rnv-2G-J6S"/>
                                     <constraint firstItem="jSu-0X-Fx9" firstAttribute="centerX" secondItem="R0g-Jt-DMB" secondAttribute="centerX" id="TGm-aj-TCI"/>

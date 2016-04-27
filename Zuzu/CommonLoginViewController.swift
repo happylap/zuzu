@@ -37,7 +37,7 @@ class CommonLoginViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!{
         didSet {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-            cancelButton.tintColor = UIColor.colorWithRGB(0xD4D4D4, alpha: 1)
+            cancelButton.tintColor = UIColor.lightGrayColor()//UIColor.colorWithRGB(0xD4D4D4, alpha: 1)
             
             cancelButton.addTarget(self, action: #selector(CommonLoginViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -109,6 +109,7 @@ class CommonLoginViewController: UIViewController {
     @IBOutlet weak var privacyIconView: UIImageView! {
         didSet{
             privacyIconView.image = UIImage(named: "login_icon_privacy")?.imageWithRenderingMode(.AlwaysTemplate)
+             privacyIconView.tintColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
         }
     }
     
@@ -118,13 +119,17 @@ class CommonLoginViewController: UIViewController {
             fbButton.layer.borderWidth = 2
             fbButton.layer.borderColor = UIColor.colorWithRGB(0x4990E2, alpha: 1).CGColor
             
-            fbButton.setImage(UIImage(named: "facebook_icon")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            fbButton.setImage(UIImage(named: "login_icon_facebook")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             fbButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-            fbButton.imageEdgeInsets = UIEdgeInsetsMake(0, -6, 0, 0)
-            fbButton.tintColor = UIColor.colorWithRGB(0x4990E2, alpha: 1)
+            fbButton.imageEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 0)
+            fbButton.tintColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
             
             fbButton.backgroundColor = UIColor.colorWithRGB(0x4990E2, alpha: 1)
             fbButton.setTitleColor(UIColor.colorWithRGB(0xFFFFFF, alpha: 1), forState: .Normal)
+            
+            let shift = (fbButton.bounds.width / 4) - 25
+            fbButton.titleEdgeInsets = UIEdgeInsetsMake(0, shift, 0, 0)
+            fbButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             
             fbButton.addTarget(self, action: #selector(CommonLoginViewController.onFBButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -136,13 +141,17 @@ class CommonLoginViewController: UIViewController {
             googleButton.layer.borderWidth = 2
             googleButton.layer.borderColor = UIColor.colorWithRGB(0xF3364C, alpha: 1).CGColor
             
-            googleButton.setImage(UIImage(named: "google_icon")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            googleButton.setImage(UIImage(named: "login_icon_google")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             googleButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-            googleButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-            googleButton.tintColor = UIColor.colorWithRGB(0xF3364C, alpha: 1)
+            googleButton.imageEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 0)
+            googleButton.tintColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
             
             googleButton.backgroundColor = UIColor.colorWithRGB(0xF3364C, alpha: 1)
             googleButton.setTitleColor(UIColor.colorWithRGB(0xFFFFFF, alpha: 1), forState: .Normal)
+            
+            let shift = (googleButton.bounds.width / 4) - 25
+            googleButton.titleEdgeInsets = UIEdgeInsetsMake(0, shift, 0, 0)
+            googleButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             
             googleButton.addTarget(self, action: #selector(CommonLoginViewController.onGoogleButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
