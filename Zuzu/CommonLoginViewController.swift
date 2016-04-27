@@ -37,7 +37,7 @@ class CommonLoginViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!{
         didSet {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
-            cancelButton.tintColor = UIColor.lightGrayColor()//UIColor.colorWithRGB(0xD4D4D4, alpha: 1)
+            cancelButton.tintColor = UIColor.lightGrayColor()
             
             cancelButton.addTarget(self, action: #selector(CommonLoginViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
@@ -127,7 +127,7 @@ class CommonLoginViewController: UIViewController {
             fbButton.backgroundColor = UIColor.colorWithRGB(0x4990E2, alpha: 1)
             fbButton.setTitleColor(UIColor.colorWithRGB(0xFFFFFF, alpha: 1), forState: .Normal)
             
-            let shift = (fbButton.bounds.width / 4) - 25
+            let shift = (fbButton.bounds.width / 4) - (25 + 12)
             fbButton.titleEdgeInsets = UIEdgeInsetsMake(0, shift, 0, 0)
             fbButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             
@@ -149,7 +149,7 @@ class CommonLoginViewController: UIViewController {
             googleButton.backgroundColor = UIColor.colorWithRGB(0xF3364C, alpha: 1)
             googleButton.setTitleColor(UIColor.colorWithRGB(0xFFFFFF, alpha: 1), forState: .Normal)
             
-            let shift = (googleButton.bounds.width / 4) - 25
+            let shift = (googleButton.bounds.width / 4) - (25 + 12)
             googleButton.titleEdgeInsets = UIEdgeInsetsMake(0, shift, 0, 0)
             googleButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             
