@@ -47,8 +47,8 @@ class CommonLoginViewController: UIViewController {
         
         didSet {
             userRegisterButton.layer.borderWidth = 2
-            userRegisterButton.layer.borderColor = UIColor.colorWithRGB(0x00B4C6, alpha: 1).CGColor
-            userRegisterButton.backgroundColor = UIColor.colorWithRGB(0x00B4C6, alpha: 1)
+            userRegisterButton.layer.borderColor = UIColor.colorWithRGB(0x12B3A6, alpha: 1).CGColor
+            userRegisterButton.backgroundColor = UIColor.colorWithRGB(0x12B3A6, alpha: 1)
             
             userRegisterButton.tintColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
             
@@ -61,8 +61,8 @@ class CommonLoginViewController: UIViewController {
         
         didSet {
             userLoginButton.layer.borderWidth = 2
-            userLoginButton.layer.borderColor = UIColor.colorWithRGB(0x00B4C6, alpha: 1).CGColor
-            userLoginButton.backgroundColor = UIColor.colorWithRGB(0x00B4C6, alpha: 1)
+            userLoginButton.layer.borderColor = UIColor.colorWithRGB(0x12B3A6, alpha: 1).CGColor
+            userLoginButton.backgroundColor = UIColor.colorWithRGB(0x12B3A6, alpha: 1)
             userLoginButton.tintColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
             
             userLoginButton.addTarget(self, action: #selector(CommonLoginViewController.onZuzuLoginButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
@@ -108,7 +108,7 @@ class CommonLoginViewController: UIViewController {
     
     @IBOutlet weak var privacyIconView: UIImageView! {
         didSet{
-            privacyIconView.image = UIImage(named: "login_privacy_icon")?.imageWithRenderingMode(.AlwaysTemplate)
+            privacyIconView.image = UIImage(named: "login_icon_privacy")?.imageWithRenderingMode(.AlwaysTemplate)
         }
     }
     
