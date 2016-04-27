@@ -98,8 +98,11 @@ extension UIButton {
                 
                 if let baseFont = self.titleLabel?.font {
                     let scaledSize = getScaledFontSize(baseFont)
-                    
-                    self.titleLabel?.font = UIFont.systemFontOfSize(scaledSize)
+                    if let originalFont = self.titleLabel?.font {
+                        self.titleLabel?.font = originalFont.fontWithSize(scaledSize)
+                    } else {
+                        self.titleLabel?.font = UIFont.systemFontOfSize(scaledSize)
+                    }
                 }
             }
         }
@@ -118,7 +121,7 @@ extension UILabel {
                 if let baseFont = self.font {
                     let scaledSize = getScaledFontSize(baseFont)
                     
-                    self.font = UIFont.systemFontOfSize(scaledSize)
+                    self.font = baseFont.fontWithSize(scaledSize)
                 }
             }
         }
