@@ -70,10 +70,22 @@ class SearchResultViewController: UIViewController {
     
     @IBOutlet weak var debugBarButton: UIBarButtonItem! {
         didSet {
+            
+            let rightItems = self.navigationItem.rightBarButtonItems
+            
             #if DEBUG
                 debugBarButton.enabled = true
             #else
                 debugBarButton.enabled = false
+                
+                /// Remove debug button
+                if let rightBarButtonItems = rightItems?.filter({ (button) -> Bool in
+                    return (button != debugBarButton)
+                }) {
+                    
+                    self.navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
+                }
+                
             #endif
             
         }
