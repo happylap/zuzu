@@ -1011,6 +1011,10 @@ class SearchBoxTableViewController: UITableViewController {
         
         self.configurePricePicker()
         
+        //Configure location manager
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
         //Configure Guesture
         self.configureGestureRecognizer()
         
@@ -1060,18 +1064,6 @@ class SearchBoxTableViewController: UITableViewController {
         //Restore hidden tab bar before apeearing
         self.tabBarController?.tabBarHidden = false
         
-        //Configure location manager
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        
-        //Try to start monitoring location
-        if let regionList = currentCriteria.region where !regionList.isEmpty {
-            locationManagerActive = false
-        } else {
-            locationManagerActive = true
-        }
-        
         //Google Analytics Tracker
         self.trackScreen()
         
@@ -1081,6 +1073,16 @@ class SearchBoxTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.enter()
+        
+        /// Request to monitor location
+        locationManager.requestWhenInUseAuthorization()
+        
+        //Try to start monitoring location
+        if let regionList = currentCriteria.region where regionList.isEmpty == false {
+            locationManagerActive = false
+        } else {
+            locationManagerActive = true
+        }
         
         /// Start all SearchCriteriaObservers
         for observer in stateObservers {
