@@ -214,9 +214,9 @@ class NotificationItemsTableViewController: UITableViewController {
         }
         
         /// Refresh data on receiving new items
-        let apnsNewItem = AppDelegate.apnsNewItemCount
-        if(apnsNewItem > 0) {
-            Log.debug("apnsNewItem > 0, refreshData")
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
+        if(badgeNumber > 0) {
+            Log.debug("badgeNumber > 0, refreshData")
             self.refreshData(true)
         }
         

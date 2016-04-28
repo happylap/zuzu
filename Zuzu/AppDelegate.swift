@@ -29,9 +29,7 @@ enum AppStateOnNotification : Int {
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal typealias NotificationSetupHandler = (result:Bool) -> ()
-    
-    internal static var apnsNewItemCount: Int = 0
-    
+
     internal static var tagContainer: TAGContainer?
     
     var window: UIWindow?
@@ -55,9 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var walkthrough:BWWalkthroughViewController!
     
     // MARK: Private Utils
-    private static func updateNewApnsItemCount(count: Int) {
-        apnsNewItemCount = count
-    }
     
     private func commonServiceSetup() {
         
@@ -131,7 +126,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func postRadarItemReceivedEventForAppInState(appState: AppStateOnNotification,
                                                             switchTab: Bool) {
 
-        Log.debug("appState = \(appState), switchTab = \(switchTab), apnsItemCount = \(AppDelegate.apnsNewItemCount)")
+        let appBadge = UIApplication.sharedApplication().applicationIconBadgeNumber
+        Log.debug("appState = \(appState), switchTab = \(switchTab), appBadge = \(appBadge)")
         
         /// Check is logged in
         if(!AmazonClientManager.sharedInstance.isLoggedIn()) {
@@ -144,8 +140,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
         
-        if(AppDelegate.apnsNewItemCount <= 0) {
-            Log.debug("apnsItemCount <= 0")
+        if(appBadge <= 0) {
+            Log.debug("appBadge <= 0")
             
             Log.exit()
             return
@@ -153,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /// GA Tracking: Notification info
         GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value: AppDelegate.apnsNewItemCount)
+                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value: appBadge)
         
         /// Post receiveNotifyItems Notification
         /// - Log the notification, update badge if needed, switch tab if needed
@@ -185,7 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.enter()
         
         /// Get the new item count as Tab Badge
-        let badgeNumber = AppDelegate.apnsNewItemCount
+        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
         Log.debug("badgeNumber: \(badgeNumber)")
         
         if badgeNumber <= 0{
@@ -236,9 +232,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let notifyTabIndex = MainTabConstants.NOTIFICATION_TAB_INDEX
 
             /// Switch tab is APNS new item count > 0
-            if AppDelegate.apnsNewItemCount > 0 {
+            if(UIApplication.sharedApplication().applicationIconBadgeNumber > 0) {
                 if(tabViewController.selectedIndex != notifyTabIndex) {
-                    AppDelegate.updateTabBarBadge()
                     
                     Log.debug("postNotificationName: switchToTab")
                     NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self,
@@ -380,13 +375,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         ///Save APNS new item count
         if let aps = userInfo["aps"] as? NSDictionary, newItemCount = aps["badge"] as? Int {
-            
-            AppDelegate.updateNewApnsItemCount(newItemCount)
-            
-        } else {
-            
-            AppDelegate.updateNewApnsItemCount(UIApplication.sharedApplication().applicationIconBadgeNumber)
-            
+            /// Need to set App badge manually
+            application.applicationIconBadgeNumber = newItemCount
         }
         
         /// AppState: Foreground, Launch From: N/A
@@ -452,9 +442,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// Resume Login Session when the app is launched
         AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
-                
-                AppDelegate.updateNewApnsItemCount(UIApplication.sharedApplication().applicationIconBadgeNumber)
-                
+
                 /// AppState: Terminate, Launch From: Alert
                 if let launchOptions = launchOptions, _ = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] {
                     
@@ -499,7 +487,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.debug("\(application.applicationIconBadgeNumber)")
         
         /// AppState: Background, Launch From: Alert | AppIcon
-        AppDelegate.updateNewApnsItemCount(UIApplication.sharedApplication().applicationIconBadgeNumber)
         self.postRadarItemReceivedEventForAppInState(.Background, switchTab: false)
         
         /// Try to trigger the timer for refreshing token
