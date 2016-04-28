@@ -102,9 +102,9 @@ class SearchCriteria: NSObject, NSCoding {
         
         aCoder.encodeObject(types, forKey:"types")
         
-//        if let filterGroups = filterGroups {
-//            aCoder.encodeObject(filterGroups, forKey:"filterGroups")
-//        }
+        //        if let filterGroups = filterGroups {
+        //            aCoder.encodeObject(filterGroups, forKey:"filterGroups")
+        //        }
     }
     
     func isEmpty() ->Bool {
@@ -202,6 +202,8 @@ class SearchItem: NSObject, NSCoding {
     
     static let labelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
     
+    let maxDisplayRegion = 3
+    
     let criteria:SearchCriteria
     
     let type:SearchType
@@ -222,7 +224,15 @@ class SearchItem: NSObject, NSCoding {
                         regionStr.append( "\(region.name)")
                     }
                     
-                    resultStr = "\(city.name) (\(regionStr.prefix(3).joinWithSeparator("，")))"
+                    let regionCount = regionStr.count
+                    
+                    if(regionCount > 3) {
+                        resultStr =
+                            "\(city.name) (\(regionStr.prefix(maxDisplayRegion).joinWithSeparator("，"))等\(regionCount)區)"
+                    } else {
+                        resultStr =
+                            "\(city.name) (\(regionStr.joinWithSeparator("，")))"
+                    }
                     
                 } else {
                     for city in cities {

@@ -12,6 +12,8 @@ class RadarDisplayItem: NSObject, NSCoding {
     
     static let labelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
     
+    let maxDisplayRegion = 3
+    
     let criteria:SearchCriteria
     
     var title:String {
@@ -30,7 +32,15 @@ class RadarDisplayItem: NSObject, NSCoding {
                         regionStr.append( "\(region.name)")
                     }
                     
-                    resultStr = "\(city.name) (\(regionStr.prefix(3).joinWithSeparator("，")))"
+                    let regionCount = regionStr.count
+                    
+                    if(regionCount > 3) {
+                        resultStr =
+                            "\(city.name) (\(regionStr.prefix(maxDisplayRegion).joinWithSeparator("，"))等\(regionCount)區)"
+                    } else {
+                        resultStr =
+                            "\(city.name) (\(regionStr.joinWithSeparator("，")))"
+                    }
                     
                 } else {
                     for city in cities {
@@ -137,8 +147,8 @@ class RadarDisplayItem: NSObject, NSCoding {
             }
             
             result += "\n"
-
-        
+            
+            
             if let priceRange = criteria.price {
                 
                 assert(priceRange.0 != CriteriaConst.Bound.LOWER_ANY || priceRange.1 != CriteriaConst.Bound.UPPER_ANY
@@ -180,9 +190,9 @@ class RadarDisplayItem: NSObject, NSCoding {
             return result + titleStr.joinWithSeparator("，")
         }
         
-
-    }
         
+    }
+    
     init(criteria:SearchCriteria) {
         self.criteria = criteria
     }
@@ -190,13 +200,13 @@ class RadarDisplayItem: NSObject, NSCoding {
     convenience required init?(coder decoder: NSCoder) {
         
         let criteria = decoder.decodeObjectForKey("criteria") as? SearchCriteria
-                
+        
         self.init(criteria: criteria!)
         
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(criteria, forKey: "criteria")
-
+        
     }
 }
