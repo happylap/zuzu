@@ -19,18 +19,20 @@ import BWWalkthrough
 
 private let Log = Logger.defaultLogger
 
+enum AppStateOnNotification : Int {
+    case Foreground
+    case Background
+    case Terminated
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal typealias NotificationSetupHandler = (result:Bool) -> ()
     
-    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    internal static var apnsNewItemCount: Int = 0
     
     internal static var tagContainer: TAGContainer?
-    
-    private static let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
-    
-    //var reachability:Reachability?
     
     var window: UIWindow?
     
@@ -40,6 +42,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return urls[urls.count-1] as NSURL
     }()
     
+    private let filterDataStore = UserDefaultsFilterSettingDataStore.getInstance()
+    
+    private static let googleMapsApiKey = "AIzaSyCFtYM50yN8atX1xZRvhhTcAfmkEj3IOf8"
+    
+    //var reachability:Reachability?
+    
     private var localNotificationSetupHandler: NotificationSetupHandler?
     
     private var pushNotificationSetupHandler: NotificationSetupHandler?
@@ -47,6 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var walkthrough:BWWalkthroughViewController!
     
     // MARK: Private Utils
+    private static func updateNewApnsItemCount(count: Int) {
+        apnsNewItemCount = count
+    }
+    
     private func commonServiceSetup() {
         
         // Google Map
@@ -93,24 +105,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UIBarButtonItem.appearance().tintColor  = UIColor.whiteColor()
     }
     
-    private func updateTabBarBadge(application: UIApplication, tabController: UITabBarController){
-        Log.enter()
-        let badgeNumber = application.applicationIconBadgeNumber
-        Log.debug("badgeNumber: \(badgeNumber)")
-        
-        if badgeNumber > 0{
-            let tabArray = tabController.tabBar.items as NSArray!
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let tabItem = tabArray.objectAtIndex(notifyTabIndex) as! UITabBarItem
-            Log.debug("set tab bar badge number as \(badgeNumber)")
-            tabItem.badgeValue = "\(badgeNumber)"
-        }else{
-            Log.debug("badgeNumber <=0 ")
-        }
-        
-        Log.exit()
-    }
-    
     private func presentWalkthrough() {
         let mainStory = UIStoryboard(name: "Main", bundle: nil)
         
@@ -131,6 +125,128 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Onboarding pages have been displayed.
             UserDefaultsUtils.setDisplayOnboardingPages()
         }
+    }
+    
+    /// Handle received notification. Log the notification & update Tab badge number
+    private func postRadarItemReceivedEventForAppInState(appState: AppStateOnNotification,
+                                                            switchTab: Bool) {
+
+        Log.debug("appState = \(appState), switchTab = \(switchTab), apnsItemCount = \(AppDelegate.apnsNewItemCount)")
+        
+        /// Check is logged in
+        if(!AmazonClientManager.sharedInstance.isLoggedIn()) {
+            
+            Log.debug("Cannot handle the notification. The user is not logged in.")
+            
+            AppDelegate.clearAllBadge()
+            
+            Log.exit()
+            return
+        }
+        
+        if(AppDelegate.apnsNewItemCount <= 0) {
+            Log.debug("apnsItemCount <= 0")
+            
+            Log.exit()
+            return
+        }
+        
+        /// GA Tracking: Notification info
+        GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
+                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value: AppDelegate.apnsNewItemCount)
+        
+        /// Post receiveNotifyItems Notification
+        /// - Log the notification, update badge if needed, switch tab if needed
+        Log.debug("post notification: receiveNotifyItems")
+        
+        let userinfo:[NSObject: AnyObject] = ["appState": appState.rawValue,
+                                              "switchTab": switchTab]
+        
+        NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: userinfo)
+        
+    }
+    
+    /// Clear  App/Tab badge
+    internal static func clearAllBadge(){
+        Log.enter()
+        
+        let application = UIApplication.sharedApplication()
+        let badgeNumber = application.applicationIconBadgeNumber
+        application.applicationIconBadgeNumber = 0
+        Log.debug("Clear App Badge Number: \(badgeNumber)")
+        
+        self.setNotificationTabBarBadge(nil)
+        
+        Log.exit()
+    }
+    
+    /// Sync Tab badge with App badge
+    internal static func updateTabBarBadge(){
+        Log.enter()
+        
+        /// Get the new item count as Tab Badge
+        let badgeNumber = AppDelegate.apnsNewItemCount
+        Log.debug("badgeNumber: \(badgeNumber)")
+        
+        if badgeNumber <= 0{
+            Log.debug("badgeNumber <=0 ")
+            return
+        }
+        
+        self.setNotificationTabBarBadge(badgeNumber)
+        
+        Log.exit()
+    }
+    
+    internal static func setNotificationTabBarBadge(badgeNumber: Int?){
+        Log.enter()
+        
+        let application = UIApplication.sharedApplication()
+        Log.debug("badgeNumber: \(badgeNumber)")
+        
+        if let appDelegate = application.delegate as? AppDelegate,
+            tabViewController = appDelegate.window?.rootViewController as? UITabBarController,
+            tabItems = tabViewController.viewControllers {
+            
+            let notificationViewIndex = MainTabConstants.NOTIFICATION_TAB_INDEX
+            
+            if(tabItems.count > notificationViewIndex) {
+                let tabItem = tabItems[notificationViewIndex]
+                
+                if let badgeNumber = badgeNumber {
+                    tabItem.tabBarItem?.badgeValue = "\(badgeNumber)"
+                    Log.debug("Set Tab badge = \(badgeNumber)")
+                } else {
+                    tabItem.tabBarItem?.badgeValue = nil
+                    Log.debug("Clear Tab badge")
+                }
+            }
+        }
+        
+        Log.exit()
+    }
+    
+    
+    /// Switch the tab to notification view if needed.
+    internal static  func switchToNotificationTab() {
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
+            tabViewController = appDelegate.window?.rootViewController as? UITabBarController {
+            
+            let notifyTabIndex = MainTabConstants.NOTIFICATION_TAB_INDEX
+
+            /// Switch tab is APNS new item count > 0
+            if AppDelegate.apnsNewItemCount > 0 {
+                if(tabViewController.selectedIndex != notifyTabIndex) {
+                    AppDelegate.updateTabBarBadge()
+                    
+                    Log.debug("postNotificationName: switchToTab")
+                    NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self,
+                                                                              userInfo: ["targetTab" : notifyTabIndex])
+                }
+            }
+        }
+        
     }
     
     // MARK: Public Utils
@@ -262,51 +378,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.enter()
         Log.debug("application badge = \(application.applicationIconBadgeNumber)")
         
-        if let rootViewController = self.window?.rootViewController as? UITabBarController {
+        ///Save APNS new item count
+        if let aps = userInfo["aps"] as? NSDictionary, newItemCount = aps["badge"] as? Int {
             
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
+            AppDelegate.updateNewApnsItemCount(newItemCount)
             
-            if let aps = userInfo["aps"] as? NSDictionary, badge = aps["badge"] as? Int {
-                GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                                   action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value:badge)
-            }
+        } else {
             
-            if application.applicationState == UIApplicationState.Active {
-                Log.debug("user receive notification while app is in the foreground")
-                
-                Log.debug("post notification: receiveNotifyItems")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
-                
-                if rootViewController.selectedIndex == notifyTabIndex{
-                    Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
-                    NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: userInfo)
-                    
-                }else{
-                    if let aps = userInfo["aps"] as? NSDictionary {
-                        if let badge = aps["badge"] as? Int {
-                            Log.debug("aps[badge] = \(badge)")
-                            application.applicationIconBadgeNumber = badge
-                            updateTabBarBadge(application, tabController: rootViewController)
-                        }
-                    }
-                }
-                
-            }else{
-                
-                let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-                let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-                
-                if badgeNumber > 0 {
-                    if rootViewController.selectedIndex != notifyTabIndex{
-                        updateTabBarBadge(application, tabController: rootViewController)
-                        Log.debug("postNotificationName: switchToTab")
-                        NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : notifyTabIndex])
-                        //Log.debug("set notification tab as selected")
-                        //rootViewController.selectedIndex = notifyTabIndex
-                    }
-                }
-                
-            }
+            AppDelegate.updateNewApnsItemCount(UIApplication.sharedApplication().applicationIconBadgeNumber)
+            
+        }
+        
+        /// AppState: Foreground, Launch From: N/A
+        if application.applicationState == UIApplicationState.Active {
+            
+            self.postRadarItemReceivedEventForAppInState(.Foreground, switchTab: false)
+            
+        } else {
+            /// AppState: Background, Launch From: Alert
+            
+            ///Try switch to notification tab
+            AppDelegate.switchToNotificationTab()
+            
         }
         
         Log.exit()
@@ -323,7 +416,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.presentWalkthrough()
         }
         
-        // Initialize Amazon Auth Client
+        /// Initialize Amazon Auth Client
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         /// Start services
@@ -349,16 +442,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
         
-        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-        
-        if badgeNumber > 0 {
-            Log.debug("post notification: receiveNotifyItems")
-            NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
+        /// Clear app badge if not logged in when App is launched
+        if(!AmazonClientManager.sharedInstance.isLoggedIn()) {
+            
+            AppDelegate.clearAllBadge()
+            
         }
         
         /// Resume Login Session when the app is launched
         AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
+                
+                AppDelegate.updateNewApnsItemCount(UIApplication.sharedApplication().applicationIconBadgeNumber)
+                
+                /// AppState: Terminate, Launch From: Alert
+                if let launchOptions = launchOptions, _ = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] {
+                    
+                    Log.debug("Launch from alert")
+                    self.postRadarItemReceivedEventForAppInState(.Terminated, switchTab: true)
+                    
+                } else {
+                    /// AppState: Terminate, Launch From: AppIcon
+                    
+                    Log.debug("Launch from App icon")
+                    self.postRadarItemReceivedEventForAppInState(.Terminated, switchTab: false)
+                    
+                }
+                
             }
             return nil
         }
@@ -386,28 +496,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.enter()
         
-        if let rootViewController = self.window?.rootViewController as? UITabBarController {
-            let notifyTabIndex = MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX
-            let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-            
-            if badgeNumber > 0 {
-                Log.debug("post notification: receiveNotifyItems")
-                NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: nil)
-                
-                if rootViewController.selectedIndex == notifyTabIndex{
-                    UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-                    Log.debug("post notification: receiveNotifyItemsOnNotifyTab in didReceiveRemoteNotification")
-                    NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self, userInfo: nil)
-                }else{
-                    self.updateTabBarBadge(application, tabController: rootViewController)
-                }
-            }
-        }
+        Log.debug("\(application.applicationIconBadgeNumber)")
+        
+        /// AppState: Background, Launch From: Alert | AppIcon
+        AppDelegate.updateNewApnsItemCount(UIApplication.sharedApplication().applicationIconBadgeNumber)
+        self.postRadarItemReceivedEventForAppInState(.Background, switchTab: false)
         
         /// Try to trigger the timer for refreshing token
         AmazonClientManager.sharedInstance.triggerTokenRefreshingTimer()
     }
-
+    
     // MARK: App Life Cycle - applicationDidBecomeActive
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -467,3 +565,9 @@ extension AppDelegate: BWWalkthroughViewControllerDelegate {
     }
     
 }
+
+// MARK: - NotificationHandler
+class NotificationHandler {
+    
+}
+

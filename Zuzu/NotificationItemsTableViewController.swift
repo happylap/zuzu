@@ -11,10 +11,11 @@ import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
-class NotificationItemsTableViewController: UITableViewController, TableResultsControllerDelegate, HouseDetailViewDelegate {
+class NotificationItemsTableViewController: UITableViewController {
     
-    var pendingRefreshOnViewLoad = false
-    var refreshForUserLogin = false
+    /// Control whether we need to refresh data
+    var needsRefreshData = false
+    
     var notificationService: NotificationItemService!
     var resultController: TableResultsController!
     
@@ -29,78 +30,115 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         static let sectionNum:Int = 1
     }
     
-    func getResultsController() -> TableResultsController{
+    // MARK: - Private Utils
+    private func getResultsController() -> TableResultsController{
         let entityName = self.notificationService.entityName
         let controller = CoreDataResultsController.Builder(entityName: entityName).addSorting("postTime", ascending: false).build()
         controller.setDelegate(self)
         return controller
     }
     
-    // MARK: - View Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func initLocalStorage(){
         Log.enter()
-        self.notificationService = NotificationItemService.sharedInstance
-        self.resultController = self.getResultsController()
-        self.refreshControl?.addTarget(self, action: #selector(NotificationItemsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
-        self.refreshOnViewLoad()
+        /// Load local data first
+        self.resultController.refreshData()
+        self.tableView.reloadData()
         
-        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnNotifyTab(_:)), name: "receiveNotifyItemsOnNotifyTab", object: nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.didTabBarAgainSelectedNotification(_:)), name: TabBarAgainSelectedNotification, object: nil)
-        
-        configureTableView()
         Log.exit()
     }
     
-    func didTabBarAgainSelectedNotification(aNotification: NSNotification) {
-        Log.debug("didTabBarAgainSelectedNotification")
-        if let tabIndex = aNotification.userInfo?["tabIndex"] as? Int {
-            if tabIndex == MainTabViewController.MainTabConstants.NOTIFICATION_TAB_INDEX {
-                self.scrollToFirstRow()
+    private func refreshData(showSpinner: Bool){
+        Log.enter()
+        Log.debug("refreshData, showSpinner: \(showSpinner)")
+        
+        if(!AmazonClientManager.sharedInstance.isLoggedIn()){
+            Log.debug("Cannot refresh data because user is not logged in")
+            return
+        }
+        
+        /// The check is currently for Google-Signin
+        if(AmazonClientManager.sharedInstance.currentUserToken.token == nil) {
+            Log.debug("Cannot refresh data because user token is not retrieved yet")
+            return
+        }
+        
+        
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            if showSpinner == true{
+                Log.debug("refresh data with loading")
+                LoadingSpinner.shared.stop()
+                LoadingSpinner.shared.setImmediateAppear(true)
+                LoadingSpinner.shared.setOpacity(0.3)
+                LoadingSpinner.shared.startOnView(self.tableView)
+            }else{
+                Log.debug("refresh data without loading")
+            }
+            
+            /// Get latest notification item post_time
+            var lastUpdateTime: NSDate?
+            
+            if let houseItem = self.notificationService.getLatestNotificationItem() {
+                lastUpdateTime = houseItem.postTime
+            }
+            
+            Log.debug("getNotificationItemsByUserId: \(userId), \(lastUpdateTime)")
+            
+            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
+                
+                if showSpinner == true{
+                    LoadingSpinner.shared.stop()
+                }
+                
+                if error != nil{
+                    
+                    Log.debug("getNotificationItemsByUserId fails")
+                    
+                    if let nsError = error as? NSError where nsError.code == 403{
+                        Log.debug("forbidden to getNotificationItemsByUserId")
+                    }
+                    
+                    return
+                }
+                
+                /// Remove data over the max limit
+                if totalNum > 0 {
+                    /// Try to remove old items if max number of items is reached
+                    self.notificationService.removeExtra(true)
+                    
+                    /// Insert new notification items
+                    if let notifyItems: [NotifyItem] = result {
+                        for notifyItem: NotifyItem in notifyItems {
+                            self.notificationService.add(notifyItem, isCommit: true)
+                        }
+                    }
+                }
+                
+                /// Finish loading items
+                AppDelegate.clearAllBadge()
+                
+            }
+        }
+        Log.exit()
+    }
+    
+    private func setItemRead(item: NotificationHouseItem) {
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
+            return
+        }
+        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+            ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id) { (result, error) -> Void in
+                if (result == true) {
+                    var updateData = Dictionary<String, AnyObject>()
+                    updateData["isRead"] = true
+                    self.notificationService.updateItem(item, dataToUpdate: updateData)
+                }
             }
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        Log.enter()
-        
-        if self.refreshForUserLogin == true{
-            self.refreshForUserLogin = false
-            Log.debug("refreshForUserLogin")
-            self.refreshData(true)
-            Log.exit()
-            return
-        }
-        
-        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-        if badgeNumber > 0{
-            Log.debug("badgeNumber > 0, refreshData")
-            self.refreshData(true)
-        }
-        
-        Log.exit()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.tabBarController?.tabBarHidden = false
-        Log.enter()
-        Log.debug("set badge as 0")
-        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-        self.parentViewController?.tabBarItem.badgeValue = nil
-        Log.exit()
-    }
-    
-    // MARK: - Confiure View
-    func configureTableView(){
+    // Confiure TableView
+    private func configureTableView(){
         
         self.tableView.rowHeight = UIScreen.mainScreen().bounds.width * (500/1440)
         
@@ -135,15 +173,66 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         
     }
     
-    func showEmpty(){
+    private func showEmpty(){
         emptyLabel.hidden = true
         emptyLabel.text = SystemMessage.INFO.EMPTY_NOTIFICATIONS
         emptyLabel.sizeToFit()
         emptyLabel.hidden = false
     }
     
-    // MARK: - UITableViewDataSource
+    // MARK: - View Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        Log.enter()
+        self.notificationService = NotificationItemService.sharedInstance
+        self.resultController = self.getResultsController()
+        self.refreshControl?.addTarget(self, action: #selector(NotificationItemsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        
+        self.initLocalStorage()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnNotifyTab(_:)), name: "receiveNotifyItemsOnNotifyTab", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleTabBarTappedNotification(_:)), name: TabBarAgainSelectedNotification, object: nil)
+        
+        configureTableView()
+        Log.exit()
+    }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        Log.enter()
+        
+        /// Refresh data when needed
+        if(self.needsRefreshData) {
+            self.refreshData(true)
+            self.needsRefreshData = false
+            
+            Log.exit()
+            return
+        }
+        
+        /// Refresh data on receiving new items
+        let apnsNewItem = AppDelegate.apnsNewItemCount
+        if(apnsNewItem > 0) {
+            Log.debug("apnsNewItem > 0, refreshData")
+            self.refreshData(true)
+        }
+        
+        Log.exit()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Log.enter()
+        
+        self.tabBarController?.tabBarHidden = false
+        
+        Log.exit()
+    }
+    
+    // MARK: - UITableViewDataSource
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return TableConst.sectionNum
     }
@@ -167,114 +256,9 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         return cell
     }
     
-    // MARK: - Data manipulation Function
+    // MARK: - Acion/Notification Handlers
     
-    func refreshOnViewLoad(){
-        Log.enter()
- 
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            Log.debug("Cannot refresh data because user is not logged in")
-            self.pendingRefreshOnViewLoad = true
-            return
-        }
-        
-        let userToken = AmazonClientManager.sharedInstance.currentUserToken
-        if userToken.token == nil{
-            Log.debug("Cannot refresh data because user token is gone")
-            self.pendingRefreshOnViewLoad = true
-            return
-        }
-        
-        /// Load local data first
-        self.resultController.refreshData()
-        self.tableView.reloadData()
-        
-        /// Fetch remote difference data
-        self.refreshData(true)
-        Log.exit()
-    }
-    
-    func refreshData(showSpinner: Bool){
-        Log.enter()
-        Log.debug("refreshData, showSpinner: \(showSpinner)")
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
-            Log.debug("Cannot refresh data because user is not logged in")
-            return
-        }
-
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            if showSpinner == true{
-                Log.debug("refresh data with loading")
-                LoadingSpinner.shared.stop()
-                LoadingSpinner.shared.setImmediateAppear(true)
-                LoadingSpinner.shared.setOpacity(0.3)
-                LoadingSpinner.shared.startOnView(self.tableView)
-            }else{
-                Log.debug("refresh data without loading")
-            }
-            
-            /// Get latest notification item post_time
-            var lastUpdateTime: NSDate?
-            
-            if let houseItem = self.notificationService.getLatestNotificationItem() {
-                lastUpdateTime = houseItem.postTime
-            }
-            
-            Log.debug("getNotificationItemsByUserId: \(userId), \(lastUpdateTime)")
-            
-            ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: lastUpdateTime) { (totalNum, result, error) -> Void in
-                if error != nil{
-
-                    Log.debug("getNotificationItemsByUserId fails")
-                    
-                    if showSpinner == true{
-                        LoadingSpinner.shared.stop()
-                    }
-                    
-                    if let nsError = error as? NSError where nsError.code == 403{
-                        Log.debug("forbidden to getNotificationItemsByUserId")
-                    }
-                    
-                    return
-                }
-                
-                if totalNum > 0 {
-                    
-                    /// Try to remove old items if max number of items is reached
-                    self.notificationService.removeExtra(true)
-                    
-                    /// Insert new notification items
-                    if let notifyItems: [NotifyItem] = result {
-                        for notifyItem: NotifyItem in notifyItems {
-                            self.notificationService.add(notifyItem, isCommit: true)
-                        }
-                    }
-                }
-                
-                if showSpinner == true{
-                    LoadingSpinner.shared.stop()
-                }
-            }
-        }
-        Log.exit()
-    }
-    
-    func setItemRead(item: NotificationHouseItem) {
-        if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            return
-        }
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
-            ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id) { (result, error) -> Void in
-                if (result == true) {
-                    var updateData = Dictionary<String, AnyObject>()
-                    updateData["isRead"] = true
-                    self.notificationService.updateItem(item, dataToUpdate: updateData)
-                }
-            }
-        }
-    }
-    
-    // MARK: - handle notification
+    // Receive new items
     func handleReceiveNotifyItemsOnNotifyTab(notification:NSNotification) {
         Log.enter()
         
@@ -285,24 +269,17 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         Log.exit()
     }
     
+    // User logged in
     func handleUserLogin(notification: NSNotification){
         Log.enter()
-        Log.debug("handleUserLogin")
         
-        if self.pendingRefreshOnViewLoad == true{
-            Log.debug("pendingRefreshOnViewLoad == true")
-            self.pendingRefreshOnViewLoad = false
-            self.refreshOnViewLoad()
-        }else{
-            Log.debug("set refreshForUserLogin as true")
-            self.refreshForUserLogin = true
-        }
+        Log.debug("set refreshForUserLogin as true")
+        self.needsRefreshData = true
         
         Log.exit()
     }
     
-    // MARK: - Pull update
-    
+    // Pull to update
     func handleRefresh(refreshControl: UIRefreshControl) {
         Log.enter()
         self.refreshData(false)
@@ -311,15 +288,25 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         Log.exit()
     }
     
+    // Try to scroll to top
+    func handleTabBarTappedNotification(aNotification: NSNotification) {
+        Log.debug("didTabBarAgainSelectedNotification")
+        if let tabIndex = aNotification.userInfo?["tabIndex"] as? Int {
+            if tabIndex == MainTabConstants.NOTIFICATION_TAB_INDEX {
+                self.scrollToFirstRow()
+            }
+        }
+    }
+    
     // MARK: - swipe-left-to-delete
     
     /*override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-    if(editingStyle == .Delete) {
-    if let notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
-    self.notificationService.deleteItem(notificationItem)
-    }
-    }
-    }*/
+     if(editingStyle == .Delete) {
+     if let notificationItem = self.resultController.objectAtIndexPath(indexPath) as? NotificationHouseItem {
+     self.notificationService.deleteItem(notificationItem)
+     }
+     }
+     }*/
     
     // MARK: - select item action
     
@@ -341,16 +328,16 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
                         
                         //GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
-                            action: GAConst.Action.ZuzuRadarNotification.ReadNotificationPrice,
-                            label: String(houseItem.price))
+                                                        action: GAConst.Action.ZuzuRadarNotification.ReadNotificationPrice,
+                                                        label: String(houseItem.price))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
-                            action: GAConst.Action.ZuzuRadarNotification.ReadNotificationSize,
-                            label: String(houseItem.size))
+                                                        action: GAConst.Action.ZuzuRadarNotification.ReadNotificationSize,
+                                                        label: String(houseItem.size))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
-                            action: GAConst.Action.ZuzuRadarNotification.ReadNotificationType,
-                            label: String(houseItem.purposeType))
+                                                        action: GAConst.Action.ZuzuRadarNotification.ReadNotificationType,
+                                                        label: String(houseItem.purposeType))
                         
                     }
                     
@@ -360,8 +347,10 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
             }
         }
     }
-    
-    // MARK: - TableResultsControllerDelegate Function
+}
+
+// MARK: - TableResultsControllerDelegate
+extension NotificationItemsTableViewController: TableResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: TableResultsController) {
         self.tableView.beginUpdates()
@@ -394,8 +383,20 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         self.tableView.endUpdates()
     }
     
+    func scrollToFirstRow() {
+        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        let rowNum = self.tableView.numberOfRowsInSection(0)
+        if rowNum > 0 {
+            self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+        }
+    }
     
-    internal func onHouseItemLoaded(result: Bool) {
+}
+
+// MARK: - HouseDetailViewDelegate
+extension NotificationItemsTableViewController: HouseDetailViewDelegate {
+    
+    func onHouseItemLoaded(result: Bool) {
         if (result == true) {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 if let item = self.resultController.objectAtIndexPath(selectedIndexPath) as? NotificationHouseItem {
@@ -408,11 +409,4 @@ class NotificationItemsTableViewController: UITableViewController, TableResultsC
         }
     }
     
-    func scrollToFirstRow() {
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        let rowNum = self.tableView.numberOfRowsInSection(0)
-        if rowNum > 0 {
-            self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-        }
-    }
 }

@@ -8,18 +8,20 @@
 
 import UIKit
 
+private let Log = Logger.defaultLogger
+
 /// Notification that is generated when tab is selected.
 let TabBarSelectedNotification = "TabBarSelectedNotification"
 let TabBarAgainSelectedNotification = "TabBarAgainSelectedNotification"
 
+struct MainTabConstants {
+    static let SEARCH_TAB_INDEX = 0
+    static let COLLECTION_TAB_INDEX = 1
+    static let RADAR_TAB_INDEX = 2
+    static let NOTIFICATION_TAB_INDEX = 3
+}
+
 class MainTabViewController: UITabBarController {
-    
-    struct MainTabConstants {
-        static let SEARCH_TAB_INDEX = 0
-        static let COLLECTION_TAB_INDEX = 1
-        static let RADAR_TAB_INDEX = 2
-        static let NOTIFICATION_TAB_INDEX = 3
-    }
     
     private var tabViewControllers = [UIViewController]()
     
@@ -28,6 +30,8 @@ class MainTabViewController: UITabBarController {
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Log.enter()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.dismissAllViewControllers(_:)), name: "switchToTab", object: nil)
         
@@ -61,8 +65,6 @@ class MainTabViewController: UITabBarController {
             tabViewControllers.append(notificationViewController)
         }
         
-        
-        
         #if DEBUG
             tabViewControllers.append(loginDebugViewController)
         #endif
@@ -72,8 +74,6 @@ class MainTabViewController: UITabBarController {
         self.delegate = self
         
         self.initTabBar()
-        
-        self.checkNotification()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -167,16 +167,6 @@ extension MainTabViewController:  UITabBarControllerDelegate {
         }
         
         return true
-    }
-    
-    func checkNotification() -> Void {
-        let badgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber
-        if badgeNumber > 0 {
-            //let tabArray = self.tabBar.items as NSArray!
-            //let tabItem = tabArray.objectAtIndex(MainTabConstants.NOTIFICATION_TAB_INDEX) as! UITabBarItem
-            //tabItem.badgeValue = "\(badgeNumber)"
-            self.selectedIndex = MainTabConstants.NOTIFICATION_TAB_INDEX
-        }
     }
 }
 
