@@ -124,9 +124,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     /// Handle received notification. Log the notification & update Tab badge number
     private func postRadarItemReceivedEventForAppInState(appState: AppStateOnNotification,
-                                                            switchTab: Bool) {
+                                                            switchTab: Bool,
+                                                            newAppBadge: Int? = nil) {
 
-        let appBadge = UIApplication.sharedApplication().applicationIconBadgeNumber
+        let appBadge = newAppBadge ?? UIApplication.sharedApplication().applicationIconBadgeNumber
+        
         Log.debug("appState = \(appState), switchTab = \(switchTab), appBadge = \(appBadge)")
         
         /// Check is logged in
@@ -371,18 +373,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         Log.enter()
-        Log.debug("application badge = \(application.applicationIconBadgeNumber)")
-        
-        ///Save APNS new item count
-        if let aps = userInfo["aps"] as? NSDictionary, newItemCount = aps["badge"] as? Int {
-            /// Need to set App badge manually
-            application.applicationIconBadgeNumber = newItemCount
-        }
+        Log.debug("Current application badge = \(application.applicationIconBadgeNumber)")
         
         /// AppState: Foreground, Launch From: N/A
         if application.applicationState == UIApplicationState.Active {
             
-            self.postRadarItemReceivedEventForAppInState(.Foreground, switchTab: false)
+            ///Save APNS new item count
+            if let aps = userInfo["aps"] as? NSDictionary, newItemCount = aps["badge"] as? Int {
+                /// Need to set App badge manually
+                
+                Log.debug("aps badge = \(aps["badge"]), newItemCount = \(newItemCount)")
+                application.applicationIconBadgeNumber = newItemCount
+                
+                self.postRadarItemReceivedEventForAppInState(.Foreground, switchTab: false, newAppBadge: newItemCount)
+                
+            } else {
+                
+                Log.warning("APNS message recevied without userInfo")
+            }
+            
             
         } else {
             /// AppState: Background, Launch From: Alert
