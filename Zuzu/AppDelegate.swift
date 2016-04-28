@@ -116,9 +116,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             walkthrough.addViewController(pageThree)
             
             self.window?.rootViewController = walkthrough
-            
-            // Onboarding pages have been displayed.
-            UserDefaultsUtils.setDisplayOnboardingPages()
         }
     }
     
@@ -554,16 +551,13 @@ extension AppDelegate: BWWalkthroughViewControllerDelegate {
                 }, completion: nil)
         }
         
+        // Onboarding pages have been displayed.
+        UserDefaultsUtils.setDisplayOnboardingPages()
     }
     
     func walkthroughPageDidChange(pageNumber: Int) {
         
     }
-    
-}
-
-// MARK: - NotificationHandler
-class NotificationHandler {
     
 }
 
