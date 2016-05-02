@@ -531,9 +531,13 @@ extension FormViewController: PasswordFormDelegate {
                     }
                     
                     // Finish login
-                    dismissModalStack(self, animated: true, completionBlock: {
+                    self.dismissViewControllerAnimated(true, completion: {
                         self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
                     })
+                    
+//                    dismissModalStack(self, animated: true, completionBlock: {
+//                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+//                    })
                     
                 })
                 
@@ -580,9 +584,13 @@ extension FormViewController: PasswordFormDelegate {
                         }
                         
                         // Finish login
-                        dismissModalStack(self, animated: true, completionBlock: {
+                        self.dismissViewControllerAnimated(true, completion: {
                             self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
                         })
+                        
+//                        dismissModalStack(self, animated: true, completionBlock: {
+//                            self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+//                        })
                         
                     })
                     
