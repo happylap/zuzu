@@ -64,9 +64,36 @@ struct UserDefaultsUtils {
     
     // MARK: Login
     /// UserProfile UserDefaults persistence APIs
+    static let googleTokenDefaultKey = "googleToken"
+    static let googleTokenExpiryDefaultKey = "googleTokenExpiry"
     static let userProfileUserDefaultKey = "loginUserData"
     static let loginProviderUserDefaultKey = "loginProvider"
     static let userLastCognitoIdentityUserDefaultKey = "userLastCognitoIdentityUserDefaultKey"
+    
+    // Google Token
+    static func clearGoogleToken() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(googleTokenDefaultKey)
+        userDefaults.removeObjectForKey(googleTokenExpiryDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func setGoogleToken(token: String, expiry: NSDate) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(token, forKey: googleTokenDefaultKey)
+        userDefaults.setObject(expiry, forKey: googleTokenExpiryDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func getGoogleToken() -> String? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(googleTokenDefaultKey) as? String
+    }
+    
+    static func getGoogleTokenExpiry() -> NSDate? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(googleTokenExpiryDefaultKey) as? NSDate
+    }
     
     // Login Provider
     static func clearLoginProvider() {

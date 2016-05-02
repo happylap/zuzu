@@ -109,7 +109,11 @@ class AmazonClientManager : NSObject {
                     
                 case Provider.GOOGLE:
                     
-                    return (provider.rawValue, self.googleSignIn.currentUser?.authentication?.idToken)
+                    if let token = self.googleSignIn.currentUser?.authentication?.idToken {
+                        return (provider.rawValue, token)
+                    } else {
+                        return (provider.rawValue, UserDefaultsUtils.getGoogleToken())
+                    }
                     
                 case Provider.ZUZU:
                     
@@ -862,11 +866,25 @@ class AmazonClientManager : NSObject {
             if(error != nil) {
                 /// Cannot get user data.
                 
-                /// Revert the login only if we are Not resuming the session
-                if self.currentUserProfile == nil {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.failLogin(.FacebookFailure)
+                if let _ = self.currentUserProfile {
+                    if let accessToken = FBSDKAccessToken.currentAccessToken(),
+                        expiry = FBSDKAccessToken.currentAccessToken().expirationDate {
+                        
+                        if(expiry.timeIntervalSinceNow > 0) {
+                            Log.debug("Cannot resume Facebook, but FB token is still valid. token = \(accessToken), expiry = \(expiry)")
+                            
+                            /// Complete resume action
+                            
+                            self.completeLogin(["graph.facebook.com" : accessToken.tokenString])
+                            
+                            return
+                        }
                     }
+                }
+                
+                /// Revert the login only if we are Not resuming the session
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.failLogin(.FacebookFailure)
                 }
                 
                 Log.warning("FBSDKGraphRequest Error: \(error.localizedDescription)")
@@ -1039,7 +1057,7 @@ class AmazonClientManager : NSObject {
     func googleLogin(theViewController: UIViewController) {
         
         ///Already signed in
-        if let _ = self.googleSignIn.currentUser?.authentication?.idToken {
+        if(self.isLoggedInWithGoogle()) {
             Log.debug("Google Already Sign-in")
             return
         }
@@ -1059,6 +1077,8 @@ class AmazonClientManager : NSObject {
     
     func googleLogout() {
         Log.enter()
+        
+        UserDefaultsUtils.clearGoogleToken()
         self.googleSignIn.signOut()
         Log.exit()
     }
@@ -1071,9 +1091,14 @@ class AmazonClientManager : NSObject {
         Log.debug("Google access token: \(self.googleSignIn.currentUser?.authentication?.accessToken)")
         Log.debug("Google accesstoken: \(self.googleSignIn.currentUser?.authentication?.accessTokenExpirationDate)")
         
-        if let idToken = self.googleSignIn.currentUser.authentication.idToken {
+        if let idToken = self.googleSignIn.currentUser.authentication.idToken,
+            expiry = self.googleSignIn.currentUser.authentication.idTokenExpirationDate {
+            
             //Set current login provider
             UserDefaultsUtils.setLoginProvider(Provider.GOOGLE)
+            
+            //Save token for later use
+            UserDefaultsUtils.setGoogleToken(idToken, expiry: expiry)
             
             self.completeLogin(["accounts.google.com": idToken])
         } else {
@@ -1263,6 +1288,20 @@ extension AmazonClientManager: GIDSignInDelegate {
                 self.cancelLogin(LoginErrorType.GoogleCancel)
                 
             } else {
+                
+                /// Don't care the login error if the previous token is still valid
+                if let _ = self.currentUserProfile {
+                    if let idToken = UserDefaultsUtils.getGoogleToken(), expiry =  UserDefaultsUtils.getGoogleTokenExpiry() {
+                        if(expiry.timeIntervalSinceNow > 0) {
+                            Log.debug("Cannot refresh Google token. Use the cached token = \(idToken), expiry = \(expiry)")
+                            
+                            /// Complete resume action
+                            self.completeLogin(["accounts.google.com" : idToken])
+                            
+                            return
+                        }
+                    }
+                }
                 
                 /// Revert the login if Google cannot resume successfully
                 /// Google token would be nil after App is closed, so we need to get it again from the Google server
