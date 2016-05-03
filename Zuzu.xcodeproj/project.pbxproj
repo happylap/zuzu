@@ -456,10 +456,10 @@
 			children = (
 				2F482DF91BAFE09100C68670 /* MyCollectionViewController.swift */,
 				81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */,
-				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
 				8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */,
 				816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */,
 				81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */,
+				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
 			);
 			name = Collection;
 			sourceTree = "<group>";
@@ -472,11 +472,11 @@
 				14426ACB1C7AFAD600C25440 /* RadarNavigationController.swift */,
 				144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */,
 				2FE132691C312081008F5E68 /* RadarViewController.swift */,
-				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
 				8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */,
 				1405856B1C73083800449C27 /* RadarDisplayItem.swift */,
 				2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */,
 				140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */,
+				2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */,
 			);
 			name = Radar;
 			sourceTree = "<group>";

@@ -806,7 +806,8 @@ class AmazonClientManager : NSObject {
         }
     }
     
-    func loginFromView(theViewController: UIViewController, mode: Int = 1,
+    func loginFromView(theViewController: UIViewController,
+                       mode: Int = 1, allowSkip: Bool = false,
                        withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
         
@@ -818,6 +819,7 @@ class AmazonClientManager : NSObject {
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("myCommonLoginView") as? MyCommonLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
+            vc.allowSkip = allowSkip
             vc.loginMode = mode
             vc.delegate = self
             theViewController.presentViewController(vc, animated: true, completion: nil)
