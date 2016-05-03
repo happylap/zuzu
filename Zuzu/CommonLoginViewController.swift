@@ -17,6 +17,8 @@ protocol CommonLoginViewDelegate {
     
     func onCancelUserLogin()
     
+    func onSkipUserLogin()
+    
 }
 
 class CommonLoginViewController: UIViewController {

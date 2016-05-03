@@ -977,15 +977,15 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="存在重複物件" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVl-n4-yhH" userLabel="Title">
-                                        <rect key="frame" x="57" y="40" width="300" height="24"/>
+                                        <rect key="frame" x="62" y="40" width="290" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pa4-3H-Bgo" userLabel="Close Button">
-                                        <rect key="frame" x="16" y="39" width="25" height="25"/>
+                                        <rect key="frame" x="16" y="36.5" width="30" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="25" id="9FM-zr-DIs"/>
+                                            <constraint firstAttribute="width" constant="30" id="9FM-zr-DIs"/>
                                             <constraint firstAttribute="width" secondItem="pa4-3H-Bgo" secondAttribute="height" multiplier="1:1" id="GhC-nN-T4V"/>
                                         </constraints>
                                         <state key="normal" image="cancel"/>
@@ -1022,16 +1022,16 @@
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nLi-jA-WKn" userLabel="Main House View">
-                                <rect key="frame" x="0.0" y="238" width="414" height="0.0"/>
+                                <rect key="frame" x="0.0" y="238" width="414" height="0.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="nLi-jA-WKn" secondAttribute="height" multiplier="1440:1" id="jlH-iG-pFT"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gMy-UU-W7e" userLabel="Table Header View">
-                                <rect key="frame" x="0.0" y="246" width="414" height="49"/>
+                                <rect key="frame" x="0.0" y="246.5" width="414" height="48.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重複物件列表" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3MW-9S-7R3">
-                                        <rect key="frame" x="8" y="25" width="78" height="16"/>
+                                        <rect key="frame" x="8" y="24.5" width="78" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>

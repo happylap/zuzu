@@ -648,9 +648,9 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PgA-ud-CHL">
-                                        <rect key="frame" x="16" y="39.5" width="25" height="25"/>
+                                        <rect key="frame" x="16" y="37" width="30" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="25" id="MVW-Md-KgF"/>
+                                            <constraint firstAttribute="width" constant="30" id="MVW-Md-KgF"/>
                                             <constraint firstAttribute="height" constant="35" id="OEv-Iv-4Cp"/>
                                             <constraint firstAttribute="width" secondItem="PgA-ud-CHL" secondAttribute="height" multiplier="1:1" id="wOd-J8-2L4"/>
                                         </constraints>
@@ -677,11 +677,11 @@
                                 <rect key="frame" x="-0.5" y="84" width="414" height="652"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mie-Zo-9ZE" userLabel="Description View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="163"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="130.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWw-3J-mdm" userLabel="SubTitle Label">
-                                                <rect key="frame" x="41" y="16" width="331" height="131"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <rect key="frame" x="41" y="16" width="331" height="98.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
@@ -693,13 +693,22 @@
                                         <constraints>
                                             <constraint firstItem="iWw-3J-mdm" firstAttribute="centerY" secondItem="mie-Zo-9ZE" secondAttribute="centerY" id="0wZ-qu-Exe"/>
                                             <constraint firstItem="iWw-3J-mdm" firstAttribute="centerX" secondItem="mie-Zo-9ZE" secondAttribute="centerX" id="CJv-7D-kTP"/>
+                                            <constraint firstAttribute="bottom" secondItem="iWw-3J-mdm" secondAttribute="bottom" constant="16" id="S0K-K8-03N"/>
                                             <constraint firstItem="iWw-3J-mdm" firstAttribute="width" secondItem="mie-Zo-9ZE" secondAttribute="width" multiplier="80:100" id="aer-O7-AVG"/>
                                             <constraint firstAttribute="bottom" secondItem="iWw-3J-mdm" secondAttribute="bottom" constant="16" id="fq2-lP-bh4"/>
-                                            <constraint firstItem="iWw-3J-mdm" firstAttribute="top" secondItem="mie-Zo-9ZE" secondAttribute="top" constant="16" id="mMy-k9-ajG"/>
+                                            <constraint firstItem="iWw-3J-mdm" firstAttribute="top" secondItem="mie-Zo-9ZE" secondAttribute="top" constant="20" symbolic="YES" id="mMy-k9-ajG"/>
+                                            <constraint firstItem="iWw-3J-mdm" firstAttribute="top" secondItem="mie-Zo-9ZE" secondAttribute="top" constant="16" id="rNN-jA-lKj"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="0wZ-qu-Exe"/>
+                                                <exclude reference="fq2-lP-bh4"/>
+                                                <exclude reference="mMy-k9-ajG"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m57-iU-Wq4" userLabel="Social Login View">
-                                        <rect key="frame" x="0.0" y="163" width="414" height="124.5"/>
+                                        <rect key="frame" x="0.0" y="146" width="414" height="124.5"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1NO-Gq-b3C" userLabel="facebookButton">
                                                 <rect key="frame" x="62" y="0.0" width="290" height="50"/>
@@ -713,6 +722,7 @@
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUH-3i-rFW" userLabel="googleButton">
@@ -723,6 +733,7 @@
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </button>
                                         </subviews>
@@ -740,13 +751,16 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="或使用豬豬快租帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udt-9H-U34">
-                                        <rect key="frame" x="143.5" y="299.5" width="126" height="17"/>
+                                        <rect key="frame" x="144" y="282.5" width="126" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="29x-GV-8Ir" userLabel="Custom Login">
-                                        <rect key="frame" x="32" y="320.5" width="349" height="82"/>
+                                        <rect key="frame" x="32" y="303" width="349" height="74"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dpI-9V-HTW">
                                                 <rect key="frame" x="32" y="16" width="130.5" height="50"/>
@@ -764,8 +778,8 @@
                                                 </userDefinedRuntimeAttributes>
                                                 <variation key="default">
                                                     <mask key="constraints">
-                                                        <exclude reference="vCe-47-JOd"/>
                                                         <exclude reference="p8d-5K-kdv"/>
+                                                        <exclude reference="vCe-47-JOd"/>
                                                     </mask>
                                                 </variation>
                                             </button>
@@ -789,22 +803,42 @@
                                             <constraint firstItem="4kH-5W-Qpv" firstAttribute="leading" secondItem="dpI-9V-HTW" secondAttribute="trailing" constant="24" id="RL5-UB-lRi"/>
                                             <constraint firstItem="4kH-5W-Qpv" firstAttribute="width" secondItem="dpI-9V-HTW" secondAttribute="width" id="cQg-s5-yox"/>
                                             <constraint firstItem="dpI-9V-HTW" firstAttribute="leading" secondItem="29x-GV-8Ir" secondAttribute="leading" constant="32" id="ipY-dZ-E0H"/>
+                                            <constraint firstAttribute="bottom" secondItem="dpI-9V-HTW" secondAttribute="bottom" constant="8" id="s8g-rq-d4e"/>
                                             <constraint firstAttribute="trailing" secondItem="4kH-5W-Qpv" secondAttribute="trailing" constant="32" id="tNT-wf-hXx"/>
-                                            <constraint firstAttribute="bottom" secondItem="dpI-9V-HTW" secondAttribute="bottom" constant="16" id="wVg-w4-Hw1"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vxe-7q-cvv" userLabel="skipLogin View">
+                                        <rect key="frame" x="-0.5" y="409" width="414" height="66"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjg-Cq-EAX">
+                                                <rect key="frame" x="62" y="8" width="290" height="50"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <state key="normal" title="暫不登入，繼續購買"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleRadious" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="jjg-Cq-EAX" secondAttribute="bottom" constant="8" id="3MV-9d-T4r"/>
+                                            <constraint firstItem="jjg-Cq-EAX" firstAttribute="top" secondItem="Vxe-7q-cvv" secondAttribute="top" constant="8" id="PUu-yS-8gj"/>
+                                            <constraint firstItem="jjg-Cq-EAX" firstAttribute="centerX" secondItem="Vxe-7q-cvv" secondAttribute="centerX" id="Uup-wn-LVo"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DZ8-ar-y77" userLabel="Privacy View">
-                                        <rect key="frame" x="0.0" y="403" width="414" height="241"/>
+                                        <rect key="frame" x="0.0" y="475" width="414" height="169"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Fjw-SJ-6Bd" userLabel="privacy">
-                                                <rect key="frame" x="137" y="19" width="20" height="20"/>
+                                                <rect key="frame" x="137" y="119" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="XW7-oN-AVI"/>
                                                     <constraint firstAttribute="width" secondItem="Fjw-SJ-6Bd" secondAttribute="height" multiplier="1:1" id="mDW-S3-33k"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="隱私保護保證" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDW-Wr-UG2">
-                                                <rect key="frame" x="165" y="20" width="84" height="17"/>
+                                                <rect key="frame" x="165" y="120" width="84" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="qPt-Ig-WdP"/>
                                                 </constraints>
@@ -821,7 +855,7 @@
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬快租絕不會未經同意以您的身份發佈任何資訊" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u76-1l-mrS">
-                                                <rect key="frame" x="64" y="45" width="286" height="16"/>
+                                                <rect key="frame" x="64" y="145" width="286" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.28627450980000002" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -833,39 +867,53 @@
                                         <constraints>
                                             <constraint firstItem="u76-1l-mrS" firstAttribute="top" secondItem="wDW-Wr-UG2" secondAttribute="bottom" constant="8" symbolic="YES" id="3rZ-LL-s8n"/>
                                             <constraint firstItem="wDW-Wr-UG2" firstAttribute="leading" secondItem="Fjw-SJ-6Bd" secondAttribute="trailing" constant="8" id="7Gx-rE-zla"/>
-                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="u76-1l-mrS" secondAttribute="bottom" constant="8" id="CHv-er-DJg"/>
+                                            <constraint firstAttribute="bottom" secondItem="u76-1l-mrS" secondAttribute="bottom" constant="8" id="CHv-er-DJg"/>
                                             <constraint firstItem="u76-1l-mrS" firstAttribute="centerX" secondItem="wDW-Wr-UG2" secondAttribute="centerX" id="GYY-tP-NqU"/>
                                             <constraint firstItem="wDW-Wr-UG2" firstAttribute="centerX" secondItem="DZ8-ar-y77" secondAttribute="centerX" id="aeV-5c-mc9"/>
                                             <constraint firstItem="Fjw-SJ-6Bd" firstAttribute="centerY" secondItem="wDW-Wr-UG2" secondAttribute="centerY" id="kbT-gu-JCl"/>
-                                            <constraint firstItem="wDW-Wr-UG2" firstAttribute="top" secondItem="DZ8-ar-y77" secondAttribute="top" constant="20" symbolic="YES" id="zKe-6P-CuF"/>
+                                            <constraint firstItem="wDW-Wr-UG2" firstAttribute="top" relation="greaterThanOrEqual" secondItem="DZ8-ar-y77" secondAttribute="top" constant="8" id="zKe-6P-CuF"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="zKe-6P-CuF"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="Vxe-7q-cvv" firstAttribute="width" secondItem="J8l-fD-4dI" secondAttribute="width" id="9RA-b4-tZp"/>
+                                    <constraint firstItem="Vxe-7q-cvv" firstAttribute="top" secondItem="29x-GV-8Ir" secondAttribute="bottom" constant="32" id="BXQ-44-9NQ"/>
                                     <constraint firstItem="DZ8-ar-y77" firstAttribute="width" secondItem="J8l-fD-4dI" secondAttribute="width" id="Cu0-qo-Fth"/>
                                     <constraint firstItem="udt-9H-U34" firstAttribute="centerX" secondItem="J8l-fD-4dI" secondAttribute="centerX" id="DiP-DD-MEf"/>
+                                    <constraint firstItem="jjg-Cq-EAX" firstAttribute="height" secondItem="1NO-Gq-b3C" secondAttribute="height" id="GDp-10-idY"/>
                                     <constraint firstItem="29x-GV-8Ir" firstAttribute="bottom" secondItem="DZ8-ar-y77" secondAttribute="top" id="Gto-Vg-AW1"/>
-                                    <constraint firstItem="m57-iU-Wq4" firstAttribute="top" secondItem="mie-Zo-9ZE" secondAttribute="bottom" id="HyX-Ys-Fhe"/>
+                                    <constraint firstItem="m57-iU-Wq4" firstAttribute="top" secondItem="mie-Zo-9ZE" secondAttribute="bottom" constant="16" id="HyX-Ys-Fhe"/>
                                     <constraint firstItem="m57-iU-Wq4" firstAttribute="centerX" secondItem="J8l-fD-4dI" secondAttribute="centerX" id="IFd-Yd-3qT"/>
                                     <constraint firstItem="dpI-9V-HTW" firstAttribute="width" secondItem="1NO-Gq-b3C" secondAttribute="width" multiplier="9:20" id="JG6-jf-N46"/>
+                                    <constraint firstItem="Vxe-7q-cvv" firstAttribute="centerX" secondItem="J8l-fD-4dI" secondAttribute="centerX" id="LWr-zY-VpC"/>
                                     <constraint firstItem="dpI-9V-HTW" firstAttribute="height" secondItem="1NO-Gq-b3C" secondAttribute="height" id="OYc-vH-yPK"/>
                                     <constraint firstItem="29x-GV-8Ir" firstAttribute="top" secondItem="udt-9H-U34" secondAttribute="bottom" constant="4" id="Rkn-Uv-vxQ"/>
-                                    <constraint firstItem="mie-Zo-9ZE" firstAttribute="height" secondItem="J8l-fD-4dI" secondAttribute="height" multiplier="1:4" id="W1R-4Q-oJg"/>
+                                    <constraint firstItem="jjg-Cq-EAX" firstAttribute="width" secondItem="1NO-Gq-b3C" secondAttribute="width" id="TLb-rW-TdS"/>
+                                    <constraint firstItem="mie-Zo-9ZE" firstAttribute="height" secondItem="J8l-fD-4dI" secondAttribute="height" multiplier="1:5" id="W1R-4Q-oJg"/>
                                     <constraint firstItem="29x-GV-8Ir" firstAttribute="centerX" secondItem="m57-iU-Wq4" secondAttribute="centerX" id="b6x-68-QZC"/>
                                     <constraint firstItem="29x-GV-8Ir" firstAttribute="centerX" secondItem="m57-iU-Wq4" secondAttribute="centerX" id="bmG-nb-MYm"/>
+                                    <constraint firstItem="29x-GV-8Ir" firstAttribute="height" relation="greaterThanOrEqual" secondItem="J8l-fD-4dI" secondAttribute="height" multiplier="1:4" id="cUe-ed-UIL"/>
                                     <constraint firstItem="mie-Zo-9ZE" firstAttribute="top" secondItem="J8l-fD-4dI" secondAttribute="top" id="eFZ-52-x1u"/>
                                     <constraint firstItem="mie-Zo-9ZE" firstAttribute="width" secondItem="J8l-fD-4dI" secondAttribute="width" id="eol-bl-2wq"/>
                                     <constraint firstAttribute="bottom" secondItem="DZ8-ar-y77" secondAttribute="bottom" constant="8" id="ewZ-0Z-6iT"/>
                                     <constraint firstItem="mie-Zo-9ZE" firstAttribute="centerX" secondItem="J8l-fD-4dI" secondAttribute="centerX" id="hAf-Yi-Cdh"/>
-                                    <constraint firstItem="DZ8-ar-y77" firstAttribute="centerX" secondItem="29x-GV-8Ir" secondAttribute="centerX" id="kZ3-FI-VpT"/>
                                     <constraint firstItem="udt-9H-U34" firstAttribute="top" secondItem="m57-iU-Wq4" secondAttribute="bottom" constant="12" id="ohr-2j-jpO"/>
+                                    <constraint firstItem="29x-GV-8Ir" firstAttribute="bottom" secondItem="Vxe-7q-cvv" secondAttribute="top" constant="32" id="rCI-Sy-JzP"/>
                                     <constraint firstItem="DZ8-ar-y77" firstAttribute="centerX" secondItem="J8l-fD-4dI" secondAttribute="centerX" id="t6X-zh-NMh"/>
+                                    <constraint firstItem="DZ8-ar-y77" firstAttribute="top" secondItem="Vxe-7q-cvv" secondAttribute="bottom" id="w4w-cM-seU"/>
                                     <constraint firstItem="m57-iU-Wq4" firstAttribute="width" secondItem="J8l-fD-4dI" secondAttribute="width" id="yxK-kJ-RLT"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="kZ3-FI-VpT"/>
+                                        <exclude reference="Gto-Vg-AW1"/>
+                                        <exclude reference="cUe-ed-UIL"/>
+                                        <exclude reference="rCI-Sy-JzP"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -891,6 +939,7 @@
                         <outlet property="faceImageView" destination="Fjw-SJ-6Bd" id="6Dm-ql-9jF"/>
                         <outlet property="fbButton" destination="1NO-Gq-b3C" id="OML-c9-adq"/>
                         <outlet property="googleButton" destination="kUH-3i-rFW" id="kmc-2N-Ppu"/>
+                        <outlet property="skipLoginButton" destination="jjg-Cq-EAX" id="GdZ-tG-9Ri"/>
                         <outlet property="subTitleText" destination="iWw-3J-mdm" id="PmJ-Cj-2B7"/>
                         <outlet property="titleText" destination="udr-Yo-Lds" id="2Dk-yh-rqt"/>
                         <outlet property="userLoginButton" destination="dpI-9V-HTW" id="j9Q-AD-uzA"/>

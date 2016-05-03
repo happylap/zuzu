@@ -78,7 +78,7 @@ class MainTabViewController: UITabBarController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-
+        
         //self.tabBar.hidden = true
     }
     
@@ -136,11 +136,30 @@ extension MainTabViewController:  UITabBarControllerDelegate {
                         AmazonClientManager.sharedInstance.loginFromView(self) {
                             (task: AWSTask!) -> AnyObject! in
                             
-                            if(task.error == nil) {
-                                self.runOnMainThread({ () -> Void in
-                                    self.selectedIndex = MainTabConstants.COLLECTION_TAB_INDEX
-                                })
+                            /// Login Failed
+                            if let error = task.error {
+                                Log.warning("Login Failed  or cancelled: \(error)")
+                                return nil
                             }
+                            
+                            /// Login Form is closed
+                            if let result = task.result as? Int,
+                                loginResult = LoginResult(rawValue: result) where loginResult == LoginResult.Cancelled {
+                                Log.warning("Login form is closed")
+                                return nil
+                            }
+                            
+                            /// Login is skipped
+                            if let result = task.result as? Int,
+                                loginResult = LoginResult(rawValue: result) where loginResult == LoginResult.Skip {
+                                Log.warning("Login is skipped")
+                                return nil
+                            }
+                            
+                            self.runOnMainThread({ () -> Void in
+                                self.selectedIndex = MainTabConstants.COLLECTION_TAB_INDEX
+                            })
+                            
                             
                             return nil
                         }

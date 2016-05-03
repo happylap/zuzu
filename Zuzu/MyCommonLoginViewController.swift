@@ -9,16 +9,6 @@ import UIKit
 
 private let Log = Logger.defaultLogger
 
-protocol MyCommonLoginViewControllerDelegate {
-    
-    func onPerformSocialLogin(provider: Provider)
-    
-    func onPerformZuzuLogin(needRegister: Bool)
-    
-    func onCancelUserLogin()
-    
-}
-
 class MyCommonLoginViewController: UIViewController {
     
     // segue to configure UI
@@ -39,21 +29,20 @@ class MyCommonLoginViewController: UIViewController {
             cancelButton.setImage(UIImage(named: "cancel")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             cancelButton.tintColor = UIColor.whiteColor()
             
-            cancelButton.addTarget(self, action: #selector(CommonLoginViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            cancelButton.addTarget(self, action: #selector(MyCommonLoginViewController.onCancelButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
     @IBOutlet weak var userRegisterButton: UIButton! {
         
         didSet {
-            //userRegisterButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             userRegisterButton.layer.borderWidth = 2
             userRegisterButton.layer.borderColor =
-                UIColor.colorWithRGB(0x00CD96, alpha: 1).CGColor
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
             userRegisterButton.tintColor =
-                UIColor.colorWithRGB(0x00CD96, alpha: 1)
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             
-            userRegisterButton.addTarget(self, action: #selector(CommonLoginViewController.onZuzuRegisterButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            userRegisterButton.addTarget(self, action: #selector(MyCommonLoginViewController.onZuzuRegisterButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
         
     }
@@ -61,14 +50,13 @@ class MyCommonLoginViewController: UIViewController {
     @IBOutlet weak var userLoginButton: UIButton! {
         
         didSet {
-            //userLoginButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             userLoginButton.layer.borderWidth = 2
             userLoginButton.layer.borderColor =
-                UIColor.colorWithRGB(0x00CD96, alpha: 1).CGColor
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
             userLoginButton.tintColor =
-                UIColor.colorWithRGB(0x00CD96, alpha: 1)
+                UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             
-            userLoginButton.addTarget(self, action: #selector(CommonLoginViewController.onZuzuLoginButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            userLoginButton.addTarget(self, action: #selector(MyCommonLoginViewController.onZuzuLoginButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
         
     }
@@ -103,13 +91,12 @@ class MyCommonLoginViewController: UIViewController {
             } else {
                 customLoginView.hidden = true
                 customLoginView.removeFromSuperview()
-
+                
             }
         }
         
     }
-    //@IBOutlet weak var maskView: UIView!
-    
+
     @IBOutlet weak var titleText: UILabel!
     
     @IBOutlet weak var subTitleText: UILabel!
@@ -117,6 +104,23 @@ class MyCommonLoginViewController: UIViewController {
     @IBOutlet weak var faceImageView: UIImageView! {
         didSet{
             faceImageView.image = UIImage(named: "lock_icon")?.imageWithRenderingMode(.AlwaysTemplate)
+        }
+    }
+    
+    @IBOutlet weak var skipLoginButton: UIButton! {
+        didSet {
+            
+            if(self.loginMode == 2) {
+                skipLoginButton.tintColor = UIColor.grayColor()
+                skipLoginButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
+                skipLoginButton.layer.cornerRadius = CGFloat(5.0)
+                
+                            skipLoginButton.addTarget(self, action: #selector(MyCommonLoginViewController.onSkipButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+                
+            } else {
+                skipLoginButton.removeFromSuperview()
+            }
+            
         }
     }
     
@@ -134,12 +138,11 @@ class MyCommonLoginViewController: UIViewController {
             
             fbButton.tintColor =
                 UIColor.colorWithRGB(0x4990E2, alpha: 1)
-            
-            //fbButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
+
             fbButton.setTitleColor(UIColor.colorWithRGB(0x4990E2, alpha: 1), forState: .Normal)
             fbButton.layer.cornerRadius = CGFloat(5.0)
             
-            fbButton.addTarget(self, action: #selector(CommonLoginViewController.onFBButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            fbButton.addTarget(self, action: #selector(MyCommonLoginViewController.onFBButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
@@ -157,19 +160,26 @@ class MyCommonLoginViewController: UIViewController {
             googleButton.tintColor =
                 UIColor.colorWithRGB(0xF3364C, alpha: 1)
             
-            //googleButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
             googleButton.setTitleColor(UIColor.colorWithRGB(0xF3364C, alpha: 1), forState: .Normal)
             googleButton.layer.cornerRadius = CGFloat(5.0)
             
-            googleButton.addTarget(self, action: #selector(CommonLoginViewController.onGoogleButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+            googleButton.addTarget(self, action: #selector(MyCommonLoginViewController.onGoogleButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
     
     
     // MARK: - Action Handler
     
+    func onSkipButtonTouched(sender: UIButton) {
+        Log.enter()
+        
+        self.dismissViewControllerAnimated(true) {
+            self.delegate?.onSkipUserLogin()
+        }
+    }
+    
     func onCancelButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onCancelButtonTouched")
+        Log.enter()
         
         self.dismissViewControllerAnimated(true) {
             self.delegate?.onCancelUserLogin()
@@ -227,14 +237,11 @@ class MyCommonLoginViewController: UIViewController {
             subTitleText.text = "請登入使用「我的收藏」，收藏的物件將會被儲存在雲端，日後更換裝置也不會不見喔！"
         } else if loginMode == 2 {
             titleText.text = "登入使用租屋雷達"
-            subTitleText.text = "請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務"
+            subTitleText.text = "登入豬豬快租，讓您在不同的iOS裝置上都可以收到最即時的通知，好屋不漏接！"
         } else if loginMode == 3 {
             titleText.text = "登入啟用租屋雷達服務"
             subTitleText.text = "我們發現您有購買的租屋雷達尚未完成啟用，請您使用下列帳號登入啟用服務，以維護您的權益"
         }
-        
-        //        self.maskView.alpha = 0.0
-        //        self.maskView.hidden = false
         
         if let tabBar = self.presentingViewController?.tabBarController{
             self.isOriginallyHideTabBar = tabBar.tabBarHidden
