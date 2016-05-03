@@ -72,7 +72,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             /// Provide free trial whether there are products from AppStroe or not
             let trialProduct = ZuzuProducts.TrialProduct
             let productId = trialProduct.productIdentifier
-
+            
             if let expiryDate = ZuzuProducts.FreeTrialExpiry {
                 
                 Log.debug("Time to expire frmo now = \(expiryDate.timeIntervalSinceNow)")
@@ -208,7 +208,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     
                                     return
                                 }
-
+                                
                                 /// GA tracker
                                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
                                     action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
@@ -222,7 +222,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                     
                                     self.purchaseDelegate?.onPurchaseSuccess()
                                 }
-
+                                
                             }
                         }
                         
@@ -236,7 +236,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             
             //AppStore will pop up confirmation dialog
             RadarService.sharedInstance.startLoadingText(self, text: "交易中")
-
+            
             if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
                 
                 ///Successfully sent out the payment request to Zuzu Backend. Wait for handler callback
@@ -322,6 +322,13 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     return nil
                 }
                 
+                /// Login Form is closed
+                if let result = task.result as? Int,
+                    loginResult = LoginResult(rawValue: result) where loginResult == LoginResult.Cancelled {
+                    Log.warning("Login form is closed")
+                    return nil
+                }
+                
                 self.runOnMainThread({ () -> Void in
                     
                     self.purchaseDelegate?.onLoggedInForPurchase()
@@ -338,7 +345,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         assert(false, "Access products array out of bound \(self.products.count)")
                     }
                 })
-
+                
                 return nil
             }
         }else{
@@ -347,7 +354,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 //GA tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                    action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
+                                                action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                 
                 self.proceedTransaction(product)
             } else {
@@ -388,7 +395,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
-        button.layer.cornerRadius = CGFloat(18.0)
+        button.autoScaleRadious = true
+        button.layer.cornerRadius = CGFloat(18.5)
         
         if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
             cell.textLabel?.text = "\(product.localizedTitle)"
@@ -429,7 +437,7 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         
         //GA tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-            action: GAConst.Action.ZuzuRadarPurchase.MakePaymentSuccess, label: self.purchasedProduct?.productIdentifier)
+                                        action: GAConst.Action.ZuzuRadarPurchase.MakePaymentSuccess, label: self.purchasedProduct?.productIdentifier)
         
         Log.debug("\(transaction.transactionIdentifier)")
         
@@ -444,15 +452,15 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
                 
                 /// GA tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                    action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
+                                                action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
                 
                 RadarService.sharedInstance.stopLoading()
                 Log.error("create purchase error")
- 
+                
                 SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，您的交易已經成功，但是目前無法為您啟用雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                 
                 return
-
+                
             }
             
             self.finishTransaction(transaction)
@@ -465,14 +473,14 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         
         /// GA tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-            action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
+                                        action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
         
         ZuzuStore.sharedInstance.finishTransaction(transaction)
         
         self.dismissViewControllerAnimated(true){
             
             RadarService.sharedInstance.stopLoading()
-
+            
             self.purchaseDelegate?.onPurchaseSuccess()
         }
     }
@@ -480,10 +488,10 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
     
     func onFailed(store: ZuzuStore, transaction: SKPaymentTransaction){
         Log.debug("\(transaction.transactionIdentifier)")
-
+        
         /// GA tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-            action: GAConst.Action.ZuzuRadarPurchase.MakePaymentFailure, label: self.purchasedProduct?.productIdentifier)
+                                        action: GAConst.Action.ZuzuRadarPurchase.MakePaymentFailure, label: self.purchasedProduct?.productIdentifier)
         
         
         RadarService.sharedInstance.stopLoading()

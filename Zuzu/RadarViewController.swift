@@ -594,24 +594,30 @@ extension RadarViewController{
 
 // MARK: Handle unfinished transactions
 
-extension RadarViewController{
-    
-    func cancelLoginHandler() -> Void{
-        self.isOnLoggingForUnfinishTransaction = false
-    }
+extension RadarViewController {
     
     func loginForUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
         self.isOnLoggingForUnfinishTransaction = true
         
-        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3, withCancelHandler: self.cancelLoginHandler){
+        AmazonClientManager.sharedInstance.loginFromView(self, mode: 3){
             
             (task: AWSTask!) -> AnyObject! in
             
             self.isOnLoggingForUnfinishTransaction = false
             
+            /// Login Failed or Cancelled
             if let error = task.error {
                 Log.warning("Login Failed or cancelled: \(error)")
+                return nil
+            }
+            
+            /// Login Form is closed
+            if let result = task.result as? Int,
+                loginResult = LoginResult(rawValue: result) where loginResult == LoginResult.Cancelled {
+                
+                self.isOnLoggingForUnfinishTransaction = false
+                
                 return nil
             }
             

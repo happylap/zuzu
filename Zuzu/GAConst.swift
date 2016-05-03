@@ -187,6 +187,8 @@ struct GAConst {
             
             static let loginReject = "loginReject"
             
+            static let loginSkip = "loginSkip"
+            
         }
     }
     

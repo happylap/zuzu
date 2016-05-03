@@ -23,6 +23,13 @@ private let Log = Logger.defaultLogger
 let UserLoginNotification = "UserLoginNotification"
 let UserLogoutNotification = "UserLogoutNotification"
 
+
+enum LoginResult: Int {
+    case Success
+    case Cancelled
+    case Skip
+}
+
 enum LoginStatus: Int {
     case New
     case Resume
@@ -60,7 +67,6 @@ class AmazonClientManager : NSObject {
     
     //Properties
     private var completionHandler: AWSContinuationBlock?
-    private var cancelHandler: (() -> Void)?
     
     //The custom Cognito auth provider name
     private let providerName = "com.lap.zuzu.login"
@@ -801,17 +807,16 @@ class AmazonClientManager : NSObject {
     }
     
     func loginFromView(theViewController: UIViewController, mode: Int = 1,
-                       withCancelHandler:(() -> Void)? = nil, withCompletionHandler completionHandler: AWSContinuationBlock) {
+                       withCompletionHandler completionHandler: AWSContinuationBlock) {
         Log.enter()
         
         /// Store cancel & complete callback
-        self.cancelHandler = withCancelHandler
         self.completionHandler = completionHandler
         self.loginViewController = theViewController
         
         
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        if let vc = storyboard.instantiateViewControllerWithIdentifier("commonLoginView") as? CommonLoginViewController {
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("myCommonLoginView") as? MyCommonLoginViewController {
             vc.modalPresentationStyle = .OverCurrentContext
             vc.loginMode = mode
             vc.delegate = self
@@ -1413,7 +1418,15 @@ extension AmazonClientManager: CommonLoginViewDelegate {
         self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                                                              action: GAConst.Action.Blocking.loginReject)
         
-        self.cancelHandler?()
+        AWSTask(result: LoginResult.Cancelled.rawValue).continueWithBlock(self.completionHandler!)
+    }
+    
+    func onSkipUserLogin() {
+        ///GA Tracker: Login cancelled
+        self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                                                             action: GAConst.Action.Blocking.loginSkip)
+        
+        AWSTask(result: LoginResult.Skip.rawValue).continueWithBlock(self.completionHandler!)
     }
 }
 
