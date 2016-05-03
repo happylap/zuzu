@@ -340,25 +340,40 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
                             action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                         
-                        /// User loggs in
+                        /// User logged in
                         if(AmazonClientManager.sharedInstance.isLoggedIn()) {
                             
                             self.proceedTransaction(product)
-                            
-                        } else {
-                        /// User skipped
-//                            ZuzuWebService.sharedInstance.getRandomUserId({ (userId, error) in
-//                                
-//                                if let error = error {
-//                                    Log.warning("Cannot get random userId, error = \(error)")
-//                                    return
-//                                }
-//                                
-//                                /// Save userID to keychain
-//                                
-//                                self.proceedTransaction(product)
-//                            })
+                            return
                         }
+                        
+                        /// User has random userID
+                        if let _ = ZuzuUnauthUtil.getUnauthUserID(), let _ = ZuzuUnauthUtil.getUnauthUserToken() {
+                            
+                            self.proceedTransaction(product)
+                            return
+                        }
+                        
+                        /// User skipped login
+                        ZuzuWebService.sharedInstance.getRandomUserId({ (userId, zuzuToken, error) in
+                            
+                            if let error = error {
+                                Log.warning("Cannot get random userId, error = \(error)")
+                                return
+                            }
+                            
+                            if let userId = userId, zuzuToken = zuzuToken {
+                                /// Save userID to keychain
+                                ZuzuUnauthUtil.saveUnauthUser(userId, userToken: zuzuToken)
+                                
+                                self.proceedTransaction(product)
+                                
+                            } else {
+                                assert(false, "The userID and zuzuToekn cannot be nil")
+                            }
+                            
+                        })
+                        
                         
                     } else {
                         assert(false, "Access products array out of bound \(self.products.count)")

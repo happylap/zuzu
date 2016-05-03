@@ -34,20 +34,38 @@ class ZuzuUnauthUtil {
         
     }
     
+    static func isRandomIdGenerated() -> Bool {
+        if let _ = getUnauthUserID() {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     static func getUnauthUserID() -> String? {
         
-        if let userId = try? keychain.get(userIDKey) {
-            return userId
-        } else {
+        do {
+            if let userId = try keychain.get(userIDKey) {
+                return userId
+            } else {
+                return nil
+            }
+        } catch let error {
+            Log.error("Cannot get userID from keychain error =  \(error)")
             return nil
         }
     }
     
     static func getUnauthUserToken() -> String? {
         
-        if let userToken = try? keychain.get(userTokenKey) {
-            return userToken
-        } else {
+        do {
+            if let userToken = try keychain.get(userTokenKey) {
+                return userToken
+            } else {
+                return nil
+            }
+        } catch let error {
+            Log.error("Cannot get userToken from keychain error =  \(error)")
             return nil
         }
     }

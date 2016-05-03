@@ -43,7 +43,9 @@ class RadarNavigationController: UINavigationController {
     func showRadar(onCompleteHandler: (() -> Void)? = nil){
         Log.enter()
         
-        if !AmazonClientManager.sharedInstance.isLoggedIn(){
+        /// User has not got any identity for using our services
+        if(!AmazonClientManager.sharedInstance.isLoggedIn() && !ZuzuUnauthUtil.isRandomIdGenerated()){
+            
             self.showConfigureRadarView(onCompleteHandler)
             
             // it's beteer to check if it is loading now and then stop it.
@@ -54,7 +56,18 @@ class RadarNavigationController: UINavigationController {
             return
         }
         
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        var serviceUserId:String?
+        
+        if(AmazonClientManager.sharedInstance.isLoggedIn()){
+            serviceUserId = AmazonClientManager.sharedInstance.currentUserProfile?.id
+            Log.debug("Formal userID = \(serviceUserId)")
+        }else if(ZuzuUnauthUtil.isRandomIdGenerated()) {
+            serviceUserId = ZuzuUnauthUtil.getUnauthUserID()
+            Log.debug("Temperary userID = \(serviceUserId)")
+        }
+        
+        
+        if let userId = serviceUserId {
             
             RadarService.sharedInstance.startLoading(self, graceTime: 0.6)
             
