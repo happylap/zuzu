@@ -46,24 +46,31 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Register
     
-    func getRandomUserId(handler: (userId: String?, error: ErrorType?) -> Void) {
+    func getRandomUserId(handler: (userId: String?, zuzuToken: String?, error: ErrorType?) -> Void) {
         
         let resource = "/public/user/randomid"
         
         self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
             
             if let error = error {
-                handler(userId: nil, error: error)
+                handler(userId: nil, zuzuToken: nil, error: error)
+                return
             }
             
-            if let result = result {
-                handler(userId: result as? String, error: error)
+            if(result == nil) {
+                Log.debug("HTTP no data")
+                handler(userId: nil, zuzuToken: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
+                return
+            }
+            
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
+                handler(userId: json["userId"].string, zuzuToken: json["zuzuToken"].string, error: nil)
             }
         }
         
-        
         Log.exit()
-        
     }
     
     
@@ -87,7 +94,6 @@ class ZuzuWebService: NSObject
                 handler(emailExisted: false, provider: nil, error: nil)
             }
         }
-        
         
         Log.exit()
     }
