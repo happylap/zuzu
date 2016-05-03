@@ -35,6 +35,14 @@ class UnauthClientManager {
         return Singleton.instance
     }
     
+    internal func isExistsRandomId() -> Bool {
+        if let _ = getUnauthUserID() {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     internal func loginUnauthUser(handler: CompleteHandler)-> Bool {
 
         self.unauthCompleteHandler = handler
@@ -80,7 +88,57 @@ class UnauthClientManager {
         return true
     }
     
-    internal func saveUnauthUser(userID: String, userToken: String) -> Bool {
+    internal func clearUnauthUser() -> Bool {
+        
+        do {
+            try keychain.remove(UnauthClientManager.userIDKey)
+            
+            Log.debug("Remove userID from keychain")
+            
+            try keychain.remove(UnauthClientManager.userTokenKey)
+            
+            Log.debug("Remove userToken from keychain")
+            
+            return true
+            
+        } catch let error {
+            Log.error("Cannot remove userID or userToken to keychain error =  \(error)")
+            
+            return false
+        }
+    }
+    
+    internal func getUnauthUserID() -> String? {
+        
+        do {
+            if let userId = try keychain.get(UnauthClientManager.userIDKey) {
+                return userId
+            } else {
+                return nil
+            }
+        } catch let error {
+            Log.error("Cannot get userID from keychain error =  \(error)")
+            return nil
+        }
+        
+    }
+    
+    internal func getUnauthUserToken() -> String? {
+        
+        do {
+            if let userToken = try keychain.get(UnauthClientManager.userTokenKey) {
+                return userToken
+            } else {
+                return nil
+            }
+        } catch let error {
+            Log.error("Cannot get userToken from keychain error =  \(error)")
+            return nil
+        }
+        
+    }
+    
+    private func saveUnauthUser(userID: String, userToken: String) -> Bool {
         
         do {
             try keychain.set(userID, key: UnauthClientManager.userIDKey)
@@ -97,44 +155,6 @@ class UnauthClientManager {
             Log.error("Cannot write userID or userToken to keychain error =  \(error)")
             
             return false
-        }
-        
-    }
-    
-    internal func isExistsRandomId() -> Bool {
-        if let _ = getUnauthUserID() {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    internal func getUnauthUserID() -> String? {
-
-        do {
-            if let userId = try keychain.get(UnauthClientManager.userIDKey) {
-                return userId
-            } else {
-                return nil
-            }
-        } catch let error {
-            Log.error("Cannot get userID from keychain error =  \(error)")
-            return nil
-        }
-        
-    }
-    
-    internal func getUnauthUserToken() -> String? {
-
-        do {
-            if let userToken = try keychain.get(UnauthClientManager.userTokenKey) {
-                return userToken
-            } else {
-                return nil
-            }
-        } catch let error {
-            Log.error("Cannot get userToken from keychain error =  \(error)")
-            return nil
         }
         
     }
