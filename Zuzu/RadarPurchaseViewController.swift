@@ -314,7 +314,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2) {
+            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: true) {
                 (task: AWSTask!) -> AnyObject! in
                 
                 if let error = task.error {
@@ -340,7 +340,26 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
                             action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                         
-                        self.proceedTransaction(product)
+                        /// User loggs in
+                        if(AmazonClientManager.sharedInstance.isLoggedIn()) {
+                            
+                            self.proceedTransaction(product)
+                            
+                        } else {
+                        /// User skipped
+//                            ZuzuWebService.sharedInstance.getRandomUserId({ (userId, error) in
+//                                
+//                                if let error = error {
+//                                    Log.warning("Cannot get random userId, error = \(error)")
+//                                    return
+//                                }
+//                                
+//                                /// Save userID to keychain
+//                                
+//                                self.proceedTransaction(product)
+//                            })
+                        }
+                        
                     } else {
                         assert(false, "Access products array out of bound \(self.products.count)")
                     }

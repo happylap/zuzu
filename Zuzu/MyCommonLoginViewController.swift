@@ -22,6 +22,8 @@ class MyCommonLoginViewController: UIViewController {
     
     var loginMode:Int = 1
     
+    var allowSkip = false
+    
     var isOriginallyHideTabBar = true
     
     @IBOutlet weak var cancelButton: UIButton!{
@@ -110,7 +112,7 @@ class MyCommonLoginViewController: UIViewController {
     @IBOutlet weak var skipLoginButton: UIButton! {
         didSet {
             
-            if(self.loginMode == 2) {
+            if(allowSkip) {
                 skipLoginButton.tintColor = UIColor.grayColor()
                 skipLoginButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
                 skipLoginButton.layer.cornerRadius = CGFloat(5.0)
