@@ -46,6 +46,27 @@ class ZuzuWebService: NSObject
     
     // MARK: - Public APIs - Register
     
+    func getRandomUserId(handler: (userId: String?, error: ErrorType?) -> Void) {
+        
+        let resource = "/public/user/randomid"
+        
+        self.responseJSON(.GET, resource: resource) { (result, error) -> Void in
+            
+            if let error = error {
+                handler(userId: nil, error: error)
+            }
+            
+            if let result = result {
+                handler(userId: result as? String, error: error)
+            }
+        }
+        
+        
+        Log.exit()
+        
+    }
+    
+    
     func checkEmail(email: String, handler: (emailExisted: Bool, provider: String?, error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
@@ -521,7 +542,7 @@ class ZuzuWebService: NSObject
     func createPurchase(purchase: ZuzuPurchase, handler: (result: String?, error: NSError?) -> Void) {
         Log.enter()
         
-        let url = self.host + "/purchase"
+        let url = self.host + "/public/purchase"
         let headers = self.getHeaders()
         
         Alamofire.upload(.POST, url, headers: headers, multipartFormData: { multipartFormData -> Void in

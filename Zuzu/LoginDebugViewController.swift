@@ -271,6 +271,7 @@ class LoginDebugViewController: UIViewController {
     
     let apiNameArray = [
         "--- Tester ---",
+        "getRandomUserId",
         "checkEmail",
         "registerUser",
         "registerUser2",
@@ -317,6 +318,19 @@ class LoginDebugViewController: UIViewController {
         
         switch self.seletedApiName {
             
+        case "getRandomUserId":
+            ZuzuWebService.sharedInstance.getRandomUserId({ (userId, error) in
+                let title = "Tester"
+                let subTitle = "API: \(self.seletedApiName) \n\n result: \n"
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                } else {
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)")
+                }
+            })
+            
+            
         case "checkEmail":
             
             ZuzuWebService.sharedInstance.checkEmail(ApiTestConst.email, handler: { (emailExisted, provider, error) -> Void in
@@ -334,6 +348,7 @@ class LoginDebugViewController: UIViewController {
         case "registerUser":
             
             let user = ZuzuUser()
+            user.id = "0cd2a682-0bfb-4dcb-a089-a338ea05e720"
             user.provider = Provider.FB
             user.email = ApiTestConst.email
             user.name = ApiTestConst.email
@@ -357,6 +372,7 @@ class LoginDebugViewController: UIViewController {
         case "registerUser2":
             
             let user = ZuzuUser()
+            user.id = "3cf3cb45-507e-4f18-9082-822cf0ff06ce"
             user.provider = Provider.ZUZU
             user.email = ApiTestConst.email2
             user.name = ApiTestConst.email2
