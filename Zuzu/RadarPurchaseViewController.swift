@@ -340,7 +340,26 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
                             action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                         
-                        self.proceedTransaction(product)
+                        /// User loggs in
+                        if(AmazonClientManager.sharedInstance.isLoggedIn()) {
+                            
+                            self.proceedTransaction(product)
+                            
+                        } else {
+                        /// User skipped
+//                            ZuzuWebService.sharedInstance.getRandomUserId({ (userId, error) in
+//                                
+//                                if let error = error {
+//                                    Log.warning("Cannot get random userId, error = \(error)")
+//                                    return
+//                                }
+//                                
+//                                /// Save userID to keychain
+//                                
+//                                self.proceedTransaction(product)
+//                            })
+                        }
+                        
                     } else {
                         assert(false, "Access products array out of bound \(self.products.count)")
                     }
