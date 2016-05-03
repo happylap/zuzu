@@ -56,18 +56,7 @@ class RadarNavigationController: UINavigationController {
             return
         }
         
-        var serviceUserId:String?
-        
-        if(AmazonClientManager.sharedInstance.isLoggedIn()){
-            serviceUserId = AmazonClientManager.sharedInstance.currentUserProfile?.id
-            Log.debug("Formal userID = \(serviceUserId)")
-        }else if(ZuzuUnauthUtil.isRandomIdGenerated()) {
-            serviceUserId = ZuzuUnauthUtil.getUnauthUserID()
-            Log.debug("Temperary userID = \(serviceUserId)")
-        }
-        
-        
-        if let userId = serviceUserId {
+        if let userId = UserManager.getCurrentUser()?.userId {
             
             RadarService.sharedInstance.startLoading(self, graceTime: 0.6)
             

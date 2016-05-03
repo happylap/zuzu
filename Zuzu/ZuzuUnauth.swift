@@ -13,23 +13,27 @@ private let Log = Logger.defaultLogger
 
 class ZuzuUnauthUtil {
     
-    private static let keychainName = "com.zuzu.unauthuser"
-    private static let userIDKey = "userId"
-    private static let userTokenKey = "userToken"
-    private static let keychain = Keychain(service: keychainName)
+    private static let keychainName = "com.lap.zuzurentals"
+    private static let userIDKey = "unauthUserId"
+    private static let userTokenKey = "unauthUserToken"
     
     static func saveUnauthUser(userID: String, userToken: String) -> Void {
         
+        let keychain = Keychain(service: keychainName)
+        
         do {
             try keychain
-                .accessibility(.WhenUnlocked)
                 .set(userID, key: userIDKey)
             
+            Log.debug("Write userID to keychain =  \(userID)")
+            
             try keychain
-                .accessibility(.WhenUnlocked)
                 .set(userToken, key: userTokenKey)
+            
+            Log.debug("Write userToken to keychain =  \(userToken)")
+            
         } catch let error {
-            Log.error("Cannot write userID to keychain error =  \(error)")
+            Log.error("Cannot write userID or userToken to keychain error =  \(error)")
         }
         
     }
@@ -44,6 +48,8 @@ class ZuzuUnauthUtil {
     
     static func getUnauthUserID() -> String? {
         
+        let keychain = Keychain(service: keychainName)
+        
         do {
             if let userId = try keychain.get(userIDKey) {
                 return userId
@@ -57,6 +63,8 @@ class ZuzuUnauthUtil {
     }
     
     static func getUnauthUserToken() -> String? {
+        
+        let keychain = Keychain(service: keychainName)
         
         do {
             if let userToken = try keychain.get(userTokenKey) {
