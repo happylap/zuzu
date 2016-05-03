@@ -18,6 +18,7 @@ enum UserType: Int {
 struct UserInfo {
     var userType: UserType
     var userId: String
+    var provider: Provider?
     var userToken: String
 }
 
@@ -27,12 +28,14 @@ class UserManager {
         
         if(AmazonClientManager.sharedInstance.isLoggedIn()) {
             
-            if let userID = AmazonClientManager.sharedInstance.currentUserProfile?.id,
+            if let userProfile = AmazonClientManager.sharedInstance.currentUserProfile,
+                userID = userProfile.id,
+                provider = userProfile.provider,
                 userToken = AmazonClientManager.sharedInstance.currentUserToken.token {
                 
                 Log.debug("Authenticated userID = \(userID)")
                 
-                return UserInfo(userType: .Authenticated, userId: userID, userToken: userToken)
+                return UserInfo(userType: .Authenticated, userId: userID, provider: provider, userToken: userToken)
             } else {
                 assert(false, "userID and userToken cannot be nil after logging in")
             }
@@ -42,7 +45,7 @@ class UserManager {
         if let userID = ZuzuUnauthUtil.getUnauthUserID(), userToken =  ZuzuUnauthUtil.getUnauthUserToken() {
             
             Log.debug("Unauthenticated userID = \(userID)")
-            return UserInfo(userType: .Unauthenticated, userId: userID, userToken: userToken)
+            return UserInfo(userType: .Unauthenticated, userId: userID, provider: nil, userToken: userToken)
             
         }
         

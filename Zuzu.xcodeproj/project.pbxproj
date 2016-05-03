@@ -549,6 +549,7 @@
 				2FB16C511C48BDCF009738AC /* InAppPurchase */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
 				2F53FCCB1CD89EDD00E65F50 /* ZuzuUnauth.swift */,
+				2F53FCCD1CD8C3F600E65F50 /* UserManager.swift */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 				1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */,
@@ -623,7 +624,6 @@
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
 				2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */,
-				2F53FCCD1CD8C3F600E65F50 /* UserManager.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
