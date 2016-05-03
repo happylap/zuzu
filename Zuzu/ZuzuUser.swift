@@ -46,6 +46,9 @@ class ZuzuUser: NSObject, NSCoding {
         self.gender = gender
         self.birthday = birthday
         self.pictureUrl = pictureUrl
+        if let providerRaw = decoder.decodeObjectForKey("provider") as? String {
+            self.provider = Provider(rawValue: providerRaw)
+        }
         
     }
     
@@ -57,5 +60,6 @@ class ZuzuUser: NSObject, NSCoding {
         aCoder.encodeObject(gender, forKey:"gender")
         aCoder.encodeObject(birthday, forKey:"birthday")
         aCoder.encodeObject(pictureUrl, forKey:"pictureUrl")
+        aCoder.encodeObject(provider?.rawValue, forKey:"provider")
     }
 }

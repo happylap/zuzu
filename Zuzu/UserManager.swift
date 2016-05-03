@@ -30,12 +30,12 @@ class UserManager {
             
             if let userProfile = AmazonClientManager.sharedInstance.currentUserProfile,
                 userID = userProfile.id,
-                provider = userProfile.provider,
                 userToken = AmazonClientManager.sharedInstance.currentUserToken.token {
                 
                 Log.debug("Authenticated userID = \(userID)")
                 
-                return UserInfo(userType: .Authenticated, userId: userID, provider: provider, userToken: userToken)
+                return UserInfo(userType: .Authenticated, userId: userID, provider: userProfile.provider, userToken: userToken)
+                
             } else {
                 assert(false, "userID and userToken cannot be nil after logging in")
             }
