@@ -42,7 +42,8 @@ class UserManager {
             
         }
         
-        if let userID = ZuzuUnauthUtil.getUnauthUserID(), userToken =  ZuzuUnauthUtil.getUnauthUserToken() {
+        if let userID = UnauthClientManager.sharedInstance.getUnauthUserID(),
+            userToken =  UnauthClientManager.sharedInstance.getUnauthUserToken() {
             
             Log.debug("Unauthenticated userID = \(userID)")
             return UserInfo(userType: .Unauthenticated, userId: userID, provider: nil, userToken: userToken)

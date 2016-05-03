@@ -32,7 +32,7 @@ class AmazonSNSService : NSObject {
     // MARK: Private Utils
     private func logReceiveNotification(){
         Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                 
                 
@@ -69,38 +69,46 @@ class AmazonSNSService : NSObject {
     internal func start(){
         Log.enter()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleUserIDCreated(_:)), name: UserLoginNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleUserIDCreated(_:)), name: UnauthUserGeneratedNotification, object: nil)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleDeviceTokenChange(_:)), name: "deviceTokenChange", object: nil)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AmazonSNSService.handleReceiveNotifyItems(_:)), name: "receiveNotifyItems", object: nil)
         
         Log.exit()
     }
     
     // MARK: Notifications Handlers
-    func handleUserLogin(notification: NSNotification) {
+    func handleUserIDCreated(notification: NSNotification) {
         Log.enter()
         Log.debug("\(notification.userInfo)")
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        
+        if let userId = UserManager.getCurrentUser()?.userId {
             if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
                 let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
-                self.createDevice(deviceTokenString)
+                self.createDeviceForUser(userId, deviceToken: deviceTokenString)
             }else{
                 Log.debug("deviceTokenString is nil")
             }
         }else{
             Log.error("userId is nil")
         }
+        
         Log.exit()
     }
     
     func handleDeviceTokenChange(notification: NSNotification) {
         Log.enter()
-        if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String{
+        if let deviceTokenString = notification.userInfo?["deviceTokenString"] as? String {
+            
             let endpointArn = UserDefaultsUtils.getSNSEndpointArn()
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            
+            if let userId = UserManager.getCurrentUser()?.userId {
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
-                self.createDevice(deviceTokenString)
+                self.createDeviceForUser(userId, deviceToken: deviceTokenString)
             }else{
                 Log.debug("userId is nil")
             }
@@ -197,12 +205,15 @@ class AmazonSNSService : NSObject {
             let request = AWSSNSGetEndpointAttributesInput()
             request.endpointArn = endpointArn
             sns.getEndpointAttributes(request).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task: AWSTask!) -> AnyObject! in
+                
+                /// Create new endpoint
                 if task.error != nil {
                     Log.debug("Error: \(task.error)")
                     if task.error!.code == AWSSNSErrorType.NotFound.rawValue{
                         self.createEndpoint(deviceTokenString, userData:userId)
                     }
                 } else {
+                    /// Update previous endpoint
                     let getEndpointResponse = task.result as! AWSSNSGetEndpointAttributesResponse
                     Log.debug("token: \(getEndpointResponse.attributes!["Token"])")
                     Log.debug("Enabled: \(getEndpointResponse.attributes!["Enabled"])")
@@ -304,16 +315,14 @@ class AmazonSNSService : NSObject {
         }
     }
     
-    internal func createDevice(deviceToken: String){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
-            ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceToken){
-                (result, error) -> Void in
-                
-                if error != nil{
-                    Log.error("Fail to register deviceToken: \(deviceToken) for user: \(userId)")
-                }
-                
+    internal func createDeviceForUser(userId: String, deviceToken: String){
+        ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceToken){
+            (result, error) -> Void in
+            
+            if error != nil{
+                Log.error("Fail to register deviceToken: \(deviceToken) for user: \(userId)")
             }
+            
         }
     }
     

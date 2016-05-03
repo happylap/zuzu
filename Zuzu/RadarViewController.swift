@@ -220,7 +220,7 @@ class RadarViewController: UIViewController {
         }
         
         if isUpdateMode == true{
-            if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+            if let userId = UserManager.getCurrentUser()?.userId {
                 
                 if let criteiraId = self.criteiraId{
                     
@@ -419,7 +419,7 @@ extension RadarViewController{
     
     func setUpCriteria(){
         Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
             
             RadarService.sharedInstance.startLoading(self)
             
@@ -461,7 +461,7 @@ extension RadarViewController{
     func updateCriteria(zuzuCriteria: ZuzuCriteria){
         
         Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
             
             ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: zuzuCriteria.criteriaId!, criteria: self.radarSearchCriteria) { (result, error) -> Void in
                 
@@ -511,7 +511,7 @@ extension RadarViewController{
         
         isEnabled = true
                 
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
                 criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) {
@@ -551,7 +551,7 @@ extension RadarViewController{
     
     func createCriteria(){
         Log.enter()
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
             
             ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: self.radarSearchCriteria){
                 (result, error) -> Void in

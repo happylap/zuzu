@@ -366,7 +366,8 @@ class RadarDisplayViewController: UIViewController {
     }
     
     func setCriteriaEnabled(isEnabled: Bool){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteriaId = self.zuzuCriteria.criteriaId{
+        if let userId = UserManager.getCurrentUser()?.userId,
+            criteriaId = self.zuzuCriteria.criteriaId{
             
             var text = "啟用中"
             if isEnabled == false{
@@ -733,7 +734,8 @@ extension RadarDisplayViewController{
             
         }
         
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, criteiraId = self.zuzuCriteria.criteriaId{
+        if let userId = UserManager.getCurrentUser()?.userId,
+            criteiraId = self.zuzuCriteria.criteriaId{
             
             if isEnabled == true{
                 

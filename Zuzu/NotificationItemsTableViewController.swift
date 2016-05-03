@@ -64,7 +64,7 @@ class NotificationItemsTableViewController: UITableViewController {
         }
         
         
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
             if showSpinner == true{
                 Log.debug("refresh data with loading")
                 LoadingSpinner.shared.stop()
@@ -126,7 +126,8 @@ class NotificationItemsTableViewController: UITableViewController {
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             return
         }
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+        if let userId = UserManager.getCurrentUser()?.userId {
+            
             ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id) { (result, error) -> Void in
                 if (result == true) {
                     var updateData = Dictionary<String, AnyObject>()
@@ -134,6 +135,7 @@ class NotificationItemsTableViewController: UITableViewController {
                     self.notificationService.updateItem(item, dataToUpdate: updateData)
                 }
             }
+            
         }
     }
     

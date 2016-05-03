@@ -121,7 +121,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             freeTrialAlertView.addButton("馬上兌換", action: { () -> Void in
                 
                 /// Check if the free trial is already activated
-                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+                if let userId = UserManager.getCurrentUser()?.userId {
                     
                     RadarService.sharedInstance.startLoading(self)
                     
@@ -167,8 +167,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             purchase.productTitle = product.localizedTitle
                             
                             
-                            if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
-                                AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
+                            if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(),
+                                userID = UserManager.getCurrentUser()?.userId{
+                                AmazonSNSService.sharedInstance.createDeviceForUser(userID, deviceToken: deviceTokenString)
                             }
                             
                             
@@ -245,8 +246,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             } else {
                 
                 // create device here
-                if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
-                    AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
+                if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(),
+                    userID = UserManager.getCurrentUser()?.userId{
+                    
+                    AmazonSNSService.sharedInstance.createDeviceForUser(userID, deviceToken: deviceTokenString)
                 }
                 
                 ///You have an unfinished transaction for the product or the product is not valid
@@ -348,32 +351,24 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         }
                         
                         /// User has random userID
-                        if let _ = ZuzuUnauthUtil.getUnauthUserID(), let _ = ZuzuUnauthUtil.getUnauthUserToken() {
+                        if(UnauthClientManager.sharedInstance.isExistsRandomId()){
+                            
+                            Log.error("Random ID already exist")
                             
                             self.proceedTransaction(product)
                             return
                         }
                         
                         /// User skipped login
-                        ZuzuWebService.sharedInstance.getRandomUserId({ (userId, zuzuToken, error) in
+                        UnauthClientManager.sharedInstance.loginUnauthUser({ (userId, zuzuToken, success) in
                             
-                            if let error = error {
-                                Log.warning("Cannot get random userId, error = \(error)")
-                                return
-                            }
-                            
-                            if let userId = userId, zuzuToken = zuzuToken {
-                                /// Save userID to keychain
-                                ZuzuUnauthUtil.saveUnauthUser(userId, userToken: zuzuToken)
-                                
+                            if(success) {
                                 self.proceedTransaction(product)
-                                
                             } else {
-                                assert(false, "The userID and zuzuToekn cannot be nil")
+                                Log.error("Random ID is not generated")
                             }
                             
                         })
-                        
                         
                     } else {
                         assert(false, "Access products array out of bound \(self.products.count)")
@@ -476,8 +471,8 @@ extension RadarPurchaseViewController: ZuzuStorePurchaseHandler {
         Log.debug("\(transaction.transactionIdentifier)")
         
         // create device here
-        if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(){
-            AmazonSNSService.sharedInstance.createDevice(deviceTokenString)
+        if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(), userID = UserManager.getCurrentUser()?.userId {
+            AmazonSNSService.sharedInstance.createDeviceForUser(userID, deviceToken: deviceTokenString)
         }
         
         RadarService.sharedInstance.createPurchase(transaction, product:self.purchasedProduct){

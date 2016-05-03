@@ -58,7 +58,8 @@ class RadarPurchaseHistoryTableViewDataSource : NSObject, UITableViewDelegate, U
     var purchaseHistoryTableDelegate: RadarPurchaseHistoryTableDelegate?
     
     func refresh(completeHandler:(()->Void)?){
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
+            
             ZuzuWebService.sharedInstance.getPurchaseByUserId(userId){
                 (totalNum, result, error) -> Void in
                 self.purchaseData = []

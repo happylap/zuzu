@@ -46,7 +46,7 @@ enum LoginErrorType: Int {
 
 class AmazonClientManager : NSObject {
     
-    //Share Instance for interacting with the ZuzuStore
+    //Share Instance for interacting with the AmazonClientManager
     class var sharedInstance: AmazonClientManager {
         struct Singleton {
             static let instance = AmazonClientManager()

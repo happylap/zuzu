@@ -148,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /// GA Tracking: Notification info
         GAUtils.trackEvent(GAConst.Catrgory.ZuzuRadarNotification,
-                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: AmazonClientManager.sharedInstance.currentUserProfile?.id, value: appBadge)
+                           action: GAConst.Action.ZuzuRadarNotification.ReceiveNotification, label: UserManager.getCurrentUser()?.userId, value: appBadge)
         
         /// Post receiveNotifyItems Notification
         /// - Log the notification, update badge if needed, switch tab if needed

@@ -44,7 +44,8 @@ class RadarNavigationController: UINavigationController {
         Log.enter()
         
         /// User has not got any identity for using our services
-        if(!AmazonClientManager.sharedInstance.isLoggedIn() && !ZuzuUnauthUtil.isRandomIdGenerated()){
+        
+        if(UserManager.getCurrentUser() == nil){
             
             self.showConfigureRadarView(onCompleteHandler)
             

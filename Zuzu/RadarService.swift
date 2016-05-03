@@ -40,7 +40,8 @@ class RadarService : NSObject {
 
     func composeZuzuPurchase(transaction: SKPaymentTransaction, product: ZuzuProduct?=nil, purchaseReceipt:NSData, handler: (result: ZuzuPurchase?, error: NSError?) -> Void){
         
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id, let transId = transaction.transactionIdentifier{
+        if let userId = UserManager.getCurrentUser()?.userId,
+            transId = transaction.transactionIdentifier{
             
             if let purchaseProduct = product{
                 let purchase = ZuzuPurchase(transactionId: transId, userId: userId, productId: purchaseProduct.productIdentifier, productPrice: purchaseProduct.price, purchaseReceipt: purchaseReceipt)
@@ -131,7 +132,8 @@ class RadarService : NSObject {
     }
     
     func checkPurchaseExist(transactionId: String, handler: (isExist: Bool, checkExistError: ErrorType?) -> Void) {
-        if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id{
+        if let userId = UserManager.getCurrentUser()?.userId {
+            
             ZuzuWebService.sharedInstance.getPurchaseByUserId(userId){
                 (totalNum, result, error) -> Void in
                 
