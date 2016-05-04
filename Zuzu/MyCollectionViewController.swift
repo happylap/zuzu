@@ -54,10 +54,21 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBOutlet weak var logoutButton: UIButton!
     
-    // UILabel for empty collection list
-    let noCollectionLabel = UILabel()
+    private let noCollectionLabel = UILabel() //UILabel for displaying no collection message
+    private let noCollectionImage = UIImageView(image: UIImage(named: "empty_no_collection"))
     
     // MARK: - Private Utils
+    
+    private func setNoCollectionMessageVisible(visible: Bool) {
+        
+        noCollectionLabel.hidden = !visible
+        noCollectionImage.hidden = !visible
+        
+        if(visible) {
+            noCollectionLabel.sizeToFit()
+        }
+        
+    }
     
     private func configureTableView() {
         
@@ -71,14 +82,19 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: "houseItemCell")
         
         if let contentView = tableView.superview {
+            
+            /// UILabel setting
             noCollectionLabel.translatesAutoresizingMaskIntoConstraints = false
             noCollectionLabel.textAlignment = NSTextAlignment.Center
             noCollectionLabel.numberOfLines = -1
             noCollectionLabel.font = UIFont.systemFontOfSize(14)
+            noCollectionLabel.autoScaleFontSize = true
+            noCollectionLabel.text = SystemMessage.INFO.EMPTY_COLLECTTIONS
             noCollectionLabel.textColor = UIColor.grayColor()
             noCollectionLabel.hidden = true
             contentView.addSubview(noCollectionLabel)
             
+            /// Setup constraints for Label
             let xConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
@@ -91,7 +107,24 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             let rightConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
             rightConstraint.priority = UILayoutPriorityDefaultLow
             
-            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+            /// UIImage setting
+            noCollectionImage.translatesAutoresizingMaskIntoConstraints = false
+            noCollectionImage.hidden = true
+            let size = noCollectionImage.intrinsicContentSize()
+            noCollectionImage.frame.size = size
+            
+            contentView.addSubview(noCollectionImage)
+            
+            /// Setup constraints for Image
+            let xImgConstraint = NSLayoutConstraint(item: noCollectionImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yImgConstraint = NSLayoutConstraint(item: noCollectionImage, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noCollectionLabel, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.1, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+            
+            /// Add constraints to contentView
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
+                xImgConstraint, yImgConstraint])
             
         }
     }
@@ -315,7 +348,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         AmazonClientManager.sharedInstance.logOut() {
             (task: AWSTask!) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
-                SCLAlertView().showWarning("提醒您", subTitle: "您已登出", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                SCLAlertView().showInfo("提醒您", subTitle: "您已登出", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             }
             return nil
         }
@@ -424,11 +457,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             count = sectionInfo.numberOfObjects
         }
         
-        noCollectionLabel.hidden = true
+        
         if count == 0 {
-            noCollectionLabel.text = SystemMessage.INFO.EMPTY_COLLECTTIONS
-            noCollectionLabel.sizeToFit()
-            noCollectionLabel.hidden = false
+            self.setNoCollectionMessageVisible(true)
+        } else {
+            self.setNoCollectionMessageVisible(false)
         }
         
         return count

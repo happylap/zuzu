@@ -74,8 +74,8 @@ class SearchBoxTableViewController: UITableViewController {
         static let upperCompIdx = 1
     }
     
-    // UILabel for empty search lisy
-    let noSearchHistoryLabel = UILabel()
+    private let noSearchHistoryLabel = UILabel() //UILabel for displaying no saved criteria message
+    private let noSearchHistoryImage = UIImageView(image: UIImage(named: "empty_no_search_history"))
     
     var alertViewResponder: SCLAlertViewResponder?
     
@@ -403,6 +403,19 @@ class SearchBoxTableViewController: UITableViewController {
         tableView.delegate = self
     }
     
+    internal func showNoSearchHistoryMessage(message: String) {
+        noSearchHistoryLabel.text = message
+        noSearchHistoryLabel.sizeToFit()
+        noSearchHistoryLabel.hidden = false
+        noSearchHistoryImage.hidden = false
+    }
+    
+    internal func hideNoSearchHistoryMessage() {
+        noSearchHistoryLabel.text = nil
+        noSearchHistoryLabel.hidden = true
+        noSearchHistoryImage.hidden = true
+    }
+    
     private func configureSearchHistoryTable() {
         
         //Segments UI config
@@ -424,6 +437,7 @@ class SearchBoxTableViewController: UITableViewController {
         
         if let contentView = searchItemTable.superview {
             
+            /// UILabel setting
             noSearchHistoryLabel.translatesAutoresizingMaskIntoConstraints = false
             noSearchHistoryLabel.textAlignment = NSTextAlignment.Center
             noSearchHistoryLabel.numberOfLines = -1
@@ -432,6 +446,7 @@ class SearchBoxTableViewController: UITableViewController {
             noSearchHistoryLabel.hidden = true
             contentView.addSubview(noSearchHistoryLabel)
             
+            /// Setup constraints for Label
             let xConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
@@ -444,7 +459,25 @@ class SearchBoxTableViewController: UITableViewController {
             let rightConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
             rightConstraint.priority = UILayoutPriorityDefaultLow
             
-            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+            
+            /// UIImage setting
+            noSearchHistoryImage.translatesAutoresizingMaskIntoConstraints = false
+            noSearchHistoryImage.hidden = true
+            let size = noSearchHistoryImage.intrinsicContentSize()
+            noSearchHistoryImage.frame.size = size
+            
+            contentView.addSubview(noSearchHistoryImage)
+            
+            /// Setup constraints for Image
+            let xImgConstraint = NSLayoutConstraint(item: noSearchHistoryImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yImgConstraint = NSLayoutConstraint(item: noSearchHistoryImage, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noSearchHistoryLabel, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.2, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+            
+            /// Add constraints to contentView
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
+                xImgConstraint, yImgConstraint])
             
         }
     }

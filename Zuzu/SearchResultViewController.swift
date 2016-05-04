@@ -58,6 +58,9 @@ class SearchResultViewController: UIViewController {
     
     private var duplicateHouseItem: HouseItem?
     
+    private let noSearchResultLabel = UILabel() //UILabel for displaying no search result message
+    private let noSearchResultImage = UIImageView(image: UIImage(named: "empty_no_search_result"))
+    
     // MARK: - Public Fields
     
     @IBOutlet weak var filterSettingButton: UIButton!
@@ -125,45 +128,6 @@ class SearchResultViewController: UIViewController {
         
     }
     
-    private func setSubviewsVisible(visible: Bool) {
-        let subviews = self.view.subviews
-        
-        for view in subviews{
-            view.hidden = !visible
-        }
-    }
-    
-    private func configureTableView() {
-        
-        tableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
-        
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
-        //Configure table DataSource & Delegate
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: CellIdentifier.houseItem)
-        self.tableView.registerNib(UINib(nibName: "SearchResultAdCell", bundle: nil), forCellReuseIdentifier: CellIdentifier.adItem)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        
-        
-        
-    }
-    
-    private func configureFilterButtons() {
-        
-        /// Add SmartFilterContainerView to the parent
-        
-        if (smartFilterContainerView == nil) {
-            smartFilterContainerView = SmartFilterContainerView(frame: self.view.bounds)
-            self.view.addSubview(smartFilterContainerView!)
-        }
-        
-        updateSmartFilterState()
-    }
-    
     private func updateSmartFilterState() {
         
         if let smartFilterContainerView = self.smartFilterContainerView {
@@ -190,6 +154,96 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    private func setNoSearchResultMessageVisible(visible: Bool) {
+        
+        noSearchResultLabel.hidden = !visible
+        noSearchResultImage.hidden = !visible
+        
+        if(visible) {
+            noSearchResultLabel.sizeToFit()
+        }
+    }
+    
+    private func configureNoSearchResultMessage() {
+
+        if let contentView = tableView.superview {
+            
+            /// UILabel setting
+            noSearchResultLabel.translatesAutoresizingMaskIntoConstraints = false
+            noSearchResultLabel.textAlignment = NSTextAlignment.Center
+            noSearchResultLabel.numberOfLines = -1
+            noSearchResultLabel.font = UIFont.systemFontOfSize(14)
+            noSearchResultLabel.autoScaleFontSize = true
+            noSearchResultLabel.textColor = UIColor.grayColor()
+            noSearchResultLabel.text = SystemMessage.INFO.EMPTY_SEARCH_RESULT
+            noSearchResultLabel.hidden = true
+            contentView.addSubview(noSearchResultLabel)
+            
+            /// Setup constraints for Label
+            let xConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+            
+            let leftConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            leftConstraint.priority = UILayoutPriorityDefaultLow
+            
+            let rightConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            rightConstraint.priority = UILayoutPriorityDefaultLow
+            
+            /// UIImage setting
+            noSearchResultImage.translatesAutoresizingMaskIntoConstraints = false
+            noSearchResultImage.hidden = true
+            let size = noSearchResultImage.intrinsicContentSize()
+            noSearchResultImage.frame.size = size
+            
+            noSearchResultImage.userInteractionEnabled = true
+            noSearchResultImage.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(SearchResultViewController.onNoSearchResultImageTouched(_:)))
+            )
+
+            contentView.addSubview(noSearchResultImage)
+            
+            /// Setup constraints for Image
+            let xImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+            
+            let yImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noSearchResultLabel, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.1, constant: 0)
+            yConstraint.priority = UILayoutPriorityRequired
+
+            
+            /// Add constraints to contentView
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
+                xImgConstraint, yImgConstraint])
+        }
+        
+    }
+    
+    private func configureTableView() {
+        
+        tableView.estimatedRowHeight = BaseLayoutConst.houseImageHeight * getCurrentScale()
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        //Configure table DataSource & Delegate
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.registerNib(UINib(nibName: "SearchResultTableViewCell", bundle: nil), forCellReuseIdentifier: CellIdentifier.houseItem)
+        self.tableView.registerNib(UINib(nibName: "SearchResultAdCell", bundle: nil), forCellReuseIdentifier: CellIdentifier.adItem)
+    }
+    
+    private func configureFilterButtons() {
+        
+        /// Add SmartFilterContainerView to the parent
+        
+        if (smartFilterContainerView == nil) {
+            smartFilterContainerView = SmartFilterContainerView(frame: self.view.bounds)
+            self.view.addSubview(smartFilterContainerView!)
+        }
+        
+        updateSmartFilterState()
+    }
     
     private func configureSortingButtons() {
         let bgColorWhenSelected = UIColor.colorWithRGB(0x00E3E3, alpha: 0.6)
@@ -346,8 +400,13 @@ class SearchResultViewController: UIViewController {
         ///  Set navigation bar title according to the number of result
         if(dataSource.estimatedTotalResults > 0) {
             self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆"
+            
+            self.setNoSearchResultMessageVisible(false)
+            
         } else {
             self.navigationItem.title = "查無資料"
+            
+            self.setNoSearchResultMessageVisible(true)
             
             /// GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
@@ -726,6 +785,10 @@ class SearchResultViewController: UIViewController {
             label: sortingOrder)
     }
     
+    func onNoSearchResultImageTouched(sender:UITapGestureRecognizer) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
     func onSearchButtonTouched(sender: UIBarButtonItem) {
         navigationController?.popViewControllerAnimated(true)
     }
@@ -754,6 +817,8 @@ class SearchResultViewController: UIViewController {
         
         //Configure cell height
         configureTableView()
+        
+        configureNoSearchResultMessage()
         
         //Configure Sorting Status
         configureSortingButtons()

@@ -79,24 +79,20 @@ public class SearchItemTableViewDataSource : NSObject, UITableViewDelegate, UITa
         }
         
         Log.debug("Number of search history = \(itemSize)")
-        
-        let noSearchHistoryLabel = tableViewController.noSearchHistoryLabel
-        
+
         if (itemSize == 0) {
             
             if(itemType == .SavedSearch) {
-                noSearchHistoryLabel.text = SystemMessage.INFO.EMPTY_SAVED_SEARCH
-                noSearchHistoryLabel.sizeToFit()
-                noSearchHistoryLabel.hidden = false
+                tableViewController
+                    .showNoSearchHistoryMessage(SystemMessage.INFO.EMPTY_SAVED_SEARCH)
             }
             
             if(itemType == .HistoricalSearch) {
-                noSearchHistoryLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_SEARCH
-                noSearchHistoryLabel.sizeToFit()
-                noSearchHistoryLabel.hidden = false
+                tableViewController
+                    .showNoSearchHistoryMessage(SystemMessage.INFO.EMPTY_HISTORICAL_SEARCH)
             }
         } else {
-            noSearchHistoryLabel.hidden = true
+            tableViewController.hideNoSearchHistoryMessage()
         }
         
         return itemSize
