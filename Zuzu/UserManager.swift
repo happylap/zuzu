@@ -34,7 +34,9 @@ class UserManager {
                 
                 Log.debug("Authenticated userID = \(userID)")
                 
-                return UserInfo(userType: .Authenticated, userId: userID, provider: userProfile.provider, userToken: userToken)
+                let accountProvider = UserDefaultsUtils.getLoginProvider()
+                
+                return UserInfo(userType: .Authenticated, userId: userID, provider: accountProvider, userToken: userToken)
                 
             } else {
                 assert(false, "userID and userToken cannot be nil after logging in")
