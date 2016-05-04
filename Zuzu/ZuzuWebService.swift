@@ -548,7 +548,7 @@ class ZuzuWebService: NSObject
     func createPurchase(purchase: ZuzuPurchase, handler: (result: String?, error: NSError?) -> Void) {
         Log.enter()
         
-        let url = self.host + "/public/purchase"
+        let url = self.host + "/purchase"
         let headers = self.getHeaders()
         
         Alamofire.upload(.POST, url, headers: headers, multipartFormData: { multipartFormData -> Void in
@@ -746,9 +746,10 @@ class ZuzuWebService: NSObject
             Log.debug("Unable to do Basic Authorization")
         }
         
-        let userToken = AmazonClientManager.sharedInstance.currentUserToken
-        headers["UserProvider"] = userToken.provider
-        headers["UserToken"] = userToken.token
+        if let userInfo = UserManager.getCurrentUser() {
+            headers["UserProvider"] = userInfo.provider?.rawValue
+            headers["UserToken"] = userInfo.userToken
+        }
         
         Log.debug("headers: \(headers)")
         

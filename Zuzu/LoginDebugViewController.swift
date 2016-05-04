@@ -936,7 +936,12 @@ class LoginDebugViewController: UIViewController {
     }
     
     private func checkLogin(handler: (userId: String, email: String) -> Void) {
-        if AmazonClientManager.sharedInstance.isLoggedIn() {
+        if let currentUser = UserManager.getCurrentUser() {
+            if currentUser.userType == UserType.Unauthenticated {
+                handler(userId: currentUser.userId, email: "")
+                return
+            }
+            
             if let userProfile = AmazonClientManager.sharedInstance.currentUserProfile {
                 if let userId = userProfile.id, email = userProfile.email {
                     handler(userId: userId, email: email)
@@ -944,6 +949,17 @@ class LoginDebugViewController: UIViewController {
                 }
             }
         }
+        
+//        if AmazonClientManager.sharedInstance.isLoggedIn() {
+//            if let userProfile = AmazonClientManager.sharedInstance.currentUserProfile {
+//                if let userId = userProfile.id, email = userProfile.email {
+//                    handler(userId: userId, email: email)
+//                    return
+//                }
+//            }
+//        }
+        
+        
         self.showAlert("提醒", subTitle: "請先登入")
     }
     
