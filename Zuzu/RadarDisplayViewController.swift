@@ -369,12 +369,12 @@ class RadarDisplayViewController: UIViewController {
         if let userId = UserManager.getCurrentUser()?.userId,
             criteriaId = self.zuzuCriteria.criteriaId{
             
-            var text = "啟用中"
+            var text = "開啟通知"
             if isEnabled == false{
-                text = "停用中"
+                text = "關閉通知"
             }
             
-            RadarService.sharedInstance.startLoadingText(self,text:text, animated:false)
+            RadarService.sharedInstance.startLoadingText(self,text:text, animated:false, minShowTime: 1.0)
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId, criteriaId: criteriaId, enabled: isEnabled) {
                 (result, error) -> Void in
