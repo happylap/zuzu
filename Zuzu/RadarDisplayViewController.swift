@@ -48,10 +48,12 @@ class RadarDisplayViewController: UIViewController {
             
             let loginButton: UIButton = UIButton(type: UIButtonType.Custom)
             loginButton.setTitle("登入", forState: UIControlState.Normal)
+            loginButton.titleLabel?.font = UIFont.systemFontOfSize(16)
+            loginButton.autoScaleFontSize = true
             loginButton.addTarget(self, action: #selector(RadarDisplayViewController.onLoginRightButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            loginButton.sizeToFit()
             
             let loginItem = UIBarButtonItem(customView: loginButton)
-            loginItem.enabled = false
             
             self.navigationItem.setRightBarButtonItems([loginItem], animated: false)
             
