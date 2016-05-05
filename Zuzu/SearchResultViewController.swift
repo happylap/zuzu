@@ -183,7 +183,7 @@ class SearchResultViewController: UIViewController {
             let xConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
-            let yConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            let yConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noSearchResultImage, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.0, constant: 22)
             yConstraint.priority = UILayoutPriorityRequired
             
             let leftConstraint = NSLayoutConstraint(item: noSearchResultLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
@@ -206,11 +206,12 @@ class SearchResultViewController: UIViewController {
             contentView.addSubview(noSearchResultImage)
             
             /// Setup constraints for Image
-            let xImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
-            xConstraint.priority = UILayoutPriorityRequired
             
-            let yImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noSearchResultLabel, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.1, constant: 0)
-            yConstraint.priority = UILayoutPriorityRequired
+            let xImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xImgConstraint.priority = UILayoutPriorityRequired
+            
+            let yImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yImgConstraint.priority = UILayoutPriorityRequired
 
             
             /// Add constraints to contentView

@@ -244,7 +244,7 @@ class SearchBoxTableViewController: UITableViewController {
                     if let typeButton = view as? ToggleButton {
                         if(typeButton.tag !=
                             UIControlTag.NOT_LIMITED_BUTTON_TAG){
-                                selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
+                            selectAllButton!.addStateListener(ToggleButtonListenr(target: typeButton))
                         }
                         
                         typeButton.addTarget(self, action: #selector(SearchBoxTableViewController.onTypeButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -442,7 +442,8 @@ class SearchBoxTableViewController: UITableViewController {
             noSearchHistoryLabel.textAlignment = NSTextAlignment.Center
             noSearchHistoryLabel.numberOfLines = -1
             noSearchHistoryLabel.font = UIFont.systemFontOfSize(14)
-            noSearchHistoryLabel.textColor = UIColor.grayColor()
+            noSearchHistoryLabel.autoScaleFontSize = true
+            noSearchHistoryLabel.textColor = UIColor.colorWithRGB(0x848484)
             noSearchHistoryLabel.hidden = true
             contentView.addSubview(noSearchHistoryLabel)
             
@@ -450,7 +451,7 @@ class SearchBoxTableViewController: UITableViewController {
             let xConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
-            let yConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            let yConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noSearchHistoryImage, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.0, constant: 22)
             yConstraint.priority = UILayoutPriorityRequired
             
             let leftConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
@@ -458,7 +459,6 @@ class SearchBoxTableViewController: UITableViewController {
             
             let rightConstraint = NSLayoutConstraint(item: noSearchHistoryLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
             rightConstraint.priority = UILayoutPriorityDefaultLow
-            
             
             /// UIImage setting
             noSearchHistoryImage.translatesAutoresizingMaskIntoConstraints = false
@@ -469,11 +469,12 @@ class SearchBoxTableViewController: UITableViewController {
             contentView.addSubview(noSearchHistoryImage)
             
             /// Setup constraints for Image
-            let xImgConstraint = NSLayoutConstraint(item: noSearchHistoryImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
-            xConstraint.priority = UILayoutPriorityRequired
             
-            let yImgConstraint = NSLayoutConstraint(item: noSearchHistoryImage, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noSearchHistoryLabel, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.2, constant: 0)
-            yConstraint.priority = UILayoutPriorityRequired
+            let xImgConstraint = NSLayoutConstraint(item: noSearchHistoryImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xImgConstraint.priority = UILayoutPriorityRequired
+            
+            let yImgConstraint = NSLayoutConstraint(item: noSearchHistoryImage, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yImgConstraint.priority = UILayoutPriorityRequired
             
             /// Add constraints to contentView
             contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
@@ -722,31 +723,31 @@ class SearchBoxTableViewController: UITableViewController {
         
         ///Price Range
         let priceMinRow =
-        pricePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
+            pricePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
         let priceMaxRow =
-        pricePicker.selectedRowInComponent(PickerConst.upperCompIdx)
+            pricePicker.selectedRowInComponent(PickerConst.upperCompIdx)
         
         if let priceMin = getItemForPicker(pricePicker, component: PickerConst.lowerCompIdx, row: priceMinRow),
             let priceMax = getItemForPicker(pricePicker, component: PickerConst.upperCompIdx, row: priceMaxRow) {
-                
-                if(priceMin.value != PickerConst.anyLower.value || priceMax.value != PickerConst.anyUpper.value) {
-                    searchCriteria.price = (priceMin.value, priceMax.value)
-                }
-                
+            
+            if(priceMin.value != PickerConst.anyLower.value || priceMax.value != PickerConst.anyUpper.value) {
+                searchCriteria.price = (priceMin.value, priceMax.value)
+            }
+            
         }
         
         ///Size Range
         let sizeMinRow =
-        sizePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
+            sizePicker.selectedRowInComponent(PickerConst.lowerCompIdx)
         let sizeMaxRow =
-        sizePicker.selectedRowInComponent(PickerConst.upperCompIdx)
+            sizePicker.selectedRowInComponent(PickerConst.upperCompIdx)
         
         if let sizeMin = getItemForPicker(sizePicker, component: PickerConst.lowerCompIdx, row: sizeMinRow),
             let sizeMax = getItemForPicker(sizePicker, component: PickerConst.upperCompIdx, row: sizeMaxRow){
-                
-                if(sizeMin.value != PickerConst.anyLower.value || sizeMax.value != PickerConst.anyUpper.value) {
-                    searchCriteria.size = (sizeMin.value, sizeMax.value)
-                }
+            
+            if(sizeMin.value != PickerConst.anyLower.value || sizeMax.value != PickerConst.anyUpper.value) {
+                searchCriteria.size = (sizeMin.value, sizeMax.value)
+            }
         }
         
         ///House Types
@@ -760,21 +761,21 @@ class SearchBoxTableViewController: UITableViewController {
                 if let typeButton = view as? ToggleButton {
                     if(typeButton.tag !=
                         UIControlTag.NOT_LIMITED_BUTTON_TAG){
-                            if(typeButton.getToggleState()) {
-                                switch typeButton.tag {
-                                case 1:
-                                    typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
-                                case 2:
-                                    typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
-                                case 3:
-                                    typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
-                                case 4:
-                                    typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
-                                case 5:
-                                    typeList.append(CriteriaConst.PrimaryType.HOME_OFFICE)
-                                default: break
-                                }
+                        if(typeButton.getToggleState()) {
+                            switch typeButton.tag {
+                            case 1:
+                                typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
+                            case 2:
+                                typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
+                            case 3:
+                                typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
+                            case 4:
+                                typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
+                            case 5:
+                                typeList.append(CriteriaConst.PrimaryType.HOME_OFFICE)
+                            default: break
                             }
+                        }
                     }
                 }
             }
@@ -828,8 +829,8 @@ class SearchBoxTableViewController: UITableViewController {
         ///GA Tracker
         
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-            action: GAConst.Action.UIActivity.RateUs,
-            label: gaLabel ?? "failed")
+                                        action: GAConst.Action.UIActivity.RateUs,
+                                        label: gaLabel ?? "failed")
         
     }
     
@@ -885,8 +886,8 @@ class SearchBoxTableViewController: UITableViewController {
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-            action: GAConst.Action.UIActivity.FanPage,
-            label: gaLabel ?? "failed")
+                                        action: GAConst.Action.UIActivity.FanPage,
+                                        label: gaLabel ?? "failed")
         
         
     }
@@ -910,7 +911,7 @@ class SearchBoxTableViewController: UITableViewController {
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-            action: GAConst.Action.UIActivity.ResetCriteria)
+                                        action: GAConst.Action.UIActivity.ResetCriteria)
     }
     
     func onTypeButtonTouched(sender: UIButton) {
@@ -1020,10 +1021,10 @@ class SearchBoxTableViewController: UITableViewController {
         return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
         
         /* Use Autolayout decided size
-        let cellView = self.tableView(tableView, cellForRowAtIndexPath: indexPath)
-        
-        return cellView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-        */
+         let cellView = self.tableView(tableView, cellForRowAtIndexPath: indexPath)
+         
+         return cellView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+         */
         
     }
     
@@ -1158,33 +1159,33 @@ class SearchBoxTableViewController: UITableViewController {
                         
                         if let keyword = self.currentCriteria.keyword {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.Keyword, label: keyword)
+                                                            action: GAConst.Action.SearchHouse.Keyword, label: keyword)
                         }
                         
                         if let priceRange = self.currentCriteria.price {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.PriceMin,
-                                label: String(priceRange.0))
+                                                            action: GAConst.Action.SearchHouse.PriceMin,
+                                                            label: String(priceRange.0))
                             
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.PriceMax,
-                                label: String(priceRange.1))
+                                                            action: GAConst.Action.SearchHouse.PriceMax,
+                                                            label: String(priceRange.1))
                         }
                         
                         if let sizeRange = self.currentCriteria.size {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.SizeMin,
-                                label: String(sizeRange.0))
+                                                            action: GAConst.Action.SearchHouse.SizeMin,
+                                                            label: String(sizeRange.0))
                             
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                action: GAConst.Action.SearchHouse.SizeMax,
-                                label: String(sizeRange.1))
+                                                            action: GAConst.Action.SearchHouse.SizeMax,
+                                                            label: String(sizeRange.1))
                         }
                         
                         if let types = self.currentCriteria.types {
                             for type in types {
                                 self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                    action: GAConst.Action.SearchHouse.Type, label: String(type))
+                                                                action: GAConst.Action.SearchHouse.Type, label: String(type))
                             }
                         } else {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse, action:
@@ -1255,9 +1256,9 @@ extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSo
             ///Return cached data if there is cached data
             if let cachedData = cache.objectForKey(self.cacheKey),
                 let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) as? [String: Int] {
-                    
-                    return result
-                    
+                
+                return result
+                
             }
             
         } catch _ {
@@ -1439,50 +1440,50 @@ extension SearchBoxTableViewController: UIPickerViewDelegate, UIPickerViewDataSo
     
     private func updatePickerSelectionLabel(
         pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int, targetItems: [[(label: String, value: Int)]]) {
+        
+        var targetLabel:UILabel
+        
+        switch(pickerView) {
+        case sizePicker:
+            targetLabel = sizeLabel
+        case pricePicker:
+            targetLabel = priceLabel
+        default:
+            return
+        }
+        
+        var pickerFrom:(component:Int, row:Int) = (0,0)
+        var pickerTo:(component:Int, row:Int) = (0,0)
+        
+        if(component == PickerConst.lowerCompIdx) {
+            let fromItemIdx = row
+            let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
             
-            var targetLabel:UILabel
+            pickerFrom = (component, fromItemIdx)
+            pickerTo = ((targetItems.endIndex - 1), toItemIdx)
             
-            switch(pickerView) {
-            case sizePicker:
-                targetLabel = sizeLabel
-            case pricePicker:
-                targetLabel = priceLabel
-            default:
-                return
-            }
+        }else if(component == PickerConst.upperCompIdx) {
+            let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
+            let toItemIdx = row
             
-            var pickerFrom:(component:Int, row:Int) = (0,0)
-            var pickerTo:(component:Int, row:Int) = (0,0)
+            pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
+            pickerTo = (component: component, row: toItemIdx)
             
-            if(component == PickerConst.lowerCompIdx) {
-                let fromItemIdx = row
-                let toItemIdx = pickerView.selectedRowInComponent(targetItems.endIndex - 1)
-                
-                pickerFrom = (component, fromItemIdx)
-                pickerTo = ((targetItems.endIndex - 1), toItemIdx)
-                
-            }else if(component == PickerConst.upperCompIdx) {
-                let fromItemIdx = pickerView.selectedRowInComponent(targetItems.startIndex)
-                let toItemIdx = row
-                
-                pickerFrom = (component: (targetItems.startIndex), row: fromItemIdx)
-                pickerTo = (component: component, row: toItemIdx)
-                
-            }else {
-                assert(false, "Strange component index!")
-            }
-            
-            let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
-            let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
-            
-            if(fromTuple?.label == toTuple?.label) {
-                targetLabel.text = "\((fromTuple?.label)!)"
-            } else {
-                targetLabel.text = "\((fromTuple?.label)!) — \((toTuple?.label)!)"
-            }
-            
-            targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
-            
+        }else {
+            assert(false, "Strange component index!")
+        }
+        
+        let fromTuple = self.getItemForPicker(pickerView, component: pickerFrom.component, row: pickerFrom.row)
+        let toTuple = self.getItemForPicker(pickerView, component: pickerTo.component, row: pickerTo.row)
+        
+        if(fromTuple?.label == toTuple?.label) {
+            targetLabel.text = "\((fromTuple?.label)!)"
+        } else {
+            targetLabel.text = "\((fromTuple?.label)!) — \((toTuple?.label)!)"
+        }
+        
+        targetLabel.text = pickerRangeToString(pickerView, pickerFrom: pickerFrom, pickerTo: pickerTo)
+        
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -1652,7 +1653,7 @@ extension SearchBoxTableViewController : CityRegionContainerControllerDelegate {
                 for city in cities {
                     for region in city.regions {
                         self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                            action: GAConst.Action.SearchHouse.Region + String(city.code), label: String(region.code))
+                                                        action: GAConst.Action.SearchHouse.Region + String(city.code), label: String(region.code))
                     }
                 }
             }

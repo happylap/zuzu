@@ -98,7 +98,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             let xConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
-            let yConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.8, constant: 0)
+            let yConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noCollectionImage, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.0, constant: 22)
             yConstraint.priority = UILayoutPriorityRequired
             
             let leftConstraint = NSLayoutConstraint(item: noCollectionLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
@@ -117,10 +117,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             
             /// Setup constraints for Image
             let xImgConstraint = NSLayoutConstraint(item: noCollectionImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
-            xConstraint.priority = UILayoutPriorityRequired
+            xImgConstraint.priority = UILayoutPriorityRequired
             
-            let yImgConstraint = NSLayoutConstraint(item: noCollectionImage, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: noCollectionLabel, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.1, constant: 0)
-            yConstraint.priority = UILayoutPriorityRequired
+            let yImgConstraint = NSLayoutConstraint(item: noCollectionImage, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yImgConstraint.priority = UILayoutPriorityRequired
+
             
             /// Add constraints to contentView
             contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
