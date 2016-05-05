@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ybg-AC-NMz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ybg-AC-NMz">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -1382,17 +1382,25 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vil-gD-7zS">
-                                                    <rect key="frame" x="20" y="5" width="622" height="45"/>
+                                                    <rect key="frame" x="20" y="5" width="622" height="41.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="cSY-eD-EWV"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="cSY-eD-EWV"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Vil-gD-7zS" firstAttribute="top" secondItem="hMY-Ey-K1Q" secondAttribute="topMargin" constant="5" id="ApU-rD-1zm"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Vil-gD-7zS" secondAttribute="bottom" constant="5" id="GqU-RS-2MG"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Vil-gD-7zS" secondAttribute="bottom" constant="8" id="Hsg-go-VEH"/>
                                                 <constraint firstItem="Vil-gD-7zS" firstAttribute="leading" secondItem="hMY-Ey-K1Q" secondAttribute="leading" constant="20" symbolic="YES" id="PsI-iv-APw"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Vil-gD-7zS" secondAttribute="trailing" constant="8" id="pIb-Sc-7z1"/>
                                             </constraints>
@@ -1401,6 +1409,60 @@
                                         <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
                                         <connections>
                                             <outlet property="contentLabel" destination="Vil-gD-7zS" id="ZiE-J0-2YL"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentAdCell" rowHeight="80" id="fxB-Xv-OpS" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="582" width="650" height="80"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fxB-Xv-OpS" id="Lav-bE-QX3">
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="79.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHr-y3-o58">
+                                                    <rect key="frame" x="20" y="5" width="622" height="8.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="W95-ZO-NvQ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="W95-ZO-NvQ"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGT-FQ-Tld" userLabel="AdBannerView">
+                                                    <rect key="frame" x="165" y="21.5" width="320" height="50"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="320" id="A7D-V6-8yt"/>
+                                                        <constraint firstAttribute="height" constant="50" id="OoQ-tj-VLf"/>
+                                                        <constraint firstAttribute="height" constant="50" id="hTg-1b-vTn"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="OoQ-tj-VLf"/>
+                                                        </mask>
+                                                    </variation>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="eGT-FQ-Tld" secondAttribute="bottom" constant="8" id="5Qa-st-UHi"/>
+                                                <constraint firstItem="KHr-y3-o58" firstAttribute="top" secondItem="Lav-bE-QX3" secondAttribute="topMargin" constant="5" id="9rx-eZ-vAW"/>
+                                                <constraint firstItem="eGT-FQ-Tld" firstAttribute="top" secondItem="KHr-y3-o58" secondAttribute="bottom" constant="8" id="KHQ-O3-53r"/>
+                                                <constraint firstItem="eGT-FQ-Tld" firstAttribute="centerX" secondItem="Lav-bE-QX3" secondAttribute="centerX" id="fcB-D8-Pmn"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="KHr-y3-o58" secondAttribute="trailing" constant="8" id="s09-ON-zF7"/>
+                                                <constraint firstItem="KHr-y3-o58" firstAttribute="leading" secondItem="Lav-bE-QX3" secondAttribute="leading" constant="20" symbolic="YES" id="yFb-UK-Rfu"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
+                                            <outlet property="adBannerContainer" destination="eGT-FQ-Tld" id="FxO-At-9qS"/>
+                                            <outlet property="contentLabel" destination="KHr-y3-o58" id="J6j-4e-ZV0"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

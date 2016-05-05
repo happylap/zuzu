@@ -29,8 +29,6 @@ private let Log = Logger.defaultLogger
 class HouseDetailViewController: UIViewController {
     
     // MARK: - Private Fields
-    private var bannerView: GADBannerView = ADFactory.sharedInstance.getHouseDetailBanner()
-    
     private static var alertViewResponder: SCLAlertViewResponder?
     private var networkErrorAlertView:SCLAlertView? = SCLAlertView()
     
@@ -66,6 +64,7 @@ class HouseDetailViewController: UIViewController {
         case AddressCell = "addressCell"
         case ExpandableHeaderCell = "expandableHeaderCell"
         case ExpandableContentCell = "expandableContentCell"
+        case ExpandableContentAdCell = "expandableContentAdCell"
     }
     
     
@@ -151,15 +150,15 @@ class HouseDetailViewController: UIViewController {
             ///Return cached data if there is cached data
             if let cachedData = cache.objectForKey(houseItem.id),
                 let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) {
-                    
-                    Log.debug("Hit Cache for item: Id: \(houseItem.id), Title: \(houseItem.title)")
-                    
-                    hitCache = true
-                    
-                    LoadingSpinner.shared.stop()
-                    
-                    self.delegate?.onHouseItemLoaded?(true)
-                    handleHouseDetailResponse(result)
+                
+                Log.debug("Hit Cache for item: Id: \(houseItem.id), Title: \(houseItem.title)")
+                
+                hitCache = true
+                
+                LoadingSpinner.shared.stop()
+                
+                self.delegate?.onHouseItemLoaded?(true)
+                handleHouseDetailResponse(result)
             }
             
         } catch _ {
@@ -619,7 +618,7 @@ class HouseDetailViewController: UIViewController {
                     cell.headerLabel.text = "屋主說明"
                 }
             }),
-            15:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            15:CellInfo(cellIdentifier: .ExpandableContentAdCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     cell.contentLabel.adjustsFontSizeToFitWidth = false
                     cell.contentLabel.numberOfLines = 0
@@ -643,14 +642,18 @@ class HouseDetailViewController: UIViewController {
                             cell.contentLabel.text = "無資訊\n"
                         }
                         
-                        //cell.contentLabel.sizeToFit()
-                        //cell.setNeedsLayout()
-                        // cell.layoutIfNeeded()
-                        
                         Log.debug("Frame Height: \(cell.contentLabel.frame.height)")
                     } else {
                         cell.contentLabel.text = "無資訊\n"
                     }
+                    
+                    if(cell.isAdBannerSupported) {
+                        cell.setAdBanner(self)
+                    }
+                    
+                    //if(TagUtils.shouldDisplayADs()) {
+                    
+                    //}
                 }
             })
         ]
@@ -699,23 +702,6 @@ class HouseDetailViewController: UIViewController {
         self.configureContactBarView()
     }
     
-    private func getAdBannerFooterView() -> UIView {
-        self.bannerView.rootViewController = self
-        self.bannerView.adSize = kGADAdSizeBanner
-        self.bannerView.delegate = self
-        
-        let request = GADRequest()
-        request.testDevices = ADFactory.testDevice
-        self.bannerView.loadRequest(request)
-        
-        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))
-        footerView.addSubview(self.bannerView)
-        self.bannerView.center.x = footerView.center.x
-        self.bannerView.center.y = self.bannerView.center.y + 8.0
-        
-        return footerView
-    }
-    
     private func configureTableView() {
         //Configure cell height
         tableView.estimatedRowHeight = 213//tableView.rowHeight
@@ -729,15 +715,8 @@ class HouseDetailViewController: UIViewController {
         self.tableView.layoutIfNeeded()
         
         
-        if(TagUtils.shouldDisplayADs()) {
-            
-            tableView.tableFooterView = self.getAdBannerFooterView()
-            
-        } else {
-            
-            //Remove extra cells with some padding height
-            tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
-        }
+        //Remove extra cells with some padding height
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
         
     }
     
@@ -853,11 +832,11 @@ class HouseDetailViewController: UIViewController {
     func contactByMailButtonTouched(sender: UIButton) {
         
         /* Another way to allow sending mail by lauching default mail App
-        * Our app will be suspended, and the user woulden't have a way to return to our App
-        if let url = NSURL(string: "mailto:jon.doe@mail.com") {
-        UIApplication.sharedApplication().openURL(url)
-        }
-        */
+         * Our app will be suspended, and the user woulden't have a way to return to our App
+         if let url = NSURL(string: "mailto:jon.doe@mail.com") {
+         UIApplication.sharedApplication().openURL(url)
+         }
+         */
         
         
         if let houseDetail = self.houseItemDetail {
@@ -959,12 +938,12 @@ class HouseDetailViewController: UIViewController {
                             
                             if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
                                 let url = NSURL(string: "tel://\(phoneStr)") {
-                                    
-                                    success = UIApplication.sharedApplication().openURL(url)
-                                    
-                                    if let houseId = houseDetail.valueForKey("id") as? String {
-                                        CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
-                                    }
+                                
+                                success = UIApplication.sharedApplication().openURL(url)
+                                
+                                if let houseId = houseDetail.valueForKey("id") as? String {
+                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                                }
                             }
                         }
                         
@@ -1008,29 +987,29 @@ class HouseDetailViewController: UIViewController {
         
         if let houseItemDetail = self.houseItemDetail,
             let houseLink = houseItemDetail.valueForKey("mobile_link") as? String {
+            
+            if let houseURL = NSURL(string: houseLink) {
+                var objectsToShare = [AnyObject]()
                 
-                if let houseURL = NSURL(string: houseLink) {
-                    var objectsToShare = [AnyObject]()
-                    
-                    let appSlogan = "想租屋就找豬豬! 本資訊透過[豬豬快租App]與您分享"
-                    
-                    let titleToShare = houseItemDetail.valueForKey("title") as? String ?? ""
-                    let addressToShare = houseItemDetail.valueForKey("addr") as? String ?? ""
-                    
-                    let text = ("\n\(titleToShare)\n\(addressToShare)\n\(houseLink)\n\n\(appSlogan)\n")
-                    
-                    objectsToShare.append(HouseUrl(houseUrl: houseURL))
-                    objectsToShare.append(HouseText(houseText: text))
-                    
-                    
-                    let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-                    
-                    self.presentViewController(activityVC, animated: true, completion: { () -> Void in
-                    })
-                    
-                    
-                }
+                let appSlogan = "想租屋就找豬豬! 本資訊透過[豬豬快租App]與您分享"
                 
+                let titleToShare = houseItemDetail.valueForKey("title") as? String ?? ""
+                let addressToShare = houseItemDetail.valueForKey("addr") as? String ?? ""
+                
+                let text = ("\n\(titleToShare)\n\(addressToShare)\n\(houseLink)\n\n\(appSlogan)\n")
+                
+                objectsToShare.append(HouseUrl(houseUrl: houseURL))
+                objectsToShare.append(HouseText(houseText: text))
+                
+                
+                let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                
+                self.presentViewController(activityVC, animated: true, completion: { () -> Void in
+                })
+                
+                
+            }
+            
         } else {
             Log.debug("No data to share now")
         }
@@ -1038,16 +1017,16 @@ class HouseDetailViewController: UIViewController {
         ///GA Tracker
         if let houseItem = houseItem {
             self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                action: GAConst.Action.UIActivity.ShareItemPrice,
-                label: String(houseItem.price))
+                                            action: GAConst.Action.UIActivity.ShareItemPrice,
+                                            label: String(houseItem.price))
             
             self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                action: GAConst.Action.UIActivity.ShareItemSize,
-                label: String(houseItem.size))
+                                            action: GAConst.Action.UIActivity.ShareItemSize,
+                                            label: String(houseItem.size))
             
             self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                action: GAConst.Action.UIActivity.ShareItemType,
-                label: String(houseItem.purposeType))
+                                            action: GAConst.Action.UIActivity.ShareItemType,
+                                            label: String(houseItem.purposeType))
         }
         
     }
@@ -1063,69 +1042,69 @@ class HouseDetailViewController: UIViewController {
         
         if let houseItemDetail = self.houseItemDetail,
             let houseId = houseItemDetail.valueForKey("id") as? String {
+            
+            let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
+            
+            let collectionService = CollectionItemService.sharedInstance
+            
+            ///Determine action based on whether the house item is already in "My Collection"
+            if(collectionService.isExist(houseId)) {
                 
-                let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
+                collectionService.deleteItemById(houseId)
                 
-                let collectionService = CollectionItemService.sharedInstance
+                if let barItem = barItem {
+                    barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                }
                 
-                ///Determine action based on whether the house item is already in "My Collection"
-                if(collectionService.isExist(houseId)) {
+                ///Notify the search result table to refresh the selected row
+                delegate?.onHouseItemStateChanged?()
+                
+            } else {
+                
+                if !CollectionItemService.sharedInstance.canAdd() {
+                    let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
+                    SCLAlertView().showInfo("提醒您", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    return
+                }
+                
+                if let barItem = barItem {
+                    barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+                }
+                
+                LoadingSpinner.shared.stop()
+                LoadingSpinner.shared.setImmediateAppear(false)
+                LoadingSpinner.shared.setGraceTime(1.0)
+                LoadingSpinner.shared.setOpacity(0.3)
+                LoadingSpinner.shared.startOnView(self.view)
+                Log.debug("LoadingSpinner startOnView")
+                
+                HouseDataRequester.getInstance().searchById(houseId) { (result, error) -> Void in
+                    LoadingSpinner.shared.stop()
+                    Log.debug("LoadingSpinner stop")
                     
-                    collectionService.deleteItemById(houseId)
-                    
-                    if let barItem = barItem {
-                        barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
-                    }
-                    
-                    ///Notify the search result table to refresh the selected row
-                    delegate?.onHouseItemStateChanged?()
-                    
-                } else {
-                    
-                    if !CollectionItemService.sharedInstance.canAdd() {
-                        let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
-                        SCLAlertView().showInfo("提醒您", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    if let error = error {
+                        let alertView = SCLAlertView()
+                        alertView.showCloseButton = false
+                        alertView.addButton("知道了") {
+                            if let barItem = barItem {
+                                barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                            }
+                        }
+                        let subTitle = "您目前可能處於飛航模式或是無網路狀態，請稍後再試"
+                        alertView.showInfo("網路無法連線", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                        
+                        Log.debug("Cannot get remote data \(error.localizedDescription)")
                         return
                     }
                     
-                    if let barItem = barItem {
-                        barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
-                    }
+                    collectionService.addItem(houseItemDetail)
+                    self.alertAddingToCollectionSuccess()
                     
-                    LoadingSpinner.shared.stop()
-                    LoadingSpinner.shared.setImmediateAppear(false)
-                    LoadingSpinner.shared.setGraceTime(1.0)
-                    LoadingSpinner.shared.setOpacity(0.3)
-                    LoadingSpinner.shared.startOnView(self.view)
-                    Log.debug("LoadingSpinner startOnView")
-                    
-                    HouseDataRequester.getInstance().searchById(houseId) { (result, error) -> Void in
-                        LoadingSpinner.shared.stop()
-                        Log.debug("LoadingSpinner stop")
-                        
-                        if let error = error {
-                            let alertView = SCLAlertView()
-                            alertView.showCloseButton = false
-                            alertView.addButton("知道了") {
-                                if let barItem = barItem {
-                                    barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
-                                }
-                            }
-                            let subTitle = "您目前可能處於飛航模式或是無網路狀態，請稍後再試"
-                            alertView.showInfo("網路無法連線", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                            
-                            Log.debug("Cannot get remote data \(error.localizedDescription)")
-                            return
-                        }
-                        
-                        collectionService.addItem(houseItemDetail)
-                        self.alertAddingToCollectionSuccess()
-                        
-                        ///Notify the search result table to refresh the slected row
-                        self.delegate?.onHouseItemStateChanged?()
-                    }
+                    ///Notify the search result table to refresh the slected row
+                    self.delegate?.onHouseItemStateChanged?()
                 }
-                
+            }
+            
         }
     }
     
@@ -1282,8 +1261,8 @@ class HouseDetailViewController: UIViewController {
                         ///GA Tracker
                         if let houseItem = houseItem {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                                action: GAConst.Action.UIActivity.ViewSource,
-                                label: String(houseItem.source))
+                                                            action: GAConst.Action.UIActivity.ViewSource,
+                                                            label: String(houseItem.source))
                         }
                     }
                 }
@@ -1321,9 +1300,9 @@ extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-            action: GAConst.Action.UIActivity.Contact,
-            label: GAConst.Label.Contact.Email,
-            value:  UInt(success))
+                                        action: GAConst.Action.UIActivity.Contact,
+                                        label: GAConst.Label.Contact.Email,
+                                        value:  UInt(success))
         
         //self.navigationController?.popViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -1401,12 +1380,18 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let cell = cell as? HouseDetailTitleViewCell {
+        if let myCell = cell as? HouseDetailTitleViewCell {
             
-            Log.debug("willDisplayCell: \(cell)")
+            Log.debug("willDisplayCell: \(myCell)")
             
-            let label:MarqueeLabel =  cell.houseTitleLabel as! MarqueeLabel
+            let label:MarqueeLabel =  myCell.houseTitleLabel as! MarqueeLabel
             label.restartLabel()
+            
+        } else if let myCell = cell as? HouseDetailExpandableContentCell where myCell.isAdBannerEnabled {
+            
+            Log.debug("willDisplayCell: \(myCell)")
+            
+            myCell.loadBanner()
         }
         
     }
@@ -1493,37 +1478,37 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         }
     }
     
-//    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        
-//        self.bannerView.rootViewController = self
-//        self.bannerView.adSize = kGADAdSizeBanner
-//        //self.bannerView.delegate = self
-//        
-//        //FBAdSettings.addTestDevices(fbTestDevice)
-//        
-//        #if DEBUG
-//            //Test adUnit
-//            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-//        #else
-//            //Real adUnit
-//            //self.bannerView.adUnitID = "ca-app-pub-7083975197863528/2369456093"
-//            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-//        #endif
-//        
-//        let request = GADRequest()
-//        
-//        self.bannerView.loadRequest(request)
-//        
-//        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))
-//        footerView.addSubview(self.bannerView)
-//        
-//        return footerView
-//    }
-//    
-//    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 120.0
-//    }
-
+    //    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    //
+    //        self.bannerView.rootViewController = self
+    //        self.bannerView.adSize = kGADAdSizeBanner
+    //        //self.bannerView.delegate = self
+    //
+    //        //FBAdSettings.addTestDevices(fbTestDevice)
+    //
+    //        #if DEBUG
+    //            //Test adUnit
+    //            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+    //        #else
+    //            //Real adUnit
+    //            //self.bannerView.adUnitID = "ca-app-pub-7083975197863528/2369456093"
+    //            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+    //        #endif
+    //
+    //        let request = GADRequest()
+    //
+    //        self.bannerView.loadRequest(request)
+    //
+    //        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))
+    //        footerView.addSubview(self.bannerView)
+    //
+    //        return footerView
+    //    }
+    //
+    //    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    //        return 120.0
+    //    }
+    
     
     
 }
@@ -1535,8 +1520,8 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         
         if let houseItemDetail = self.houseItemDetail,
             let imgList = houseItemDetail.valueForKey("img") as? [String]{
-                
-                return UInt(imgList.count)
+            
+            return UInt(imgList.count)
         } else {
             return 0
         }
@@ -1549,12 +1534,12 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         
         if let houseItemDetail = self.houseItemDetail,
             let imgList = houseItemDetail.valueForKey("img") as? [String]{
-                
-                if (photoIndex < imgList.endIndex) {
-                    return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
-                } else {
-                    return nil
-                }
+            
+            if (photoIndex < imgList.endIndex) {
+                return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
+            } else {
+                return nil
+            }
         } else {
             return nil
         }
@@ -1566,38 +1551,14 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         
         if let houseItemDetail = self.houseItemDetail,
             let imgList = houseItemDetail.valueForKey("img") as? [String] {
-                
-                if (photoIndex < imgList.endIndex) {
-                    return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
-                } else {
-                    return nil
-                }
+            
+            if (photoIndex < imgList.endIndex) {
+                return  MWPhoto(URL:NSURL(string: imgList[photoIndex]))
+            } else {
+                return nil
+            }
         } else {
             return nil
         }
-    }
-}
-
-// MARK: - GADBannerViewDelegate
-extension HouseDetailViewController: GADBannerViewDelegate {
-    
-    internal func adViewDidReceiveAd(bannerView: GADBannerView!) {
-        Log.enter()
-        Log.error("Banner adapter class name: \(bannerView.adNetworkClassName)")
-    }
-    internal func adView(bannerView: GADBannerView!, didFailToReceiveAdWithError error: GADRequestError!) {
-        Log.error("\(error)")
-    }
-    internal func adViewWillPresentScreen(bannerView: GADBannerView!) {
-        Log.enter()
-    }
-    internal func adViewWillDismissScreen(bannerView: GADBannerView!) {
-        Log.enter()
-    }
-    internal func adViewDidDismissScreen(bannerView: GADBannerView!) {
-        Log.enter()
-    }
-    internal func adViewWillLeaveApplication(bannerView: GADBannerView!) {
-        Log.enter()
     }
 }
