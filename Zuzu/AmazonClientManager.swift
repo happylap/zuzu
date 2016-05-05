@@ -1285,8 +1285,8 @@ extension AmazonClientManager: GIDSignInDelegate {
             
             if(error.code == -5) {
                 
-                ///GA Tracker: Login failed
-                if let viewController = signIn.uiDelegate as? UIViewController {
+                ///GA Tracker: Login cancelled
+                if let viewController = self.loginViewController {
                     viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                                                               action: GAConst.Action.Blocking.LoginCancel, label: "\(GAConst.Label.LoginType.Google), \(error.description)")
                 }
@@ -1318,7 +1318,7 @@ extension AmazonClientManager: GIDSignInDelegate {
                 }
                 
                 ///GA Tracker: Login failed
-                if let viewController = signIn.uiDelegate as? UIViewController {
+                if let viewController = self.loginViewController {
                     viewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                                                               action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Google), \(error.localizedDescription), \(error.userInfo)")
                 }
@@ -1349,7 +1349,7 @@ extension AmazonClientManager: GIDSignInDelegate {
                 self.completeGoogleLogin()
                 
                 ///GA Tracker: Login successful
-                if let viewController = signIn.uiDelegate as? UIViewController {
+                if let viewController = self.loginViewController {
                     viewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
                                                               action: GAConst.Action.UIActivity.Login, label: GAConst.Label.LoginType.Google)
                 }
