@@ -319,9 +319,10 @@ class AmazonClientManager : NSObject {
                     } else {
                         /// Create new user account
                         
-                        if let _ = UserDefaultsUtils.getLoginProvider() {
+                        if let provider = UserDefaultsUtils.getLoginProvider() {
                             
                             let zuzuUser = ZuzuUser()
+                            zuzuUser.provider = provider // The login provider for the account creation
                             zuzuUser.email = userProfile.email
                             zuzuUser.name = userProfile.name
                             zuzuUser.gender = userProfile.gender
@@ -855,7 +856,7 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithFacebook() -> Bool {
         
-        if let _ = self.currentUserProfile {
+        if let provider = UserDefaultsUtils.getLoginProvider() where provider == Provider.FB {
             return FBSDKAccessToken.currentAccessToken() != nil
         } else {
             return false
@@ -1036,7 +1037,7 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithGoogle() -> Bool {
         
-        if let _ = self.currentUserProfile {
+        if let provider = UserDefaultsUtils.getLoginProvider() where provider == Provider.GOOGLE {
             if let _ = self.googleSignIn.currentUser?.authentication {
                 
                 return true
@@ -1118,7 +1119,7 @@ class AmazonClientManager : NSObject {
     
     func isLoggedInWithZuzu() -> Bool {
         
-        if let _ = self.currentUserProfile {
+        if let provider = UserDefaultsUtils.getLoginProvider() where provider == Provider.ZUZU {
             return ZuzuAccessToken.currentAccessToken.token != nil
         } else {
             return false
