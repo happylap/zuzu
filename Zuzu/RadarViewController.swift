@@ -527,7 +527,7 @@ extension RadarViewController{
                         
                         RadarService.sharedInstance.stopLoading()
                         
-                        SCLAlertView().showInfo("設定成功", subTitle: "很抱歉，租屋雷達條件儲存成功，但是尚無法成功啟用，請您稍後嘗試手動啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                        SCLAlertView().showInfo("無法開啟通知", subTitle: "很抱歉，租屋雷達條件儲存成功，但是開啟通知失敗。請您稍後嘗試手動開啟，成功開啟之前您無法收到雷達通知", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                             
                             self.reloadRadarUI()
                         

@@ -153,7 +153,7 @@ class RadarDisplayViewController: UIViewController {
         
         let alertView = SCLAlertView()
         
-        let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務"
+        let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務。請允許接下來手機提示的通知權限請求。"
         
         alertView.showCloseButton = false
         
@@ -175,7 +175,7 @@ class RadarDisplayViewController: UIViewController {
             
         }
         
-        alertView.showInfo("開啟傳送通知", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView.showInfo("開啟App通知", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     private func alertLocalNotificationDisabled() {
@@ -279,9 +279,9 @@ class RadarDisplayViewController: UIViewController {
                 self.alertNoCriteria = true
                 
                 if RadarDisplayViewController.alertViewResponder == nil{
-                    RadarDisplayViewController.alertViewResponder = SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    RadarDisplayViewController.alertViewResponder = SCLAlertView().showInfo("請即設定", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並開啟通知，以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                     RadarDisplayViewController.alertViewResponder?.setDismissBlock(){
-                        RadarDisplayViewController.alertViewResponder
+                        RadarDisplayViewController.alertViewResponder = nil
                     }
                 }
                 
@@ -340,7 +340,7 @@ class RadarDisplayViewController: UIViewController {
         
         if self.zuzuCriteria.criteriaId == nil{
             
-            SCLAlertView().showInfo("尚未設定租屋雷達", subTitle: "啟用前請先完成租屋雷達的設定", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+            SCLAlertView().showInfo("尚未設定雷達條件", subTitle: "開啟通知前請先設定雷達條件", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
                 sender.on = !isEnabled
             }
             
@@ -428,7 +428,7 @@ class RadarDisplayViewController: UIViewController {
     private func updateCriteriaTextLabel(){
         
         if self.zuzuCriteria.criteria == nil{
-            let text = "您的租屋雷達服務已在作用中\n請立即設定租屋條件並啟用，才能開始收到通知。"
+            let text = "您的租屋雷達服務已在作用中\n請立即設定租屋條件並開啟通知，才能開始收到通知。"
             self.criteriaMessage.hidden = false
             self.criteriaMessage.text = text
             self.regionLabel?.text = ""
@@ -723,7 +723,7 @@ extension RadarDisplayViewController{
         if self.zuzuCriteria.criteriaId == nil{
             
             if RadarDisplayViewController.alertViewResponder == nil{
-                RadarDisplayViewController.alertViewResponder = SCLAlertView().showInfo("請即啟用", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並啟用，\n以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                RadarDisplayViewController.alertViewResponder = SCLAlertView().showInfo("請即設定", subTitle: "您的租屋雷達服務已在作用中，\n請立即設定租屋雷達條件並開啟通知，以維護您的權益，謝謝！", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
                 
                 RadarDisplayViewController.alertViewResponder?.setDismissBlock(){
                     RadarDisplayViewController.alertViewResponder = nil
