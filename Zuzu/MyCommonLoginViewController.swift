@@ -92,13 +92,16 @@ class MyCommonLoginViewController: UIViewController {
                 
             } else {
                 customLoginView.hidden = true
-                customLoginView.removeFromSuperview()
                 
+                /// Remove Zuzu Login Buttons, so that the customLoginView's height can shrink
+                for subview in customLoginView.subviews {
+                    subview.removeFromSuperview()
+                }
             }
         }
         
     }
-
+    
     @IBOutlet weak var titleText: UILabel!
     
     @IBOutlet weak var subTitleText: UILabel!
@@ -117,7 +120,7 @@ class MyCommonLoginViewController: UIViewController {
                 skipLoginButton.setTitleColor(UIColor.grayColor(), forState: .Normal)
                 skipLoginButton.layer.cornerRadius = CGFloat(5.0)
                 
-                            skipLoginButton.addTarget(self, action: #selector(MyCommonLoginViewController.onSkipButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
+                skipLoginButton.addTarget(self, action: #selector(MyCommonLoginViewController.onSkipButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
                 
             } else {
                 skipLoginButton.removeFromSuperview()
@@ -140,7 +143,7 @@ class MyCommonLoginViewController: UIViewController {
             
             fbButton.tintColor =
                 UIColor.colorWithRGB(0x4990E2, alpha: 1)
-
+            
             fbButton.setTitleColor(UIColor.colorWithRGB(0x4990E2, alpha: 1), forState: .Normal)
             fbButton.layer.cornerRadius = CGFloat(5.0)
             
