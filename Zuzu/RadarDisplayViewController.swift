@@ -235,6 +235,20 @@ class RadarDisplayViewController: UIViewController {
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
         self.purchaseHistotyTableDataSource.refresh(nil)
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Log.debug("viewWillAppear")
+        
+        self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
+        
+        // update criteria UI according to zuzuCriteria
+        self.updateCriteriaTextLabel()
+        
+        // update service UI according to zuzuService
+        self.updateServiceUI()
         
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
@@ -256,20 +270,6 @@ class RadarDisplayViewController: UIViewController {
             }
             
         }
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        Log.debug("viewWillAppear")
-        
-        self.criteriaEnableSwitch?.on = self.zuzuCriteria.enabled ?? false
-        
-        // update criteria UI according to zuzuCriteria
-        self.updateCriteriaTextLabel()
-        
-        // update service UI according to zuzuService
-        self.updateServiceUI()
         
         //Google Analytics Tracker
         self.trackScreen()
