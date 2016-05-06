@@ -155,7 +155,7 @@ class RadarDisplayViewController: UIViewController {
         
         let alertView = SCLAlertView()
         
-        let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務\n請再繼續後允許手機通知權限請求"
+        let subTitle = "要使用「租屋雷達」接收新物件通知，需要您授權接收通知\n\n請在點擊「繼續」後，允許豬豬快豬的通知權限請求"
         
         alertView.showCloseButton = false
         
@@ -190,7 +190,7 @@ class RadarDisplayViewController: UIViewController {
             
         }
         
-        alertView.showInfo("開啟App通知", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView.showInfo("請授權接收通知", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
     private func alertLocalNotificationDisabled() {
@@ -198,11 +198,11 @@ class RadarDisplayViewController: UIViewController {
         
         let alertView = SCLAlertView()
         
-        let subTitle = "您似乎沒有接受App通知的授權請求。\n\n請到：設定 > 通知 > 豬豬快租\n開啟「允許通知」選項\n\n才能接收租屋雷達通知物件"
+        let subTitle = "您似乎拒絕了接收通知的請求\n\n請到：設定 > 通知 > 豬豬快租，開啟「允許通知」選項\n\n通知功能開啟後，才能正常接收租屋雷達通知物件"
         
         alertView.showCloseButton = true
         
-        alertView.showInfo("尚未授權通知功能", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        alertView.showInfo("尚未授權接收通知", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     private func toggleServiceStatusIcon(isValid: Bool) {

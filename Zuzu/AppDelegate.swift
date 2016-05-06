@@ -173,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let alertView = SCLAlertView()
         
         
-        let subTitle = "遠端通知無法開啟，無法使用租屋雷達，請嘗試下面步驟：\n1.確認網路狀況正常\n2.關閉豬豬快租後，重新開啟進入「租屋雷達」。\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
+        let subTitle = "無法開啟遠端通知，無法使用「租屋雷達」，請嘗試下面步驟排除：\n\n確認網路狀況正常後，關閉豬豬快租，再重新開啟進入「租屋雷達」。\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
         
         alertView.showCloseButton = true
         
