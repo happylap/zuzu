@@ -166,20 +166,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-    /// Alert for no registered device token
-    internal static func alertPushNotificationDisabled() {
-        Log.enter()
-        
-        let alertView = SCLAlertView()
-        
-        
-        let subTitle = "無法開啟遠端通知，無法使用「租屋雷達」，請嘗試下面步驟排除：\n\n確認網路狀況正常後，關閉豬豬快租，再重新開啟進入「租屋雷達」。\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
-        
-        alertView.showCloseButton = true
-        
-        alertView.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    }
-    
     /// Clear  App/Tab badge
     internal static func clearAllBadge(){
         Log.enter()

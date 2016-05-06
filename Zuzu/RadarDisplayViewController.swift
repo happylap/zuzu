@@ -39,6 +39,7 @@ class RadarDisplayViewController: UIViewController {
     let emptyPurchaseHistoryLabel = UILabel()
     private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource()
     
+    private var currentTimer: NSTimer?
     
     // Criteria UI outlet
     
@@ -150,7 +151,7 @@ class RadarDisplayViewController: UIViewController {
     
     // MARK: - Private Utils
     
-    private func alertRegisterLocalNotification() {
+    private func promptAuthLocalNotification() {
         Log.enter()
         
         let alertView = SCLAlertView()
@@ -172,7 +173,7 @@ class RadarDisplayViewController: UIViewController {
                         
                         if(!appDelegate.isPushNotificationRegistered()) {
                             
-                            AppDelegate.alertPushNotificationDisabled()
+                            self.alertPushNotificationDisabled()
                             
                         }
                         
@@ -203,6 +204,64 @@ class RadarDisplayViewController: UIViewController {
         alertView.showCloseButton = true
         
         alertView.showInfo("尚未授權接收通知", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
+    private func alertPushNotificationDisabled() {
+        Log.enter()
+        
+        let alertView = SCLAlertView()
+        
+        
+        let subTitle = "無法使用「租屋雷達」，請確認網路連線正常後，參考下面步驟：\n\n嘗試點選「開啟遠端推播」按鈕開啟推播; 或完全關閉「豬豬快租」，再重新進入本頁面\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
+        
+        alertView.showCloseButton = true
+        
+        alertView.addButton("開啟遠端推播") {
+            
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                
+                let loadingSpinner = LoadingSpinner.getInstance("enablePushNotification")
+                loadingSpinner.setGraceTime(0.6)
+                loadingSpinner.setMinShowTime(1)
+                loadingSpinner.setOpacity(0.6)
+                loadingSpinner.setText("開啟中")
+                loadingSpinner.startOnView(self.view)
+                
+                appDelegate.setupPushNotifications({ (result) in
+                    if(!result) {
+                        self.currentTimer?.invalidate()
+                        LoadingSpinner.getInstance("enablePushNotification").stop()
+                        /// Check remote notification registered
+                        
+                        if(!appDelegate.isPushNotificationRegistered()) {
+                            
+                            self.alertPushNotificationDisabled()
+                            
+                        }
+                    }
+                })
+                
+                /// Setup a timer to do the checking
+                self.currentTimer?.invalidate()
+                
+                self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(RadarDisplayViewController.onRegisterPushNotificationTimeout(_:)), userInfo: nil, repeats: false)
+            }
+        }
+        
+        alertView.showInfo("遠端推播尚未開啟", subTitle: subTitle, closeButtonTitle: "關閉", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+    
+    func onRegisterPushNotificationTimeout(timer:NSTimer) {
+        LoadingSpinner.getInstance("enablePushNotification").stop()
+        
+        /// Check remote notification registered
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            if(!appDelegate.isPushNotificationRegistered()) {
+                
+                self.alertPushNotificationDisabled()
+                
+            }
+        }
     }
     
     private func toggleServiceStatusIcon(isValid: Bool) {
@@ -258,14 +317,14 @@ class RadarDisplayViewController: UIViewController {
                 /// Remote notification not registered
                 if(!appDelegate.isPushNotificationRegistered()) {
                     
-                    AppDelegate.alertPushNotificationDisabled()
+                    self.alertPushNotificationDisabled()
                     
                 }
                 
             } else {
                 
                 /// Ask notification type permission
-                self.alertRegisterLocalNotification()
+                self.promptAuthLocalNotification()
                 
             }
             
