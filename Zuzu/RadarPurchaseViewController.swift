@@ -127,6 +127,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     
                     ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, purchaseList, error) -> Void in
                         
+                        /// Cannot contact backend server
                         if let _ = error {
                             RadarService.sharedInstance.stopLoading()
                             
@@ -138,14 +139,14 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             return
                         }
                         
-                        /// Check if free trial is already activated
+                        
                         let alreadyActivated = purchaseList?.contains({ (purchase) -> Bool in
                             
                             return (purchase.productId == ZuzuProducts.ProductRadarFreeTrial)
                             
                         }) ?? false
                         
-                        
+                        /// Free trial is already activated
                         if(alreadyActivated) {
                             
                             Log.debug("Free trial already activated")
@@ -159,72 +160,73 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 self.loadProducts()
                             })
                             
-                        } else {
-                            let transId = ""
-                            let productId = product.productIdentifier
-                            let price = product.price
-                            let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
-                            purchase.productTitle = product.localizedTitle
+                            return
+                        }
+                        
+                        let transId = ""
+                        let productId = product.productIdentifier
+                        let price = product.price
+                        let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
+                        purchase.productTitle = product.localizedTitle
+                        
+                        
+                        if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(),
+                            userID = UserManager.getCurrentUser()?.userId{
+                            AmazonSNSService.sharedInstance.createDeviceForUser(userID, deviceToken: deviceTokenString)
+                        }
+                        
+                        
+                        ZuzuWebService.sharedInstance.createPurchase(purchase){
+                            (result, error) -> Void in
                             
-                            
-                            if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(),
-                                userID = UserManager.getCurrentUser()?.userId{
-                                AmazonSNSService.sharedInstance.createDeviceForUser(userID, deviceToken: deviceTokenString)
-                            }
-                            
-                            
-                            ZuzuWebService.sharedInstance.createPurchase(purchase){
-                                (result, error) -> Void in
+                            if error != nil{
+                                Log.error("Fail to createPurchase for product: \(productId)")
                                 
-                                if error != nil{
-                                    Log.error("Fail to createPurchase for product: \(productId)")
-                                    
-                                    RadarService.sharedInstance.checkPurchaseExist(transId){
-                                        (isExist, checkExistError) -> Void in
-                                        if isExist == true{
+                                RadarService.sharedInstance.checkPurchaseExist(transId){
+                                    (isExist, checkExistError) -> Void in
+                                    if isExist == true{
+                                        
+                                        /// The free trial is activated successfully
+                                        
+                                        UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                                        
+                                        self.dismissViewControllerAnimated(true){
                                             
-                                            /// The free trial is activated successfully
+                                            RadarService.sharedInstance.stopLoading()
                                             
-                                            UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
-                                            
-                                            self.dismissViewControllerAnimated(true){
-                                                
-                                                RadarService.sharedInstance.stopLoading()
-                                                
-                                                self.purchaseDelegate?.onPurchaseSuccess()
-                                            }
-                                            
-                                            return
+                                            self.purchaseDelegate?.onPurchaseSuccess()
                                         }
                                         
-                                        /// GA tracker
-                                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                                            action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
-                                        
-                                        RadarService.sharedInstance.stopLoading()
-                                        
-                                        SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您啟用雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-                                        
+                                        return
                                     }
                                     
-                                    return
-                                }
-                                
-                                /// GA tracker
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                                    action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
-                                
-                                /// The free trial is activated successfully
-                                UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
-                                
-                                self.dismissViewControllerAnimated(true){
+                                    /// GA tracker
+                                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                        action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionFailure, label: self.purchasedProduct?.productIdentifier)
                                     
                                     RadarService.sharedInstance.stopLoading()
                                     
-                                    self.purchaseDelegate?.onPurchaseSuccess()
+                                    SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，我們目前無法為您啟用雷達服務，請您稍後重試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                                    
                                 }
                                 
+                                return
                             }
+                            
+                            /// GA tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
+                            
+                            /// The free trial is activated successfully
+                            UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                            
+                            self.dismissViewControllerAnimated(true){
+                                
+                                RadarService.sharedInstance.stopLoading()
+                                
+                                self.purchaseDelegate?.onPurchaseSuccess()
+                            }
+                            
                         }
                         
                     })
@@ -238,14 +240,15 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             //AppStore will pop up confirmation dialog
             RadarService.sharedInstance.startLoadingText(self, text: "交易中")
             
+            /// Try to make purchase
             if(ZuzuStore.sharedInstance.makePurchase(product, handler: self)) {
                 
                 ///Successfully sent out the payment request to Zuzu Backend. Wait for handler callback
                 Log.debug("Purchase Request Sent")
                 
             } else {
+                /// Unfinished transaction exists
                 
-                // create device here
                 if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(),
                     userID = UserManager.getCurrentUser()?.userId{
                     
