@@ -19,6 +19,11 @@ import BWWalkthrough
 
 private let Log = Logger.defaultLogger
 
+/// Notification Type definiton
+let DeviceTokenChangeNotification = "deviceTokenChange"
+let RadarItemReceiveNotification = "receiveNotifyItems"
+
+
 enum AppStateOnNotification : Int {
     case Foreground
     case Background
@@ -29,7 +34,7 @@ enum AppStateOnNotification : Int {
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal typealias NotificationSetupHandler = (result:Bool) -> ()
-
+    
     internal static var tagContainer: TAGContainer?
     
     var window: UIWindow?
@@ -121,9 +126,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     /// Handle received notification. Log the notification & update Tab badge number
     private func postRadarItemReceivedEventForAppInState(appState: AppStateOnNotification,
-                                                            switchTab: Bool,
-                                                            newAppBadge: Int? = nil) {
-
+                                                         switchTab: Bool,
+                                                         newAppBadge: Int? = nil) {
+        
         let appBadge = newAppBadge ?? UIApplication.sharedApplication().applicationIconBadgeNumber
         
         Log.debug("appState = \(appState), switchTab = \(switchTab), appBadge = \(appBadge)")
@@ -152,13 +157,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /// Post receiveNotifyItems Notification
         /// - Log the notification, update badge if needed, switch tab if needed
-        Log.debug("post notification: receiveNotifyItems")
+        Log.debug("post notification: \(RadarItemReceiveNotification)")
         
         let userinfo:[NSObject: AnyObject] = ["appState": appState.rawValue,
                                               "switchTab": switchTab]
         
-        NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItems", object: self, userInfo: userinfo)
+        NSNotificationCenter.defaultCenter().postNotificationName(RadarItemReceiveNotification, object: self, userInfo: userinfo)
         
+    }
+    
+    /// Alert for no registered device token
+    internal static func alertPushNotificationDisabled() {
+        Log.enter()
+        
+        let alertView = SCLAlertView()
+        
+        
+        let subTitle = "遠端通知無法開啟，無法使用租屋雷達，請嘗試下面步驟：\n1.確認網路狀況正常\n2.關閉豬豬快租後，重新開啟進入「租屋雷達」。\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
+        
+        alertView.showCloseButton = true
+        
+        alertView.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     /// Clear  App/Tab badge
@@ -229,7 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tabViewController = appDelegate.window?.rootViewController as? UITabBarController {
             
             let notifyTabIndex = MainTabConstants.NOTIFICATION_TAB_INDEX
-
+            
             /// Switch tab is APNS new item count > 0
             if(UIApplication.sharedApplication().applicationIconBadgeNumber > 0) {
                 if(tabViewController.selectedIndex != notifyTabIndex) {
@@ -253,7 +272,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().registerForRemoteNotifications()
     }
     
-    internal func isEnabledLocalNotification() -> Bool{
+    internal func isPushNotificationRegistered() -> Bool {
+        
+        let registered = UIApplication.sharedApplication().isRegisteredForRemoteNotifications()
+        
+        if(registered) {
+            
+            if UserDefaultsUtils.getAPNDevicetoken() == nil {
+                assert(false, "Device Token should be saved when remote notification is registered")
+            }
+            
+        }
+        
+        return registered
+        
+    }
+    
+    internal func isLocalNotificationEnabled() -> Bool{
         if let grantedSettings = UIApplication.sharedApplication().currentUserNotificationSettings(){
             if grantedSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
                 
@@ -355,7 +390,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log.warning("didRegisterForRemoteNotificationsWithDeviceToken tokenString: \(deviceTokenString)")
         
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
-        NSNotificationCenter.defaultCenter().postNotificationName("deviceTokenChange", object: self, userInfo: ["deviceTokenString": deviceTokenString])
+        NSNotificationCenter.defaultCenter().postNotificationName(DeviceTokenChangeNotification, object: self, userInfo: ["deviceTokenString": deviceTokenString])
         
         self.pushNotificationSetupHandler?(result: true)
         self.pushNotificationSetupHandler = nil
@@ -412,6 +447,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.presentWalkthrough()
         }
         
+        /// Init for MoPub AD Lib
+        Fabric.with([MoPub.self])
+        
         /// Initialize Amazon Auth Client
         AmazonClientManager.sharedInstance.application(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -427,16 +465,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //reachability = Reachability.reachabilityForInternetConnection();
         //reachability?.startNotifier();
         
-        UIApplication.sharedApplication().registerForRemoteNotifications()
-        
         commonServiceSetup()
         
         customUISetup()
         
-        Fabric.with([MoPub.self])
-        
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("dev-zuzu01.sqlite")
         Log.debug(url.absoluteString)
+        
+        /// Register for remote notifications
+        self.setupPushNotifications { (result) in
+            if(!result) {
+                
+            }
+        }
         
         /// Clear app badge if not logged in when App is launched
         if(!AmazonClientManager.sharedInstance.isLoggedIn()) {
@@ -448,7 +489,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// Resume Login Session when the app is launched
         AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
             dispatch_async(dispatch_get_main_queue()) {
-
+                
                 /// AppState: Terminate, Launch From: Alert
                 if let launchOptions = launchOptions, _ = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] {
                     

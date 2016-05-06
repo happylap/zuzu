@@ -155,23 +155,36 @@ class RadarDisplayViewController: UIViewController {
         
         let alertView = SCLAlertView()
         
-        let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務。請允許接下來手機提示的通知權限請求。"
+        let subTitle = "接收租屋雷達通知物件需允許豬豬快租開啟「傳送通知」服務\n請再繼續後允許手機通知權限請求"
         
         alertView.showCloseButton = false
         
-        alertView.addButton("知道了") {
+        alertView.addButton("繼續") {
             
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                
                 /// Enable Local App Notifications
                 appDelegate.setupLocalNotifications({ (result) -> () in
                     
                     Log.warning("setupLocalNotifications = \(result)")
                     
-                    if(!result) {
+                    if(result) {
+                        
+                        if(!appDelegate.isPushNotificationRegistered()) {
+                            
+                            AppDelegate.alertPushNotificationDisabled()
+                            
+                        }
+                        
+                    } else {
+                        
                         self.alertLocalNotificationDisabled()
+                        
                     }
                 })
+                
             }else{
+                assert(false, "appDelegate cannot be nil")
                 Log.error("appDelegate is nil")
             }
             
@@ -185,23 +198,11 @@ class RadarDisplayViewController: UIViewController {
         
         let alertView = SCLAlertView()
         
-        let subTitle = "請到：設定 > 通知 > 豬豬快租\n開啟「允許通知」選項\n才能接收租屋雷達通知物件"
+        let subTitle = "您似乎沒有接受App通知的授權請求。\n\n請到：設定 > 通知 > 豬豬快租\n開啟「允許通知」選項\n\n才能接收租屋雷達通知物件"
         
         alertView.showCloseButton = true
         
         alertView.showInfo("尚未授權通知功能", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    }
-    
-    private func alertPushNotificationDisabled() {
-        Log.enter()
-        
-        let alertView = SCLAlertView()
-        
-        let subTitle = "遠端通知功能開啟失敗，請您重新開啟豬豬快租，並再次進入「租屋雷達」，謝謝！"
-        
-        alertView.showCloseButton = true
-        
-        alertView.showInfo("通知功能尚未開啟", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     private func toggleServiceStatusIcon(isValid: Bool) {
@@ -237,8 +238,21 @@ class RadarDisplayViewController: UIViewController {
         
         if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
-            if appDelegate.isEnabledLocalNotification() == false{
+            /// Local notification enabled
+            if(appDelegate.isLocalNotificationEnabled()) {
+                
+                /// Remote notification not registered
+                if(!appDelegate.isPushNotificationRegistered()) {
+                    
+                    AppDelegate.alertPushNotificationDisabled()
+                    
+                }
+                
+            } else {
+                
+                /// Ask notification type permission
                 self.alertRegisterLocalNotification()
+                
             }
             
         }
