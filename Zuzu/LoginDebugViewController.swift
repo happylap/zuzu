@@ -280,6 +280,7 @@ class LoginDebugViewController: UIViewController {
         "removeUser",
         "removeUser2",
         "loginUser2",
+        "loginByGoogleToken",
         " ",
         "forgetPassword",
         "resetPassword",
@@ -454,6 +455,39 @@ class LoginDebugViewController: UIViewController {
                     })
                 }
             })
+            
+        case "loginByGoogleToken":
+            
+            let title = "Tester"
+            let subTitle = "API: \(self.seletedApiName) \n\n result: \n"
+            let provider = Provider.GOOGLE.rawValue
+            let accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNmYjRhZDJhYTNiY2IxZGY3ZjY5ZTRkYTY2MGU4ZWQ2Mzk2NGE0N2EifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiU2NpMHpDTlIzSGRPN0lXeHNDTlNjQSIsImF1ZCI6Ijg0NjAxMjYwNTQwNi05dG5yaDgwajhrY2JjbWEyOW9taGxzZWtvdDJtbzBnbS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjExNjY0Njc2NjI5ODczOTM1ODcyOSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4NDYwMTI2MDU0MDYtOXRucmg4MGo4a2NiY21hMjlvbWhsc2Vrb3QybW8wZ20uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6ImVlY2hpaEBnbWFpbC5jb20iLCJpYXQiOjE0NjI1MzIyMzQsImV4cCI6MTQ2MjUzNTgzNCwibmFtZSI6IkhhcnJ5IFllaCIsInBpY3R1cmUiOiJodHRwczovL2xoNi5nb29nbGV1c2VyY29udGVudC5jb20vLTJGalpDMGJobEh3L0FBQUFBQUFBQUFJL0FBQUFBQUFBQVBjLzJra1dSYkQ0Wng4L3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJIYXJyeSIsImZhbWlseV9uYW1lIjoiWWVoIiwibG9jYWxlIjoiemgtVFcifQ.CQr0f-BK1DddSO7JepmkDSy4M3gNdolps9Z-89VLjNmMOb9rqR1XTIzmRijB0APgG3j-7OejlxaYMMgEd8IyN_XOXG6vmpsC6dkl7VoKDqMJyMiZu6mcd7zqKBjWHiiFZAH-5uR4Bub-_9vR1ZkUqFVGVLzqHwCpcy2ZWXNL3R33J1QjDcO4-3_WxaauIVc6dQOC8uU8Ac-pYK65raLTsXV0_6HXYjyjpRGGljQyrj9QOoPdbG-fYKy05oiPZN7U9gwhfV68bhGW32CkQO0bYR-tV6d3XcqkSpjRYpUd5TCAUAuI3WOlyIEl19ea20szhG7pXpocQkR4h4SZnlGamQ"
+            
+            ZuzuWebService.sharedInstance.loginBySocialToken(accessToken, provider: provider, handler: { (userId, email, error) in
+                
+                if let error = error {
+                    self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                } else {
+                    self.showAlert(title, subTitle: "\(subTitle) userId: \(userId), email: \(email)")
+                }
+            })
+            
+            /*
+            if let provider = AmazonClientManager.sharedInstance.currentUserToken.provider,
+                accessToken = AmazonClientManager.sharedInstance.currentUserToken.token {
+                ZuzuWebService.sharedInstance.loginBySocialToken(accessToken, provider: provider, handler: { (userId, email, error) in
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    } else {
+                        self.showAlert(title, subTitle: "\(subTitle) userId: \(userId), email: \(email)")
+                    }
+                })
+            } else {
+                self.showAlert(title, subTitle: "\(subTitle) no login")
+            }*/
+            
+                
             
         case "updateUser":
             ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in

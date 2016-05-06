@@ -157,6 +157,34 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
+    func loginBySocialToken(accessToken: String, provider: String, handler: (userId: String?, email: String?, error: ErrorType?) -> Void) {
+        Log.debug("Input parameters [provider: \(provider), accessToken: \(accessToken)]")
+        
+        let resource = "/public/user/socialtoken/login"
+        let payload = ["provider": provider, "access_token": accessToken]
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            if let error = error {
+                handler(userId: nil, email: nil, error: error)
+                return
+            }
+            
+            if(result == nil) {
+                Log.debug("HTTP no data")
+                handler(userId: nil, email: nil, error: NSError(domain: "No data", code: 0, userInfo: nil))
+                return
+            }
+            
+            if let value = result {
+                let json = JSON(value)
+                Log.debug("Result: \(json)")
+                handler(userId: json["userId"].string, email: json["email"].string, error: nil)
+            }
+        }
+        
+        Log.exit()
+    }
+    
     func forgotPassword(email: String, handler: (error: ErrorType?) -> Void) {
         Log.debug("Input parameters [email: \(email)]")
         
