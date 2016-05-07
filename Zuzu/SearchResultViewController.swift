@@ -887,7 +887,8 @@ class SearchResultViewController: UIViewController {
             
             Log.debug("prepareForSegue: \(identifier)")
             
-            self.navigationItem.backBarButtonItem?.title = "返回結果"
+            let item = UIBarButtonItem(title: "返回結果", style: .Plain, target: nil, action: nil)
+            self.navigationItem.backBarButtonItem = item
             
             switch identifier{
             case ViewTransConst.showDebugInfo:

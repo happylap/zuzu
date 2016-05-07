@@ -1154,9 +1154,6 @@ class HouseDetailViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        ///Disable Back Button default title
-        self.title = ""
-        
         ///Hide tab bar
         self.tabBarController?.tabBarHidden = true
         
@@ -1209,6 +1206,9 @@ class HouseDetailViewController: UIViewController {
         if let identifier = segue.identifier{
             
             Log.debug("prepareForSegue: \(identifier)")
+            
+            let item = UIBarButtonItem(title: " ", style: .Plain, target: nil, action: nil)
+            self.navigationItem.backBarButtonItem = item
             
             switch identifier{
                 

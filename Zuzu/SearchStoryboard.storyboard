@@ -925,7 +925,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="搜尋結果" id="NBD-dJ-SqW">
-                        <barButtonItem key="backBarButtonItem" title="返回結果" id="TBb-Ie-hZp"/>
                         <rightBarButtonItems>
                             <barButtonItem image="list_icon_n" id="8EG-ML-NRj">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1607,7 +1606,6 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Rwh-2b-TFN"/>
                     <connections>
                         <outlet property="pesudoAnchor" destination="0Rp-kS-nkI" id="QdM-jT-DVk"/>
                     </connections>
