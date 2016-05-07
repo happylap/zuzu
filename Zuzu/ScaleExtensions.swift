@@ -18,32 +18,71 @@ struct BaseLayoutConst {
 
 /// Definitions of the scale ratio for devices with larger or smaller screens
 struct ScaleConst {
+    static let tinyScale:CGFloat = Device.ScreenSize.iPhone4.width / Device.ScreenSize.iPhone6.width
     static let smallScale:CGFloat = Device.ScreenSize.iPhone5.width / Device.ScreenSize.iPhone6.width
     static let largeScale:CGFloat = Device.ScreenSize.iPhone6P.width / Device.ScreenSize.iPhone6.width
 }
 
-internal func getCurrentScale() -> CGFloat{
+struct ScaleVerticalConst {
+    static let tinyScale:CGFloat = Device.ScreenSize.iPhone4.height / Device.ScreenSize.iPhone6.height
+    static let smallScale:CGFloat = Device.ScreenSize.iPhone5.height / Device.ScreenSize.iPhone6.height
+    static let largeScale:CGFloat = Device.ScreenSize.iPhone6P.height / Device.ScreenSize.iPhone6.height
+}
+
+internal enum ScaleType: Int {
+    case Vertical
+    case Horizontal
+}
+
+internal func getCurrentScale(type: ScaleType = .Horizontal) -> CGFloat{
     
     var scale:CGFloat = 1.0
     
     switch Device.version() {
         
     case .iPhone4, .iPhone4S, .iPhone5, .iPhone5C, .iPhone5S:
-        scale = ScaleConst.smallScale
+        switch type {
+        case .Horizontal:
+                scale = ScaleConst.smallScale
+        case .Vertical:
+                scale = ScaleVerticalConst.smallScale
+        }
     case .iPhone6, .iPhone6S:
         break
     case .iPhone6Plus, .iPhone6SPlus:
-        scale = ScaleConst.largeScale
+        switch type {
+        case .Horizontal:
+            scale = ScaleConst.largeScale
+        case .Vertical:
+            scale = ScaleVerticalConst.largeScale
+        }
     case .Simulator:
         Log.debug("It's an simulator")
         
         switch(Device.size()) {
         case .Screen5_5Inch:
-            scale = ScaleConst.largeScale
+            switch type {
+            case .Horizontal:
+                scale = ScaleConst.largeScale
+            case .Vertical:
+                scale = ScaleVerticalConst.largeScale
+            }
         case .Screen4_7Inch:
             break
-        case .Screen4Inch, .Screen3_5Inch:
-            scale = ScaleConst.smallScale
+        case .Screen4Inch:
+            switch type {
+            case .Horizontal:
+                scale = ScaleConst.smallScale
+            case .Vertical:
+                scale = ScaleVerticalConst.smallScale
+            }
+        case .Screen3_5Inch:
+            switch type {
+            case .Horizontal:
+                scale = ScaleConst.tinyScale
+            case .Vertical:
+                scale = ScaleVerticalConst.tinyScale
+            }
         default: break
         }
         
@@ -55,12 +94,12 @@ internal func getCurrentScale() -> CGFloat{
     
 }
 
-private func getScaledFontSize(baseFont: UIFont) -> CGFloat{
+private func getScaledFontSize(baseFont: UIFont, type: ScaleType = .Horizontal) -> CGFloat{
     
     let baseSize: CGFloat = CGFloat(baseFont.pointSize)
     var scaledSize:CGFloat = baseSize
     
-    let scale:CGFloat = getCurrentScale()
+    let scale:CGFloat = getCurrentScale(type)
     
     scaledSize = round(baseSize * scale)
     
@@ -160,6 +199,7 @@ extension UINavigationBar {
 
 extension Device {
     struct ScreenSize {
+        static let iPhone4 = CGSize(width: 320, height: 480)
         static let iPhone5 = CGSize(width: 320, height: 568)
         static let iPhone6 = CGSize(width: 375, height: 667)
         static let iPhone6P = CGSize(width: 414, height: 736)

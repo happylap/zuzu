@@ -10,7 +10,7 @@ import UIKit
 
 class UINavigationBarTaller: UINavigationBar {
     ///The height you want your navigation bar to be of
-    static let navigationBarHeight: CGFloat = 64
+    static let navigationBarHeight: CGFloat = 64 * getCurrentScale()
     
     ///The difference between new height and default height
     static let heightIncrease:CGFloat = navigationBarHeight - 44
