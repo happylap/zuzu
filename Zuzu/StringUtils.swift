@@ -32,4 +32,23 @@ struct StringUtils{
         
         
     }
+    
+    // Get the part of String that matches a pattern
+    // http://stackoverflow.com/questions/27067508/how-to-group-search-regular-expressions-using-swift
+    static func matchesForRegexInText(regex: String!, text: String!) -> [String] {
+        
+        do {
+            let regex = try NSRegularExpression(pattern: regex, options: [])
+            let nsString = text as NSString
+            let matches = regex.matchesInString(text,
+                                                options: [], range: NSMakeRange(0, nsString.length))
+            // range at index 0: full match
+            // range at index 1: first capture group
+            return matches.map { nsString.substringWithRange($0.rangeAtIndex(1))}
+        } catch let error as NSError {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
+        
+    }
 }

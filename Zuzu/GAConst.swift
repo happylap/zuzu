@@ -163,6 +163,8 @@ struct GAConst {
             
             static let RegisterSNSNoCredential = "registerSNSNoCredential"
             
+            static let RegisterSNSNoService = "registerSNSNoService"
+            
             static let RegisterSNSNoUserId = "registerSNSNoUserId"
             
             static let RegisterSNSNoDeviceToken = "registerSNSNoDeviceToken"

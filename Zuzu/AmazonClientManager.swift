@@ -580,10 +580,6 @@ class AmazonClientManager : NSObject {
         
     }
     
-    func isCredentailsProviderExist() -> Bool {
-        return self.credentialsProvider != nil
-    }
-    
     func resumeSession(completionHandler: AWSContinuationBlock) {
         Log.enter()
         
