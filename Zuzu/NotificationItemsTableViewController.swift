@@ -58,7 +58,7 @@ class NotificationItemsTableViewController: UITableViewController {
         }
         
         /// The check is currently for Google-Signin
-        if(AmazonClientManager.sharedInstance.currentUserToken.token == nil) {
+        if(AmazonClientManager.sharedInstance.currentUserToken == nil) {
             Log.debug("Cannot refresh data because user token is not retrieved yet")
             return
         }

@@ -165,7 +165,7 @@ class TagUtils: NSObject{
             
         }
         
-        return isEnableZuzuLogin
+        return true
         
     }
     

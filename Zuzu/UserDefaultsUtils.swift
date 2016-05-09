@@ -67,6 +67,7 @@ struct UserDefaultsUtils {
     static let googleTokenDefaultKey = "googleToken"
     static let googleTokenExpiryDefaultKey = "googleTokenExpiry"
     static let userProfileUserDefaultKey = "loginUserData"
+    static let loginUserUserDefaultKey = "loginUser"
     static let loginProviderUserDefaultKey = "loginProvider"
     static let userLastCognitoIdentityUserDefaultKey = "userLastCognitoIdentityUserDefaultKey"
     
@@ -137,6 +138,25 @@ struct UserDefaultsUtils {
         
         let data = userDefaults.objectForKey(userProfileUserDefaultKey) as? NSData
         return (data == nil) ? nil : NSKeyedUnarchiver.unarchiveObjectWithData(data!) as? ZuzuUser
+    }
+    
+    // Logged in User Id
+    static func clearLoginUser() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(loginUserUserDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func setLoginUser(userId: String) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(userId, forKey: loginUserUserDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func getLoginUser() -> String?{
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        return userDefaults.objectForKey(loginUserUserDefaultKey) as? String
     }
     
     /// Check if the user has ever loggin for this installation

@@ -116,7 +116,7 @@ class LoginDebugViewController: UIViewController {
             
             subTitle = "Google Token = \n\(googleToken)" +
                 "\n\n Token Expiry = \(GIDSignIn.sharedInstance().currentUser?.authentication?.idTokenExpirationDate ?? "-")" +
-            "\n\n Now(UTC) = \(NSDate())"
+                "\n\n Now(UTC) = \(NSDate())"
             
         }
         
@@ -127,7 +127,7 @@ class LoginDebugViewController: UIViewController {
             
             myAlert.addButton("Validate") { () -> Void in
                 
-                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
+                if let userId = AmazonClientManager.sharedInstance.currentUserToken?.userId {
                     
                     let provider = UserDefaultsUtils.getLoginProvider()
                     
@@ -193,7 +193,7 @@ class LoginDebugViewController: UIViewController {
             
             subTitle = "FB Token = \n\(fbToken)" +
                 "\n\n Token Expiry = \(FBSDKAccessToken.currentAccessToken()?.expirationDate ?? "-")" +
-            "\n\n Now(UTC) = \(NSDate())"
+                "\n\n Now(UTC) = \(NSDate())"
             
         }
         
@@ -204,9 +204,8 @@ class LoginDebugViewController: UIViewController {
             
             myAlert.addButton("Validate") { () -> Void in
                 
-                if let userId = AmazonClientManager.sharedInstance.currentUserProfile?.id {
-                    
-                    let provider = UserDefaultsUtils.getLoginProvider()
+                if let userId = AmazonClientManager.sharedInstance.currentUserToken?.userId,
+                    provider = AmazonClientManager.sharedInstance.currentUserToken?.provider {
                     
                     if(provider == Provider.FB) {
                         ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) { (result, error) -> Void in
@@ -237,7 +236,7 @@ class LoginDebugViewController: UIViewController {
             
             subTitle = "Cognito IdentityID = \n\(provider.identityId ?? "-")" +
                 "\n\n IdentityID Expiry = \(provider.expiration ?? "-")" +
-            "\n\n Now(UTC) = \(NSDate())"
+                "\n\n Now(UTC) = \(NSDate())"
             
             
         }
@@ -256,13 +255,11 @@ class LoginDebugViewController: UIViewController {
         
         var subTitle = "No current user"
         
-        if let currentUser = AmazonClientManager.sharedInstance.currentUserProfile {
+        if let userId = AmazonClientManager.sharedInstance.currentUserToken?.userId,
+            let provider = AmazonClientManager.sharedInstance.currentUserToken?.provider {
             
-            let provider = UserDefaultsUtils.getLoginProvider()
-            
-            subTitle = "UserId = \n\(currentUser.id ?? "-")" +
-                "\n\n Provider = \(provider?.rawValue ?? "-")" +
-            "\n\n Email = \(currentUser.email ?? "-")"
+            subTitle = "UserId = \n\(userId)" +
+                "\n\n Provider = \(provider.rawValue)"
         }
         
         myAlert.showTitle("Current User", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
@@ -473,21 +470,21 @@ class LoginDebugViewController: UIViewController {
             })
             
             /*
-            if let provider = AmazonClientManager.sharedInstance.currentUserToken.provider,
-                accessToken = AmazonClientManager.sharedInstance.currentUserToken.token {
-                ZuzuWebService.sharedInstance.loginBySocialToken(accessToken, provider: provider, handler: { (userId, email, error) in
-                    
-                    if let error = error {
-                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
-                    } else {
-                        self.showAlert(title, subTitle: "\(subTitle) userId: \(userId), email: \(email)")
-                    }
-                })
-            } else {
-                self.showAlert(title, subTitle: "\(subTitle) no login")
-            }*/
+             if let provider = AmazonClientManager.sharedInstance.currentUserToken.provider,
+             accessToken = AmazonClientManager.sharedInstance.currentUserToken.token {
+             ZuzuWebService.sharedInstance.loginBySocialToken(accessToken, provider: provider, handler: { (userId, email, error) in
+             
+             if let error = error {
+             self.showAlert(title, subTitle: "\(subTitle) \(error)")
+             } else {
+             self.showAlert(title, subTitle: "\(subTitle) userId: \(userId), email: \(email)")
+             }
+             })
+             } else {
+             self.showAlert(title, subTitle: "\(subTitle) no login")
+             }*/
             
-                
+            
             
         case "updateUser":
             ZuzuWebService.sharedInstance.getUserByEmail(ApiTestConst.email, handler: { (result, error) -> Void in
@@ -611,7 +608,7 @@ class LoginDebugViewController: UIViewController {
                                 
                                 let title = "User"
                                 let subTitle = "API: \(self.seletedApiName) \n\n email: \(ApiTestConst.email2) \n\n userId: \(user.id) \n\n zuzuToken: \(zuzuToken) \n\n logins: \(logins) \n\n result: \n"
-                
+                                
                                 if let error = error {
                                     self.showAlert(title, subTitle: "\(subTitle) \(error)")
                                 }
@@ -628,7 +625,7 @@ class LoginDebugViewController: UIViewController {
             
         case "createDeviceByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 let deviceId = self.deviceTokenForTest
                 
                 ZuzuWebService.sharedInstance.createDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
@@ -646,7 +643,7 @@ class LoginDebugViewController: UIViewController {
             
         case "isExistDeviceByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 let deviceId = self.deviceTokenForTest
                 
                 ZuzuWebService.sharedInstance.isExistDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
@@ -664,7 +661,7 @@ class LoginDebugViewController: UIViewController {
             
         case "deleteDeviceByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 let deviceId = self.deviceTokenForTest
                 
                 ZuzuWebService.sharedInstance.deleteDeviceByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
@@ -681,7 +678,7 @@ class LoginDebugViewController: UIViewController {
             })
             
         case "getCriteriaByUserId":
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
                     let title = "User"
                     var subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
@@ -707,7 +704,7 @@ class LoginDebugViewController: UIViewController {
             
         case "createCriteriaByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 let criteria = SearchCriteria()
                 criteria.size = (0, 100)
                 criteria.price = (10000, 20000)
@@ -729,7 +726,7 @@ class LoginDebugViewController: UIViewController {
             
         case "updateCriteriaFiltersByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
                     
@@ -763,7 +760,7 @@ class LoginDebugViewController: UIViewController {
             
         case "enableCriteriaByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 ZuzuWebService.sharedInstance.getCriteriaByUserId(userId, handler: { (result, error) -> Void in
                     
                     let title = "User"
@@ -794,7 +791,7 @@ class LoginDebugViewController: UIViewController {
             
         case "hasValidCriteriaByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 ZuzuWebService.sharedInstance.hasValidCriteriaByUserId(userId, handler: { (result, error) -> Void in
                     let title = "User"
                     let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
@@ -810,7 +807,7 @@ class LoginDebugViewController: UIViewController {
             
         case "deleteCriteriaByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 ZuzuWebService.sharedInstance.deleteCriteriaByUserId(userId, handler: { (result, error) -> Void in
                     
                     let title = "User"
@@ -825,7 +822,7 @@ class LoginDebugViewController: UIViewController {
             })
             
         case "getNotificationItemsByUserId":
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, postTime: nil, handler: { (totalNum, result, error) -> Void in
                     
                 })
@@ -847,7 +844,7 @@ class LoginDebugViewController: UIViewController {
             
         case "getNotificationItemsByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 
                 ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
                     let title = "User"
@@ -864,7 +861,7 @@ class LoginDebugViewController: UIViewController {
             
         case "getNotificationItemsByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 
                 ZuzuWebService.sharedInstance.getNotificationItemsByUserId(userId, handler: { (totalNum, result, error) -> Void in
                     let title = "User"
@@ -881,7 +878,7 @@ class LoginDebugViewController: UIViewController {
             
         case "getNotificationItemsByUserId2":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 
                 let postTime = NSDate()
                 
@@ -900,7 +897,7 @@ class LoginDebugViewController: UIViewController {
             
         case "setReceiveNotifyTimeByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 let deviceId = self.deviceTokenForTest
                 
                 ZuzuWebService.sharedInstance.setReceiveNotifyTimeByUserId(userId, deviceId: deviceId, handler: { (result, error) -> Void in
@@ -919,7 +916,7 @@ class LoginDebugViewController: UIViewController {
             
         case "getPurchaseByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 ZuzuWebService.sharedInstance.getPurchaseByUserId(userId, handler: { (totalNum, result, error) -> Void in
                     let title = "User"
                     let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
@@ -937,7 +934,7 @@ class LoginDebugViewController: UIViewController {
             
         case "getServiceByUserId":
             
-            self.checkLogin({ (userId, email) -> Void in
+            self.checkLogin({ (userId) -> Void in
                 
                 ZuzuWebService.sharedInstance.getServiceByUserId(userId, handler: { (result, error) -> Void in
                     let title = "User"
@@ -969,30 +966,18 @@ class LoginDebugViewController: UIViewController {
         
     }
     
-    private func checkLogin(handler: (userId: String, email: String) -> Void) {
+    private func checkLogin(handler: (userId: String) -> Void) {
         if let currentUser = UserManager.getCurrentUser() {
             if currentUser.userType == UserType.Unauthenticated {
-                handler(userId: currentUser.userId, email: "")
+                handler(userId: currentUser.userId)
                 return
             }
             
-            if let userProfile = AmazonClientManager.sharedInstance.currentUserProfile {
-                if let userId = userProfile.id, email = userProfile.email {
-                    handler(userId: userId, email: email)
-                    return
-                }
+            if let userId = AmazonClientManager.sharedInstance.currentUserToken?.userId {
+                handler(userId: userId)
+                return
             }
         }
-        
-//        if AmazonClientManager.sharedInstance.isLoggedIn() {
-//            if let userProfile = AmazonClientManager.sharedInstance.currentUserProfile {
-//                if let userId = userProfile.id, email = userProfile.email {
-//                    handler(userId: userId, email: email)
-//                    return
-//                }
-//            }
-//        }
-        
         
         self.showAlert("提醒", subTitle: "請先登入")
     }
@@ -1004,14 +989,14 @@ class LoginDebugViewController: UIViewController {
     }
     
     /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
     
 }
 
