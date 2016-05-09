@@ -238,7 +238,7 @@ class ZuzuWebService: NSObject
         
         let signature = zuzuToken
         
-        let resource = "/cognito/token"
+        let resource = "/public/cognito/token"
         var payload = ["userId": userId, "signature": signature, "timestamp": timestamp, "logins": logins] as [String : AnyObject]
         if let identityId = identityId {
             payload["identityId"] = identityId
