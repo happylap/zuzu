@@ -212,4 +212,16 @@ struct UserDefaultsUtils {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.stringForKey(snsEndpointUserDefaultKey)
     }
+    
+    // MARK: Backward compatibility
+    static func upgradeToLatest() -> Void {
+        
+        /// Removed in 1.1
+        if let userProfile = UserDefaultsUtils.getUserProfile(), userId = userProfile.id  {
+            
+            UserDefaultsUtils.setLoginUser(userId)
+            
+        }
+        
+    }
 }

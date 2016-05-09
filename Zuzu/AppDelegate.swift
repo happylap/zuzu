@@ -442,6 +442,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.enter()
         
+        UserDefaultsUtils.upgradeToLatest()
+        
         if(UserDefaultsUtils.needsDisplayOnboardingPages()) {
             self.presentWalkthrough()
         }
