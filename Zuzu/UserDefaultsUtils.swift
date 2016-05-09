@@ -174,6 +174,8 @@ struct UserDefaultsUtils {
     static func setAPNDevicetoken(deviceToken: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(deviceToken, forKey: deviceTokenUserDefaultKey)
+        /// Make sure the data is saved immediately
+        userDefaults.synchronize()
     }
     
     static func getAPNDevicetoken() -> String?{
