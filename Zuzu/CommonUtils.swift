@@ -148,7 +148,7 @@ class TagUtils: NSObject{
         if let tagContainer = AppDelegate.tagContainer {
             let zuzuLoginString = tagContainer.stringForKey(TagConst.zuzuLogin)
             
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(zuzuLoginString)")
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), zuzuLoginString = \(zuzuLoginString)")
             
             if(zuzuLoginString == "y") {
                 
