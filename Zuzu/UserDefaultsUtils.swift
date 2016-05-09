@@ -159,18 +159,6 @@ struct UserDefaultsUtils {
         return userDefaults.objectForKey(loginUserUserDefaultKey) as? String
     }
     
-    /// Check if the user has ever loggin for this installation
-    static func setCognitoIdentityId(identityId : String) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(identityId, forKey: userLastCognitoIdentityUserDefaultKey)
-    }
-    
-    static func getCognitoIdentityId() -> String? {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.objectForKey(userLastCognitoIdentityUserDefaultKey) as? String
-    }
-    
-    
     // MARK: My Collection
     
     static let myCollectionAlertUserDefaultKey = "myCollectionAlert"

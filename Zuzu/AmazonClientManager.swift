@@ -409,11 +409,11 @@ class AmazonClientManager : NSObject {
             unauthRoleArn:nil,
             authRoleArn:nil)
         
-        /// Clear previous IdentityId when we find the user has never logged to Cognito for
-        // this installation. This would avoid the use of previous IdentityId
-        // when switching to another login provider's account
-        if(UserDefaultsUtils.getCognitoIdentityId() == nil) {
-            // No previous Cognito identityId for current installation.
+        /// [Remove Cognito IdentityId for previous installation]
+        // Clear previous IdentityId if the user has never logged to Cognito for this installation.
+        // This would avoid the use of previous Cognito IdentityId when switching to another login provider's account
+        if(UserDefaultsUtils.getLoginUser() == nil) {
+            // Not login for current installation.
             // We don't need the previous identityId in the keychain
             Log.debug("Clear previous identityId")
             self.credentialsProvider?.clearKeychain()
@@ -445,11 +445,6 @@ class AmazonClientManager : NSObject {
         if let userInfo = notification.userInfo as? [String: AnyObject] {
             Log.debug("userInfo = \(userInfo)")
             Log.debug("identity changed from: \(userInfo[AWSCognitoNotificationPreviousId]) to: \(userInfo[AWSCognitoNotificationNewId])")
-            
-            /// Save the latest Cognito identityId
-            if let identityId = userInfo[AWSCognitoNotificationNewId] as? String {
-                UserDefaultsUtils.setCognitoIdentityId(identityId)
-            }
         }
     }
     
