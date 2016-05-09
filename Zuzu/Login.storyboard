@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -636,11 +636,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kM0-E3-LwB" userLabel="Header View">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="115"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登入個人帳號" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udr-Yo-Lds" userLabel="Title Label">
-                                        <rect key="frame" x="141" y="39.5" width="132" height="26.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <rect key="frame" x="147" y="56" width="120" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -648,7 +648,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PgA-ud-CHL">
-                                        <rect key="frame" x="16" y="37" width="30" height="30"/>
+                                        <rect key="frame" x="16" y="51" width="33.5" height="33.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="MVW-Md-KgF"/>
                                             <constraint firstAttribute="height" constant="35" id="OEv-Iv-4Cp"/>
@@ -660,6 +660,7 @@
                                         </userDefinedRuntimeAttributes>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="MVW-Md-KgF"/>
                                                 <exclude reference="OEv-Iv-4Cp"/>
                                             </mask>
                                         </variation>
@@ -669,18 +670,25 @@
                                 <constraints>
                                     <constraint firstItem="udr-Yo-Lds" firstAttribute="centerY" secondItem="PgA-ud-CHL" secondAttribute="centerY" id="Awc-sg-Gwt"/>
                                     <constraint firstItem="PgA-ud-CHL" firstAttribute="leading" secondItem="kM0-E3-LwB" secondAttribute="leading" constant="16" id="DYX-Iv-cet"/>
+                                    <constraint firstItem="PgA-ud-CHL" firstAttribute="height" secondItem="kM0-E3-LwB" secondAttribute="height" multiplier="30:104" id="cij-Ht-wWl"/>
                                     <constraint firstItem="udr-Yo-Lds" firstAttribute="centerX" secondItem="kM0-E3-LwB" secondAttribute="centerX" id="lFA-Pg-9au"/>
+                                    <constraint firstAttribute="height" constant="84" id="rCj-QE-Qln"/>
                                     <constraint firstItem="PgA-ud-CHL" firstAttribute="centerY" secondItem="kM0-E3-LwB" secondAttribute="centerY" constant="10" id="z3g-bp-FtJ"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="rCj-QE-Qln"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J8l-fD-4dI" userLabel="Body View">
-                                <rect key="frame" x="-0.5" y="84" width="414" height="652"/>
+                                <rect key="frame" x="0.0" y="115" width="414" height="621"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mie-Zo-9ZE" userLabel="Description View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="130.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="124.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iWw-3J-mdm" userLabel="SubTitle Label">
-                                                <rect key="frame" x="41" y="16" width="331" height="98.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="請您使用下列帳號登入，豬豬快租便能為您提供個人專屬的通知服務" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="iWw-3J-mdm" userLabel="SubTitle Label">
+                                                <rect key="frame" x="41" y="16" width="331" height="92.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -708,7 +716,7 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m57-iU-Wq4" userLabel="Social Login View">
-                                        <rect key="frame" x="0.0" y="146" width="414" height="124.5"/>
+                                        <rect key="frame" x="0.0" y="140" width="414" height="124.5"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1NO-Gq-b3C" userLabel="facebookButton">
                                                 <rect key="frame" x="62" y="0.0" width="290" height="50"/>
@@ -751,7 +759,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="或使用豬豬快租帳號" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udt-9H-U34">
-                                        <rect key="frame" x="144" y="282.5" width="126" height="17"/>
+                                        <rect key="frame" x="144" y="276.5" width="126" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -760,7 +768,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="29x-GV-8Ir" userLabel="Custom Login">
-                                        <rect key="frame" x="32" y="303" width="349" height="74"/>
+                                        <rect key="frame" x="32" y="297" width="349" height="74"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dpI-9V-HTW">
                                                 <rect key="frame" x="32" y="16" width="130.5" height="50"/>
@@ -808,7 +816,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vxe-7q-cvv" userLabel="skipLogin View">
-                                        <rect key="frame" x="-0.5" y="409" width="414" height="66"/>
+                                        <rect key="frame" x="0.0" y="403" width="414" height="66"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjg-Cq-EAX">
                                                 <rect key="frame" x="62" y="8" width="290" height="50"/>
@@ -828,17 +836,17 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DZ8-ar-y77" userLabel="Privacy View">
-                                        <rect key="frame" x="0.0" y="475" width="414" height="169"/>
+                                        <rect key="frame" x="0.0" y="469" width="414" height="144"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Fjw-SJ-6Bd" userLabel="privacy">
-                                                <rect key="frame" x="137" y="119" width="20" height="20"/>
+                                                <rect key="frame" x="137" y="94" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="XW7-oN-AVI"/>
                                                     <constraint firstAttribute="width" secondItem="Fjw-SJ-6Bd" secondAttribute="height" multiplier="1:1" id="mDW-S3-33k"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="隱私保護保證" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDW-Wr-UG2">
-                                                <rect key="frame" x="165" y="120" width="84" height="17"/>
+                                                <rect key="frame" x="165" y="95" width="84" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="qPt-Ig-WdP"/>
                                                 </constraints>
@@ -855,7 +863,7 @@
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬快租絕不會未經同意以您的身份發佈任何資訊" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u76-1l-mrS">
-                                                <rect key="frame" x="64" y="145" width="286" height="16"/>
+                                                <rect key="frame" x="64" y="120" width="286" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.28627450980000002" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -926,10 +934,11 @@
                             <constraint firstItem="kM0-E3-LwB" firstAttribute="centerX" secondItem="5c0-HG-BGj" secondAttribute="centerX" id="ILL-cm-A5e"/>
                             <constraint firstItem="kM0-E3-LwB" firstAttribute="width" secondItem="5c0-HG-BGj" secondAttribute="width" id="RqJ-AJ-qVQ"/>
                             <constraint firstItem="J8l-fD-4dI" firstAttribute="width" secondItem="kM0-E3-LwB" secondAttribute="width" id="adf-Pj-Og3"/>
-                            <constraint firstItem="kM0-E3-LwB" firstAttribute="height" secondItem="5c0-HG-BGj" secondAttribute="height" multiplier="84:736" id="cff-Sh-UHq"/>
+                            <constraint firstItem="kM0-E3-LwB" firstAttribute="height" secondItem="5c0-HG-BGj" secondAttribute="height" multiplier="104:667" id="cff-Sh-UHq"/>
                             <constraint firstItem="kM0-E3-LwB" firstAttribute="top" secondItem="5c0-HG-BGj" secondAttribute="topMargin" id="gi5-kw-sRB"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>

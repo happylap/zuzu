@@ -424,6 +424,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 72, height: 36))
         button.backgroundColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
         button.setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: .Normal)
+        button.autoScaleFontSize = true
         
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
