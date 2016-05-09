@@ -711,6 +711,22 @@ class AmazonClientManager : NSObject {
         
     }
     
+    private func finishLogin(provider: Provider, userId: String) {
+        
+        Log.debug("Persist login user, provider = \(provider), userId = \(userId)")
+        
+        /// Save Login Data
+        UserDefaultsUtils.setLoginProvider(provider)
+        UserDefaultsUtils.setLoginUser(userId)
+        
+        /// Sign-in completed
+        Log.debug("postNotificationName: \(UserLoginNotification)")
+        NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
+                                                                  userInfo: ["userData": userId, "status": LoginStatus.New.rawValue])
+        
+        self.triggerTokenRefreshingTimer()
+    }
+    
     private func completeLogin(logins: [NSObject : AnyObject]?) {
         
         Log.info("\(logins)")
@@ -760,8 +776,12 @@ class AmazonClientManager : NSObject {
                 switch(provider) {
                 case .ZUZU:
                     if let userId = ZuzuAccessToken.currentAccessToken.userId {
-                        UserDefaultsUtils.setLoginProvider(provider)
-                        UserDefaultsUtils.setLoginUser(userId)
+                        
+                        /// The login process is finished
+                        self.finishLogin(provider, userId: userId)
+                        
+                        AWSTask(result: nil).continueWithBlock(self.completionHandler!)
+                        
                     } else {
                         assert(false, "ZuzuUser Id cannot be nil")
                         /// Zuzu Web Api failure
@@ -782,24 +802,12 @@ class AmazonClientManager : NSObject {
                                 
                                 if let userId = userId {
                                     
-                                    Log.debug("Persist Logged in userId")
-                                    
-                                    //Set current login provider & userId
-                                    if let provider = self.currentProvider {
-                                        UserDefaultsUtils.setLoginProvider(provider)
-                                        UserDefaultsUtils.setLoginUser(userId)
-                                    }
-                                    
-                                    /// Sign-in completed
-                                    Log.debug("postNotificationName: \(UserLoginNotification)")
-                                    NSNotificationCenter.defaultCenter().postNotificationName(UserLoginNotification, object: self,
-                                        userInfo: ["userData": userProfile, "status": LoginStatus.New.rawValue])
-                                    
-                                    self.triggerTokenRefreshingTimer()
-                                    
-                                    self.transientUserProfile = nil
+                                    /// The login process is finished
+                                    self.finishLogin(provider, userId: userId)
                                     
                                     AWSTask(result: nil).continueWithBlock(self.completionHandler!)
+                                    
+                                    self.transientUserProfile = nil
                                     
                                 } else {
                                     
