@@ -220,6 +220,7 @@ struct UserDefaultsUtils {
         if let userProfile = UserDefaultsUtils.getUserProfile(), userId = userProfile.id  {
             
             UserDefaultsUtils.setLoginUser(userId)
+            UserDefaultsUtils.clearUserProfile()
             
         }
         
