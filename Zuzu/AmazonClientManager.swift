@@ -71,10 +71,13 @@ class AmazonClientManager : NSObject {
     //The custom Cognito auth provider name
     private let customProviderName = "com.lap.zuzu.login"
     
-    //Login Managers
+    /// Login transient data
+    //The provider type for the login in progress
     private var currentProvider: Provider?
+    //The user profile for the social login (FB/ GOOGLE) in progress
     private var transientUserProfile: UserProfile?
     
+    /// Login Managers
     private var fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     private var googleSignIn: GIDSignIn = GIDSignIn.sharedInstance()
     private var zuzuAuthClient: ZuzuAuthenticator = ZuzuAuthenticator()
@@ -320,7 +323,7 @@ class AmazonClientManager : NSObject {
                 } else {
                     /// Create new user account
                     
-                    if let provider = UserDefaultsUtils.getLoginProvider() {
+                    if let provider = self.currentProvider {
                         
                         let zuzuUser = ZuzuUser()
                         zuzuUser.provider = provider // The login provider for the account creation
