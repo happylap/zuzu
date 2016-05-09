@@ -86,6 +86,10 @@ class AmazonSNSService : NSObject {
             (result, error) -> Void in
             
             if error != nil{
+                
+                GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                                   action: GAConst.Action.NotificationSetup.CreateDeviceFailure, label: userId)
+                
                 Log.error("Fail to register deviceToken: \(deviceToken) for user: \(userId)")
             }
             
@@ -104,9 +108,16 @@ class AmazonSNSService : NSObject {
                 self.registerSNSEndpoint(userId, deviceTokenString:deviceTokenString, endpointArn: endpointArn)
                 self.createDeviceForUser(userId, deviceToken: deviceTokenString)
             }else{
+                
+                GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                                   action: GAConst.Action.NotificationSetup.RegisterSNSNoDeviceToken, label: userId)
+                
                 Log.debug("deviceTokenString is nil")
             }
         }else{
+            
+            GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                               action: GAConst.Action.NotificationSetup.RegisterSNSNoUserId)
             Log.error("userId is nil")
         }
         
@@ -211,6 +222,10 @@ class AmazonSNSService : NSObject {
     private func registerSNSEndpoint(userId: String, deviceTokenString:String, endpointArn:String?) {
         Log.enter()
         if (!AmazonClientManager.sharedInstance.isCredentailsProviderExist()){
+            
+            GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                               action: GAConst.Action.NotificationSetup.RegisterSNSNoCredential, label: "\(deviceTokenString),\(userId)")
+            
             Log.debug("Credebtial provider is nil, cannot register SNS")
             Log.exit()
             return
@@ -229,9 +244,9 @@ class AmazonSNSService : NSObject {
         sns.getEndpointAttributes(request).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task: AWSTask!) -> AnyObject! in
             
             /// Create new endpoint
-            if task.error != nil {
+            if let error = task.error {
                 Log.debug("Error: \(task.error)")
-                if task.error!.code == AWSSNSErrorType.NotFound.rawValue{
+                if error == AWSSNSErrorType.NotFound.rawValue{
                     self.createEndpoint(deviceTokenString, userData:userId)
                 }
                 
@@ -277,11 +292,6 @@ class AmazonSNSService : NSObject {
     
     private func updateEndpoint(deviceTokenString: String, endpointArn:String, userData: String) {
         Log.enter()
-        if (!AmazonClientManager.sharedInstance.isCredentailsProviderExist()){
-            Log.debug("Credebtial provider is nil, cannot register SNS")
-            Log.exit()
-            return
-        }
         
         let sns = AWSSNS.defaultSNS()
         let request = AWSSNSSetEndpointAttributesInput()
@@ -310,11 +320,6 @@ class AmazonSNSService : NSObject {
     
     private func createEndpoint(deviceTokenString: String, userData: String?) {
         Log.enter()
-        if (!AmazonClientManager.sharedInstance.isCredentailsProviderExist()){
-            Log.debug("Credebtial provider is nil, cannot register SNS")
-            Log.exit()
-            return
-        }
         
         if let customUserData = userData{
             let sns = AWSSNS.defaultSNS()
@@ -322,19 +327,29 @@ class AmazonSNSService : NSObject {
             request.token = deviceTokenString
             request.customUserData = customUserData
             request.platformApplicationArn = AmazonSNSConstants.PLATFORM_APPLICATION_ARN
+            
             sns.createPlatformEndpoint(request).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task: AWSTask!) -> AnyObject! in
-                if task.error != nil {
-                    Log.debug("Error: \(task.error)")
-                } else {
-                    let createEndpointResponse = task.result as! AWSSNSCreateEndpointResponse
-                    Log.debug("endpointArn: \(createEndpointResponse.endpointArn)")
-                    if let endpointArn = createEndpointResponse.endpointArn{
-                        UserDefaultsUtils.setSNSEndpointArn(endpointArn)
-                    }
+                
+                if let error = task.error {
+                    
+                    GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                        action: GAConst.Action.NotificationSetup.RegisterSNSFailure, label: "\(deviceTokenString),\(userData)")
+                    
+                    Log.debug("Error: \(error)")
+                    Log.exit()
+                    return nil
                 }
+                
+                let createEndpointResponse = task.result as! AWSSNSCreateEndpointResponse
+                Log.debug("endpointArn: \(createEndpointResponse.endpointArn)")
+                if let endpointArn = createEndpointResponse.endpointArn{
+                    UserDefaultsUtils.setSNSEndpointArn(endpointArn)
+                }
+                
                 Log.exit()
                 return nil
             })
+            
         }
     }
     

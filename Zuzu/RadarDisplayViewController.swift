@@ -197,6 +197,12 @@ class RadarDisplayViewController: UIViewController {
     private func alertLocalNotificationDisabled() {
         Log.enter()
         
+        
+        let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken()
+        let userID = UserManager.getCurrentUser()?.userId ?? ""
+        self.trackEventForCurrentScreen(GAConst.Catrgory.NotificationStatus,
+                                        action: GAConst.Action.NotificationStatus.LocalNotificationDisabled, label: "\(deviceTokenString), \(userID)")
+        
         let alertView = SCLAlertView()
         
         let subTitle = "您似乎拒絕了接收通知的請求\n\n請到：設定 > 通知 > 豬豬快租，開啟「允許通知」選項\n\n通知功能開啟後，才能正常接收租屋雷達通知物件"
@@ -209,8 +215,13 @@ class RadarDisplayViewController: UIViewController {
     private func alertPushNotificationDisabled() {
         Log.enter()
         
-        let alertView = SCLAlertView()
         
+        let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken()
+        let userID = UserManager.getCurrentUser()?.userId ?? ""
+        self.trackEventForCurrentScreen(GAConst.Catrgory.NotificationStatus,
+                                        action: GAConst.Action.NotificationStatus.PushNotificationNotRegistered, label: "\(deviceTokenString), \(userID)")
+        
+        let alertView = SCLAlertView()
         
         let subTitle = "無法使用「租屋雷達」，請確認網路連線正常後，參考下面步驟：\n\n嘗試點選「開啟遠端推播」按鈕開啟推播; 或完全關閉「豬豬快租」，再重新進入本頁面\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
         

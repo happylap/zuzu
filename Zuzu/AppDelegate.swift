@@ -266,6 +266,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             if UserDefaultsUtils.getAPNDevicetoken() == nil {
                 assert(false, "Device Token should be saved when remote notification is registered")
+
+                let userID = UserManager.getCurrentUser()?.userId ?? ""
+                GAUtils.trackEvent(GAConst.Catrgory.NotificationStatus,
+                                                action: GAConst.Action.NotificationStatus.PushNotificationRegisteredNoSavedToken, label: userID)
             }
             
         }
@@ -375,7 +379,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.warning("didRegisterForRemoteNotificationsWithDeviceToken tokenString: \(deviceTokenString)")
         
+        let userId = UserManager.getCurrentUser()?.userId ?? ""
+        GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                           action: GAConst.Action.NotificationSetup.DeviceTokenChangeSuccess,
+                           label: "\(deviceTokenString), \(userId)")
+        
         UserDefaultsUtils.setAPNDevicetoken(deviceTokenString)
+        
         NSNotificationCenter.defaultCenter().postNotificationName(DeviceTokenChangeNotification, object: self, userInfo: ["deviceTokenString": deviceTokenString])
         
         self.pushNotificationSetupHandler?(result: true)
@@ -384,6 +394,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         Log.error("Error in registering for remote notifications: \(error.localizedDescription)")
+        
+        GAUtils.trackEvent(GAConst.Catrgory.NotificationSetup,
+                           action: GAConst.Action.NotificationSetup.DeviceTokenChangeFailure, label: UserManager.getCurrentUser()?.userId)
         
         self.pushNotificationSetupHandler?(result: false)
         self.pushNotificationSetupHandler = nil

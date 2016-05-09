@@ -26,6 +26,12 @@ struct GAConst {
         ///ZuzuRadarNotification event
         static let ZuzuRadarNotification = "zuzuRadarNotification"
         
+        ///Notification setup event
+        static let NotificationSetup = "notificationSetup"
+        
+        ///Notification setup event
+        static let NotificationStatus = "notificationStatus"
+        
         ///SearchHouse event
         static let SearchHouse = "searchHouse"
         
@@ -145,6 +151,34 @@ struct GAConst {
             static let ReadNotificationSize = "readNotificationSize"
             
             static let ReadNotificationType = "readNotificationType"
+        }
+        
+        struct NotificationSetup {
+
+            static let DeviceTokenChangeSuccess = "deviceTokenChangeSuccess"
+            
+            static let DeviceTokenChangeFailure = "deviceTokenChangeFailure"
+            
+            static let CreateDeviceFailure = "createDeviceFailure"
+            
+            static let RegisterSNSNoCredential = "registerSNSNoCredential"
+            
+            static let RegisterSNSNoUserId = "registerSNSNoUserId"
+            
+            static let RegisterSNSNoDeviceToken = "registerSNSNoDeviceToken"
+            
+            static let RegisterSNSFailure = "registerSNSFailure"
+            
+        }
+        
+        struct NotificationStatus {
+            
+            static let LocalNotificationDisabled = "localNotificationDisabled"
+            
+            static let PushNotificationNotRegistered = "pushNotificationNotRegistered"
+            
+            static let PushNotificationRegisteredNoSavedToken = "pushNotificationRegisteredNoSavedToken"
+            
         }
         
         struct SearchHouse {
