@@ -165,8 +165,8 @@ class SearchResultTableViewCell: UITableViewCell {
                     Log.debug("Start> Loading Img for Row[\(indexPath.row)]")
                     
                     houseImg.af_setImageWithURL(firstURL, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .None)
-                        { (request, response, result) -> Void in
-                            Log.debug("End> Loading Img for row = [\(self.indexPath.row)], url = \(firstURL), status = \(response?.statusCode)")
+                    { (request, response, result) -> Void in
+                        Log.debug("End> Loading Img for row = [\(self.indexPath.row)], url = \(firstURL), status = \(response?.statusCode)")
                     }
                 }
             }
@@ -363,13 +363,25 @@ class SearchResultTableViewCell: UITableViewCell {
             AmazonClientManager.sharedInstance.loginFromView(viewController) {
                 (task: AWSTask!) -> AnyObject! in
                 
-                if(task.error == nil) {
-                    
-                    viewController.runOnMainThread({ () -> Void in
-                        self.continueCollectionCallback()
-                    })
-                    
+                if let error = task.error {
+                    Log.debug("Login error = \(error)")
+                    return nil
                 }
+                
+                /// Login Form is closed
+                if let result = task.result as? Int,
+                    loginResult = LoginResult(rawValue: result) where loginResult == LoginResult.Cancelled {
+                    
+                    Log.debug("Login cancelled")
+                    
+                    return nil
+                }
+                
+                viewController.runOnMainThread({ () -> Void in
+                    self.continueCollectionCallback()
+                })
+                
+                
                 
                 return nil
             }
