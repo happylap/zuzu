@@ -358,10 +358,12 @@ class HouseDetailViewController: UIViewController {
                                 
                             }
                             
+                            let floorLowLabel = (floorLow < 0) ? "B\(-floorLow)" : "\(floorLow)"
+                            
                             if(floorLow == floorHigh) {
-                                floorLabel = "\(floorLow) / \(totalFloorLabel)"
+                                floorLabel = "\(floorLowLabel) / \(totalFloorLabel)"
                             } else {
-                                floorLabel = "\(floorLow)~\(floorHigh) / \(totalFloorLabel)"
+                                floorLabel = "\(floorLowLabel)~\(floorHigh) / \(totalFloorLabel)"
                             }
                             
                         } else {
