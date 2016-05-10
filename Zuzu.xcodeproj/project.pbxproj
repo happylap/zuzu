@@ -156,8 +156,6 @@
 		8166359C1C60B67D008C0AA3 /* ZuzuCriteria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8166359B1C60B67D008C0AA3 /* ZuzuCriteria.swift */; };
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
 		817DBA901C7219DE00795941 /* CommonLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */; };
-		81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */; };
-		81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E311C32D95100976EC7 /* FBLoginService.swift */; };
 		81924E341C33AB4C00976EC7 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserProfile.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81B467941C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */; };
@@ -354,8 +352,6 @@
 		8166359B1C60B67D008C0AA3 /* ZuzuCriteria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuCriteria.swift; sourceTree = "<group>"; };
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewCell.swift; sourceTree = "<group>"; };
 		817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonLoginViewController.swift; sourceTree = "<group>"; };
-		81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginViewController.swift; sourceTree = "<group>"; };
-		81924E311C32D95100976EC7 /* FBLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLoginService.swift; sourceTree = "<group>"; };
 		81924E331C33AB4C00976EC7 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchaseMapper.swift; sourceTree = "<group>"; };
@@ -462,7 +458,6 @@
 				81F05D5B1BEFCFEF00441A84 /* MyCollectionDetailViewController.swift */,
 				8130F7E91C00EE69006F5852 /* MyNoteViewController.swift */,
 				816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */,
-				81924E2F1C326BAC00976EC7 /* FBLoginViewController.swift */,
 				81FA280F1BDA39A50038DD19 /* MyCollectionStoryboard.storyboard */,
 			);
 			name = Collection;
@@ -618,7 +613,6 @@
 				14426ACD1C7B30B000C25440 /* AmazonSNSService.swift */,
 				81390C8A1C37B0E800450761 /* CollectionItemService.swift */,
 				14CBABB31C2A93DD00EF2E13 /* CoreDataResultsController.swift */,
-				81924E311C32D95100976EC7 /* FBLoginService.swift */,
 				14914FB11C2836DB00025AC1 /* NotificationItemService.swift */,
 				140250BD1C7C71B50009A076 /* RadarService.swift */,
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
@@ -1060,7 +1054,6 @@
 				1446FA5C1C2D3AA90073A8A7 /* CommonUtils.swift in Sources */,
 				2F61555B1BD8C1DF0024145E /* SearchCriteriaObserver.swift in Sources */,
 				2FBF52621C05A4AB00B3F47B /* ScaleExtensions.swift in Sources */,
-				81924E301C326BAC00976EC7 /* FBLoginViewController.swift in Sources */,
 				2F7B5F861BD62B950024E88A /* SearchItemDataStore.swift in Sources */,
 				1486A42A1C630CB800A6F7CA /* RadarDisplayViewController.swift in Sources */,
 				14914FA01C27D09800025AC1 /* NotificationHouseItem.swift in Sources */,
@@ -1096,7 +1089,6 @@
 				14914FA21C27D09800025AC1 /* CollectionHouseItem.swift in Sources */,
 				14CBABB41C2A93DD00EF2E13 /* CoreDataResultsController.swift in Sources */,
 				14CBABB21C2A908500EF2E13 /* TableResultsController.swift in Sources */,
-				81924E321C32D95100976EC7 /* FBLoginService.swift in Sources */,
 				2F3B4AFF1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift in Sources */,
 				2F024C781BF97A4B00627B22 /* DisplayLabelMaker.swift in Sources */,
 				2F4234151BF1CB5D00385C9A /* HouseDetailViewController.swift in Sources */,
