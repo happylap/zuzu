@@ -95,7 +95,24 @@ class FilterTableViewController: UITableViewController {
     
     var selectedFilterIdSet = [String : Set<FilterIdentifier>]() ///GroupId : Filter Set
     
+    let basementFilterIdentifier = FilterIdentifier(key: "floor", value: "{* TO 0}", order: 0)
+    
     // MARK: - Private Utils
+    private func handleConflictSelection(selectedFilterGroupId: String) {
+        
+        if(selectedFilterGroupId == "floor_range") {
+            
+            if let _ = selectedFilterIdSet["floor_range"] {
+                
+                /// Remove not_basement selection if any floor is selected
+                selectedFilterIdSet["not_basement"] = nil
+                
+            }
+            
+        }
+        
+    }
+    
     ///Try to update any UI related to filter status
     private func notifyFilterChange() {
         
@@ -172,13 +189,13 @@ class FilterTableViewController: UITableViewController {
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity, action: GAConst.Action.UIActivity.ResetFilters)
     }
     
-//    @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
-//        
-//        self.filterDelegate?.onFiltersSelected(self.selectedFilterIdSet)
-//        
-//        navigationController?.popViewControllerAnimated(true)
-//        
-//    }
+    //    @IBAction func onFilterSelectionDone(sender: UIBarButtonItem) {
+    //
+    //        self.filterDelegate?.onFiltersSelected(self.selectedFilterIdSet)
+    //
+    //        navigationController?.popViewControllerAnimated(true)
+    //
+    //    }
     
     // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
@@ -316,7 +333,7 @@ class FilterTableViewController: UITableViewController {
         
         if(type == DisplayType.SimpleView) {
             
-            if let currentFilter = filterGroup.filters.first, let filterSetForGroup = filterIdSetForGroup {
+            if let currentFilter = filterGroup.filters.first, filterSetForGroup = filterIdSetForGroup {
                 if filterSetForGroup.contains(currentFilter.identifier) {
                     cell.filterCheckMark.image = UIImage(named: "checked_green")
                 } else {
@@ -326,6 +343,23 @@ class FilterTableViewController: UITableViewController {
             }
             
             cell.simpleFilterLabel.text = label
+            
+            if(filterGroup.id == "not_basement") {
+                
+                if let filterIdSet = selectedFilterIdSet["floor_range"] {
+                    
+                    if(filterIdSet.isEmpty) {
+                        cell.selectionStyle = UITableViewCellSelectionStyle.Default
+                        cell.userInteractionEnabled = true
+                        cell.contentView.alpha = 1
+                    } else {
+                        cell.selectionStyle = UITableViewCellSelectionStyle.None
+                        cell.userInteractionEnabled = false
+                        cell.contentView.alpha = 0.5
+                    }
+                    
+                }
+            }
             
         } else {
             
@@ -423,8 +457,10 @@ extension FilterTableViewController: FilterOptionTableViewControllerDelegate {
         ///Update selection for a FilterGroup
         selectedFilterIdSet[groupId] = filterIdSet
         
-        notifyFilterChange()
+        self.handleConflictSelection(groupId)
         
         tableView.reloadData()
+        
+        notifyFilterChange()
     }
 }
