@@ -320,7 +320,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: true) {
+            
+            /// Do not allow using Radar witout login for now
+            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: false) {
                 (task: AWSTask!) -> AnyObject! in
                 
                 if let error = task.error {
