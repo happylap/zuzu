@@ -900,18 +900,29 @@ extension RadarDisplayViewController{
             alertView.addButton("啟用服務", action: {
                 () -> Void in
                 
-                RadarDisplayViewController.alertViewResponder = nil
-                
-                RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
-                
-                RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+                /// Allow finish transaction for auth / unauth users
+                if let _ = UserManager.getCurrentUser()?.userId {
                     
-                    (success, fail) -> Void in
+                    RadarDisplayViewController.alertViewResponder = nil
                     
-                    RadarService.sharedInstance.stopLoading()
+                    RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                     
-                    self.alertUnfinishTransactionsStatus(success, fail: fail)
+                    RadarService.sharedInstance.tryCompleteUnfinishTransactions(unfinishedTranscations){
+                        
+                        (success, fail) -> Void in
+                        
+                        RadarService.sharedInstance.stopLoading()
+                        
+                        self.alertUnfinishTransactionsStatus(success, fail: fail)
+                    }
+                    
+                }else{
+                    /// No current userID, ask user to login
+                    
+                    assert(false, "RadarDisplayViewcontroller should not be shown when there is no current user")
+                    
                 }
+                
             })
             
             RadarDisplayViewController.alertViewResponder = alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)

@@ -28,7 +28,7 @@ class RadarViewController: UIViewController {
     
     // unfinished transcation variables
     var isOnLoggingForUnfinishTransaction = false
-
+    
     
     weak var configTable: RadarConfigureTableViewController?
     
@@ -121,7 +121,7 @@ class RadarViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear")
-       
+        
         /// When there are some unfinished transactions
         if isUpdateMode == false && isOnLoggingForUnfinishTransaction == false{
             
@@ -186,31 +186,31 @@ class RadarViewController: UIViewController {
         
         //
         dispatch_async(GlobalQueue.Background) {
-
+            
             if let priceRange = self.radarSearchCriteria.price {
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                    action: GAConst.Action.ZuzuRadarSetting.PriceMin,
-                    label: String(priceRange.0))
+                                                action: GAConst.Action.ZuzuRadarSetting.PriceMin,
+                                                label: String(priceRange.0))
                 
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                    action: GAConst.Action.ZuzuRadarSetting.PriceMax,
-                    label: String(priceRange.1))
+                                                action: GAConst.Action.ZuzuRadarSetting.PriceMax,
+                                                label: String(priceRange.1))
             }
             
             if let sizeRange = self.radarSearchCriteria.size {
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                    action: GAConst.Action.ZuzuRadarSetting.SizeMin,
-                    label: String(sizeRange.0))
+                                                action: GAConst.Action.ZuzuRadarSetting.SizeMin,
+                                                label: String(sizeRange.0))
                 
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                    action: GAConst.Action.ZuzuRadarSetting.SizeMax,
-                    label: String(sizeRange.1))
+                                                action: GAConst.Action.ZuzuRadarSetting.SizeMax,
+                                                label: String(sizeRange.1))
             }
             
             if let types = self.radarSearchCriteria.types {
                 for type in types {
                     self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                        action: GAConst.Action.ZuzuRadarSetting.Type, label: String(type))
+                                                    action: GAConst.Action.ZuzuRadarSetting.Type, label: String(type))
                 }
             } else {
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting, action:
@@ -232,7 +232,7 @@ class RadarViewController: UIViewController {
                         if error != nil{
                             
                             self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                                action: GAConst.Action.ZuzuRadarSetting.UpdateCriteriaError, label: userId)
+                                                            action: GAConst.Action.ZuzuRadarSetting.UpdateCriteriaError, label: userId)
                             
                             RadarService.sharedInstance.stopLoading()
                             
@@ -244,7 +244,7 @@ class RadarViewController: UIViewController {
                         }
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarSetting,
-                            action: GAConst.Action.ZuzuRadarSetting.UpdateCriteriaSuccess, label: userId)
+                                                        action: GAConst.Action.ZuzuRadarSetting.UpdateCriteriaSuccess, label: userId)
                         
                         Log.info("update criteria success")
                         
@@ -287,7 +287,7 @@ class RadarViewController: UIViewController {
                 }
                 
             }
-
+            
             
             return
             
@@ -323,7 +323,7 @@ class RadarViewController: UIViewController {
     }
     
     // MARK: - Criteria View Update Function
-
+    
     private func updateCriteriaTextLabel(){
         Log.enter()
         
@@ -351,7 +351,7 @@ class RadarViewController: UIViewController {
         activateButton
             .setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: UIControlState.Selected)
     }
-
+    
     
     private static func resetAlertView(){
         RadarViewController.alertViewResponder = nil
@@ -401,7 +401,7 @@ extension RadarViewController: RadarPurchaseDelegate{
     
     func onFindUnfinishedTransaction(unfinishedTranscations:[SKPaymentTransaction]) -> Void{
         Log.enter()
-
+        
         if isUpdateMode == false && isOnLoggingForUnfinishTransaction == false{
             self.alertCompleteUnfinishTransactions(unfinishedTranscations)
         }
@@ -431,8 +431,8 @@ extension RadarViewController{
                     
                     //GA tracker
                     self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
-            
+                                                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                    
                     RadarService.sharedInstance.stopLoading()
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "設定租屋雷達失敗", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
@@ -470,16 +470,16 @@ extension RadarViewController{
                     
                     //GA tracker
                     self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                                                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
                     
                     RadarService.sharedInstance.stopLoading()
                     
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法為您更新租屋雷達條件，請您稍後再試！", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                         
                         self.reloadRadarUI()
-                    
+                        
                     }
-
+                    
                     return
                 }
                 
@@ -501,7 +501,7 @@ extension RadarViewController{
             
             //GA tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: zuzuCriteria.userId)
+                                            action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: zuzuCriteria.userId)
             
             //don't need to stop loading here because it is going ti reload ui
             zuzuCriteria.enabled = isEnabled
@@ -510,41 +510,41 @@ extension RadarViewController{
         }
         
         isEnabled = true
-                
+        
         if let userId = UserManager.getCurrentUser()?.userId {
             
             ZuzuWebService.sharedInstance.enableCriteriaByUserId(userId,
-                criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) {
-                    
-                    (result, error) -> Void in
-                    
-                    if error != nil{
-                        Log.error("Cannot enable criteria by user id:\(userId)")
-                        
-                        //GA tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                            action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
-                        
-                        RadarService.sharedInstance.stopLoading()
-                        
-                        SCLAlertView().showInfo("無法開啟通知", subTitle: "很抱歉，租屋雷達條件儲存成功，但是開啟通知失敗。請您稍後嘗試手動開啟，成功開啟之前您無法收到雷達通知", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-                            
-                            self.reloadRadarUI()
-                        
-                        }
-                        
-                        return
-                    }
-                    
-                    //GA tracker
-                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
-                    
-                    Log.info("enable criteria success")
-                    
-                    //don't need to stop loading here because it is going ti reload ui
-                    
-                    self.reloadRadarUI()
+                                                                 criteriaId: zuzuCriteria.criteriaId!, enabled: isEnabled) {
+                                                                    
+                                                                    (result, error) -> Void in
+                                                                    
+                                                                    if error != nil{
+                                                                        Log.error("Cannot enable criteria by user id:\(userId)")
+                                                                        
+                                                                        //GA tracker
+                                                                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                                                                                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                                                                        
+                                                                        RadarService.sharedInstance.stopLoading()
+                                                                        
+                                                                        SCLAlertView().showInfo("無法開啟通知", subTitle: "很抱歉，租屋雷達條件儲存成功，但是開啟通知失敗。請您稍後嘗試手動開啟，成功開啟之前您無法收到雷達通知", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
+                                                                            
+                                                                            self.reloadRadarUI()
+                                                                            
+                                                                        }
+                                                                        
+                                                                        return
+                                                                    }
+                                                                    
+                                                                    //GA tracker
+                                                                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                                                                                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
+                                                                    
+                                                                    Log.info("enable criteria success")
+                                                                    
+                                                                    //don't need to stop loading here because it is going ti reload ui
+                                                                    
+                                                                    self.reloadRadarUI()
             }
         }
     }
@@ -560,7 +560,7 @@ extension RadarViewController{
                     
                     //GA tracker
                     self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                        action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
+                                                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaError, label: userId)
                     
                     Log.info("create criteria fails")
                     
@@ -571,14 +571,14 @@ extension RadarViewController{
                     SCLAlertView().showInfo("網路連線失敗", subTitle: "很抱歉，目前無法成功為您設定租屋雷達條件，請稍後再試!", closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF).setDismissBlock(){
                         
                         self.reloadRadarUI()
-                    
+                        
                     }
                     return
                 }
                 
                 //GA tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                    action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
+                                                action: GAConst.Action.ZuzuRadarPurchase.SaveCriteriaSuccess, label: userId)
                 
                 Log.info("create criteria success")
                 
@@ -636,16 +636,17 @@ extension RadarViewController {
             return nil
         }
     }
- 
+    
     func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
         if RadarViewController.alertViewResponder == nil{
             let alertView = SCLAlertView()
             
-            if AmazonClientManager.sharedInstance.isLoggedIn(){
+            alertView.addButton("啟用服務", action: {
+                () -> Void in
                 
-                alertView.addButton("啟用服務", action: {
-                    () -> Void in
+                /// Allow finish transaction for auth / unauth users
+                if let _ = UserManager.getCurrentUser()?.userId {
                     
                     RadarService.sharedInstance.startLoadingText(self, text:"啟用中...")
                     
@@ -657,17 +658,15 @@ extension RadarViewController {
                         
                         self.alertUnfinishTransactionsStatus(success, fail: fail)
                     }
-                })
-                
-            }else{
-                
-                alertView.addButton("啟用服務", action: {
-                    () -> Void in
                     
+                }else{
+                    /// No current userID, ask user to login
+                    //  This is the only way to bind the transaction to a specific user
                     self.loginForUnfinishTransactions(unfinishedTranscations)
-                })
+                    
+                }
                 
-            }
+            })
             
             RadarViewController.alertViewResponder = alertView.showNotice("啟用租屋雷達服務", subTitle: "您已經成功購買過租屋雷達，但服務尚未完成啟用，請點選「啟用服務」以啟用此服務項目", closeButtonTitle: "下次再說", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
             
@@ -679,7 +678,7 @@ extension RadarViewController {
                 
             }
         }
-
+        
     }
     
     func alertUnfinishTransactionsStatus(success: Int, fail: Int){
@@ -687,9 +686,9 @@ extension RadarViewController {
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         if fail <= 0{
-
+            
             SCLAlertView().showInfo("服務啟用成功", subTitle: "所有服務已經完成啟用", closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF).setDismissBlock(){
-
+                
                 self.reloadRadarUI()
                 
             }
@@ -723,5 +722,5 @@ extension RadarViewController {
         }
         
     }
-
+    
 }
