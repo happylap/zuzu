@@ -343,10 +343,37 @@ class HouseDetailViewController: UIViewController {
                     
                     if let houseDetail = self.houseItemDetail {
                         
-                        let floor = (houseDetail.valueForKey("floor") as? [Int] ?? [0]).first
-                        let total_floor = houseDetail.valueForKey("total_floor") as? Int ?? 0
+                        var floorLabel = "—"
                         
-                        cell.leftInfoText.text = "樓層: \(floor!)/\(total_floor)"
+                        let floorList = houseDetail.valueForKey("floor") as? [Int] ?? []
+                        
+                        /// Has floor
+                        if let floorLow = floorList.first, floorHigh = floorList.last {
+                            
+                            var totalFloorLabel = "—"
+                            
+                            if let total_floor = houseDetail.valueForKey("total_floor") as? Int {
+                                
+                                totalFloorLabel = "\(total_floor)"
+                                
+                            }
+                            
+                            if(floorLow == floorHigh) {
+                                floorLabel = "\(floorLow) / \(totalFloorLabel)"
+                            } else {
+                                floorLabel = "\(floorLow)~\(floorHigh) / \(totalFloorLabel)"
+                            }
+                            
+                        } else {
+                        /// No floor
+                            if let total_floor = houseDetail.valueForKey("total_floor") as? Int {
+                                
+                                floorLabel = "— / \(total_floor)"
+                                
+                            }
+                        }
+                        
+                        cell.leftInfoText.text = "樓層: \(floorLabel)"
                         
                         var layoutLabel = "—"
                         let room = houseDetail.valueForKey("num_bedroom") as? Int ?? 0
