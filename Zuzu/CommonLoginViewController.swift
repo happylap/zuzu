@@ -223,6 +223,9 @@ class CommonLoginViewController: UIViewController {
                 tabBar.tabBarHidden = true
             }
         }
+        
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func viewDidAppear(animated: Bool) {

@@ -238,6 +238,9 @@ class ForgotPasswordViewController: UIViewController {
         
         /// Send reset password validation code
         self.sendValidationCode()
+        
+        //Google Analytics Tracker
+        self.trackScreen()
     }
     
     override func didReceiveMemoryWarning() {
