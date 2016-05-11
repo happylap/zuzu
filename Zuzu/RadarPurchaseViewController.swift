@@ -310,11 +310,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     // MARK: - Action Handlers
     
     func onCancelButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onCancelButtonTouched")
+        Log.enter()
         dismissViewControllerAnimated(true){
             self.purchaseDelegate?.onPurchaseCancel()
         }
-        
     }
     
     // Purchase the product

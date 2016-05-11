@@ -39,8 +39,6 @@ class RadarDisplayViewController: UIViewController {
     let emptyPurchaseHistoryLabel = UILabel()
     private lazy var purchaseHistotyTableDataSource: RadarPurchaseHistoryTableViewDataSource = RadarPurchaseHistoryTableViewDataSource()
     
-    private var currentTimer: NSTimer?
-    
     // Criteria UI outlet
     
     private func configureLoginRightButton() {
@@ -67,22 +65,13 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
-    func onLoginRightButtonTouched(sender: UIButton) {
-        Log.enter()
-        
-        AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: false) {
-            (task: AWSTask!) -> AnyObject! in
-            
-            return nil
-            
-        }
-        
-    }
-    
     @IBOutlet weak var radarDiagnosisButton: UIButton! {
         didSet {
             radarDiagnosisButton.setImage(UIImage(named: "notification_error")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             radarDiagnosisButton.tintColor = UIColor.colorWithRGB(0xFF6666)
+            
+            radarDiagnosisButton.addTarget(self, action: #selector(RadarDisplayViewController.onDiagnosisButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+
             setDisplayRadarDiagnosisButton(false)
         }
     }
@@ -156,7 +145,6 @@ class RadarDisplayViewController: UIViewController {
     
     @IBOutlet weak var purchaseTableView: UITableView!
     
-    
     // MARK: - Private Utils
     
     private func setDisplayRadarDiagnosisButton(visible: Bool) {
@@ -171,13 +159,7 @@ class RadarDisplayViewController: UIViewController {
     private func promptAuthLocalNotification() {
         Log.enter()
         
-        let alertView = SCLAlertView()
-        
-        let subTitle = "要使用「租屋雷達」接收新物件通知，需要您授權接收通知\n\n請在點擊「繼續」後，允許豬豬快豬的通知權限請求"
-        
-        alertView.showCloseButton = false
-        
-        alertView.addButton("繼續") {
+        RadarUtils.shared.promptAuthLocalNotification {
             
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
                 
@@ -190,13 +172,13 @@ class RadarDisplayViewController: UIViewController {
                         
                         if(!appDelegate.isPushNotificationRegistered()) {
                             
-                            self.alertPushNotificationDisabled()
+                            self.doAlertPushNotificationDisabled()
                             
                         }
                         
                     } else {
                         
-                        self.alertLocalNotificationDisabled()
+                        self.doAlertLocalNotificationDisabled()
                         
                     }
                 })
@@ -207,30 +189,25 @@ class RadarDisplayViewController: UIViewController {
             }
             
         }
-        
-        alertView.showInfo("請授權接收通知", subTitle: subTitle, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
     }
     
-    private func alertLocalNotificationDisabled() {
+    private func doAlertLocalNotificationDisabled() {
         Log.enter()
         
         self.setDisplayRadarDiagnosisButton(true)
         
         let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken()
         let userID = UserManager.getCurrentUser()?.userId ?? ""
+        let grantedSettings = UIApplication.sharedApplication().currentUserNotificationSettings()?.types
+
+        
         self.trackEventForCurrentScreen(GAConst.Catrgory.NotificationStatus,
-                                        action: GAConst.Action.NotificationStatus.LocalNotificationDisabled, label: "\(deviceTokenString), \(userID)")
+                                        action: GAConst.Action.NotificationStatus.LocalNotificationDisabled, label: "\(deviceTokenString), uid: \(userID), ntype: \(grantedSettings)")
         
-        let alertView = SCLAlertView()
-        
-        let subTitle = "您似乎拒絕了接收通知的請求\n\n請到：設定 > 通知 > 豬豬快租，開啟「允許通知」選項\n\n通知功能開啟後，才能正常接收租屋雷達通知物件"
-        
-        alertView.showCloseButton = true
-        
-        alertView.showInfo("尚未授權接收通知", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        RadarUtils.shared.alertLocalNotificationDisabled()
     }
     
-    private func alertPushNotificationDisabled() {
+    private func doAlertPushNotificationDisabled() {
         Log.enter()
         
         self.setDisplayRadarDiagnosisButton(true)
@@ -240,58 +217,7 @@ class RadarDisplayViewController: UIViewController {
         self.trackEventForCurrentScreen(GAConst.Catrgory.NotificationStatus,
                                         action: GAConst.Action.NotificationStatus.PushNotificationNotRegistered, label: "\(deviceTokenString), \(userID)")
         
-        let alertView = SCLAlertView()
-        
-        let subTitle = "無法使用「租屋雷達」，請確認網路連線正常後，參考下面步驟：\n\n嘗試點選「開啟遠端推播」按鈕開啟推播; 或完全關閉「豬豬快租」，再重新進入本頁面\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
-        
-        alertView.showCloseButton = true
-        
-        alertView.addButton("開啟遠端推播") {
-            
-            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                
-                let loadingSpinner = LoadingSpinner.getInstance("enablePushNotification")
-                loadingSpinner.setGraceTime(0.6)
-                loadingSpinner.setMinShowTime(1)
-                loadingSpinner.setOpacity(0.6)
-                loadingSpinner.setText("開啟中")
-                loadingSpinner.startOnView(self.view)
-                
-                appDelegate.setupPushNotifications({ (result) in
-                    if(!result) {
-                        self.currentTimer?.invalidate()
-                        LoadingSpinner.getInstance("enablePushNotification").stop()
-                        /// Check remote notification registered
-                        
-                        if(!appDelegate.isPushNotificationRegistered()) {
-                            
-                            self.alertPushNotificationDisabled()
-                            
-                        }
-                    }
-                })
-                
-                /// Setup a timer to do the checking
-                self.currentTimer?.invalidate()
-                
-                self.currentTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(RadarDisplayViewController.onRegisterPushNotificationTimeout(_:)), userInfo: nil, repeats: false)
-            }
-        }
-        
-        alertView.showInfo("遠端推播尚未開啟", subTitle: subTitle, closeButtonTitle: "關閉", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    }
-    
-    func onRegisterPushNotificationTimeout(timer:NSTimer) {
-        LoadingSpinner.getInstance("enablePushNotification").stop()
-        
-        /// Check remote notification registered
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            if(!appDelegate.isPushNotificationRegistered()) {
-                
-                self.alertPushNotificationDisabled()
-                
-            }
-        }
+        RadarUtils.shared.alertPushNotificationDisabled()
     }
     
     private func toggleServiceStatusIcon(isValid: Bool) {
@@ -305,6 +231,31 @@ class RadarDisplayViewController: UIViewController {
         }
         
     }
+    
+    // MARK: - Action Handlers
+    
+    func onLoginRightButtonTouched(sender: UIButton) {
+        Log.enter()
+        
+        AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: false) {
+            (task: AWSTask!) -> AnyObject! in
+            
+            return nil
+            
+        }
+        
+    }
+    
+    func onDiagnosisButtonTouched(sender: UIButton) {
+        Log.enter()
+        
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDiagnosisView") as? RadarDiagnosisViewController {
+            vc.modalPresentationStyle = .OverFullScreen
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
     
     // MARK: - Life Cycle
     
@@ -347,7 +298,7 @@ class RadarDisplayViewController: UIViewController {
                 /// Remote notification not registered
                 if(!appDelegate.isPushNotificationRegistered()) {
                     
-                    self.alertPushNotificationDisabled()
+                    self.doAlertPushNotificationDisabled()
                     
                 }
                 

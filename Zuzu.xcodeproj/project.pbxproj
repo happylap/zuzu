@@ -37,8 +37,10 @@
 		2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F05C6271BBA2FBB00100D5F /* StringUtils.swift */; };
 		2F08BCDD1C0BF48800A3D645 /* GAExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */; };
 		2F08BCDF1C0BF4B300A3D645 /* GAConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */; };
+		2F1BB04E1CE3366C009F4AD1 /* RadarUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BB04D1CE3366C009F4AD1 /* RadarUtils.swift */; };
 		2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F276B2E1BBE989E00A41306 /* DataPersistence.swift */; };
 		2F27A5551BEC7A760072FA98 /* FilterSettingDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */; };
+		2F2FC63C1CE3037500AE534D /* RadarDiagnosisViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2FC63B1CE3037500AE534D /* RadarDiagnosisViewController.swift */; };
 		2F31F5091BBF7B6400054355 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31F5081BBF7B6400054355 /* MainTabViewController.swift */; };
 		2F31F50B1BBF7BA500054355 /* SearchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */; };
 		2F31F50F1BBF7D3700054355 /* RadarStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */; };
@@ -222,8 +224,10 @@
 		2F05C6271BBA2FBB00100D5F /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		2F08BCDC1C0BF48800A3D645 /* GAExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GAExtensions.swift; sourceTree = "<group>"; };
 		2F08BCDE1C0BF4B300A3D645 /* GAConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GAConst.swift; sourceTree = "<group>"; };
+		2F1BB04D1CE3366C009F4AD1 /* RadarUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarUtils.swift; sourceTree = "<group>"; };
 		2F276B2E1BBE989E00A41306 /* DataPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPersistence.swift; sourceTree = "<group>"; };
 		2F27A5541BEC7A760072FA98 /* FilterSettingDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterSettingDataStore.swift; sourceTree = "<group>"; };
+		2F2FC63B1CE3037500AE534D /* RadarDiagnosisViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarDiagnosisViewController.swift; sourceTree = "<group>"; };
 		2F31F5081BBF7B6400054355 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabViewController.swift; sourceTree = "<group>"; };
 		2F31F50A1BBF7BA500054355 /* SearchStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchStoryboard.storyboard; sourceTree = "<group>"; };
 		2F31F50E1BBF7D3700054355 /* RadarStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RadarStoryboard.storyboard; sourceTree = "<group>"; };
@@ -466,12 +470,14 @@
 		2F276B371BBED53500A41306 /* Radar */ = {
 			isa = PBXGroup;
 			children = (
+				2F1BB04D1CE3366C009F4AD1 /* RadarUtils.swift */,
 				1486A4291C630CB800A6F7CA /* RadarDisplayViewController.swift */,
 				14426ACF1C7C3D1500C25440 /* RadarRetryViewController.swift */,
 				14426ACB1C7AFAD600C25440 /* RadarNavigationController.swift */,
 				144195371C62EBDC00C8779A /* RadarConfigureTableViewController.swift */,
 				2FE132691C312081008F5E68 /* RadarViewController.swift */,
 				8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */,
+				2F2FC63B1CE3037500AE534D /* RadarDiagnosisViewController.swift */,
 				1405856B1C73083800449C27 /* RadarDisplayItem.swift */,
 				2F9139EA1C7334C4004325B1 /* RadarLandingViewController.swift */,
 				140585711C73EA1300449C27 /* RadarPurchaseHistoryDataSource.swift */,
@@ -1100,6 +1106,7 @@
 				2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */,
 				81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */,
 				2F7ADC6F1CC8B10A009726B2 /* WalkthroughMasterViewController.swift in Sources */,
+				2F1BB04E1CE3366C009F4AD1 /* RadarUtils.swift in Sources */,
 				2FE28A191BE7033000ABBA14 /* FilterTableViewController.swift in Sources */,
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
@@ -1144,6 +1151,7 @@
 				2F3F23AB1CAE181900D8C044 /* ADUtils.swift in Sources */,
 				2FE912761C045B0400019053 /* SearchCriteriaDataStore.swift in Sources */,
 				2F4F80911BCBB3C4003D23F4 /* CityPickerViewController.swift in Sources */,
+				2F2FC63C1CE3037500AE534D /* RadarDiagnosisViewController.swift in Sources */,
 				2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */,
 				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
 				2F99890D1C8F1286005ED6E0 /* LoginDebugViewController.swift in Sources */,

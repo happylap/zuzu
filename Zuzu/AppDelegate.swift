@@ -266,10 +266,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             if UserDefaultsUtils.getAPNDevicetoken() == nil {
                 assert(false, "Device Token should be saved when remote notification is registered")
-
+                
                 let userID = UserManager.getCurrentUser()?.userId ?? ""
                 GAUtils.trackEvent(GAConst.Catrgory.NotificationStatus,
-                                                action: GAConst.Action.NotificationStatus.PushNotificationRegisteredNoSavedToken, label: userID)
+                                   action: GAConst.Action.NotificationStatus.PushNotificationRegisteredNoSavedToken, label: userID)
             }
             
         }
@@ -280,7 +280,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal func isLocalNotificationEnabled() -> Bool{
         if let grantedSettings = UIApplication.sharedApplication().currentUserNotificationSettings(){
-            if grantedSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
+            Log.debug("\(grantedSettings.types)")
+            
+            if(grantedSettings.types.contains(.Alert)
+                || grantedSettings.types.contains(.Badge)
+                || grantedSettings.types.contains(.Sound)) {
                 
                 return true
             }
