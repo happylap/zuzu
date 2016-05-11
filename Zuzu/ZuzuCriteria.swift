@@ -111,7 +111,7 @@ class ZuzuCriteria: NSObject, Mappable {
             var filterGroups: [FilterGroup] = [FilterGroup]()
             for filterSection in ZuzuCriteria.filterSections {
                 for filterGroup in filterSection.filterGroups {
-                    filterGroups.append(filterGroup)
+                    filterGroups.append(filterGroup.copy() as! FilterGroup)
                 }
             }
             
@@ -359,6 +359,8 @@ class ZuzuCriteria: NSObject, Mappable {
                     }
                 }
             }
+            
+            Log.debug("JSONDict: \(JSONDict)")
             
             return JSONDict
         }
