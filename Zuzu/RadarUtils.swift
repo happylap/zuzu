@@ -46,11 +46,13 @@ class RadarUtils : NSObject{
         
         let alertView = SCLAlertView()
         
-        let subTitle = "您尚未授權「豬豬快租」顯示通知\n\n" +
-            "請到：設定 > 通知 > 豬豬快租" +
-            "\n\n• 開啟「允許通知」選項" +
-            "\n• 確認各項顯示方式都開啟" +
-        "\n\n完成開啟後重新進入「租屋雷達」確認此訊息是否不再出現"
+        let subTitle = "您尚未授權「豬豬快租」顯示通知，請按照下面步驟開啟：\n\n" +
+            "進入：設定 > 通知 > 豬豬快租\n" +
+            "\n• 確認開啟「允許通知」" +
+            "\n• 確認開啟「通知聲」" +
+            "\n• 確認開啟「App標記」" +
+            "\n• 確認提示樣式為「橫幅顯示」" +
+        "\n\n完成設定後，重新進入「租屋雷達」，確認本訊息不再出現"
         
         alertView.showCloseButton = true
         
@@ -75,10 +77,12 @@ class RadarUtils : NSObject{
         
         let alertView = SCLAlertView()
         
-        let subTitle = "請參考下面步驟註冊：" +
-            "\n\n• 請先確認網路連線是否正常" +
+        let subTitle = "請先確認網路連線正常後，參考下面步驟註冊推播服務以使用「租屋雷達」：\n" +
             "\n• 點選「註冊遠端推播」按鈕" +
-        "\n• 完全關閉應用後，重新進入「租屋雷達」，確認是否仍出現錯誤訊息\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
+            "\n• 雙擊Home鍵開啟工作清單" +
+            "\n• 將「豬豬快租」上滑完全關閉" +
+            "\n• 重新進入「租屋雷達」" +
+        "\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
         
         alertView.showCloseButton = true
         
