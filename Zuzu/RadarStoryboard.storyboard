@@ -552,12 +552,22 @@
                                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vFU-IY-56D">
+                                                                        <rect key="frame" x="539" y="8.5" width="25" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="25" id="waU-IN-AJe"/>
+                                                                            <constraint firstAttribute="width" secondItem="vFU-IY-56D" secondAttribute="height" multiplier="1:1" id="xLz-po-s61"/>
+                                                                        </constraints>
+                                                                        <state key="normal" image="notification_error"/>
+                                                                    </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.97999999999999998" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <constraints>
                                                                     <constraint firstItem="QMV-ev-uwx" firstAttribute="leading" secondItem="7N5-qc-Jhl" secondAttribute="leading" constant="16" id="0N4-nd-ZKQ"/>
+                                                                    <constraint firstItem="vFU-IY-56D" firstAttribute="centerY" secondItem="QMV-ev-uwx" secondAttribute="centerY" id="6HH-dM-S87"/>
                                                                     <constraint firstAttribute="bottom" secondItem="QMV-ev-uwx" secondAttribute="bottom" constant="6" id="77H-J3-HWZ"/>
                                                                     <constraint firstItem="QMV-ev-uwx" firstAttribute="top" secondItem="7N5-qc-Jhl" secondAttribute="top" constant="6" id="CWh-DZ-mBE"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="vFU-IY-56D" secondAttribute="trailing" constant="20" symbolic="YES" id="RQg-cS-jLO"/>
                                                                     <constraint firstAttribute="trailing" secondItem="QMV-ev-uwx" secondAttribute="trailing" constant="20" symbolic="YES" id="ejz-Ua-V7Z"/>
                                                                     <constraint firstItem="QMV-ev-uwx" firstAttribute="centerY" secondItem="7N5-qc-Jhl" secondAttribute="centerY" id="zaB-SN-HOK"/>
                                                                 </constraints>
@@ -898,6 +908,7 @@
                         <outlet property="priceSizeLabel" destination="uHP-bL-3Pa" id="kvA-QI-JJZ"/>
                         <outlet property="purchaseHistoryBannerLabel" destination="ABG-LT-SrP" id="Ng1-m2-zwO"/>
                         <outlet property="purchaseTableView" destination="kzV-PJ-lR5" id="IKU-GQ-xsh"/>
+                        <outlet property="radarDiagnosisButton" destination="vFU-IY-56D" id="CLZ-xs-pn9"/>
                         <outlet property="regionLabel" destination="wkD-W0-Nni" id="cVX-6v-SN5"/>
                         <outlet property="serviceButton" destination="tQY-Zr-6Ob" id="EmM-yN-2f3"/>
                         <outlet property="serviceExpireLabel" destination="3ea-9P-KAv" id="kuU-EK-Y2I"/>
@@ -1451,6 +1462,7 @@
         <image name="cancel" width="30" height="30"/>
         <image name="cloud-outline-off" width="120" height="120"/>
         <image name="main_radar_n" width="38" height="38"/>
+        <image name="notification_error" width="30" height="30"/>
         <image name="radar_filter" width="60" height="60"/>
         <image name="refresh" width="60" height="60"/>
         <image name="search item_01" width="30" height="30"/>

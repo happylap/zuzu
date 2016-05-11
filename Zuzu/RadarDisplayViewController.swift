@@ -79,6 +79,14 @@ class RadarDisplayViewController: UIViewController {
         
     }
     
+    @IBOutlet weak var radarDiagnosisButton: UIButton! {
+        didSet {
+            radarDiagnosisButton.setImage(UIImage(named: "notification_error")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            radarDiagnosisButton.tintColor = UIColor.colorWithRGB(0xFF6666)
+            setDisplayRadarDiagnosisButton(false)
+        }
+    }
+    
     @IBOutlet weak var modifyButtoon: UIButton! // buton to update or configure criteria
     
     @IBOutlet weak var currentConditionBannerLabel: UILabel!
@@ -151,6 +159,15 @@ class RadarDisplayViewController: UIViewController {
     
     // MARK: - Private Utils
     
+    private func setDisplayRadarDiagnosisButton(visible: Bool) {
+        
+        if(visible) {
+            self.radarDiagnosisButton.hidden = false
+        } else {
+            self.radarDiagnosisButton.hidden = true
+        }
+    }
+    
     private func promptAuthLocalNotification() {
         Log.enter()
         
@@ -197,6 +214,7 @@ class RadarDisplayViewController: UIViewController {
     private func alertLocalNotificationDisabled() {
         Log.enter()
         
+        self.setDisplayRadarDiagnosisButton(true)
         
         let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken()
         let userID = UserManager.getCurrentUser()?.userId ?? ""
@@ -215,6 +233,7 @@ class RadarDisplayViewController: UIViewController {
     private func alertPushNotificationDisabled() {
         Log.enter()
         
+        self.setDisplayRadarDiagnosisButton(true)
         
         let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken()
         let userID = UserManager.getCurrentUser()?.userId ?? ""
