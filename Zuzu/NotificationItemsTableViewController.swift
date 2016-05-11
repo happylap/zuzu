@@ -114,9 +114,6 @@ class NotificationItemsTableViewController: UITableViewController {
                     }
                 }
                 
-                /// Finish loading items
-                AppDelegate.clearAllBadge()
-                
             }
         }
         Log.exit()
@@ -228,6 +225,9 @@ class NotificationItemsTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.enter()
+        
+        /// Clear badges when notification tab is displayed
+        AppDelegate.clearAllBadge()
         
         self.tabBarController?.tabBarHidden = false
         
