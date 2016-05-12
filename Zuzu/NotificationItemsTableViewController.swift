@@ -53,6 +53,10 @@ class NotificationItemsTableViewController: UITableViewController {
         Log.debug("refreshData, showSpinner: \(showSpinner)")
         
         if let userId = UserManager.getCurrentUser()?.userId {
+            
+            /// Clear badges when notification tab is to be refreshed
+            AppDelegate.clearAllBadge()
+            
             if showSpinner == true{
                 Log.debug("refresh data with loading")
                 LoadingSpinner.shared.stop()
@@ -213,9 +217,6 @@ class NotificationItemsTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.enter()
-        
-        /// Clear badges when notification tab is displayed
-        AppDelegate.clearAllBadge()
         
         self.tabBarController?.tabBarHidden = false
         
