@@ -46,42 +46,59 @@ class RadarUtils : NSObject{
         
         let alertView = SCLAlertView()
         
-        let subTitle = "您尚未授權「豬豬快租」顯示通知，請按照下面步驟開啟：\n\n" +
-            "進入：設定 > 通知 > 豬豬快租\n" +
-            "\n• 確認開啟「允許通知」" +
-            "\n• 確認開啟「通知聲」" +
-            "\n• 確認開啟「App標記」" +
-            "\n• 確認提示樣式為「橫幅顯示」" +
+        let subTitle = "請點選「豬豬快租設定」，進入「通知」選項，開啟「允許通知」，並確認下列項目已開啟：\n\n" +
+            "•「通知聲」•「App標記」•提示樣式「橫幅顯示」" +
         "\n\n完成設定後，重新進入「租屋雷達」，確認本訊息不再出現"
         
         alertView.showCloseButton = true
         
+        alertView.addButton("豬豬快租設定") {
+            
+            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
+            if let url = settingsUrl {
+                UIApplication.sharedApplication().openURL(url)
+            }
+            
+        }
         alertView.showInfo(title, subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+        
+        
     }
     
-    private func alertRegisterSuccess() {
+    internal func alertRegisterFailure() {
         Log.enter()
         
         let alertView = SCLAlertView()
         
-        let subTitle = "註冊成功"
+        let subTitle = "遠端推播註冊失敗，請確認網路狀況正常後重啟豬豬快租：\n" +
+            "\n• 雙擊「Home」鍵開啟工作清單" +
+            "\n• 將「豬豬快租」上滑完全關閉" +
+        "\n• 重啟App，進入「租屋雷達」"
         
         alertView.showCloseButton = true
         
-        alertView.showInfo("遠端推播已經註冊成功，租屋雷達現在可以向您推播即時通知", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        alertView.showInfo("註冊失敗", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
-    internal func alertPushNotificationDisabled(title: String = "尚未註冊遠端推播",
-                                                onSuccess: (()-> Void)? = nil, onFailure: (()-> Void)? = nil) {
+    internal func alertRegisterSuccess() {
         Log.enter()
         
         let alertView = SCLAlertView()
         
-        let subTitle = "請先確認網路連線正常後，參考下面步驟註冊推播服務以使用「租屋雷達」：\n" +
-            "\n• 點選「註冊遠端推播」按鈕" +
-            "\n• 雙擊Home鍵開啟工作清單" +
-            "\n• 將「豬豬快租」上滑完全關閉" +
-            "\n• 重新進入「租屋雷達」" +
+        let subTitle = "遠端推播已經註冊成功，租屋雷達現在可以向您推播即時通知"
+        
+        alertView.showCloseButton = true
+        
+        alertView.showInfo("註冊成功", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
+    
+    internal func alertPushNotificationDisabled(title: String = "尚未註冊遠端推播",
+                                                handler: ((result: Bool)-> Void)? = nil) {
+        Log.enter()
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "請先確認網路連線正常後，點選「註冊遠端推播」按鈕，嘗試重新註冊推播服務以使用「租屋雷達」" +
         "\n\n若本訊息持續出現，請聯繫粉絲團客服協助排除"
         
         alertView.showCloseButton = true
@@ -108,13 +125,11 @@ class RadarUtils : NSObject{
                         
                         if(!appDelegate.isPushNotificationRegistered()) {
                             
-                            self.alertPushNotificationDisabled()
-                            //onFailure?()
+                            handler?(result: false)
                             
                         } else {
                             
-                            self.alertRegisterSuccess()
-                            //onSuccess?()
+                            handler?(result: true)
                             
                         }
                     }

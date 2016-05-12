@@ -11,6 +11,10 @@ import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
+protocol RadarDiagnosisViewControllerDelegate: class {
+    func onDismiss()
+}
+
 class RadarDiagnosisViewController: UIViewController {
     
     private let enbledButtonColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
@@ -26,6 +30,8 @@ class RadarDiagnosisViewController: UIViewController {
     private let pushNotificationEnabledMessage = "已經成功註冊此裝置接收遠端推播服務"
     
     private let pushNotificationDisabledMessage = "此裝置尚無法接收推播訊息"
+    
+    var delegate : RadarDiagnosisViewControllerDelegate?
     
     @IBOutlet weak var cancelButton: UIButton!{
         didSet {
@@ -111,6 +117,41 @@ class RadarDiagnosisViewController: UIViewController {
     @IBOutlet weak var lastSavedDeviceToken: UILabel!
     
     // MARK: - Private Util
+    
+    private func performDiagnosis() {
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            
+            /// Local Notification Enabled
+            if(appDelegate.isLocalNotificationEnabled()) {
+                
+                self.handleLocalNotificationEnabled()
+                
+                self.setPushNotificationMessageVisible(true)
+                
+                /// Push Notification
+                if(appDelegate.isPushNotificationRegistered()) {
+                    
+                    self.handlePushNotificationEnable()
+                    
+                } else {
+                    
+                    self.handlePushNotificationDisabled()
+                    
+                }
+                
+            } else {
+                /// Local Notification Disabled
+                self.handleLocalNotificationDisabled()
+                
+            }
+            
+        }else{
+            assert(false, "appDelegate cannot be nil")
+            Log.error("appDelegate is nil")
+        }
+        
+    }
     
     private func handleLocalNotificationEnabled() {
         localNotificationFixButton.hidden = true
@@ -205,6 +246,8 @@ class RadarDiagnosisViewController: UIViewController {
         
         self.dismissViewControllerAnimated(true){
             
+            self.delegate?.onDismiss()
+            
         }
     }
     
@@ -217,7 +260,20 @@ class RadarDiagnosisViewController: UIViewController {
     func onFixPushNotificationButtonTouched(sender: UIButton) {
         Log.enter()
         
-        RadarUtils.shared.alertPushNotificationDisabled("推播服務修復方式")
+        RadarUtils.shared.alertPushNotificationDisabled("推播服務修復方式") { (result) in
+            if(result) {
+                
+                RadarUtils.shared.alertRegisterSuccess()
+                
+            } else {
+                
+                RadarUtils.shared.alertRegisterFailure()
+                
+            }
+            
+            self.performDiagnosis()
+        }
+
     }
     
     // MARK: - View Life Cycle
@@ -226,36 +282,7 @@ class RadarDiagnosisViewController: UIViewController {
         
         self.setPushNotificationMessageVisible(false)
         
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            
-            /// Local Notification Enabled
-            if(appDelegate.isLocalNotificationEnabled()) {
-                
-                self.handleLocalNotificationEnabled()
-                
-                self.setPushNotificationMessageVisible(true)
-                
-                /// Push Notification
-                if(appDelegate.isPushNotificationRegistered()) {
-                    
-                    self.handlePushNotificationEnable()
-                    
-                } else {
-                    
-                    self.handlePushNotificationDisabled()
-                    
-                }
-                
-            } else {
-                /// Local Notification Disabled
-                self.handleLocalNotificationDisabled()
-
-            }
-            
-        }else{
-            assert(false, "appDelegate cannot be nil")
-            Log.error("appDelegate is nil")
-        }
+        self.performDiagnosis()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -263,9 +290,5 @@ class RadarDiagnosisViewController: UIViewController {
         
         //Google Analytics Tracker
         self.trackScreen()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        self.presentingViewController?.tabBarController?.tabBarHidden = false
     }
 }

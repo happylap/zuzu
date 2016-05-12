@@ -156,7 +156,7 @@ class RadarDisplayViewController: UIViewController {
         }
     }
     
-    private func promptAuthLocalNotification() {
+    private func doPromptAuthLocalNotification() {
         Log.enter()
         
         RadarUtils.shared.promptAuthLocalNotification {
@@ -217,7 +217,17 @@ class RadarDisplayViewController: UIViewController {
         self.trackEventForCurrentScreen(GAConst.Catrgory.NotificationStatus,
                                         action: GAConst.Action.NotificationStatus.PushNotificationNotRegistered, label: "\(deviceTokenString), \(userID)")
         
-        RadarUtils.shared.alertPushNotificationDisabled()
+        RadarUtils.shared.alertPushNotificationDisabled { (result) in
+            if(result) {
+                
+                RadarUtils.shared.alertRegisterSuccess()
+                
+            } else {
+                
+                RadarUtils.shared.alertRegisterFailure()
+                
+            }
+        }
     }
     
     private func toggleServiceStatusIcon(isValid: Bool) {
@@ -228,6 +238,33 @@ class RadarDisplayViewController: UIViewController {
             statusImageView.image = UIImage(named: "comment-check-outline")?.imageWithRenderingMode(.AlwaysTemplate)
         } else {
             statusImageView.image = UIImage(named: "comment-alert-outline")?.imageWithRenderingMode(.AlwaysTemplate)
+        }
+        
+    }
+    
+    private func performRadarStatusCheck() {
+        
+        self.setDisplayRadarDiagnosisButton(false)
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            
+            /// Local notification enabled
+            if(appDelegate.isLocalNotificationEnabled()) {
+                
+                /// Remote notification not registered
+                if(!appDelegate.isPushNotificationRegistered()) {
+                    
+                    self.doAlertPushNotificationDisabled()
+                    
+                }
+                
+            } else {
+                
+                /// Ask notification type permission
+                self.doPromptAuthLocalNotification()
+                
+            }
+            
         }
         
     }
@@ -252,6 +289,7 @@ class RadarDisplayViewController: UIViewController {
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDiagnosisView") as? RadarDiagnosisViewController {
             vc.modalPresentationStyle = .OverFullScreen
+            vc.delegate = self
             self.presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -290,26 +328,8 @@ class RadarDisplayViewController: UIViewController {
         // update service UI according to zuzuService
         self.updateServiceUI()
         
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            
-            /// Local notification enabled
-            if(appDelegate.isLocalNotificationEnabled()) {
-                
-                /// Remote notification not registered
-                if(!appDelegate.isPushNotificationRegistered()) {
-                    
-                    self.doAlertPushNotificationDisabled()
-                    
-                }
-                
-            } else {
-                
-                /// Ask notification type permission
-                self.promptAuthLocalNotification()
-                
-            }
-            
-        }
+
+        self.performRadarStatusCheck()
         
         //Google Analytics Tracker
         self.trackScreen()
@@ -859,7 +879,7 @@ extension RadarDisplayViewController{
 
 // MARK: Handle unfinished transactions
 
-extension RadarDisplayViewController{
+extension RadarDisplayViewController {
     
     func alertCompleteUnfinishTransactions(unfinishedTranscations:[SKPaymentTransaction]){
         
@@ -947,7 +967,8 @@ extension RadarDisplayViewController{
     
 }
 
-extension RadarDisplayViewController: RadarPurchaseHistoryTableDelegate{
+// MARK: RadarPurchaseHistoryTableDelegate
+extension RadarDisplayViewController: RadarPurchaseHistoryTableDelegate {
     
     func onRefreshData(){
         self.purchaseTableView.reloadData()
@@ -962,6 +983,17 @@ extension RadarDisplayViewController: RadarPurchaseHistoryTableDelegate{
         self.emptyPurchaseHistoryLabel.text = SystemMessage.INFO.EMPTY_HISTORICAL_PURCHASE
         self.emptyPurchaseHistoryLabel.sizeToFit()
         self.emptyPurchaseHistoryLabel.hidden = false
+    }
+    
+}
+
+// MARK: RadarDiagnosisViewControllerDelegate
+extension RadarDisplayViewController: RadarDiagnosisViewControllerDelegate {
+    
+    func onDismiss(){
+        
+        self.performRadarStatusCheck()
+        
     }
     
 }
