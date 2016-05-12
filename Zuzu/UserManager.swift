@@ -43,12 +43,14 @@ class UserManager {
             
         }
         
-        if let userID = UnauthClientManager.sharedInstance.getUnauthUserID(),
-            userToken =  UnauthClientManager.sharedInstance.getUnauthUserToken() {
-            
-            Log.debug("Unauthenticated userID = \(userID)")
-            return UserInfo(userType: .Unauthenticated, userId: userID, provider: nil, userToken: userToken)
-            
+        if(FeatureOption.Radar.enableUnauth) {
+            if let userID = UnauthClientManager.sharedInstance.getUnauthUserID(),
+                userToken =  UnauthClientManager.sharedInstance.getUnauthUserToken() {
+                
+                Log.debug("Unauthenticated userID = \(userID)")
+                return UserInfo(userType: .Unauthenticated, userId: userID, provider: nil, userToken: userToken)
+                
+            }
         }
         
         

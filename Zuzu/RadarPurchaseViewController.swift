@@ -321,7 +321,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             
             /// Do not allow using Radar witout login for now
-            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: false) {
+            let allowSkip = FeatureOption.Radar.enableUnauth
+            
+            AmazonClientManager.sharedInstance.loginFromView(self, mode: 2, allowSkip: allowSkip) {
                 (task: AWSTask!) -> AnyObject! in
                 
                 if let error = task.error {
