@@ -305,6 +305,7 @@ class FilterTableViewController: UITableViewController {
                 }
                 
                 notifyFilterChange()
+                
             }
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
@@ -349,11 +350,9 @@ class FilterTableViewController: UITableViewController {
                 if let filterIdSet = selectedFilterIdSet["floor_range"] {
                     
                     if(filterIdSet.isEmpty) {
-                        cell.selectionStyle = UITableViewCellSelectionStyle.Default
                         cell.userInteractionEnabled = true
                         cell.contentView.alpha = 1
                     } else {
-                        cell.selectionStyle = UITableViewCellSelectionStyle.None
                         cell.userInteractionEnabled = false
                         cell.contentView.alpha = 0.5
                     }
