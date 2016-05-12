@@ -1,5 +1,5 @@
 //
-//  LoginDebugViewController.swift
+//  EngineerModeViewController.swift
 //  Zuzu
 //
 //Copyright © LAP Inc. All rights reserved
@@ -11,7 +11,7 @@ import FBSDKLoginKit
 
 private let Log = Logger.defaultLogger
 
-class LoginDebugViewController: UIViewController {
+class EngineerModeViewController: UIViewController {
     
     private var responder: SCLAlertViewResponder?
     
@@ -63,7 +63,7 @@ class LoginDebugViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginDebugViewController.handleTokenRefreshed(_:)), name: UserLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EngineerModeViewController.handleTokenRefreshed(_:)), name: UserLoginNotification, object: nil)
         // Do any additional setup after loading the view.
         
         self.webApiPickerView.dataSource = self;
@@ -255,11 +255,11 @@ class LoginDebugViewController: UIViewController {
         
         var subTitle = "No current user"
         
-        if let userId = AmazonClientManager.sharedInstance.currentUserToken?.userId,
-            let provider = AmazonClientManager.sharedInstance.currentUserToken?.provider {
+        if let userInfo = UserManager.getCurrentUser() {
             
-            subTitle = "UserId = \n\(userId)" +
-                "\n\n Provider = \(provider.rawValue)"
+            subTitle = "UserId = \n\(userInfo.userId)" +
+                "\n\n Provider = \(userInfo.provider)" +
+                "\n\n Type = \(userInfo.userType)"
         }
         
         myAlert.showTitle("Current User", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
@@ -1000,7 +1000,7 @@ class LoginDebugViewController: UIViewController {
     
 }
 
-extension LoginDebugViewController: UIPickerViewDataSource{
+extension EngineerModeViewController: UIPickerViewDataSource{
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
         return 1
     }
@@ -1012,7 +1012,7 @@ extension LoginDebugViewController: UIPickerViewDataSource{
     
 }
 
-extension LoginDebugViewController: UIPickerViewDelegate{
+extension EngineerModeViewController: UIPickerViewDelegate{
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return apiNameArray[row]
     }
