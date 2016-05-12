@@ -16,15 +16,34 @@ class RadarNavigationController: UINavigationController {
     
     var zuzuCriteria: ZuzuCriteria?
     
+    internal func showNewTabBadge() {
+        
+        if(UserDefaultsUtils.needsDisplayRadarNewBadge()) {
+            self.tabBarItem.badgeValue = "New"
+        }
+        
+    }
+    
+    // MARK: - Private Utils
+    private func disableNewTabBadge() {
+        
+        self.tabBarItem.badgeValue = nil
+        UserDefaultsUtils.setRadarNewBadgeDisplayed()
+        
+    }
+    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.showTransitionRadarView() // blank page
     }
     
     override func viewWillAppear(animated: Bool) {
         Log.enter()
+        
+        /// Remove "New" tab badge
+        self.disableNewTabBadge()
         
         self.showRadar()
         super.viewWillAppear(animated)
@@ -78,7 +97,7 @@ class RadarNavigationController: UINavigationController {
                 
                 
                 if let zuzuService = result, _ = zuzuService.status, _ = zuzuService.expireTime{
- 
+                    
                     if let criteria = self.zuzuCriteria, _ = criteria.criteriaId {
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!, onCompleteHandler:onCompleteHandler)
                         
@@ -197,7 +216,7 @@ class RadarNavigationController: UINavigationController {
     
     private func showTransitionRadarView(){
         Log.enter()
-
+        
         let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("RadarTransitionViewController")
         self.setViewControllers([vc], animated: false)

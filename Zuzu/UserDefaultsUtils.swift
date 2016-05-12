@@ -44,6 +44,22 @@ struct UserDefaultsUtils {
         }
     }
     
+    static let radarNewBadgeDisplayedUserDefaultKey = "radarNewBadgeDisplayed"
+    
+    static func setRadarNewBadgeDisplayed() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(true, forKey: radarNewBadgeDisplayedUserDefaultKey)
+    }
+    
+    static func needsDisplayRadarNewBadge() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if let _ = userDefaults.objectForKey(radarNewBadgeDisplayedUserDefaultKey) {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     // Free Trial (Need to be cleared when switching users)
     static func setUsedFreeTrial(productIdentifier: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
