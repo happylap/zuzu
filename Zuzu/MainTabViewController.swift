@@ -37,36 +37,38 @@ class MainTabViewController: UITabBarController {
         
         /// Init View Controllers for each Tab
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
-        let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController()!
-        
-        let collectionStoryboard:UIStoryboard = UIStoryboard(name: "MyCollectionStoryboard", bundle: nil)
-        let collectionViewController:UIViewController = collectionStoryboard.instantiateInitialViewController()!
-        
-        let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
-        let radarViewController:UIViewController = radarStoryboard.instantiateInitialViewController()!
-        
-        let notificationStoryboard:UIStoryboard = UIStoryboard(name: "NotificationStoryboard", bundle: nil)
-        let notificationViewController:UIViewController = notificationStoryboard.instantiateInitialViewController()!
-        
-        #if DEBUG
-            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let loginDebugViewController:UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("loginDebugPage")
-        #endif
-        
-        /// Append needed view controllers to Tab View
-        tabViewControllers.append(searchViewController)
+        if let searchViewController:UIViewController = searchStoryboard.instantiateInitialViewController() {
+            tabViewControllers.append(searchViewController)
+        }
         
         if(FeatureOption.Collection.enableMain) {
-            tabViewControllers.append(collectionViewController)
+            let collectionStoryboard:UIStoryboard = UIStoryboard(name: "MyCollectionStoryboard", bundle: nil)
+            if let collectionViewController:UIViewController = collectionStoryboard.instantiateInitialViewController() {
+                tabViewControllers.append(collectionViewController)
+            }
         }
         
         if(FeatureOption.Radar.enableMain) {
-            tabViewControllers.append(radarViewController)
-            tabViewControllers.append(notificationViewController)
+            
+            let radarStoryboard:UIStoryboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+            let notificationStoryboard:UIStoryboard = UIStoryboard(name: "NotificationStoryboard", bundle: nil)
+            
+            if let radarViewController = radarStoryboard.instantiateInitialViewController() as? RadarNavigationController,
+                let notificationViewController:UIViewController = notificationStoryboard.instantiateInitialViewController() {
+                
+                tabViewControllers.append(radarViewController)
+                radarViewController.showNewTabBadge()
+                
+                tabViewControllers.append(notificationViewController)
+                
+            }
         }
         
         #if DEBUG
-            tabViewControllers.append(loginDebugViewController)
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            if let loginDebugViewController:UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("loginDebugPage") {
+                tabViewControllers.append(loginDebugViewController)
+            }
         #endif
         
         self.viewControllers = tabViewControllers
@@ -78,14 +80,10 @@ class MainTabViewController: UITabBarController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        //self.tabBar.hidden = true
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        //self.tabBar.hidden = true
     }
     
     func dismissAllViewControllers(notification: NSNotification) {
