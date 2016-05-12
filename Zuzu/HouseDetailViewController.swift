@@ -187,6 +187,8 @@ class HouseDetailViewController: UIViewController {
                     return
                 }
                 
+                self.delegate?.onHouseItemLoaded?(true)
+                
                 if let result = result {
                     
                     ///Try to cache the house detail response
@@ -199,8 +201,12 @@ class HouseDetailViewController: UIViewController {
                         Log.debug("Something went wrong with the cache")
                     }
                     
-                    self.delegate?.onHouseItemLoaded?(true)
                     self.handleHouseDetailResponse(result)
+                    
+                } else {
+                    
+                    self.alertItemNotFound()
+                    
                 }
             }
             
@@ -686,6 +692,20 @@ class HouseDetailViewController: UIViewController {
                 }
             })
         ]
+    }
+    
+    private func alertItemNotFound() {
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "請您參考其他物件，謝謝！"
+        
+        alertView.showCloseButton = false
+        
+        alertView.addButton("知道了") { 
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+        alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
     
     private func alertMailAppNotReady() {
