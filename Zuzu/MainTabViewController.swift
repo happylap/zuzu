@@ -84,6 +84,24 @@ class MainTabViewController: UITabBarController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        Log.enter()
+        
+        /// Check if need to update tab badge
+        Log.debug("needUpdateTabBadge = \(AmazonSNSService.sharedInstance.needUpdateTabBadge)")
+        
+        if(AmazonSNSService.sharedInstance.needUpdateTabBadge) {
+            AppDelegate.updateTabBarBadge()
+            AmazonSNSService.sharedInstance.needUpdateTabBadge = false
+        }
+        
+        /// Check if need to switch to notification bar
+        Log.debug("needSwitchToNotificationTab = \(AmazonSNSService.sharedInstance.needSwitchToNotificationTab)")
+        
+        if(AmazonSNSService.sharedInstance.needSwitchToNotificationTab) {
+            AppDelegate.switchToNotificationTab()
+            AmazonSNSService.sharedInstance.needSwitchToNotificationTab = false
+        }
+        
     }
     
     func dismissAllViewControllers(notification: NSNotification) {
@@ -100,6 +118,7 @@ class MainTabViewController: UITabBarController {
                 }
             }
             
+            Log.debug("Switch to \(tabIndex)")
             // dismiss all view controllers in the navigation stack
             self.selectedIndex = tabIndex
         }

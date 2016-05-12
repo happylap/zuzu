@@ -21,6 +21,9 @@ class AmazonSNSService : NSObject {
         return Singleton.instance
     }
     
+    internal var needSwitchToNotificationTab = false
+    
+    internal var needUpdateTabBadge = false
     
     // MARK: Private Members
     private struct AmazonSNSConstants {
@@ -60,6 +63,23 @@ class AmazonSNSService : NSObject {
         }
         
         Log.exit()
+    }
+    
+    private func isMainTabReady()-> Bool {
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
+            tabViewController = appDelegate.window?.rootViewController as? UITabBarController,
+            _ = tabViewController.viewControllers {
+
+            Log.debug("isMainTabReady = true")
+            return true
+            
+        } else {
+            
+            Log.debug("isMainTabReady = false")
+            return false
+        }
+        
     }
     
     private func isNotificationTabSelected()-> Bool {
@@ -175,13 +195,13 @@ class AmazonSNSService : NSObject {
         Log.debug("\(notification.userInfo)")
         
         if let info = notification.userInfo,
-            appStateRaw = info["appState"] as? Int, appState = AppStateOnNotification(rawValue: appStateRaw),
-            switchTab = info["switchTab"] as? Bool {
+            appStateRaw = info["appState"] as? Int, switchTab = info["switchTab"] as? Bool,
+            appState = AppStateOnNotification(rawValue: appStateRaw) {
             
-            Log.debug("appState = \(appState), switchTab = \(switchTab)")
+            Log.debug("appState = \(appState)")
             
-            /// Check is logged in
-            if(!AmazonClientManager.sharedInstance.isLoggedIn()) {
+            /// Check if there is any current user (auth or unauth)
+            if(UserManager.getCurrentUser() == nil) {
                 
                 Log.debug("Cannot handle the notification. The user is not logged in.")
                 
@@ -208,7 +228,12 @@ class AmazonSNSService : NSObject {
                     // Update Badge no matter we'll switch to notification view or not
                     // Reason: Tab switching is delayed until the user session is resumed.
                     // It's better that we display tab badge first during the delay
-                    AppDelegate.updateTabBarBadge()
+                    
+                    if(isMainTabReady()) {
+                        AppDelegate.updateTabBarBadge()
+                    } else {
+                        self.needUpdateTabBadge = true
+                    }
                     
                 }
                 
@@ -222,19 +247,27 @@ class AmazonSNSService : NSObject {
                     
                 } else {
                     
-                    // Update Badge if not switching
-                    if(!switchTab) {
+                    if(isMainTabReady()) {
                         AppDelegate.updateTabBarBadge()
+                    } else {
+                        self.needUpdateTabBadge = true
                     }
+                    
                 }
                 
                 break
             }
             
-            /// Try switch to notification view if it's not selected
+            
+            /// Whether to switch to notification tab
             if(switchTab) {
-                AppDelegate.switchToNotificationTab()
+                if(isMainTabReady()) {
+                    AppDelegate.switchToNotificationTab()
+                } else {
+                    self.needSwitchToNotificationTab = switchTab
+                }
             }
+            
             
         } else {
             assert(false, "The user info for this notification is mandatory")
@@ -282,7 +315,7 @@ class AmazonSNSService : NSObject {
                     if let message = error.userInfo["Message"] as? String {
                         
                         let matches = StringUtils.matchesForRegexInText(".*Endpoint (arn:aws:sns[^ ]+) already exists with the same Token.*", text: message)
-
+                        
                         Log.debug("message = \(message) \nmatches = \(matches)")
                         
                         if let endpointArn = matches.first {
@@ -366,7 +399,7 @@ class AmazonSNSService : NSObject {
         
         if let snsService = self.snsService {
             let request = AWSSNSSetEndpointAttributesInput()
-
+            
             request.endpointArn = endpointArn
             request.attributes = [String:String]()
             request.attributes!["Token"] = deviceTokenString
