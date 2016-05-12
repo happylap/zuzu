@@ -26,5 +26,6 @@ struct FeatureOption {
 
     struct Radar {
         static let enableMain = true ///The main Radar function
+        static let enableUnauth = false ///Allow unauth user to use Radar
     }
 }
