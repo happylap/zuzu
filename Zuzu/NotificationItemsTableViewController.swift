@@ -52,18 +52,6 @@ class NotificationItemsTableViewController: UITableViewController {
         Log.enter()
         Log.debug("refreshData, showSpinner: \(showSpinner)")
         
-        if(!AmazonClientManager.sharedInstance.isLoggedIn()){
-            Log.debug("Cannot refresh data because user is not logged in")
-            return
-        }
-        
-        /// The check is currently for Google-Signin
-        if(AmazonClientManager.sharedInstance.currentUserToken == nil) {
-            Log.debug("Cannot refresh data because user token is not retrieved yet")
-            return
-        }
-        
-        
         if let userId = UserManager.getCurrentUser()?.userId {
             if showSpinner == true{
                 Log.debug("refresh data with loading")
