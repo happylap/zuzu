@@ -95,7 +95,7 @@
 		2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */; };
 		2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */; };
 		2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */; };
-		2F99890D1C8F1286005ED6E0 /* LoginDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */; };
+		2F99890D1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99890C1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift */; };
 		2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B25E51C08C251004CECAA /* FeatureOptions.swift */; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
@@ -289,7 +289,7 @@
 		2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailAddressCell.swift; sourceTree = "<group>"; };
 		2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableHeaderCell.swift; sourceTree = "<group>"; };
 		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
-		2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginDebugViewController.swift; sourceTree = "<group>"; };
+		2F99890C1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineerModeViewControllerViewController.swift; sourceTree = "<group>"; };
 		2F9B25E51C08C251004CECAA /* FeatureOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureOptions.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -688,7 +688,7 @@
 				2F66375B1CB77B1500A51095 /* View */,
 				2FAAAFA41CB6268300B954EF /* Login.storyboard */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
-				2F99890C1C8F1286005ED6E0 /* LoginDebugViewController.swift */,
+				2F99890C1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
 				2F8320AE1CCF20BF00C19476 /* MyCommonLoginViewController.swift */,
@@ -1154,7 +1154,7 @@
 				2F2FC63C1CE3037500AE534D /* RadarDiagnosisViewController.swift in Sources */,
 				2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */,
 				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
-				2F99890D1C8F1286005ED6E0 /* LoginDebugViewController.swift in Sources */,
+				2F99890D1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift in Sources */,
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
 				2F6637671CB7A27000A51095 /* ContinueSocialLoginView.swift in Sources */,
