@@ -71,7 +71,7 @@ class RadarDisplayViewController: UIViewController {
             radarDiagnosisButton.tintColor = UIColor.colorWithRGB(0xFF6666)
             
             radarDiagnosisButton.addTarget(self, action: #selector(RadarDisplayViewController.onDiagnosisButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-
+            
             setDisplayRadarDiagnosisButton(false)
         }
     }
@@ -199,7 +199,7 @@ class RadarDisplayViewController: UIViewController {
         let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken()
         let userID = UserManager.getCurrentUser()?.userId ?? ""
         let grantedSettings = UIApplication.sharedApplication().currentUserNotificationSettings()?.types
-
+        
         
         self.trackEventForCurrentScreen(GAConst.Catrgory.NotificationStatus,
                                         action: GAConst.Action.NotificationStatus.LocalNotificationDisabled, label: "\(deviceTokenString), uid: \(userID), ntype: \(grantedSettings)")
@@ -307,7 +307,11 @@ class RadarDisplayViewController: UIViewController {
         self.configureButton()
         self.configureBannerText()
         self.configurePurchaseTableView()
-        self.configureLoginRightButton()
+        
+        /// Enable login button when unauthenticated users are allowed
+        if(FeatureOption.Radar.enableUnauth) {
+            self.configureLoginRightButton()
+        }
         
         // purchase history only refresh in view load
         self.purchaseHistotyTableDataSource.purchaseHistoryTableDelegate = self
@@ -328,7 +332,7 @@ class RadarDisplayViewController: UIViewController {
         // update service UI according to zuzuService
         self.updateServiceUI()
         
-
+        
         self.performRadarStatusCheck()
         
         //Google Analytics Tracker

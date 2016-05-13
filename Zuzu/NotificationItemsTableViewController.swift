@@ -112,9 +112,8 @@ class NotificationItemsTableViewController: UITableViewController {
     }
     
     private func setItemRead(item: NotificationHouseItem) {
-        if !AmazonClientManager.sharedInstance.isLoggedIn() {
-            return
-        }
+        Log.debug("item = \(item.id)")
+        
         if let userId = UserManager.getCurrentUser()?.userId {
             
             ZuzuWebService.sharedInstance.setReadNotificationByUserId(userId, itemId: item.id) { (result, error) -> Void in
