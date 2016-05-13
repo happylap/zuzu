@@ -872,13 +872,6 @@ class AmazonClientManager : NSObject {
         if let _ = self.currentUserToken {
             return self.isLoggedInWithFacebook() || self.isLoggedInWithGoogle() || self.isLoggedInWithZuzu()
         } else {
-            
-            /// [Backward Compatible]
-            //When there is no currentProfile saved in UserDefaults, Force resuming FB session
-            if(FBSDKAccessToken.currentAccessToken() != nil) {
-                return true
-            }
-            
             return false
         }
     }
