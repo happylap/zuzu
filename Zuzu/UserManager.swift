@@ -28,13 +28,12 @@ class UserManager {
         
         if(AmazonClientManager.sharedInstance.isLoggedIn()) {
             
-            if let userID = AmazonClientManager.sharedInstance.currentUserToken?.userId,
+            if let accountProvider = AmazonClientManager.sharedInstance.currentUserToken?.provider,
+                userID = AmazonClientManager.sharedInstance.currentUserToken?.userId,
                 userToken = AmazonClientManager.sharedInstance.currentUserToken?.token {
                 
                 Log.debug("Authenticated userID = \(userID)")
-                
-                let accountProvider = UserDefaultsUtils.getLoginProvider()
-                
+
                 return UserInfo(userType: .Authenticated, userId: userID, provider: accountProvider, userToken: userToken)
                 
             } else {
