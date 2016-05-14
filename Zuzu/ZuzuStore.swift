@@ -167,7 +167,7 @@ extension ZuzuStore: SKPaymentTransactionObserver {
     
     private func failedTransaction(transaction: SKPaymentTransaction) {
         Log.debug("failedTransaction...")
-        if transaction.error!.code != SKErrorPaymentCancelled {
+        if transaction.error!.code != SKErrorCode.PaymentCancelled.rawValue {
             Log.debug("Transaction error: \(transaction.error!.localizedDescription)")
         }
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
