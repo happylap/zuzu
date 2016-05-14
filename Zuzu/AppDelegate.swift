@@ -538,6 +538,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                 }
             }
+        } else {
+            
+            /// [Backward Compatible]
+            //When there is no currentUserToken saved in UserDefaults, Try force resuming FB session
+            
+            if let view = self.window?.rootViewController?.view{
+                LoadingSpinner.shared.setImmediateAppear(true)
+                LoadingSpinner.shared.setMinShowTime(0.6)
+                LoadingSpinner.shared.setOpacity(0.5)
+                LoadingSpinner.shared.setText("升級中")
+                LoadingSpinner.shared.startOnView(view)
+            }
+            
+            AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
+                dispatch_async(dispatch_get_main_queue()) {
+                    
+                    LoadingSpinner.shared.stop()
+                    
+                }
+                return nil
+            }
+            
         }
         
         return true
