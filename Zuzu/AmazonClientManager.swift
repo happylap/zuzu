@@ -107,8 +107,7 @@ class AmazonClientManager : NSObject {
             //TODO: Allow token access even when the logged in process is not completely finished
             //Since we need the token to finish our login process. Need to refine the whole process.
             
-            if let provider = UserDefaultsUtils.getLoginProvider(),
-                userId = UserDefaultsUtils.getLoginUser(),
+            if let provider = UserDefaultsUtils.getLoginProvider(), userId = UserDefaultsUtils.getLoginUser(),
                 token = self.getTokenByProvider(provider) {
                 
                 return (provider, userId, token)
@@ -141,15 +140,6 @@ class AmazonClientManager : NSObject {
             return ZuzuAccessToken.currentAccessToken.token
         }
         
-    }
-    
-    private func errorAlert(message: String) {
-        let errorAlert = UIAlertController(title: "Error", message: "\(message)", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default) { (alert: UIAlertAction) -> Void in }
-        
-        errorAlert.addAction(okAction)
-        
-        self.loginViewController?.presentViewController(errorAlert, animated: true, completion: nil)
     }
     
     // MARK: Private S3 Utils
@@ -613,18 +603,39 @@ class AmazonClientManager : NSObject {
                 }
             }
             
-        } else {
-            
-            /// [Backward Compatible]
-            //When there is no currentProfile saved in UserDefaults, Force resuming FB session
-            if(FBSDKAccessToken.currentAccessToken() != nil) {
-                self.reloadFBSession()
-            }
-            
         }
         
         Log.exit()
     }
+    
+    /// [Backward Compatible]
+    func resumeSessionForUpgrade(provider: Provider, completionHandler: AWSContinuationBlock) {
+        Log.enter()
+        
+        self.completionHandler = completionHandler
+        
+        switch(provider) {
+        case .FB:
+            //v0.93.1 -> v1.1: There is no saved userID, provider in UserDefaults, still resume FB session anyway
+            if(FBSDKAccessToken.currentAccessToken() != nil) {
+                
+                self.reloadFBSession()
+                
+            }
+        case .GOOGLE:
+            //v1.0 -> v1.1: There is no Google token, still resume Google session anyway
+            // Google's token will be nil when app is relaunched
+            if(self.isLoggedInWithGoogle()) {
+                
+                self.reloadGSession()
+                
+            }
+        default: break
+        }
+        
+        Log.exit()
+    }
+    
     
     private func logOutAll() {
         
@@ -872,13 +883,6 @@ class AmazonClientManager : NSObject {
         if let _ = self.currentUserToken {
             return self.isLoggedInWithFacebook() || self.isLoggedInWithGoogle() || self.isLoggedInWithZuzu()
         } else {
-            
-            /// [Backward Compatible]
-            //When there is no currentProfile saved in UserDefaults, Force resuming FB session
-            if(FBSDKAccessToken.currentAccessToken() != nil) {
-                return true
-            }
-            
             return false
         }
     }

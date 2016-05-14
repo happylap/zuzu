@@ -541,23 +541,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             
             /// [Backward Compatible]
-            //When there is no currentUserToken saved in UserDefaults, Try force resuming FB session
-            
-            if let view = self.window?.rootViewController?.view{
-                LoadingSpinner.shared.setImmediateAppear(true)
-                LoadingSpinner.shared.setMinShowTime(0.6)
-                LoadingSpinner.shared.setOpacity(0.5)
-                LoadingSpinner.shared.setText("升級中")
-                LoadingSpinner.shared.startOnView(view)
-            }
-            
-            AmazonClientManager.sharedInstance.resumeSession { (task) -> AnyObject! in
-                dispatch_async(dispatch_get_main_queue()) {
-                    
-                    LoadingSpinner.shared.stop()
-                    
+            // For v0.93.1 -> v1.1: resume FB session if FB token is available
+            // v0.93.1: no saved provider & userId for Facebook
+            // v1.1: we use a whole new set of info saved in UserDefault
+            if(AmazonClientManager.sharedInstance.isLoggedInWithFacebook()) {
+                
+                if let view = self.window?.rootViewController?.view{
+                    LoadingSpinner.shared.setImmediateAppear(true)
+                    LoadingSpinner.shared.setMinShowTime(0.6)
+                    LoadingSpinner.shared.setOpacity(0.5)
+                    LoadingSpinner.shared.startOnView(view)
                 }
-                return nil
+                
+                AmazonClientManager.sharedInstance.resumeSessionForUpgrade(.FB) { (task) -> AnyObject! in
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        
+                        LoadingSpinner.shared.stop()
+                        
+                    }
+                    return nil
+                }
+                
+                // For v1.0 -> v1.1: resume GOOGLE session if Google token is available in UserDefaults
+                // v1.0: Google token will be cleared when App is closed
+                // v1.1: Google token is saved in userDefaults for use
+            } else if(AmazonClientManager.sharedInstance.isLoggedInWithGoogle()) {
+                
+                if let view = self.window?.rootViewController?.view{
+                    LoadingSpinner.shared.setImmediateAppear(true)
+                    LoadingSpinner.shared.setMinShowTime(0.6)
+                    LoadingSpinner.shared.setOpacity(0.5)
+                    LoadingSpinner.shared.startOnView(view)
+                }
+                
+                AmazonClientManager.sharedInstance.resumeSessionForUpgrade(.GOOGLE) { (task) -> AnyObject! in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        
+                        LoadingSpinner.shared.stop()
+                        
+                    }
+                    return nil
+                }
             }
             
         }
