@@ -789,6 +789,20 @@
                                     <action selector="onWebApiButtonTouched:" destination="jVh-QR-suA" eventType="touchUpInside" id="TQ2-SI-efv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WoN-Wj-bHh">
+                                <rect key="frame" x="172" y="229" width="120" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="Radar Diagnosis"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -799,6 +813,7 @@
                             <constraint firstItem="TuY-ur-aMc" firstAttribute="leading" secondItem="WNG-BA-KzA" secondAttribute="leading" id="3Rk-KF-9wV"/>
                             <constraint firstItem="WNG-BA-KzA" firstAttribute="bottom" secondItem="gtR-mL-aYb" secondAttribute="bottom" id="4Kt-zI-MKf"/>
                             <constraint firstItem="iHg-98-mRc" firstAttribute="centerX" secondItem="biy-yK-7aq" secondAttribute="centerX" id="56V-lM-8te"/>
+                            <constraint firstItem="WoN-Wj-bHh" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="5lZ-FR-SVb"/>
                             <constraint firstItem="WNG-BA-KzA" firstAttribute="leading" secondItem="gtR-mL-aYb" secondAttribute="trailing" constant="32" id="6Gl-UL-hOf"/>
                             <constraint firstItem="rr9-O0-vwt" firstAttribute="top" secondItem="biy-yK-7aq" secondAttribute="bottom" id="8l6-ex-t5d"/>
                             <constraint firstItem="Gmz-ID-ItJ" firstAttribute="leading" secondItem="WNG-BA-KzA" secondAttribute="leading" id="8v7-CK-xpk"/>
@@ -810,6 +825,7 @@
                             <constraint firstItem="UE7-6z-Alq" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="Hcg-3e-zqq"/>
                             <constraint firstItem="7SY-p8-DAN" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="JLr-HY-DIk"/>
                             <constraint firstItem="VZe-ij-aa5" firstAttribute="top" secondItem="rle-Nh-8TE" secondAttribute="topMargin" constant="8" id="Jxr-Kp-ofT"/>
+                            <constraint firstItem="WoN-Wj-bHh" firstAttribute="top" secondItem="TuY-ur-aMc" secondAttribute="bottom" constant="8.5" id="Kiw-NC-KUw"/>
                             <constraint firstItem="biy-yK-7aq" firstAttribute="leading" secondItem="rle-Nh-8TE" secondAttribute="leadingMargin" id="LKI-Rx-WMu"/>
                             <constraint firstItem="biy-yK-7aq" firstAttribute="top" secondItem="1Zg-1w-Xv0" secondAttribute="bottom" constant="16" id="M2b-gh-z4y"/>
                             <constraint firstItem="TuY-ur-aMc" firstAttribute="top" secondItem="WNG-BA-KzA" secondAttribute="bottom" constant="8" symbolic="YES" id="POo-FT-mL5"/>
@@ -823,6 +839,7 @@
                             <constraint firstItem="1Zg-1w-Xv0" firstAttribute="centerX" secondItem="ydf-Nd-SUy" secondAttribute="centerX" id="buT-bA-h8i"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="leading" secondItem="rle-Nh-8TE" secondAttribute="leadingMargin" id="c2p-uN-sqo"/>
                             <constraint firstItem="WNG-BA-KzA" firstAttribute="top" secondItem="gtR-mL-aYb" secondAttribute="top" id="das-PI-1YY"/>
+                            <constraint firstItem="WoN-Wj-bHh" firstAttribute="width" secondItem="ydf-Nd-SUy" secondAttribute="width" id="e96-JR-Bt4"/>
                             <constraint firstItem="VZe-ij-aa5" firstAttribute="top" secondItem="spy-N1-ITn" secondAttribute="bottom" constant="16" id="eWY-iM-jcf"/>
                             <constraint firstAttribute="trailingMargin" secondItem="biy-yK-7aq" secondAttribute="trailing" id="edT-an-9Ue"/>
                             <constraint firstItem="WNG-BA-KzA" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="gLP-HJ-0iL"/>
@@ -831,6 +848,7 @@
                             <constraint firstItem="Gmz-ID-ItJ" firstAttribute="centerY" secondItem="VZe-ij-aa5" secondAttribute="centerY" id="jHA-tm-S5u"/>
                             <constraint firstItem="ydf-Nd-SUy" firstAttribute="centerX" secondItem="7SY-p8-DAN" secondAttribute="centerX" id="jW7-ff-Lm7"/>
                             <constraint firstItem="gtR-mL-aYb" firstAttribute="height" secondItem="ydf-Nd-SUy" secondAttribute="height" id="kZ8-oY-s4X"/>
+                            <constraint firstItem="WoN-Wj-bHh" firstAttribute="leading" secondItem="WNG-BA-KzA" secondAttribute="leading" id="lpp-mv-elK"/>
                             <constraint firstItem="7SY-p8-DAN" firstAttribute="top" secondItem="ydf-Nd-SUy" secondAttribute="bottom" constant="8" symbolic="YES" id="mX1-Pt-7j4"/>
                             <constraint firstItem="iHg-98-mRc" firstAttribute="top" secondItem="biy-yK-7aq" secondAttribute="bottom" constant="32" id="o1K-f2-AFS"/>
                             <constraint firstItem="iHg-98-mRc" firstAttribute="leading" secondItem="1Zg-1w-Xv0" secondAttribute="trailing" constant="16" id="o5w-Ep-0vZ"/>
@@ -872,6 +890,7 @@
                         <outlet property="finishTransButton" destination="WNG-BA-KzA" id="OkL-KC-pVD"/>
                         <outlet property="generateTransButton" destination="TuY-ur-aMc" id="e0Q-Ye-C25"/>
                         <outlet property="googleLogin" destination="gtR-mL-aYb" id="PB7-yO-R78"/>
+                        <outlet property="radarDiagnosisButton" destination="WoN-Wj-bHh" id="Yuo-2H-uWp"/>
                         <outlet property="webApi" destination="iHg-98-mRc" id="2BI-wT-iDn"/>
                         <outlet property="webApiPickerView" destination="biy-yK-7aq" id="Osk-7K-KUh"/>
                     </connections>
