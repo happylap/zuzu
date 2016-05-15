@@ -10,6 +10,49 @@ import Foundation
 
 struct UserDefaultsUtils {
     
+    // MARK: App Version
+    static let currentAppVersionUserDefaultKey = "appVersion"
+    
+    static let previousAppVersionUserDefaultKey = "previousAppVersion"
+    
+    /// Record App version change for upgrade
+    static func persistAppVersion() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let version = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as? String {
+            
+            if let current = userDefaults.objectForKey(currentAppVersionUserDefaultKey) as? String {
+                
+                /// Version changes.
+                if(current != version) {
+                    /// Move current to previous
+                    userDefaults.setObject(current, forKey: previousAppVersionUserDefaultKey)
+                    
+                    /// Save current App version
+                    userDefaults.setObject(version, forKey: currentAppVersionUserDefaultKey)
+                    
+                    userDefaults.synchronize()
+                }
+                
+            } else {
+                
+                /// Save current App version
+                userDefaults.setObject(version, forKey: currentAppVersionUserDefaultKey)
+                
+                userDefaults.synchronize()
+            }
+            
+        } else {
+            assert(false, "Version number cannot be nil")
+        }
+        
+    }
+    
+    static func getPreviousVersion() -> String? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(previousAppVersionUserDefaultKey) as? String
+    }
+    
     // MARK: Walkthrough Pages
     static let onboardingPagesUserDefaultKey = "displayOnboardingPages"
     
