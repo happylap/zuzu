@@ -60,6 +60,13 @@ class EngineerModeViewController: UIViewController {
     
     @IBOutlet weak var webApiPickerView: UIPickerView!
     
+    @IBOutlet weak var radarDiagnosisButton: UIButton! {
+        didSet {
+            radarDiagnosisButton.layer.borderColor = UIColor.colorWithRGB(0x0080FF).CGColor
+            radarDiagnosisButton.addTarget(self, action: #selector(EngineerModeViewController.onRadarDiagnosisButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -73,6 +80,16 @@ class EngineerModeViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func onRadarDiagnosisButtonTouched(sender:UIButton) {
+        Log.enter()
+        
+        let storyboard = UIStoryboard(name: "RadarStoryboard", bundle: nil)
+        if let vc = storyboard.instantiateViewControllerWithIdentifier("RadarDiagnosisView") as? RadarDiagnosisViewController {
+            vc.modalPresentationStyle = .OverFullScreen
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
     }
     
     func handleTokenRefreshed(notification: NSNotification){
