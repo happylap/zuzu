@@ -450,6 +450,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Log.enter()
         
+        UserDefaultsUtils.persistAppVersion()
+        
+        Log.warning("Previous App Version = \(UserDefaultsUtils.getPreviousVersion())")
+        
         UserDefaultsUtils.upgradeToLatest()
         
         if(UserDefaultsUtils.needsDisplayOnboardingPages()) {
