@@ -548,7 +548,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // For v0.93.1 -> v1.1: resume FB session if FB token is available
             // v0.93.1: no saved provider & userId for Facebook
             // v1.1: we use a whole new set of info saved in UserDefault
-            if(AmazonClientManager.sharedInstance.isLoggedInWithFacebook()) {
+            if(FBSDKAccessToken.currentAccessToken() != nil) {
                 
                 if let view = self.window?.rootViewController?.view{
                     LoadingSpinner.shared.setImmediateAppear(true)
