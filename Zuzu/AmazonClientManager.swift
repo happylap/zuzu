@@ -1228,10 +1228,7 @@ class AmazonClientManager : NSObject {
                 case .Success:
                     
                     LoadingSpinner.shared.stop(afterDelay: 1.0)
-                    
-                    //Set current login provider
-                    UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
-                    
+
                     self.completeZuzuLogin()
                     
                 case .Failed:
