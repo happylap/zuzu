@@ -373,7 +373,7 @@ class HouseDetailViewController: UIViewController {
                             }
                             
                         } else {
-                        /// No floor
+                            /// No floor
                             if let total_floor = houseDetail.valueForKey("total_floor") as? Int {
                                 
                                 floorLabel = "— / \(total_floor)"
@@ -682,13 +682,11 @@ class HouseDetailViewController: UIViewController {
                         cell.contentLabel.text = "無資訊\n"
                     }
                     
-                    if(cell.isAdBannerSupported) {
-                        cell.setAdBanner(self)
+                    if(TagUtils.shouldDisplayADs()) {
+                        if(cell.isAdBannerSupported) {
+                            cell.setAdBanner(self)
+                        }
                     }
-                    
-                    //if(TagUtils.shouldDisplayADs()) {
-                    
-                    //}
                 }
             })
         ]
@@ -702,7 +700,7 @@ class HouseDetailViewController: UIViewController {
         
         alertView.showCloseButton = false
         
-        alertView.addButton("知道了") { 
+        alertView.addButton("知道了") {
             self.navigationController?.popViewControllerAnimated(true)
         }
         alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
