@@ -1232,22 +1232,7 @@ class AmazonClientManager : NSObject {
                     //Set current login provider
                     UserDefaultsUtils.setLoginProvider(Provider.ZUZU)
                     
-                    if let userId = userId {
-                        ZuzuWebService.sharedInstance.getUserById(userId, handler: { (zuzuUser, error) in
-                            
-                            if let zuzuUser = zuzuUser {
-                                UserDefaultsUtils.setUserProfile(zuzuUser)
-                                self.completeZuzuLogin()
-                            } else {
-                                self.failLogin(.ZuzuFailure)
-                            }
-                            
-                        })
-                    } else {
-                        
-                        assert(false, "userId should not be nil after login")
-                        self.failLogin(.ZuzuFailure)
-                    }
+                    self.completeZuzuLogin()
                     
                 case .Failed:
                     
