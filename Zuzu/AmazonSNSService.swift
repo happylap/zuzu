@@ -455,6 +455,8 @@ class AmazonSNSService : NSObject {
                 Log.debug("Created endpointArn: \(createEndpointResponse.endpointArn)")
                 if let endpointArn = createEndpointResponse.endpointArn {
                     UserDefaultsUtils.setSNSEndpointArn(endpointArn)
+                    
+                    self.updateEndpoint(deviceTokenString, endpointArn:endpointArn, userData: customUserData)
                 }
                 
                 return task
