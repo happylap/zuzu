@@ -151,11 +151,25 @@ class PasswordFormView: UIView {
         self.addSubview(view)
     }
     
+    private func clearErrorMessageForField(field: UITextField) {
+        
+        for (field, error) in validator.errors {
+            if(field == field) {
+                field.layer.borderColor = UIColor.clearColor().CGColor
+                field.layer.borderWidth = 0.0
+                error.errorLabel?.hidden = true
+            }
+        }
+        
+    }
+    
     // MARK: - Public APIs
     func alertIncorrectPassword() {
         let errors = [self.passwordTextField : ValidationError(textField: self.passwordTextField, errorLabel: self.formValidationError, error: "您輸入的密碼有誤，請再試一次，謝謝")]
         validator.errors = errors
         self.validationFailed(errors)
+        
+        self.setNormalStateForButton(self.continueButton)
     }
     
     // MARK: - Action Handlers
@@ -167,19 +181,16 @@ class PasswordFormView: UIView {
     
     func onForgotPasswordLabelTouched(sender:UITapGestureRecognizer) {
         
+        self.passwordTextField.text = nil
+        self.clearErrorMessageForField(self.passwordTextField)
+        
         self.delegate?.onForgotPassword?()
         
     }
     
     func textFieldDidChange(sender: UITextField) {
         
-        for (field, error) in validator.errors {
-            if(field == sender) {
-                field.layer.borderColor = UIColor.clearColor().CGColor
-                field.layer.borderWidth = 0.0
-                error.errorLabel?.hidden = true
-            }
-        }
+        self.clearErrorMessageForField(sender)
         
     }
     
