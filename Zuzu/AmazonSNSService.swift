@@ -11,7 +11,11 @@ import AWSSNS
 
 private let Log = Logger.defaultLogger
 
+/// Notification definition
+let ReceiveNotifyItemsOnNotifyTab = "receiveNotifyItemsOnNotifyTab"
+
 class AmazonSNSService : NSObject {
+    
     //Share Instance for interacting with the AmazonSNSService
     class var sharedInstance: AmazonSNSService {
         struct Singleton {
@@ -221,7 +225,7 @@ class AmazonSNSService : NSObject {
                 if(notificationTab) {
                     
                     // Refresh data on notification view
-                    NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self)
+                    NSNotificationCenter.defaultCenter().postNotificationName(ReceiveNotifyItemsOnNotifyTab, object: self)
                     
                 } else {
                     
@@ -243,7 +247,7 @@ class AmazonSNSService : NSObject {
                 if(notificationTab) {
                     
                     // Refresh data on notification view
-                    NSNotificationCenter.defaultCenter().postNotificationName("receiveNotifyItemsOnNotifyTab", object: self)
+                    NSNotificationCenter.defaultCenter().postNotificationName(ReceiveNotifyItemsOnNotifyTab, object: self)
                     
                 } else {
                     
