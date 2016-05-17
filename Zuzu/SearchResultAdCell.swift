@@ -35,12 +35,17 @@ class SearchResultAdCell: UITableViewCell {
         
         Log.enter()
         
-        self.bannerView = ADFactory.sharedInstance.getSearchResultBanner()
-        
-        if let bannerView = self.bannerView {
-            bannerView.rootViewController = controller
-            bannerView.delegate = self
-            self.contentView.addSubview(bannerView)
+        /// Add bannerView only when it's nil
+        if(self.bannerView == nil) {
+            Log.debug("Add banner view")
+            
+            self.bannerView = ADFactory.sharedInstance.getSearchResultBanner()
+            
+            if let bannerView = self.bannerView {
+                bannerView.rootViewController = controller
+                bannerView.delegate = self
+                self.contentView.addSubview(bannerView)
+            }
         }
     }
     

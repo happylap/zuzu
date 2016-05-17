@@ -32,33 +32,30 @@ class ADFactory : NSObject {
     static let fbTestDevice = ["0d5e4441357c49679cace1707412a6b516d3bb36", "9a44f4d536f52e37ba572e672e81ba0b9eb5bdd6", "4c0f7234ac32176ccd83ffb8dbd03a54cce8f9ce"]
     
     override init() {
+        
+        #if DEBUG
+            //Test adUnit
+            searchResultBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+            houseDetailBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        #else
+            //Real adUnit
+            searchResultBanner.adUnitID = "ca-app-pub-7083975197863528/2369456093"
+            houseDetailBanner.adUnitID = "ca-app-pub-7083975197863528/3785388890"
+        #endif
+        
         FBAdSettings.addTestDevices(ADFactory.fbTestDevice)
     }
     
     func getSearchResultBanner() -> GADBannerView {
         
-        #if DEBUG
-            //Test adUnit
-            searchResultBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        #else
-            //Real adUnit
-            searchResultBanner.adUnitID = "ca-app-pub-7083975197863528/2369456093"
-        #endif
-        
         return searchResultBanner
+        
     }
     
     func getHouseDetailBanner() -> GADBannerView {
         
-        #if DEBUG
-            //Test adUnit
-            houseDetailBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        #else
-            //Real adUnit
-            houseDetailBanner.adUnitID = "ca-app-pub-7083975197863528/3785388890"
-        #endif
-        
         return houseDetailBanner
+        
     }
 }
 
