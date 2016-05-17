@@ -109,11 +109,12 @@ class RadarViewController: UIViewController {
         super.viewWillAppear(animated)
         Log.debug("viewWillAppear")
         
+        let title = self.title ?? "Radar Setting"
         //Google Analytics Tracker
         if self.isUpdateMode{
-            self.trackScreenWithTitle("\(self.title)_Update")
+            self.trackScreenWithTitle("\(title) Update")
         }else{
-            self.trackScreenWithTitle("\(self.title)_Create")
+            self.trackScreenWithTitle("\(title) Create")
         }
         
     }
