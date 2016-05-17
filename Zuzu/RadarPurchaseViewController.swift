@@ -318,6 +318,14 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     // Purchase the product
     func onBuyButtonTapped(button: UIButton) {
+        
+        //GA tracker
+        if(button.tag < self.products.count) {
+            let product = self.products[button.tag]
+            self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
+                                            action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
+        }
+        
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             
             /// Do not allow using Radar witout login for now
@@ -344,10 +352,6 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     
                     if(button.tag < self.products.count) {
                         let product = self.products[button.tag]
-                        
-                        //GA tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                            action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
                         
                         /// User logged in
                         if(AmazonClientManager.sharedInstance.isLoggedIn()) {
@@ -387,11 +391,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             if(button.tag < self.products.count) {
                 let product = self.products[button.tag]
                 
-                //GA tracker
-                self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
-                                                action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
-                
                 self.proceedTransaction(product)
+                
             } else {
                 assert(false, "Access products array out of bound \(self.products.count)")
             }
