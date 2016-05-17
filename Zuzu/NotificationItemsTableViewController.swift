@@ -170,19 +170,36 @@ class NotificationItemsTableViewController: UITableViewController {
         emptyLabel.hidden = false
     }
     
+    private func isSelectedTab()-> Bool {
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate,
+            tabViewController = appDelegate.window?.rootViewController as? UITabBarController {
+            
+            return tabViewController.selectedIndex == MainTabConstants.NOTIFICATION_TAB_INDEX
+            
+        } else {
+            return false
+        }
+        
+    }
+    
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         Log.enter()
+        
         self.notificationService = NotificationItemService.sharedInstance
         self.resultController = self.getResultsController()
         self.refreshControl?.addTarget(self, action: #selector(NotificationItemsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         self.initLocalStorage()
         
+        /// Enable data refreshing when notification view is loaded
+        self.needsRefreshData = true
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnNotifyTab(_:)), name: "receiveNotifyItemsOnNotifyTab", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleReceiveNotifyItemsOnNotifyTab(_:)), name: ReceiveNotifyItemsOnNotifyTab, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationItemsTableViewController.handleTabBarTappedNotification(_:)), name: TabBarAgainSelectedNotification, object: nil)
         
@@ -248,7 +265,8 @@ class NotificationItemsTableViewController: UITableViewController {
     
     // MARK: - Acion/Notification Handlers
     
-    // Receive new items
+    // Notification View Load > Receive new items
+    // TODO: Should receive this notification when new items are received, and decide what to do by checking the selected tab
     func handleReceiveNotifyItemsOnNotifyTab(notification:NSNotification) {
         Log.enter()
         
@@ -259,12 +277,21 @@ class NotificationItemsTableViewController: UITableViewController {
         Log.exit()
     }
     
-    // User logged in
+    // Notification View Load > User Logged In
     func handleUserLogin(notification: NSNotification){
         Log.enter()
         
-        Log.debug("set refreshForUserLogin as true")
-        self.needsRefreshData = true
+        if(isSelectedTab()) {
+            
+            Log.debug("perform data refrshing")
+            self.refreshData(false)
+            
+        } else {
+            
+            Log.debug("pending data refreshing until tab is shown")
+            self.needsRefreshData = true
+            
+        }
         
         Log.exit()
     }
