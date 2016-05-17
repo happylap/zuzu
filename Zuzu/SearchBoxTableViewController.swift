@@ -876,7 +876,7 @@ class SearchBoxTableViewController: UITableViewController {
             if let browserViewController = browserViewController {
                 browserViewController.enableToolBar = false
                 browserViewController.sourceLink = fbUrl
-                browserViewController.viewTitle = "豬豬快租"
+                browserViewController.viewTitle = "豬豬快租粉絲團"
                 //self.modalPresentationStyle = .CurrentContext
                 self.navigationController?.pushViewController(browserViewController, animated: true)
                 
