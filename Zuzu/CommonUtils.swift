@@ -113,7 +113,7 @@ class TagUtils: NSObject{
 
     static func shouldDisplayADs() -> Bool {
         
-        var isDisplayADs = false
+        var isDisplayADs = true
         
         // A/B Testing flags
         if let tagContainer = AppDelegate.tagContainer {
