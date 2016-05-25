@@ -211,6 +211,9 @@ class NotificationItemsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         Log.enter()
         
+        //Google Analytics Tracker
+        self.trackScreen()
+        
         /// Refresh data when needed
         if(self.needsRefreshData) {
             self.refreshData(true)

@@ -1458,7 +1458,7 @@
         <!--購買雷達-->
         <scene sceneID="dT3-pj-862">
             <objects>
-                <viewController storyboardIdentifier="RadarDiagnosisView" title="Radar Purchase" hidesBottomBarWhenPushed="YES" id="NfC-lb-naZ" userLabel="購買雷達" customClass="RadarDiagnosisViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RadarDiagnosisView" title="Radar Diagnosis View" hidesBottomBarWhenPushed="YES" id="NfC-lb-naZ" userLabel="購買雷達" customClass="RadarDiagnosisViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0sG-He-ClN"/>
                         <viewControllerLayoutGuide type="bottom" id="dCd-tX-Sd2"/>
