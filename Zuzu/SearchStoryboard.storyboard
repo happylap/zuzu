@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ybg-AC-NMz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ybg-AC-NMz">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -1099,11 +1099,11 @@
                         <viewControllerLayoutGuide type="bottom" id="z6L-pd-X4C"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fc8-tO-VZH">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RTx-PQ-fjy">
-                                <rect key="frame" x="0.0" y="64" width="650" height="692"/>
+                                <rect key="frame" x="0.0" y="64" width="650" height="792"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -1410,11 +1410,11 @@
                                             <outlet property="contentLabel" destination="Vil-gD-7zS" id="ZiE-J0-2YL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentAdCell" rowHeight="80" id="fxB-Xv-OpS" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="582" width="650" height="80"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentAdCell" rowHeight="280" id="fxB-Xv-OpS" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="582" width="650" height="280"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fxB-Xv-OpS" id="Lav-bE-QX3">
-                                            <rect key="frame" x="0.0" y="0.0" width="650" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="279.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHr-y3-o58">
@@ -1434,12 +1434,12 @@
                                                     </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGT-FQ-Tld" userLabel="AdBannerView">
-                                                    <rect key="frame" x="165" y="21.5" width="320" height="50"/>
+                                                    <rect key="frame" x="175" y="21" width="300" height="250"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="320" id="A7D-V6-8yt"/>
+                                                        <constraint firstAttribute="width" constant="300" id="A7D-V6-8yt"/>
                                                         <constraint firstAttribute="height" constant="50" id="OoQ-tj-VLf"/>
-                                                        <constraint firstAttribute="height" constant="50" id="hTg-1b-vTn"/>
+                                                        <constraint firstAttribute="height" constant="250" id="hTg-1b-vTn"/>
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -1467,7 +1467,7 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05l-B1-oJ7" userLabel="Contact Bar View" customClass="HouseDetailContactBarView" customModule="Zuzu" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="670" width="650" height="86"/>
+                                <rect key="frame" x="0.0" y="770" width="650" height="85.5"/>
                                 <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                             </view>
@@ -1486,7 +1486,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="maV-fu-tgx"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="650" height="800"/>
+                    <size key="freeformSize" width="650" height="900"/>
                     <connections>
                         <outlet property="contactBarView" destination="05l-B1-oJ7" id="ceY-82-SRg"/>
                         <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
@@ -1507,11 +1507,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Gwr-WJ-4Sj"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="hDY-U9-dVB">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7jF-KR-mPn" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="64" width="650" height="692"/>
+                                <rect key="frame" x="0.0" y="64" width="650" height="792"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -1602,7 +1602,7 @@
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="16T-0Q-CKY">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="900"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1619,7 +1619,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1725" y="2946"/>
+            <point key="canvasLocation" x="1725" y="3011"/>
         </scene>
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">

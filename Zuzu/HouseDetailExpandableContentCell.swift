@@ -52,7 +52,7 @@ class HouseDetailExpandableContentCell: UITableViewCell {
             
             bannerView.rootViewController = rootViewController
             bannerView.delegate = self
-            bannerView.adSize = kGADAdSizeBanner
+            bannerView.adSize = kGADAdSizeMediumRectangle
 
             adBannerContainer.addSubview(bannerView)
             
