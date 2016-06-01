@@ -302,6 +302,7 @@ class EngineerModeViewController: UIViewController {
         " ",
         " ",
         "--- User ---",
+        "sendNotification",
         "retrieveCognitoToken",
         "getUserById",
         "createDeviceByUserId",
@@ -974,6 +975,25 @@ class EngineerModeViewController: UIViewController {
                         self.showAlert(title, subTitle: "\(subTitle) userId: \(userId)\n status: \(status)\n totalSecond: \(totalSecond)\n remainingSecond: \(remainingSecond)\n startTime: \(startTime)\n expireTime: \(expireTime)\n validPurchaseCount: \(validPurchaseCount)\n invalidPurchaseCount: \(invalidPurchaseCount)")
                     }
                 })
+            })
+        
+        case "sendNotification":
+            
+            let targetARN = "arn:aws:sns:ap-northeast-1:994273935857:endpoint/APNS/zuzurentals/25ba882c-b3d0-3a20-9650-b000ccf2e5ff"
+            
+            self.checkLogin({ (userId) -> Void in
+                ZuzuWebService.sharedInstance.sendNotification(userId, targetARN: targetARN, customMessage: nil, handler: { (result, error) in
+                    let title = "User"
+                    let subTitle = "API: \(self.seletedApiName) \n\n userId: \(userId) \n\n result: \n"
+                    
+                    if let error = error {
+                        self.showAlert(title, subTitle: "\(subTitle) \(error)")
+                    }
+                    else {
+                        self.showAlert(title, subTitle: "\(subTitle): \(result)")
+                    }
+                })
+                
             })
             
             
