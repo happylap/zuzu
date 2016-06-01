@@ -693,6 +693,36 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
+    // MARK: - Send Notification
+    
+    func sendNotification(userId: String, targetARN: String, customMessage: String?, handler: (result: Bool, error: NSError?) -> Void) {
+        Log.debug("Input parameters [userId: \(userId), targetARN: \(targetARN)]")
+        
+        let resource = "/notification/send"
+        
+        var message = ""
+        if let customMessage = customMessage {
+            message = customMessage
+        }
+        
+        let payload:[String: String] = ["userId": userId, "targetARN": targetARN, "message": message]
+        
+        
+        self.responseJSON(.POST, resource: resource, payload: payload) { (result, error) -> Void in
+            if let error = error {
+                handler(result: false, error: error)
+            } else if let _ = result {
+                handler(result: true, error: nil)
+            } else {
+                handler(result: false, error: nil)
+            }
+        }
+        
+        Log.exit()
+        
+    }
+    
+    
     // MARK: - Private Methods
     
     private func responseJSON(method: Alamofire.Method, resource: String, handler: ((result: AnyObject?, error: NSError?) -> Void)?) {
