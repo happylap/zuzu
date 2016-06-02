@@ -31,6 +31,7 @@ public typealias PurchaseHandler = (store: ZuzuStore, transaction: SKPaymentTran
 public struct ZuzuProduct {
     var productIdentifier: String
     var localizedTitle: String
+    var localizedDescription: String
     var price: NSDecimalNumber
     var priceLocale: NSLocale
 }

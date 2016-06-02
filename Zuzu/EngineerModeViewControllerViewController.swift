@@ -174,7 +174,7 @@ class EngineerModeViewController: UIViewController {
             
             if let firstProduct = products.first {
                 
-                let zuzuProduct = ZuzuProduct(productIdentifier: firstProduct.productIdentifier, localizedTitle: firstProduct.localizedTitle, price: firstProduct.price, priceLocale: firstProduct.priceLocale)
+                let zuzuProduct = ZuzuProduct(productIdentifier: firstProduct.productIdentifier, localizedTitle: firstProduct.localizedTitle, localizedDescription: firstProduct.localizedDescription, price: firstProduct.price, priceLocale: firstProduct.priceLocale)
                 
                 ZuzuStore.sharedInstance.makePurchase(zuzuProduct, handler: nil)
                 

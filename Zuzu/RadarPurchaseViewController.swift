@@ -90,6 +90,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     
                     let zuzuProduct:ZuzuProduct = ZuzuProduct(productIdentifier: product.productIdentifier,
                         localizedTitle: product.localizedTitle,
+                        localizedDescription: product.localizedDescription,
                         price: product.price,
                         priceLocale: product.priceLocale)
                     
@@ -423,9 +424,11 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         let product = products[indexPath.row]
         
         self.priceFormatter.locale = product.priceLocale
-        cell.detailTextLabel?.text = priceFormatter.stringFromNumber(product.price)
+        cell.detailTextLabel?.text = "\(priceFormatter.stringFromNumber(product.price) ?? "")  \(product.localizedDescription)"
         
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 72, height: 36))
+        let scaledWidth = 72 * getCurrentScale()
+        let scaledHeight = scaledWidth / 2
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: scaledWidth, height: scaledHeight))
         button.backgroundColor = UIColor.colorWithRGB(0xFFFFFF, alpha: 1)
         button.setTitleColor(UIColor.colorWithRGB(0x1CD4C6, alpha: 1), forState: .Normal)
         button.autoScaleFontSize = true
@@ -433,12 +436,12 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
         button.autoScaleRadious = true
-        button.layer.cornerRadius = CGFloat(18.5)
+        button.layer.cornerRadius = scaledHeight / 2
         
         if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
             cell.textLabel?.text = "\(product.localizedTitle)"
             
-            cell.detailTextLabel?.text = "免費，兌換期限：2016-06-30"
+            cell.detailTextLabel?.text = product.localizedDescription
             
             button.setTitle("兌換", forState: .Normal)
             cell.textLabel?.textColor = UIColor.colorWithRGB(0xFF6666)

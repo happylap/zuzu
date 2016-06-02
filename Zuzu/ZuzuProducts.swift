@@ -24,6 +24,7 @@ public struct ZuzuProducts {
     // Free Trial Product
     public static let TrialProduct = ZuzuProduct(productIdentifier: ProductRadarFreeTrial,
         localizedTitle: "15天租屋雷達服務禮包",
+        localizedDescription: "免費，兌換期限：2016-06-30",
         price: 0.0,
         priceLocale: NSLocale.currentLocale())
     
