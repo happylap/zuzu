@@ -301,7 +301,9 @@ class RadarDisplayViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize
-        self.serviceButton?.hidden = true
+        /// Always display "renew" button
+        self.serviceButton?.hidden = false
+        
         self.serviceStatusLabel?.text = ""
         self.serviceExpireLabel?.text = ""
         self.configureButton()
@@ -586,7 +588,7 @@ class RadarDisplayViewController: UIViewController {
             
             self.serviceStatusLabel?.text = "很抱歉!無法取得租屋雷達服務狀態"
             self.serviceExpireLabel?.text = ""
-            self.serviceButton?.hidden = true
+            //self.serviceButton?.hidden = true
             
             /// Clear Chart
             self.clearChart("無法載入資料")
@@ -601,7 +603,7 @@ class RadarDisplayViewController: UIViewController {
         /// Update UI for service expiry
         self.serviceStatusLabel?.text = "您的租屋雷達服務已到期"
         self.criteriaEnableSwitch?.on = false
-        self.serviceButton?.hidden = false
+        //self.serviceButton?.hidden = false
         self.disableModifyButton()
         
         // Update Chart
@@ -654,11 +656,12 @@ class RadarDisplayViewController: UIViewController {
                       values: [usedDays, remainingDays],
                       info: infoText ?? "")
         
-        if(remainingDays <= Double(RenewalThresholdDays)) {
-            self.serviceButton?.hidden = false
-        }else{
-            self.serviceButton?.hidden = true
-        }
+        
+//        if(remainingDays <= Double(RenewalThresholdDays)) {
+//            self.serviceButton?.hidden = false
+//        }else{
+//            self.serviceButton?.hidden = true
+//        }
         
         self.enableModifyButton()
         toggleServiceStatusIcon(true)
