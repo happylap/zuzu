@@ -124,9 +124,7 @@ class RadarNavigationController: UINavigationController {
                     UserDefaultsUtils.setRadarExpiryDate(expireTime)
                     
                     // Update Expired TabBadge
-                    if let navigation = self.navigationController as? RadarNavigationController {
-                        navigation.updateRadarTabBadge()
-                    }
+                    self.updateRadarTabBadge()
                     
                     /// Display Radar view directly if criteria is available
                     if let criteria = self.zuzuCriteria, _ = criteria.criteriaId {
