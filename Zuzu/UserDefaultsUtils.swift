@@ -103,6 +103,25 @@ struct UserDefaultsUtils {
         }
     }
     
+    static let radarExpiryDateUserDefaultKey = "radarExpiryDate"
+    
+    static func setRadarExpiryDate(expiry: NSDate) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(expiry, forKey: radarExpiryDateUserDefaultKey)
+        userDefaults.synchronize()
+    }
+
+    static func getRadarExpiryDate() -> NSDate? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(radarExpiryDateUserDefaultKey) as? NSDate
+    }
+    
+    static func removeRadarExpiryDate() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(radarExpiryDateUserDefaultKey)
+        userDefaults.synchronize()
+    }
+    
     // Free Trial (Need to be cleared when switching users)
     static func setUsedFreeTrial(productIdentifier: String) {
         let userDefaults = NSUserDefaults.standardUserDefaults()

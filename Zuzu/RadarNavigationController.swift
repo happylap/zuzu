@@ -21,6 +21,28 @@ class RadarNavigationController: UINavigationController {
         if(UserDefaultsUtils.needsDisplayRadarNewBadge()) {
             self.tabBarItem.badgeValue = "New"
         }
+    }
+    
+    internal func updateRadarTabBadge() {
+        
+        if(UserDefaultsUtils.needsDisplayRadarNewBadge()) {
+            return
+        }
+        
+        /// Check against cached expired date
+        if let expiryDate = UserDefaultsUtils.getRadarExpiryDate() {
+            
+            if(expiryDate.timeIntervalSinceNow < 0) {
+                self.tabBarItem.badgeValue = "到期"
+            } else {
+                self.tabBarItem.badgeValue = nil
+            }
+            
+        } else {
+            
+            self.tabBarItem.badgeValue = nil
+            
+        }
         
     }
     
@@ -82,11 +104,11 @@ class RadarNavigationController: UINavigationController {
             
             //UserServiceStatusManager.shared.resetServiceStatusCache() cleart cache for testing
             
-            UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId){
+            UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId) {
                 
                 (result, success) -> Void in
                 
-                if success == false{
+                if success == false {
                     Log.error("Cannot get Zuzu service by user id:\(userId)")
                     self.showRetryRadarView(false, onCompleteHandler: onCompleteHandler)
                     
@@ -96,8 +118,17 @@ class RadarNavigationController: UINavigationController {
                 }
                 
                 
-                if let zuzuService = result, _ = zuzuService.status, _ = zuzuService.expireTime{
+                if let zuzuService = result, _ = zuzuService.status, expireTime = zuzuService.expireTime {
                     
+                    // Update service expiration date
+                    UserDefaultsUtils.setRadarExpiryDate(expireTime)
+                    
+                    // Update Expired TabBadge
+                    if let navigation = self.navigationController as? RadarNavigationController {
+                        navigation.updateRadarTabBadge()
+                    }
+                    
+                    /// Display Radar view directly if criteria is available
                     if let criteria = self.zuzuCriteria, _ = criteria.criteriaId {
                         self.showDisplayRadarView(zuzuService, zuzuCriteria: self.zuzuCriteria!, onCompleteHandler:onCompleteHandler)
                         
@@ -106,6 +137,7 @@ class RadarNavigationController: UINavigationController {
                         return
                     }
                     
+                    /// Retrieve criteria from remote
                     ZuzuWebService.sharedInstance.getCriteriaByUserId(userId) {
                         (result, error) -> Void in
                         
@@ -119,7 +151,7 @@ class RadarNavigationController: UINavigationController {
                         }
                         
                         
-                        if result == nil{
+                        if result == nil {
                             // deliver emptry criteria to display
                             // In display UI, it will tell users that they have not configured any criteria
                             self.zuzuCriteria = result

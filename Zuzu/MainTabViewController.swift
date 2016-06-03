@@ -33,7 +33,10 @@ class MainTabViewController: UITabBarController {
         
         Log.enter()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.dismissAllViewControllers(_:)), name: "switchToTab", object: nil)
+        /// Register Global Notifications
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.handleTabSwitch(_:)), name: "switchToTab", object: nil)
         
         /// Init View Controllers for each Tab
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)
@@ -104,7 +107,39 @@ class MainTabViewController: UITabBarController {
         
     }
     
-    func dismissAllViewControllers(notification: NSNotification) {
+    // MARK: - Notification Handlers
+    func handleUserLogin(notification: NSNotification) {
+        
+        if let radarNavigationController = tabViewControllers[MainTabConstants.RADAR_TAB_INDEX] as? RadarNavigationController {
+            
+            /// Get latest radar expiry time
+            if let _ = UserDefaultsUtils.getRadarExpiryDate() {
+                
+                /// Update expiry badge
+                radarNavigationController.updateRadarTabBadge()
+                
+            } else {
+                
+                if let userId = UserManager.getCurrentUser()?.userId {
+                    UserServiceStatusManager.shared.getRadarServiceStatusByUserId(userId, onCompleteHandler: { (result, success) in
+                        
+                        if let radarExpiry = result?.expireTime {
+                            UserDefaultsUtils.setRadarExpiryDate(radarExpiry)
+                            
+                            /// Update expiry badge
+                            radarNavigationController.updateRadarTabBadge()
+                        }
+                        
+                    })
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    func handleTabSwitch(notification: NSNotification) {
         
         if let userInfo = notification.userInfo,
             let tabIndex = userInfo["targetTab"] as? Int{

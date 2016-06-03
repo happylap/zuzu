@@ -575,7 +575,8 @@ class RadarDisplayViewController: UIViewController {
             
             // Display service expiration date
             var expireDateStr = "—"
-            if let expireDate = service.expireTime{
+            if let expireDate = service.expireTime {
+                
                 if let dateString = CommonUtils.getLocalShortStringFromDate(expireDate) {
                     expireDateStr = dateString
                 }
