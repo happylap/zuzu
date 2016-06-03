@@ -29,7 +29,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     var purchasedProduct: ZuzuProduct?
     
     // This list of available in-app purchases
-    var products = [ZuzuProduct]()
+    var radarProducts = [ZuzuProduct]()
     
     var purchaseDelegate: RadarPurchaseDelegate?
     
@@ -65,7 +65,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         RadarService.sharedInstance.startLoading(self)
         
-        self.products.removeAll()
+        self.radarProducts.removeAll()
         
         ZuzuStore.sharedInstance.requestProducts { success, products in
             
@@ -77,10 +77,10 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 
                 Log.debug("Time to expire frmo now = \(expiryDate.timeIntervalSinceNow)")
                 
-                if(expiryDate.timeIntervalSinceNow >= 0) {
-                    if(!UserDefaultsUtils.hasUsedFreeTrial(productId)) {
-                        self.products.append(trialProduct)
-                    }
+                
+                /// Add free tiral (15-days or 5-days)
+                if(!UserDefaultsUtils.hasUsedFreeTrial(productId)) {
+                    self.radarProducts.append(trialProduct)
                 }
                 
             }
@@ -98,7 +98,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                 })
                 
                 
-                self.products.appendContentsOf(storeProducts)
+                self.radarProducts.appendContentsOf(storeProducts)
             }
             
             /// Display result no matter whether we get the products from AppStore successfully
@@ -112,8 +112,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         
         self.purchasedProduct = product
         
-        if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
-            //Alert redeem
+        //Redeem free pack
+        if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial1 ||
+            product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial2) {
             
             let freeTrialAlertView = SCLAlertView()
             
@@ -143,7 +144,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         
                         let alreadyActivated = purchaseList?.contains({ (purchase) -> Bool in
                             
-                            return (purchase.productId == ZuzuProducts.ProductRadarFreeTrial)
+                            return (purchase.productId == product.productIdentifier)
                             
                         }) ?? false
                         
@@ -153,7 +154,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                             Log.debug("Free trial already activated")
                             
                             /// The free trial is activated successfully
-                            UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                            UserDefaultsUtils.setUsedFreeTrial(product.productIdentifier)
                             
                             RadarService.sharedInstance.stopLoading()
                             
@@ -189,7 +190,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                         
                                         /// The free trial is activated successfully
                                         
-                                        UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                                        UserDefaultsUtils.setUsedFreeTrial(product.productIdentifier)
                                         
                                         self.dismissViewControllerAnimated(true){
                                             
@@ -219,7 +220,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                                 action: GAConst.Action.ZuzuRadarPurchase.SaveTransactionSuccess, label: self.purchasedProduct?.productIdentifier)
                             
                             /// The free trial is activated successfully
-                            UserDefaultsUtils.setUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+                            UserDefaultsUtils.setUsedFreeTrial(product.productIdentifier)
                             
                             self.dismissViewControllerAnimated(true){
                                 
@@ -321,8 +322,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     func onBuyButtonTapped(button: UIButton) {
         
         //GA tracker
-        if(button.tag < self.products.count) {
-            let product = self.products[button.tag]
+        if(button.tag < self.radarProducts.count) {
+            let product = self.radarProducts[button.tag]
             self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarPurchase,
                                             action: GAConst.Action.ZuzuRadarPurchase.TryPurchase, label: product.productIdentifier)
         }
@@ -351,8 +352,8 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                     
                     self.purchaseDelegate?.onLoggedInForPurchase()
                     
-                    if(button.tag < self.products.count) {
-                        let product = self.products[button.tag]
+                    if(button.tag < self.radarProducts.count) {
+                        let product = self.radarProducts[button.tag]
                         
                         /// User logged in
                         if(AmazonClientManager.sharedInstance.isLoggedIn()) {
@@ -382,20 +383,20 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         })
                         
                     } else {
-                        assert(false, "Access products array out of bound \(self.products.count)")
+                        assert(false, "Access products array out of bound \(self.radarProducts.count)")
                     }
                 })
                 
                 return nil
             }
         }else{
-            if(button.tag < self.products.count) {
-                let product = self.products[button.tag]
+            if(button.tag < self.radarProducts.count) {
+                let product = self.radarProducts[button.tag]
                 
                 self.proceedTransaction(product)
                 
             } else {
-                assert(false, "Access products array out of bound \(self.products.count)")
+                assert(false, "Access products array out of bound \(self.radarProducts.count)")
             }
         }
     }
@@ -409,7 +410,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return products.count
+        return radarProducts.count
     }
     
     
@@ -421,7 +422,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("radarPurchaseTableViewCell", forIndexPath: indexPath)
         
-        let product = products[indexPath.row]
+        let product = radarProducts[indexPath.row]
         
         self.priceFormatter.locale = product.priceLocale
         cell.detailTextLabel?.text = "\(priceFormatter.stringFromNumber(product.price) ?? "")  \(product.localizedDescription)"
@@ -438,7 +439,9 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
         button.autoScaleRadious = true
         button.layer.cornerRadius = scaledHeight / 2
         
-        if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial) {
+        if(product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial1 ||
+            product.productIdentifier == ZuzuProducts.ProductRadarFreeTrial2) {
+            
             cell.textLabel?.text = "\(product.localizedTitle)"
             
             cell.detailTextLabel?.text = product.localizedDescription

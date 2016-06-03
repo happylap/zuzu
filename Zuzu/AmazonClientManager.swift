@@ -652,7 +652,8 @@ class AmazonClientManager : NSObject {
         }
         
         // Clear free trial history
-        UserDefaultsUtils.clearUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial)
+        UserDefaultsUtils.clearUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial1)
+        UserDefaultsUtils.clearUsedFreeTrial(ZuzuProducts.ProductRadarFreeTrial2)
         
         // Clear current user profile
         UserDefaultsUtils.clearUserProfile()
