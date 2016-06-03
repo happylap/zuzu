@@ -49,8 +49,10 @@ class RadarNavigationController: UINavigationController {
     // MARK: - Private Utils
     private func disableNewTabBadge() {
         
-        self.tabBarItem.badgeValue = nil
-        UserDefaultsUtils.setRadarNewBadgeDisplayed()
+        if(UserDefaultsUtils.needsDisplayRadarNewBadge()) {
+            self.tabBarItem.badgeValue = nil
+            UserDefaultsUtils.setRadarNewBadgeDisplayed()
+        }
         
     }
     
