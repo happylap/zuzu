@@ -19,7 +19,7 @@ public struct ZuzuProducts {
     
     public static let ProductRadar45 = Prefix + "radar3"
     
-    public static let ProductRadar60 = Prefix + "radar4"
+    public static let ProductRadar60 = Prefix + "radar5"
     
     public static let ProductRadarFreeTrial1 = Prefix + "radarfree1"
     
