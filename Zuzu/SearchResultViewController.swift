@@ -387,8 +387,7 @@ class SearchResultViewController: UIViewController {
             if let searchAction = searchAction {
                 self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
                     action: searchAction,
-                    label: GAConst.Label.SearchResult.Number,
-                    value: dataSource.estimatedTotalResults)
+                    label: "\(dataSource.estimatedTotalResults)")
             }
         }
         
