@@ -111,7 +111,10 @@ class SearchResultTableViewCell: UITableViewCell {
             labelColor = UIColor.colorWithRGB(0x55EFCB)
         case 3:
             labelColor = UIColor.colorWithRGB(0xFFCD02)
+        case 4:
+            labelColor = UIColor.colorWithRGB(0xCCFF66)
         default:
+            labelColor = UIColor.colorWithRGB(0xFFFFFF)
             break
         }
         
@@ -122,9 +125,9 @@ class SearchResultTableViewCell: UITableViewCell {
             
         } else {
             assert(false, " Cannot find source label for: \(source)")
-            
-            label.textColor = UIColor.colorWithRGB(0xFF9500)
-            label.text = "未知來源"
+            houseSourceBox.layer.borderColor = labelColor?.CGColor
+            label.textColor = labelColor
+            label.text = "其他"
         }
     }
     
