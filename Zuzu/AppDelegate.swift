@@ -23,6 +23,13 @@ private let Log = Logger.defaultLogger
 let DeviceTokenChangeNotification = "deviceTokenChange"
 let RadarItemReceiveNotification = "receiveNotifyItems"
 
+/* 
+[NotifyRadarPurchase]
+enum AlertCode : Int {
+    case RadarPurchase
+}
+ */
+
 
 enum AppStateOnNotification : Int {
     case Foreground
@@ -336,6 +343,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
+    /*
+    [NotifyRadarPurchase]
+    internal func handleAlertCode(alert:String, code:Int){
+        switch code{
+        case AlertCode.RadarPurchase.rawValue:
+            SCLAlertView().showInfo("租屋雷達", subTitle: "感謝購買租屋雷達服務，當您收到此訊息表示租屋雷達現在已經可以為您推播即時通知", closeButtonTitle: "確認", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+        default:
+            Log.debug("the alert code is not recognized")
+        }
+    }
+    */
+    
+    
     // MARK: UIApplicationDelegate Methods
     @available(iOS, introduced=8.0, deprecated=9.0)
     func application(app: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
@@ -426,7 +446,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 self.onRadarItemReceivedForAppInState(.Foreground, switchTab: false, newAppBadge: newItemCount)
                 
-            } else {
+            /* 
+            [NotifyRadarPurchase]
+            } else if let aps = userInfo["aps"] as? NSDictionary, alert = aps["alert"] as? String, code = aps["code"] as? Int {
+                
+                Log.debug("aps alert = \(alert), code = \(code)")
+                
+                handleAlertCode(alert,code:code)
+            */
+                
+            }else {
                 
                 Log.warning("APNS message recevied without userInfo")
             }
