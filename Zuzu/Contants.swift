@@ -23,6 +23,8 @@ struct TagConst {
     
     static let zuzuLogin = "zuzuLogin"
     
+    static let freeTrial = "freeTrial"
+    
 }
 
 // MARK: Constants for Criteria

@@ -73,10 +73,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
             let trialProduct = ZuzuProducts.TrialProduct
             let productId = trialProduct.productIdentifier
             
-            if let expiryDate = ZuzuProducts.FreeTrialExpiry {
-                
-                Log.debug("Time to expire frmo now = \(expiryDate.timeIntervalSinceNow)")
-                
+            if(TagUtils.shouldAllowFreeTrial()) {
                 
                 /// Add free tiral (15-days or 5-days)
                 if(!UserDefaultsUtils.hasUsedFreeTrial(productId)) {

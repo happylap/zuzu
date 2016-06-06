@@ -119,7 +119,7 @@ class TagUtils: NSObject{
         if let tagContainer = AppDelegate.tagContainer {
             let showADString = tagContainer.stringForKey(TagConst.showADs)
             
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), showADString = \(showADString)")
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.showADs) = \(showADString)")
             
             if(showADString == "y") {
                 
@@ -148,7 +148,7 @@ class TagUtils: NSObject{
         if let tagContainer = AppDelegate.tagContainer {
             let zuzuLoginString = tagContainer.stringForKey(TagConst.zuzuLogin)
             
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), zuzuLoginString = \(zuzuLoginString)")
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.zuzuLogin) = \(zuzuLoginString)")
             
             if(zuzuLoginString == "y") {
                 
@@ -160,12 +160,41 @@ class TagUtils: NSObject{
                 
             } else {
                 
-                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showADs)")
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.zuzuLogin)")
             }
             
         }
         
         return isEnableZuzuLogin
+        
+    }
+    
+    static func shouldAllowFreeTrial() -> Bool {
+        
+        var isAllowFreeTrial = true
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let freeTrialString = tagContainer.stringForKey(TagConst.freeTrial)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.freeTrial) = \(freeTrialString)")
+            
+            if(freeTrialString == "y") {
+                
+                isAllowFreeTrial = true
+                
+            } else if(freeTrialString == "n"){
+                
+                isAllowFreeTrial = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.freeTrial)")
+            }
+            
+        }
+        
+        return isAllowFreeTrial
         
     }
     
