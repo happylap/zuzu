@@ -140,6 +140,35 @@ class TagUtils: NSObject{
         
     }
     
+    static func shouldDisplayVideoADs() -> Bool {
+        
+        var isDisplayVideoADs = false
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let showVideoADString = tagContainer.stringForKey(TagConst.showVideoADs)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.showVideoADs) = \(showVideoADString)")
+            
+            if(showVideoADString == "y") {
+                
+                isDisplayVideoADs = true
+                
+            } else if(showVideoADString == "n"){
+                
+                isDisplayVideoADs = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.showVideoADs)")
+            }
+            
+        }
+        
+        return isDisplayVideoADs
+        
+    }
+    
     static func shouldAllowZuzuLogin() -> Bool {
         
         var isEnableZuzuLogin = true

@@ -1410,11 +1410,11 @@
                                             <outlet property="contentLabel" destination="Vil-gD-7zS" id="ZiE-J0-2YL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentAdCell" rowHeight="280" id="fxB-Xv-OpS" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="582" width="650" height="280"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentAdCell" rowHeight="330" id="fxB-Xv-OpS" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="582" width="650" height="330"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fxB-Xv-OpS" id="Lav-bE-QX3">
-                                            <rect key="frame" x="0.0" y="0.0" width="650" height="279.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="650" height="329.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHr-y3-o58">
@@ -1434,24 +1434,18 @@
                                                     </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGT-FQ-Tld" userLabel="AdBannerView">
-                                                    <rect key="frame" x="175" y="21" width="300" height="250"/>
+                                                    <rect key="frame" x="175" y="13.5" width="300" height="300"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="300" id="A7D-V6-8yt"/>
-                                                        <constraint firstAttribute="height" constant="50" id="OoQ-tj-VLf"/>
-                                                        <constraint firstAttribute="height" constant="250" id="hTg-1b-vTn"/>
+                                                        <constraint firstAttribute="height" constant="300" id="hTg-1b-vTn"/>
                                                     </constraints>
-                                                    <variation key="default">
-                                                        <mask key="constraints">
-                                                            <exclude reference="OoQ-tj-VLf"/>
-                                                        </mask>
-                                                    </variation>
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="eGT-FQ-Tld" secondAttribute="bottom" constant="8" id="5Qa-st-UHi"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="eGT-FQ-Tld" secondAttribute="bottom" constant="16" id="5Qa-st-UHi"/>
                                                 <constraint firstItem="KHr-y3-o58" firstAttribute="top" secondItem="Lav-bE-QX3" secondAttribute="topMargin" constant="5" id="9rx-eZ-vAW"/>
-                                                <constraint firstItem="eGT-FQ-Tld" firstAttribute="top" secondItem="KHr-y3-o58" secondAttribute="bottom" constant="8" id="KHQ-O3-53r"/>
+                                                <constraint firstItem="eGT-FQ-Tld" firstAttribute="top" secondItem="KHr-y3-o58" secondAttribute="bottom" id="KHQ-O3-53r"/>
                                                 <constraint firstItem="eGT-FQ-Tld" firstAttribute="centerX" secondItem="Lav-bE-QX3" secondAttribute="centerX" id="fcB-D8-Pmn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="KHr-y3-o58" secondAttribute="trailing" constant="8" id="s09-ON-zF7"/>
                                                 <constraint firstItem="KHr-y3-o58" firstAttribute="leading" secondItem="Lav-bE-QX3" secondAttribute="leading" constant="20" symbolic="YES" id="yFb-UK-Rfu"/>

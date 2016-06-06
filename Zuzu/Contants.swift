@@ -21,6 +21,8 @@ struct TagConst {
     
     static let showADs = "showADs"
     
+    static let showVideoADs = "videoAD"
+    
     static let zuzuLogin = "zuzuLogin"
     
     static let freeTrial = "freeTrial"

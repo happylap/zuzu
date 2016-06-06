@@ -683,8 +683,16 @@ class HouseDetailViewController: UIViewController {
                     }
                     
                     if(TagUtils.shouldDisplayADs()) {
-                        if(cell.isAdBannerSupported) {
-                            cell.setAdBanner(self)
+                        if(cell.isAdSupported) {
+                            
+                            if(TagUtils.shouldDisplayVideoADs()) {
+                                /// Display VMFiveAdNetwork ADs
+                                cell.setVideoAdBanner(self)
+                            } else {
+                                /// Display ADMOB, FACEBOOK, MOPUB ADs
+                                cell.setAdBanner(self)
+                            }
+                            
                         }
                     }
                 }
@@ -763,7 +771,7 @@ class HouseDetailViewController: UIViewController {
         
         
         //Remove extra cells with some padding height
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 165))
+        tableView.tableFooterView = UIView(frame: CGRectZero)
         
     }
     
@@ -1439,6 +1447,12 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             Log.debug("willDisplayCell: \(myCell)")
             
             myCell.loadBanner()
+            
+        } else if let myCell = cell as? HouseDetailExpandableContentCell where myCell.isVideoAdBannerEnabled {
+            
+            Log.debug("willDisplayCell: \(myCell)")
+            
+            myCell.loadVideoBanner()
         }
         
     }

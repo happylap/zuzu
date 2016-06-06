@@ -20,8 +20,12 @@ class HouseDetailExpandableContentCell: UITableViewCell {
     
     @IBOutlet weak var adBannerContainer: UIView!
     
+    private weak var rootViewController: UIViewController!
+    
     private var bannerView: GADBannerView?
-
+    
+    private var videoBannerView: VAAdView?
+    
     private func loadAdForController() {
         
         Log.error("Google Mobile Ads SDK version: \(GADRequest.sdkVersion())")
@@ -32,7 +36,7 @@ class HouseDetailExpandableContentCell: UITableViewCell {
         self.bannerView?.loadRequest(request)
     }
     
-    var isAdBannerSupported: Bool {
+    var isAdSupported: Bool {
         get {
             return adBannerContainer != nil
         }
@@ -44,8 +48,16 @@ class HouseDetailExpandableContentCell: UITableViewCell {
         }
     }
     
+    var isVideoAdBannerEnabled: Bool {
+        get {
+            return videoBannerView != nil
+        }
+    }
+    
     internal func setAdBanner(rootViewController: UIViewController) {
-
+        
+        self.rootViewController = rootViewController
+        
         self.bannerView = ADFactory.sharedInstance.getHouseDetailBanner()
         
         if let bannerView = self.bannerView, adBannerContainer = self.adBannerContainer {
@@ -53,8 +65,34 @@ class HouseDetailExpandableContentCell: UITableViewCell {
             bannerView.rootViewController = rootViewController
             bannerView.delegate = self
             bannerView.adSize = kGADAdSizeMediumRectangle
-
+            
             adBannerContainer.addSubview(bannerView)
+            
+        } else {
+            assert(false, "AD Banner is not supported.")
+        }
+    }
+    
+    internal func setVideoAdBanner(rootViewController: UIViewController) {
+        
+        self.rootViewController = rootViewController
+        
+        self.videoBannerView = ADFactory.sharedInstance.getHouseDetailVideoAD()
+        
+        if let videoBannerView = self.videoBannerView, adBannerContainer = self.adBannerContainer {
+            
+            videoBannerView.delegate = self
+            
+            adBannerContainer.addSubview(videoBannerView)
+            
+            videoBannerView.translatesAutoresizingMaskIntoConstraints = false
+            
+            videoBannerView.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 300))
+            videoBannerView.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 300))
+            
+            adBannerContainer.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .CenterX, relatedBy: .Equal, toItem: adBannerContainer, attribute: .CenterX, multiplier: 1.0, constant: 0))
+            adBannerContainer.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .CenterY, relatedBy: .Equal, toItem: adBannerContainer, attribute: .CenterY, multiplier: 1.0, constant: 0))
+            adBannerContainer.layoutIfNeeded()
             
         } else {
             assert(false, "AD Banner is not supported.")
@@ -66,12 +104,26 @@ class HouseDetailExpandableContentCell: UITableViewCell {
         Log.enter()
         
         if let _  = self.bannerView?.rootViewController {
+            
             self.loadAdForController()
+            
+        }
+    }
+    
+    internal func loadVideoBanner() {
+        
+        Log.enter()
+        
+        if let videoBannerView  = self.videoBannerView {
+            
+            videoBannerView.loadAd()
+            
         }
     }
     
     override func prepareForReuse() {
-        bannerView = nil
+        self.bannerView = nil
+        self.videoBannerView = nil
     }
     
     override func layoutSubviews() {
@@ -106,5 +158,41 @@ extension HouseDetailExpandableContentCell: GADBannerViewDelegate {
     internal func adViewWillLeaveApplication(bannerView: GADBannerView!) {
         Log.enter()
     }
+}
+
+// MARK: - VAAdViewDelegate
+extension HouseDetailExpandableContentCell: VAAdViewDelegate {
+    
+    func adViewDidLoad(adView: VAAdView) {
+        Log.enter()
+        Log.error("VAAdView: \(adView.placement)")
+    }
+    
+    func adViewBeImpressed(adView: VAAdView) {
+        Log.enter()
+        Log.error("VAAdView: \(adView.placement)")
+    }
+    
+    func adView(adView: VAAdView, didFailWithError error: NSError) {
+        Log.enter()
+        Log.error("\(error)")
+    }
+    
+    func adViewDidClick(adView: VAAdView) {
+        Log.enter()
+    }
+    
+    func adViewDidFinishHandlingClick(adView: VAAdView) {
+        Log.enter()
+    }
+    
+    func viewControllerForPresentingModalView() -> UIViewController {
+        return self.rootViewController
+    }
+    
+    func shouldAdViewBeReload(adView: VAAdView) -> Bool {
+        return true
+    }
+    
 }
 

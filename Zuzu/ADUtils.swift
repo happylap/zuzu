@@ -25,6 +25,8 @@ class ADFactory : NSObject {
     
     private let houseDetailBanner: GADBannerView = GADBannerView()
     
+    private let houseDetailVideoAD: VAAdView = VAAdView()
+    
     private let searchResultBanner: GADBannerView = GADBannerView()
     
     static let testDevice = ["cca2dd7bf0e491df7d78b7ba80c8d113","a78e7dfcf98d255d2c1d107bb5e96449", "11e6a9c7dd478e63f94ba9ab64bed6ff", "a02fc8fda29b27cfd4a45d741fe728a7", "6889c4bd976a58bd447f1e7eab997323"]
@@ -37,6 +39,12 @@ class ADFactory : NSObject {
             //Test adUnit
             searchResultBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
             houseDetailBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+            
+            houseDetailVideoAD.placement = "VMFiveAdNetwork_CardSample"
+            houseDetailVideoAD.adType = kVAAdTypeVideoCard
+            houseDetailVideoAD.testMode = true
+            houseDetailVideoAD.apiKey = "YOUR API KEY HERE"
+
         #else
             //Real adUnit
             searchResultBanner.adUnitID = "ca-app-pub-7083975197863528/2369456093"
@@ -55,6 +63,12 @@ class ADFactory : NSObject {
     func getHouseDetailBanner() -> GADBannerView {
         
         return houseDetailBanner
+        
+    }
+    
+    func getHouseDetailVideoAD() -> VAAdView {
+        
+        return houseDetailVideoAD
         
     }
 }
