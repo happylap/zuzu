@@ -35,25 +35,24 @@ class ADFactory : NSObject {
     
     override init() {
         
+        
+        houseDetailVideoAD.apiKey = "5755423c4b49a00c2591ea25"
+        houseDetailVideoAD.placement = "zuzurental_housedetail_bottom"
+        houseDetailVideoAD.adType = kVAAdTypeVideoCard
+        
+        
         #if DEBUG
             //Test adUnit
             searchResultBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
             houseDetailBanner.adUnitID = "ca-app-pub-3940256099942544/2934735716"
             
-            houseDetailVideoAD.placement = "VMFiveAdNetwork_CardSample"
-            houseDetailVideoAD.adType = kVAAdTypeVideoCard
             houseDetailVideoAD.testMode = true
-            houseDetailVideoAD.apiKey = "YOUR API KEY HERE"
-
         #else
             //Real adUnit
             searchResultBanner.adUnitID = "ca-app-pub-7083975197863528/2369456093"
             houseDetailBanner.adUnitID = "ca-app-pub-7083975197863528/3785388890"
             
-            houseDetailVideoAD.placement = "VMFiveAdNetwork_CardSample"
-            houseDetailVideoAD.adType = kVAAdTypeVideoCard
             houseDetailVideoAD.testMode = false
-            houseDetailVideoAD.apiKey = "YOUR API KEY HERE"
         #endif
         
         FBAdSettings.addTestDevices(ADFactory.fbTestDevice)

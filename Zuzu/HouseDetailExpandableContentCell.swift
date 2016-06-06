@@ -87,8 +87,9 @@ class HouseDetailExpandableContentCell: UITableViewCell {
             
             videoBannerView.translatesAutoresizingMaskIntoConstraints = false
             
-            videoBannerView.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 300))
-            videoBannerView.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 300))
+            let height = NSLayoutConstraint(item: videoBannerView, attribute: .Height, relatedBy: .Equal, toItem: adBannerContainer, attribute: .Height, multiplier: 1, constant: 0)
+            let width = NSLayoutConstraint(item: videoBannerView, attribute: .Width, relatedBy: .Equal, toItem: adBannerContainer, attribute: .Width, multiplier: 1, constant: 0)
+            adBannerContainer.addConstraints([height, width])
             
             adBannerContainer.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .CenterX, relatedBy: .Equal, toItem: adBannerContainer, attribute: .CenterX, multiplier: 1.0, constant: 0))
             adBannerContainer.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .CenterY, relatedBy: .Equal, toItem: adBannerContainer, attribute: .CenterY, multiplier: 1.0, constant: 0))
