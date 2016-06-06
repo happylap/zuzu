@@ -693,7 +693,6 @@ class ZuzuWebService: NSObject
         Log.exit()
     }
     
-    /* [NotifyRadarPurchase]
     // MARK: - Send Notification
     
     func sendNotification(userId: String, targetARN: String, customMessage: String?, handler: (result: Bool, error: NSError?) -> Void) {
@@ -722,7 +721,6 @@ class ZuzuWebService: NSObject
         Log.exit()
         
     }
-    */
     
     // MARK: - Private Methods
     
