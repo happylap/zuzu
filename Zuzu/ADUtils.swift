@@ -49,6 +49,11 @@ class ADFactory : NSObject {
             //Real adUnit
             searchResultBanner.adUnitID = "ca-app-pub-7083975197863528/2369456093"
             houseDetailBanner.adUnitID = "ca-app-pub-7083975197863528/3785388890"
+            
+            houseDetailVideoAD.placement = "VMFiveAdNetwork_CardSample"
+            houseDetailVideoAD.adType = kVAAdTypeVideoCard
+            houseDetailVideoAD.testMode = false
+            houseDetailVideoAD.apiKey = "YOUR API KEY HERE"
         #endif
         
         FBAdSettings.addTestDevices(ADFactory.fbTestDevice)
