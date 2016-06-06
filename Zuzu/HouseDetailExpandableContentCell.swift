@@ -93,7 +93,6 @@ class HouseDetailExpandableContentCell: UITableViewCell {
             
             adBannerContainer.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .CenterX, relatedBy: .Equal, toItem: adBannerContainer, attribute: .CenterX, multiplier: 1.0, constant: 0))
             adBannerContainer.addConstraint(NSLayoutConstraint(item: videoBannerView, attribute: .CenterY, relatedBy: .Equal, toItem: adBannerContainer, attribute: .CenterY, multiplier: 1.0, constant: 0))
-            adBannerContainer.layoutIfNeeded()
             
         } else {
             assert(false, "AD Banner is not supported.")
