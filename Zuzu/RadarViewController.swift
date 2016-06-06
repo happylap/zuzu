@@ -393,22 +393,24 @@ extension RadarViewController: RadarPurchaseDelegate{
     
     func onPurchaseSuccess() -> Void{
         Log.enter()
+
+        
+        /*
+        [NotifyRadarPurchase]
+        if let userId = UserManager.getCurrentUser()?.userId, endpointArn = UserDefaultsUtils.getSNSEndpointArn(){
+            // calling the sendNotifcaiont is just to make sure the app can receive the push notification from server
+            // we don't want it engaged with the flow about purchase and criteria setup
+            ZuzuWebService.sharedInstance.sendNotification(userId, targetARN: endpointArn, customMessage: nil, handler: {
+                (result, error) in
+                // don't need to handle the error
+            })
+        }
+        */
         
         UserServiceStatusManager.shared.resetServiceStatusCache() // reset service cache
         
         self.setUpCriteria()
-        
-        if let userId = UserManager.getCurrentUser()?.userId, endpointArn = UserDefaultsUtils.getSNSEndpointArn(){
-            // calling the sendNotifcaiont is just to make sure the app can receive the push notification from server
-            // we don't want it to engage the flow about purchase and criteria setup, thus, we delay the sending for 5 seconds
-            self.runOnMainThreadAfter(5.0){
-                ZuzuWebService.sharedInstance.sendNotification(userId, targetARN: endpointArn, customMessage: nil, handler: {
-                    (result, error) in
-                    // don't need to handle the error
-                })
-            }
-        }
-        
+
         Log.exit()
     }
     

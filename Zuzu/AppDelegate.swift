@@ -23,9 +23,12 @@ private let Log = Logger.defaultLogger
 let DeviceTokenChangeNotification = "deviceTokenChange"
 let RadarItemReceiveNotification = "receiveNotifyItems"
 
+/* 
+[NotifyRadarPurchase]
 enum AlertCode : Int {
     case RadarPurchase
 }
+ */
 
 
 enum AppStateOnNotification : Int {
@@ -340,6 +343,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
+    /*
+    [NotifyRadarPurchase]
     internal func handleAlertCode(alert:String, code:Int){
         switch code{
         case AlertCode.RadarPurchase.rawValue:
@@ -348,6 +353,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log.debug("the alert code is not recognized")
         }
     }
+    */
     
     
     // MARK: UIApplicationDelegate Methods
@@ -440,11 +446,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 self.onRadarItemReceivedForAppInState(.Foreground, switchTab: false, newAppBadge: newItemCount)
                 
+            /* 
+            [NotifyRadarPurchase]
             } else if let aps = userInfo["aps"] as? NSDictionary, alert = aps["alert"] as? String, code = aps["code"] as? Int {
                 
                 Log.debug("aps alert = \(alert), code = \(code)")
                 
                 handleAlertCode(alert,code:code)
+            */
                 
             }else {
                 
