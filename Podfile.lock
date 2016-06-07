@@ -31,43 +31,43 @@ PODS:
   - FBSDKShareKit (4.10.1):
     - FBSDKCoreKit
   - FLAnimatedImage (1.0.10)
-  - Google/AdMob (1.3.2):
+  - Google/AdMob (2.0.4):
     - Google/Core
     - GoogleMobileAds (~> 7.3)
-  - Google/Analytics (1.3.2):
+  - Google/Analytics (2.0.4):
     - Google/Core
     - GoogleAnalytics (~> 3.12)
-  - Google/Core (1.3.2):
+  - Google/Core (2.0.4):
     - GoogleInterchangeUtilities (~> 1.0)
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleSymbolUtilities (~> 1.0)
     - GoogleUtilities (~> 1.1)
-  - Google/SignIn (1.3.2):
+  - Google/SignIn (2.0.4):
     - Google/Core
-    - GoogleSignIn (~> 2.0)
+    - GoogleSignIn (~> 3.0)
   - GoogleAnalytics (3.14.0)
-  - GoogleAppUtilities (1.0.0):
+  - GoogleAppUtilities (1.1.1):
     - GoogleSymbolUtilities (~> 1.0)
-  - GoogleAuthUtilities (1.0.1):
+  - GoogleAuthUtilities (2.0.1):
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleSymbolUtilities (~> 1.0)
   - GoogleIDFASupport (3.14.0)
-  - GoogleInterchangeUtilities (1.1.0):
+  - GoogleInterchangeUtilities (1.2.1):
     - GoogleSymbolUtilities (~> 1.0)
   - GoogleMaps (1.10.5)
-  - GoogleMobileAds (7.6.0)
-  - GoogleNetworkingUtilities (1.0.0):
+  - GoogleMobileAds (7.8.0)
+  - GoogleNetworkingUtilities (1.2.1):
     - GoogleSymbolUtilities (~> 1.0)
-  - GoogleSignIn (2.4.0):
+  - GoogleSignIn (3.0.0):
     - GoogleAppUtilities (~> 1.0)
-    - GoogleAuthUtilities (~> 1.0)
+    - GoogleAuthUtilities (~> 2.0)
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleUtilities (~> 1.0)
-  - GoogleSymbolUtilities (1.0.3)
+  - GoogleSymbolUtilities (1.1.1)
   - GoogleTagManager (3.15.0):
     - GoogleAnalytics (= 3.14.0)
-  - GoogleUtilities (1.1.0):
-    - GoogleSymbolUtilities (~> 1.0.0)
+  - GoogleUtilities (1.3.1):
+    - GoogleSymbolUtilities (~> 1.0)
   - KeychainAccess (2.3.5)
   - MarqueeLabel (2.3.5)
   - MBProgressHUD (0.9.1)
@@ -111,9 +111,9 @@ DEPENDENCIES:
   - FBSDKLoginKit (= 4.10.1)
   - FBSDKShareKit (= 4.10.1)
   - FLAnimatedImage (= 1.0.10)
-  - Google/AdMob (= 1.3.2)
-  - Google/Analytics (= 1.3.2)
-  - Google/SignIn (= 1.3.2)
+  - Google/AdMob (= 2.0.4)
+  - Google/Analytics (= 2.0.4)
+  - Google/SignIn (= 2.0.4)
   - GoogleIDFASupport (= 3.14.0)
   - GoogleMaps (= 1.10.5)
   - GoogleTagManager (= 3.15.0)
@@ -153,19 +153,19 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 699ff169080e3072de4b9b0faca90bf23dc36deb
   FBSDKShareKit: 2fd887cce0056bdda91f99b2021d724a4fed8e88
   FLAnimatedImage: e16a1e1cef08e4c509b47e4acbe3923f65c16135
-  Google: 97618e118111b998cce1d8dd1bd98b82301d72db
+  Google: d0932824c5b97c96be489aa6f4e8cd6c294d637d
   GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
-  GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
-  GoogleAuthUtilities: 049ffd3a297cdffd271451b82fd4e75304f15ef3
+  GoogleAppUtilities: f1730f91f67767b453c289577040dd3f425ffdc7
+  GoogleAuthUtilities: d7a19615cd7627688afcf181737f1011ee8b5a23
   GoogleIDFASupport: aaf8c10bd429abb1c15349d5252244f5eda8ead1
-  GoogleInterchangeUtilities: d7f7174176fbcf9710f696f1acebad4dbd98ac03
+  GoogleInterchangeUtilities: def8415a862effc67d549d5b5b0b9c7a2f97d4de
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
-  GoogleMobileAds: c2f4d3ef1be73d58ec25158addfde463636433a6
-  GoogleNetworkingUtilities: 292992ab31b7b4ba32809a0e8b40e324cdfb2c0c
-  GoogleSignIn: 79929b51e6299c69f1197bbd9c7a1367d523ecd8
-  GoogleSymbolUtilities: 82ad9f93d3615244b3f4ce440f5ab2515e8b4f56
+  GoogleMobileAds: c79931d6eef16b1e4c35d331cf23c47e0dd490d2
+  GoogleNetworkingUtilities: 3e83269048cfb498dc7ec83ab36813360965c74f
+  GoogleSignIn: 3d571172b8603be39dcb1705d8217146bb76fe62
+  GoogleSymbolUtilities: 33117db1b5f290c6fbf259585e4885b4c84b98d7
   GoogleTagManager: 39e4af1e9250e7817d328f690768e26afe560da0
-  GoogleUtilities: 8ed9134debe11719097881711464752900668f10
+  GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
   KeychainAccess: e283c1981a6c5655e1984cd411c6faf16fa165ae
   MarqueeLabel: fd29be3b4cf5f37b01676749409679aac23eb6fa
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
