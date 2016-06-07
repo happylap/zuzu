@@ -48,6 +48,7 @@
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
 		2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F33E0451BD918E300A7D6CD /* Extensions.swift */; };
 		2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegion.swift */; };
+		2F3AAB8C1D066B1300596F70 /* EM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F3AAB8A1D066B1300596F70 /* EM.storyboard */; };
 		2F3B4AFD1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */; };
 		2F3B4AFF1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */; };
 		2F3B4B011CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B4B001CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift */; };
@@ -95,7 +96,7 @@
 		2F9797C91BF341AE00D41F6D /* HouseDetailAddressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */; };
 		2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */; };
 		2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */; };
-		2F99890D1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99890C1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift */; };
+		2F99890D1C8F1286005ED6E0 /* EngineerModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99890C1C8F1286005ED6E0 /* EngineerModeViewController.swift */; };
 		2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B25E51C08C251004CECAA /* FeatureOptions.swift */; };
 		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
@@ -126,7 +127,6 @@
 		2FD4A0231BE1EEB500F1858D /* UINavigationBarTaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */; };
 		2FD8EA9A1C3F957400C920D3 /* UserDefaultsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */; };
 		2FD8EA9C1C3FA9CC00C920D3 /* LocalConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD8EA9B1C3FA9CC00C920D3 /* LocalConst.swift */; };
-		2FD8EA9E1C3FB63500C920D3 /* ic_loginLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2FD8EA9D1C3FB63500C920D3 /* ic_loginLoading.gif */; };
 		2FDA072E1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */; };
 		2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */; };
 		2FDCA0D31BE0675B00498FC0 /* SmartFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */; };
@@ -239,6 +239,7 @@
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F33E0451BD918E300A7D6CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2F3901E11BD4C69A00B806B8 /* CityRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegion.swift; sourceTree = "<group>"; };
+		2F3AAB8B1D066B1300596F70 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EM.storyboard; sourceTree = "<group>"; };
 		2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResetPasswordValidationFormView.xib; sourceTree = "<group>"; };
 		2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		2F3B4B001CC4DBE7003A4BCA /* ResetPasswordValidationFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordValidationFormView.swift; sourceTree = "<group>"; };
@@ -291,7 +292,7 @@
 		2F9797C81BF341AE00D41F6D /* HouseDetailAddressCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailAddressCell.swift; sourceTree = "<group>"; };
 		2F9797CA1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableHeaderCell.swift; sourceTree = "<group>"; };
 		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
-		2F99890C1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineerModeViewControllerViewController.swift; sourceTree = "<group>"; };
+		2F99890C1C8F1286005ED6E0 /* EngineerModeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineerModeViewController.swift; sourceTree = "<group>"; };
 		2F9B25E51C08C251004CECAA /* FeatureOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureOptions.swift; sourceTree = "<group>"; };
 		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -325,7 +326,6 @@
 		2FD4A0221BE1EEB500F1858D /* UINavigationBarTaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBarTaller.swift; sourceTree = "<group>"; };
 		2FD8EA991C3F957400C920D3 /* UserDefaultsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsUtils.swift; sourceTree = "<group>"; };
 		2FD8EA9B1C3FA9CC00C920D3 /* LocalConst.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConst.swift; sourceTree = "<group>"; };
-		2FD8EA9D1C3FB63500C920D3 /* ic_loginLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ic_loginLoading.gif; sourceTree = "<group>"; };
 		2FDA072C1BEA1AE200CDA8BE /* FilterOptionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterOptionTableViewController.swift; sourceTree = "<group>"; };
 		2FDB90ED1BF0396000217D3A /* SearchResultTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		2FDCA0D21BE0675B00498FC0 /* SmartFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartFilterView.swift; sourceTree = "<group>"; };
@@ -694,7 +694,8 @@
 				2F66375B1CB77B1500A51095 /* View */,
 				2FAAAFA41CB6268300B954EF /* Login.storyboard */,
 				2F482DFB1BAFE09100C68670 /* Main.storyboard */,
-				2F99890C1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift */,
+				2F3AAB8A1D066B1300596F70 /* EM.storyboard */,
+				2F99890C1C8F1286005ED6E0 /* EngineerModeViewController.swift */,
 				2F31F5081BBF7B6400054355 /* MainTabViewController.swift */,
 				817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */,
 				2F8320AE1CCF20BF00C19476 /* MyCommonLoginViewController.swift */,
@@ -723,7 +724,6 @@
 		2FBC05561BDE769B0035652D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				2FD8EA9D1C3FB63500C920D3 /* ic_loginLoading.gif */,
 				2F31F5281BC3C34600054355 /* Localizable.strings */,
 				2F4F80921BCC9BE5003D23F4 /* areasInTaiwan.json */,
 				2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */,
@@ -926,6 +926,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F3AAB8C1D066B1300596F70 /* EM.storyboard in Resources */,
 				2F6637651CB7A26300A51095 /* ContinueSocialLoginView.xib in Resources */,
 				2F3B4AFD1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib in Resources */,
 				2FDB90EE1BF0396000217D3A /* SearchResultTableViewCell.xib in Resources */,
@@ -947,7 +948,6 @@
 				2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */,
 				2F4F80931BCC9BE5003D23F4 /* areasInTaiwan.json in Resources */,
 				2FBDAB0D1C0C4BDE00B45E5B /* GoogleService-Info.plist in Resources */,
-				2FD8EA9E1C3FB63500C920D3 /* ic_loginLoading.gif in Resources */,
 				2F9410581BF458A000BA12B5 /* HouseDetailContactBarView.xib in Resources */,
 				2F482E021BAFE09100C68670 /* LaunchScreen.storyboard in Resources */,
 				2F7181F31C607D3A00C56B5F /* GTM-PLP77J in Resources */,
@@ -1162,7 +1162,7 @@
 				2F2FC63C1CE3037500AE534D /* RadarDiagnosisViewController.swift in Sources */,
 				2F9797CB1BF3426A00D41F6D /* HouseDetailExpandableHeaderCell.swift in Sources */,
 				2F482E281BB02FFE00C68670 /* SearchBoxTableViewController.swift in Sources */,
-				2F99890D1C8F1286005ED6E0 /* EngineerModeViewControllerViewController.swift in Sources */,
+				2F99890D1C8F1286005ED6E0 /* EngineerModeViewController.swift in Sources */,
 				2FB09E021BC657040047110E /* HouseItemTableDataSource.swift in Sources */,
 				2F482DF61BAFE09100C68670 /* AppDelegate.swift in Sources */,
 				2F6637671CB7A27000A51095 /* ContinueSocialLoginView.swift in Sources */,
@@ -1215,6 +1215,14 @@
 			);
 			name = Localizable.strings;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		2F3AAB8A1D066B1300596F70 /* EM.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F3AAB8B1D066B1300596F70 /* Base */,
+			);
+			name = EM.storyboard;
 			sourceTree = "<group>";
 		};
 		2F482DFB1BAFE09100C68670 /* Main.storyboard */ = {
@@ -1343,6 +1351,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				EXCLUDED_SOURCE_FILE_NAMES = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1373,6 +1382,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					EngineerModeViewController.swift,
+					EM.storyboard,
+				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
