@@ -165,21 +165,32 @@ extension HouseDetailExpandableContentCell: VAAdViewDelegate {
     
     func adViewDidLoad(adView: VAAdView) {
         Log.enter()
-        Log.error("VAAdView: \(adView.placement)")
+        Log.error("\(adView.placement)")
     }
     
     func adViewBeImpressed(adView: VAAdView) {
         Log.enter()
-        Log.error("VAAdView: \(adView.placement)")
+        
+        ///GA Tracker
+        GAUtils.trackEvent(GAConst.Catrgory.DisplayAD, action: GAConst.Action.DisplayAD.Impression, label: GAConst.Label.DisplayAD.Vmfive)
+        
+        Log.error("\(adView.placement)")
     }
     
     func adView(adView: VAAdView, didFailWithError error: NSError) {
         Log.enter()
+        
+        ///GA Tracker
+        GAUtils.trackEvent(GAConst.Catrgory.DisplayAD, action: GAConst.Action.DisplayAD.Error, label: "\(GAConst.Label.DisplayAD.Vmfive) = \(error)")
+        
         Log.error("\(error)")
     }
     
     func adViewDidClick(adView: VAAdView) {
         Log.enter()
+        
+        ///GA Tracker
+        GAUtils.trackEvent(GAConst.Catrgory.DisplayAD, action: GAConst.Action.DisplayAD.Click, label: GAConst.Label.DisplayAD.Vmfive)
     }
     
     func adViewDidFinishHandlingClick(adView: VAAdView) {

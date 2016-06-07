@@ -43,6 +43,8 @@ struct GAConst {
         ///Sorting event
         static let Sorting = "sorting"
         
+        static let DisplayAD = "displayAD"
+        
         ///Blocking event
         static let Blocking = "blocking"
     }
@@ -209,6 +211,15 @@ struct GAConst {
             
             static let DuplicateItemView = "duplicateItemView"
         }
+        
+        struct DisplayAD {
+            
+            static let Impression = "impression"
+            
+            static let Click = "click"
+            
+            static let Error = "error"
+        }
 
         
         struct Blocking {
@@ -247,6 +258,10 @@ struct GAConst {
         struct LoginType {
             static let Facebook = "facebook"
             static let Google = "google"
+        }
+        
+        struct DisplayAD {
+            static let Vmfive = "vm5"
         }
     }
     
