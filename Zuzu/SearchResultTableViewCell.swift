@@ -50,7 +50,10 @@ class SearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var houseSize: UILabel!
     @IBOutlet weak var houseAddr: UILabel!
     @IBOutlet weak var housePrice: UILabel!
+    
     @IBOutlet weak var addToCollectionButton: UIImageView!
+    @IBOutlet weak var openItemNoteButton: UIImageView!
+    
     @IBOutlet weak var prefixedButton: UIImageView!
     @IBOutlet weak var contactedView: UIView!
     
@@ -181,7 +184,7 @@ class SearchResultTableViewCell: UITableViewCell {
         
         // load new information (if any)
         if let collectionHouseItem = self.houseItemForCollection {
-            self.addToCollectionButton.hidden = !FeatureOption.Collection.enableNote
+            self.openItemNoteButton.hidden = !FeatureOption.Collection.enableNote
             
             self.houseTitleForCollection.hidden = false
             self.prefixedButton.hidden = false
@@ -196,7 +199,7 @@ class SearchResultTableViewCell: UITableViewCell {
             self.prefixedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchResultTableViewCell.onContactTouched(_:))))
             
             
-            self.addToCollectionButton.image = UIImage(named: "note_n")
+            self.openItemNoteButton.image = UIImage(named: "note_n")
             
             self.houseTitleForCollection.text = collectionHouseItem.title
             //self.houseTitle.text = "    \(house.title)"

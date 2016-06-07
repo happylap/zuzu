@@ -511,9 +511,9 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             }
         }
         
-        /// Enable add to collection button
-        cell.addToCollectionButton.userInteractionEnabled = true
-        cell.addToCollectionButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MyCollectionViewController.onShowNoteEditorTouched(_:))))
+        /// Enable open note button
+        cell.openItemNoteButton.userInteractionEnabled = true
+        cell.openItemNoteButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MyCollectionViewController.onShowNoteEditorTouched(_:))))
         
         return cell
     }
