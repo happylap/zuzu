@@ -77,7 +77,7 @@ class HouseDetailExpandableContentCell: UITableViewCell {
         
         self.rootViewController = rootViewController
         
-        self.videoBannerView = ADFactory.sharedInstance.getHouseDetailVideoAD()
+        self.videoBannerView = ADFactory.sharedInstance.createHouseDetailVideoAD()
         
         if let videoBannerView = self.videoBannerView, adBannerContainer = self.adBannerContainer {
             
@@ -184,6 +184,10 @@ extension HouseDetailExpandableContentCell: VAAdViewDelegate {
         GAUtils.trackEvent(GAConst.Catrgory.DisplayAD, action: GAConst.Action.DisplayAD.Error, label: "\(GAConst.Label.DisplayAD.Vmfive) = \(error)")
         
         Log.error("\(error)")
+        
+        /// Load other ADs when video AD fails
+        self.setAdBanner(self.rootViewController)
+        self.loadBanner()
     }
     
     func adViewDidClick(adView: VAAdView) {
