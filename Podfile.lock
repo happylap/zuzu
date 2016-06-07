@@ -91,7 +91,7 @@ PODS:
   - SwiftyJSON (2.3.0)
   - SwiftyStateMachine (0.3.0)
   - UICKeyChainStore (2.0.7)
-  - VMFiveAdNetwork (2.1.2)
+  - VMFiveAdNetwork (2.1.3)
   - XCGLogger (3.2)
 
 DEPENDENCIES:
@@ -131,7 +131,7 @@ DEPENDENCIES:
   - SwiftyJSON (= 2.3.0)
   - SwiftyStateMachine (= 0.3.0)
   - UICKeyChainStore (= 2.0.7)
-  - VMFiveAdNetwork (~> 2.1.2)
+  - VMFiveAdNetwork (= 2.1.3)
   - XCGLogger (= 3.2)
 
 SPEC CHECKSUMS:
@@ -180,7 +180,7 @@ SPEC CHECKSUMS:
   SwiftyJSON: 8d6b61a70277ef2a5d710d372e06e7e2d87fb9e4
   SwiftyStateMachine: 064b3983708aea40169ea60adabbe4ae08885198
   UICKeyChainStore: 696cd35083f7c8fb5e201d909b7e6aea6b478575
-  VMFiveAdNetwork: 53191746899c9bfb8c89d3546952928305d4f030
+  VMFiveAdNetwork: b424f48e19136282f269ff0c080fb06cfe60cc94
   XCGLogger: da1f341f4bb8979db6e1df64232f04d9698402d4
 
 COCOAPODS: 0.39.0
