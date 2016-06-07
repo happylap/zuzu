@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xEL-Hn-43X">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xEL-Hn-43X">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -97,13 +97,13 @@
                     </view>
                     <navigationItem key="navigationItem" title="我的收藏" id="7PK-Td-XoL">
                         <barButtonItem key="backBarButtonItem" title="我的收藏" id="ubr-4i-7IU"/>
-                        <barButtonItem key="rightBarButtonItem" id="ENn-dk-taI">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6bE-YE-Su1">
-                                <rect key="frame" x="964" y="7" width="40" height="30"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ih2-pF-Sil">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tuT-Hf-asx" userLabel="Sync Button">
+                                <rect key="frame" x="974" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="登出"/>
+                                <state key="normal" title=" " image="refresh"/>
                                 <connections>
-                                    <action selector="onLogoutButtonTouched:" destination="JEf-c3-Mui" eventType="touchUpInside" id="sl0-vi-pYH"/>
+                                    <action selector="onSyncButtonTouched:" destination="JEf-c3-Mui" eventType="touchUpInside" id="qi5-eO-zpv"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -111,10 +111,10 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="1024" height="800"/>
                     <connections>
-                        <outlet property="logoutButton" destination="6bE-YE-Su1" id="pf1-0F-5Yr"/>
                         <outlet property="sortByCollectTimeButton" destination="pK7-Cq-xWf" id="kh2-oz-KVT"/>
                         <outlet property="sortByPriceButton" destination="SKl-Yc-iBw" id="5Uf-8q-Xdg"/>
                         <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
+                        <outlet property="syncButton" destination="tuT-Hf-asx" id="mg2-6A-oyu"/>
                         <outlet property="tableView" destination="Bbm-3e-fwq" id="qjJ-rk-Dpf"/>
                         <segue destination="n73-o7-CN9" kind="presentation" identifier="showNotes" modalTransitionStyle="crossDissolve" id="KRq-Pu-eHg"/>
                     </connections>
@@ -355,5 +355,6 @@
         <image name="cancel" width="30" height="30"/>
         <image name="launchingImage" width="1500" height="2668"/>
         <image name="main_collection_n" width="38" height="38"/>
+        <image name="refresh" width="60" height="60"/>
     </resources>
 </document>

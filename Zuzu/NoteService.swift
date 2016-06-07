@@ -92,6 +92,7 @@ class NoteService: NSObject
             let id = obj.valueForKey("id") as! String
             
             if let note: Note = self.getNote(id) {
+                Log.debug("note: \(note)")
                 
                 let JSONString = Mapper().toJSONString(note)
                 Log.debug("JSONString: \(JSONString)")
@@ -299,6 +300,7 @@ class NoteService: NSObject
     }
     
     func addNote(houseId: String, title: String) {
+        Log.debug("addNote houseId=\(houseId), title=\(title)")
         if self.canAdd(houseId) {
             var jsonObj: [String : AnyObject] = [:]
             jsonObj["id"] = NSUUID().UUIDString

@@ -58,6 +58,18 @@ class EngineerModeViewController: UIViewController {
         }
     }
     
+    @IBAction func onLogoutButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onLogoutButtonTouched")
+        
+        AmazonClientManager.sharedInstance.logOut() {
+            (task: AWSTask!) -> AnyObject! in
+            dispatch_async(dispatch_get_main_queue()) {
+                SCLAlertView().showInfo("提醒您", subTitle: "您已登出", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            }
+            return nil
+        }
+    }
+    
     @IBOutlet weak var webApiPickerView: UIPickerView!
     
     @IBOutlet weak var radarDiagnosisButton: UIButton! {

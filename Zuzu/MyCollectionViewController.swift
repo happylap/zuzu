@@ -52,7 +52,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var logoutButton: UIButton!
+    @IBOutlet weak var syncButton: UIButton!
     
     private let noCollectionLabel = UILabel() //UILabel for displaying no collection message
     private let noCollectionImage = UIImageView(image: UIImage(named: "empty_no_collection"))
@@ -343,16 +343,21 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         sortByField(sortingField, sortingOrder: sortingOrder)
     }
     
-    @IBAction func onLogoutButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onLogoutButtonTouched")
-
-        AmazonClientManager.sharedInstance.logOut() {
-            (task: AWSTask!) -> AnyObject! in
-            dispatch_async(dispatch_get_main_queue()) {
-                SCLAlertView().showInfo("提醒您", subTitle: "您已登出", closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
-            }
-            return nil
+    @IBAction func onSyncButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onSyncButtonTouched")
+        
+        if let view = self.view.window?.rootViewController?.view {
+            LoadingSpinner.shared.setDimBackground(true)
+            LoadingSpinner.shared.setImmediateAppear(true)
+            LoadingSpinner.shared.setOpacity(0.8)
+            LoadingSpinner.shared.setText("資料同步中")
+            LoadingSpinner.shared.startOnView(view)
+            
+            LoadingSpinner.shared.stop(afterDelay: 2.0)
         }
+        
+        CollectionItemService.sharedInstance.syncTimeUp()
+        NoteService.sharedInstance.syncTimeUp()
     }
     
     /*
@@ -395,7 +400,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         self.updateNavigationTitle()
         
-        self.logoutButton.hidden = !FeatureOption.Collection.enableLogout
+        //self.logoutButton.hidden = !FeatureOption.Collection.enableLogout
         
         //Google Analytics Tracker
         self.trackScreen()

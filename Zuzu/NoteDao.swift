@@ -41,12 +41,13 @@ class NoteDao: NSObject {
     
     func add(jsonObj: AnyObject, isCommit: Bool) -> Note?{
         
+        Log.debug("\(self) add \(jsonObj)")
+        
         if let id = jsonObj.valueForKey("id") as? String {
             if self.isExist(id) {
+                Log.debug("Existed note id: \(id)")
                 return nil
             }
-            
-            Log.debug("\(self) add note")
             
             let context=CoreDataManager.shared.managedObjectContext
             
