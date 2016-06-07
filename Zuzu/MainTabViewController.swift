@@ -68,7 +68,7 @@ class MainTabViewController: UITabBarController {
         }
         
         #if DEBUG
-            let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let mainStoryboard:UIStoryboard = UIStoryboard(name: "EM", bundle: nil)
             if let loginDebugViewController:UIViewController = mainStoryboard.instantiateViewControllerWithIdentifier("emNaviagationController") {
                 tabViewControllers.append(loginDebugViewController)
             }
