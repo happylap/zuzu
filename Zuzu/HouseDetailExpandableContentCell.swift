@@ -184,6 +184,10 @@ extension HouseDetailExpandableContentCell: VAAdViewDelegate {
         GAUtils.trackEvent(GAConst.Catrgory.DisplayAD, action: GAConst.Action.DisplayAD.Error, label: "\(GAConst.Label.DisplayAD.Vmfive) = \(error)")
         
         Log.error("\(error)")
+        
+        /// Load other ADs when video AD fails
+        self.setAdBanner(self.rootViewController)
+        self.loadBanner()
     }
     
     func adViewDidClick(adView: VAAdView) {
