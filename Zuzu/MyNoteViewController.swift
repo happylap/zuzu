@@ -45,20 +45,11 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
         return fetchedResultsController
     }()
     
-    private func addNote(title: String) {
-        if let house = self.collectionHouseItem {
-            let context = CoreDataManager.shared.managedObjectContext
-            
-            if let model = NSEntityDescription.entityForName(EntityTypes.Note.rawValue, inManagedObjectContext: context) {
-                let note = Note(entity: model, insertIntoManagedObjectContext: context)
-                note.title = title
-                note.desc = title
-                note.createDate = NSDate()
-                note.houseId = house.id
-                CoreDataManager.shared.save()
-            }
-        }
-    }
+//    private func addNote(title: String) {
+//        if let house = self.collectionHouseItem {
+//            NoteService.sharedInstance.addNote(house.id, title: title)
+//        }
+//    }
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noteItemForCreate: UITextField!
@@ -67,7 +58,10 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     @IBAction func addNoteItem(sender: UIButton) {
         Log.debug("\(self) addNoteItem")
         if self.noteItemForCreate.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            self.addNote(self.noteItemForCreate.text!)
+            //self.addNote(self.noteItemForCreate.text!)
+            if let house = self.collectionHouseItem {
+                NoteService.sharedInstance.addNote(house.id, title: self.noteItemForCreate.text!)
+            }
             self.noteItemForCreate.text = ""
             self.view.endEditing(true)
         }
@@ -134,12 +128,10 @@ extension MyNoteViewController {
     // MARK: - Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return TableConst.sectionNum
-        //return fetchedResultsController.sections!.count
     }
 
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.noteList.count
         let sectionInfo = fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
         return sectionInfo.numberOfObjects
     }
@@ -150,8 +142,6 @@ extension MyNoteViewController {
         Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
         
         if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
-            //cell.textLabel?.text = note.title
-            
             cell.noteItem = note
         }
         
@@ -187,8 +177,7 @@ extension MyNoteViewController {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
-                CoreDataManager.shared.delete(note.objectID)
-                CoreDataManager.shared.save()
+                NoteService.sharedInstance.deleteNote(note.id)
             }
         }
     }
@@ -212,7 +201,6 @@ extension MyNoteViewController {
         case .Update:
             if let cell = self.tableView.cellForRowAtIndexPath(indexPath!) as? MyNoteViewCell {
                 if let note: Note = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Note {
-                    //cell.textLabel?.text = note.title
                     cell.noteItem = note
                 }
             } else {

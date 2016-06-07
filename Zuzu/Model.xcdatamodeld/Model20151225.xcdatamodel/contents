@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="14F1509" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15B42" minimumToolsVersion="Xcode 7.0">
     <entity name="AbstractHouseItem" representedClassName="AbstractHouseItem" isAbstract="YES" syncable="YES">
         <attribute name="addr" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="agent" optional="YES" attributeType="String" syncable="YES"/>
@@ -108,6 +108,7 @@
         <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="houseId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="NotificationHouseItem" representedClassName="NotificationHouseItem" parentEntity="AbstractHouseItem" syncable="YES">
@@ -118,7 +119,7 @@
         <element name="AbstractHouseItem" positionX="-36" positionY="-2430" width="128" height="750"/>
         <element name="CollectionHouseItem" positionX="196" positionY="-2043" width="128" height="73"/>
         <element name="House" positionX="-180" positionY="-2602" width="128" height="780"/>
-        <element name="Note" positionX="-18" positionY="-2574" width="128" height="105"/>
+        <element name="Note" positionX="-18" positionY="-2574" width="128" height="120"/>
         <element name="NotificationHouseItem" positionX="196" positionY="-2187" width="128" height="73"/>
     </elements>
 </model>

@@ -502,6 +502,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         CollectionItemService.sharedInstance.start()
         
+        NoteService.sharedInstance.start()
+        
         RadarService.sharedInstance.start()
         
         //reachability = Reachability.reachabilityForInternetConnection();

@@ -14,7 +14,7 @@ struct FeatureOption {
         static let enableMain = true
         
         /// The sub module depending on the main function
-        static let enableNote = false
+        static let enableNote = true
         
         #if DEBUG
             static let enableLogout = true

@@ -159,6 +159,8 @@
 		816D8ACF1C0EDE2800EC110D /* MyNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */; };
 		817DBA901C7219DE00795941 /* CommonLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */; };
 		81924E341C33AB4C00976EC7 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81924E331C33AB4C00976EC7 /* UserProfile.swift */; };
+		81A2A7B81CFFDC2600521314 /* NoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A7B71CFFDC2600521314 /* NoteService.swift */; };
+		81A2A7BA1CFFE4F300521314 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A2A7B91CFFE4F300521314 /* Note+CoreDataProperties.swift */; };
 		81B2FF1E1BE11EA90095F3B7 /* EntityTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */; };
 		81B467941C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */; };
 		81CAAFE31CB6419F00F42A36 /* ZuzuUserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAAFE21CB6419F00F42A36 /* ZuzuUserMapper.swift */; };
@@ -357,6 +359,8 @@
 		816D8ACE1C0EDE2800EC110D /* MyNoteViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNoteViewCell.swift; sourceTree = "<group>"; };
 		817DBA8F1C7219DE00795941 /* CommonLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonLoginViewController.swift; sourceTree = "<group>"; };
 		81924E331C33AB4C00976EC7 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		81A2A7B71CFFDC2600521314 /* NoteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteService.swift; sourceTree = "<group>"; };
+		81A2A7B91CFFE4F300521314 /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Note+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTypes.swift; sourceTree = "<group>"; };
 		81B467931C7DD3C5007B5EAA /* ZuzuPurchaseMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuPurchaseMapper.swift; sourceTree = "<group>"; };
 		81CAAFE21CB6419F00F42A36 /* ZuzuUserMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuUserMapper.swift; sourceTree = "<group>"; };
@@ -624,6 +628,7 @@
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
 				2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */,
+				81A2A7B71CFFDC2600521314 /* NoteService.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -671,6 +676,7 @@
 				14914F9B1C27D09800025AC1 /* CollectionHouseItem+CoreDataProperties.swift */,
 				14914F9C1C27D09800025AC1 /* CollectionHouseItem.swift */,
 				81FA28071BDA397B0038DD19 /* House.swift */,
+				81A2A7B91CFFE4F300521314 /* Note+CoreDataProperties.swift */,
 				81FA28111BDA39B10038DD19 /* Note.swift */,
 				81B2FF1D1BE11EA90095F3B7 /* EntityTypes.swift */,
 				81924E331C33AB4C00976EC7 /* UserProfile.swift */,
@@ -1111,6 +1117,7 @@
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
 				2FAAAFA71CB663ED00B954EF /* FormViewController.swift in Sources */,
+				81A2A7BA1CFFE4F300521314 /* Note+CoreDataProperties.swift in Sources */,
 				816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,
 				2F6F609B1C5740DC004BCA45 /* FilterStatusBarView.swift in Sources */,
@@ -1124,6 +1131,7 @@
 				2FE912741BFF796C00019053 /* LoadingSpinner.swift in Sources */,
 				81390C8B1C37B0E800450761 /* CollectionItemService.swift in Sources */,
 				2FB16C541C48BDEC009738AC /* ZuzuStore.swift in Sources */,
+				81A2A7B81CFFDC2600521314 /* NoteService.swift in Sources */,
 				14914FA81C27D7E800025AC1 /* NotificationHouseItemDao.swift in Sources */,
 				81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */,
 				2F4F80981BCCE25A003D23F4 /* RegionTableViewController.swift in Sources */,

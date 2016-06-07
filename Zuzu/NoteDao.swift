@@ -24,7 +24,47 @@ class NoteDao: NSObject {
         return Singleton.instance
     }
     
+    
+    var entityName: String{
+        return EntityTypes.Note.rawValue
+    }
+    
     // MARK: Create
+    
+    func addAll(notes: [AnyObject]){
+        for note in notes {
+            self.add(note, isCommit: false)
+        }
+        
+        self.commit()
+    }
+    
+    func add(jsonObj: AnyObject, isCommit: Bool) -> Note?{
+        
+        if let id = jsonObj.valueForKey("id") as? String {
+            if self.isExist(id) {
+                return nil
+            }
+            
+            Log.debug("\(self) add note")
+            
+            let context=CoreDataManager.shared.managedObjectContext
+            
+            let model = NSEntityDescription.entityForName(self.entityName, inManagedObjectContext: context)
+            
+            let note = Note(entity: model!, insertIntoManagedObjectContext: context)
+            
+            if model != nil {
+                note.fromJSON(jsonObj)
+                if (isCommit == true) {
+                    self.commit()
+                }
+                return note
+            }
+        }
+        
+        return nil
+    }
     
     func addNote(house: House, noteDesc: String) {
         
@@ -47,10 +87,41 @@ class NoteDao: NSObject {
     
     // MARK: Read
     
-    func getNoteListByHouseId(houseId: String) -> [Note]? {
-        Log.debug("\(self) getNoteListByHouseId: \(houseId)")
+    func isExist(id: String) -> Bool {
+        let fetchRequest = NSFetchRequest(entityName: self.entityName)
+        let findByIdPredicate = NSPredicate(format: "id == %@", id)
+        fetchRequest.predicate = findByIdPredicate
+        let count = CoreDataManager.shared.countForFetchRequest(fetchRequest)
+        return count > 0
+    }
+    
+    
+    func get(id: String) -> Note? {
+        Log.debug("\(self) get: \(id)")
+        // Create request on House entity
+        let fetchRequest = NSFetchRequest(entityName: self.entityName)
         
-        let fetchRequest = NSFetchRequest(entityName: EntityTypes.Note.rawValue)
+        // Add a predicate to filter by houseId
+        let findByIdPredicate = NSPredicate(format: "id == %@", id)
+        fetchRequest.predicate = findByIdPredicate
+        
+        // Execute fetch request
+        let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [Note]
+        
+        //print(fetchedResults)
+        
+        if let first = fetchedResults?.first {
+            return first
+        }
+        
+        return nil
+    }
+    
+    
+    func getByHouseId(houseId: String) -> [Note]? {
+        Log.debug("\(self) getByHouseId: \(houseId)")
+        
+        let fetchRequest = NSFetchRequest(entityName: self.entityName)
         
         let findByIdPredicate = NSPredicate(format: "houseId == %@", houseId)
         fetchRequest.predicate = findByIdPredicate
@@ -60,46 +131,37 @@ class NoteDao: NSObject {
         return CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [Note]
     }
     
-    func getNoteById(id: String) -> AnyObject? {
-        Log.debug("\(self) getNoteById: \(id)")
-        
-        let fetchRequest = NSFetchRequest(entityName: EntityTypes.Note.rawValue)
-        
-        let findByIdPredicate = NSPredicate(format: "id == %@", id)
-        fetchRequest.predicate = findByIdPredicate
-        
-        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
-        
-        let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest)
-        
-        if let first = fetchedResults?.first {
-            return first
-        }
-        return nil
-    }
-    
     // MARK: Delete
     
+    // MARK: Delete Function
     func deleteById(id: String) {
         Log.debug("\(self) deleteById: \(id)")
-        
-        if let entity = self.getNoteById(id) {
-            if let obj: NSManagedObject = entity as? NSManagedObject {
-                CoreDataManager.shared.deleteEntity(obj)
-                CoreDataManager.shared.save()
-            }
+        if let note = self.get(id) {
+            CoreDataManager.shared.deleteEntity(note)
+            self.commit()
         }
     }
     
     func deleteByHouseId(houseId: String) {
         Log.debug("\(self) deleteByHouseId: \(houseId)")
         
-        if let result = self.getNoteListByHouseId(houseId) {
-            for item in result {
-                CoreDataManager.shared.deleteEntity(item)
+        if let notes = self.getByHouseId(houseId) {
+            for note in notes {
+                CoreDataManager.shared.deleteEntity(note)
             }
             CoreDataManager.shared.save()
         }
+    }
+    
+    func safeDeleteById(id: String) {
+        if self.isExist(id) {
+            self.deleteById(id)
+        }
+    }
+    
+    // MARK: Commit Function
+    func commit(){
+        CoreDataManager.shared.save()
     }
     
 }
