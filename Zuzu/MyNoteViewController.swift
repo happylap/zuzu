@@ -59,9 +59,6 @@ class MyNoteViewController: UIViewController {
         
         if let houseId = self.houseId {
             NoteService.sharedInstance.addNote(houseId, title: self.noteItemForCreate.text!)
-            ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
-                                            action: GAConst.Action.MyNote.Add)
         }
         
     }
@@ -132,9 +129,11 @@ class MyNoteViewController: UIViewController {
             
             self.noteItemForCreate.text = nil
             self.view.endEditing(true)
+            
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
-                                            action: GAConst.Action.MyNote.TapAddButton)
+                                            action: GAConst.Action.MyNote.Add,
+                                            label: GAConst.Label.AddNote.PlusButton)
         }
     }
     
@@ -145,12 +144,18 @@ class MyNoteViewController: UIViewController {
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
-                                        action: GAConst.Action.MyNote.TapReturnButton)
+                                        action: GAConst.Action.MyNote.Exit,
+                                        label: GAConst.Label.ExitNote.DoneButton)
     }
     
     func backgroundViewTapped(view: UIView) {
         Log.enter()
         self.closeNoteEditor()
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                        action: GAConst.Action.MyNote.Exit,
+                                        label: GAConst.Label.ExitNote.TapBackground)
     }
     
     func textFieldDidChange(sender: UITextField) {
@@ -215,6 +220,11 @@ extension MyNoteViewController: UITextFieldDelegate {
             saveNoteItem(noteItemText)
             
             textField.text = nil
+            
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                            action: GAConst.Action.MyNote.Add,
+                                            label: GAConst.Label.AddNote.KeyboardReturn)
         }
         
         textField.resignFirstResponder()

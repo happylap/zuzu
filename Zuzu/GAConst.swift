@@ -117,10 +117,7 @@ struct GAConst {
             
             static let Delete = "delete"
             
-            static let TapAddButton = "tapAddButton"
-            
-            static let TapReturnButton = "tapReturnButton"
-            
+            static let Exit = "exit"
         }
         
         struct ZuzuRadarSetting {
@@ -281,6 +278,16 @@ struct GAConst {
         
         struct DisplayAD {
             static let Vmfive = "vm5"
+        }
+        
+        struct AddNote {
+            static let KeyboardReturn = "keyboardReturn"
+            static let PlusButton = "plusButton"
+        }
+        
+        struct ExitNote {
+            static let DoneButton = "doneButton"
+            static let TapBackground = "tapBackground"
         }
     }
     
