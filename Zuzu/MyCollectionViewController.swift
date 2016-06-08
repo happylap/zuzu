@@ -569,6 +569,17 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         return true
     }
     
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        
+        let cellHeight = UInt(BaseLayoutConst.houseImageHeight * getCurrentScale())
+        
+        let deleteButton =  BGTableViewRowActionWithImage.rowActionWithStyle(UITableViewRowActionStyle.Default, title: "  刪除  ", titleColor: UIColor.whiteColor(), backgroundColor: UIColor.colorWithRGB(0x1CD4C6), image: UIImage(named: "delete_icon")!, forCellHeight: cellHeight, andFittedWidth: false) { (action, indexPath) in
+            self.tableView(tableView, commitEditingStyle: UITableViewCellEditingStyle.Delete, forRowAtIndexPath: indexPath)
+        }
+        
+        return [deleteButton]
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if editingStyle == .Delete {
