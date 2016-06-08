@@ -122,8 +122,7 @@ class MyNoteViewController: UIViewController {
     @IBAction func addNoteItem(sender: UIButton) {
         Log.enter()
         
-        if let noteItemText = self.noteItemForCreate.text
-            where noteItemText.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+        if let noteItemText = self.noteItemForCreate.text where noteItemText.characters.count > 0 {
             
             saveNoteItem(noteItemText)
             
@@ -139,6 +138,11 @@ class MyNoteViewController: UIViewController {
     
     @IBAction func returnMainTable(sender: UIButton) {
         Log.enter()
+        
+        /// Save note before closing
+        if let noteItemText = self.noteItemForCreate.text where noteItemText.characters.count > 0 {
+            self.saveNoteItem(noteItemText)
+        }
         
         self.closeNoteEditor()
         
