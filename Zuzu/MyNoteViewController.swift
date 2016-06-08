@@ -14,6 +14,8 @@ private let Log = Logger.defaultLogger
 
 class MyNoteViewController: UIViewController {
     
+    let maxNoteItemLength = 50
+    
     let cellReuseIdentifier = "NoteCell"
     
     struct TableConst {
@@ -91,6 +93,11 @@ class MyNoteViewController: UIViewController {
     @IBOutlet weak var noteItemForCreate: UITextField! {
         didSet {
             noteItemForCreate.delegate = self
+            
+            noteItemForCreate.addTarget(self,
+                                        action: #selector(MyNoteViewController.textFieldDidChange(_:)),
+                                        forControlEvents: UIControlEvents.EditingChanged)
+
         }
     }
     
@@ -116,6 +123,14 @@ class MyNoteViewController: UIViewController {
     func backgroundViewTapped(view: UIView) {
         Log.enter()
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func textFieldDidChange(sender: UITextField) {
+        if let textString = sender.text where textString.characters.count > maxNoteItemLength {
+            let newText = textString
+                .substringToIndex(textString.startIndex.advancedBy(maxNoteItemLength))
+            sender.text = newText
+        }
     }
     
     // Close keyboard when touching on other area
@@ -173,6 +188,31 @@ extension MyNoteViewController: UITextFieldDelegate {
         
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        
+    }
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if let currentString = textField.text {
+            
+            let start = currentString.startIndex.advancedBy(range.location)
+            let end = start.advancedBy(range.length)
+            let range = start..<end
+            
+            let newString =
+                currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newLength = newString.characters.count
+            
+            return newLength <= maxNoteItemLength
+            
+        } else {
+            
+            assert(false, "text in textField cannot be nil")
+            return true
+            
+        }
     }
     
     func keyboardWillShow(notification: NSNotification) {

@@ -6,10 +6,21 @@
 //  Copyright © 2015 Jung-Shuo Pai. All rights reserved.
 //
 import UIKit
+import MarqueeLabel
 
 class MyNoteViewCell: UITableViewCell {
 
-    @IBOutlet weak var noteTitle: UILabel!
+    @IBOutlet weak var noteTitle: UILabel! {
+        didSet {
+            let label:MarqueeLabel =  noteTitle as! MarqueeLabel
+            label.userInteractionEnabled = true
+            label.trailingBuffer = 60
+            label.rate = 60 //pixels/sec
+            label.fadeLength = 6
+            label.animationDelay = 1 //Sec
+            label.marqueeType = .MLContinuous
+        }
+    }
     
     var noteItem: Note? {
         didSet {
