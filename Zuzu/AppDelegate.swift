@@ -504,6 +504,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NoteService.sharedInstance.start()
         
+        CognitoSyncService.sharedInstance.start()
+        
         RadarService.sharedInstance.start()
         
         //reachability = Reachability.reachabilityForInternetConnection();

@@ -144,6 +144,7 @@
 		2FFD60AD1BD7B92900E1DA46 /* searchCriteriaOptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FFD60AC1BD7B92900E1DA46 /* searchCriteriaOptions.json */; };
 		810081D21C8E653100659BE2 /* ZuzuServiceMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810081D11C8E653100659BE2 /* ZuzuServiceMapper.swift */; };
 		8110CEB91BF25DB20013894C /* CoreDataManager_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */; };
+		81179A211D06C21E006C6BCF /* CognitoSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81179A201D06C21E006C6BCF /* CognitoSyncService.swift */; };
 		812455341C5768E40085F3A8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812455331C5768E40085F3A8 /* StoreKit.framework */; };
 		81287B071BDA19310008FAA3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81287B051BDA19310008FAA3 /* Model.xcdatamodeld */; };
 		8130344C1C52367E00EF7FAB /* RadarPurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */; };
@@ -344,6 +345,7 @@
 		67DA6EA264C067F65D3E41B2 /* Pods_Zuzu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zuzu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		810081D11C8E653100659BE2 /* ZuzuServiceMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZuzuServiceMapper.swift; sourceTree = "<group>"; };
 		8110CEB81BF25DB20013894C /* CoreDataManager_Deletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager_Deletion.swift; sourceTree = "<group>"; };
+		81179A201D06C21E006C6BCF /* CognitoSyncService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CognitoSyncService.swift; sourceTree = "<group>"; };
 		812455331C5768E40085F3A8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		81287B061BDA19310008FAA3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8130344B1C52367E00EF7FAB /* RadarPurchaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarPurchaseViewController.swift; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
 				2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */,
 				81A2A7B71CFFDC2600521314 /* NoteService.swift */,
+				81179A201D06C21E006C6BCF /* CognitoSyncService.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -1087,6 +1090,7 @@
 				81D585951C7B12A200B8FD11 /* ZuzuPurchase.swift in Sources */,
 				2F05C6281BBA2FBB00100D5F /* StringUtils.swift in Sources */,
 				1446FA601C2D3C200073A8A7 /* SystemMessage.swift in Sources */,
+				81179A211D06C21E006C6BCF /* CognitoSyncService.swift in Sources */,
 				81CAAFE31CB6419F00F42A36 /* ZuzuUserMapper.swift in Sources */,
 				2FC54C421C4CE5660052FD6F /* HouseDetailPriceSizeCell.swift in Sources */,
 				2F276B2F1BBE989E00A41306 /* DataPersistence.swift in Sources */,

@@ -96,6 +96,11 @@ class NoteDao: NSObject {
         return count > 0
     }
     
+    func getAll() -> [Note]? {
+        Log.enter()
+        let fetchRequest = NSFetchRequest(entityName: self.entityName)
+        return CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [Note]
+    }
     
     func get(id: String) -> Note? {
         Log.debug("\(self) get: \(id)")

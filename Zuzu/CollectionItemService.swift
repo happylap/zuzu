@@ -20,20 +20,8 @@ class CollectionItemService: NSObject
 {
     let dao = CollectionHouseItemDao.sharedInstance
     
-    let datasetName = "MyCollection"
-    
-    let fieldList = [SolrConst.Field.ID, SolrConst.Field.ADDR, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE]
-    
-    var parentViewController: UIViewController?
-    
-    var entityName: String{
-        return self.dao.entityName
-    }
-    
     struct CollectionItemConstants {
         static let MYCOLLECTION_MAX_SIZE = 60
-        static let SYNCHRONIZE_DELAY_FOR_ADD = 3.0  // Unit: second
-        static let SYNCHRONIZE_DELAY = 1.0  // Unit: second
     }
     
     class var sharedInstance: CollectionItemService {
@@ -45,152 +33,25 @@ class CollectionItemService: NSObject
     }
     
     func start() {
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(CollectionItemService.didFinishUserLoginNotification(_:)),
-            name: UserLoginNotification,
-            object:nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(CollectionItemService.startSynchronizeNotification(_:)),
-            name: AWSCognitoDidStartSynchronizeNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(CollectionItemService.endSynchronizeNotification(_:)),
-            name: AWSCognitoDidEndSynchronizeNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(CollectionItemService.failToSynchronizeNotification(_:)),
-            name: AWSCognitoDidFailToSynchronizeNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(CollectionItemService.changeRemoteValueNotification(_:)),
-            name: AWSCognitoDidChangeRemoteValueNotification,
-            object:nil)
-        
-        
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(CollectionItemService.changeLocalValueFromRemoteNotification(_:)),
-            name: AWSCognitoDidChangeLocalValueFromRemoteNotification,
-            object:nil)
+        let center: NSNotificationCenter = NSNotificationCenter.defaultCenter()
+        center.addObserver(self,
+                           selector: #selector(NoteService.didSyncFromCognitoNotification(_:)),
+                           name: SyncFromCognitoNotification,
+                           object:nil)
     }
-    
-    // MARK: Private methods for modify items
-    
-    func _add(items: [AnyObject]) {
-        self.dao.addAll(items)
         
-        // Add item to Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
-            for obj in items {
-                let id = obj.valueForKey("id") as! String
-                if let item: CollectionHouseItem = self.getItem(id) {
-                    let JSONString = Mapper().toJSONString(item)
-                    dataset.setString(JSONString, forKey: id)
-                }
-            }
-            self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY_FOR_ADD)
-        }
-    }
-    
-    func _update(id: String, dataToUpdate: [String: AnyObject]) {
-        self.dao.updateByID(id, dataToUpdate: dataToUpdate)
-        
-        // Update item to Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
-            if let item: CollectionHouseItem = self.getItem(id) {
-                let JSONString = Mapper().toJSONString(item)
-                dataset.setString(JSONString, forKey: id)
-            }
-            self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY)
-        }
-    }
-    
-    func _delete(id: String) {
-        self.dao.safeDeleteByID(id)
-        // Delete item from Cognito
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
-            dataset.removeObjectForKey(id)
-            self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY)
-        }
-    }
-    
-    // MARK: Dataset methods
-    
-    func _getDataSet() -> AWSCognitoDataset? {
-        let datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
-        for dataset in datasets {
-            if dataset.name == self.datasetName {
-                if let dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName) {
-                    return dataset
-                }
-            }
-        }
-        return nil
-    }
-    
-    func _openOrCreateDataset() -> AWSCognitoDataset {
-        var dataset = self._getDataSet()
-        
-        if dataset == nil{
-            dataset = AWSCognito.defaultCognito().openOrCreateDataset(self.datasetName)
-            var datasets: [AnyObject] = AWSCognito.defaultCognito().listDatasets()
-            datasets.append(dataset!)
-        }
-        
-        return dataset!
-    }
-    
-    
     // MARK: Notifications
     
-    func didFinishUserLoginNotification(aNotification: NSNotification) {
-        Log.debug("ZuzuApp didFinishUserLoginNotification")
-        self._doSync()
-    }
-    
-    func startSynchronizeNotification(aNotification: NSNotification) {
-        Log.debug("AWSCognito startSynchronizeNotification")
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-    }
-    
-    func endSynchronizeNotification(aNotification: NSNotification) {
-        Log.debug("AWSCognito endSynchronizeNotification")
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-    }
-    
-    func failToSynchronizeNotification(aNotification: NSNotification) {
-        Log.debug("AWSCognito failToSynchronizeNotification")
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-    }
-    
-    func changeRemoteValueNotification(aNotification: NSNotification) {
-        Log.debug("AWSCognito changeRemoteValueNotification")
+    func didSyncFromCognitoNotification(aNotification: NSNotification) {
         
-    }
-    
-    func changeLocalValueFromRemoteNotification(aNotification: NSNotification) {
-        Log.debug("AWSCognito changeRemoteValueNotification")
- 
         dispatch_async(dispatch_get_main_queue()) {
-            
-            if self.parentViewController != nil {
-                LoadingSpinner.shared.setImmediateAppear(true)
-                LoadingSpinner.shared.setOpacity(0.3)
-                LoadingSpinner.shared.startOnView(self.parentViewController!.view)
-            }
+            Log.enter()
             
             if let modifyingKeys: [String] = aNotification.userInfo?["keys"] as? [String] {
                 if modifyingKeys.count > 0 {
                     
                     if let dataset: AWSCognitoDataset = aNotification.object as? AWSCognitoDataset {
-                        if dataset.name != self.datasetName{
+                        if dataset.name != CognitoDatasetType.Collection.name() {
                             return
                         }
                         
@@ -243,76 +104,51 @@ class CollectionItemService: NSObject
                 }
             }
             
-            if self.parentViewController != nil {
-                LoadingSpinner.shared.stop()
-            }
+            Log.exit()
         }
     }
-
-    // MARK: Private Synchronize Methods
-    
-    var _delay: Double?
-    var _sycQueue = [Int]()
-    var _syncTimer: NSTimer?
-    
-    func syncTimeUp() { //The timeUp function is a selector, which must be a public function
-        self._syncTimer?.invalidate()
-        self._sync()
-    }
-    
-    func _sync(){
-        if self._sycQueue.isEmpty{
-            self._doSync()
-        }else{
-            self._sycQueue[0] = 1
-        }
-    }
-    
-    private func _doSync(){
-        if let dataset: AWSCognitoDataset = self._openOrCreateDataset() {
-            dataset.synchronizeOnConnectivity().continueWithBlock { (task) -> AnyObject! in
-                if !self._sycQueue.isEmpty {
-                    self._sycQueue.removeAll()
-                    self._syncDataset(CollectionItemConstants.SYNCHRONIZE_DELAY)
-                }
-                return nil
-            }
-        }
-    }
-
-    func _syncDataset(delay:Double) {
-        self._syncTimer?.invalidate()
-        _syncTimer = NSTimer.scheduledTimerWithTimeInterval(delay, target: self, selector: #selector(CollectionItemService.syncTimeUp), userInfo: nil, repeats: true)
-    }
-
     
     // MARK: Public Modify methods
     func canAdd() -> Bool {
         return self.getAllCount() < CollectionItemConstants.MYCOLLECTION_MAX_SIZE
     }
     
-    func addItem(item: AnyObject) {
+    func addItem(obj: AnyObject) {
+        Log.enter()
+        
         if self.canAdd() {
-            self._add([item])
+            if let id = obj.valueForKey("id") as? String {
+                self.dao.add(obj, isCommit: true)
+                if let item: CollectionHouseItem = self.getItem(id) {
+                    if let JSONString = Mapper().toJSONString(item) {
+                        CognitoSyncService.sharedInstance.doAdd(CognitoDatasetType.Collection, key: id, value: JSONString)
+                    }
+                }
+            }
         }
-    }
-    
-    func addAll(items: [AnyObject]) {
-        if self.canAdd() {
-            self._add(items)
-        }
+        Log.exit()
     }
     
     func updateItem(item: CollectionHouseItem, dataToUpdate: [String: AnyObject]) {
-        self._update(item.id, dataToUpdate: dataToUpdate)
-    }
-    
-    func deleteItem(item: CollectionHouseItem) {
-        self._delete(item.id)
+        Log.enter()
+        
+        let id = item.id
+        
+        self.dao.updateByID(id, dataToUpdate: dataToUpdate)
+        
+        if let item: CollectionHouseItem = self.getItem(id) {
+            if let JSONString = Mapper().toJSONString(item) {
+                CognitoSyncService.sharedInstance.doSet(CognitoDatasetType.Collection, key: id, value: JSONString)
+            }
+        }
+        Log.exit()
     }
     
     func deleteItemById(id: String) {
-        self._delete(id)
+        Log.enter()
+        self.dao.safeDeleteByID(id)
+        CognitoSyncService.sharedInstance.doDel(CognitoDatasetType.Collection, key: id)
+        Log.exit()
     }
     
     func getItem(id:String) -> CollectionHouseItem?{

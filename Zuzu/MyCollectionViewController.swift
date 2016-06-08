@@ -28,7 +28,7 @@ struct CollectionHouseItemDocument {
     static let collectTime:String = "collectTime"
 }
 
-class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate {
+class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDelegate, CognitoSynchronizeObserverDelegate {
     
     let cellReuseIdentifier = "houseItemCell"
     
@@ -343,36 +343,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         sortByField(sortingField, sortingOrder: sortingOrder)
     }
     
-    @IBAction func onSyncButtonTouched(sender: UIButton) {
-        Log.debug("\(self) onSyncButtonTouched")
-        
-        if let view = self.view.window?.rootViewController?.view {
-            LoadingSpinner.shared.setDimBackground(true)
-            LoadingSpinner.shared.setImmediateAppear(true)
-            LoadingSpinner.shared.setOpacity(0.8)
-            LoadingSpinner.shared.setText("資料同步中")
-            LoadingSpinner.shared.startOnView(view)
-            
-            LoadingSpinner.shared.stop(afterDelay: 2.0)
-        }
-        
-        CollectionItemService.sharedInstance.syncTimeUp()
-        NoteService.sharedInstance.syncTimeUp()
-    }
-    
-    /*
-    @IBAction func onLoginButtonTouched(sender: UIButton) {
-        Log.debug("%@ onLoginButtonTouched", self)
-        
-        AmazonClientManager.sharedInstance.loginFromView(self) {
-            (task: AWSTask!) -> AnyObject! in
-            dispatch_async(dispatch_get_main_queue()) {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            }
-            return nil
-        }
-        
-    }*/
     
     // MARK: - View Life Cycle
     
@@ -389,6 +359,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         //Configure Sorting Status
         configureSortingButtons()
+        
+        CognitoSyncService.sharedInstance.register(self)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -618,7 +590,48 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.tableView.endUpdates()
     }
     
+    // MARK: Cognito Synchronize
     
+    var isShowLoddingSpinnerWhileSynchronize = false
     
+    @IBAction func onSyncButtonTouched(sender: UIButton) {
+        Log.debug("\(self) onSyncButtonTouched")
+        self.isShowLoddingSpinnerWhileSynchronize = true
+        CognitoSyncService.sharedInstance.doSyncAll()
+    }
+    
+    func onStartSynchronize() {
+        Log.enter()
+        if self.isShowLoddingSpinnerWhileSynchronize == true {
+            self.runOnMainThread {
+                if let view = self.view.window?.rootViewController?.view {
+                    let loadingSpinner = LoadingSpinner.getInstance("sync")
+                    loadingSpinner.setDimBackground(true)
+                    loadingSpinner.setImmediateAppear(true)
+                    loadingSpinner.setOpacity(0.8)
+                    loadingSpinner.setText("同步中")
+                    loadingSpinner.startOnView(view)
+                    Log.debug("loadingSpinner start on view: \(view)")
+                    self.isShowLoddingSpinnerWhileSynchronize = false
+                }
+            }
+        }
+        Log.exit()
+    }
+    
+    func onEndSynchronize() {
+        Log.enter()
+        self.runOnMainThread {
+            LoadingSpinner.getInstance("sync").stop(afterDelay: 1.0)
+        }
+        Log.exit()
+    }
+    
+    func onFailToSynchronize() {
+        Log.enter()
+        self.runOnMainThread {
+            LoadingSpinner.getInstance("sync").stop(afterDelay: 1.0)
+        }
+        Log.exit()
+    }
 }
-
