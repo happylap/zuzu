@@ -17,6 +17,9 @@ struct GAConst {
         ///MyCollection event
         static let MyCollection = "myCollection"
         
+        ///Note event
+        static let MyNote = "myNote"
+        
         ///ZuzuRadarSetting event
         static let ZuzuRadarSetting = "zuzuRadarSetting"
 
@@ -102,6 +105,22 @@ struct GAConst {
             static let AddItemType = "addItemType"
             
             static let Delete = "delete"
+            
+            static let TapSyncAllButton = "tapSyncAllButton"
+        }
+        
+        struct MyNote {
+            
+            static let View = "view"
+            
+            static let Add = "add"
+            
+            static let Delete = "delete"
+            
+            static let TapAddButton = "tapAddButton"
+            
+            static let TapReturnButton = "tapReturnButton"
+            
         }
         
         struct ZuzuRadarSetting {

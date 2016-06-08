@@ -610,6 +610,10 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         Log.debug("\(self) onSyncButtonTouched")
         self.isShowLoddingSpinnerWhileSynchronize = true
         CognitoSyncService.sharedInstance.doSyncAll()
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                        action: GAConst.Action.MyCollection.TapSyncAllButton)
     }
     
     func onStartSynchronize() {
@@ -635,6 +639,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         Log.enter()
         self.runOnMainThread {
             LoadingSpinner.getInstance("sync").stop(afterDelay: 1.0)
+            self.isShowLoddingSpinnerWhileSynchronize = false
         }
         Log.exit()
     }
@@ -643,6 +648,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         Log.enter()
         self.runOnMainThread {
             LoadingSpinner.getInstance("sync").stop(afterDelay: 1.0)
+            self.isShowLoddingSpinnerWhileSynchronize = false
         }
         Log.exit()
     }

@@ -52,6 +52,9 @@ class MyNoteViewController: UIViewController {
         
         if let house = self.collectionHouseItem {
             NoteService.sharedInstance.addNote(house.id, title: self.noteItemForCreate.text!)
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                            action: GAConst.Action.MyNote.Add)
         }
         
     }
@@ -112,12 +115,18 @@ class MyNoteViewController: UIViewController {
             
             self.noteItemForCreate.text = nil
             self.view.endEditing(true)
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                            action: GAConst.Action.MyNote.TapAddButton)
         }
     }
     
     @IBAction func returnMainTable(sender: UIButton) {
         Log.enter()
         dismissViewControllerAnimated(true, completion: nil)
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                        action: GAConst.Action.MyNote.TapReturnButton)
     }
     
     func backgroundViewTapped(view: UIView) {
@@ -163,6 +172,9 @@ class MyNoteViewController: UIViewController {
         super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MyNoteViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MyNoteViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                        action: GAConst.Action.MyNote.View)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -269,6 +281,10 @@ extension MyNoteViewController: NSFetchedResultsControllerDelegate {
         if editingStyle == .Delete {
             if let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note {
                 NoteService.sharedInstance.deleteNote(note.id)
+                
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
+                                                action: GAConst.Action.MyNote.Delete)
             }
         }
     }
