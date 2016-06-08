@@ -12,7 +12,7 @@ import CoreData
 
 private let Log = Logger.defaultLogger
 
-class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate {
+class MyNoteViewController: UIViewController {
     
     let cellReuseIdentifier = "NoteCell"
     
@@ -45,38 +45,41 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
         return fetchedResultsController
     }()
     
-//    private func addNote(title: String) {
-//        if let house = self.collectionHouseItem {
-//            NoteService.sharedInstance.addNote(house.id, title: title)
-//        }
-//    }
+    private func saveNoteItem(title: String) {
+        
+        if let house = self.collectionHouseItem {
+            NoteService.sharedInstance.addNote(house.id, title: self.noteItemForCreate.text!)
+        }
+        
+    }
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noteItemForCreate: UITextField!
     
     // MARK: Actions
     @IBAction func addNoteItem(sender: UIButton) {
-        Log.debug("\(self) addNoteItem")
-        if self.noteItemForCreate.text?.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            //self.addNote(self.noteItemForCreate.text!)
-            if let house = self.collectionHouseItem {
-                NoteService.sharedInstance.addNote(house.id, title: self.noteItemForCreate.text!)
-            }
+        Log.enter()
+        
+        if let noteItemText = self.noteItemForCreate.text
+            where noteItemText.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            
+            saveNoteItem(noteItemText)
+            
             self.noteItemForCreate.text = ""
             self.view.endEditing(true)
         }
     }
     
     @IBAction func returnMainTable(sender: UIButton) {
-        Log.debug("\(self) returnMainTable")
+        Log.enter()
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     // MARK: - View Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        Log.debug("\(self) viewDidLoad")
+        Log.enter()
+        
         noteItemForCreate.delegate = self
         
         do {
@@ -108,28 +111,38 @@ class MyNoteViewController: UIViewController, NSFetchedResultsControllerDelegate
     
 }
 
+// MARK: - UITextFieldDelegate
 extension MyNoteViewController: UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        if let noteItemText = textField.text
+            where noteItemText.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            
+            saveNoteItem(noteItemText)
+            
+            textField.text = ""
+        }
+        
         textField.resignFirstResponder()
         return true
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        Log.debug("\(self) keyboardWillShow")
+        Log.enter()
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        Log.debug("\(self) keyboardWillHide")
+        Log.enter()
     }
 }
 
-extension MyNoteViewController {
+// MARK: - NSFetchedResultsControllerDelegate
+extension MyNoteViewController: NSFetchedResultsControllerDelegate {
     
-    // MARK: - Table View Data Source
+    // Table View Data Source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return TableConst.sectionNum
     }
-
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
@@ -151,9 +164,7 @@ extension MyNoteViewController {
     }
     
     
-    // MARK: - Table Edit Mode
-    
-
+    // Table Edit Mode
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         
         let deleteButton = UITableViewRowAction(style: .Default, title: "", handler: { (action, indexPath) in
@@ -162,8 +173,6 @@ extension MyNoteViewController {
         })
         
         deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "delete_icon_small")!)
-        
-
         
         //deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "")).colorWithRGB(0x1cd4c6)
         
@@ -182,10 +191,7 @@ extension MyNoteViewController {
         }
     }
     
-
-    
-    // MARK: -
-    // MARK: Fetched Results Controller Delegate Methods
+    /// Fetched Results Controller Delegate Methods
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.tableView.beginUpdates()
     }
