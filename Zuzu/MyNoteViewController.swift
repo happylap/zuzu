@@ -45,6 +45,7 @@ class MyNoteViewController: UIViewController {
         return fetchedResultsController
     }()
     
+    // MARK: Private Utils
     private func saveNoteItem(title: String) {
         
         if let house = self.collectionHouseItem {
@@ -52,6 +53,30 @@ class MyNoteViewController: UIViewController {
         }
         
     }
+    
+    /** Do not use for now
+     private func imageWithBgColor(image: UIImage, color: UIColor) -> UIImage {
+     
+     let rect:CGRect = CGRect(x: 0.0, y: 0.0, width: 44.0, height: 44.0)
+     UIGraphicsBeginImageContext(rect.size)
+     let context:CGContextRef? = UIGraphicsGetCurrentContext()
+     
+     CGContextSetFillColorWithColor(context, color.CGColor)
+     CGContextFillRect(context, rect)
+     
+     CGContextTranslateCTM(context, rect.origin.x, rect.origin.y)
+     CGContextTranslateCTM(context, 0, rect.size.height)
+     CGContextScaleCTM(context, 1.0, -1.0)
+     CGContextTranslateCTM(context, -rect.origin.x, -rect.origin.y)
+     CGContextDrawImage(context, rect, image.CGImage)
+     
+     let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+     UIGraphicsEndImageContext()
+     
+     return image
+     
+     }
+     **/
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noteItemForCreate: UITextField!
@@ -65,7 +90,7 @@ class MyNoteViewController: UIViewController {
             
             saveNoteItem(noteItemText)
             
-            self.noteItemForCreate.text = ""
+            self.noteItemForCreate.text = nil
             self.view.endEditing(true)
         }
     }
@@ -73,6 +98,16 @@ class MyNoteViewController: UIViewController {
     @IBAction func returnMainTable(sender: UIButton) {
         Log.enter()
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // Close keyboard when touching on other area
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
+            if (noteItemForCreate.isFirstResponder() && touch.view != noteItemForCreate) {
+                noteItemForCreate.resignFirstResponder()
+            }
+        }
+        super.touchesBegan(touches, withEvent:event)
     }
     
     // MARK: - View Life Cycle
@@ -89,12 +124,8 @@ class MyNoteViewController: UIViewController {
             Log.debug("\(fetchError), \(fetchError.userInfo)")
         }
         
-        //Remove extra cells when the table height is smaller than the screen
+        // Remove extra cells when the table height is smaller than the screen
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
-        
-        // self.tableView.backgroundColor = UIColor(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 1.0)
-        
-        // self.tableView.tableFooterView?.backgroundColor = UIColor.clearColor()
     }
     
     override func viewWillAppear(animated:Bool) {
@@ -113,6 +144,7 @@ class MyNoteViewController: UIViewController {
 
 // MARK: - UITextFieldDelegate
 extension MyNoteViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
         if let noteItemText = textField.text
@@ -120,7 +152,7 @@ extension MyNoteViewController: UITextFieldDelegate {
             
             saveNoteItem(noteItemText)
             
-            textField.text = ""
+            textField.text = nil
         }
         
         textField.resignFirstResponder()
@@ -163,18 +195,15 @@ extension MyNoteViewController: NSFetchedResultsControllerDelegate {
         return cell
     }
     
-    
     // Table Edit Mode
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         
-        let deleteButton = UITableViewRowAction(style: .Default, title: "", handler: { (action, indexPath) in
+        let deleteButton = UITableViewRowAction(style: .Default, title: "  ", handler: { (action, indexPath) in
             Log.debug("Delete pressed!")
             self.tableView(tableView, commitEditingStyle: UITableViewCellEditingStyle.Delete, forRowAtIndexPath: indexPath)
         })
         
         deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "delete_icon_small")!)
-        
-        //deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "")).colorWithRGB(0x1cd4c6)
         
         return [deleteButton]
     }
@@ -191,7 +220,7 @@ extension MyNoteViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
-    /// Fetched Results Controller Delegate Methods
+    // Fetched Results Controller Delegate Methods
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.tableView.beginUpdates()
     }
