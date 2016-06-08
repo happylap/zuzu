@@ -239,12 +239,12 @@ extension MyNoteViewController: UITextFieldDelegate {
         
         if let currentString = textField.text {
             
-            let start = currentString.startIndex.advancedBy(range.location)
-            let end = start.advancedBy(range.length)
-            let range = start..<end
+            Log.debug("CurrentString: length = \(currentString.characters.count), startIndex = \(currentString.startIndex)")
+            Log.debug("InsertedString: \(string)")
+            Log.debug("Range: length = \(range.length), location = \(range.location)")
             
-            let newString =
-                currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString = (currentString as NSString).stringByReplacingCharactersInRange(range, withString: string)
+            
             let newLength = newString.characters.count
             
             return newLength <= maxNoteItemLength
