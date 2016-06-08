@@ -189,10 +189,7 @@ extension MyNoteViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
-    func textFieldDidEndEditing(textField: UITextField) {
-        
-    }
+
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         if let currentString = textField.text {
