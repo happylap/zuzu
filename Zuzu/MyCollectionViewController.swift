@@ -409,7 +409,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                             if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
                                 
                                 Log.debug("\(self) segue to showNotes: house title: \(collectionHouseItem.title)")
-                                destController.collectionHouseItem = collectionHouseItem
+                                
+                                
+                                destController.delegate = self
+                                destController.houseId = collectionHouseItem.id
+                                destController.itemRow = indexPath.row
                             }
                         }
                     }
@@ -652,4 +656,14 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
         Log.exit()
     }
+}
+
+extension MyCollectionViewController: NoteViewControllerDelegate {
+    
+    func onAddingNoteDone(row: Int) {
+        
+        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+        
+    }
+    
 }

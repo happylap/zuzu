@@ -21,6 +21,8 @@ class SearchResultTableViewCell: UITableViewCell {
     
     private let collectedImg = UIImage(named: "heart_pink")
     
+    private let noteImg = UIImage(named: "note_n")?.imageWithRenderingMode(.AlwaysTemplate)
+    
     private var isCollected = false
     
     private var collectionButtonTouchEventCallback: CollectionEventCallback? = nil
@@ -198,8 +200,16 @@ class SearchResultTableViewCell: UITableViewCell {
             self.prefixedButton.userInteractionEnabled = true
             self.prefixedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchResultTableViewCell.onContactTouched(_:))))
             
+            self.openItemNoteButton.image = noteImg
             
-            self.openItemNoteButton.image = UIImage(named: "note_n")
+            if(NoteService.sharedInstance.hasNote(collectionHouseItem.id)) {
+                
+                self.openItemNoteButton.tintColor = UIColor.colorWithRGB(0x1CD4C6)
+                
+            } else {
+                
+                self.openItemNoteButton.tintColor = UIColor.whiteColor()
+            }
             
             self.houseTitleForCollection.text = collectionHouseItem.title
             //self.houseTitle.text = "    \(house.title)"

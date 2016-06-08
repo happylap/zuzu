@@ -12,6 +12,10 @@ import CoreData
 
 private let Log = Logger.defaultLogger
 
+protocol NoteViewControllerDelegate: class {
+    func onAddingNoteDone(row: Int)
+}
+
 class MyNoteViewController: UIViewController {
     
     let maxNoteItemLength = 50
@@ -22,15 +26,18 @@ class MyNoteViewController: UIViewController {
         static let sectionNum:Int = 1
     }
     
-    var collectionHouseItem: CollectionHouseItem?
+    /// Passed-in Params
+    var delegate: NoteViewControllerDelegate?
+    var houseId: String?
+    var itemRow: Int?
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         // Initialize Fetch Request
         let fetchRequest = NSFetchRequest(entityName: "Note")
         
         // Add Predicates
-        if let house = self.collectionHouseItem {
-            let findByIdPredicate = NSPredicate(format: "houseId == %@", house.id)
+        if let houseId = self.houseId {
+            let findByIdPredicate = NSPredicate(format: "houseId == %@", houseId)
             fetchRequest.predicate = findByIdPredicate
         }
         
@@ -50,12 +57,22 @@ class MyNoteViewController: UIViewController {
     // MARK: Private Utils
     private func saveNoteItem(title: String) {
         
-        if let house = self.collectionHouseItem {
-            NoteService.sharedInstance.addNote(house.id, title: self.noteItemForCreate.text!)
+        if let houseId = self.houseId {
+            NoteService.sharedInstance.addNote(houseId, title: self.noteItemForCreate.text!)
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
                                             action: GAConst.Action.MyNote.Add)
         }
+        
+    }
+    
+    private func closeNoteEditor() {
+        
+        if let itemRow = self.itemRow {
+            delegate?.onAddingNoteDone(itemRow)
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
         
     }
     
@@ -100,7 +117,7 @@ class MyNoteViewController: UIViewController {
             noteItemForCreate.addTarget(self,
                                         action: #selector(MyNoteViewController.textFieldDidChange(_:)),
                                         forControlEvents: UIControlEvents.EditingChanged)
-
+            
         }
     }
     
@@ -123,7 +140,9 @@ class MyNoteViewController: UIViewController {
     
     @IBAction func returnMainTable(sender: UIButton) {
         Log.enter()
-        dismissViewControllerAnimated(true, completion: nil)
+        
+        self.closeNoteEditor()
+        
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.MyNote,
                                         action: GAConst.Action.MyNote.TapReturnButton)
@@ -131,7 +150,7 @@ class MyNoteViewController: UIViewController {
     
     func backgroundViewTapped(view: UIView) {
         Log.enter()
-        dismissViewControllerAnimated(true, completion: nil)
+        self.closeNoteEditor()
     }
     
     func textFieldDidChange(sender: UITextField) {
@@ -201,7 +220,7 @@ extension MyNoteViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         if let currentString = textField.text {
