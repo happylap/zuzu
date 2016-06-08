@@ -11,6 +11,7 @@ import UIKit
 private let Log = Logger.defaultLogger
 
 /// Notification that is generated when tab is selected.
+let SwitchToTabNotification = "switchToTab"
 let TabBarSelectedNotification = "TabBarSelectedNotification"
 let TabBarAgainSelectedNotification = "TabBarAgainSelectedNotification"
 
@@ -36,7 +37,7 @@ class MainTabViewController: UITabBarController {
         /// Register Global Notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.handleUserLogin(_:)), name: UserLoginNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.handleTabSwitch(_:)), name: "switchToTab", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MainTabViewController.handleTabSwitch(_:)), name: SwitchToTabNotification, object: nil)
         
         /// Init View Controllers for each Tab
         let searchStoryboard:UIStoryboard = UIStoryboard(name: "SearchStoryboard", bundle: nil)

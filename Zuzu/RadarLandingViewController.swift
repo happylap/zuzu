@@ -60,7 +60,7 @@ class RadarLandingViewController: UIViewController {
         
         UserDefaultsUtils.setRadarLandindPageDisplayed()
         
-        NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self,
+        NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self,
                                                                   userInfo: ["targetTab" : MainTabConstants.RADAR_TAB_INDEX])
         
         self.dismissViewControllerAnimated(true, completion: nil)

@@ -21,6 +21,7 @@ class NotificationItemsTableViewController: UITableViewController {
     
     // UILabel for empty collection list
     let emptyLabel = UILabel()
+    private let radarImage = UIImageView(image: UIImage(named: "radar_toolbar_n")?.imageWithRenderingMode(.AlwaysTemplate))
     
     private struct Storyboard{
         static let CellReuseIdentifier = "NotificationItemCell"
@@ -136,29 +137,60 @@ class NotificationItemsTableViewController: UITableViewController {
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
         // configure empty label
         if let contentView = tableView {
+            
+            /// UILabel setting
             emptyLabel.translatesAutoresizingMaskIntoConstraints = false
             emptyLabel.textAlignment = NSTextAlignment.Center
             emptyLabel.numberOfLines = -1
             emptyLabel.font = UIFont.systemFontOfSize(14)
+            emptyLabel.autoScaleFontSize = true
             emptyLabel.textColor = UIColor.grayColor()
             emptyLabel.hidden = true
-            emptyLabel.autoScaleFontSize = true
+            emptyLabel.userInteractionEnabled = true
+            emptyLabel.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(NotificationItemsTableViewController.onRadarImageTouched(_:)))
+            )
             contentView.addSubview(emptyLabel)
             
+            /// Setup constraints for Label
             let xConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
             xConstraint.priority = UILayoutPriorityRequired
             
-            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            let yConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: radarImage, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.0, constant: 22)
             yConstraint.priority = UILayoutPriorityRequired
             
-            let leftConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            let leftConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 16)
             leftConstraint.priority = UILayoutPriorityDefaultLow
             
-            let rightConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            let rightConstraint = NSLayoutConstraint(item: emptyLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: 16)
             rightConstraint.priority = UILayoutPriorityDefaultLow
             
-            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint])
+            /// UIImage setting
+            radarImage.tintColor = UIColor.lightGrayColor()
+            radarImage.translatesAutoresizingMaskIntoConstraints = false
+            radarImage.hidden = true
+            radarImage.userInteractionEnabled = true
+            radarImage.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(NotificationItemsTableViewController.onRadarImageTouched(_:)))
+            )
             
+            contentView.addSubview(radarImage)
+            
+            /// Setup constraints for Image
+            let wImgConstraint = NSLayoutConstraint(item: radarImage, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 45)
+            
+            let aspectImgConstraint = NSLayoutConstraint(item: radarImage, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: radarImage, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0)
+            
+            let xImgConstraint = NSLayoutConstraint(item: radarImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xImgConstraint.priority = UILayoutPriorityRequired
+            
+            let yImgConstraint = NSLayoutConstraint(item: radarImage, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
+            yImgConstraint.priority = UILayoutPriorityRequired
+            
+            
+            /// Add constraints to contentView
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
+                wImgConstraint, aspectImgConstraint, xImgConstraint, yImgConstraint])
         }
         
     }
@@ -167,7 +199,9 @@ class NotificationItemsTableViewController: UITableViewController {
         emptyLabel.hidden = true
         emptyLabel.text = SystemMessage.INFO.EMPTY_NOTIFICATIONS
         emptyLabel.sizeToFit()
+        
         emptyLabel.hidden = false
+        radarImage.hidden = false
     }
     
     private func isSelectedTab()-> Bool {
@@ -267,6 +301,23 @@ class NotificationItemsTableViewController: UITableViewController {
     }
     
     // MARK: - Acion/Notification Handlers
+    
+    func onRadarImageTouched(sender:UITapGestureRecognizer) {
+        
+        //If fisrt time, pop up landing page
+        if(UserDefaultsUtils.needsDisplayRadarLandingPage()) {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier("radarLandingPage")
+            vc.modalPresentationStyle = .OverFullScreen
+            presentViewController(vc, animated: true, completion: nil)
+
+        } else {
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self, userInfo: ["targetTab" : MainTabConstants.RADAR_TAB_INDEX])
+        }
+        
+    }
     
     // Notification View Load > Receive new items
     // TODO: Should receive this notification when new items are received, and decide what to do by checking the selected tab

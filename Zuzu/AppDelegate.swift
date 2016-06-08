@@ -250,7 +250,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if(tabViewController.selectedIndex != notifyTabIndex) {
                     
                     Log.debug("postNotificationName: switchToTab = \(notifyTabIndex)")
-                    NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self,
+                    NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self,
                                                                               userInfo: ["targetTab" : notifyTabIndex])
                 }
             }

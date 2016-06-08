@@ -137,7 +137,7 @@ class DuplicateHouseViewController: UIViewController {
         alertView.addButton("馬上去看看") {
             UserDefaultsUtils.disableMyCollectionPrompt()
             
-            NSNotificationCenter.defaultCenter().postNotificationName("switchToTab", object: self, userInfo: ["targetTab" : 1])
+            NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self, userInfo: ["targetTab" : MainTabConstants.COLLECTION_TAB_INDEX])
         }
         
         alertView.addButton("不需要") {
