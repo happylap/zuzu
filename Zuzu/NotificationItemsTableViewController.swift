@@ -20,7 +20,7 @@ class NotificationItemsTableViewController: UITableViewController {
     var resultController: TableResultsController!
     
     // UILabel for empty collection list
-    let emptyLabel = UILabel()
+    private let emptyLabel = UILabel()
     private let radarImage = UIImageView(image: UIImage(named: "radar_toolbar_n")?.imageWithRenderingMode(.AlwaysTemplate))
     
     private struct Storyboard{
@@ -283,10 +283,11 @@ class NotificationItemsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let rowNum = self.resultController.getNumberOfRowInSection(section)
-        if rowNum == 0{
+        if rowNum == 0 {
             showEmpty()
-        }else if emptyLabel.hidden == false{
+        }else {
             emptyLabel.hidden = true
+            radarImage.hidden = true
         }
         return rowNum
     }
