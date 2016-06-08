@@ -13,6 +13,7 @@ import FBSDKLoginKit
 import AWSCore
 import AWSCognito
 import SCLAlertView
+import BGTableViewRowActionWithImage
 
 private let Log = Logger.defaultLogger
 
