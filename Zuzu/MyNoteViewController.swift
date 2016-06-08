@@ -79,7 +79,20 @@ class MyNoteViewController: UIViewController {
      **/
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var noteItemForCreate: UITextField!
+    
+    @IBOutlet weak var transparentBackView: UIView! {
+        didSet {
+            transparentBackView.userInteractionEnabled = true
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(MyNoteViewController.backgroundViewTapped(_:)))
+            transparentBackView.addGestureRecognizer(tapGestureRecognizer)
+        }
+    }
+    
+    @IBOutlet weak var noteItemForCreate: UITextField! {
+        didSet {
+            noteItemForCreate.delegate = self
+        }
+    }
     
     // MARK: Actions
     @IBAction func addNoteItem(sender: UIButton) {
@@ -100,6 +113,11 @@ class MyNoteViewController: UIViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func backgroundViewTapped(view: UIView) {
+        Log.enter()
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     // Close keyboard when touching on other area
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if let touch = touches.first {
@@ -114,8 +132,6 @@ class MyNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         Log.enter()
-        
-        noteItemForCreate.delegate = self
         
         do {
             try self.fetchedResultsController.performFetch()

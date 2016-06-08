@@ -123,10 +123,10 @@
             </objects>
             <point key="canvasLocation" x="563" y="1342"/>
         </scene>
-        <!--My Note View Controller-->
+        <!--Item Note View-->
         <scene sceneID="kjJ-ca-Q3l">
             <objects>
-                <viewController modalPresentationStyle="overFullScreen" id="n73-o7-CN9" customClass="MyNoteViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Item Note View" modalPresentationStyle="overFullScreen" id="n73-o7-CN9" customClass="MyNoteViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WXM-JF-KvL"/>
                         <viewControllerLayoutGuide type="bottom" id="5mx-7b-TFu"/>
@@ -143,21 +143,32 @@
                                 <rect key="frame" x="0.0" y="61" width="600" height="45"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="租屋物件筆記" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Res-V9-7Ku">
-                                        <rect key="frame" x="249" y="12" width="102" height="21"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="246" y="12" width="108" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Thf-bv-IZx">
-                                        <rect key="frame" x="542" y="5" width="50" height="35"/>
+                                        <rect key="frame" x="540" y="0.0" width="60" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="7pb-Vm-biw"/>
-                                            <constraint firstAttribute="width" constant="50" id="v5Y-al-Jl2"/>
+                                            <constraint firstAttribute="width" constant="60" id="v5Y-al-Jl2"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="完成">
                                             <color key="titleColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="7pb-Vm-biw"/>
+                                            </mask>
+                                        </variation>
                                         <connections>
                                             <action selector="returnMainTable:" destination="n73-o7-CN9" eventType="touchUpInside" id="jCM-ir-ThF"/>
                                         </connections>
@@ -167,9 +178,10 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="7t6-CW-kd6"/>
                                     <constraint firstItem="Res-V9-7Ku" firstAttribute="centerY" secondItem="HSo-Q0-DfF" secondAttribute="centerY" id="7yn-cn-Iip"/>
-                                    <constraint firstAttribute="trailing" secondItem="Thf-bv-IZx" secondAttribute="trailing" constant="8" id="Ano-Lv-y8v"/>
+                                    <constraint firstAttribute="trailing" secondItem="Thf-bv-IZx" secondAttribute="trailing" id="Ano-Lv-y8v"/>
                                     <constraint firstItem="Res-V9-7Ku" firstAttribute="centerX" secondItem="HSo-Q0-DfF" secondAttribute="centerX" id="BTm-Ff-sLb"/>
                                     <constraint firstItem="Thf-bv-IZx" firstAttribute="centerY" secondItem="HSo-Q0-DfF" secondAttribute="centerY" id="I6I-gu-NAg"/>
+                                    <constraint firstItem="Thf-bv-IZx" firstAttribute="height" secondItem="HSo-Q0-DfF" secondAttribute="height" id="yGB-kz-hGD"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ou1-9l-o37" userLabel="Input Form">
@@ -187,6 +199,9 @@
                                         <state key="normal" title="+">
                                             <color key="titleColor" red="0.10980392160000001" green="0.83137254900000002" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="addNoteItem:" destination="n73-o7-CN9" eventType="touchUpInside" id="inz-K9-FMT"/>
                                         </connections>
@@ -210,12 +225,13 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ktC-Vs-Y5Y">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ktC-Vs-Y5Y">
                                 <rect key="frame" x="0.0" y="150" width="600" height="450"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ktC-Vs-Y5Y" secondAttribute="height" multiplier="4:3" id="FwQ-fB-qxI"/>
                                 </constraints>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoteCell" rowHeight="44" id="bGA-QU-RJb" customClass="MyNoteViewCell" customModule="Zuzu" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="600" height="44"/>
@@ -284,6 +300,7 @@
                     <connections>
                         <outlet property="noteItemForCreate" destination="tJv-Em-YFp" id="xFU-pm-kPJ"/>
                         <outlet property="tableView" destination="ktC-Vs-Y5Y" id="UP1-Wr-uTE"/>
+                        <outlet property="transparentBackView" destination="M65-C5-e45" id="siR-0X-AlQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Py-OJ-Zcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
