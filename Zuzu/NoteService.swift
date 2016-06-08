@@ -133,7 +133,7 @@ class NoteService: NSObject
         Log.exit()
     }
     
-    func getNote(id:String) -> Note? {
+    func getNote(id: String) -> Note? {
         Log.enter()
         let note = self.dao.get(id)
         Log.debug("return \(note)")
@@ -147,6 +147,20 @@ class NoteService: NSObject
     
     func getAll() -> [Note]?{
         return self.dao.getAll()
+    }
+    
+    func hasNote(houseId: String) -> Bool {
+        Log.enter()
+        
+        var has = false
+        if let notes = self.getAll(houseId) {
+            if notes.count > 0 {
+                has = true
+            }
+        }
+        
+        Log.debug("return \(has)")
+        return has
     }
     
     func isExist(id: String) -> Bool{
