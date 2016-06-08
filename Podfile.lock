@@ -10,6 +10,7 @@ PODS:
     - AWSCore (= 2.3.5)
   - AWSSNS (2.3.5):
     - AWSCore (= 2.3.5)
+  - BGTableViewRowActionWithImage (0.3.5)
   - Bolts (1.7.0):
     - Bolts/AppLinks (= 1.7.0)
     - Bolts/Tasks (= 1.7.0)
@@ -102,6 +103,7 @@ DEPENDENCIES:
   - AWSCore (= 2.3.5)
   - AWSS3 (= 2.3.5)
   - AWSSNS (= 2.3.5)
+  - BGTableViewRowActionWithImage
   - BWWalkthrough (= 1.1.0)
   - Charts (= 2.2.3)
   - Device (= 0.0.4)
@@ -142,6 +144,7 @@ SPEC CHECKSUMS:
   AWSCore: 8022eda5778fd7b87c9182709d8a27388e1a31fb
   AWSS3: 967f4ad3c91f1ed2c9dca09a9dcf905111232a87
   AWSSNS: d95b17f039776ec0dd9cd9237313779d174b0215
+  BGTableViewRowActionWithImage: 4871f575342221f67645ec937e4db2a7258ed47c
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   BWWalkthrough: 0c27ad2773a25c8f4fb9004bc7d6685deb35fecc
   Charts: f54267bb3f0f0e74520c6f248517cf5074dfd6fc
