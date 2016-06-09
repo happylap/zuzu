@@ -101,7 +101,7 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tuT-Hf-asx" userLabel="Sync Button">
                                 <rect key="frame" x="974" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title=" " image="synchronize_filled"/>
+                                <state key="normal" title=" " image="sync_filled"/>
                                 <connections>
                                     <action selector="onSyncButtonTouched:" destination="JEf-c3-Mui" eventType="touchUpInside" id="qi5-eO-zpv"/>
                                 </connections>
@@ -114,7 +114,7 @@
                         <outlet property="sortByCollectTimeButton" destination="pK7-Cq-xWf" id="kh2-oz-KVT"/>
                         <outlet property="sortByPriceButton" destination="SKl-Yc-iBw" id="5Uf-8q-Xdg"/>
                         <outlet property="sortBySizeButton" destination="ma9-FJ-x4v" id="3N7-3i-DqM"/>
-                        <outlet property="syncButton" destination="tuT-Hf-asx" id="mg2-6A-oyu"/>
+                        <outlet property="syncButton" destination="tuT-Hf-asx" id="Nu7-f2-cD0"/>
                         <outlet property="tableView" destination="Bbm-3e-fwq" id="qjJ-rk-Dpf"/>
                         <segue destination="n73-o7-CN9" kind="presentation" identifier="showNotes" modalTransitionStyle="crossDissolve" id="KRq-Pu-eHg"/>
                     </connections>
@@ -332,6 +332,6 @@
     </scenes>
     <resources>
         <image name="main_collection_n" width="38" height="38"/>
-        <image name="synchronize_filled" width="60" height="60"/>
+        <image name="sync_filled" width="125" height="125"/>
     </resources>
 </document>

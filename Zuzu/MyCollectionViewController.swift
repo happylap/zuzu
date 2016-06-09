@@ -361,6 +361,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         //Configure Sorting Status
         configureSortingButtons()
         
+        if let syncImage = self.syncButton.imageView?.image {
+            self.syncButton.imageView?.image = syncImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+            self.syncButton.imageView?.tintColor = UIColor.whiteColor()
+        }
+        
         CognitoSyncService.sharedInstance.register(self)
     }
     
