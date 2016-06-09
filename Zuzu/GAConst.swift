@@ -88,6 +88,8 @@ struct GAConst {
             static let Login = "login"
             
             static let ChangeRadarStatus = "changeRadarStatus"
+            
+            static let PromptRadarSuggestion = "promptRadarSuggestion"
         }
         
         struct MyCollection {

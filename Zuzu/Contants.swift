@@ -9,6 +9,17 @@
 import Foundation
 import AWSCore
 
+// MARK: Radar
+struct RadarConstants {
+    
+    /// The threshold of number of search result that we increment the trigger counter
+    static let SUGGESTION_TRIGGER_INCREMENT_THRESHOLD = 100
+    
+    /// The min trigger count for prompting Radar functionality to the user
+    static let SUGGESTION_TRIGGER_COUNT = 3
+    
+}
+
 // MARK: My Collection
 struct CollectionConstants {
 

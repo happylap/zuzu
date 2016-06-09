@@ -71,6 +71,52 @@ struct UserDefaultsUtils {
     }
     
     // MARK: Radar
+    static let radarSuggestionTriggerCounterUserDefaultKey = "radarSuggestionTriggerCounter"
+    static let allowPromptRadarSuggestionUserDefaultKey = "allowPromptRadarSuggestion"
+    
+    // RadarSuggestionTriggerCounter
+    static func incrementRadarSuggestionTriggerCounter() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let current = getRadarSuggestionTriggerCounter()
+        
+        userDefaults.setInteger(current + 1, forKey: radarSuggestionTriggerCounterUserDefaultKey)
+    }
+    
+    static func resetRadarSuggestionTriggerCounter() {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(radarSuggestionTriggerCounterUserDefaultKey)
+    }
+    
+    static func getRadarSuggestionTriggerCounter() -> Int {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let count = userDefaults.integerForKey(radarSuggestionTriggerCounterUserDefaultKey)
+        
+        return count
+    }
+    
+    // SuggestRadarCounter
+    static func setAllowPromptRadarSuggestion(allow: Bool) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if(allow) {
+            userDefaults.setInteger(0, forKey: allowPromptRadarSuggestionUserDefaultKey)
+        } else {
+            userDefaults.setInteger(1, forKey: allowPromptRadarSuggestionUserDefaultKey)
+        }
+    }
+    
+    static func isAllowPromptRadarSuggestion() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        let allowInt = userDefaults.integerForKey(allowPromptRadarSuggestionUserDefaultKey)
+        
+        if(allowInt == 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
     
     static func setRadarLandindPageDisplayed() {
@@ -110,7 +156,7 @@ struct UserDefaultsUtils {
         userDefaults.setObject(expiry, forKey: radarExpiryDateUserDefaultKey)
         userDefaults.synchronize()
     }
-
+    
     static func getRadarExpiryDate() -> NSDate? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.objectForKey(radarExpiryDateUserDefaultKey) as? NSDate

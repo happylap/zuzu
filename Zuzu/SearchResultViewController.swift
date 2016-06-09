@@ -61,6 +61,9 @@ class SearchResultViewController: UIViewController {
     private let noSearchResultLabel = UILabel() //UILabel for displaying no search result message
     private let noSearchResultImage = UIImageView(image: UIImage(named: "empty_no_search_result"))
     
+    ///Set the time limit within which the counter will not be incremented
+    private var radarSuggestionCounterLimitTime: NSDate?
+    
     // MARK: - Public Fields
     
     @IBOutlet weak var filterSettingButton: UIButton!
@@ -111,6 +114,16 @@ class SearchResultViewController: UIViewController {
     var collectionIdList:[String]?
     
     // MARK: - Private Utils
+    
+    //Check if we can increment the Radar suggestion counter now
+    private func isRadarSuggestionTimerTimeout() -> Bool {
+        Log.debug("Now = \(NSDate()), radarSuggestionCounterLimitTime = \(radarSuggestionCounterLimitTime)")
+        if let timeLimit = self.radarSuggestionCounterLimitTime {
+            return timeLimit.timeIntervalSinceNow < 0
+        } else {
+            return true
+        }
+    }
     
     //Update Advanced Filtet Icon Status
     private func updateFilterSettingButtonStatus() {
@@ -165,7 +178,7 @@ class SearchResultViewController: UIViewController {
     }
     
     private func configureNoSearchResultMessage() {
-
+        
         if let contentView = tableView.superview {
             
             /// UILabel setting
@@ -202,7 +215,7 @@ class SearchResultViewController: UIViewController {
             noSearchResultImage.addGestureRecognizer(
                 UITapGestureRecognizer(target: self, action: #selector(SearchResultViewController.onNoSearchResultImageTouched(_:)))
             )
-
+            
             contentView.addSubview(noSearchResultImage)
             
             /// Setup constraints for Image
@@ -212,7 +225,7 @@ class SearchResultViewController: UIViewController {
             
             let yImgConstraint = NSLayoutConstraint(item: noSearchResultImage, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 0.6, constant: 0)
             yImgConstraint.priority = UILayoutPriorityRequired
-
+            
             
             /// Add constraints to contentView
             contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
@@ -311,6 +324,63 @@ class SearchResultViewController: UIViewController {
         alertView.showTitle("新增到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
     }
     
+    private func tryPromptRadarSuggestion() {
+        
+        let allowPrompt = UserDefaultsUtils.isAllowPromptRadarSuggestion()
+        
+        if(!allowPrompt) {
+            Log.debug("Do not prompt Radar suggestion")
+            return
+        }
+        
+        let alertView = SCLAlertView()
+        
+        let subTitle = "快來用專屬於你的「租屋雷達」\n\n" +
+            "● 持續掃描滿足您條件的新物件\n" +
+            "● 一小時內App即時通知到手機" +
+        "\n\n幫你省時搶好屋！"
+        
+        alertView.addButton("馬上去看看") {
+            //If fisrt time, pop up landing page
+            if(UserDefaultsUtils.needsDisplayRadarLandingPage()) {
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("radarLandingPage")
+                vc.modalPresentationStyle = .OverFullScreen
+                self.presentViewController(vc, animated: true, completion: nil)
+                
+            } else {
+                
+                ///Hide tab bar
+                self.tabBarController?.tabBarHidden = false
+                
+                NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self, userInfo: ["targetTab" : MainTabConstants.RADAR_TAB_INDEX])
+            }
+            
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                            action: GAConst.Action.UIActivity.PromptRadarSuggestion, label: "now")
+        }
+        
+        alertView.addButton("稍後再說") {
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                            action: GAConst.Action.UIActivity.PromptRadarSuggestion, label: "later")
+        }
+        
+        alertView.addButton("不再顯示") {
+            UserDefaultsUtils.setAllowPromptRadarSuggestion(false)
+            
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                            action: GAConst.Action.UIActivity.PromptRadarSuggestion, label: "disabled")
+        }
+        
+        alertView.showCloseButton = false
+        
+        alertView.showNotice("還找不到滿意物件？", subTitle: subTitle, colorStyle: 0x1CD4C6)
+    }
+    
     private func startSpinner() {
         loadingSpinner.startAnimating()
     }
@@ -358,7 +428,7 @@ class SearchResultViewController: UIViewController {
             /// GA Tracker
             if let duration = dataSource.loadingDuration {
                 self.trackTimeForCurrentScreen("Networkdata", interval: Int(duration * 1000),
-                    name: "searchHouse", label: String(error.code))
+                                               name: "searchHouse", label: String(error.code))
             }
         } else {
             
@@ -370,6 +440,8 @@ class SearchResultViewController: UIViewController {
         
         LoadingSpinner.shared.stop()
         self.stopSpinner()
+        
+        let totalItemNumber = dataSource.estimatedTotalResults
         
         /// Track the total result only for the first request
         if(pageNo == 1) {
@@ -386,20 +458,52 @@ class SearchResultViewController: UIViewController {
             
             if let searchAction = searchAction {
                 self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                    action: searchAction,
-                    label: "\(dataSource.estimatedTotalResults)")
+                                                action: searchAction,
+                                                label: "\(dataSource.estimatedTotalResults)")
+            }
+            
+            
+            /// Check if results hit the lower bound
+            if(totalItemNumber < RadarConstants.SUGGESTION_TRIGGER_INCREMENT_THRESHOLD) {
+                
+                /// The first time when the threshold is reached
+                if(self.radarSuggestionCounterLimitTime == nil) {
+                    UserDefaultsUtils.incrementRadarSuggestionTriggerCounter()
+                    
+                    // Start the timer to avoid fast counter increment
+                    self.radarSuggestionCounterLimitTime = NSDate().dateByAddingTimeInterval(60)
+                }
+
+                
+                /// Increment the counter when the buffer runs out
+                // So that the counter won't be incremented every time the filter button is touched
+                if(self.isRadarSuggestionTimerTimeout()) {
+                    Log.debug("RadarSuggestionTimer Timeout")
+                    UserDefaultsUtils.incrementRadarSuggestionTriggerCounter()
+                }
+                
+                /// Check if we nned to prompt the user
+                let counter = UserDefaultsUtils.getRadarSuggestionTriggerCounter()
+                
+                if(counter >= RadarConstants.SUGGESTION_TRIGGER_COUNT) {
+                    
+                    /// Suggest Radar to the user
+                    self.tryPromptRadarSuggestion()
+                    
+                    UserDefaultsUtils.resetRadarSuggestionTriggerCounter()
+                }
             }
         }
         
         /// GA Tracker: Record each result page loaded by the users
         self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-            action: GAConst.Action.SearchHouse.LoadPage,
-            label: String(pageNo))
+                                        action: GAConst.Action.SearchHouse.LoadPage,
+                                        label: String(pageNo))
         
         
         ///  Set navigation bar title according to the number of result
-        if(dataSource.estimatedTotalResults > 0) {
-            self.navigationItem.title = "共\(dataSource.estimatedTotalResults)筆"
+        if(totalItemNumber > 0) {
+            self.navigationItem.title = "共\(totalItemNumber)筆"
             
             self.setNoSearchResultMessageVisible(false)
             
@@ -410,8 +514,8 @@ class SearchResultViewController: UIViewController {
             
             /// GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                action: GAConst.Action.Blocking.NoSearchResult,
-                label: HouseDataRequester.getInstance().urlComp.URL?.query)
+                                            action: GAConst.Action.Blocking.NoSearchResult,
+                                            label: HouseDataRequester.getInstance().urlComp.URL?.query)
         }
         
         self.tableView.reloadData()
@@ -451,15 +555,15 @@ class SearchResultViewController: UIViewController {
             ///Disselect all & Clear all sorting icon for Normal state
             sortByPriceButton.selected = false
             sortByPriceButton.setImage(nil,
-                forState: UIControlState.Normal)
+                                       forState: UIControlState.Normal)
             
             sortBySizeButton.selected = false
             sortBySizeButton.setImage(nil,
-                forState: UIControlState.Normal)
+                                      forState: UIControlState.Normal)
             
             sortByPostTimeButton.selected = false
             sortByPostTimeButton.setImage(nil,
-                forState: UIControlState.Normal)
+                                          forState: UIControlState.Normal)
             
             ///Select the one specified by hte user
             targetButton.selected = true
@@ -469,15 +573,15 @@ class SearchResultViewController: UIViewController {
         ///Set image for selected state
         if(sortingOrder == HouseItemDocument.Sorting.sortAsc) {
             targetButton.setImage(UIImage(named: "arrow_up_n"),
-                forState: UIControlState.Selected)
+                                  forState: UIControlState.Selected)
             targetButton.setImage(UIImage(named: "arrow_up_n"),
-                forState: UIControlState.Normal)
+                                  forState: UIControlState.Normal)
             
         } else if(sortingOrder == HouseItemDocument.Sorting.sortDesc) {
             targetButton.setImage(UIImage(named: "arrow_down_n"),
-                forState: UIControlState.Selected)
+                                  forState: UIControlState.Selected)
             targetButton.setImage(UIImage(named: "arrow_down_n"),
-                forState: UIControlState.Normal)
+                                  forState: UIControlState.Normal)
             
         } else {
             assert(false, "Unknown Sorting order")
@@ -633,16 +737,16 @@ class SearchResultViewController: UIViewController {
                 
                 ///GA Tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                    action: GAConst.Action.MyCollection.AddItemPrice,
-                    label: String(houseItem.price))
+                                                action: GAConst.Action.MyCollection.AddItemPrice,
+                                                label: String(houseItem.price))
                 
                 self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                    action: GAConst.Action.MyCollection.AddItemSize,
-                    label: String(houseItem.size))
+                                                action: GAConst.Action.MyCollection.AddItemSize,
+                                                label: String(houseItem.size))
                 
                 self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                    action: GAConst.Action.MyCollection.AddItemType,
-                    label: String(houseItem.purposeType))
+                                                action: GAConst.Action.MyCollection.AddItemType,
+                                                label: String(houseItem.purposeType))
             }
         }
     }
@@ -657,7 +761,7 @@ class SearchResultViewController: UIViewController {
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-            action: GAConst.Action.MyCollection.Delete)
+                                        action: GAConst.Action.MyCollection.Delete)
     }
     
     // MARK: - Control Action Handlers
@@ -677,8 +781,8 @@ class SearchResultViewController: UIViewController {
             
             ///GA Tracker
             self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                action: GAConst.Action.UIActivity.History,
-                label: GAConst.Label.History.Save)
+                                            action: GAConst.Action.UIActivity.History,
+                                            label: GAConst.Label.History.Save)
         }
     }
     
@@ -706,8 +810,8 @@ class SearchResultViewController: UIViewController {
                                     
                                     ///GA Tracker
                                     self.trackEventForCurrentScreen(GAConst.Catrgory.SmartFilter,
-                                        action: smartFilter.key,
-                                        label: smartFilter.value)
+                                                                    action: smartFilter.key,
+                                                                    label: smartFilter.value)
                                     
                                 } else {
                                     ///Clear filters under this group
@@ -781,8 +885,8 @@ class SearchResultViewController: UIViewController {
         
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.Sorting,
-            action: sortingField,
-            label: sortingOrder)
+                                        action: sortingField,
+                                        label: sortingOrder)
     }
     
     func onNoSearchResultImageTouched(sender:UITapGestureRecognizer) {
@@ -940,16 +1044,16 @@ class SearchResultViewController: UIViewController {
                     if let targetHouseItem = targetHouseItem {
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                            action: GAConst.Action.UIActivity.ViewItemPrice,
-                            label: String(targetHouseItem.price))
+                                                        action: GAConst.Action.UIActivity.ViewItemPrice,
+                                                        label: String(targetHouseItem.price))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                            action: GAConst.Action.UIActivity.ViewItemSize,
-                            label: String(targetHouseItem.size))
+                                                        action: GAConst.Action.UIActivity.ViewItemSize,
+                                                        label: String(targetHouseItem.size))
                         
                         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                            action: GAConst.Action.UIActivity.ViewItemType,
-                            label: String(targetHouseItem.purposeType))
+                                                        action: GAConst.Action.UIActivity.ViewItemType,
+                                                        label: String(targetHouseItem.purposeType))
                     }
                 }
                 
@@ -1224,8 +1328,8 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
                 if let filters = searchCriteria.filters {
                     for (key, value) in filters {
                         self.trackEventForCurrentScreen(GAConst.Catrgory.Filter,
-                            action: key,
-                            label: value)
+                                                        action: key,
+                                                        label: value)
                     }
                 }
                 

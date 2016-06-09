@@ -174,10 +174,15 @@ class SearchBoxTableViewController: UITableViewController {
         
         didSet{
             
-            if !(oldValue == currentCriteria) {
+            if (oldValue != currentCriteria) {
                 filterDataStore.clearFilterSetting()
                 
-                ///Clear ItemCountByRegion Cache to avoid the case when the user would see the  ItemCountByRegion for previous criteria
+                /// Reset Search Result Lower Bound Counter
+                // The counter is reset when main criteria is changed
+                UserDefaultsUtils.resetRadarSuggestionTriggerCounter()
+                
+                ///Clear ItemCountByRegion Cache
+                // So that the user would not see the ItemCountByRegion for previous criteria
                 clearItemCountByRegion()
                 
                 ///Send criteria change notification
