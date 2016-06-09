@@ -351,9 +351,6 @@ class SearchResultViewController: UIViewController {
                 
             } else {
                 
-                ///Hide tab bar
-                self.tabBarController?.tabBarHidden = false
-                
                 NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self, userInfo: ["targetTab" : MainTabConstants.RADAR_TAB_INDEX])
             }
             

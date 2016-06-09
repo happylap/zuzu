@@ -66,6 +66,9 @@ class RadarNavigationController: UINavigationController {
     override func viewWillAppear(animated: Bool) {
         Log.enter()
         
+        ///Make sure tab bar is shown
+        self.tabBarController?.tabBarHidden = false
+        
         /// Remove "New" tab badge
         self.disableNewTabBadge()
         
