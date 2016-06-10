@@ -1390,6 +1390,7 @@
 				EXCLUDED_SOURCE_FILE_NAMES = (
 					EngineerModeViewController.swift,
 					EM.storyboard,
+					DataPersistence.swift,
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
