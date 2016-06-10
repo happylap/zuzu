@@ -4,6 +4,14 @@ link_with 'Zuzu', 'ZuzuTests'
 platform :ios, '8.0'
 use_frameworks!
 
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['ENABLE_BITCODE'] = 'NO'
+        end
+    end
+end
+
 target 'Zuzu' do
 pod 'Alamofire', '2.0.2'
 pod 'AlamofireImage', '1.1.2'
