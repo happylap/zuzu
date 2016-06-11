@@ -167,6 +167,7 @@ class RadarPurchaseViewController: UIViewController, UITableViewDataSource, UITa
                         let price = product.price
                         let purchase = ZuzuPurchase(transactionId:transId, userId: userId, productId: productId, productPrice: price)
                         purchase.productTitle = product.localizedTitle
+                        purchase.productLocaleId = product.priceLocale.localeIdentifier
                         
                         
                         if let deviceTokenString = UserDefaultsUtils.getAPNDevicetoken(),
