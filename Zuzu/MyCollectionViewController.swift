@@ -53,7 +53,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var syncButton: UIButton!
+    @IBOutlet var pseudoAnchor: UIBarButtonItem!
     
     private let noCollectionLabel = UILabel() //UILabel for displaying no collection message
     private let noCollectionImage = UIImageView(image: UIImage(named: "empty_no_collection"))
@@ -138,6 +138,18 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.sortByCollectTimeButton.setBackgroundImage(imageWithColor(bgColorWhenSelected), forState:UIControlState.Selected)
     }
     
+    private func configureNavigationBarItems() {
+        
+        ///Prepare custom UIButton for UIBarButtonItem
+        let syncButton: UIButton = UIButton(type: UIButtonType.Custom)
+        syncButton.setImage(UIImage(named: "sync_filled")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+        syncButton.addTarget(self, action: #selector(MyCollectionViewController.onSyncButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        syncButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        syncButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        pseudoAnchor.customView = syncButton
+        pseudoAnchor.tintColor = UIColor.whiteColor()
+    }
     
     private func loadDataBy(sortingField: String?, ascending: Bool?) {
         Log.debug("\(self) loadData")
@@ -361,10 +373,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         //Configure Sorting Status
         configureSortingButtons()
         
-        if let syncImage = self.syncButton.imageView?.image {
-            self.syncButton.imageView?.image = syncImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-            self.syncButton.imageView?.tintColor = UIColor.whiteColor()
-        }
+        configureNavigationBarItems()
         
         CognitoSyncService.sharedInstance.register(self)
     }
