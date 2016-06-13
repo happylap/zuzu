@@ -393,6 +393,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         //self.logoutButton.hidden = !FeatureOption.Collection.enableLogout
         
+        self.reloadVisibleRows()
+        
         //Google Analytics Tracker
         self.trackScreen()
     }
@@ -653,12 +655,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.runOnMainThread {
             LoadingSpinner.getInstance("sync").stop(afterDelay: 1.0)
             self.isShowLoddingSpinnerWhileSynchronize = false
-            
-            if let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows {
-                for indexPathsForVisibleRow in indexPathsForVisibleRows {
-                    self.onAddingNoteDone(indexPathsForVisibleRow.row)
-                }
-            }
+            self.reloadVisibleRows()
         }
         Log.exit()
     }
@@ -671,6 +668,14 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         }
         Log.exit()
     }
+    
+    
+    func reloadVisibleRows() {
+        if let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows {
+            self.tableView.reloadRowsAtIndexPaths(indexPathsForVisibleRows, withRowAnimation: UITableViewRowAnimation.None)
+        }
+    }
+
 }
 
 extension MyCollectionViewController: NoteViewControllerDelegate {
