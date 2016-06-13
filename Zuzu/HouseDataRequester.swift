@@ -18,9 +18,17 @@ struct SolrConst {
     
     struct Server {
         static let SCHEME = "http"
-        static let HOST = HostConst.SolrBackend
-        static let PORT = 8983
-        static let PATH = "/solr/rhc/select"
+        
+        #if DEBUG
+        static let HOST = HostConstStage.SolrHost
+        static let PORT = HostConstStage.SolrPort
+        static let PATH = HostConstStage.SolrPath
+        #else
+        static let HOST = HostConst.SolrHost
+        static let PORT = HostConst.SolrPort
+        static let PATH = HostConst.SolrPath
+        #endif
+        
         static let HTTP_METHOD = "GET"
     }
     

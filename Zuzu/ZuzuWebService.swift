@@ -21,7 +21,7 @@ class ZuzuWebService: NSObject
     private static let instance = ZuzuWebService()
     
     #if DEBUG
-    var host = HostConst.ZuzuBackendStage
+    var host = HostConstStage.ZuzuBackend
     #else
     var host = HostConst.ZuzuBackend
     #endif
