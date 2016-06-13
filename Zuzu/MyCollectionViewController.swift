@@ -295,10 +295,14 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     
     func onShowNoteEditorTouched(sender: UITapGestureRecognizer) {
-        Log.debug("\(self) onShowNoteEditorTouched")
+        Log.enter()
         
         if FeatureOption.Collection.enableNote {
-            self.performSegueWithIdentifier("showNotes", sender: sender)
+            let tapLocation = sender.locationInView(self.tableView)
+            let indexPath:NSIndexPath = self.tableView.indexPathForRowAtPoint(tapLocation)!
+            Log.debug("performSegueWithIdentifier: showNotes - indexPath: \(indexPath)")
+            
+            self.performSegueWithIdentifier("showNotes", sender: indexPath)
         }
     }
     
@@ -415,28 +419,19 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             switch identifier {
             case "showNotes":
                 let destController = segue.destinationViewController as! MyNoteViewController
-                if let sender = sender as? UITapGestureRecognizer {
-                    if let imgView = sender.view {
-                        if let cell = imgView.superview?.superview as? SearchResultTableViewCell {
-                            let indexPath = cell.indexPath
-                            Log.debug("\(self) segue to showNotes: \(indexPath)")
-                            if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
-                                
-                                Log.debug("\(self) segue to showNotes: house title: \(collectionHouseItem.title)")
-                                
-                                
-                                destController.delegate = self
-                                destController.houseId = collectionHouseItem.id
-                                destController.itemRow = indexPath.row
-                            }
-                        }
+                if let indexPath = sender as? NSIndexPath {
+                    Log.debug("\(self) segue to showNotes: \(indexPath)")
+                    if let collectionHouseItem: CollectionHouseItem = self.fetchedResultsController.objectAtIndexPath(indexPath) as? CollectionHouseItem {
+                        Log.debug("\(self) segue to showNotes: house title: \(collectionHouseItem.title)")
+                        
+                        destController.delegate = self
+                        destController.houseId = collectionHouseItem.id
+                        destController.itemRow = indexPath.row
                     }
                 }
-                
             default: break
             }
         }
-
     }
     
     
@@ -658,6 +653,12 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         self.runOnMainThread {
             LoadingSpinner.getInstance("sync").stop(afterDelay: 1.0)
             self.isShowLoddingSpinnerWhileSynchronize = false
+            
+            if let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows {
+                for indexPathsForVisibleRow in indexPathsForVisibleRows {
+                    self.onAddingNoteDone(indexPathsForVisibleRow.row)
+                }
+            }
         }
         Log.exit()
     }
