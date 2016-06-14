@@ -50,7 +50,7 @@ pod 'SwiftValidator', '3.0.3'
 pod 'SwiftyStateMachine', '0.3.0'
 pod 'BWWalkthrough', '1.1.0'
 pod 'KeychainAccess', '2.3.5'
-pod 'VMFiveAdNetwork', '2.1.3'
+pod 'VMFiveAdNetwork', '2.1.4'
 pod 'BGTableViewRowActionWithImage'
 end
 
