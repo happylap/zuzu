@@ -60,6 +60,7 @@ struct CriteriaConst {
         static let SUITE_COMMON_AREA = 3
         static let ROOM_NO_TOILET = 4
         static let HOME_OFFICE = 8
+        static let SUITE_GENERAL = 13
     }
     
     /**

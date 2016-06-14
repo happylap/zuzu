@@ -764,16 +764,18 @@ class SearchBoxTableViewController: UITableViewController {
             //Other type buttons are controlled by "select all" button
             for view in views {
                 if let typeButton = view as? ToggleButton {
-                    if(typeButton.tag !=
-                        UIControlTag.NOT_LIMITED_BUTTON_TAG){
+                    
+                    let typeId = typeButton.tag
+                    
+                    if(typeId != UIControlTag.NOT_LIMITED_BUTTON_TAG){
                         if(typeButton.getToggleState()) {
-                            switch typeButton.tag {
+                            switch(typeId) {
                             case 1:
                                 typeList.append(CriteriaConst.PrimaryType.FULL_FLOOR)
-                            case 2:
-                                typeList.append(CriteriaConst.PrimaryType.SUITE_INDEPENDENT)
-                            case 3:
-                                typeList.append(CriteriaConst.PrimaryType.SUITE_COMMON_AREA)
+                            case 2, 3:
+                                typeList.append(typeId) // SUITE_INDEPENDENT or SUITE_COMMON_AREA
+                                /// Including the SUITE_GENERAL for items without specified suite type
+                                typeList.append(CriteriaConst.PrimaryType.SUITE_GENERAL)
                             case 4:
                                 typeList.append(CriteriaConst.PrimaryType.ROOM_NO_TOILET)
                             case 5:
