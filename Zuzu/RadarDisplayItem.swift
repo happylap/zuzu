@@ -72,6 +72,11 @@ class RadarDisplayItem: NSObject, NSCoding {
         if let purposeType = criteria.types {
             for type in purposeType.sort() {
                 
+                /// SUITE_GENERAL shoulden be known to the users
+                if(type == CriteriaConst.PrimaryType.SUITE_GENERAL) {
+                        continue
+                }
+                
                 if let typeString = SearchItem.labelMaker.fromCodeForField("purpose_type", code: type) {
                     typeStr.append(typeString)
                 }
