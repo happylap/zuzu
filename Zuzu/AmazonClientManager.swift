@@ -1192,16 +1192,30 @@ class AmazonClientManager : NSObject {
                     
                     LoadingSpinner.shared.stop(afterDelay: 1.0)
                     
+                    ///GA Tracker: Login successful
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                        action: GAConst.Action.UIActivity.Login, label: GAConst.Label.LoginType.Zuzu)
+                    
                     self.completeZuzuLogin()
                     
                 case .Failed:
                     
                     Log.warning("Zuzu Login Failed")
+                    
+                    ///GA Tracker: Login error
+                        theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                            action: GAConst.Action.Blocking.LoginError, label: "\(GAConst.Label.LoginType.Zuzu)")
+                    
                     self.failLogin(.ZuzuFailure)
                     
                 case .Cancelled:
                     
                     Log.warning("Zuzu Login Cancelled")
+                    
+                    ///GA Tracker: Login cancelled
+                    theViewController.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                        action: GAConst.Action.Blocking.LoginCancel, label: "\(GAConst.Label.LoginType.Zuzu)")
+                    
                     self.cancelLogin(.ZuzuCancel)
                 }
                 
@@ -1416,7 +1430,7 @@ extension AmazonClientManager: CommonLoginViewDelegate {
     func onCancelUserLogin() {
         ///GA Tracker: Login cancelled
         self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                                                             action: GAConst.Action.Blocking.loginReject)
+                                                             action: GAConst.Action.Blocking.LoginReject)
         
         AWSTask(result: LoginResult.Cancelled.rawValue).continueWithBlock(self.completionHandler!)
     }
@@ -1424,7 +1438,7 @@ extension AmazonClientManager: CommonLoginViewDelegate {
     func onSkipUserLogin() {
         ///GA Tracker: Login cancelled
         self.loginViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                                                             action: GAConst.Action.Blocking.loginSkip)
+                                                             action: GAConst.Action.Blocking.LoginSkip)
         
         AWSTask(result: LoginResult.Skip.rawValue).continueWithBlock(self.completionHandler!)
     }

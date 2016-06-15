@@ -248,11 +248,11 @@ struct GAConst {
             
             static let LoginError = "loginError"
             
-            static let LoginCancel = "loginCancel"
+            static let LoginCancel = "loginCancel" //The login operation is cancelled
             
-            static let loginReject = "loginReject"
+            static let LoginReject = "loginReject" //The user refuse to login in the begining
             
-            static let loginSkip = "loginSkip"
+            static let LoginSkip = "loginSkip"
             
         }
     }
@@ -276,6 +276,7 @@ struct GAConst {
         struct LoginType {
             static let Facebook = "facebook"
             static let Google = "google"
+            static let Zuzu = "zuzu"
         }
         
         struct DisplayAD {
