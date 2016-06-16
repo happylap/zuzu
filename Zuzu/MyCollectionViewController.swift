@@ -393,8 +393,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         //self.logoutButton.hidden = !FeatureOption.Collection.enableLogout
         
-        self.reloadVisibleRows()
-        
         //Google Analytics Tracker
         self.trackScreen()
     }
