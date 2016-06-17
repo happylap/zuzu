@@ -15,6 +15,7 @@ import AwesomeCache
 import SCLAlertView
 import GoogleMobileAds
 import FBAudienceNetwork
+import SafariServices
 
 private let Log = Logger.defaultLogger
 
@@ -43,7 +44,7 @@ class HouseDetailViewController: UIViewController {
     private let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
     
     private let cellIdentifier = "houseDetailTitleCell"
-    private var tableRows:[Int: CellInfo]!
+    private var tableRows:[CellInfo]!
     
     private var photos = [MWPhoto]()
     
@@ -62,6 +63,7 @@ class HouseDetailViewController: UIViewController {
         case PriceSizeCell = "priceSizeCell"
         case RightDetailCell = "rightDetailCell"
         case AddressCell = "addressCell"
+        case MoverCell = "moverCell"
         case ExpandableHeaderCell = "expandableHeaderCell"
         case ExpandableContentCell = "expandableContentCell"
         case ExpandableContentAdCell = "expandableContentAdCell"
@@ -216,7 +218,7 @@ class HouseDetailViewController: UIViewController {
     private func setupTableCells() {
         
         tableRows = [
-            0:CellInfo(cellIdentifier: .HouseDetailTitleCell, hidden: false, cellHeight: 213, handler: { (cell : UITableViewCell) -> () in
+            CellInfo(cellIdentifier: .HouseDetailTitleCell, hidden: false, cellHeight: 213, handler: { (cell : UITableViewCell) -> () in
                 if let cell = cell as? HouseDetailTitleViewCell {
                     
                     if let houseItemDetail = self.houseItemDetail {
@@ -242,7 +244,7 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            1:CellInfo(cellIdentifier: .PriceSizeCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .PriceSizeCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailPriceSizeCell {
                     
                     var priceDetail:String?
@@ -310,7 +312,7 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            2:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailBasicInfoCell {
                     
                     if let houseDetail = self.houseItemDetail {
@@ -344,7 +346,7 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            3:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailBasicInfoCell {
                     
                     if let houseDetail = self.houseItemDetail {
@@ -395,7 +397,7 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            4:CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .RightDetailCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailBasicInfoCell {
                     
                     if let houseDetail = self.houseItemDetail {
@@ -409,7 +411,7 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            5:CellInfo(cellIdentifier: .AddressCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .AddressCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailAddressCell {
                     
                     if let houseDetail = self.houseItemDetail {
@@ -420,12 +422,12 @@ class HouseDetailViewController: UIViewController {
                     
                 }
             }),
-            6:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "提供物品"
                 }
             }),
-            7:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     
@@ -462,12 +464,12 @@ class HouseDetailViewController: UIViewController {
                     
                 }
             }),
-            8:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "生活機能"
                 }
             }),
-            9:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     if let houseDetail = self.houseItemDetail {
@@ -527,12 +529,12 @@ class HouseDetailViewController: UIViewController {
                     
                 }
             }),
-            10:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "租屋限制"
                 }
             }),
-            11:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     if let houseDetail = self.houseItemDetail {
@@ -606,12 +608,12 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            12:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "其他資訊"
                 }
             }),
-            13:CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     
                     var otherInfoList = [String]()
@@ -648,12 +650,12 @@ class HouseDetailViewController: UIViewController {
                     }
                 }
             }),
-            14:CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableHeaderCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableHeaderCell {
                     cell.headerLabel.text = "屋主說明"
                 }
             }),
-            15:CellInfo(cellIdentifier: .ExpandableContentAdCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            CellInfo(cellIdentifier: .ExpandableContentAdCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
                     cell.contentLabel.adjustsFontSizeToFitWidth = false
                     cell.contentLabel.numberOfLines = 0
@@ -698,6 +700,15 @@ class HouseDetailViewController: UIViewController {
                 }
             })
         ]
+        
+        let moverCell = CellInfo(cellIdentifier: .MoverCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+            if let cell = cell as? HouseDetailMoverCell {
+                
+                
+            }
+        })
+        
+        tableRows.insert(moverCell, atIndex: 1)
     }
     
     private func alertItemNotFound() {
@@ -1218,22 +1229,6 @@ class HouseDetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        //        let serviceType = SLServiceTypeTwitter
-        //        if SLComposeViewController.isAvailableForServiceType(serviceType){
-        //            let controller = SLComposeViewController(forServiceType: serviceType)
-        //            controller.setInitialText("Safari is a great browser!")
-        //            controller.addImage(UIImage(named: "Safari"))
-        //            controller.addURL(NSURL(string: "http://www.apple.com/safari/"))
-        //            controller.completionHandler = {(result: SLComposeViewControllerResult) in
-        //                Log.debug("Completed")
-        //            }
-        //
-        //            presentViewController(controller, animated: true, completion: nil)
-        //
-        //        }else{
-        //            Log.debug("The Twitter service is not available")
-        //        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -1376,61 +1371,38 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         return tableRows.count
     }
     
-    //    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-    //        if var cellInfo = tableRows[indexPath.row] {
-    //            Log.debug("heightForRowAtIndexPath> Height: %f for Row: %d", cellInfo.cellHeight, indexPath.row)
-    //
-    //            if(cellInfo.hidden) {
-    //                return 0
-    //            } else {
-    //                if(indexPath.row == 12) {
-    //                    return cellInfo.cellHeight + 2 * 8
-    //                } else {
-    //                    return cellInfo.cellHeight
-    //                }
-    //            }
-    //        } else {
-    //            return 0
-    //        }
-    //    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        if var cellInfo = tableRows[indexPath.row] {
+        var cellInfo = tableRows[indexPath.row]
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellInfo.cellIdentifier.rawValue, forIndexPath: indexPath)
+        
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        cellInfo.handler(cell)
+        
+        
+        if let cell = cell as? HouseDetailExpandableContentCell {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(cellInfo.cellIdentifier.rawValue, forIndexPath: indexPath)
+            let contentHeight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+            let labelHeight = cell.contentLabel.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
             
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            Log.debug("Content Layout Height: \(contentHeight)")
+            Log.debug("Label Layout Height: \(labelHeight)")
             
-            cellInfo.handler(cell)
+            cellInfo.cellHeight = max(cellInfo.cellHeight, contentHeight)
+            cellInfo.cellHeight = max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
             
+            tableRows[indexPath.row] = cellInfo
             
-            if let cell = cell as? HouseDetailExpandableContentCell {
-                
-                let contentHeight = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-                let labelHeight = cell.contentLabel.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-                
-                Log.debug("Content Layout Height: \(contentHeight)")
-                Log.debug("Label Layout Height: \(labelHeight)")
-                
-                cellInfo.cellHeight = max(cellInfo.cellHeight, contentHeight)
-                cellInfo.cellHeight = max(cellInfo.cellHeight, cell.contentLabel.intrinsicContentSize().height)
-                
-                tableRows[indexPath.row] = cellInfo
-                
-                Log.debug("IntrinsicContentSize Height: \(cell.contentLabel.intrinsicContentSize().height) for Row: \(indexPath.row)")
-                
-                Log.debug("Updated Cell Height: \(cellInfo.cellHeight) for Row: \(indexPath.row)")
-            }
+            Log.debug("IntrinsicContentSize Height: \(cell.contentLabel.intrinsicContentSize().height) for Row: \(indexPath.row)")
             
-            Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
-            
-            return cell
-            
-        } else {
-            assert(false, "No cellInfo for the row = \(indexPath.row)")
-            return UITableViewCell()
+            Log.debug("Updated Cell Height: \(cellInfo.cellHeight) for Row: \(indexPath.row)")
         }
+        
+        Log.debug("- Cell Instance [\(cell)] Prepare Cell For Row[\(indexPath.row)]")
+        
+        return cell
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -1459,119 +1431,106 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let cellInfo = tableRows[indexPath.row] {
+        let cellInfo = tableRows[indexPath.row]
+        
+        switch(cellInfo.cellIdentifier) {
+        case .MoverCell:
+            LoadingSpinner.shared.startOnView(self.view)
             
-            switch(cellInfo.cellIdentifier) {
-            case .AddressCell:
-                LoadingSpinner.shared.startOnView(self.view)
+            let moverLandingPage = "https://zuzurentals.wordpress.com/%E5%A4%A7%E5%8F%B0%E5%8C%97%E5%BE%AE%E6%90%AC%E5%AE%B6%EF%BC%9A%E8%B1%AC%E8%B1%AC%E6%90%AC%E4%B8%80%E4%B8%8B/"
+            
+            if #available(iOS 9.0, *) {
+                let svc = SFSafariViewController(URL: NSURL(string: moverLandingPage)!)
+                self.presentViewController(svc, animated: true, completion: nil)
+            } else {
+                // Fallback on earlier versions
                 
-                ///It takes time to load the map, leave some time to display loading spinner makes the flow look smoother
-                self.runOnMainThreadAfter(0.1){
-                    self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+                let browserViewController = self.storyboard?.instantiateViewControllerWithIdentifier("browserView") as? BrowserViewController
+                
+                if let browserViewController = browserViewController {
+                    browserViewController.enableToolBar = false
+                    browserViewController.sourceLink = moverLandingPage
+                    browserViewController.viewTitle = "豬豬搬一下"
+                    //self.modalPresentationStyle = .CurrentContext
+                    self.navigationController?.pushViewController(browserViewController, animated: true)
                 }
-            case .HouseDetailTitleCell:
-                
-                LoadingSpinner.shared.startOnView(self.view)
-                
-                let browser = MWPhotoBrowser(delegate: self)
-                
-                // Config navigation left bar
-                browser.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: #selector(HouseDetailViewController.onClosePhotoBrowser(_:)))
-                
-                // Action button to allow sharing, copying, etc (default: true)
-                browser.displayActionButton = true
-                
-                // Whether to display nav arrows on toolbar (default: false)
-                browser.displayNavArrows = true
-                
-                // Whether selection buttons are shown on each image (default: true)
-                browser.displaySelectionButtons = false
-                
-                // Images that almost fill the screen will be initially zoomed to fill (default: true)
-                browser.zoomPhotosToFill = true
-                
-                // Whether the bars and controls are always visible or not (default: false)
-                browser.alwaysShowControls = false
-                
-                // Whether to allow the grid view (default: true)
-                browser.enableGrid = true;
-                
-                // Whether to start on the grid view (default: false)
-                browser.startOnGrid = false
-                
-                // Auto-play first video
-                browser.autoPlayOnAppear = false;
-                
-                browser.setCurrentPhotoIndex(0)
-                
-                self.navigationController?.pushViewController(browser, animated: true)
-                
-                self.trackScreenWithTitle("View: Image Viewer")
-                
-            case .ExpandableHeaderCell:
-                let nextRow = indexPath.row + 1
-                var nextCellInfo = tableRows[nextRow]
-                
-                
-                if nextCellInfo?.hidden == true {
-                    Log.debug("Set Show for Row \(nextRow)")
-                    nextCellInfo?.hidden = false
-                } else {
-                    Log.debug("Set Hide for Row \(nextRow)")
-                    nextCellInfo?.hidden = true
-                }
-                tableRows[nextRow] = nextCellInfo
-                
-                ///Fix disappering seperator issue
-                tableView.deselectRowAtIndexPath(indexPath, animated: false)
-                
-                tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: nextRow, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
-                //                tableView.beginUpdates()
-                //                tableView.endUpdates()
-                
-                ///Scroll to the header row
-                //                if(nextCellInfo?.cellHeight > 0) {
-                //                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Middle, animated: true)
-                //                }
-                
-            default: break
             }
+            
+        case .AddressCell:
+            LoadingSpinner.shared.startOnView(self.view)
+            
+            ///It takes time to load the map, leave some time to display loading spinner makes the flow look smoother
+            self.runOnMainThreadAfter(0.1){
+                self.performSegueWithIdentifier(ViewTransConst.displayHouseOnMap, sender: self)
+            }
+        case .HouseDetailTitleCell:
+            
+            LoadingSpinner.shared.startOnView(self.view)
+            
+            let browser = MWPhotoBrowser(delegate: self)
+            
+            // Config navigation left bar
+            browser.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"cancel"), style: .Plain, target: self, action: #selector(HouseDetailViewController.onClosePhotoBrowser(_:)))
+            
+            // Action button to allow sharing, copying, etc (default: true)
+            browser.displayActionButton = true
+            
+            // Whether to display nav arrows on toolbar (default: false)
+            browser.displayNavArrows = true
+            
+            // Whether selection buttons are shown on each image (default: true)
+            browser.displaySelectionButtons = false
+            
+            // Images that almost fill the screen will be initially zoomed to fill (default: true)
+            browser.zoomPhotosToFill = true
+            
+            // Whether the bars and controls are always visible or not (default: false)
+            browser.alwaysShowControls = false
+            
+            // Whether to allow the grid view (default: true)
+            browser.enableGrid = true;
+            
+            // Whether to start on the grid view (default: false)
+            browser.startOnGrid = false
+            
+            // Auto-play first video
+            browser.autoPlayOnAppear = false;
+            
+            browser.setCurrentPhotoIndex(0)
+            
+            self.navigationController?.pushViewController(browser, animated: true)
+            
+            self.trackScreenWithTitle("View: Image Viewer")
+            
+        case .ExpandableHeaderCell:
+            let nextRow = indexPath.row + 1
+            var nextCellInfo = tableRows[nextRow]
+            
+            
+            if nextCellInfo.hidden == true {
+                Log.debug("Set Show for Row \(nextRow)")
+                nextCellInfo.hidden = false
+            } else {
+                Log.debug("Set Hide for Row \(nextRow)")
+                nextCellInfo.hidden = true
+            }
+            tableRows[nextRow] = nextCellInfo
+            
+            ///Fix disappering seperator issue
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+            
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: nextRow, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            //                tableView.beginUpdates()
+            //                tableView.endUpdates()
+            
+            ///Scroll to the header row
+            //                if(nextCellInfo?.cellHeight > 0) {
+            //                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Middle, animated: true)
+            //                }
+            
+        default: break
         }
     }
-    
-    //    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-    //
-    //        self.bannerView.rootViewController = self
-    //        self.bannerView.adSize = kGADAdSizeBanner
-    //        //self.bannerView.delegate = self
-    //
-    //        //FBAdSettings.addTestDevices(fbTestDevice)
-    //
-    //        #if DEBUG
-    //            //Test adUnit
-    //            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-    //        #else
-    //            //Real adUnit
-    //            //self.bannerView.adUnitID = "ca-app-pub-7083975197863528/2369456093"
-    //            self.bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-    //        #endif
-    //
-    //        let request = GADRequest()
-    //
-    //        self.bannerView.loadRequest(request)
-    //
-    //        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 120))
-    //        footerView.addSubview(self.bannerView)
-    //
-    //        return footerView
-    //    }
-    //
-    //    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-    //        return 120.0
-    //    }
-    
-    
-    
 }
 
 // MARK: - MWPhotoBrowserDelegate
