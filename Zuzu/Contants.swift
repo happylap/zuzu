@@ -38,6 +38,10 @@ struct TagConst {
     
     static let freeTrial = "freeTrial"
     
+    static let moverDisplay = "moverDisplay"
+    
+    static let moverMsg = "moverMsg"
+    
 }
 
 // MARK: Constants for Criteria

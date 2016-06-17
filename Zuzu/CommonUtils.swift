@@ -227,6 +227,38 @@ class TagUtils: NSObject{
         
     }
     
+    /// House-moving micro service campaign experiment
+    static func getMoverExperiment() -> (display: Bool, msg: String?) {
+        
+        var isDisplay = false
+        var moverMsgString: String?
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let moverDisplayString = tagContainer.stringForKey(TagConst.moverDisplay)
+            moverMsgString = tagContainer.stringForKey(TagConst.moverMsg)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.moverDisplay) = \(moverDisplayString)")
+            
+            if(moverDisplayString == "y") {
+                
+                isDisplay = true
+                
+            } else if(moverDisplayString == "n"){
+                
+                isDisplay = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.moverDisplay)")
+            }
+            
+        }
+        
+        return (isDisplay, moverMsgString)
+        
+    }
+    
 }
 
 // MARK: UserServiceUtils

@@ -132,6 +132,31 @@ class HouseDetailViewController: UIViewController {
         
         self.houseItemDetail = result
         
+        
+        let experimentData = TagUtils.getMoverExperiment()
+        
+        /// Enable experiment only for Taipei/New Taipei city
+        if(experimentData.display) {
+            
+            if let houseDetail = self.houseItemDetail,
+                let city = houseDetail.valueForKey("city") as? Int
+                where city == 100 || city == 207 {
+                
+                let moverCell = CellInfo(cellIdentifier: .MoverCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
+                    if let cell = cell as? HouseDetailMoverCell {
+                        
+                        if let msg = experimentData.msg {
+                            cell.detailLabel.text = msg
+                        }
+                        
+                    }
+                })
+                
+                tableRows.insert(moverCell, atIndex: 1)
+            }
+            
+        }
+        
         ///Reload Table View
         self.tableView.reloadData()
         
@@ -700,15 +725,6 @@ class HouseDetailViewController: UIViewController {
                 }
             })
         ]
-        
-        let moverCell = CellInfo(cellIdentifier: .MoverCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
-            if let cell = cell as? HouseDetailMoverCell {
-                
-                
-            }
-        })
-        
-        tableRows.insert(moverCell, atIndex: 1)
     }
     
     private func alertItemNotFound() {
@@ -1206,14 +1222,15 @@ class HouseDetailViewController: UIViewController {
         ///Configure navigation bar items
         configureNavigationBarItems()
         
+        ///Prepare table view
+        setupTableCells()
+        
+        configureTableView()
+        
         ///Get remote data
         if let houseItem = self.houseItem {
             fetchHouseDetail(houseItem)
         }
-        
-        setupTableCells()
-        
-        configureTableView()
         
     }
     
