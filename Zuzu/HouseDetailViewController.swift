@@ -45,6 +45,7 @@ class HouseDetailViewController: UIViewController {
     
     private let cellIdentifier = "houseDetailTitleCell"
     private var tableRows:[CellInfo]!
+    private let experimentData = TagUtils.getMoverExperiment()
     
     private var photos = [MWPhoto]()
     
@@ -131,12 +132,9 @@ class HouseDetailViewController: UIViewController {
     private func handleHouseDetailResponse(result: AnyObject) {
         
         self.houseItemDetail = result
-        
-        
-        let experimentData = TagUtils.getMoverExperiment()
-        
+
         /// Enable experiment only for Taipei/New Taipei city
-        if(experimentData.display) {
+        if(self.experimentData.display) {
             
             if let houseDetail = self.houseItemDetail,
                 let city = houseDetail.valueForKey("city") as? Int
@@ -145,7 +143,7 @@ class HouseDetailViewController: UIViewController {
                 let moverCell = CellInfo(cellIdentifier: .MoverCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                     if let cell = cell as? HouseDetailMoverCell {
                         
-                        if let msg = experimentData.msg {
+                        if let msg = self.experimentData.msg {
                             cell.detailLabel.text = msg
                         }
                         
@@ -153,6 +151,10 @@ class HouseDetailViewController: UIViewController {
                 })
                 
                 tableRows.insert(moverCell, atIndex: 1)
+                
+                ///GA Tracker: Campaign Displayed
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                                action: GAConst.Action.Campaign.MicroMovingDisplay, label: self.experimentData.msg)
             }
             
         }
@@ -1459,6 +1461,10 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
             if #available(iOS 9.0, *) {
                 let svc = SFSafariViewController(URL: NSURL(string: moverLandingPage)!)
                 self.presentViewController(svc, animated: true, completion: nil)
+                
+                ///GA Tracker: Campaign Displayed
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                                action: GAConst.Action.Campaign.MicroMovingClick, label: self.experimentData.msg)
             } else {
                 // Fallback on earlier versions
                 
@@ -1470,6 +1476,10 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                     browserViewController.viewTitle = "豬豬搬一下"
                     //self.modalPresentationStyle = .CurrentContext
                     self.navigationController?.pushViewController(browserViewController, animated: true)
+                    
+                    ///GA Tracker: Campaign Displayed
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                                    action: GAConst.Action.Campaign.MicroMovingClick, label: self.experimentData.msg)
                 }
             }
             
