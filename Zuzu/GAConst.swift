@@ -11,6 +11,10 @@ import Foundation
 struct GAConst {
     
     struct Catrgory {
+        
+        ///Campaign event
+        static let Campaign = "campaign"
+        
         ///Common UI event
         static let UIActivity = "activity"
         
@@ -54,6 +58,13 @@ struct GAConst {
     
     
     struct Action {
+        
+        struct Campaign {
+            
+            static let MicroMovingDisplay = "microMovingDisplay"
+            
+            static let MicroMovingClick = "microMovingClick"
+        }
         
         struct UIActivity {
             

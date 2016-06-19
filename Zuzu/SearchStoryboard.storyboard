@@ -1099,11 +1099,11 @@
                         <viewControllerLayoutGuide type="bottom" id="z6L-pd-X4C"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fc8-tO-VZH">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="900"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="1500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RTx-PQ-fjy">
-                                <rect key="frame" x="0.0" y="64" width="650" height="792"/>
+                                <rect key="frame" x="0.0" y="64" width="650" height="1392"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -1162,8 +1162,47 @@
                                             <outlet property="houseTitleLabel" destination="jjz-Vf-7cD" id="khe-Be-2Lv"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="moverCell" rowHeight="55" id="TGV-H8-7yW" userLabel="moverCell" customClass="HouseDetailMoverCell" customModule="Zuzu" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="241" width="650" height="55"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TGV-H8-7yW" id="klB-5Y-k7i">
+                                            <rect key="frame" x="0.0" y="0.0" width="617" height="54.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6y7-io-YTG" userLabel="titleIcon">
+                                                    <rect key="frame" x="18" y="13" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="6y7-io-YTG" secondAttribute="height" multiplier="1:1" id="4vm-Bt-Ip4"/>
+                                                        <constraint firstAttribute="width" constant="30" id="ans-yn-YZ2"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬大台北微搬家—跑多遠、算多少，最划算!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2fn-Gp-ugy" userLabel="detailLabel">
+                                                    <rect key="frame" x="56" y="19.5" width="557" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="2fn-Gp-ugy" firstAttribute="leading" secondItem="6y7-io-YTG" secondAttribute="trailing" constant="8" id="1Ya-lu-RbH"/>
+                                                <constraint firstItem="6y7-io-YTG" firstAttribute="leading" secondItem="klB-5Y-k7i" secondAttribute="leadingMargin" constant="18" id="LXf-i7-02G"/>
+                                                <constraint firstItem="6y7-io-YTG" firstAttribute="centerY" secondItem="klB-5Y-k7i" secondAttribute="centerY" id="OBA-Rq-lCv"/>
+                                                <constraint firstItem="2fn-Gp-ugy" firstAttribute="centerY" secondItem="6y7-io-YTG" secondAttribute="centerY" id="T9f-Ib-hek"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="2fn-Gp-ugy" secondAttribute="trailing" constant="4" id="bGo-Jn-kv8"/>
+                                            </constraints>
+                                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="0.0"/>
+                                        <connections>
+                                            <outlet property="detailLabel" destination="2fn-Gp-ugy" id="VDc-XC-pTa"/>
+                                            <outlet property="titleIcon" destination="6y7-io-YTG" id="5K8-vB-v3l"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="priceSizeCell" rowHeight="88" id="HsS-WD-77U" customClass="HouseDetailPriceSizeCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="241" width="650" height="88"/>
+                                        <rect key="frame" x="0.0" y="296" width="650" height="88"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HsS-WD-77U" id="ScC-8c-B61">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="87.5"/>
@@ -1196,7 +1235,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J10-PP-Htj" userLabel="Size Text">
-                                                    <rect key="frame" x="419" y="34" width="216" height="20"/>
+                                                    <rect key="frame" x="418" y="34" width="216.5" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1237,7 +1276,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightDetailCell" rowHeight="88" id="YtO-1w-zYw" customClass="HouseDetailBasicInfoCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="329" width="650" height="88"/>
+                                        <rect key="frame" x="0.0" y="384" width="650" height="88"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YtO-1w-zYw" id="5qm-sc-lWa">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="87.5"/>
@@ -1253,7 +1292,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgt-HK-naS">
-                                                    <rect key="frame" x="419" y="34" width="216" height="21"/>
+                                                    <rect key="frame" x="418" y="34" width="216.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1281,7 +1320,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addressCell" rowHeight="55" id="KRN-bB-aZY" customClass="HouseDetailAddressCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="417" width="650" height="55"/>
+                                        <rect key="frame" x="0.0" y="472" width="650" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KRN-bB-aZY" id="K7j-yJ-GZE">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
@@ -1323,7 +1362,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableHeaderCell" rowHeight="55" id="Dbo-7a-fKS" customClass="HouseDetailExpandableHeaderCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="472" width="650" height="55"/>
+                                        <rect key="frame" x="0.0" y="527" width="650" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dbo-7a-fKS" id="V9N-G1-Fvz">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
@@ -1374,7 +1413,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentCell" rowHeight="55" id="94S-Ko-yrz" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="527" width="650" height="55"/>
+                                        <rect key="frame" x="0.0" y="582" width="650" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="94S-Ko-yrz" id="hMY-Ey-K1Q">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="54.5"/>
@@ -1411,7 +1450,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="expandableContentAdCell" rowHeight="330" id="fxB-Xv-OpS" customClass="HouseDetailExpandableContentCell" customModule="Zuzu" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="582" width="650" height="330"/>
+                                        <rect key="frame" x="0.0" y="637" width="650" height="330"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fxB-Xv-OpS" id="Lav-bE-QX3">
                                             <rect key="frame" x="0.0" y="0.0" width="650" height="329.5"/>
@@ -1434,7 +1473,7 @@
                                                     </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGT-FQ-Tld" userLabel="AdBannerView">
-                                                    <rect key="frame" x="175" y="13.5" width="300" height="300"/>
+                                                    <rect key="frame" x="175" y="13" width="300" height="300"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="300" id="A7D-V6-8yt"/>
@@ -1461,7 +1500,7 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05l-B1-oJ7" userLabel="Contact Bar View" customClass="HouseDetailContactBarView" customModule="Zuzu" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="770" width="650" height="85.5"/>
+                                <rect key="frame" x="0.0" y="1370" width="650" height="85.5"/>
                                 <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                             </view>
@@ -1480,7 +1519,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="maV-fu-tgx"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="650" height="900"/>
+                    <size key="freeformSize" width="650" height="1500"/>
                     <connections>
                         <outlet property="contactBarView" destination="05l-B1-oJ7" id="ceY-82-SRg"/>
                         <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
@@ -1490,7 +1529,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RrS-e7-IQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1725" y="1987"/>
+            <point key="canvasLocation" x="1725" y="2312"/>
         </scene>
         <!--House Map-->
         <scene sceneID="LeV-xK-fi9">
@@ -1501,11 +1540,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Gwr-WJ-4Sj"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="hDY-U9-dVB">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="900"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="1500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7jF-KR-mPn" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="64" width="650" height="792"/>
+                                <rect key="frame" x="0.0" y="64" width="650" height="1392"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -1596,7 +1635,7 @@
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="16T-0Q-CKY">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="900"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="1500"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1613,7 +1652,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1725" y="3011"/>
+            <point key="canvasLocation" x="1725" y="4000"/>
         </scene>
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
