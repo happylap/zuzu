@@ -109,6 +109,13 @@ class CommonUtils: NSObject{
     }
 }
 
+struct ExperimentData {
+    var isEnabled: Bool
+    var title: String?
+    var subtitle: String?
+    var url: String?
+}
+
 class TagUtils: NSObject{
 
     static func shouldDisplayADs() -> Bool {
@@ -256,6 +263,43 @@ class TagUtils: NSObject{
         }
         
         return (isDisplay, moverMsgString)
+    }
+    
+    /// Rent-discount campaign experiment
+    static func getRentDiscountExperiment() -> ExperimentData? {
+        
+        var tenantTitleString: String?
+        var tenantSubtitleString: String?
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let tenantDisplayString = tagContainer.stringForKey(TagConst.tenantDisplay)
+            tenantTitleString = tagContainer.stringForKey(TagConst.tenantTitle)
+            tenantSubtitleString = tagContainer.stringForKey(TagConst.tenantSubtitle)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.tenantDisplay) = \(tenantDisplayString)")
+            
+            if(tenantDisplayString == "y") {
+                
+                let data: ExperimentData = ExperimentData(isEnabled: true, title: tenantTitleString, subtitle: tenantSubtitleString, url: "http://bit.ly/28KvecO")
+                
+                return data
+                
+            } else if(tenantDisplayString == "n"){
+                
+                let data: ExperimentData = ExperimentData(isEnabled: false, title: nil, subtitle: nil, url: nil)
+                
+                return data
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.tenantDisplay)")
+                return nil
+            }
+            
+        }
+        
+        return nil
         
     }
     

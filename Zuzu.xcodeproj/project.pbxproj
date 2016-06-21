@@ -48,6 +48,7 @@
 		2F31F5261BC3C34600054355 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F31F5281BC3C34600054355 /* Localizable.strings */; };
 		2F33E0461BD918E300A7D6CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F33E0451BD918E300A7D6CD /* Extensions.swift */; };
 		2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3901E11BD4C69A00B806B8 /* CityRegion.swift */; };
+		2F396F751D1924D500CF4E12 /* PromotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F396F741D1924D500CF4E12 /* PromotionService.swift */; };
 		2F3AAB8C1D066B1300596F70 /* EM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F3AAB8A1D066B1300596F70 /* EM.storyboard */; };
 		2F3B4AFD1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */; };
 		2F3B4AFF1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */; };
@@ -241,6 +242,7 @@
 		2F31F52A1BC3DDF200054355 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2F33E0451BD918E300A7D6CD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2F3901E11BD4C69A00B806B8 /* CityRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityRegion.swift; sourceTree = "<group>"; };
+		2F396F741D1924D500CF4E12 /* PromotionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionService.swift; sourceTree = "<group>"; };
 		2F3AAB8B1D066B1300596F70 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EM.storyboard; sourceTree = "<group>"; };
 		2F3B4AFC1CC4CFB2003A4BCA /* ResetPasswordValidationFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResetPasswordValidationFormView.xib; sourceTree = "<group>"; };
 		2F3B4AFE1CC4D2A1003A4BCA /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
@@ -559,6 +561,7 @@
 				2FB16C511C48BDCF009738AC /* InAppPurchase */,
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
 				2F53FCCD1CD8C3F600E65F50 /* UserManager.swift */,
+				2F396F741D1924D500CF4E12 /* PromotionService.swift */,
 				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 				1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */,
@@ -1125,6 +1128,7 @@
 				14914F9F1C27D09800025AC1 /* NotificationHouseItem+CoreDataProperties.swift in Sources */,
 				8130F7EA1C00EE69006F5852 /* MyNoteViewController.swift in Sources */,
 				2FAAAFA71CB663ED00B954EF /* FormViewController.swift in Sources */,
+				2F396F751D1924D500CF4E12 /* PromotionService.swift in Sources */,
 				81A2A7BA1CFFE4F300521314 /* Note+CoreDataProperties.swift in Sources */,
 				816635911C5A8D64008C0AA3 /* CarouselView.swift in Sources */,
 				2F94105D1BF48D2F00BA12B5 /* MapViewController.swift in Sources */,

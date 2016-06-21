@@ -70,6 +70,31 @@ struct UserDefaultsUtils {
         }
     }
     
+    // MARK: Experiments
+    static let rentDiscountExperimentNextDisplayUserDefaultKey = "rentDiscountExperimentNextDisplay"
+    static let rentDiscountExperimentDelayFactorUserDefaultKey = "rentDiscountExperimentDelayFactor"
+    
+    static func setNextRentDiscountDisplayDate(expiry: NSDate) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(expiry, forKey: rentDiscountExperimentNextDisplayUserDefaultKey)
+        userDefaults.synchronize()
+    }
+    
+    static func getNextRentDiscountDisplayDate() -> NSDate? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(rentDiscountExperimentNextDisplayUserDefaultKey) as? NSDate
+    }
+    
+    static func setRentDiscountDisplayDelayFactor(days: Int) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(days, forKey: rentDiscountExperimentDelayFactorUserDefaultKey)
+    }
+    
+    static func getRentDiscountDisplayDelayFactor() -> Int? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(rentDiscountExperimentDelayFactorUserDefaultKey) as? Int
+    }
+    
     // MARK: Radar
     static let radarSuggestionTriggerCounterUserDefaultKey = "radarSuggestionTriggerCounter"
     static let allowPromptRadarSuggestionUserDefaultKey = "allowPromptRadarSuggestion"
@@ -117,6 +142,7 @@ struct UserDefaultsUtils {
         }
     }
     
+    // Radar Landing Page
     static let radarLandingPageDisplayedUserDefaultKey = "radarLandingPageDisplayed"
     
     static func setRadarLandindPageDisplayed() {

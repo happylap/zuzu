@@ -64,6 +64,12 @@ struct GAConst {
             static let MicroMovingDisplay = "microMovingDisplay"
             
             static let MicroMovingClick = "microMovingClick"
+            
+            static let RentDiscountDisplay = "rentDiscountDisplay"
+            
+            static let RentDiscountClick = "rentDiscountClick"
+            
+            static let RentDiscountReach = "rentDiscountReach"
         }
         
         struct UIActivity {
