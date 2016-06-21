@@ -926,6 +926,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="搜尋結果" id="NBD-dJ-SqW">
                         <rightBarButtonItems>
+                            <barButtonItem image="rent_discount_icon" width="30" id="FJZ-fs-Ryi">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="onRentDiscountButtonTouched:" destination="ewd-BO-qUn" id="dh7-qs-VGl"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem image="list_icon_n" id="8EG-ML-NRj">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -948,6 +954,7 @@
                         <outlet property="debugBarButton" destination="9Py-vk-BeN" id="BpY-q0-oeK"/>
                         <outlet property="filterSettingButton" destination="njk-V3-8Pl" id="N08-EB-vmC"/>
                         <outlet property="loadingSpinner" destination="Y95-Rm-Nya" id="lMA-m6-03K"/>
+                        <outlet property="rentDiscountButton" destination="FJZ-fs-Ryi" id="WuR-gU-q4J"/>
                         <outlet property="sortByPostTimeButton" destination="Aif-ds-c0e" id="vUQ-KP-XLr"/>
                         <outlet property="sortByPriceButton" destination="JTH-Sz-NIS" id="9Ko-U1-rVX"/>
                         <outlet property="sortBySizeButton" destination="RkJ-yY-SbF" id="Zzj-xd-YKt"/>
@@ -1791,6 +1798,7 @@
         <image name="location" width="30" height="30"/>
         <image name="main_search_n" width="38" height="38"/>
         <image name="rateus" width="33" height="33"/>
+        <image name="rent_discount_icon" width="30" height="30"/>
         <image name="search item_01" width="30" height="30"/>
         <image name="search item_02" width="30" height="30"/>
         <image name="search item_03" width="30" height="30"/>

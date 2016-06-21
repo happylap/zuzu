@@ -99,6 +99,46 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    @IBAction func onRentDiscountButtonTouched(sender: AnyObject) {
+        
+        if let experimentData = TagUtils.getRentDiscountExperiment() {
+            if(experimentData.isEnabled) {
+                
+                PromotionService.sharedInstance.showPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
+                
+                ///GA Tracker: Campaign Displayed
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                                          action: GAConst.Action.Campaign.RentDiscountDisplay, label: experimentData.title)
+            }
+        }
+    }
+    
+    
+    @IBOutlet weak var rentDiscountButton: UIBarButtonItem! {
+        didSet {
+            
+            let rightItems = self.navigationItem.rightBarButtonItems
+            
+            if let experimentData = TagUtils.getRentDiscountExperiment() where experimentData.isEnabled {
+                
+                rentDiscountButton.enabled = true
+                
+            } else {
+                
+                rentDiscountButton.enabled = false
+                
+                /// Remove debug button
+                if let rightBarButtonItems = rightItems?.filter({ (button) -> Bool in
+                    return (button != rentDiscountButton)
+                }) {
+                    
+                    self.navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
+                }
+            }
+            
+        }
+    }
+    
     @IBOutlet weak var sortByPriceButton: UIButton!
     
     @IBOutlet weak var sortBySizeButton: UIButton!
@@ -448,7 +488,11 @@ class SearchResultViewController: UIViewController {
             if let experimentData = TagUtils.getRentDiscountExperiment() {
                 if(experimentData.isEnabled) {
                     self.runOnMainThreadAfter(2.0, block: {
-                        PromotionService.sharedInstance.showPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
+                        PromotionService.sharedInstance.tryShowPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
+                        
+                        ///GA Tracker: Campaign Displayed
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                            action: GAConst.Action.Campaign.RentDiscountAutoDisplay, label: experimentData.title)
                     })
                 }
             }
