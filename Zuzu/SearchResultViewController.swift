@@ -61,6 +61,8 @@ class SearchResultViewController: UIViewController {
     private let noSearchResultLabel = UILabel() //UILabel for displaying no search result message
     private let noSearchResultImage = UIImageView(image: UIImage(named: "empty_no_search_result"))
     
+    private let randomNumber = 2 + Int(arc4random_uniform(UInt32(8))) // 2 ~ 10
+    
     ///Set the time limit within which the counter will not be incremented
     private var radarSuggestionCounterLimitTime: NSDate?
     
@@ -93,6 +95,46 @@ class SearchResultViewController: UIViewController {
                 }
                 
             #endif
+            
+        }
+    }
+    
+    @IBAction func onRentDiscountButtonTouched(sender: AnyObject) {
+        
+        if let experimentData = TagUtils.getRentDiscountExperiment() {
+            if(experimentData.isEnabled) {
+                
+                PromotionService.sharedInstance.showPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
+                
+                ///GA Tracker: Campaign Displayed
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                                          action: GAConst.Action.Campaign.RentDiscountDisplay, label: experimentData.title)
+            }
+        }
+    }
+    
+    
+    @IBOutlet weak var rentDiscountButton: UIBarButtonItem! {
+        didSet {
+            
+            let rightItems = self.navigationItem.rightBarButtonItems
+            
+            if let experimentData = TagUtils.getRentDiscountExperiment() where experimentData.isEnabled {
+                
+                rentDiscountButton.enabled = true
+                
+            } else {
+                
+                rentDiscountButton.enabled = false
+                
+                /// Remove debug button
+                if let rightBarButtonItems = rightItems?.filter({ (button) -> Bool in
+                    return (button != rentDiscountButton)
+                }) {
+                    
+                    self.navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
+                }
+            }
             
         }
     }
@@ -440,6 +482,22 @@ class SearchResultViewController: UIViewController {
         
         let totalItemNumber = dataSource.estimatedTotalResults
         
+        
+        /// Display rent discount experiment if needed
+        if(pageNo == randomNumber) {
+            if let experimentData = TagUtils.getRentDiscountExperiment() {
+                if(experimentData.isEnabled) {
+                    self.runOnMainThreadAfter(2.0, block: {
+                        PromotionService.sharedInstance.tryShowPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
+                        
+                        ///GA Tracker: Campaign Displayed
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                            action: GAConst.Action.Campaign.RentDiscountAutoDisplay, label: experimentData.title)
+                    })
+                }
+            }
+        }
+        
         /// Track the total result only for the first request
         if(pageNo == 1) {
             
@@ -470,7 +528,7 @@ class SearchResultViewController: UIViewController {
                     // Start the timer to avoid fast counter increment
                     self.radarSuggestionCounterLimitTime = NSDate().dateByAddingTimeInterval(60)
                 }
-
+                
                 
                 /// Increment the counter when the buffer runs out
                 // So that the counter won't be incremented every time the filter button is touched

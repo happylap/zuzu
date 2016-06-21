@@ -16,3 +16,4 @@
 #import <GoogleTagManager/TAGLogger.h>
 #import "Reachability.h"
 #import <VMFiveAdNetwork/VMFiveAdNetwork.h>
+#import "CNPPopupController.h"
