@@ -25,9 +25,13 @@ public class PromotionService: NSObject  {
     }
     private let rentDiscountImage = UIImageView(image: UIImage(named: "rent-discount")?.imageWithRenderingMode(.AlwaysTemplate))
     
+    private var experimentData: ExperimentData?
+    
+    private var parentViewController: UIViewController?
+    
     private var popupController:CNPPopupController = CNPPopupController()
     
-    private var isOkClicked = false
+    private var isButtonClicked:Bool = false
     
     /// Cache constants
     private let cacheName = "experimentCache"
@@ -36,7 +40,7 @@ public class PromotionService: NSObject  {
     
     /// Delay display delay constants
     private let maxDelayDays = 365 // A year later
-    private let delayStep = 1 // one day
+    private let delayStep = 2 // double the delay
     
     
     // MARK: - Private API
@@ -106,7 +110,8 @@ public class PromotionService: NSObject  {
     }
     
     // MARK: - Public API
-    internal func showPopupFromViewController(viewController: UIViewController, popupStyle: CNPPopupStyle, data: ExperimentData) {
+    
+    internal func tryShowPopupFromViewController(viewController: UIViewController, popupStyle: CNPPopupStyle, data: ExperimentData) {
         
         /// Check if the experiment can be displayed for the current date
         if(!self.allowDisplayRentDiscount()) {
@@ -117,6 +122,18 @@ public class PromotionService: NSObject  {
         if(self.isRentDiscountDisplayed()) {
             return
         }
+        
+        self.showPopupFromViewController(viewController, popupStyle: popupStyle, data: data)
+        
+    }
+    
+    internal func showPopupFromViewController(viewController: UIViewController, popupStyle: CNPPopupStyle, data: ExperimentData) {
+        
+        self.isButtonClicked = false
+        
+        parentViewController = viewController
+        
+        experimentData = data
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -145,7 +162,7 @@ public class PromotionService: NSObject  {
                     
                     ///GA Tracker: Campaign Clicked
                     viewController.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                                    action: GAConst.Action.Campaign.RentDiscountReach, label: data.title)
+                                                              action: GAConst.Action.Campaign.RentDiscountReach, label: data.title)
                 } else {
                     // Fallback on earlier versions
                     
@@ -161,16 +178,18 @@ public class PromotionService: NSObject  {
                         
                         ///GA Tracker: Campaign Clicked
                         viewController.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                                        action: GAConst.Action.Campaign.RentDiscountReach, label: data.title)
+                                                                  action: GAConst.Action.Campaign.RentDiscountReach, label: data.title)
                     }
                 }
             }
             
+            self.setNextDisplayDate(self.maxDelayDays)
+            
             ///GA Tracker: Campaign Clicked
             viewController.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                            action: GAConst.Action.Campaign.RentDiscountClick, label: data.title)
+                                                      action: GAConst.Action.Campaign.RentDiscountClick, label: data.title)
             
-            self.isOkClicked = true
+            self.isButtonClicked = true
         }
         
         
@@ -186,11 +205,21 @@ public class PromotionService: NSObject  {
             self.popupController.dismissPopupControllerAnimated(true)
             Log.debug("Button click: \(button.titleLabel?.text)")
             
+            
+            var delayFactor: Int = 1
+            
+            if let currentDelayFactor = UserDefaultsUtils.getRentDiscountDisplayDelayFactor() {
+                
+                delayFactor = (currentDelayFactor * self.delayStep) % self.maxDelayDays
+                
+            }
+            
+            self.setNextDisplayDate(delayFactor)
+            
             ///GA Tracker: Campaign Clicked
             viewController.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                            action: GAConst.Action.Campaign.RentDiscountClick, label: "later")
-            
-            self.isOkClicked = false
+                                                             action: GAConst.Action.Campaign.RentDiscountLater, label: data.title)
+            self.isButtonClicked = true
         }
         
         let titleLabel = UILabel()
@@ -214,13 +243,9 @@ public class PromotionService: NSObject  {
         
         /// Display Control
         self.setRentDiscountDisplayed(true)
-        
-        ///GA Tracker: Campaign Displayed
-        viewController.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                        action: GAConst.Action.Campaign.RentDiscountDisplay, label: data.title)
     }
     
-
+    
 }
 
 // MARK: - CNPPopupControllerDelegate
@@ -230,17 +255,23 @@ extension PromotionService : CNPPopupControllerDelegate {
         controller
         Log.enter()
         
-        if(self.isOkClicked) {
+        /// The dialog is closed by touching background
+        if(!self.isButtonClicked) {
             
-            self.setNextDisplayDate(self.maxDelayDays)
+            var delayFactor: Int = 1
             
-        } else {
-            
-            var delayFactor = UserDefaultsUtils.getRentDiscountDisplayDelayFactor() ?? 1
-            
-            delayFactor = (delayFactor * self.delayStep) % self.maxDelayDays
+            if let currentDelayFactor = UserDefaultsUtils.getRentDiscountDisplayDelayFactor() {
+                
+                delayFactor = (currentDelayFactor * self.delayStep) % self.maxDelayDays
+                
+            }
             
             self.setNextDisplayDate(delayFactor)
+            
+            ///GA Tracker: Campaign Clicked
+            parentViewController?.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                                             action: GAConst.Action.Campaign.RentDiscountLater, label: experimentData?.title)
+            
         }
     }
     
