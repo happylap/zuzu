@@ -42,6 +42,12 @@ struct TagConst {
     
     static let moverMsg = "moverMsg"
     
+    static let tenantDisplay = "tenantDisplay"
+    
+    static let tenantTitle = "tenantTitle"
+    
+    static let tenantSubtitle = "tenantSubtitle"
+    
 }
 
 // MARK: Constants for Criteria
