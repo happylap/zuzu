@@ -148,6 +148,8 @@ class CollectionItemService: NSObject
         Log.enter()
         self.dao.safeDeleteByID(id)
         CognitoSyncService.sharedInstance.doDel(CognitoDatasetType.Collection, key: id)
+        
+        NoteService.sharedInstance.deleteByHouseId(id)
         Log.exit()
     }
     
