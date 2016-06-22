@@ -261,7 +261,6 @@ class CognitoSyncService: NSObject {
         Log.enter()
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset(datasetType) {
             dataset.setString(value, forKey: key)
-            self._sync(datasetType)
         }
         Log.exit()
     }
@@ -270,7 +269,6 @@ class CognitoSyncService: NSObject {
         Log.enter()
         if let dataset: AWSCognitoDataset = self._openOrCreateDataset(datasetType) {
             dataset.removeObjectForKey(key)
-            self._sync(datasetType)
         }
         Log.exit()
     }

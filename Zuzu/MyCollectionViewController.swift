@@ -393,8 +393,6 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         
         //self.logoutButton.hidden = !FeatureOption.Collection.enableLogout
         
-        self.reloadVisibleRows()
-        
         //Google Analytics Tracker
         self.trackScreen()
     }
@@ -671,9 +669,11 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
     
     
     func reloadVisibleRows() {
+        Log.enter()
         if let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows {
             self.tableView.reloadRowsAtIndexPaths(indexPathsForVisibleRows, withRowAnimation: UITableViewRowAnimation.None)
         }
+        Log.exit()
     }
 
 }

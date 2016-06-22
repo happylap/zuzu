@@ -133,6 +133,16 @@ class NoteService: NSObject
         Log.exit()
     }
     
+    func deleteByHouseId(houseId: String) {
+        Log.enter()
+        if let notes = getAll(houseId) {
+            for note: Note in notes {
+                self.deleteNote(note.id)
+            }
+        }
+        Log.exit()
+    }
+    
     func getNote(id: String) -> Note? {
         Log.enter()
         let note = self.dao.get(id)
