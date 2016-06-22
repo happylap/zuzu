@@ -430,11 +430,22 @@ class HouseDetailViewController: UIViewController {
                     if let houseDetail = self.houseItemDetail {
                         
                         let community = houseDetail.valueForKey("community") as? String ?? "—"
-                        let mgmtFee = houseDetail.valueForKey("mgmt_fee") as? String ?? "—"
-                        
                         cell.leftInfoText.text = "社區: \(community)"
                         
-                        cell.rightInfoText.text = "管理費: \(mgmtFee)"
+                        var mgmtFeeString = "—"
+                        
+                        if let hasMgmt = houseDetail.valueForKey("has_mgmt_fee") as? Bool where hasMgmt == true {
+                            
+                            if let mgmtFee = houseDetail.valueForKey("mgmt_fee") as? Int {
+                                mgmtFeeString = "\(mgmtFee) 元"
+                            } else {
+                                mgmtFeeString = "有"
+                            }
+                            
+                        }
+
+                        cell.rightInfoText.text = "管理費: \(mgmtFeeString)"
+                        
                     }
                 }
             }),
