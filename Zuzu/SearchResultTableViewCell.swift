@@ -32,7 +32,7 @@ class SearchResultTableViewCell: UITableViewCell {
         case DELETE = 2
     }
     
-    typealias CollectionEventCallback = (event: CollectionEvent, houseItem: HouseItem)-> Void
+    typealias CollectionEventCallback = (event: CollectionEvent, indexPath: NSIndexPath, houseItem: HouseItem)-> Void
     
     enum HouseFlag: Int {
         case OFF_SHELF = 1  // 已下架
@@ -283,14 +283,12 @@ class SearchResultTableViewCell: UITableViewCell {
             
             if (self.isCollected){
                 Log.debug("Delete continueCollectionCallback: \(houseItem.id)")
-                self.collectionButtonTouchEventCallback?(event: CollectionEvent.DELETE, houseItem: houseItem)
+                self.collectionButtonTouchEventCallback?(event: CollectionEvent.DELETE, indexPath: self.indexPath, houseItem: houseItem)
                 
             } else {
                 Log.debug("Add continueCollectionCallback: \(houseItem.id)")
-                self.collectionButtonTouchEventCallback?(event: CollectionEvent.ADD, houseItem: houseItem)
+                self.collectionButtonTouchEventCallback?(event: CollectionEvent.ADD, indexPath: self.indexPath, houseItem: houseItem)
             }
-            
-            self.parentTableView.reloadRowsAtIndexPaths([self.indexPath], withRowAnimation: UITableViewRowAnimation.None)
             
         } else {
             assert(false, "The house item for the cell should not be nil")

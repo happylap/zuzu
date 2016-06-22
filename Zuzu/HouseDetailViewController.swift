@@ -1115,6 +1115,23 @@ class HouseDetailViewController: UIViewController {
         
     }
     
+    private func performCollectionDeletion(houseID: String) {
+
+        CollectionItemService.sharedInstance.deleteItemById(houseID)
+        
+        if let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton {
+            barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+        }
+        
+        ///Notify the search result table to refresh the selected row
+        delegate?.onHouseItemStateChanged?()
+        
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                        action: GAConst.Action.MyCollection.Delete)
+        
+    }
+    
     func collectButtonTouched(sender: UIButton){
         if !AmazonClientManager.sharedInstance.isLoggedIn() {
             AmazonClientManager.sharedInstance.loginFromView(self) {
@@ -1125,23 +1142,32 @@ class HouseDetailViewController: UIViewController {
         }
         
         if let houseItemDetail = self.houseItemDetail,
-            let houseId = houseItemDetail.valueForKey("id") as? String {
+            let houseID = houseItemDetail.valueForKey("id") as? String {
             
-            let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton
+            
             
             let collectionService = CollectionItemService.sharedInstance
             
             ///Determine action based on whether the house item is already in "My Collection"
-            if(collectionService.isExist(houseId)) {
+            if(collectionService.isExist(houseID)) {
                 
-                collectionService.deleteItemById(houseId)
-                
-                if let barItem = barItem {
-                    barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                /// Ask for user confirmation if there exists notes for this item
+                if(NoteService.sharedInstance.hasNote(houseID)) {
+                    
+                    let alertView = SCLAlertView()
+                    
+                    alertView.addButton("確認移除") {
+
+                        self.performCollectionDeletion(houseID)
+                        
+                    }
+                    
+                    alertView.showNotice("是否確認移除", subTitle: "此物件包含您撰寫筆記，將此物件從「我的收藏」中移除會一併將筆記刪除，是否確認？", closeButtonTitle: "暫時不要", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    
+                    return
                 }
                 
-                ///Notify the search result table to refresh the selected row
-                delegate?.onHouseItemStateChanged?()
+                self.performCollectionDeletion(houseID)
                 
             } else {
                 
@@ -1151,7 +1177,7 @@ class HouseDetailViewController: UIViewController {
                     return
                 }
                 
-                if let barItem = barItem {
+                if let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton {
                     barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
                 }
                 
@@ -1162,18 +1188,20 @@ class HouseDetailViewController: UIViewController {
                 LoadingSpinner.shared.startOnView(self.view)
                 Log.debug("LoadingSpinner startOnView")
                 
-                HouseDataRequester.getInstance().searchById(houseId) { (result, error) -> Void in
+                HouseDataRequester.getInstance().searchById(houseID) { (result, error) -> Void in
                     LoadingSpinner.shared.stop()
                     Log.debug("LoadingSpinner stop")
                     
                     if let error = error {
                         let alertView = SCLAlertView()
                         alertView.showCloseButton = false
+                        
                         alertView.addButton("知道了") {
-                            if let barItem = barItem {
+                            if let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton {
                                 barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
                             }
                         }
+                        
                         let subTitle = "您目前可能處於飛航模式或是無網路狀態，請稍後再試"
                         alertView.showInfo("網路無法連線", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
                         

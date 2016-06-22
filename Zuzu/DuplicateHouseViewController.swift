@@ -149,7 +149,7 @@ class DuplicateHouseViewController: UIViewController {
         alertView.showTitle("成功加入收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
     }
     
-    private func handleAddToCollection(houseItem: HouseItem) {
+    private func handleAddToCollection(houseItem: HouseItem, indexPath: NSIndexPath) {
         
         /// Check if maximum collection is reached
         if (!CollectionItemService.sharedInstance.canAdd()) {
@@ -179,8 +179,11 @@ class DuplicateHouseViewController: UIViewController {
                 let collectionService = CollectionItemService.sharedInstance
                 collectionService.addItem(result)
                 
-                /// Reload collection list
+                /// Refresh collection list
                 self.collectionIdList = collectionService.getIds()
+                
+                /// Reload the table cell
+                self.duplicateTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                 
                 ///GA Tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
@@ -198,17 +201,44 @@ class DuplicateHouseViewController: UIViewController {
         }
     }
     
-    private func handleDeleteFromCollection(houseItem: HouseItem) {
+    private func performCollectionDeletion(houseID: String, indexPath: NSIndexPath) {
         
         /// Update Collection data in CoreData
-        CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
+        CollectionItemService.sharedInstance.deleteItemById(houseID)
         
         /// Reload cached data
         self.collectionIdList = CollectionItemService.sharedInstance.getIds()
         
+        
+        /// Reload the table cell
+        self.duplicateTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-            action: GAConst.Action.MyCollection.Delete)
+                                        action: GAConst.Action.MyCollection.Delete)
+        
+    }
+    
+    private func handleDeleteFromCollection(houseItem: HouseItem, indexPath: NSIndexPath) {
+        
+        let houseID = houseItem.id
+        
+        /// Ask for user confirmation if there exists notes for this item
+        if(NoteService.sharedInstance.hasNote(houseItem.id)) {
+            
+            let alertView = SCLAlertView()
+            
+            alertView.addButton("確認移除") {
+                self.performCollectionDeletion(houseID, indexPath: indexPath)
+            }
+            
+            alertView.showNotice("是否確認移除", subTitle: "此物件包含您撰寫筆記，將此物件從「我的收藏」中移除會一併將筆記刪除，是否確認？", closeButtonTitle: "暫時不要", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            
+            return
+        }
+        
+        self.performCollectionDeletion(houseID, indexPath: indexPath)
+        
     }
     
     func onContinueButtonTouched(sender: UIButton) {
@@ -329,12 +359,12 @@ extension DuplicateHouseViewController: UITableViewDataSource, UITableViewDelega
                     isCollected = collectionIdList.contains(houseItem.id)
                 }
                 
-                cell.enableCollection(isCollected, eventCallback: { (event, houseItem) -> Void in
+                cell.enableCollection(isCollected, eventCallback: { (event, indexPath, houseItem) -> Void in
                     switch(event) {
                     case .ADD:
-                        self.handleAddToCollection(houseItem)
+                        self.handleAddToCollection(houseItem, indexPath: indexPath)
                     case .DELETE:
-                        self.handleDeleteFromCollection(houseItem)
+                        self.handleDeleteFromCollection(houseItem, indexPath: indexPath)
                     }
                 })
             }
