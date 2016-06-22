@@ -219,6 +219,21 @@ class SearchResultViewController: UIViewController {
         }
     }
     
+    private func configureAutoScaleNavigationTitle() {
+        
+        let titleLabel = UILabel()
+        titleLabel.numberOfLines = 1
+        titleLabel.font = UIFont.systemFontOfSize(21)
+        titleLabel.text = self.navigationItem.title
+        titleLabel.textColor = UIColor.whiteColor()
+        titleLabel.backgroundColor = UIColor.clearColor()
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.sizeToFit()
+        
+        self.navigationItem.titleView = titleLabel
+        
+    }
+    
     private func configureNoSearchResultMessage() {
         
         if let contentView = tableView.superview {
@@ -558,12 +573,12 @@ class SearchResultViewController: UIViewController {
         
         ///  Set navigation bar title according to the number of result
         if(totalItemNumber > 0) {
-            self.navigationItem.title = "共\(totalItemNumber)筆"
+            (self.navigationItem.titleView as? UILabel)?.text = "共\(totalItemNumber)筆"
             
             self.setNoSearchResultMessageVisible(false)
             
         } else {
-            self.navigationItem.title = "查無資料"
+            (self.navigationItem.titleView as? UILabel)?.text = "查無資料"
             
             self.setNoSearchResultMessageVisible(true)
             
@@ -1035,6 +1050,10 @@ class SearchResultViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("\(self) [[viewWillAppear]]")
+        
+
+        /// Setup auto-scale navigation title
+        self.configureAutoScaleNavigationTitle()
         
         ///Hide tab bar
         self.tabBarController?.tabBarHidden = true
