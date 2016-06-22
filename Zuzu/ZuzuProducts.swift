@@ -33,7 +33,7 @@ public struct ZuzuProducts {
                                                  priceLocale: NSLocale.currentLocale())
     
     public static let TrialProduct5 = ZuzuProduct(productIdentifier: ProductRadarFreeTrial2,
-                                                  localizedTitle: "5天租屋雷達服務體驗包",
+                                                  localizedTitle: "7天租屋雷達服務試用包",
                                                   localizedDescription: "免費",
                                                   price: 0.0,
                                                   priceLocale: NSLocale.currentLocale())
