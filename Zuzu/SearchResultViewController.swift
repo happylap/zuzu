@@ -771,7 +771,8 @@ class SearchResultViewController: UIViewController {
                 alertView.addButton("知道了") {
                     /// Reload collection list
                     self.collectionIdList = CollectionItemService.sharedInstance.getIds()
-                    // Refresh the row
+                    
+                    /// Reload the table cell
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                 }
                 let subTitle = "您目前可能是飛航模式或是無網路的狀況，請稍後再試"
@@ -790,6 +791,9 @@ class SearchResultViewController: UIViewController {
                 /// Reload collection list
                 self.collectionIdList = collectionService.getIds()
                 
+                /// Reload the table cell
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                
                 ///GA Tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
                                                 action: GAConst.Action.MyCollection.AddItemPrice,
@@ -806,17 +810,43 @@ class SearchResultViewController: UIViewController {
         }
     }
     
-    private func handleDeleteFromCollection(houseItem: HouseItem) {
+    private func performCollectionDeletion(houseID: String, indexPath: NSIndexPath) {
         
         /// Update Collection data in CoreData
-        CollectionItemService.sharedInstance.deleteItemById(houseItem.id)
+        CollectionItemService.sharedInstance.deleteItemById(houseID)
         
         /// Reload cached data
         self.collectionIdList = CollectionItemService.sharedInstance.getIds()
         
+        /// Reload the table cell
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        
         ///GA Tracker
         self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
                                         action: GAConst.Action.MyCollection.Delete)
+        
+    }
+    
+    private func handleDeleteFromCollection(houseItem: HouseItem, indexPath: NSIndexPath) {
+        
+        let houseID = houseItem.id
+        
+        /// Ask for user confirmation if there exists notes for this item
+        if(NoteService.sharedInstance.hasNote(houseID)) {
+            
+            let alertView = SCLAlertView()
+            
+            alertView.addButton("確認移除") {
+                self.performCollectionDeletion(houseID, indexPath: indexPath)
+            }
+            
+            alertView.showNotice("是否確認移除", subTitle: "此物件包含您撰寫筆記，將此物件從「我的收藏」中移除會一併將筆記刪除，是否確認？", closeButtonTitle: "暫時不要", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+            
+            return
+        }
+        
+        self.performCollectionDeletion(houseID, indexPath: indexPath)
+
     }
     
     // MARK: - Control Action Handlers
@@ -1162,12 +1192,12 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
                 isCollected = collectionIdList.contains(houseItem.id)
             }
             
-            cell.enableCollection(isCollected, eventCallback: { (event, houseItem) -> Void in
+            cell.enableCollection(isCollected, eventCallback: { (event, indexPath, houseItem) -> Void in
                 switch(event) {
                 case .ADD:
                     self.handleAddToCollection(houseItem, indexPath: indexPath)
                 case .DELETE:
-                    self.handleDeleteFromCollection(houseItem)
+                    self.handleDeleteFromCollection(houseItem, indexPath: indexPath)
                 }
             })
         }
@@ -1401,13 +1431,13 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
 // TODO: A better solution. A delegate for doing "my collecion" operations
 extension SearchResultViewController: HouseDetailViewDelegate {
     func onHouseItemStateChanged() {
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+        if let visibleCellIndexPath = tableView.indexPathsForVisibleRows {
             
             // Reload collection list
             self.collectionIdList = CollectionItemService.sharedInstance.getIds()
             
             // Refresh the row
-            tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: UITableViewRowAnimation.None)
+            tableView.reloadRowsAtIndexPaths(visibleCellIndexPath, withRowAnimation: UITableViewRowAnimation.None)
         }
     }
 }
