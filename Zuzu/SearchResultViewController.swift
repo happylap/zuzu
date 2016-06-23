@@ -66,6 +66,8 @@ class SearchResultViewController: UIViewController {
     ///Set the time limit within which the counter will not be incremented
     private var radarSuggestionCounterLimitTime: NSDate?
     
+    private var totalItemNumber = 0
+    
     // MARK: - Public Fields
     
     @IBOutlet weak var filterSettingButton: UIButton!
@@ -108,7 +110,7 @@ class SearchResultViewController: UIViewController {
                 
                 ///GA Tracker: Campaign Displayed
                 self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                                          action: GAConst.Action.Campaign.RentDiscountDisplay, label: experimentData.title)
+                                                action: GAConst.Action.Campaign.RentDiscountDisplay, label: experimentData.title)
             }
         }
     }
@@ -445,7 +447,7 @@ class SearchResultViewController: UIViewController {
     
     private func loadHouseListPage(pageNo: Int) {
         
-        let maxPageNum = ceil( Double(dataSource.estimatedTotalResults) / Double(HouseItemTableDataSource.Const.pageSize))
+        let maxPageNum = ceil( Double(self.totalItemNumber) / Double(HouseItemTableDataSource.Const.pageSize))
         
         if(pageNo > Int(maxPageNum)){
             Log.debug("loadHouseListPage: Exceeding max number of pages [\(dataSource.estimatedTotalResults)]")
@@ -458,6 +460,8 @@ class SearchResultViewController: UIViewController {
     }
     
     private func onDataLoaded(dataSource: HouseItemTableDataSource, pageNo: Int, error: NSError?) -> Void {
+        
+        let isFirstPage = (pageNo == 1)
         
         if let error = error {
             // Initialize Alert View
@@ -479,6 +483,13 @@ class SearchResultViewController: UIViewController {
                 }
             }
             
+            if(isFirstPage) {
+                
+                // TODO: Should use a network error image later
+                self.setNoSearchResultMessageVisible(true)
+                
+            }
+            
             /// GA Tracker
             if let duration = dataSource.loadingDuration {
                 self.trackTimeForCurrentScreen("Networkdata", interval: Int(duration * 1000),
@@ -486,7 +497,93 @@ class SearchResultViewController: UIViewController {
             }
         } else {
             
-            ///GA Tracker
+            /// Update total item number only when data is loaded successfully
+            self.totalItemNumber = dataSource.estimatedTotalResults
+            
+            /// Display rent discount experiment if needed
+            if(pageNo == randomNumber) {
+                if let experimentData = TagUtils.getRentDiscountExperiment() {
+                    if(experimentData.isEnabled) {
+                        self.runOnMainThreadAfter(2.0, block: {
+                            PromotionService.sharedInstance.tryShowPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
+                            
+                            ///GA Tracker: Campaign Displayed
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
+                                action: GAConst.Action.Campaign.RentDiscountAutoDisplay, label: experimentData.title)
+                        })
+                    }
+                }
+            }
+            
+            /// Track the total result only for the first request
+            if(isFirstPage) {
+                
+                var isFiltesOn = false
+                var searchAction:String?
+                if let filters = self.searchCriteria?.filters {
+                    isFiltesOn = filters.count > 0
+                }
+                
+                /// GA Tracker
+                searchAction = isFiltesOn ?
+                    GAConst.Action.SearchHouse.FilteredResult : GAConst.Action.SearchHouse.SearchResult
+                
+                if let searchAction = searchAction {
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
+                                                    action: searchAction,
+                                                    label: "\(dataSource.estimatedTotalResults)")
+                }
+                
+                /// Check if results hit the lower bound
+                if(totalItemNumber < RadarConstants.SUGGESTION_TRIGGER_INCREMENT_THRESHOLD) {
+                    
+                    /// The first time when the threshold is reached
+                    if(self.radarSuggestionCounterLimitTime == nil) {
+                        UserDefaultsUtils.incrementRadarSuggestionTriggerCounter()
+                        
+                        // Start the timer to avoid fast counter increment
+                        self.radarSuggestionCounterLimitTime = NSDate().dateByAddingTimeInterval(60)
+                    }
+                    
+                    
+                    /// Increment the counter when the buffer runs out
+                    // So that the counter won't be incremented every time the filter button is touched
+                    if(self.isRadarSuggestionTimerTimeout()) {
+                        Log.debug("RadarSuggestionTimer Timeout")
+                        UserDefaultsUtils.incrementRadarSuggestionTriggerCounter()
+                    }
+                    
+                    /// Check if we nned to prompt the user
+                    let counter = UserDefaultsUtils.getRadarSuggestionTriggerCounter()
+                    
+                    if(counter >= RadarConstants.SUGGESTION_TRIGGER_COUNT) {
+                        
+                        /// Suggest Radar to the user
+                        self.tryPromptRadarSuggestion()
+                        
+                        UserDefaultsUtils.resetRadarSuggestionTriggerCounter()
+                    }
+                }
+            }
+            
+            ///  Set navigation bar title & other UI according to the number of result
+            if(totalItemNumber > 0) {
+                (self.navigationItem.titleView as? UILabel)?.text = "共\(totalItemNumber)筆"
+                
+                self.setNoSearchResultMessageVisible(false)
+                
+            } else {
+                (self.navigationItem.titleView as? UILabel)?.text = "查無資料"
+                
+                self.setNoSearchResultMessageVisible(true)
+                
+                /// GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
+                                                action: GAConst.Action.Blocking.NoSearchResult,
+                                                label: HouseDataRequester.getInstance().urlComp.URL?.query)
+            }
+            
+            /// GA Tracker
             if let duration = dataSource.loadingDuration {
                 self.trackTimeForCurrentScreen("Networkdata", interval: Int(duration * 1000), name: "searchHouse")
             }
@@ -495,98 +592,10 @@ class SearchResultViewController: UIViewController {
         LoadingSpinner.shared.stop()
         self.stopSpinner()
         
-        let totalItemNumber = dataSource.estimatedTotalResults
-        
-        
-        /// Display rent discount experiment if needed
-        if(pageNo == randomNumber) {
-            if let experimentData = TagUtils.getRentDiscountExperiment() {
-                if(experimentData.isEnabled) {
-                    self.runOnMainThreadAfter(2.0, block: {
-                        PromotionService.sharedInstance.tryShowPopupFromViewController(self, popupStyle: CNPPopupStyle.ActionSheet, data: experimentData)
-                        
-                        ///GA Tracker: Campaign Displayed
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                            action: GAConst.Action.Campaign.RentDiscountAutoDisplay, label: experimentData.title)
-                    })
-                }
-            }
-        }
-        
-        /// Track the total result only for the first request
-        if(pageNo == 1) {
-            
-            var isFiltesOn = false
-            var searchAction:String?
-            if let filters = self.searchCriteria?.filters {
-                isFiltesOn = filters.count > 0
-            }
-            
-            /// GA Tracker
-            searchAction = isFiltesOn ?
-                GAConst.Action.SearchHouse.FilteredResult : GAConst.Action.SearchHouse.SearchResult
-            
-            if let searchAction = searchAction {
-                self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
-                                                action: searchAction,
-                                                label: "\(dataSource.estimatedTotalResults)")
-            }
-            
-            
-            /// Check if results hit the lower bound
-            if(totalItemNumber < RadarConstants.SUGGESTION_TRIGGER_INCREMENT_THRESHOLD) {
-                
-                /// The first time when the threshold is reached
-                if(self.radarSuggestionCounterLimitTime == nil) {
-                    UserDefaultsUtils.incrementRadarSuggestionTriggerCounter()
-                    
-                    // Start the timer to avoid fast counter increment
-                    self.radarSuggestionCounterLimitTime = NSDate().dateByAddingTimeInterval(60)
-                }
-                
-                
-                /// Increment the counter when the buffer runs out
-                // So that the counter won't be incremented every time the filter button is touched
-                if(self.isRadarSuggestionTimerTimeout()) {
-                    Log.debug("RadarSuggestionTimer Timeout")
-                    UserDefaultsUtils.incrementRadarSuggestionTriggerCounter()
-                }
-                
-                /// Check if we nned to prompt the user
-                let counter = UserDefaultsUtils.getRadarSuggestionTriggerCounter()
-                
-                if(counter >= RadarConstants.SUGGESTION_TRIGGER_COUNT) {
-                    
-                    /// Suggest Radar to the user
-                    self.tryPromptRadarSuggestion()
-                    
-                    UserDefaultsUtils.resetRadarSuggestionTriggerCounter()
-                }
-            }
-        }
-        
         /// GA Tracker: Record each result page loaded by the users
         self.trackEventForCurrentScreen(GAConst.Catrgory.SearchHouse,
                                         action: GAConst.Action.SearchHouse.LoadPage,
                                         label: String(pageNo))
-        
-        
-        ///  Set navigation bar title according to the number of result
-        if(totalItemNumber > 0) {
-            (self.navigationItem.titleView as? UILabel)?.text = "共\(totalItemNumber)筆"
-            
-            self.setNoSearchResultMessageVisible(false)
-            
-        } else {
-            (self.navigationItem.titleView as? UILabel)?.text = "查無資料"
-            
-            self.setNoSearchResultMessageVisible(true)
-            
-            /// GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
-                                            action: GAConst.Action.Blocking.NoSearchResult,
-                                            label: HouseDataRequester.getInstance().urlComp.URL?.query)
-        }
         
         self.tableView.reloadData()
         
@@ -861,7 +870,7 @@ class SearchResultViewController: UIViewController {
         }
         
         self.performCollectionDeletion(houseID, indexPath: indexPath)
-
+        
     }
     
     // MARK: - Control Action Handlers
@@ -1048,7 +1057,7 @@ class SearchResultViewController: UIViewController {
         
         /// Setup auto-scale navigation title
         self.configureAutoScaleNavigationTitle()
-
+        
     }
     
     override func viewWillAppear(animated: Bool) {
