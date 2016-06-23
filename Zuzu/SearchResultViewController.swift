@@ -1045,15 +1045,15 @@ class SearchResultViewController: UIViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier.adItem) as! SearchResultAdCell
         cell.setupBanner(self)
         cell.loadBanner()
+        
+        /// Setup auto-scale navigation title
+        self.configureAutoScaleNavigationTitle()
+
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("\(self) [[viewWillAppear]]")
-        
-
-        /// Setup auto-scale navigation title
-        self.configureAutoScaleNavigationTitle()
         
         ///Hide tab bar
         self.tabBarController?.tabBarHidden = true
