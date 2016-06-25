@@ -52,7 +52,8 @@ pod 'BWWalkthrough', '1.1.0'
 pod 'KeychainAccess', '2.3.5'
 pod 'VMFiveAdNetwork', '2.1.4'
 pod 'BGTableViewRowActionWithImage'
-pod 'CNPPopupController'
+pod 'CNPPopupController', '0.3.1'
+pod 'JKNotificationPanel', '0.2.0'
 end
 
 target 'ZuzuTests' do

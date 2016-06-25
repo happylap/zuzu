@@ -16,6 +16,8 @@ import SCLAlertView
 import GoogleMobileAds
 import FBAudienceNetwork
 import SafariServices
+import JKNotificationPanel
+import Alamofire
 
 private let Log = Logger.defaultLogger
 
@@ -48,6 +50,20 @@ class HouseDetailViewController: UIViewController {
     private let experimentData = TagUtils.getMoverExperiment()
     
     private var photos = [MWPhoto]()
+    
+    private let notificationBar = JKNotificationPanel()
+    
+    private var alamoFireManager: Alamofire.Manager =  {
+        
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForRequest = 4 // seconds
+        configuration.timeoutIntervalForResource = 8
+        configuration.URLCache = nil // Do not cache
+        return Alamofire.Manager(configuration: configuration)
+        
+    }()
+    
+    private var alamoFireRequest: Alamofire.Request?
     
     // MARK: - Public Fields
     
@@ -126,13 +142,64 @@ class HouseDetailViewController: UIViewController {
     @IBOutlet weak var contactBarView: HouseDetailContactBarView!
     @IBOutlet weak var tableView: UITableView!
     
-    
     // MARK: - Private Utils
+    
+    private func startCheckSourceAvailability(url: String) {
+        
+        self.alamoFireRequest = self.alamoFireManager.request(Alamofire.Method.GET, url).responseString { (request, response, result) in
+            
+            Log.error(result.debugDescription)
+            
+            if let code = response?.statusCode {
+                
+                switch(code) {
+                case 302, 404:
+                    self.showItemRemovedNotice()
+                    Log.debug("Item removed")
+                    break
+                default:
+                    Log.debug("Item ok")
+                    break
+                }
+            }
+            
+        }
+    }
+    
+    
+    private func stopCheckSourceAvailability() {
+        
+        self.alamoFireRequest?.cancel()
+        
+    }
+    
+    private func showItemRemovedNotice() {
+        
+        let defaultView = notificationBar.defaultView(JKType.WARNING, message: "提醒您，此物件可能已經從原始房源下架")
+        defaultView.setColor(UIColor.colorWithRGB(0xFF6666))
+        
+        notificationBar.delegate = self
+        notificationBar.timeUntilDismiss = 3.5
+        notificationBar.enableTapDismiss = false
+        notificationBar.showNotify(withView: defaultView, belowNavigation: self.navigationController!)
+        
+        ///GA Tracker: Item Removed Notice
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                                     action: GAConst.Action.UIActivity.RemovedItemNotice, label: houseItem?.id ?? "")
+        
+    }
     
     private func handleHouseDetailResponse(result: AnyObject) {
         
         self.houseItemDetail = result
 
+        /// Check is item removed / sold
+        if let houseDetail = self.houseItemDetail,
+            url = houseDetail.valueForKey("link") as? String {
+            
+            self.startCheckSourceAvailability(url)
+        }
+        
         /// Enable experiment only for Taipei/New Taipei city
         if(self.experimentData.display) {
             
@@ -1299,6 +1366,12 @@ class HouseDetailViewController: UIViewController {
         self.networkErrorAlertView = nil
         
         LoadingSpinner.shared.stop()
+        
+        if(self.isMovingFromParentViewController()) {
+            self.notificationBar.dismissNotify()
+            self.stopCheckSourceAvailability()
+        }
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -1646,5 +1719,18 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
         } else {
             return nil
         }
+    }
+}
+
+
+// MARK: - JKNotificationPanelDelegate
+extension HouseDetailViewController: JKNotificationPanelDelegate {
+
+    func notificationPanelDidDismiss () {
+        // Dismissed
+    }
+    
+    func notificationPanelDidTap() {
+        // Tapped
     }
 }
