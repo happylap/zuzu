@@ -58,7 +58,6 @@ class HouseDetailViewController: UIViewController {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForRequest = 4 // seconds
         configuration.timeoutIntervalForResource = 8
-        configuration.URLCache = nil // Do not cache
         return Alamofire.Manager(configuration: configuration)
         
     }()
