@@ -56,10 +56,10 @@ public class HouseItemTableDataSource {
             //                + "<Region>: \(self.criteria?.size)\n"
             
             
-            let host = HouseDataRequester.getInstance().urlComp.host ?? ""
-            let port = HouseDataRequester.getInstance().urlComp.port ?? 0
-            let path = HouseDataRequester.getInstance().urlComp.path ?? ""
-            let query = HouseDataRequester.getInstance().urlComp.query ?? ""
+            let host = HouseDataRequestService.getInstance().urlComp.host ?? ""
+            let port = HouseDataRequestService.getInstance().urlComp.port ?? 0
+            let path = HouseDataRequestService.getInstance().urlComp.path ?? ""
+            let query = HouseDataRequestService.getInstance().urlComp.query ?? ""
             
             let queryInfo = "\n[Last HTTP Request]\n"
                 + "<Host>: \n\(host) \n"
@@ -68,7 +68,7 @@ public class HouseItemTableDataSource {
                 + "<Query>: \n\(query) \n"
             
             let urlInfo = "\n[Full URL]\n"
-                + "\(HouseDataRequester.getInstance().urlComp.URL ?? nil)"
+                + "\(HouseDataRequestService.getInstance().urlComp.URL ?? nil)"
             
             return pageInfo + criteriaInfo + queryInfo + urlInfo
         }
@@ -158,7 +158,7 @@ public class HouseItemTableDataSource {
     //** MARK: - Private Functions
     
     private func loadRemoteData(pageNo:Int){
-        let requester = HouseDataRequester.getInstance()
+        let requester = HouseDataRequestService.getInstance()
         let start = getStartIndexFromPageNo(pageNo)
         var row = Const.pageSize
         

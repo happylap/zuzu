@@ -251,16 +251,16 @@ class HouseItem:NSObject, NSCoding {
 
 typealias onQueryComplete = (totalNum: Int, result: [HouseItem]?, facetResult: [String: Int]? ,error: NSError?) -> Void
 
-public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
+public class HouseDataRequestService: NSObject, NSURLConnectionDelegate {
     
     private static let defaultFieldList = [SolrConst.Field.ID, SolrConst.Field.TITLE, SolrConst.Field.ADDR, SolrConst.Field.HOUSE_TYPE, SolrConst.Field.PURPOSE_TYPE, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE, SolrConst.Field.SIZE,SolrConst.Field.SOURCE, SolrConst.Field.IMG_LIST, SolrConst.Field.CHILDREN]
     
     private static let requestTimeout = 15.0
-    private static let instance = HouseDataRequester()
+    private static let instance = HouseDataRequestService()
     
     let urlComp = NSURLComponents()
     
-    public static func getInstance() -> HouseDataRequester{
+    public static func getInstance() -> HouseDataRequestService{
         return instance
     }
     
@@ -502,7 +502,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
                 Log.debug("fullURL: \(fullURL.absoluteString)")
                 
                 let request = NSMutableURLRequest(URL: fullURL)
-                request.timeoutInterval = HouseDataRequester.requestTimeout
+                request.timeoutInterval = HouseDataRequestService.requestTimeout
                 
                 request.HTTPMethod = SolrConst.Server.HTTP_METHOD
                 
@@ -621,7 +621,7 @@ public class HouseDataRequester: NSObject, NSURLConnectionDelegate {
             Log.debug("fullURL: \(fullURL.absoluteString)")
             
             let request = NSMutableURLRequest(URL: fullURL)
-            request.timeoutInterval = HouseDataRequester.requestTimeout
+            request.timeoutInterval = HouseDataRequestService.requestTimeout
             
             request.HTTPMethod = SolrConst.Server.HTTP_METHOD
             

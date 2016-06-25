@@ -205,7 +205,7 @@ class CollectionItemService: NSObject
             LoadingSpinner.shared.startOnView(theViewController!.view)
         }
         
-        HouseDataRequester.getInstance().searchById(id) {
+        HouseDataRequestService.getInstance().searchById(id) {
             (result, error) -> Void in
             
             var isExist = true
@@ -252,7 +252,7 @@ class CollectionItemService: NSObject
         if(!_hitCache) {
             Log.debug("HouseDataRequester SearchById: \(id)")
             
-            HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
+            HouseDataRequestService.getInstance().searchById(id) { (result, error) -> Void in
                 
                 if let error = error {
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
@@ -313,7 +313,7 @@ class CollectionItemService: NSObject
         if(!_hitCache) {
             Log.debug("HouseDataRequester SearchById: \(id)")
             
-            HouseDataRequester.getInstance().searchById(id) { (result, error) -> Void in
+            HouseDataRequestService.getInstance().searchById(id) { (result, error) -> Void in
                 
                 if let error = error {
                     Log.debug("Cannot get remote data \(error.localizedDescription)")

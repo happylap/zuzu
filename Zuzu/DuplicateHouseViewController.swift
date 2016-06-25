@@ -104,7 +104,7 @@ class DuplicateHouseViewController: UIViewController {
         LoadingSpinner.shared.setOpacity(0.3)
         LoadingSpinner.shared.startOnView(self.view)
         
-        HouseDataRequester.getInstance().searchByIds(houseIdList) { (totalNum, result, facetResult, error) -> Void in
+        HouseDataRequestService.getInstance().searchByIds(houseIdList) { (totalNum, result, facetResult, error) -> Void in
             self.duplicateHouses = result
             self.duplicateTableView.reloadData()
             
@@ -166,7 +166,7 @@ class DuplicateHouseViewController: UIViewController {
         /// Prompt the user if needed
         self.tryAlertAddingToCollectionSuccess()
         
-        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+        HouseDataRequestService.getInstance().searchById(houseItem.id) { (result, error) -> Void in
             
             if let error = error {
                 Log.debug("Cannot get remote data \(error.localizedDescription)")

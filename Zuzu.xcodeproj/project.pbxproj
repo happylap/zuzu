@@ -100,7 +100,7 @@
 		2F9797CD1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */; };
 		2F99890D1C8F1286005ED6E0 /* EngineerModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F99890C1C8F1286005ED6E0 /* EngineerModeViewController.swift */; };
 		2F9B25E61C08C251004CECAA /* FeatureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B25E51C08C251004CECAA /* FeatureOptions.swift */; };
-		2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */; };
+		2FA2D3191BB122AB008C5B59 /* HouseDataRequestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3181BB122AB008C5B59 /* HouseDataRequestService.swift */; };
 		2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */; };
 		2FAAAFA51CB6268300B954EF /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA41CB6268300B954EF /* Login.storyboard */; };
 		2FAAAFA71CB663ED00B954EF /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAAFA61CB663ED00B954EF /* FormViewController.swift */; };
@@ -299,7 +299,7 @@
 		2F9797CC1BF3428800D41F6D /* HouseDetailExpandableContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDetailExpandableContentCell.swift; sourceTree = "<group>"; };
 		2F99890C1C8F1286005ED6E0 /* EngineerModeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineerModeViewController.swift; sourceTree = "<group>"; };
 		2F9B25E51C08C251004CECAA /* FeatureOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureOptions.swift; sourceTree = "<group>"; };
-		2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequester.swift; sourceTree = "<group>"; };
+		2FA2D3181BB122AB008C5B59 /* HouseDataRequestService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HouseDataRequestService.swift; sourceTree = "<group>"; };
 		2FA2D3221BB2515E008C5B59 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		2FAAAFA41CB6268300B954EF /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		2FAAAFA61CB663ED00B954EF /* FormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
@@ -562,7 +562,6 @@
 				2F08BCDB1C0BF35F00A3D645 /* GoogleAnalytics */,
 				2F53FCCD1CD8C3F600E65F50 /* UserManager.swift */,
 				2F396F741D1924D500CF4E12 /* PromotionService.swift */,
-				2FA2D3181BB122AB008C5B59 /* HouseDataRequester.swift */,
 				2FB09E011BC657040047110E /* HouseItemTableDataSource.swift */,
 				1446FA5B1C2D3AA90073A8A7 /* CommonUtils.swift */,
 				2F05C6271BBA2FBB00100D5F /* StringUtils.swift */,
@@ -635,6 +634,7 @@
 				140250BD1C7C71B50009A076 /* RadarService.swift */,
 				14CBABB11C2A908500EF2E13 /* TableResultsController.swift */,
 				816635951C5F17F6008C0AA3 /* ZuzuWebService.swift */,
+				2FA2D3181BB122AB008C5B59 /* HouseDataRequestService.swift */,
 				2FBCE9DA1C9BF3DD00C9E9FA /* UserServiceStatusManager.swift */,
 				81A2A7B71CFFDC2600521314 /* NoteService.swift */,
 				81179A201D06C21E006C6BCF /* CognitoSyncService.swift */,
@@ -1119,7 +1119,7 @@
 				2F66375F1CB77D9900A51095 /* PasswordFormView.swift in Sources */,
 				2F53FCCE1CD8C3F600E65F50 /* UserManager.swift in Sources */,
 				2FA2D3231BB2515E008C5B59 /* SearchResultTableViewCell.swift in Sources */,
-				2FA2D3191BB122AB008C5B59 /* HouseDataRequester.swift in Sources */,
+				2FA2D3191BB122AB008C5B59 /* HouseDataRequestService.swift in Sources */,
 				2F3901E21BD4C69A00B806B8 /* CityRegion.swift in Sources */,
 				81390C771C365F9A00450761 /* AmazonClientManager.swift in Sources */,
 				2F7ADC6F1CC8B10A009726B2 /* WalkthroughMasterViewController.swift in Sources */,
