@@ -26,7 +26,7 @@ struct GAConst {
         
         ///ZuzuRadarSetting event
         static let ZuzuRadarSetting = "zuzuRadarSetting"
-
+        
         ///ZuzuRadarPurchase event
         static let ZuzuRadarPurchase = "zuzuRadarPurchase"
         
@@ -111,6 +111,8 @@ struct GAConst {
             static let ChangeRadarStatus = "changeRadarStatus"
             
             static let PromptRadarSuggestion = "promptRadarSuggestion"
+            
+            static let RemovedItemNotice = "removedItemNotice"
         }
         
         struct MyCollection {
@@ -195,7 +197,7 @@ struct GAConst {
         }
         
         struct NotificationSetup {
-
+            
             static let DeviceTokenChangeSuccess = "deviceTokenChangeSuccess"
             
             static let DeviceTokenChangeFailure = "deviceTokenChangeFailure"
@@ -259,7 +261,7 @@ struct GAConst {
             
             static let Error = "error"
         }
-
+        
         
         struct Blocking {
             
