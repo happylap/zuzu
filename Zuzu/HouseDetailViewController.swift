@@ -147,8 +147,6 @@ class HouseDetailViewController: UIViewController {
         
         self.alamoFireRequest = self.alamoFireManager.request(Alamofire.Method.GET, url).responseString { (request, response, result) in
             
-            Log.error(result.debugDescription)
-            
             if let code = response?.statusCode {
                 
                 switch(code) {
