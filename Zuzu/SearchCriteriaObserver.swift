@@ -45,7 +45,7 @@ class FastCountCriteriaObserver: NSObject, SearchCriteriaObserver {
     
     private var currentCriteria: SearchCriteria = SearchCriteria()
     
-    private let houseReq = HouseDataRequester.getInstance()
+    private let houseReq = HouseDataRequestService.getInstance()
     
     private var enabled = false
     
@@ -112,7 +112,7 @@ class RegionItemCountCriteriaObserver: NSObject, SearchCriteriaObserver {
     
     private var currentCriteria: SearchCriteria = SearchCriteria()
     
-    private let houseReq = HouseDataRequester.getInstance()
+    private let houseReq = HouseDataRequestService.getInstance()
     
     private var enabled = false
     

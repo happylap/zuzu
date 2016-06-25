@@ -197,7 +197,7 @@ class HouseDetailViewController: UIViewController {
         
         if(!hitCache) {
             
-            HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+            HouseDataRequestService.getInstance().searchById(houseItem.id) { (result, error) -> Void in
                 
                 LoadingSpinner.shared.stop()
                 
@@ -1199,7 +1199,7 @@ class HouseDetailViewController: UIViewController {
                 LoadingSpinner.shared.startOnView(self.view)
                 Log.debug("LoadingSpinner startOnView")
                 
-                HouseDataRequester.getInstance().searchById(houseID) { (result, error) -> Void in
+                HouseDataRequestService.getInstance().searchById(houseID) { (result, error) -> Void in
                     LoadingSpinner.shared.stop()
                     Log.debug("LoadingSpinner stop")
                     

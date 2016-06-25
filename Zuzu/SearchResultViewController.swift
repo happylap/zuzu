@@ -580,7 +580,7 @@ class SearchResultViewController: UIViewController {
                 /// GA Tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.Blocking,
                                                 action: GAConst.Action.Blocking.NoSearchResult,
-                                                label: HouseDataRequester.getInstance().urlComp.URL?.query)
+                                                label: HouseDataRequestService.getInstance().urlComp.URL?.query)
             }
             
             /// GA Tracker
@@ -785,7 +785,7 @@ class SearchResultViewController: UIViewController {
         LoadingSpinner.shared.startOnView(self.view)
         Log.debug("LoadingSpinner startOnView")
         
-        HouseDataRequester.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+        HouseDataRequestService.getInstance().searchById(houseItem.id) { (result, error) -> Void in
             LoadingSpinner.shared.stop()
             Log.debug("LoadingSpinner stop")
             
