@@ -42,11 +42,15 @@ struct TagConst {
     
     static let moverMsg = "moverMsg"
     
+    static let moverUrl = "moverUrl"
+    
     static let tenantDisplay = "tenantDisplay"
     
     static let tenantTitle = "tenantTitle"
     
     static let tenantSubtitle = "tenantSubtitle"
+    
+    static let tenantUrl = "tenantUrl"
     
 }
 
