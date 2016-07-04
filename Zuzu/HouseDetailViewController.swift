@@ -58,7 +58,7 @@ class HouseDetailViewController: UIViewController {
         
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = [
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36"
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 8_4_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/47.0.2526.107 Mobile/12H321 Safari/600.1.4"
         ]
         configuration.timeoutIntervalForRequest = 4 // seconds
         configuration.timeoutIntervalForResource = 8
@@ -199,7 +199,9 @@ class HouseDetailViewController: UIViewController {
         if let houseDetail = self.houseItemDetail,
             url = houseDetail.valueForKey("link") as? String {
             
-            self.startCheckSourceAvailability(url)
+            if(TagUtils.shouldCheckSource()) {
+                self.startCheckSourceAvailability(url)
+            }
         }
         
         let defaultTitle = "豬豬大台北微搬家—跑多遠、算多少，最划算!"

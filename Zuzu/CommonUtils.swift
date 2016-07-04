@@ -118,6 +118,35 @@ struct ExperimentData {
 
 class TagUtils: NSObject{
 
+    static func shouldCheckSource() -> Bool {
+        
+        var isCheckSource = false
+        
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let checkSourceString = tagContainer.stringForKey(TagConst.checkSource)
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.checkSource) = \(checkSourceString)")
+            
+            if(checkSourceString == "y") {
+                
+                isCheckSource = true
+                
+            } else if(checkSourceString == "n"){
+                
+                isCheckSource = false
+                
+            } else {
+                
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.checkSource)")
+            }
+            
+        }
+        
+        return isCheckSource
+        
+    }
+    
     static func shouldDisplayADs() -> Bool {
         
         var isDisplayADs = true
