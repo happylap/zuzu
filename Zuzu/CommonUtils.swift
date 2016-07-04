@@ -235,34 +235,40 @@ class TagUtils: NSObject{
     }
     
     /// House-moving micro service campaign experiment
-    static func getMoverExperiment() -> (display: Bool, msg: String?) {
-        
-        var isDisplay = false
-        var moverMsgString: String?
+    static func getMoverExperiment() -> ExperimentData? {
+
+        var moverTitleString: String?
+        var promotionUrl: String?
         
         // A/B Testing flags
         if let tagContainer = AppDelegate.tagContainer {
             let moverDisplayString = tagContainer.stringForKey(TagConst.moverDisplay)
-            moverMsgString = tagContainer.stringForKey(TagConst.moverMsg)
+            moverTitleString = tagContainer.stringForKey(TagConst.moverMsg)
+            promotionUrl = tagContainer.stringForKey(TagConst.moverUrl)
             
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.moverDisplay) = \(moverDisplayString)")
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.moverDisplay) = \(moverDisplayString), \(TagConst.moverUrl) = \(promotionUrl)")
             
             if(moverDisplayString == "y") {
                 
-                isDisplay = true
+                let data: ExperimentData = ExperimentData(isEnabled: true, title: moverTitleString, subtitle: nil, url: promotionUrl)
+                
+                return data
                 
             } else if(moverDisplayString == "n"){
                 
-                isDisplay = false
+                let data: ExperimentData = ExperimentData(isEnabled: false, title: nil, subtitle: nil, url: nil)
+                
+                return data
                 
             } else {
                 
                 Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.moverDisplay)")
+                return nil
             }
             
         }
         
-        return (isDisplay, moverMsgString)
+        return nil
     }
     
     /// Rent-discount campaign experiment
@@ -270,18 +276,21 @@ class TagUtils: NSObject{
         
         var tenantTitleString: String?
         var tenantSubtitleString: String?
+        var promotionUrl: String?
         
         // A/B Testing flags
         if let tagContainer = AppDelegate.tagContainer {
             let tenantDisplayString = tagContainer.stringForKey(TagConst.tenantDisplay)
             tenantTitleString = tagContainer.stringForKey(TagConst.tenantTitle)
             tenantSubtitleString = tagContainer.stringForKey(TagConst.tenantSubtitle)
+            promotionUrl = tagContainer.stringForKey(TagConst.tenantUrl)
             
-            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.tenantDisplay) = \(tenantDisplayString)")
+            
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.tenantDisplay) = \(tenantDisplayString) , \(TagConst.tenantUrl) = \(promotionUrl)")
             
             if(tenantDisplayString == "y") {
                 
-                let data: ExperimentData = ExperimentData(isEnabled: true, title: tenantTitleString, subtitle: tenantSubtitleString, url: "http://bit.ly/28KvecO")
+                let data: ExperimentData = ExperimentData(isEnabled: true, title: tenantTitleString, subtitle: tenantSubtitleString, url: promotionUrl)
                 
                 return data
                 

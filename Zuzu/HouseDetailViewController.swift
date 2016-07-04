@@ -47,7 +47,8 @@ class HouseDetailViewController: UIViewController {
     
     private let cellIdentifier = "houseDetailTitleCell"
     private var tableRows:[CellInfo]!
-    private let experimentData = TagUtils.getMoverExperiment()
+    
+    private var experimentData = TagUtils.getMoverExperiment()
     
     private var photos = [MWPhoto]()
     
@@ -186,14 +187,14 @@ class HouseDetailViewController: UIViewController {
         
         ///GA Tracker: Item Removed Notice
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                                                     action: GAConst.Action.UIActivity.RemovedItemNotice, label: houseItem?.id ?? "")
+                                        action: GAConst.Action.UIActivity.RemovedItemNotice, label: houseItem?.id ?? "")
         
     }
     
     private func handleHouseDetailResponse(result: AnyObject) {
         
         self.houseItemDetail = result
-
+        
         /// Check is item removed / sold
         if let houseDetail = self.houseItemDetail,
             url = houseDetail.valueForKey("link") as? String {
@@ -201,9 +202,10 @@ class HouseDetailViewController: UIViewController {
             self.startCheckSourceAvailability(url)
         }
         
+        let defaultTitle = "豬豬大台北微搬家—跑多遠、算多少，最划算!"
+        
         /// Enable experiment only for Taipei/New Taipei city
-        if(self.experimentData.display) {
-            
+        if let data = self.experimentData {
             if let houseDetail = self.houseItemDetail,
                 let city = houseDetail.valueForKey("city") as? Int
                 where city == 100 || city == 207 {
@@ -211,8 +213,10 @@ class HouseDetailViewController: UIViewController {
                 let moverCell = CellInfo(cellIdentifier: .MoverCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                     if let cell = cell as? HouseDetailMoverCell {
                         
-                        if let msg = self.experimentData.msg {
-                            cell.detailLabel.text = msg
+                        if let title = data.title {
+                            cell.detailLabel.text = title
+                        } else {
+                            cell.detailLabel.text = defaultTitle
                         }
                         
                     }
@@ -222,10 +226,10 @@ class HouseDetailViewController: UIViewController {
                 
                 ///GA Tracker: Campaign Displayed
                 self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                                action: GAConst.Action.Campaign.MicroMovingDisplay, label: self.experimentData.msg)
+                                                action: GAConst.Action.Campaign.MicroMovingDisplay, label: data.title ?? defaultTitle)
             }
-            
         }
+        
         
         ///Reload Table View
         self.tableView.reloadData()
@@ -511,7 +515,7 @@ class HouseDetailViewController: UIViewController {
                             }
                             
                         }
-
+                        
                         cell.rightInfoText.text = "管理費: \(mgmtFeeString)"
                         
                     }
@@ -1195,7 +1199,7 @@ class HouseDetailViewController: UIViewController {
     }
     
     private func performCollectionDeletion(houseID: String) {
-
+        
         CollectionItemService.sharedInstance.deleteItemById(houseID)
         
         if let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton {
@@ -1236,7 +1240,7 @@ class HouseDetailViewController: UIViewController {
                     let alertView = SCLAlertView()
                     
                     alertView.addButton("確認移除") {
-
+                        
                         self.performCollectionDeletion(houseID)
                         
                     }
@@ -1569,7 +1573,13 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
         case .MoverCell:
             LoadingSpinner.shared.startOnView(self.view)
             
-            let moverLandingPage = "https://zuzurentals.wordpress.com/%E5%A4%A7%E5%8F%B0%E5%8C%97%E5%BE%AE%E6%90%AC%E5%AE%B6%EF%BC%9A%E8%B1%AC%E8%B1%AC%E6%90%AC%E4%B8%80%E4%B8%8B/"
+            var moverLandingPage = "http://bit.ly/299e995"
+            
+            if let promotionUrl = self.experimentData?.url {
+                
+                moverLandingPage = promotionUrl
+                
+            }
             
             if #available(iOS 9.0, *) {
                 let svc = SFSafariViewController(URL: NSURL(string: moverLandingPage)!)
@@ -1577,7 +1587,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 
                 ///GA Tracker: Campaign Displayed
                 self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                                action: GAConst.Action.Campaign.MicroMovingClick, label: self.experimentData.msg)
+                                                action: GAConst.Action.Campaign.MicroMovingClick, label: self.experimentData?.title ?? "")
             } else {
                 // Fallback on earlier versions
                 
@@ -1592,7 +1602,7 @@ extension HouseDetailViewController: UITableViewDataSource, UITableViewDelegate 
                     
                     ///GA Tracker: Campaign Displayed
                     self.trackEventForCurrentScreen(GAConst.Catrgory.Campaign,
-                                                    action: GAConst.Action.Campaign.MicroMovingClick, label: self.experimentData.msg)
+                                                    action: GAConst.Action.Campaign.MicroMovingClick, label: self.experimentData?.title ?? "")
                 }
             }
             
@@ -1726,7 +1736,7 @@ extension HouseDetailViewController: MWPhotoBrowserDelegate {
 
 // MARK: - JKNotificationPanelDelegate
 extension HouseDetailViewController: JKNotificationPanelDelegate {
-
+    
     func notificationPanelDidDismiss () {
         // Dismissed
     }
