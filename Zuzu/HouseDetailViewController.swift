@@ -221,7 +221,10 @@ class HouseDetailViewController: UIViewController {
         notificationBar.delegate = self
         notificationBar.timeUntilDismiss = 3.5
         notificationBar.enableTapDismiss = false
-        notificationBar.showNotify(withView: defaultView, belowNavigation: self.navigationController!)
+        
+        if let navigationController = self.navigationController {
+            notificationBar.showNotify(withView: defaultView, belowNavigation: navigationController)
+        }
         
         ///GA Tracker: Item Removed Notice
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
