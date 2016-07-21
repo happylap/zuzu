@@ -40,8 +40,15 @@ class HouseDetailViewController: UIViewController {
     
     private var phoneNumberDic = [String:String]() /// display string : original number
     
-    private let cacheName = "houseDetailCache"
-    private let cacheTime:Double = 3 * 60 * 60 //3 hours
+    private struct HouseDetailCache {
+        static let cacheName = "houseDetailCache"
+        static let cacheTime:Double = 3 * 60 * 60 //3 hours
+    }
+    
+    private struct SourceCheckCache {
+        static let cacheName = "sourceCheckCache"
+        static let cacheTime:Double = 1 * 60 * 60 //1 hours
+    }
     
     private let houseTypeLabelMaker:LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
     
@@ -54,12 +61,13 @@ class HouseDetailViewController: UIViewController {
     
     private let notificationBar = JKNotificationPanel()
     
-    private var alamoFireManager: Alamofire.Manager =  {
+    private static var alamoFireManager: Alamofire.Manager =  {
         
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = [
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 8_4_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/47.0.2526.107 Mobile/12H321 Safari/600.1.4"
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
         ]
+        
         configuration.timeoutIntervalForRequest = 4 // seconds
         configuration.timeoutIntervalForResource = 8
         return Alamofire.Manager(configuration: configuration)
@@ -149,22 +157,52 @@ class HouseDetailViewController: UIViewController {
     
     private func startCheckSourceAvailability(url: String) {
         
-        self.alamoFireRequest = self.alamoFireManager.request(Alamofire.Method.GET, url).responseString { (request, response, result) in
+        do {
+            let cache = try Cache<NSHTTPURLResponse>(name: SourceCheckCache.cacheName)
             
-            if let code = response?.statusCode {
+            cache.setObjectForKey(url, cacheBlock: { successCallback, failureCallback in
                 
-                switch(code) {
-                case 302, 404:
-                    Log.error("Response: \(response)")
-                    self.showItemRemovedNotice()
-                    Log.debug("Item removed")
-                    break
-                default:
-                    Log.debug("Item ok")
-                    break
+                /// Check source availability from remote
+                self.alamoFireRequest = HouseDetailViewController.alamoFireManager.request(Alamofire.Method.GET, url).responseString { (request, response, result) in
+                    
+                    if(result.isFailure) {
+                        
+                        failureCallback(nil)
+                        
+                        Log.error("Cannot get item = \(url)")
+                        
+                        return
+                    }
+                    
+                    if let response = response {
+                        
+                        Log.debug("[[response]] = \n \(response) \n [[result]] = \n \(result.value)")
+                        
+                        successCallback(response, .Seconds(SourceCheckCache.cacheTime)) // Cache response for 5 minutes
+                        
+                    }
                 }
-            }
+                
+                }, completion: { object, isLoadedFromCache, error in
+                    
+                    /// Check response (either from cache or not)
+                    if let code = object?.statusCode {
+                        
+                        Log.error("Item response, isCache = \(isLoadedFromCache), code = \(code)")
+                        
+                        switch(code) {
+                        case 302, 404:
+                            self.showItemRemovedNotice()
+                            break
+                        default:
+                            break
+                        }
+                        
+                    }
+            })
             
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
         }
     }
     
@@ -183,7 +221,10 @@ class HouseDetailViewController: UIViewController {
         notificationBar.delegate = self
         notificationBar.timeUntilDismiss = 3.5
         notificationBar.enableTapDismiss = false
-        notificationBar.showNotify(withView: defaultView, belowNavigation: self.navigationController!)
+        
+        if let navigationController = self.navigationController {
+            notificationBar.showNotify(withView: defaultView, belowNavigation: navigationController)
+        }
         
         ///GA Tracker: Item Removed Notice
         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
@@ -248,7 +289,7 @@ class HouseDetailViewController: UIViewController {
         var hitCache = false
         
         do {
-            let cache = try Cache<NSData>(name: cacheName)
+            let cache = try Cache<NSData>(name: HouseDetailCache.cacheName)
             
             ///Return cached data if there is cached data
             if let cachedData = cache.objectForKey(houseItem.id),
@@ -296,9 +337,9 @@ class HouseDetailViewController: UIViewController {
                     
                     ///Try to cache the house detail response
                     do {
-                        let cache = try Cache<NSData>(name: self.cacheName)
+                        let cache = try Cache<NSData>(name: HouseDetailCache.cacheName)
                         let cachedData = NSKeyedArchiver.archivedDataWithRootObject(result)
-                        cache.setObject(cachedData, forKey: houseItem.id, expires: CacheExpiry.Seconds(self.cacheTime))
+                        cache.setObject(cachedData, forKey: houseItem.id, expires: CacheExpiry.Seconds(HouseDetailCache.cacheTime))
                         
                     } catch _ {
                         Log.debug("Something went wrong with the cache")
