@@ -48,7 +48,7 @@ extension AbstractHouseItem {
     @NSManaged var mgmtFee: Int32
     @NSManaged var hasMgmtFee: Bool
     @NSManaged var deposit: String?
-    
+
     /* Limitations */
     @NSManaged var allowPet: Bool
     @NSManaged var allowCooking: Bool
@@ -63,16 +63,16 @@ extension AbstractHouseItem {
     @NSManaged var nearbyTrain: String?
     @NSManaged var nearbyMrt: String?
     @NSManaged var nearbyThsr: String?
-    
+
     /* Sales Agent Info */
     @NSManaged var agent: String?
     @NSManaged var agentType: Int32
     @NSManaged var phone: [String]?
-    
+
     /* Extra Description */
     @NSManaged var desc: String?
     @NSManaged var img: [String]?
     @NSManaged var postTime: NSDate?
     @NSManaged var coordinate: String?
-    
+
 }

@@ -13,20 +13,20 @@ private let Log = Logger.defaultLogger
 
 /// Definitions of all layout diementions for the base setting (iPhone 6)
 struct BaseLayoutConst {
-    static let houseImageHeight:CGFloat = 174
+    static let houseImageHeight: CGFloat = 174
 }
 
 /// Definitions of the scale ratio for devices with larger or smaller screens
 struct ScaleConst {
-    static let tinyScale:CGFloat = Device.ScreenSize.iPhone4.width / Device.ScreenSize.iPhone6.width
-    static let smallScale:CGFloat = Device.ScreenSize.iPhone5.width / Device.ScreenSize.iPhone6.width
-    static let largeScale:CGFloat = Device.ScreenSize.iPhone6P.width / Device.ScreenSize.iPhone6.width
+    static let tinyScale: CGFloat = Device.ScreenSize.iPhone4.width / Device.ScreenSize.iPhone6.width
+    static let smallScale: CGFloat = Device.ScreenSize.iPhone5.width / Device.ScreenSize.iPhone6.width
+    static let largeScale: CGFloat = Device.ScreenSize.iPhone6P.width / Device.ScreenSize.iPhone6.width
 }
 
 struct ScaleVerticalConst {
-    static let tinyScale:CGFloat = Device.ScreenSize.iPhone4.height / Device.ScreenSize.iPhone6.height
-    static let smallScale:CGFloat = Device.ScreenSize.iPhone5.height / Device.ScreenSize.iPhone6.height
-    static let largeScale:CGFloat = Device.ScreenSize.iPhone6P.height / Device.ScreenSize.iPhone6.height
+    static let tinyScale: CGFloat = Device.ScreenSize.iPhone4.height / Device.ScreenSize.iPhone6.height
+    static let smallScale: CGFloat = Device.ScreenSize.iPhone5.height / Device.ScreenSize.iPhone6.height
+    static let largeScale: CGFloat = Device.ScreenSize.iPhone6P.height / Device.ScreenSize.iPhone6.height
 }
 
 internal enum ScaleType: Int {
@@ -34,12 +34,12 @@ internal enum ScaleType: Int {
     case Horizontal
 }
 
-internal func getCurrentScale(type: ScaleType = .Horizontal) -> CGFloat{
-    
-    var scale:CGFloat = 1.0
-    
+internal func getCurrentScale(type: ScaleType = .Horizontal) -> CGFloat {
+
+    var scale: CGFloat = 1.0
+
     switch Device.version() {
-        
+
     case .iPhone4, .iPhone4S, .iPhone5, .iPhone5C, .iPhone5S:
         switch type {
         case .Horizontal:
@@ -58,7 +58,7 @@ internal func getCurrentScale(type: ScaleType = .Horizontal) -> CGFloat{
         }
     case .Simulator:
         Log.debug("It's an simulator")
-        
+
         switch(Device.size()) {
         case .Screen5_5Inch:
             switch type {
@@ -85,46 +85,46 @@ internal func getCurrentScale(type: ScaleType = .Horizontal) -> CGFloat{
             }
         default: break
         }
-        
+
     default:
         Log.debug("It's an unknown device")
     }
-    
+
     return scale
-    
+
 }
 
-private func getScaledFontSize(baseFont: UIFont, type: ScaleType = .Horizontal) -> CGFloat{
-    
+private func getScaledFontSize(baseFont: UIFont, type: ScaleType = .Horizontal) -> CGFloat {
+
     let baseSize: CGFloat = CGFloat(baseFont.pointSize)
-    var scaledSize:CGFloat = baseSize
-    
-    let scale:CGFloat = getCurrentScale(type)
-    
+    var scaledSize: CGFloat = baseSize
+
+    let scale: CGFloat = getCurrentScale(type)
+
     scaledSize = round(baseSize * scale)
-    
+
     Log.verbose("base = \(baseSize), scale = \(scale), scaledSize = \(scaledSize)")
-    
+
     return scaledSize
-    
+
 }
 
 extension UIView {
     var autoScaleRadious: Bool {
         set {
-            let baseSize:CGFloat = self.layer.cornerRadius
-            var scale:CGFloat = 1.0
-            var scaledSize:CGFloat = baseSize
-            
+            let baseSize: CGFloat = self.layer.cornerRadius
+            var scale: CGFloat = 1.0
+            var scaledSize: CGFloat = baseSize
+
             scale = getCurrentScale()
-            
+
             scaledSize = round(baseSize * scale)
-            
+
             self.layer.cornerRadius = scaledSize
-            
+
         }
-        
-        get{
+
+        get {
             return false
         }
     }
@@ -134,7 +134,7 @@ extension UIButton {
     var autoScaleFontSize: Bool {
         set {
             if newValue {
-                
+
                 if let baseFont = self.titleLabel?.font {
                     let scaledSize = getScaledFontSize(baseFont)
                     if let originalFont = self.titleLabel?.font {
@@ -145,7 +145,7 @@ extension UIButton {
                 }
             }
         }
-        
+
         get {
             return false
         }
@@ -156,15 +156,15 @@ extension UILabel {
     var autoScaleFontSize: Bool {
         set {
             if newValue {
-                
+
                 if let baseFont = self.font {
                     let scaledSize = getScaledFontSize(baseFont)
-                    
+
                     self.font = baseFont.fontWithSize(scaledSize)
                 }
             }
         }
-        
+
         get {
             return false
         }
@@ -172,29 +172,29 @@ extension UILabel {
 }
 
 extension UINavigationBar {
-    
+
     var autoScaleFontSize: Bool {
         set {
             if newValue {
-                
+
                 if let attributes = self.titleTextAttributes {
-                    
+
                     if let baseFont = attributes[NSFontAttributeName] as? UIFont {
-                        
+
                         let scaledSize = getScaledFontSize(baseFont)
-                        
+
                         self.titleTextAttributes![NSFontAttributeName] = UIFont.systemFontOfSize(scaledSize)
-                        
+
                     }
                 }
             }
         }
-        
+
         get {
             return false
         }
     }
-    
+
 }
 
 extension Device {

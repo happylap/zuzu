@@ -13,7 +13,7 @@ import Foundation
 import CoreData
 
 extension CollectionHouseItem {
-    
+
     @NSManaged var contacted: Bool
     @NSManaged var collectTime: NSDate?
 

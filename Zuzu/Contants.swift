@@ -11,54 +11,54 @@ import AWSCore
 
 // MARK: Radar
 struct RadarConstants {
-    
+
     /// The threshold of number of search result that we increment the trigger counter
     static let SUGGESTION_TRIGGER_INCREMENT_THRESHOLD = 100
-    
+
     /// The min trigger count for prompting Radar functionality to the user
     static let SUGGESTION_TRIGGER_COUNT = 3
-    
+
 }
 
 // MARK: My Collection
 struct CollectionConstants {
 
     static let MYCOLLECTION_MAX_SIZE = 60
-    
+
 }
 
 // MARK: Constants for TagManager
 struct TagConst {
-    
+
     static let showADs = "showADs"
-    
+
     static let checkSource = "checkSource"
-    
+
     static let showVideoADs = "videoAD"
-    
+
     static let zuzuLogin = "zuzuLogin"
-    
+
     static let freeTrial = "freeTrial"
-    
+
     static let moverDisplay = "moverDisplay"
-    
+
     static let moverMsg = "moverMsg"
-    
+
     static let moverUrl = "moverUrl"
-    
+
     static let tenantDisplay = "tenantDisplay"
-    
+
     static let tenantTitle = "tenantTitle"
-    
+
     static let tenantSubtitle = "tenantSubtitle"
-    
+
     static let tenantUrl = "tenantUrl"
-    
+
 }
 
 // MARK: Constants for Criteria
 struct CriteriaConst {
-    
+
     /**
      "整層住家":0
      "獨立套房":1
@@ -69,7 +69,7 @@ struct CriteriaConst {
      "辦公":6
      "住辦":7
      **/
-    
+
     struct PrimaryType {
         static let FULL_FLOOR = 1
         static let SUITE_INDEPENDENT = 2
@@ -78,21 +78,21 @@ struct CriteriaConst {
         static let HOME_OFFICE = 8
         static let SUITE_GENERAL = 13
     }
-    
+
     /**
      "公寓": 1
      "電梯大樓": 2
      "透天厝": 3
      "別墅": 4
      **/
-    
+
     struct HouseType {
         static let BUILDING_WITHOUT_ELEVATOR = 1
         static let BUILDING_WITH_ELEVATOR = 2
         static let INDEPENDENT_HOUSE = 3
         static let INDEPENDENT_HOUSE_WITH_GARDEN = 4
     }
-    
+
     struct Bound {
         static let LOWER_ANY = -1
         static let UPPER_ANY = -1

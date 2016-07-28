@@ -11,9 +11,9 @@ import BWWalkthrough
 class WalkthroughMasterViewController: BWWalkthroughViewController {
 
     @IBOutlet weak var closeWalkthroughButton: UIButton! {
-        
+
         didSet {
-            
+
             closeWalkthroughButton.layer.borderWidth = 1
             closeWalkthroughButton.layer.borderColor =
                 UIColor.colorWithRGB(0xFFFFFF, alpha: 1).CGColor
@@ -23,10 +23,10 @@ class WalkthroughMasterViewController: BWWalkthroughViewController {
                 .setTitleColor(UIColor.colorWithRGB(0xFFFFFF, alpha: 1), forState: UIControlState.Normal)
             closeWalkthroughButton
                 .setTitleColor(UIColor.colorWithRGB(0xFFFFFF, alpha: 1), forState: UIControlState.Selected)
-            
+
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

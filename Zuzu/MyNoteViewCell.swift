@@ -12,7 +12,7 @@ class MyNoteViewCell: UITableViewCell {
 
     @IBOutlet weak var noteTitle: UILabel! {
         didSet {
-            let label:MarqueeLabel =  noteTitle as! MarqueeLabel
+            let label: MarqueeLabel =  noteTitle as! MarqueeLabel
             label.userInteractionEnabled = true
             label.trailingBuffer = 60
             label.rate = 60 //pixels/sec
@@ -21,26 +21,26 @@ class MyNoteViewCell: UITableViewCell {
             label.marqueeType = .MLContinuous
         }
     }
-    
+
     var noteItem: Note? {
         didSet {
             updateUI()
         }
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+
         // Reset any existing information
         self.noteTitle.text = nil
-        
+
     }
-    
+
     func updateUI() {
         if let note = noteItem {
             self.noteTitle.text = note.title
         }
     }
-    
+
 }
-    
+

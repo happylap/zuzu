@@ -14,6 +14,6 @@ enum EntityTypes: String {
     case AbstractHouseItem = "AbstractHouseItem"
     case CollectionHouseItem = "CollectionHouseItem"
     case NotificationHouseItem = "NotificationHouseItem"
-    
+
     static let getAll = [House, Note]
 }

@@ -8,33 +8,31 @@
 
 import Foundation
 
-protocol TableResultsController : NSObjectProtocol
-{
+protocol TableResultsController: NSObjectProtocol {
     func refreshData()
-    
+
     func getNumberOfSectionsInTableView() -> Int
-    
+
     func getNumberOfRowInSection(section: Int) -> Int
-    
+
     func objectAtIndexPath(indexPath: NSIndexPath) -> AnyObject
-    
+
     func setDelegate(resultControllerDelegate: TableResultsControllerDelegate)
 }
 
 
-protocol TableResultsControllerDelegate : NSObjectProtocol
-{
-    
+protocol TableResultsControllerDelegate: NSObjectProtocol {
+
     func controllerWillChangeContent(controller: TableResultsController)
-    
-    
+
+
     func controller(controller: TableResultsController, didChangeObject: AnyObject, atIndexPath: NSIndexPath?, forChangeType: TableResultsChangeType, newIndexPath: NSIndexPath?)
-    
-    
+
+
     func controllerDidChangeContent(controller: TableResultsController)
 }
 
-public enum TableResultsChangeType : UInt {
+public enum TableResultsChangeType: UInt {
     case Insert
     case Delete
     case Move

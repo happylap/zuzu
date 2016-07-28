@@ -24,14 +24,14 @@ class ZuzuPurchaseMapper: NSObject, Mappable {
     var productLocaleId: String?
     var productPrice: Double?
     var purchaseTime: NSDate?
-    
+
     override init() {
     }
-    
+
     required init?(_ map: Map) {
-        
+
     }
-    
+
     // Mappable
     func mapping(map: Map) {
         purchaseId          <-  map["purchase_id"]
@@ -44,7 +44,7 @@ class ZuzuPurchaseMapper: NSObject, Mappable {
         productPrice        <-  map["product_price"]
         purchaseTime        <- (map["purchase_time"], timeTransform)
     }
-    
+
     //
     let timeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
         if let dateString = values {
@@ -57,7 +57,7 @@ class ZuzuPurchaseMapper: NSObject, Mappable {
         }
         return nil
     })
-    
+
     func toPurchase() -> ZuzuPurchase? {
         if let transactionId = self.transactionId, userId = self.userId, let productId = self.productId, let productPrice = self.productPrice {
             let purchase = ZuzuPurchase(transactionId: transactionId, userId: userId, productId: productId, productPrice: NSDecimalNumber(double:productPrice))
@@ -71,6 +71,6 @@ class ZuzuPurchaseMapper: NSObject, Mappable {
             return purchase
         }
         return nil
-        
+
     }
 }

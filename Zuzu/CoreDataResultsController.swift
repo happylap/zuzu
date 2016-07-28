@@ -11,70 +11,70 @@ import CoreData
 
 private let Log = Logger.defaultLogger
 
-class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResultsControllerDelegate{
- 
+class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResultsControllerDelegate {
+
     class Builder: NSObject {
-        
+
         private var entityName: String
-        
+
         private var fetchRequest: NSFetchRequest?
-        
+
         private var sortDescriptors = [NSSortDescriptor]?()
-        
+
         private var predicate: NSPredicate?
-        
+
         init(entityName: String) {
             self.entityName = entityName
             self.fetchRequest = NSFetchRequest(entityName: self.entityName)
         }
-        
-        func addSorting(field: String, ascending: Bool) -> Builder{
+
+        func addSorting(field: String, ascending: Bool) -> Builder {
             let sort = NSSortDescriptor(key: field, ascending: ascending)
-            if self.sortDescriptors == nil{
+            if self.sortDescriptors == nil {
                 self.sortDescriptors  = [NSSortDescriptor]()
             }
-            
+
             self.sortDescriptors?.append(sort)
-            
+
             return self
         }
-        
-        func predicateBy(format: String, arguments: [AnyObject]?) -> Builder{
+
+        func predicateBy(format: String, arguments: [AnyObject]?) -> Builder {
             self.predicate = NSPredicate(format: format, argumentArray: arguments)
             return self
         }
-        
+
         func build() -> CoreDataResultsController {
             assert(self.fetchRequest != nil, "Fetch Request for entity \(self.entityName) cannot be nil")
-            
-            if self.sortDescriptors != nil{
+
+            if self.sortDescriptors != nil {
                 self.fetchRequest!.sortDescriptors = self.sortDescriptors!
             }
 
-            if self.predicate != nil{
+            if self.predicate != nil {
                 self.fetchRequest!.predicate = self.predicate!
             }
-            
+
             let fetchController = NSFetchedResultsController(fetchRequest: self.fetchRequest!, managedObjectContext: CoreDataManager.shared.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-            
+
             let controller = CoreDataResultsController(resultController: fetchController)
             controller.resultsController.delegate = controller
-            
+
             return controller
         }
     }
 
     var resultsController: NSFetchedResultsController
-    
+
     var resultsControllerDelegate: TableResultsControllerDelegate?
-    
-    private init(resultController: NSFetchedResultsController){
+
+    private init(resultController: NSFetchedResultsController) {
         self.resultsController = resultController
     }
-    
+
     // MARK: - TableResultsController Function
-    
-    func refreshData(){
+
+    func refreshData() {
         do {
             try self.resultsController.performFetch()
         } catch {
@@ -82,37 +82,37 @@ class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResu
             Log.debug("\(fetchError), \(fetchError.userInfo)")
         }
     }
-    
-    func getNumberOfSectionsInTableView() -> Int{
+
+    func getNumberOfSectionsInTableView() -> Int {
         return 1
     }
-    
-    func getNumberOfRowInSection(section: Int) -> Int{
-        if let sections = self.resultsController.sections{
+
+    func getNumberOfRowInSection(section: Int) -> Int {
+        if let sections = self.resultsController.sections {
             let sectionInfo = sections[section] as NSFetchedResultsSectionInfo
             return sectionInfo.numberOfObjects
         }
 
         return 0
-        
+
         //let sectionInfo = self.resultsController.sections![section] as NSFetchedResultsSectionInfo
         //return sectionInfo.numberOfObjects
     }
-    
-    func objectAtIndexPath(indexPath: NSIndexPath) -> AnyObject{
+
+    func objectAtIndexPath(indexPath: NSIndexPath) -> AnyObject {
         return self.resultsController.objectAtIndexPath(indexPath)
     }
-    
-    func setDelegate(resultControllerDelegate: TableResultsControllerDelegate){
+
+    func setDelegate(resultControllerDelegate: TableResultsControllerDelegate) {
         self.resultsControllerDelegate = resultControllerDelegate
     }
-    
+
     // MARK: - NSFetchedResultsControllerDelegate Function
-    
+
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.resultsControllerDelegate?.controllerWillChangeContent(self)
     }
-    
+
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
 
         var changeType: TableResultsChangeType?
@@ -126,15 +126,15 @@ class CoreDataResultsController: NSObject, TableResultsController, NSFetchedResu
         case .Move:
             changeType = TableResultsChangeType.Move
         }
-        
-        if changeType != nil{
+
+        if changeType != nil {
             self.resultsControllerDelegate?.controller(self, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: changeType!, newIndexPath: newIndexPath)
         }
 
     }
-    
+
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.resultsControllerDelegate?.controllerDidChangeContent(self)
     }
-    
+
 }

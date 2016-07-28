@@ -9,7 +9,7 @@
 import CoreData
 
 extension CoreDataManager {
-    
+
     /**
      Simple interface for deleting one or more managed objects from a persistent store.
      @param        objects Managed object(s) to delete.
@@ -20,8 +20,8 @@ extension CoreDataManager {
             self.managedObjectContext.deleteObject(object)
         }
     }
-    
-    
+
+
     /**
      Simple interface for deleting one or more managed objects from a persistent store by using its identifier.
      @param        identifiers Identifier of managed object(s) to delete.
