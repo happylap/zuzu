@@ -738,7 +738,7 @@ class EngineerModeViewController: UIViewController {
                 let criteria = SearchCriteria()
                 criteria.size = (0, 100)
                 criteria.price = (10000, 20000)
-                criteria.types = [1, 2,3]
+                criteria.types = [1, 2, 3]
 
                 ZuzuWebService.sharedInstance.createCriteriaByUserId(userId, criteria: criteria, handler: { (result, error) -> Void in
 
@@ -772,7 +772,7 @@ class EngineerModeViewController: UIViewController {
                         let criteria = SearchCriteria()
                         criteria.size = (200, 300)
                         criteria.price = (50000, 100000)
-                        criteria.types = [4, 5,6]
+                        criteria.types = [4, 5, 6]
 
                         ZuzuWebService.sharedInstance.updateCriteriaFiltersByUserId(userId, criteriaId: criteriaId, criteria: criteria, handler: { (result, error) -> Void in
                             if let error = error {
