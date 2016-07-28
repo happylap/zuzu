@@ -23,38 +23,38 @@ struct UserInfo {
 }
 
 class UserManager {
-    
+
     internal static func getCurrentUser() -> UserInfo? {
-        
+
         if(AmazonClientManager.sharedInstance.isLoggedIn()) {
-            
+
             if let accountProvider = AmazonClientManager.sharedInstance.currentUserToken?.provider,
                 userID = AmazonClientManager.sharedInstance.currentUserToken?.userId,
                 userToken = AmazonClientManager.sharedInstance.currentUserToken?.token {
-                
+
                 Log.debug("Authenticated userID = \(userID)")
 
                 return UserInfo(userType: .Authenticated, userId: userID, provider: accountProvider, userToken: userToken)
-                
+
             } else {
                 assert(false, "userID and userToken cannot be nil after logging in")
             }
-            
+
         }
-        
+
         if(FeatureOption.Radar.enableUnauth) {
             if let userID = UnauthClientManager.sharedInstance.getUnauthUserID(),
                 userToken =  UnauthClientManager.sharedInstance.getUnauthUserToken() {
-                
+
                 Log.debug("Unauthenticated userID = \(userID)")
                 return UserInfo(userType: .Unauthenticated, userId: userID, provider: nil, userToken: userToken)
-                
+
             }
         }
-        
-        
+
+
         return nil
     }
-    
-    
+
+
 }

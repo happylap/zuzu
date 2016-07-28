@@ -10,10 +10,10 @@ import XCGLogger
 import NSLogger
 
 public class XCGNSLoggerLogDestination: XCGBaseLogDestination {
-    
+
     // Report levels are different in NSLogger (0 = most important, 4 = least important)
     // XCGLogger level needs to be converted to use the bonjour app filtering in a meaningful way
-    private func convertLogLevel(level:XCGLogger.LogLevel) -> Int32 {
+    private func convertLogLevel(level: XCGLogger.LogLevel) -> Int32 {
         switch(level) {
         case .Severe:
             return 0
@@ -31,25 +31,25 @@ public class XCGNSLoggerLogDestination: XCGBaseLogDestination {
             return 3
         }
     }
-    
+
     public override func output(logDetails: XCGLogDetails, text: String) {
-        
+
         switch(logDetails.logLevel) {
         case .None:
             return
         default:
             break
         }
-        
+
         var arr = logDetails.fileName.componentsSeparatedByString("/")
         var fileName = logDetails.fileName
         if let last = arr.popLast() {
             fileName = last
         }
-        
+
         ///Escape the special char % in formatted string
         let logMessage = logDetails.logMessage.stringByReplacingOccurrencesOfString("%", withString: "%%")
-        
-        LogMessage_va(logDetails.logLevel.description, convertLogLevel(logDetails.logLevel), "[\(fileName):\(logDetails.lineNumber)] -> \(logDetails.functionName) : \(logMessage)",getVaList([]))
+
+        LogMessage_va(logDetails.logLevel.description, convertLogLevel(logDetails.logLevel), "[\(fileName):\(logDetails.lineNumber)] -> \(logDetails.functionName) : \(logMessage)", getVaList([]))
     }
 }

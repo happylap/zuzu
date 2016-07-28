@@ -19,15 +19,15 @@ class ZuzuUserMapper: NSObject, Mappable {
     var pictureUrl: String?
     var provider: String?
     var password: String?
-    
+
     override init() {
-        
+
     }
-    
+
     required init?(_ map: Map) {
-        
+
     }
-    
+
     // Mappable
     func mapping(map: Map) {
         userId              <- map["user_id"]
@@ -40,7 +40,7 @@ class ZuzuUserMapper: NSObject, Mappable {
         provider            <- map["provider"]
         password            <- map["password"]
     }
-    
+
     //
     let timeTransform = TransformOf<NSDate, String>(fromJSON: { (values: String?) -> NSDate? in
         if let dateString = values {
@@ -53,19 +53,19 @@ class ZuzuUserMapper: NSObject, Mappable {
             }
             return nil
     })
-    
+
     func toUser() -> ZuzuUser? {
         if let userId = self.userId, email = self.email {
             let user = ZuzuUser()
             user.id = userId
             user.email = email
-            
+
             if let _provider = self.provider {
                 if let provider = Provider(rawValue: _provider) {
                     user.provider = provider
                 }
             }
-            
+
             user.registerTime = self.registerTime
             user.name = self.name
             user.gender = self.gender
@@ -75,7 +75,7 @@ class ZuzuUserMapper: NSObject, Mappable {
         }
         return nil
     }
-    
+
     func fromUser(user: ZuzuUser) {
         self.provider = user.provider?.rawValue
         self.userId = user.id
@@ -86,5 +86,5 @@ class ZuzuUserMapper: NSObject, Mappable {
         self.birthday = user.birthday
         self.pictureUrl = user.pictureUrl
     }
-    
+
 }

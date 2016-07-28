@@ -9,7 +9,7 @@
 import Foundation
 
 class ZuzuPurchase: NSObject {
-    
+
     var purchaseId: String?
     var transactionId: String
     var userId: String
@@ -20,7 +20,7 @@ class ZuzuPurchase: NSObject {
     var productPrice: NSDecimalNumber
     var purchaseTime: NSDate?
     var purchaseReceipt: NSData?
-    
+
     init(transactionId: String, userId: String, productId: String, productPrice: NSDecimalNumber, purchaseReceipt: NSData) {
         self.transactionId = transactionId
         self.userId = userId
@@ -29,7 +29,7 @@ class ZuzuPurchase: NSObject {
         self.productPrice = productPrice
         self.purchaseReceipt = purchaseReceipt
     }
-    
+
     init(transactionId: String, userId: String, productId: String, productPrice: NSDecimalNumber) {
         self.transactionId = transactionId
         self.userId = userId
@@ -37,5 +37,5 @@ class ZuzuPurchase: NSObject {
         self.productId = productId
         self.productPrice = productPrice
     }
-    
+
 }

@@ -9,8 +9,8 @@
 import Foundation
 
 struct SystemMessage {
-    
-    struct INFO{
+
+    struct INFO {
         static let EMPTY_NOTIFICATIONS = "尚無任何通知物件\n\n請到「租屋雷達」設定找屋條件，開始接收即時通知"
         static let EMPTY_COLLECTTIONS = "尚無任何收藏的物件\n\n不妨在搜尋結果頁，開始收藏你感興趣的租屋物件"
         static let EMPTY_SAVED_SEARCH = "尚無任何儲存的\"常用搜尋\"\n\n不妨嘗試在搜尋結果頁，把當前搜尋條件儲存起來"
@@ -18,10 +18,10 @@ struct SystemMessage {
         static let EMPTY_HISTORICAL_PURCHASE = "尚無任何\"購買紀錄\"\n\n不妨嘗試在租屋雷達頁，設定並取符合需求的通知條件"
         static let EMPTY_SEARCH_RESULT = "喔喔...目前的搜尋條件找不到任何物件\n\n嘗試換個條件再搜尋一次！"
     }
- 
-    struct ALERT{
+
+    struct ALERT {
     }
-    
-    struct ERROR{
+
+    struct ERROR {
     }
 }

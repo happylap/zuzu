@@ -11,7 +11,7 @@ import CoreData
 
 @objc(House)
 public class House: NSManagedObject {
-    
+
     /* Mandatory Fields */
     @NSManaged var id: String
     @NSManaged var link: String         //
@@ -38,20 +38,20 @@ public class House: NSManagedObject {
     @NSManaged var parkingType: Int32
     @NSManaged var readyDate: NSDate?
     @NSManaged var shortestLease: Int32
-    
+
     /* Money Related */
     @NSManaged var priceIncl: [Int]?
     @NSManaged var otherExpense: [Int]?
     @NSManaged var mgmtFee: Int32
     @NSManaged var hasMgmtFee: Bool
     @NSManaged var deposit: String?
-    
+
     /* Limitations */
     @NSManaged var allowPet: Bool
     @NSManaged var allowCooking: Bool
     @NSManaged var restrProfile: String?
     @NSManaged var restrSex: Int32
-    
+
     /* Extra Benefits */
     @NSManaged var furniture: [Int]?
     @NSManaged var facility: [Int]?
@@ -60,20 +60,20 @@ public class House: NSManagedObject {
     @NSManaged var nearbyTrain: String?
     @NSManaged var nearbyMrt: String?
     @NSManaged var nearbyThsr: String?
-    
+
     /* Sales Agent Info */
     @NSManaged var agent: String?
     @NSManaged var agentType: Int32
     @NSManaged var phone: [String]?
-    
+
     /* Extra Description */
     @NSManaged var desc: String?
     @NSManaged var img: [String]?
     @NSManaged var postTime: NSDate?
     @NSManaged var coordinate: String?
     @NSManaged var source: Int32
-    
-    
+
+
     /* */
     @NSManaged var contacted: Bool
     @NSManaged var collectTime: NSDate

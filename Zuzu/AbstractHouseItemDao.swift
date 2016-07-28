@@ -11,20 +11,19 @@ import CoreData
 
 private let Log = Logger.defaultLogger
 
-class AbstractHouseItemDao: NSObject
-{
+class AbstractHouseItemDao: NSObject {
     // MARK: - Requird Override Function
-    var entityName: String{
+    var entityName: String {
         preconditionFailure("entityName property must be overridden")
     }
-    
+
     // Only add item, but not commit to DB
     //func add(jsonObj: AnyObject) {
         //preconditionFailure("This method must be overridden")
     //}
-    
+
     // MARK: - Read Function
-    
+
     func isExist(id: String) -> Bool {
         let fetchRequest = NSFetchRequest(entityName: self.entityName)
         let findByIdPredicate = NSPredicate(format: "id = %@", id)
@@ -32,62 +31,62 @@ class AbstractHouseItemDao: NSObject
         let count = CoreDataManager.shared.countForFetchRequest(fetchRequest)
         return count > 0
     }
-    
+
     // MARK: - Get Function
-    
+
     func get(id: String) -> AbstractHouseItem? {
         Log.debug("\(self) get: \(id)")
         // Create request on House entity
         let fetchRequest = NSFetchRequest(entityName: self.entityName)
-        
+
         // Add a predicate to filter by houseId
         let findByIdPredicate = NSPredicate(format: "id == %@", id)
         fetchRequest.predicate = findByIdPredicate
-        
+
         // Execute fetch request
         let fetchedResults = CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [AbstractHouseItem]
-        
+
         //print(fetchedResults)
-        
+
         if let first = fetchedResults?.first {
             return first
         }
-        
+
         return nil
     }
-    
+
     func getAll() -> [AbstractHouseItem]? {
         Log.debug("\(self) getAll")
-        
+
         let fetchRequest = NSFetchRequest(entityName: self.entityName)
 
         return CoreDataManager.shared.executeFetchRequest(fetchRequest) as? [AbstractHouseItem]
     }
-    
+
     // MARK: - Add Function
-    
-    func addAll(items: [AnyObject]){
+
+    func addAll(items: [AnyObject]) {
         for item in items {
             self.add(item, isCommit: false)
         }
-        
+
         self.commit()
     }
-    
-    func add(jsonObj: AnyObject, isCommit: Bool) -> AbstractHouseItem?{
+
+    func add(jsonObj: AnyObject, isCommit: Bool) -> AbstractHouseItem? {
         if let id = jsonObj.valueForKey("id") as? String {
             if self.isExist(id) {
                 return nil
             }
-            
+
             Log.debug("\(self) add notification item")
-            
+
             let context=CoreDataManager.shared.managedObjectContext
-            
+
             let model = NSEntityDescription.entityForName(self.entityName, inManagedObjectContext: context)
-            
+
             let item = AbstractHouseItem(entity: model!, insertIntoManagedObjectContext: context)
-            
+
             if model != nil {
                 item.fromJSON(jsonObj)
                 if (isCommit == true) {
@@ -96,12 +95,12 @@ class AbstractHouseItemDao: NSObject
                 return item
             }
         }
-        
+
         return nil
     }
-    
-    
-    // MARK: Delete Function    
+
+
+    // MARK: Delete Function
     func deleteByID(id: String) {
         Log.debug("\(self) deleteByID: \(id)")
         if let item = self.get(id) {
@@ -109,13 +108,13 @@ class AbstractHouseItemDao: NSObject
             self.commit()
         }
     }
-    
+
     func deleteAll() {
         CoreDataManager.shared.deleteTable(self.entityName)
     }
 
     // MARK: Update Function
-    
+
     func updateByID(id: String, dataToUpdate: [String: AnyObject]) {
         if let item = self.get(id) {
             for (key, value) in dataToUpdate {
@@ -126,9 +125,9 @@ class AbstractHouseItemDao: NSObject
             self.commit()
         }
     }
-    
+
     // MARK: Commit Function
-    func commit(){
+    func commit() {
         CoreDataManager.shared.save()
     }
 }

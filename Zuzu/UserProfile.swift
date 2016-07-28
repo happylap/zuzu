@@ -11,7 +11,7 @@ import ObjectMapper
 
 
 class UserProfile: NSObject, Mappable {
-    
+
     var provider: Provider?
     var id: String?
     var email: String?
@@ -19,15 +19,15 @@ class UserProfile: NSObject, Mappable {
     var gender: String?
     var birthday: String?
     var pictureUrl: String?
-    
+
     init(provider: Provider) {
         self.provider = provider
     }
-    
+
     required init?(_ map: Map) {
-        
+
     }
-    
+
     // Mappable
     func mapping(map: Map) {
         provider          <- map["provider"]
@@ -38,7 +38,7 @@ class UserProfile: NSObject, Mappable {
         birthday    <- (map["birthday"])
         pictureUrl    <- (map["pictureUrl"])
     }
-    
+
     override var description: String {
         let string = "UserData: id = \(id)\n email = \(email)\n name = \(name)\n gender = \(gender)\n birthday = \(birthday)\n pictureUrl = \(pictureUrl)"
         return string

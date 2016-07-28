@@ -14,18 +14,17 @@ import SwiftyJSON
 class AbstractHouseItem: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
- 
-    func fromJSON(obj: AnyObject)
-    {
+
+    func fromJSON(obj: AnyObject) {
         let houseItem = self
         var data = JSON(obj)
-        
+
         //print(data)
-        
+
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"//this your string date format
         dateFormatter.timeZone = NSTimeZone(name: "UTC")
-        
+
         /* Mandatory Fields */
         let id = data["id"].stringValue
         let link = data["link"].stringValue
@@ -39,7 +38,7 @@ class AbstractHouseItem: NSManagedObject {
         let region = data["region"].int32Value
         let size = data["size"].floatValue
         let source = data["source"].int32Value
-        
+
         /* Optional Fields */
         let community = data["community"].stringValue
         let totalFloor = data["total_floor"].int32Value
@@ -53,20 +52,20 @@ class AbstractHouseItem: NSManagedObject {
         let parkingType = data["parkingType"].int32Value
         let readyDate: NSDate? = dateFormatter.dateFromString(data["ready_date"].stringValue)
         let shortestLease = data["shortest_lease"].int32Value
-        
+
         /* Money Related */
         let priceIncl = data["price_incl"].arrayObject as? [Int] ?? [Int]()
         let otherExpense = data["other_expense"].arrayObject as? [Int] ?? [Int]()
         let mgmtFee = data["mgmt_fee"].int32Value
         let hasMgmtFee = data["has_mgmt_fee"].boolValue
         let deposit = data["deposit"].stringValue
-        
+
         /* Limitations */
         let allowPet = data["allow_pet"].boolValue
         let allowCooking = data["allow_cooking"].boolValue
         let restrProfile = data["restr_profile"].stringValue
         let restrSex = data["restr_sex"].int32Value
-        
+
         /* Extra Benefits */
         let furniture = data["furniture"].arrayObject as? [Int] ?? [Int]()
         let facility = data["facility"].arrayObject as? [Int] ?? [Int]()
@@ -75,19 +74,19 @@ class AbstractHouseItem: NSManagedObject {
         let nearbyTrain = data["nearby_train"].stringValue
         let nearbyMrt = data["nearby_mrt"].stringValue
         let nearbyThsr = data["nearby_thsr"].stringValue
-        
+
         /* Sales Agent Info */
         let agent = data["agent"].stringValue
         let agentType = data["agent_type"].int32Value
         let phone = data["phone"].arrayObject as? [String] ?? [String]()
-        
+
         /* Extra Description */
         let desc = data["desc"].stringValue
         let img = data["img"].arrayObject as? [String] ?? [String]()
         let postTime: NSDate? = dateFormatter.dateFromString(data["post_time"].stringValue)
         let coordinate = data["coordinate"].stringValue
-        
-        
+
+
         houseItem.id = id
         houseItem.link = link
         houseItem.mobileLink = mobileLink
@@ -97,7 +96,7 @@ class AbstractHouseItem: NSManagedObject {
         houseItem.purposeType = purposeType
         houseItem.houseType = houseType
         houseItem.price = price
-        
+
         houseItem.region = region
         houseItem.community = community
         houseItem.size = size
@@ -112,18 +111,18 @@ class AbstractHouseItem: NSManagedObject {
         houseItem.parkingType = parkingType
         houseItem.readyDate = readyDate
         houseItem.shortestLease = shortestLease
-        
+
         houseItem.priceIncl = priceIncl
         houseItem.otherExpense = otherExpense
         houseItem.mgmtFee = mgmtFee
         houseItem.hasMgmtFee = hasMgmtFee
         houseItem.deposit = deposit
-        
+
         houseItem.allowPet = allowPet
         houseItem.allowCooking = allowCooking
         houseItem.restrProfile = restrProfile
         houseItem.restrSex = restrSex
-        
+
         houseItem.furniture = furniture
         houseItem.facility = facility
         //house.surrounding = surrounding
@@ -131,20 +130,20 @@ class AbstractHouseItem: NSManagedObject {
         houseItem.nearbyTrain = nearbyTrain
         houseItem.nearbyMrt = nearbyMrt
         houseItem.nearbyThsr = nearbyThsr
-        
+
         houseItem.agent = agent
         houseItem.agentType = agentType
         houseItem.phone = phone
-        
+
         houseItem.desc = desc
         houseItem.img = img
         houseItem.postTime = postTime
         houseItem.coordinate = coordinate
         houseItem.source = source
     }
-    
+
     func toHouseItem() -> HouseItem {
-        let houseItem:HouseItem = HouseItem.Builder(id: self.id)
+        let houseItem: HouseItem = HouseItem.Builder(id: self.id)
             .addTitle(self.title)
             .addAddr(self.addr)
             .addHouseType(Int(self.houseType))
