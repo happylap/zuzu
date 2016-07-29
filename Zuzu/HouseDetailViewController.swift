@@ -694,28 +694,23 @@ class HouseDetailViewController: UIViewController {
 
                         var resultString = String()
 
-                        //Profile / Sex Restrictions
-                        var basicProfileStringList = [String]()
-
-                        if let sex = houseDetail.valueForKey("restr_sex") as? Int {
-                            if let sexString = self.houseTypeLabelMaker.fromCodeForField("restr_sex", code: sex) {
-                                basicProfileStringList.append("\(sexString)性")
-                            }
-                        }
+                        /// Profile / Sex Restrictions
 
                         if let profiles = houseDetail.valueForKey("restr_profile") as? [Int] {
                             let profilesStringList = profiles.map { (profileCode) -> String in
                                 self.houseTypeLabelMaker.fromCodeForField("restr_profile", code: profileCode, defaultValue: "")
                             }
-
-                            basicProfileStringList.appendContentsOf(profilesStringList)
+                            resultString += "身份限制：" + profilesStringList.joinWithSeparator("; ") + "\n"
                         }
 
-                        if(basicProfileStringList.count > 0) {
-                            resultString = "限：" + basicProfileStringList.joinWithSeparator("; ") + "\n"
+                        if let sex = houseDetail.valueForKey("restr_sex") as? Int {
+                            if let sexString = self.houseTypeLabelMaker.fromCodeForField("restr_sex", code: sex) {
+
+                                resultString += "限\(sexString)性" + "\n"
+                            }
                         }
 
-                        //Other Restrictions: Allow Pet, Allow Cooking
+                        /// Other Restrictions: Allow Pet, Allow Cooking
                         var restrictionList = [String]()
 
                         if let allow_pet = houseDetail.valueForKey("allow_pet") as? Bool {
