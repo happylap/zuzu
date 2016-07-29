@@ -691,33 +691,38 @@ class HouseDetailViewController: UIViewController {
                 if let cell = cell as? HouseDetailExpandableContentCell {
 
                     if let houseDetail = self.houseItemDetail {
+
                         var resultString = String()
 
-                        //Profile
-                        if let profiles = houseDetail.valueForKey("restr_profile") as? [String] {
+                        //Profile / Sex Restrictions
+                        var basicProfileStringList = [String]()
 
-                            let profilesStringList = profiles.map { (code) -> String in
-                                self.houseTypeLabelMaker.fromCodeForField("restr_profile", code: Int(code)!, defaultValue: "—")
-                            }
-
-                            resultString += profilesStringList.joinWithSeparator("; ") + "\n\n"
-                        }
-
-                        var restrictionList = [String]()
-                        //Sex
                         if let sex = houseDetail.valueForKey("restr_sex") as? Int {
                             if let sexString = self.houseTypeLabelMaker.fromCodeForField("restr_sex", code: sex) {
-                                restrictionList.append("限\(sexString)性")
+                                basicProfileStringList.append("\(sexString)性")
                             }
                         }
 
-                        //Allow Pet
+                        if let profiles = houseDetail.valueForKey("restr_profile") as? [Int] {
+                            let profilesStringList = profiles.map { (profileCode) -> String in
+                                self.houseTypeLabelMaker.fromCodeForField("restr_profile", code: profileCode, defaultValue: "")
+                            }
+
+                            basicProfileStringList.appendContentsOf(profilesStringList)
+                        }
+
+                        if(basicProfileStringList.count > 0) {
+                            resultString = "限：" + basicProfileStringList.joinWithSeparator("; ") + "\n"
+                        }
+
+                        //Other Restrictions: Allow Pet, Allow Cooking
+                        var restrictionList = [String]()
+
                         if let allow_pet = houseDetail.valueForKey("allow_pet") as? Bool {
 
                             restrictionList.append( (allow_pet ? "可養寵物" : "不可養寵物"))
                         }
 
-                        //Allow Cooking
                         if let allow_cooking = houseDetail.valueForKey("allow_cooking") as? Bool {
 
                             restrictionList.append( (allow_cooking ? "可開伙" : "不可開伙"))
