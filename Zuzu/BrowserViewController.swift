@@ -71,13 +71,13 @@ class BrowserViewController: UIViewController {
 
         if let sourceLink = self.sourceLink {
             if let url = NSURL(string:sourceLink) {
-
-                LoadingSpinner.shared.startOnView(view)
-
                 self.webView?.UIDelegate = self
                 self.webView?.navigationDelegate = self
-                let req = NSURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 45)
-                self.webView!.loadRequest(req)
+                let req = NSURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 30)
+
+                if let webView = self.webView {
+                    webView.loadRequest(req)
+                }
             }
         }
     }
@@ -176,7 +176,26 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
 
+        Log.enter()
+
+        switch (navigationAction.navigationType) {
+        case .LinkActivated:
+            Log.debug("LinkActivated")
+        case .FormSubmitted:
+            Log.debug("FormSubmitted")
+        case .BackForward:
+            Log.debug("BackForward")
+        case .Reload:
+            Log.debug("Reload")
+        case .FormResubmitted:
+            Log.debug("FormResubmitted")
+        case .Other:
+            Log.debug("Other")
+        }
+
         if let targetUrl = navigationAction.request.URL {
+
+            Log.debug("targetUrl = \(targetUrl.absoluteString)")
 
             if(targetUrl.scheme == "tel") {
 
@@ -209,23 +228,44 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(WKNavigationActionPolicy.Allow)
 
         } else {
+
+            Log.debug("No targetUrl")
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
     }
-    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        LoadingSpinner.shared.stop()
+
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        LoadingSpinner.shared.setImmediateAppear(true)
+        LoadingSpinner.shared.setMinShowTime(2)
+        LoadingSpinner.shared.startOnView(webView)
+        Log.enter()
     }
 
-    //    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-    //        LoadingSpinner.shared.stop()
-    //    }
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        LoadingSpinner.shared.stop()
+        Log.enter()
+    }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        Log.enter()
+    }
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
         LoadingSpinner.shared.stop()
+        Log.enter()
     }
 }
 
 extension BrowserViewController: WKUIDelegate {
 
+    // this handles target=_blank links by opening them in the same view
+    func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if navigationAction.targetFrame == nil {
+
+            webView.loadRequest(navigationAction.request)
+
+        }
+        return nil
+    }
 
 }
