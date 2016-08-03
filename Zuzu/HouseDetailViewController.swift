@@ -47,7 +47,7 @@ class HouseDetailViewController: UIViewController {
 
     private struct SourceCheckCache {
         static let cacheName = "sourceCheckCache"
-        static let cacheTime: Double = 1 * 60 * 60 //1 hours
+        static let cacheTime: Double = 0.5 * 60 * 60 //1 hours
     }
 
     private let houseTypeLabelMaker: LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
@@ -176,9 +176,9 @@ class HouseDetailViewController: UIViewController {
 
                     if let response = response {
 
-                        Log.debug("[[response]] = \n \(response) \n [[result]] = \n \(result.value)")
+                        Log.error("[[response]] = \n \(response)")
 
-                        successCallback(response, .Seconds(SourceCheckCache.cacheTime)) // Cache response for 5 minutes
+                        successCallback(response, .Seconds(SourceCheckCache.cacheTime)) // Cache response for 30 minutes
 
                     }
                 }
@@ -210,6 +210,8 @@ class HouseDetailViewController: UIViewController {
     private func stopCheckSourceAvailability() {
 
         self.alamoFireRequest?.cancel()
+
+        self.notificationBar.dismissNotify()
 
     }
 
@@ -1415,8 +1417,7 @@ class HouseDetailViewController: UIViewController {
 
         LoadingSpinner.shared.stop()
 
-        if(self.isMovingFromParentViewController()) {
-            self.notificationBar.dismissNotify()
+        if(TagUtils.shouldCheckSource()) {
             self.stopCheckSourceAvailability()
         }
 
