@@ -439,7 +439,7 @@ class HouseDetailViewController: UIViewController {
                         if let price = houseItemDetail.valueForKey("price") as? Int {
 
                             cell.priceLabel.font = UIFont.boldSystemFontOfSize(cell.priceLabel.font.pointSize)
-                            cell.priceLabel.text = "\(price) 月/元"
+                            cell.priceLabel.text = "\(price) 元/月"
                         }
 
                         if let size = houseItemDetail.valueForKey("size") as? Float {
