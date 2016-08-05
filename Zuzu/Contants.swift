@@ -54,6 +54,14 @@ struct TagConst {
 
     static let tenantUrl = "tenantUrl"
 
+    static let serviceAgreementDisplay = "serviceAgreementDisplay"
+
+    static let serviceAgreementTitle = "serviceAgreementTitle"
+
+    static let serviceAgreementSubtitle = "serviceAgreementSubtitle"
+
+    static let serviceAgreementSubtitle2 = "serviceAgreementSubtitle2"
+
 }
 
 // MARK: Constants for Criteria
