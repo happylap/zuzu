@@ -116,6 +116,13 @@ struct ExperimentData {
     var url: String?
 }
 
+struct ConfigData {
+    var isEnabled: Bool
+    var title: String?
+    var subtitle: String?
+    var subtitle2: String?
+}
+
 class TagUtils: NSObject {
 
     static func shouldCheckSource() -> Bool {
@@ -261,6 +268,41 @@ class TagUtils: NSObject {
 
         return isAllowFreeTrial
 
+    }
+
+    static func getServiceAgreement() -> ConfigData? {
+
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+            let serviceAgreementDisplayString = tagContainer.stringForKey(TagConst.serviceAgreementDisplay)
+            let titleString = tagContainer.stringForKey(TagConst.serviceAgreementTitle)
+            let subtitleString = tagContainer.stringForKey(TagConst.serviceAgreementSubtitle)
+            let subtitleString2 = tagContainer.stringForKey(TagConst.serviceAgreementSubtitle2)
+
+
+            Log.debug("Tag Container = \(tagContainer.containerId), isDefault = \(tagContainer.isDefault()), \(TagConst.serviceAgreementDisplay) = \(serviceAgreementDisplayString)")
+
+            if(serviceAgreementDisplayString == "y") {
+
+                let data: ConfigData = ConfigData(isEnabled: true, title: titleString, subtitle: subtitleString, subtitle2: subtitleString2)
+
+                return data
+
+            } else if(serviceAgreementDisplayString == "n") {
+
+                let data: ConfigData = ConfigData(isEnabled: false, title: nil, subtitle: nil, subtitle2: nil)
+
+                return data
+
+            } else {
+
+                Log.debug("Tag Container = \(tagContainer.containerId), No Value for Key: \(TagConst.serviceAgreementDisplay)")
+                return nil
+            }
+
+        }
+
+        return nil
     }
 
     /// House-moving micro service campaign experiment
