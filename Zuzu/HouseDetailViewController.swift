@@ -17,6 +17,7 @@ import GoogleMobileAds
 import FBAudienceNetwork
 import SafariServices
 import JKNotificationPanel
+import CWStatusBarNotification
 import Alamofire
 
 private let Log = Logger.defaultLogger
@@ -58,6 +59,8 @@ class HouseDetailViewController: UIViewController {
     private var experimentData = TagUtils.getMoverExperiment()
 
     private var photos = [MWPhoto]()
+
+    private let houseItemNotification = CWStatusBarNotification()
 
     private let notificationBar = JKNotificationPanel()
 
@@ -154,6 +157,138 @@ class HouseDetailViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     // MARK: - Private Utils
+
+    private func displayPhoneNumberMenu() {
+        if let houseDetail = self.houseItemDetail {
+
+            var message = "確認聯絡: "
+            let maxDisplayChars = 15
+
+            if let contactName = houseDetail.valueForKey("agent") as? String {
+
+                let toIndex: String.Index = contactName.startIndex
+                    .advancedBy(maxDisplayChars, limit: contactName.endIndex)
+
+                if(maxDisplayChars < contactName.characters.count) {
+                    message += contactName.substringToIndex(toIndex) + "..."
+                } else {
+                    message += contactName.substringToIndex(toIndex)
+                }
+            }
+
+            if let agentType = houseDetail.valueForKey("agent_type") as? Int {
+                let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
+                message += " (\(agentTypeStr))"
+            }
+
+            let optionMenu = UIAlertController(title: nil, message: message, preferredStyle: .ActionSheet)
+
+
+            if let phoneNumbers = houseDetail.valueForKey("phone") as? [String] {
+
+                ///Add only first 3 numbers
+                for phoneNumber in phoneNumbers.prefix(3) {
+
+                    var phoneDisplayString = phoneNumber
+                    let phoneComponents = phoneNumber.componentsSeparatedByString(PhoneExtensionChar)
+
+                    /// Convert to human-redable display format for phone number with extension
+                    if(phoneComponents.count == 2) {
+                        phoneDisplayString = phoneComponents.joinWithSeparator(DisplayPhoneExtensionChar)
+                    } else if (phoneComponents.count > 2) {
+                        assert(false, "Incorrect phone number format \(phoneNumber)")
+                    }
+
+                    /// Bind phone number & display string
+                    phoneNumberDic[phoneDisplayString] = phoneNumber
+
+                    let numberAction = UIAlertAction(title: phoneDisplayString, style: .Default, handler: {
+                        (alert: UIAlertAction!) -> Void in
+
+                        var success = false
+
+                        if let phoneDisplayStr = alert.title {
+
+                            if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
+                                let url = NSURL(string: "tel://\(phoneStr)") {
+
+                                success = UIApplication.sharedApplication().openURL(url)
+
+                                if let houseId = houseDetail.valueForKey("id") as? String {
+                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                                }
+                            }
+                        }
+
+                        ///GA Tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.Contact,
+                            label: GAConst.Label.Contact.Phone,
+                            value:  UInt(success))
+
+                    })
+
+                    optionMenu.addAction(numberAction)
+                }
+            }
+
+            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                    action: GAConst.Action.UIActivity.Contact,
+                    label: GAConst.Label.Contact.Phone,
+                    value:  2)
+            })
+
+            optionMenu.addAction(cancelAction)
+
+            self.presentViewController(optionMenu, animated: true, completion: nil)
+        }
+    }
+
+    private func displayCacheNotice() {
+
+        var sourceName = "原始房源"
+
+        if let source = self.houseItem?.source {
+
+            sourceName = houseTypeLabelMaker.fromCodeForField("source", code: source, defaultValue: "原始房源")
+
+            self.houseItemNotification.displayNotificationWithMessage("本頁為\(sourceName)暫存檔，聯繫屋主請以原始網頁資料為準", forDuration: 10.0)
+
+        }
+
+    }
+
+    private func displayDetailedCacheNotice() {
+
+        var sourceName = "原始房源"
+
+        if let houseItemDetail = self.houseItemDetail,
+            source = houseItemDetail.valueForKey("source") as? Int,
+            updateTime = houseItemDetail.valueForKey("update_time") as? String {
+
+            sourceName = houseTypeLabelMaker.fromCodeForField("source", code: source, defaultValue: "原始房源")
+
+            if let utcTime = CommonUtils.getUTCDateFromString(updateTime),
+                let localTime = CommonUtils.getCustomStringFromDate(utcTime, format: "yyyy-MM-dd HH:mm", timezone: NSTimeZone.localTimeZone()) {
+
+                self.houseItemNotification.displayNotificationWithMessage("本頁為\(sourceName)暫存檔，更新時間：\(localTime)") {
+
+                }
+
+            } else {
+
+                self.houseItemNotification.displayNotificationWithMessage("本頁為\(sourceName)暫存檔，聯繫屋主請以原始網頁資料為準") {
+
+                }
+            }
+
+        }
+
+    }
 
     private func startCheckSourceAvailability(url: String) {
 
@@ -281,6 +416,11 @@ class HouseDetailViewController: UIViewController {
 
         ///Configure Views On Data Loaded
         self.configureViewsOnDataLoaded()
+
+        ///Display cache data notice
+        self.runOnMainThreadAfter(1.0) {
+
+        }
 
         self.enableNavigationBarItems()
     }
@@ -780,7 +920,7 @@ class HouseDetailViewController: UIViewController {
                             orientationStr = self.houseTypeLabelMaker.fromCodeForField("orientation", code: orientation, defaultValue: "")
                         }
 
-                        otherInfoList.append("朝向: \(orientationStr)")
+                        otherInfoList.append("房屋朝向: \(orientationStr)")
 
 
                         var readyDateStr = "—"
@@ -792,12 +932,24 @@ class HouseDetailViewController: UIViewController {
 
                         otherInfoList.append("可遷入日: \(readyDateStr)")
 
+                        var updateDateStr = "—"
+                        if let updateTime = houseDetail.valueForKey("update_time") as? String {
+                            if let utcTime = CommonUtils.getUTCDateFromString(updateTime),
+                                let localTime = CommonUtils.getCustomStringFromDate(utcTime, format: "yyyy-MM-dd HH:mm", timezone: NSTimeZone.localTimeZone()) {
+                                updateDateStr = localTime
 
-                        if(otherInfoList.count > 0) {
-                            cell.contentLabel.text = otherInfoList.joinWithSeparator("\n") + "\n"
-                        } else {
-                            cell.contentLabel.text = "無資訊\n"
+                            }
                         }
+
+                        #if DEBUG
+                            otherInfoList.append("資料更新: \(updateDateStr)")
+
+                            if(otherInfoList.count > 0) {
+                                cell.contentLabel.text = otherInfoList.joinWithSeparator("\n") + "\n"
+                            } else {
+                                cell.contentLabel.text = "無資訊\n"
+                            }
+                        #endif
 
 
                     } else {
@@ -929,7 +1081,6 @@ class HouseDetailViewController: UIViewController {
 
         //Remove extra cells with some padding height
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-
     }
 
     private func configureNavigationBarItems() {
@@ -1097,102 +1248,12 @@ class HouseDetailViewController: UIViewController {
         }
     }
 
-    private func displayPhoneNumberMenu() {
-        if let houseDetail = self.houseItemDetail {
-
-            var message = "確認聯絡: "
-            let maxDisplayChars = 15
-
-            if let contactName = houseDetail.valueForKey("agent") as? String {
-
-                let toIndex: String.Index = contactName.startIndex
-                    .advancedBy(maxDisplayChars, limit: contactName.endIndex)
-
-                if(maxDisplayChars < contactName.characters.count) {
-                    message += contactName.substringToIndex(toIndex) + "..."
-                } else {
-                    message += contactName.substringToIndex(toIndex)
-                }
-            }
-
-            if let agentType = houseDetail.valueForKey("agent_type") as? Int {
-                let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
-                message += " (\(agentTypeStr))"
-            }
-
-            let optionMenu = UIAlertController(title: nil, message: message, preferredStyle: .ActionSheet)
-
-
-            if let phoneNumbers = houseDetail.valueForKey("phone") as? [String] {
-
-                ///Add only first 3 numbers
-                for phoneNumber in phoneNumbers.prefix(3) {
-
-                    var phoneDisplayString = phoneNumber
-                    let phoneComponents = phoneNumber.componentsSeparatedByString(PhoneExtensionChar)
-
-                    /// Convert to human-redable display format for phone number with extension
-                    if(phoneComponents.count == 2) {
-                        phoneDisplayString = phoneComponents.joinWithSeparator(DisplayPhoneExtensionChar)
-                    } else if (phoneComponents.count > 2) {
-                        assert(false, "Incorrect phone number format \(phoneNumber)")
-                    }
-
-                    /// Bind phone number & display string
-                    phoneNumberDic[phoneDisplayString] = phoneNumber
-
-                    let numberAction = UIAlertAction(title: phoneDisplayString, style: .Default, handler: {
-                        (alert: UIAlertAction!) -> Void in
-
-                        var success = false
-
-                        if let phoneDisplayStr = alert.title {
-
-                            if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
-                                let url = NSURL(string: "tel://\(phoneStr)") {
-
-                                success = UIApplication.sharedApplication().openURL(url)
-
-                                if let houseId = houseDetail.valueForKey("id") as? String {
-                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
-                                }
-                            }
-                        }
-
-                        ///GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                            action: GAConst.Action.UIActivity.Contact,
-                            label: GAConst.Label.Contact.Phone,
-                            value:  UInt(success))
-
-                    })
-
-                    optionMenu.addAction(numberAction)
-                }
-            }
-
-            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
-                (alert: UIAlertAction!) -> Void in
-
-                ///GA Tracker
-                self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                    action: GAConst.Action.UIActivity.Contact,
-                    label: GAConst.Label.Contact.Phone,
-                    value:  2)
-            })
-
-            optionMenu.addAction(cancelAction)
-
-            self.presentViewController(optionMenu, animated: true, completion: nil)
-        }
-    }
-
     func contactNameTouched(sender: UITapGestureRecognizer) {
-        displayPhoneNumberMenu()
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
     }
 
     func contactByPhoneButtonTouched(sender: UIButton) {
-        displayPhoneNumberMenu()
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
     }
 
     func shareButtonTouched(sender: UIButton) {
@@ -1370,6 +1431,12 @@ class HouseDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        ///Init Style
+        self.houseItemNotification.notificationAnimationInStyle = .Top
+        self.houseItemNotification.notificationLabelBackgroundColor = UIColor.colorWithRGB(0xF5AA00)
+        self.houseItemNotification.notificationLabelTextColor = UIColor.whiteColor()
+        self.houseItemNotification.notificationStyle = .StatusBarNotification
+
         ///Start Loading
         LoadingSpinner.shared.setDimBackground(true)
         LoadingSpinner.shared.startOnView(view)
@@ -1389,6 +1456,9 @@ class HouseDetailViewController: UIViewController {
         if let houseItem = self.houseItem {
             fetchHouseDetail(houseItem)
         }
+
+        ///Display cache data notice
+        self.displayCacheNotice()
 
     }
 
@@ -1420,6 +1490,9 @@ class HouseDetailViewController: UIViewController {
         if(TagUtils.shouldCheckSource()) {
             self.stopCheckSourceAvailability()
         }
+
+        self.houseItemNotification.notificationWindow?.hidden = true
+        self.houseItemNotification.dismissNotification()
 
     }
 
@@ -1787,5 +1860,13 @@ extension HouseDetailViewController: JKNotificationPanelDelegate {
 
     func notificationPanelDidTap() {
         // Tapped
+    }
+}
+
+// MARK: - Scroll View Delegate
+extension HouseDetailViewController: UIScrollViewDelegate {
+
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.houseItemNotification.dismissNotification()
     }
 }

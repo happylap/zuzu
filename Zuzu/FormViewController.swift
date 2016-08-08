@@ -7,7 +7,8 @@
 
 import UIKit
 import SCLAlertView
-import SwiftyStateMachine
+//TODO: Disabled for now
+//import SwiftyStateMachine
 
 enum FormMode {
     case Login
@@ -88,7 +89,8 @@ class FormViewController: UIViewController {
 
     }
 
-    private var machine: StateMachine<StateMachineSchema<FormState, FormStateEvent, Void>>!
+    //TODO: Disabled for now
+    //private var machine: StateMachine<StateMachineSchema<FormState, FormStateEvent, Void>>!
 
     private var emailFormView: EmailFormView?
 
@@ -352,60 +354,62 @@ class FormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let stateSchema = StateMachineSchema<FormState, FormStateEvent, Void>(initialState: .Init) {
-            (state, event) in
-            switch state {
+        /* TODO: Disabled for now
+         let stateSchema = StateMachineSchema<FormState, FormStateEvent, Void>(initialState: .Init) {
+         (state, event) in
+         switch state {
 
-            case .Init:
-                switch event {
-                case .OnStartLogin: return (.LoginEmail, { _ in print("LoginEmail")})
-                case .OnStartRegister: return (.RegisterEmail, { _ in print("RegisterEmail")})
-                default: return nil
-                }
+         case .Init:
+         switch event {
+         case .OnStartLogin: return (.LoginEmail, { _ in print("LoginEmail")})
+         case .OnStartRegister: return (.RegisterEmail, { _ in print("RegisterEmail")})
+         default: return nil
+         }
 
-            case .LoginEmail:
-                switch event {
-                case .OnInputEmail: return (.LoginPassword, { _ in print("LoginPassword")})
-                default: return nil
-                }
+         case .LoginEmail:
+         switch event {
+         case .OnInputEmail: return (.LoginPassword, { _ in print("LoginPassword")})
+         default: return nil
+         }
 
-            case .LoginPassword:
-                switch event {
-                case .OnInputPassword: return (.LoginPassword, { _ in print("LoginPassword")})
-                case .OnLoginSuccess: return (.LoginDone, { _ in print("LoginDone")})
-                case .OnLoginFailure: return (.LoginDone, { _ in print("LoginDone")})
-                default: return nil
-                }
+         case .LoginPassword:
+         switch event {
+         case .OnInputPassword: return (.LoginPassword, { _ in print("LoginPassword")})
+         case .OnLoginSuccess: return (.LoginDone, { _ in print("LoginDone")})
+         case .OnLoginFailure: return (.LoginDone, { _ in print("LoginDone")})
+         default: return nil
+         }
 
-            case .RegisterEmail:
-                switch event {
-                case .OnInputEmail: return (.RegisterPassword, { _ in print("RegisterEmail")})
-                default: return nil
-                }
+         case .RegisterEmail:
+         switch event {
+         case .OnInputEmail: return (.RegisterPassword, { _ in print("RegisterEmail")})
+         default: return nil
+         }
 
-            case .RegisterPassword:
-                switch event {
-                case .OnInputPassword: return nil
-                case .OnRegisterSuccess: return (.RegisterDone, { _ in print("RegisterDone")})
-                case .OnRegisterFailure: return (.RegisterDone, { _ in print("RegisterDone")})
-                default: return nil
-                }
-            default: return nil
-            }
-        }
+         case .RegisterPassword:
+         switch event {
+         case .OnInputPassword: return nil
+         case .OnRegisterSuccess: return (.RegisterDone, { _ in print("RegisterDone")})
+         case .OnRegisterFailure: return (.RegisterDone, { _ in print("RegisterDone")})
+         default: return nil
+         }
+         default: return nil
+         }
+         }
 
-        self.machine = StateMachine(schema: stateSchema, subject: ())
+         self.machine = StateMachine(schema: stateSchema, subject: ())
 
-        switch(self.formMode) {
-        case .Login:
-            self.setupUIForLogin()
-            machine.handleEvent(.OnStartLogin)
+         switch(self.formMode) {
+         case .Login:
+         self.setupUIForLogin()
+         machine.handleEvent(.OnStartLogin)
 
-        case .Register:
-            self.setupUIForRegister()
-            machine.handleEvent(.OnStartRegister)
-        default: break
-        }
+         case .Register:
+         self.setupUIForRegister()
+         machine.handleEvent(.OnStartRegister)
+         default: break
+         }
+         */
     }
 
     override func didReceiveMemoryWarning() {
@@ -535,9 +539,9 @@ extension FormViewController: PasswordFormDelegate {
                         self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
                     })
 
-//                    dismissModalStack(self, animated: true, completionBlock: {
-//                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
-//                    })
+                    //                    dismissModalStack(self, animated: true, completionBlock: {
+                    //                        self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                    //                    })
 
                 })
 
@@ -588,9 +592,9 @@ extension FormViewController: PasswordFormDelegate {
                             self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
                         })
 
-//                        dismissModalStack(self, animated: true, completionBlock: {
-//                            self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
-//                        })
+                        //                        dismissModalStack(self, animated: true, completionBlock: {
+                        //                            self.delegate?.onLoginDone(.Success, userId: userId, zuzuToken: userToken)
+                        //                        })
 
                     })
 
