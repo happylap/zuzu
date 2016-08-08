@@ -43,17 +43,20 @@ pod 'SwiftDate', '2.0.2'
 pod 'SwiftyJSON', '2.3.0'
 pod 'SCLAlertView', '0.4.3'
 pod 'SDWebImage', '3.7.3'
-pod 'UICKeyChainStore', '2.0.7'
+pod 'KeychainAccess', '2.3.5'
 pod 'XCGLogger', '3.2'
 pod 'Charts', '2.2.3'
 pod 'SwiftValidator', '3.0.3'
-pod 'SwiftyStateMachine', '0.3.0'
 pod 'BWWalkthrough', '1.1.0'
-pod 'KeychainAccess', '2.3.5'
 pod 'VMFiveAdNetwork', '2.1.4'
 pod 'BGTableViewRowActionWithImage'
 pod 'CNPPopupController', '0.3.1'
 pod 'JKNotificationPanel', '0.2.0'
+pod 'CWStatusBarNotification', '2.3.1'
+
+# The following libs are disabled for now to save some App size
+#pod 'UICKeyChainStore', '2.0.7'
+#pod 'SwiftyStateMachine', '0.3.0'
 end
 
 target 'ZuzuTests' do
