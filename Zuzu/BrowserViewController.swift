@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import SCLAlertView
 
 private let Log = Logger.defaultLogger
 
@@ -18,12 +19,131 @@ class BrowserViewController: UIViewController {
 
     var sourceLink: String?
 
+    /// House Item Data
+    var houseItem: HouseItem?
+
+    var agentType: Int?
+
+    var agentName: String?
+
+    var agentPhoneList: [String]?
+
+    var agentMail: String?
+
     struct ViewTransConst {
         static let displayHouseUrl: String = "displayHouseUrl"
     }
 
     @IBOutlet var pesudoAnchor: UIBarButtonItem!
     var webView: WKWebView?
+
+    private var phoneNumberDic = [String:String]() /// display string : original number
+
+    private let houseTypeLabelMaker: LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+
+    // MARK: - Private Utils
+
+    private func alertMailAppNotReady() {
+
+        let alertView = SCLAlertView()
+
+        let subTitle = "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成"
+
+        alertView.showCloseButton = true
+
+        alertView.showInfo("找不到預設的郵件應用", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+
+    private func displayPhoneNumberMenu() {
+
+        var message = "確認聯絡: "
+        let maxDisplayChars = 15
+
+        if let contactName = self.agentName {
+
+            let toIndex: String.Index = contactName.startIndex
+                .advancedBy(maxDisplayChars, limit: contactName.endIndex)
+
+            if(maxDisplayChars < contactName.characters.count) {
+                message += contactName.substringToIndex(toIndex) + "..."
+            } else {
+                message += contactName.substringToIndex(toIndex)
+            }
+        }
+
+        if let agentType = self.agentType {
+            let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
+            message += " (\(agentTypeStr))"
+        }
+
+        let optionMenu = UIAlertController(title: nil, message: message, preferredStyle: .ActionSheet)
+
+
+        if let phoneNumbers = self.agentPhoneList {
+
+            ///Add only first 3 numbers
+            for phoneNumber in phoneNumbers.prefix(3) {
+
+                var phoneDisplayString = phoneNumber
+                let phoneComponents = phoneNumber.componentsSeparatedByString(PhoneExtensionChar)
+
+                /// Convert to human-redable display format for phone number with extension
+                if(phoneComponents.count == 2) {
+                    phoneDisplayString = phoneComponents.joinWithSeparator(DisplayPhoneExtensionChar)
+                } else if (phoneComponents.count > 2) {
+                    assert(false, "Incorrect phone number format \(phoneNumber)")
+                }
+
+                /// Bind phone number & display string
+                self.phoneNumberDic[phoneDisplayString] = phoneNumber
+
+                let numberAction = UIAlertAction(title: phoneDisplayString, style: .Default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+
+                    var success = false
+
+                    if let phoneDisplayStr = alert.title {
+
+                        if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
+                            let url = NSURL(string: "tel://\(phoneStr)") {
+
+                            success = UIApplication.sharedApplication().openURL(url)
+
+                            if(success) {
+                                /// Update contacted status
+                                if let houseId = self.houseItem?.id {
+                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                                }
+                            }
+                        }
+                    }
+
+                    ///GA Tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                        action: GAConst.Action.UIActivity.Contact,
+                        label: GAConst.Label.Contact.Phone,
+                        value:  UInt(success))
+
+                })
+
+                optionMenu.addAction(numberAction)
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                action: GAConst.Action.UIActivity.Contact,
+                label: GAConst.Label.Contact.Phone,
+                value:  2)
+        })
+
+        optionMenu.addAction(cancelAction)
+
+        self.presentViewController(optionMenu, animated: true, completion: nil)
+    }
 
     private func configureNavigationBarItems() {
         if(enableToolBar) {
@@ -37,10 +157,38 @@ class BrowserViewController: UIViewController {
             pesudoAnchor.customView = copyLinkButton
             pesudoAnchor.tintColor = UIColor.whiteColor()
 
+            let phoneCallButton: UIButton = UIButton(type: UIButtonType.Custom)
+            phoneCallButton.setImage(UIImage(named: "phone_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            phoneCallButton.addTarget(self, action: #selector(BrowserViewController.contactByPhoneButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            phoneCallButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+
+            let phoneCallBarButton = UIBarButtonItem(customView: phoneCallButton)
+            phoneCallBarButton.tintColor = UIColor.whiteColor()
+            phoneCallBarButton.enabled = false
+
+            let sendMailButton: UIButton = UIButton(type: UIButtonType.Custom)
+            sendMailButton.setImage(UIImage(named: "envelope_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
+            sendMailButton.addTarget(self, action: #selector(BrowserViewController.contactByMailButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            sendMailButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+
+            let sendMailBarButton = UIBarButtonItem(customView: sendMailButton)
+            sendMailBarButton.tintColor = UIColor.whiteColor()
+            sendMailBarButton.enabled = false
+
+            if let _ = self.agentPhoneList {
+                phoneCallBarButton.enabled = true
+            }
+
+            if let _ = self.agentMail {
+                sendMailBarButton.enabled = true
+            }
+
             /// From right to left
             self.navigationItem.setRightBarButtonItems(
                 [
-                    pesudoAnchor
+                    pesudoAnchor,
+                    sendMailBarButton,
+                    phoneCallBarButton
                 ],
                 animated: false)
         }
@@ -48,6 +196,66 @@ class BrowserViewController: UIViewController {
 
     func copyLinkButtonTouched(sender: UIButton) {
         performSegueWithIdentifier(ViewTransConst.displayHouseUrl, sender: self)
+    }
+
+    func contactByPhoneButtonTouched(sender: UIButton) {
+
+        self.displayPhoneNumberMenu()
+
+    }
+
+    func contactByMailButtonTouched(sender: UIButton) {
+
+        /* Another way to allow sending mail by lauching default mail App
+         * Our app will be suspended, and the user woulden't have a way to return to our App
+         if let url = NSURL(string: "mailto:jon.doe@mail.com") {
+         UIApplication.sharedApplication().openURL(url)
+         }
+         */
+
+
+        if let houseItem = self.houseItem {
+
+            let title = houseItem.title
+            let addr = houseItem.addr
+
+            let emailTitle = "租屋物件詢問: " + (title ?? addr ?? "")
+
+            if let email = self.agentMail {
+
+                var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
+
+                let toRecipents = [email]
+
+                LoadingSpinner.shared.startOnView(self.view)
+
+                if let sourceLink = self.sourceLink {
+                    messageBody += "租屋物件網址: \(sourceLink) \n\n"
+                }
+
+                messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n再麻煩您回覆方便的時間！\n"
+
+                if MFMailComposeViewController.canSendMail() {
+                    if let mc: MFMailComposeViewController = MFMailComposeViewController() {
+                        ///Change Bar Item Color
+                        mc.navigationBar.tintColor = UIColor.whiteColor()
+
+                        mc.mailComposeDelegate = self
+                        mc.setSubject(emailTitle)
+                        mc.setMessageBody(messageBody, isHTML: false)
+                        mc.setToRecipients(toRecipents)
+                        self.presentViewController(mc, animated: true, completion: nil)
+                    }
+
+                } else {
+                    alertMailAppNotReady()
+                    LoadingSpinner.shared.stop()
+                }
+
+            } else {
+                Log.debug("No emails available")
+            }
+        }
     }
 
     override func loadView() {
@@ -159,11 +367,32 @@ extension BrowserViewController: WKNavigationDelegate {
 
         let callAction = UIAlertAction(title: "撥打", style: .Default) { (action) -> Void in
 
-            UIApplication.sharedApplication().openURL(targetUrl)
+            let success = UIApplication.sharedApplication().openURL(targetUrl)
+
+            if(success) {
+
+                /// Update contacted status
+                if let houseId = self.houseItem?.id {
+                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                }
+
+            }
+
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                            action: GAConst.Action.UIActivity.Contact,
+                                            label: GAConst.Label.Contact.Phone,
+                                            value:  UInt(success))
 
         }
 
         let cancelAction = UIAlertAction(title: "取消", style: .Cancel) { (action) -> Void in
+
+            ///GA Tracker
+            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                            action: GAConst.Action.UIActivity.Contact,
+                                            label: GAConst.Label.Contact.Phone,
+                                            value:  2)
 
         }
 
@@ -268,4 +497,40 @@ extension BrowserViewController: WKUIDelegate {
         return nil
     }
 
+}
+
+// MARK: - MFMailComposeViewControllerDelegate
+// Handle Mail Sending Results
+extension BrowserViewController: MFMailComposeViewControllerDelegate {
+
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+
+        var success = false
+
+        switch result {
+        case MFMailComposeResultCancelled:
+            Log.debug("Mail cancelled")
+        case MFMailComposeResultSaved:
+            Log.debug("Mail saved")
+        case MFMailComposeResultSent:
+            success = true
+            Log.debug("Mail sent")
+            if let houseId = self.houseItem?.id {
+                CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+            }
+        case MFMailComposeResultFailed:
+            Log.debug("Mail sent failure: \(error?.localizedDescription)")
+        default:
+            break
+        }
+
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                        action: GAConst.Action.UIActivity.Contact,
+                                        label: GAConst.Label.Contact.Email,
+                                        value:  UInt(success))
+
+        //self.navigationController?.popViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 }

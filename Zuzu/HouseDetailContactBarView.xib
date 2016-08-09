@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -26,7 +26,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="連絡人姓名" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2YX-jY-G9b" customClass="MarqueeLabel">
-                    <rect key="frame" x="53" y="0.0" width="236" height="71"/>
+                    <rect key="frame" x="53" y="0.0" width="281" height="71"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -41,7 +41,7 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tsm-Ar-y2Y">
-                    <rect key="frame" x="297" y="0.0" width="30" height="71"/>
+                    <rect key="frame" x="342" y="0.0" width="30" height="71"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="tsm-Ar-y2Y" secondAttribute="height" multiplier="1:2" id="5XN-fz-3jT"/>
                         <constraint firstAttribute="width" constant="30" id="J9n-DM-RTm"/>
@@ -53,7 +53,7 @@
                         </mask>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6yl-dO-wBg">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6yl-dO-wBg">
                     <rect key="frame" x="335" y="0.5" width="30" height="71"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="7FU-lB-Tpr"/>
@@ -72,6 +72,7 @@
                 <constraint firstItem="6yl-dO-wBg" firstAttribute="height" secondItem="tsm-Ar-y2Y" secondAttribute="height" id="fTy-W7-JIh"/>
                 <constraint firstItem="tsm-Ar-y2Y" firstAttribute="centerY" secondItem="6yl-dO-wBg" secondAttribute="centerY" id="gc9-kp-squ"/>
                 <constraint firstAttribute="bottom" secondItem="2YX-jY-G9b" secondAttribute="bottom" id="h0q-lK-69d"/>
+                <constraint firstAttribute="trailing" secondItem="tsm-Ar-y2Y" secondAttribute="trailing" constant="8" id="jQa-vw-bOa"/>
                 <constraint firstAttribute="bottom" secondItem="tsm-Ar-y2Y" secondAttribute="bottom" id="kQK-Yh-WC7"/>
                 <constraint firstItem="tsm-Ar-y2Y" firstAttribute="leading" secondItem="2YX-jY-G9b" secondAttribute="trailing" constant="8" symbolic="YES" id="lOL-aN-YxS"/>
                 <constraint firstItem="2YX-jY-G9b" firstAttribute="top" secondItem="PHz-ua-JMV" secondAttribute="top" id="m6f-LR-dDd"/>
@@ -80,6 +81,11 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="Vgr-qg-hvR"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="430" y="800.5"/>
         </view>
     </objects>

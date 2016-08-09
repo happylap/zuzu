@@ -9,6 +9,10 @@
 import Foundation
 import AWSCore
 
+// MARK: General Constants
+internal let PhoneExtensionChar = ","
+internal let DisplayPhoneExtensionChar = "轉"
+
 // MARK: Radar
 struct RadarConstants {
 
