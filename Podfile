@@ -52,9 +52,9 @@ pod 'VMFiveAdNetwork', '2.1.4'
 pod 'BGTableViewRowActionWithImage'
 pod 'CNPPopupController', '0.3.1'
 pod 'JKNotificationPanel', '0.2.0'
-pod 'CWStatusBarNotification', '2.3.1'
 
 # The following libs are disabled for now to save some App size
+#pod 'CWStatusBarNotification', '2.3.1'
 #pod 'UICKeyChainStore', '2.0.7'
 #pod 'SwiftyStateMachine', '0.3.0'
 end
