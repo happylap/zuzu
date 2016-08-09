@@ -22,7 +22,6 @@ PODS:
     - Charts/Core (= 2.2.3)
   - Charts/Core (2.2.3)
   - CNPPopupController (0.3.1)
-  - CWStatusBarNotification (2.3.1)
   - DACircularProgress (2.3.1)
   - Device (0.0.4)
   - Dollar (4.0.1)
@@ -108,7 +107,6 @@ DEPENDENCIES:
   - BWWalkthrough (= 1.1.0)
   - Charts (= 2.2.3)
   - CNPPopupController (= 0.3.1)
-  - CWStatusBarNotification (= 2.3.1)
   - Device (= 0.0.4)
   - Dollar (= 4.0.1)
   - Fabric (= 1.6.4)
@@ -151,7 +149,6 @@ SPEC CHECKSUMS:
   BWWalkthrough: 0c27ad2773a25c8f4fb9004bc7d6685deb35fecc
   Charts: f54267bb3f0f0e74520c6f248517cf5074dfd6fc
   CNPPopupController: 67dc2ca5a3f88cd49a27bb1b0aeb78a24d423d79
-  CWStatusBarNotification: 73d86949d11a2246f1a50532b157c1d313000ccd
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Device: 2247b952bf04acee1fb277cdddc9e6606fbeb81d
   Dollar: a058e2659e0d3261307c12630dbc2fd8e32f80bf
