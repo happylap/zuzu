@@ -36,9 +36,6 @@ class HouseDetailViewController: UIViewController {
     private static var alertViewResponder: SCLAlertViewResponder?
     private var networkErrorAlertView: SCLAlertView? = SCLAlertView()
 
-    private let PhoneExtensionChar = ","
-    private let DisplayPhoneExtensionChar = "轉"
-
     private var phoneNumberDic = [String:String]() /// display string : original number
 
     private struct HouseDetailCache {
@@ -61,6 +58,8 @@ class HouseDetailViewController: UIViewController {
     private var photos = [MWPhoto]()
 
     private let houseItemNotification = CWStatusBarNotification()
+
+    @IBOutlet weak var cacheNoticeLabel: UILabel!
 
     private let notificationBar = JKNotificationPanel()
 
@@ -256,12 +255,13 @@ class HouseDetailViewController: UIViewController {
 
             sourceName = houseTypeLabelMaker.fromCodeForField("source", code: source, defaultValue: "原始房源")
 
-            self.houseItemNotification.displayNotificationWithMessage("本頁為\(sourceName)暫存檔，聯繫屋主請以原始網頁資料為準", forDuration: 10.0)
+            self.cacheNoticeLabel.text = "本頁為\(sourceName)快取資料，聯繫屋主請以原始網頁資料為準"
 
         }
 
     }
 
+    ///TODO: Not used for now
     private func displayDetailedCacheNotice() {
 
         var sourceName = "原始房源"
@@ -1023,17 +1023,6 @@ class HouseDetailViewController: UIViewController {
         alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
     }
 
-    private func alertMailAppNotReady() {
-
-        let alertView = SCLAlertView()
-
-        let subTitle = "找不到預設的郵件應用，請到 [設定] > [郵件、聯絡資訊、行事曆] > 帳號，確認您的郵件帳號已經設置完成"
-
-        alertView.showCloseButton = true
-
-        alertView.showInfo("找不到預設的郵件應用", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    }
-
 
     private func alertAddingToCollectionSuccess() {
 
@@ -1150,6 +1139,7 @@ class HouseDetailViewController: UIViewController {
         contactBarView.contactName.enabled = false
 
         contactBarView.contactByMailButton.enabled = false
+        contactBarView.contactByMailButton.removeFromSuperview()
 
         contactBarView.contactByPhoneButton.enabled = false
     }
@@ -1193,59 +1183,7 @@ class HouseDetailViewController: UIViewController {
     // MARK: - Action Handlers
 
     func contactByMailButtonTouched(sender: UIButton) {
-
-        /* Another way to allow sending mail by lauching default mail App
-         * Our app will be suspended, and the user woulden't have a way to return to our App
-         if let url = NSURL(string: "mailto:jon.doe@mail.com") {
-         UIApplication.sharedApplication().openURL(url)
-         }
-         */
-
-
-        if let houseDetail = self.houseItemDetail {
-
-            let title = houseDetail.valueForKey("title") as? String
-            let addr = houseDetail.valueForKey("addr") as? String
-
-            let emailTitle = "租屋物件詢問: " + (title ?? addr ?? "")
-
-            if let email = houseDetail.valueForKey("email") as? String {
-
-                var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
-
-                let toRecipents = [email]
-
-                LoadingSpinner.shared.startOnView(self.view)
-
-                if let sourceLink = houseDetail.valueForKey("mobile_link") as? String {
-                    messageBody += "租屋物件網址: \(sourceLink) \n\n"
-                }
-
-                messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n再麻煩您回覆方便的時間！\n"
-
-                if MFMailComposeViewController.canSendMail() {
-                    if let mc: MFMailComposeViewController = MFMailComposeViewController() {
-                        ///Change Bar Item Color
-                        mc.navigationBar.tintColor = UIColor.whiteColor()
-
-                        mc.mailComposeDelegate = self
-                        mc.setSubject(emailTitle)
-                        mc.setMessageBody(messageBody, isHTML: false)
-                        mc.setToRecipients(toRecipents)
-                        self.presentViewController(mc, animated: true, completion: nil)
-                        //self.navigationController?.pushViewController(mc, animated: true)
-
-                    }
-
-                } else {
-                    alertMailAppNotReady()
-                    LoadingSpinner.shared.stop()
-                }
-
-            } else {
-                Log.debug("No emails available")
-            }
-        }
+        self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
     }
 
     func contactNameTouched(sender: UITapGestureRecognizer) {
@@ -1559,8 +1497,15 @@ class HouseDetailViewController: UIViewController {
                         let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String
 
                         bvc.sourceLink = sourceLink
-                        bvc.viewTitle = "原始房源網頁"
+                        bvc.viewTitle = "原始網頁"
 
+                        if let houseItemDetail = self.houseItemDetail {
+                            bvc.houseItem = self.houseItem
+                            bvc.agentName = houseItemDetail.valueForKey("agent") as? String
+                            bvc.agentType = houseItemDetail.valueForKey("agent_type") as? Int
+                            bvc.agentPhoneList = houseItemDetail.valueForKey("phone") as? [String]
+                            bvc.agentMail = houseItemDetail.valueForKey("email") as? String
+                        }
                         ///GA Tracker
                         if let houseItem = houseItem {
                             self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
@@ -1574,42 +1519,6 @@ class HouseDetailViewController: UIViewController {
         }
     }
 
-}
-
-// MARK: - MFMailComposeViewControllerDelegate
-// Handle Mail Sending Results
-extension HouseDetailViewController: MFMailComposeViewControllerDelegate {
-
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-
-        var success = false
-
-        switch result {
-        case MFMailComposeResultCancelled:
-            Log.debug("Mail cancelled")
-        case MFMailComposeResultSaved:
-            Log.debug("Mail saved")
-        case MFMailComposeResultSent:
-            success = true
-            Log.debug("Mail sent")
-            if let houseId = self.houseItem?.id {
-                CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
-            }
-        case MFMailComposeResultFailed:
-            Log.debug("Mail sent failure: \(error?.localizedDescription)")
-        default:
-            break
-        }
-
-        ///GA Tracker
-        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                                        action: GAConst.Action.UIActivity.Contact,
-                                        label: GAConst.Label.Contact.Email,
-                                        value:  UInt(success))
-
-        //self.navigationController?.popViewControllerAnimated(true)
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
 }
 
 // MARK: - Table View Data Source
