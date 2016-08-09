@@ -244,7 +244,9 @@ class BrowserViewController: UIViewController {
                         mc.setSubject(emailTitle)
                         mc.setMessageBody(messageBody, isHTML: false)
                         mc.setToRecipients(toRecipents)
-                        self.presentViewController(mc, animated: true, completion: nil)
+                        self.presentViewController(mc, animated: true, completion: {
+                            LoadingSpinner.shared.stop()
+                        })
                     }
 
                 } else {
