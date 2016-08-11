@@ -78,6 +78,10 @@ class HouseDetailViewController: UIViewController {
 
     private var alamoFireRequest: Alamofire.Request?
 
+    private let SecretModeThreshold = 8
+    private var secretModeTouchCount = 0
+    private static var isDisplayUpdateTime = false
+
     // MARK: - Public Fields
 
     /// @Controller Input Params
@@ -919,6 +923,10 @@ class HouseDetailViewController: UIViewController {
             CellInfo(cellIdentifier: .ExpandableContentCell, hidden: false, cellHeight: 55, handler: { (cell) -> () in
                 if let cell = cell as? HouseDetailExpandableContentCell {
 
+                    /// Add secret mode for displaying update time
+                    let tapGuesture = UITapGestureRecognizer(target: self, action: #selector(HouseDetailViewController.moreInfoCellTouched(_:)))
+                    cell.addGestureRecognizer(tapGuesture)
+
                     var otherInfoList = [String]()
                     if let houseDetail = self.houseItemDetail {
                         otherInfoList.append("隔間材料: \( (houseDetail.valueForKey("wall_mtl") as? String ?? "—") )")
@@ -940,7 +948,18 @@ class HouseDetailViewController: UIViewController {
 
                         otherInfoList.append("可遷入日: \(readyDateStr)")
 
-                        #if DEBUG
+                        if(HouseDetailViewController.isDisplayUpdateTime) {
+
+                            var postDateStr = "—"
+                            if let postTime = houseDetail.valueForKey("post_time") as? String {
+                                if let utcTime = CommonUtils.getUTCDateFromString(postTime),
+                                    let localTime = CommonUtils.getCustomStringFromDate(utcTime, format: "yyyy-MM-dd HH:mm", timezone: NSTimeZone.localTimeZone()) {
+                                    postDateStr = localTime
+
+                                }
+                            }
+                            otherInfoList.append("資料刊登: \(postDateStr)")
+
                             var updateDateStr = "—"
                             if let updateTime = houseDetail.valueForKey("update_time") as? String {
                                 if let utcTime = CommonUtils.getUTCDateFromString(updateTime),
@@ -950,7 +969,7 @@ class HouseDetailViewController: UIViewController {
                                 }
                             }
                             otherInfoList.append("資料更新: \(updateDateStr)")
-                        #endif
+                        }
 
                         if(otherInfoList.count > 0) {
                             cell.contentLabel.text = otherInfoList.joinWithSeparator("\n") + "\n"
@@ -1198,6 +1217,18 @@ class HouseDetailViewController: UIViewController {
     }
 
     // MARK: - Action Handlers
+
+    func moreInfoCellTouched(sender: UITapGestureRecognizer) {
+
+        self.secretModeTouchCount += 1
+
+        if(self.secretModeTouchCount == self.SecretModeThreshold) {
+
+            HouseDetailViewController.isDisplayUpdateTime = true
+
+        }
+
+    }
 
     func contactByMailButtonTouched(sender: UIButton) {
         self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
