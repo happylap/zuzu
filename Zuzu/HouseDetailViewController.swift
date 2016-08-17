@@ -14,7 +14,6 @@ import Social
 import AwesomeCache
 import SCLAlertView
 import GoogleMobileAds
-import FBAudienceNetwork
 import SafariServices
 import Alamofire
 import JKNotificationPanel
