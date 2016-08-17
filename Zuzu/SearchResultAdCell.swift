@@ -11,7 +11,6 @@ import UIKit
 import Foundation
 import Dollar
 import GoogleMobileAds
-import FBAudienceNetwork
 
 private let Log = Logger.defaultLogger
 
