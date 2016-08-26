@@ -499,6 +499,59 @@ extension BrowserViewController: WKUIDelegate {
         return nil
     }
 
+    func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
+
+        let alertView = SCLAlertView()
+
+        alertView.showCloseButton = false
+
+        alertView.addButton("知道了") {
+            completionHandler()
+        }
+
+        alertView.showInfo("網頁訊息", subTitle: message, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+    }
+
+    func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
+
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .ActionSheet)
+
+        alertController.addAction(UIAlertAction(title: "確定", style: .Default, handler: { (action) in
+            completionHandler(true)
+        }))
+
+        alertController.addAction(UIAlertAction(title: "取消", style: .Default, handler: { (action) in
+            completionHandler(false)
+        }))
+
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+
+    func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
+
+        let alertController = UIAlertController(title: nil, message: prompt, preferredStyle: .ActionSheet)
+
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.text = defaultText
+        }
+
+        alertController.addAction(UIAlertAction(title: "確定", style: .Default, handler: { (action) in
+            if let text = alertController.textFields?.first?.text {
+                completionHandler(text)
+            } else {
+                completionHandler(defaultText)
+            }
+
+        }))
+
+        alertController.addAction(UIAlertAction(title: "取消", style: .Default, handler: { (action) in
+
+            completionHandler(nil)
+
+        }))
+
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
 }
 
 // MARK: - MFMailComposeViewControllerDelegate
