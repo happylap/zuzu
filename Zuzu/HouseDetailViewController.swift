@@ -1539,7 +1539,16 @@ class HouseDetailViewController: UIViewController {
                         let sourceLink = houseItemDetail.valueForKey("mobile_link") as? String
 
                         bvc.sourceLink = sourceLink
-                        bvc.viewTitle = "原始網頁"
+
+                        var sourceName: String?
+
+                        if let source = self.houseItem?.source {
+
+                            sourceName = houseTypeLabelMaker.fromCodeForField("source", code: source)
+
+                        }
+
+                        bvc.viewTitle =  "\(sourceName ?? "") 原始網頁"
 
                         if let houseItemDetail = self.houseItemDetail {
                             bvc.houseItem = self.houseItem

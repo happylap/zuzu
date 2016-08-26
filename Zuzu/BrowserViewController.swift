@@ -30,6 +30,8 @@ class BrowserViewController: UIViewController {
 
     var agentMail: String?
 
+    var prevNavBarTitleTextAttributes: [String : AnyObject]?
+
     struct ViewTransConst {
         static let displayHouseUrl: String = "displayHouseUrl"
     }
@@ -260,6 +262,24 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    deinit {
+        self.webView?.removeObserver(self, forKeyPath: "title", context: nil)
+    }
+
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+
+        if let keyPath = keyPath {
+            switch keyPath {
+            case "title":
+                if let title = change?[NSKeyValueChangeNewKey] as? String {
+                    self.title = title
+                }
+            default:
+                break
+            }
+        }
+    }
+
     override func loadView() {
         super.loadView()
 
@@ -267,13 +287,26 @@ class BrowserViewController: UIViewController {
         self.title = viewTitle
     }
 
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        if parent == nil {
+            self.navigationController?.navigationBar.titleTextAttributes = self.prevNavBarTitleTextAttributes
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureNavigationBarItems()
 
+        self.prevNavBarTitleTextAttributes = self.navigationController?.navigationBar.titleTextAttributes
+
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont.boldSystemFontOfSize(16), NSForegroundColorAttributeName: UIColor.whiteColor()]
+
+        self.webView?.addObserver(self, forKeyPath:"title", options:.New, context:nil)
+
         view.addSubview(self.webView!)
 
+        /// Stretch the WKWebView to fit the parent
         webView!.translatesAutoresizingMaskIntoConstraints = false
         let height = NSLayoutConstraint(item: webView!, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 1, constant: 0)
         let width = NSLayoutConstraint(item: webView!, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1, constant: 0)
@@ -466,15 +499,17 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        Log.enter()
+
         LoadingSpinner.shared.setImmediateAppear(true)
         LoadingSpinner.shared.setMinShowTime(2)
         LoadingSpinner.shared.startOnView(webView)
-        Log.enter()
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        LoadingSpinner.shared.stop()
         Log.enter()
+
+        LoadingSpinner.shared.stop()
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
@@ -482,8 +517,8 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        LoadingSpinner.shared.stop()
         Log.enter()
+        LoadingSpinner.shared.stop()
     }
 }
 
