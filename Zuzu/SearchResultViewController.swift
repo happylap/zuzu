@@ -28,6 +28,7 @@ class SearchResultViewController: UIViewController {
         static let showAdvancedFilter: String = "showAdvancedFilter"
         static let displayHouseDetail: String = "displayHouseDetail"
         static let displayDuplicateHouse: String = "displayDuplicateHouse"
+        static let displayHouseSource: String = "displayHouseSource"
     }
 
     enum ScrollDirection {
@@ -67,6 +68,8 @@ class SearchResultViewController: UIViewController {
     private var radarSuggestionCounterLimitTime: NSDate?
 
     private var totalItemNumber = 0
+
+    private let houseTypeLabelMaker: LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
 
     // MARK: - Public Fields
 
@@ -158,6 +161,18 @@ class SearchResultViewController: UIViewController {
     var collectionIdList: [String]?
 
     // MARK: - Private Utils
+
+    private func displayHouseItem(source: Int) {
+
+        let itemDisplayConfig = TagUtils.getItemDisplayConfig(source)
+
+        if(itemDisplayConfig.displayDetail) {
+            self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+        } else {
+            self.performSegueWithIdentifier(ViewTransConst.displayHouseSource, sender: self)
+        }
+
+    }
 
     //Check if we can increment the Radar suggestion counter now
     private func isRadarSuggestionTimerTimeout() -> Bool {
@@ -1132,6 +1147,38 @@ class SearchResultViewController: UIViewController {
                     ftvc.filterDelegate = self
                 }
 
+            case ViewTransConst.displayHouseSource:
+
+                if let bvc = segue.destinationViewController as? BrowserViewController {
+
+                    var targetHouseItem: HouseItem?
+
+                    if let duplicateHouseItem = self.duplicateHouseItem {
+
+                        targetHouseItem = duplicateHouseItem
+
+                        /// Clear the duplicate house item after displaying it
+                        self.duplicateHouseItem = nil
+
+                    } else if let row = tableView.indexPathForSelectedRow?.row {
+
+                        targetHouseItem = dataSource.getItemForRow(row)
+
+                    }
+
+                    if let houseItem = targetHouseItem {
+
+                        let sourceName = houseTypeLabelMaker.fromCodeForField("source", code: houseItem.source)
+                        bvc.viewTitle =  "\(sourceName ?? "") 原始網頁"
+                        bvc.houseItem = houseItem
+
+                        ///GA Tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                                        action: GAConst.Action.UIActivity.ViewSource,
+                                                        label: String(houseItem.source))
+                    }
+                }
+
             case ViewTransConst.displayHouseDetail:
 
                 if let hdvc = segue.destinationViewController as? HouseDetailViewController {
@@ -1299,7 +1346,9 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
                     self.performSegueWithIdentifier(ViewTransConst.displayDuplicateHouse, sender: self)
                 })
             } else {
-                self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+
+                self.displayHouseItem(houseItem.source)
+
             }
         } else {
             assert(false, "No HouseItem for the cell \(indexPath.row)")
@@ -1479,12 +1528,19 @@ extension SearchResultViewController: DuplicateHouseViewControllerDelegate {
 
     internal func onContinue() {
 
-        self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+        if let row = tableView.indexPathForSelectedRow?.row {
+
+            if let targetHouseItem = dataSource.getItemForRow(row) {
+                self.displayHouseItem(targetHouseItem.source)
+            }
+
+        }
+
     }
 
     internal func onViewDuplicate(houseItem: HouseItem) {
 
         self.duplicateHouseItem = houseItem
-        self.performSegueWithIdentifier(ViewTransConst.displayHouseDetail, sender: self)
+        self.displayHouseItem(houseItem.source)
     }
 }

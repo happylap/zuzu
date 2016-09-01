@@ -961,6 +961,7 @@
                         <outlet property="tableView" destination="AVs-la-x6f" id="W6l-uj-pjW"/>
                         <segue destination="RI5-UG-EkB" kind="show" identifier="displayHouseDetail" id="HGk-Tx-AhT"/>
                         <segue destination="Q02-Ft-dmr" kind="presentation" identifier="displayDuplicateHouse" modalPresentationStyle="currentContext" id="xK1-uL-WB3"/>
+                        <segue destination="xp8-9U-QeU" kind="show" identifier="displayHouseSource" id="qdg-85-o2O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t8e-H4-Hw1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1594,7 +1595,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mKA-j6-Knx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2752" y="1803"/>
+            <point key="canvasLocation" x="3808" y="1999"/>
         </scene>
         <!--House Url Popover -->
         <scene sceneID="yrg-vl-0v0">
@@ -1655,18 +1656,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VAa-Ns-oxa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2506" y="2747"/>
+            <point key="canvasLocation" x="2936" y="3173"/>
         </scene>
         <!--House Source-->
         <scene sceneID="KPq-L4-VJt">
             <objects>
-                <viewController storyboardIdentifier="browserView" title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BrowserView" title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="16T-0Q-CKY">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="1500"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="1500"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1683,7 +1684,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1725" y="4000"/>
+            <point key="canvasLocation" x="2894" y="1664"/>
         </scene>
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
@@ -1828,4 +1829,7 @@
         <image name="search item_03" width="30" height="30"/>
         <image name="search item_04" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="qdg-85-o2O"/>
+    </inferredMetricsTieBreakers>
 </document>

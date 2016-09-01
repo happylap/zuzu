@@ -62,6 +62,7 @@ struct SolrConst {
         static let PRICE = "price"
         static let SIZE = "size"
         static let SOURCE = "source"
+        static let MOBILE_LINK = "mobile_link"
         static let CITY = "city"
         static let REGION = "region"
         static let IMG_LIST = "img"
@@ -88,6 +89,7 @@ class HouseItem: NSObject, NSCoding {
         private var price: Int?
         private var size: Float?
         private var source: Int?
+        private var mobileLink: String?
         private var desc: String?
         private var imgList: [String]?
         private var children: [String]?
@@ -141,6 +143,11 @@ class HouseItem: NSObject, NSCoding {
             return self
         }
 
+        func addMobileLink(link: String) -> Builder {
+            self.mobileLink = link
+            return self
+        }
+
         func addDesc(desc: String) -> Builder {
             self.desc = desc
             return self
@@ -170,8 +177,9 @@ class HouseItem: NSObject, NSCoding {
     let purposeType: Int
     let previousPrice: Int?
     let price: Int
-    let source: Int
     let size: Float
+    let source: Int
+    let mobileLink: String?
     let desc: String?
     let imgList: [String]?
     let children: [String]?
@@ -188,6 +196,7 @@ class HouseItem: NSObject, NSCoding {
         self.price = builder.price ?? 0
         self.size = builder.size ?? 0
         self.source = builder.source ?? 0
+        self.mobileLink = builder.mobileLink
         self.desc = builder.desc
         self.imgList = builder.imgList
         self.children = builder.children
@@ -205,6 +214,7 @@ class HouseItem: NSObject, NSCoding {
         let price = decoder.decodeIntegerForKey("price") as Int
         let size = decoder.decodeFloatForKey("size") as Float
         let source = decoder.decodeIntegerForKey("source") as Int
+        let mobileLink = decoder.decodeObjectForKey("mobile_link") as? String ?? ""
         let desc = decoder.decodeObjectForKey("desc") as? String ?? ""
         let imgList = decoder.decodeObjectForKey("imgList") as? [String] ?? [String]()
         let children = decoder.decodeObjectForKey("children") as? [String] ?? [String]()
@@ -223,6 +233,7 @@ class HouseItem: NSObject, NSCoding {
             .addPrice(price)
             .addSize(size)
             .addSource(source)
+            .addMobileLink(mobileLink)
             .addDesc(desc)
             .addImageList(imgList)
             .addChildren(children)
@@ -239,6 +250,7 @@ class HouseItem: NSObject, NSCoding {
         aCoder.encodeInteger(price, forKey:"price")
         aCoder.encodeFloat(size, forKey:"size")
         aCoder.encodeInteger(source, forKey:"source")
+        aCoder.encodeObject(mobileLink, forKey:"mobileLink")
         aCoder.encodeObject(desc, forKey:"desc")
         aCoder.encodeObject(imgList, forKey:"imgList")
         aCoder.encodeObject(children, forKey:"children")
@@ -253,7 +265,7 @@ typealias onQueryComplete = (totalNum: Int, result: [HouseItem]?, facetResult: [
 
 public class HouseDataRequestService: NSObject, NSURLConnectionDelegate {
 
-    private static let defaultFieldList = [SolrConst.Field.ID, SolrConst.Field.TITLE, SolrConst.Field.ADDR, SolrConst.Field.HOUSE_TYPE, SolrConst.Field.PURPOSE_TYPE, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE, SolrConst.Field.SIZE, SolrConst.Field.SOURCE, SolrConst.Field.IMG_LIST, SolrConst.Field.CHILDREN]
+    private static let defaultFieldList = [SolrConst.Field.ID, SolrConst.Field.TITLE, SolrConst.Field.ADDR, SolrConst.Field.HOUSE_TYPE, SolrConst.Field.PURPOSE_TYPE, SolrConst.Field.PREVIOUS_PRICE, SolrConst.Field.PRICE, SolrConst.Field.SIZE, SolrConst.Field.SOURCE, SolrConst.Field.MOBILE_LINK, SolrConst.Field.IMG_LIST, SolrConst.Field.CHILDREN]
 
     private static let requestTimeout = 15.0
     private static let instance = HouseDataRequestService()
@@ -551,6 +563,7 @@ public class HouseDataRequestService: NSObject, NSURLConnectionDelegate {
                                     let price = house["price"].int ?? 0
                                     let size = house["size"].float ?? 0
                                     let source = house["source"].int  ?? 1
+                                    let mobileLink = house["mobile_link"].string  ?? ""
 
                                     let imgList = house["img"].array?.map({ (jsonObj) -> String in
                                         return jsonObj.stringValue
@@ -571,6 +584,7 @@ public class HouseDataRequestService: NSObject, NSURLConnectionDelegate {
                                         .addPrice(price)
                                         .addSize(size)
                                         .addSource(source)
+                                        .addMobileLink(mobileLink)
                                         .addImageList(imgList)
                                         .addChildren(children)
                                         .build()

@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 import SCLAlertView
+import AwesomeCache
 
 private let Log = Logger.defaultLogger
 
@@ -15,20 +16,17 @@ class BrowserViewController: UIViewController {
 
     var enableToolBar: Bool = true
 
+    /// Params
     var viewTitle: String?
 
+    /// Mode 1: Arbitrary Link
     var sourceLink: String?
 
-    /// House Item Data
+    /// Mode 2: House Item Data
     var houseItem: HouseItem?
 
-    var agentType: Int?
-
-    var agentName: String?
-
-    var agentPhoneList: [String]?
-
-    var agentMail: String?
+    ///The full house detail returned from remote server
+    private var houseItemDetail: AnyObject?
 
     var prevNavBarTitleTextAttributes: [String : AnyObject]?
 
@@ -36,14 +34,113 @@ class BrowserViewController: UIViewController {
         static let displayHouseUrl: String = "displayHouseUrl"
     }
 
+    private struct BrowserHouseDetailCache {
+        static let cacheName = "browserHouseDetailCache"
+        static let cacheTime: Double = 3 * 60 * 60 //3 hours
+    }
+
     @IBOutlet var pesudoAnchor: UIBarButtonItem!
+    var phoneCallBarButton: UIBarButtonItem?
+    var sendMailBarButton: UIBarButtonItem?
+
     var webView: WKWebView?
+
+    private var networkErrorAlertView: SCLAlertView? = SCLAlertView()
 
     private var phoneNumberDic = [String:String]() /// display string : original number
 
     private let houseTypeLabelMaker: LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
 
     // MARK: - Private Utils
+
+    private func alertItemNotFound() {
+
+        let alertView = SCLAlertView()
+
+        let subTitle = "請您參考其他物件，謝謝！"
+
+        alertView.showCloseButton = false
+
+        alertView.addButton("知道了") {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+        alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
+
+    private func fetchHouseDetail(houseItem: HouseItem) {
+
+        var hitCache = false
+
+        do {
+            let cache = try Cache<NSData>(name: BrowserHouseDetailCache.cacheName)
+
+            ///Return cached data if there is cached data
+            if let cachedData = cache.objectForKey(houseItem.id),
+                let result = NSKeyedUnarchiver.unarchiveObjectWithData(cachedData) {
+
+                Log.debug("Hit Cache for item: Id: \(houseItem.id), Title: \(houseItem.title)")
+
+                hitCache = true
+
+                handleHouseDetailResponse(result)
+            }
+
+        } catch _ {
+            Log.debug("Something went wrong with the cache")
+        }
+
+
+        if(!hitCache) {
+
+            HouseDataRequestService.getInstance().searchById(houseItem.id) { (result, error) -> Void in
+
+                if let error = error {
+                    Log.debug("Cannot get remote data \(error.localizedDescription)")
+
+                    if let alertView = self.networkErrorAlertView {
+                        let subTitle = "您目前可能處於飛航模式或是無網路狀態，暫時無法檢視詳細資訊。"
+                        alertView.showCloseButton = true
+                        alertView.showInfo("網路無法連線", subTitle: subTitle, closeButtonTitle: "知道了", colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+                    }
+
+                    return
+                }
+
+                if let result = result {
+
+                    ///Try to cache the house detail response
+                    do {
+                        let cache = try Cache<NSData>(name: BrowserHouseDetailCache.cacheName)
+                        let cachedData = NSKeyedArchiver.archivedDataWithRootObject(result)
+                        cache.setObject(cachedData, forKey: houseItem.id, expires: CacheExpiry.Seconds(BrowserHouseDetailCache.cacheTime))
+
+                    } catch _ {
+                        Log.debug("Something went wrong with the cache")
+                    }
+
+                    self.handleHouseDetailResponse(result)
+
+                } else {
+
+                    self.alertItemNotFound()
+
+                }
+            }
+
+        }
+    }
+
+    private func handleHouseDetailResponse(result: AnyObject) {
+
+        self.houseItemDetail = result
+
+        if let sourceLink = self.houseItemDetail?.valueForKey("mobile_link") as? String {
+
+            self.toggleNavigationBarItems()
+
+            self.startLoad(sourceLink)
+        }
+    }
 
     private func alertMailAppNotReady() {
 
@@ -61,93 +158,98 @@ class BrowserViewController: UIViewController {
         var message = "確認聯絡: "
         let maxDisplayChars = 15
 
-        if let contactName = self.agentName {
+        if let houseItemDetail = self.houseItemDetail {
 
-            let toIndex: String.Index = contactName.startIndex
-                .advancedBy(maxDisplayChars, limit: contactName.endIndex)
+            if let contactName = houseItemDetail.valueForKey("agent") as? String {
 
-            if(maxDisplayChars < contactName.characters.count) {
-                message += contactName.substringToIndex(toIndex) + "..."
-            } else {
-                message += contactName.substringToIndex(toIndex)
-            }
-        }
+                let toIndex: String.Index = contactName.startIndex
+                    .advancedBy(maxDisplayChars, limit: contactName.endIndex)
 
-        if let agentType = self.agentType {
-            let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
-            message += " (\(agentTypeStr))"
-        }
-
-        let optionMenu = UIAlertController(title: nil, message: message, preferredStyle: .ActionSheet)
-
-
-        if let phoneNumbers = self.agentPhoneList {
-
-            ///Add only first 3 numbers
-            for phoneNumber in phoneNumbers.prefix(3) {
-
-                var phoneDisplayString = phoneNumber
-                let phoneComponents = phoneNumber.componentsSeparatedByString(PhoneExtensionChar)
-
-                /// Convert to human-redable display format for phone number with extension
-                if(phoneComponents.count == 2) {
-                    phoneDisplayString = phoneComponents.joinWithSeparator(DisplayPhoneExtensionChar)
-                } else if (phoneComponents.count > 2) {
-                    assert(false, "Incorrect phone number format \(phoneNumber)")
+                if(maxDisplayChars < contactName.characters.count) {
+                    message += contactName.substringToIndex(toIndex) + "..."
+                } else {
+                    message += contactName.substringToIndex(toIndex)
                 }
 
-                /// Bind phone number & display string
-                self.phoneNumberDic[phoneDisplayString] = phoneNumber
+                if let agentType = houseItemDetail.valueForKey("agent_type") as? Int {
+                    let agentTypeStr = houseTypeLabelMaker.fromCodeForField("agent_type", code: agentType, defaultValue: "—")
+                    message += " (\(agentTypeStr))"
+                }
 
-                let numberAction = UIAlertAction(title: phoneDisplayString, style: .Default, handler: {
-                    (alert: UIAlertAction!) -> Void in
+            }
 
-                    var success = false
 
-                    if let phoneDisplayStr = alert.title {
+            let optionMenu = UIAlertController(title: nil, message: message, preferredStyle: .ActionSheet)
 
-                        if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
-                            let url = NSURL(string: "tel://\(phoneStr)") {
+            if let phoneNumbers = houseItemDetail.valueForKey("phone") as? [String] {
+                ///Add only first 3 numbers
+                for phoneNumber in phoneNumbers.prefix(3) {
 
-                            success = UIApplication.sharedApplication().openURL(url)
+                    var phoneDisplayString = phoneNumber
+                    let phoneComponents = phoneNumber.componentsSeparatedByString(PhoneExtensionChar)
 
-                            if(success) {
-                                /// Update contacted status
-                                if let houseId = self.houseItem?.id {
-                                    CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                    /// Convert to human-redable display format for phone number with extension
+                    if(phoneComponents.count == 2) {
+                        phoneDisplayString = phoneComponents.joinWithSeparator(DisplayPhoneExtensionChar)
+                    } else if (phoneComponents.count > 2) {
+                        assert(false, "Incorrect phone number format \(phoneNumber)")
+                    }
+
+                    /// Bind phone number & display string
+                    self.phoneNumberDic[phoneDisplayString] = phoneNumber
+
+                    let numberAction = UIAlertAction(title: phoneDisplayString, style: .Default, handler: {
+                        (alert: UIAlertAction!) -> Void in
+
+                        var success = false
+
+                        if let phoneDisplayStr = alert.title {
+
+                            if let phoneStr = self.phoneNumberDic[phoneDisplayStr],
+                                let url = NSURL(string: "tel://\(phoneStr)") {
+
+                                success = UIApplication.sharedApplication().openURL(url)
+
+                                if(success) {
+                                    /// Update contacted status
+                                    if let houseId = self.houseItem?.id {
+                                        CollectionItemService.sharedInstance.updateContacted(houseId, contacted: true)
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    ///GA Tracker
-                    self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                        action: GAConst.Action.UIActivity.Contact,
-                        label: GAConst.Label.Contact.Phone,
-                        value:  UInt(success))
+                        ///GA Tracker
+                        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                            action: GAConst.Action.UIActivity.Contact,
+                            label: GAConst.Label.Contact.Phone,
+                            value:  UInt(success))
 
-                })
+                    })
 
-                optionMenu.addAction(numberAction)
+                    optionMenu.addAction(numberAction)
+                }
             }
+
+            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+
+                ///GA Tracker
+                self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                    action: GAConst.Action.UIActivity.Contact,
+                    label: GAConst.Label.Contact.Phone,
+                    value:  2)
+            })
+
+            optionMenu.addAction(cancelAction)
+
+            self.presentViewController(optionMenu, animated: true, completion: nil)
+
         }
 
-        let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-
-            ///GA Tracker
-            self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
-                action: GAConst.Action.UIActivity.Contact,
-                label: GAConst.Label.Contact.Phone,
-                value:  2)
-        })
-
-        optionMenu.addAction(cancelAction)
-
-        self.presentViewController(optionMenu, animated: true, completion: nil)
     }
 
-    private func configureNavigationBarItems() {
+    private func initNavigationBarItems() {
         if(enableToolBar) {
             ///Prepare custom UIButton for UIBarButtonItem
             let copyLinkButton: UIButton = UIButton(type: UIButtonType.Custom)
@@ -158,42 +260,72 @@ class BrowserViewController: UIViewController {
 
             pesudoAnchor.customView = copyLinkButton
             pesudoAnchor.tintColor = UIColor.whiteColor()
+            pesudoAnchor.enabled = false
 
+            /// Phone
             let phoneCallButton: UIButton = UIButton(type: UIButtonType.Custom)
             phoneCallButton.setImage(UIImage(named: "phone_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             phoneCallButton.addTarget(self, action: #selector(BrowserViewController.contactByPhoneButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             phoneCallButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
 
-            let phoneCallBarButton = UIBarButtonItem(customView: phoneCallButton)
-            phoneCallBarButton.tintColor = UIColor.whiteColor()
-            phoneCallBarButton.enabled = false
+            self.phoneCallBarButton = UIBarButtonItem(customView: phoneCallButton)
+            self.phoneCallBarButton!.tintColor = UIColor.whiteColor()
+            self.phoneCallBarButton!.enabled = false
 
+            /// Mail
             let sendMailButton: UIButton = UIButton(type: UIButtonType.Custom)
             sendMailButton.setImage(UIImage(named: "envelope_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
             sendMailButton.addTarget(self, action: #selector(BrowserViewController.contactByMailButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             sendMailButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
 
-            let sendMailBarButton = UIBarButtonItem(customView: sendMailButton)
-            sendMailBarButton.tintColor = UIColor.whiteColor()
-            sendMailBarButton.enabled = false
+            self.sendMailBarButton = UIBarButtonItem(customView: sendMailButton)
+            self.sendMailBarButton!.tintColor = UIColor.whiteColor()
+            self.sendMailBarButton!.enabled = false
 
-            if let _ = self.agentPhoneList {
-                phoneCallBarButton.enabled = true
+            var barItems: [UIBarButtonItem] = [UIBarButtonItem]()
+
+            barItems.append(pesudoAnchor)
+
+            if let source = self.houseItem?.source {
+                let displayConfig = TagUtils.getItemDisplayConfig(source)
+
+                if(displayConfig.displayContact) {
+                    barItems.append(sendMailBarButton!)
+                    barItems.append(phoneCallBarButton!)
+                }
             }
 
-            if let _ = self.agentMail {
-                sendMailBarButton.enabled = true
-            }
 
             /// From right to left
-            self.navigationItem.setRightBarButtonItems(
-                [
-                    pesudoAnchor,
-                    sendMailBarButton,
-                    phoneCallBarButton
-                ],
-                animated: false)
+            self.navigationItem.setRightBarButtonItems( barItems, animated: false)
         }
+    }
+
+    private func toggleNavigationBarItems() {
+
+        if let _ = self.houseItemDetail?.valueForKey("mobile_link") as? String {
+            pesudoAnchor.enabled = true
+        }
+
+        if let _ = self.houseItemDetail?.valueForKey("phone") as? [String] {
+            phoneCallBarButton?.enabled = true
+        }
+
+        if let _ = self.houseItemDetail?.valueForKey("email") as? String {
+            sendMailBarButton?.enabled = true
+        }
+    }
+
+    private func startLoad(sourceLink: String) {
+
+        if let url = NSURL(string:sourceLink) {
+            let req = NSURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 30)
+
+            if let webView = self.webView {
+                webView.loadRequest(req)
+            }
+        }
+
     }
 
     func copyLinkButtonTouched(sender: UIButton) {
@@ -223,41 +355,45 @@ class BrowserViewController: UIViewController {
 
             let emailTitle = "租屋物件詢問: " + (title ?? addr ?? "")
 
-            if let email = self.agentMail {
+            if let houseItemDetail = self.houseItemDetail {
 
-                var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
+                if let email = houseItemDetail.valueForKey("email") as? String {
 
-                let toRecipents = [email]
+                    var messageBody = "房東您好! 我最近從豬豬快租查詢到您在網路上刊登的租屋物件：\n\n"
 
-                LoadingSpinner.shared.startOnView(self.view)
+                    let toRecipents = [email]
 
-                if let sourceLink = self.sourceLink {
-                    messageBody += "租屋物件網址: \(sourceLink) \n\n"
-                }
+                    LoadingSpinner.shared.startOnView(self.view)
 
-                messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n再麻煩您回覆方便的時間！\n"
+                    if let sourceLink = self.sourceLink {
+                        messageBody += "租屋物件網址: \(sourceLink) \n\n"
+                    }
 
-                if MFMailComposeViewController.canSendMail() {
-                    if let mc: MFMailComposeViewController = MFMailComposeViewController() {
-                        ///Change Bar Item Color
-                        mc.navigationBar.tintColor = UIColor.whiteColor()
+                    messageBody += "我對於這個物件很感興趣，想跟您約時間看屋。\n再麻煩您回覆方便的時間！\n"
 
-                        mc.mailComposeDelegate = self
-                        mc.setSubject(emailTitle)
-                        mc.setMessageBody(messageBody, isHTML: false)
-                        mc.setToRecipients(toRecipents)
-                        self.presentViewController(mc, animated: true, completion: {
-                            LoadingSpinner.shared.stop()
-                        })
+                    if MFMailComposeViewController.canSendMail() {
+                        if let mc: MFMailComposeViewController = MFMailComposeViewController() {
+                            ///Change Bar Item Color
+                            mc.navigationBar.tintColor = UIColor.whiteColor()
+
+                            mc.mailComposeDelegate = self
+                            mc.setSubject(emailTitle)
+                            mc.setMessageBody(messageBody, isHTML: false)
+                            mc.setToRecipients(toRecipents)
+                            self.presentViewController(mc, animated: true, completion: {
+                                LoadingSpinner.shared.stop()
+                            })
+                        }
+
+                    } else {
+                        alertMailAppNotReady()
+                        LoadingSpinner.shared.stop()
                     }
 
                 } else {
-                    alertMailAppNotReady()
-                    LoadingSpinner.shared.stop()
+                    Log.debug("No emails available")
                 }
 
-            } else {
-                Log.debug("No emails available")
             }
         }
     }
@@ -296,7 +432,9 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureNavigationBarItems()
+        self.initNavigationBarItems()
+
+        self.toggleNavigationBarItems()
 
         self.prevNavBarTitleTextAttributes = self.navigationController?.navigationBar.titleTextAttributes
 
@@ -312,15 +450,15 @@ class BrowserViewController: UIViewController {
         let width = NSLayoutConstraint(item: webView!, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1, constant: 0)
         view.addConstraints([height, width])
 
-        if let sourceLink = self.sourceLink {
-            if let url = NSURL(string:sourceLink) {
-                self.webView?.UIDelegate = self
-                self.webView?.navigationDelegate = self
-                let req = NSURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 30)
+        self.webView?.UIDelegate = self
+        self.webView?.navigationDelegate = self
 
-                if let webView = self.webView {
-                    webView.loadRequest(req)
-                }
+        if let sourceLink = self.sourceLink {
+            self.startLoad(sourceLink)
+        } else {
+            ///Get remote data
+            if let houseItem = self.houseItem {
+                fetchHouseDetail(houseItem)
             }
         }
     }
@@ -350,7 +488,8 @@ class BrowserViewController: UIViewController {
             case ViewTransConst.displayHouseUrl:
 
                 if let urlVc = segue.destinationViewController as? UrlPopoverViewController {
-                    urlVc.urlLabelText = self.sourceLink
+
+                    urlVc.urlLabelText = self.sourceLink ?? (self.houseItemDetail?.valueForKey("mobile_link") as? String)
                     urlVc.delegate = self
 
                     if let pVc = urlVc.presentationController {
