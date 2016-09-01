@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 private let Log = Logger.defaultLogger
 
@@ -121,6 +122,12 @@ struct ConfigData {
     var title: String?
     var subtitle: String?
     var subtitle2: String?
+}
+
+struct ItemDisplayConfig {
+    var displayDetail: Bool
+    var displayContact: Bool
+    var displayMap: Bool
 }
 
 class TagUtils: NSObject {
@@ -268,6 +275,26 @@ class TagUtils: NSObject {
 
         return isAllowFreeTrial
 
+    }
+
+    static func getItemDisplayConfig(source: Int) -> ItemDisplayConfig {
+
+        let sourceKey = "source\(source)"
+
+        // A/B Testing flags
+        if let tagContainer = AppDelegate.tagContainer {
+
+                let displayDetail = tagContainer.stringForKey("\(sourceKey).detail") == "y"
+                let displayContact = tagContainer.stringForKey("\(sourceKey).contact") == "y"
+                let displayMap = tagContainer.stringForKey("\(sourceKey).map") == "y"
+
+                return ItemDisplayConfig(displayDetail: displayDetail, displayContact: displayContact, displayMap: displayMap)
+
+        } else {
+
+            return ItemDisplayConfig(displayDetail: false, displayContact: false, displayMap: false)
+
+        }
     }
 
     static func getServiceAgreement() -> ConfigData? {

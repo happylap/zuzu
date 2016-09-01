@@ -47,6 +47,7 @@ class SearchResultTableViewCell: UITableViewCell {
 
     @IBOutlet weak var houseImg: UIImageView!
     @IBOutlet weak var houseTitle: UILabel!
+    @IBOutlet weak var houseLink: UILabel!
     @IBOutlet weak var houseTitleForCollection: UILabel!
     @IBOutlet weak var houseTypeAndUsage: UILabel!
     @IBOutlet weak var houseSize: UILabel!
@@ -143,6 +144,7 @@ class SearchResultTableViewCell: UITableViewCell {
             houseTitle.hidden = false
             houseTitle.text = houseItem.title
             houseAddr.text = houseItem.addr
+            houseLink.text = houseItem.mobileLink
 
             if let houseTypeStr = self.getTypeString(houseItem.houseType) {
                 if let purposeTypeStr = self.getPurposeString(houseItem.purposeType) {

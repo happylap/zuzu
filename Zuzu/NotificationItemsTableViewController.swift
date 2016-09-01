@@ -13,6 +13,8 @@ private let Log = Logger.defaultLogger
 
 class NotificationItemsTableViewController: UITableViewController {
 
+    private let houseTypeLabelMaker: LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+
     /// Control whether we need to refresh data
     var needsRefreshData = false
 
@@ -391,31 +393,50 @@ class NotificationItemsTableViewController: UITableViewController {
             //            }
 
             let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
-            if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
-                if let houseItem: HouseItem = item.toHouseItem() {
-                    houseDetailVC.houseItem = houseItem
-                    houseDetailVC.delegate = self
 
-                    dispatch_async(GlobalQueue.Background) {
+            if let houseItem: HouseItem = item.toHouseItem() {
 
-                        //GA Tracker
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
-                                                        action: GAConst.Action.ZuzuRadarNotification.ReadNotificationPrice,
-                                                        label: String(houseItem.price))
+                if(TagUtils.getItemDisplayConfig(houseItem.source).displayDetail) {
 
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
-                                                        action: GAConst.Action.ZuzuRadarNotification.ReadNotificationSize,
-                                                        label: String(houseItem.size))
+                    if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
 
-                        self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
-                                                        action: GAConst.Action.ZuzuRadarNotification.ReadNotificationType,
-                                                        label: String(houseItem.purposeType))
+                        houseDetailVC.houseItem = houseItem
+                        houseDetailVC.delegate = self
 
+                        self.showViewController(houseDetailVC, sender: self)
+                    }
+
+                } else {
+
+                    if let browserVC = searchSb.instantiateViewControllerWithIdentifier("BrowserView") as? BrowserViewController {
+
+                        let sourceName = houseTypeLabelMaker.fromCodeForField("source", code: houseItem.source)
+
+                        browserVC.viewTitle = "\(sourceName ?? "") 原始網頁"
+                        browserVC.houseItem = houseItem
+
+                        self.showViewController(browserVC, sender: self)
                     }
 
                 }
 
-                self.showViewController(houseDetailVC, sender: self)
+                dispatch_async(GlobalQueue.Background) {
+
+                    //GA Tracker
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
+                                                    action: GAConst.Action.ZuzuRadarNotification.ReadNotificationPrice,
+                                                    label: String(houseItem.price))
+
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
+                                                    action: GAConst.Action.ZuzuRadarNotification.ReadNotificationSize,
+                                                    label: String(houseItem.size))
+
+                    self.trackEventForCurrentScreen(GAConst.Catrgory.ZuzuRadarNotification,
+                                                    action: GAConst.Action.ZuzuRadarNotification.ReadNotificationType,
+                                                    label: String(houseItem.purposeType))
+
+                }
+
             }
         }
     }

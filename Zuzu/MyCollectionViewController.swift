@@ -39,6 +39,8 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
 
     var fetchedResultsController: NSFetchedResultsController!
 
+    private let houseTypeLabelMaker: LabelMaker! = DisplayLabelMakerFactory.createDisplayLabelMaker(.House)
+
     private var sortingStatus: [String:String] = [String:String]() //Field Name, Sorting Type
 
     var datasets: [AnyObject] = []
@@ -245,15 +247,15 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
             ///Disselect all & Clear all sorting icon for Normal state
             sortByPriceButton.selected = false
             sortByPriceButton.setImage(nil,
-                forState: UIControlState.Normal)
+                                       forState: UIControlState.Normal)
 
             sortBySizeButton.selected = false
             sortBySizeButton.setImage(nil,
-                forState: UIControlState.Normal)
+                                      forState: UIControlState.Normal)
 
             sortByCollectTimeButton.selected = false
             sortByCollectTimeButton.setImage(nil,
-                forState: UIControlState.Normal)
+                                             forState: UIControlState.Normal)
 
             ///Select the one specified by hte user
             targetButton.selected = true
@@ -263,15 +265,15 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
         ///Set image for selected state
         if(sortingOrder == CollectionHouseItemDocument.Sorting.sortAsc) {
             targetButton.setImage(UIImage(named: "arrow_up_n"),
-                forState: UIControlState.Selected)
+                                  forState: UIControlState.Selected)
             targetButton.setImage(UIImage(named: "arrow_up_n"),
-                forState: UIControlState.Normal)
+                                  forState: UIControlState.Normal)
 
         } else if(sortingOrder == CollectionHouseItemDocument.Sorting.sortDesc) {
             targetButton.setImage(UIImage(named: "arrow_down_n"),
-                forState: UIControlState.Selected)
+                                  forState: UIControlState.Selected)
             targetButton.setImage(UIImage(named: "arrow_down_n"),
-                forState: UIControlState.Normal)
+                                  forState: UIControlState.Normal)
 
         } else {
             assert(false, "Unknown Sorting order")
@@ -524,24 +526,44 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
                     } else {
 
                         let searchSb = UIStoryboard(name: "SearchStoryboard", bundle: nil)
-                        if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
-                            if let houseItem: HouseItem = collectionItem.toHouseItem() {
-                                houseDetailVC.houseItem = houseItem
 
-                                ///GA Tracker
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                                    action: GAConst.Action.MyCollection.ViewItemPrice,
-                                    label: String(houseItem.price))
+                        if let houseItem: HouseItem = collectionItem.toHouseItem() {
 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                                    action: GAConst.Action.MyCollection.ViewItemSize,
-                                    label: String(houseItem.size))
+                            if(TagUtils.getItemDisplayConfig(houseItem.source).displayDetail) {
 
-                                self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                                    action: GAConst.Action.MyCollection.ViewItemType,
-                                    label: String(houseItem.purposeType))
+                                if let houseDetailVC = searchSb.instantiateViewControllerWithIdentifier("HouseDetailView") as? HouseDetailViewController {
+
+                                    houseDetailVC.houseItem = houseItem
+
+                                    self.showViewController(houseDetailVC, sender: self)
+                                }
+
+                            } else {
+
+                                if let browserVC = searchSb.instantiateViewControllerWithIdentifier("BrowserView") as? BrowserViewController {
+
+                                    let sourceName = self.houseTypeLabelMaker.fromCodeForField("source", code: houseItem.source)
+                                    browserVC.viewTitle = "\(sourceName ?? "") 原始網頁"
+                                    browserVC.houseItem = houseItem
+
+
+                                    self.showViewController(browserVC, sender: self)
+                                }
+
                             }
-                            self.showViewController(houseDetailVC, sender: self)
+
+                            ///GA Tracker
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                                            action: GAConst.Action.MyCollection.ViewItemPrice,
+                                                            label: String(houseItem.price))
+
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                                            action: GAConst.Action.MyCollection.ViewItemSize,
+                                                            label: String(houseItem.size))
+
+                            self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                                            action: GAConst.Action.MyCollection.ViewItemType,
+                                                            label: String(houseItem.purposeType))
                         }
                     }
                 }
@@ -574,7 +596,7 @@ class MyCollectionViewController: UIViewController, NSFetchedResultsControllerDe
 
                 ///GA Tracker
                 self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
-                    action: GAConst.Action.MyCollection.Delete)
+                                                action: GAConst.Action.MyCollection.Delete)
             }
         }
     }

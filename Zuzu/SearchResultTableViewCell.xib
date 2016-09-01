@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -27,6 +27,15 @@
                         <rect key="frame" x="8" y="8" width="358" height="20.5"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ipb-jr-jZB" userLabel="House Link">
+                        <rect key="frame" x="12" y="32.5" width="0.0" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
@@ -215,7 +224,9 @@
                     <constraint firstAttribute="trailingMargin" secondItem="zzB-16-z6B" secondAttribute="trailing" constant="8" id="4fQ-0W-376"/>
                     <constraint firstItem="11f-2y-aXb" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="leading" id="5Od-sx-1I1"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="centerY" secondItem="UBI-K0-9Hv" secondAttribute="centerY" id="6IG-FC-fZJ"/>
+                    <constraint firstItem="Ipb-jr-jZB" firstAttribute="leading" secondItem="KFe-03-eKb" secondAttribute="leading" constant="4" id="7ti-Ar-GsX"/>
                     <constraint firstItem="KFe-03-eKb" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" constant="8" id="95t-2C-vcI"/>
+                    <constraint firstItem="Ipb-jr-jZB" firstAttribute="top" secondItem="KFe-03-eKb" secondAttribute="bottom" constant="4" id="CI5-TO-xLG"/>
                     <constraint firstItem="Kgs-Ox-hob" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GD9-Jc-zPa" secondAttribute="trailing" id="Cc8-sH-bbT"/>
                     <constraint firstItem="GD9-Jc-zPa" firstAttribute="leading" secondItem="Sa0-Cs-laH" secondAttribute="trailing" constant="8" symbolic="YES" id="EY4-hO-fbE"/>
                     <constraint firstItem="Hbn-Ap-XJT" firstAttribute="top" secondItem="QwY-Xe-T1B" secondAttribute="top" id="FUD-wu-VhK"/>
@@ -273,6 +284,7 @@
                 <outlet property="contactedView" destination="Btt-ya-h7f" id="qNw-sY-s1N"/>
                 <outlet property="houseAddr" destination="11f-2y-aXb" id="ctA-hZ-UQH"/>
                 <outlet property="houseImg" destination="Hbn-Ap-XJT" id="BwR-sB-AG3"/>
+                <outlet property="houseLink" destination="Ipb-jr-jZB" id="wX6-IN-i7g"/>
                 <outlet property="housePrice" destination="Kgs-Ox-hob" id="DXn-o0-6KX"/>
                 <outlet property="houseSize" destination="GD9-Jc-zPa" id="7Qw-L3-R4x"/>
                 <outlet property="houseSourceBox" destination="uY6-DH-haq" id="tqi-dO-gaD"/>
