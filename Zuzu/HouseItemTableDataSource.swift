@@ -202,7 +202,7 @@ public class HouseItemTableDataSource {
                     // When there is at least 1 page of data
                     if(result.count >= row) {
                         adPlacementIndex = self.cachedData.endIndex - 1
-                    } else {
+                    } else if (result.count > 0) {
                         adPlacementIndex = self.cachedData.endIndex
                     }
 
