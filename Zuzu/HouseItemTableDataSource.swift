@@ -31,7 +31,7 @@ private let Log = Logger.defaultLogger
 public class HouseItemTableDataSource {
 
     struct Const {
-        static let adDisplayPageInterval = 2
+        static let adDisplayPageInterval = 1
         static let savePagePrefix = "page"
         static let startPage = 1
         static let pageSize = 10
