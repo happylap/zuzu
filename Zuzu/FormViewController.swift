@@ -398,18 +398,16 @@ class FormViewController: UIViewController {
          }
 
          self.machine = StateMachine(schema: stateSchema, subject: ())
-
-         switch(self.formMode) {
-         case .Login:
-         self.setupUIForLogin()
-         machine.handleEvent(.OnStartLogin)
-
-         case .Register:
-         self.setupUIForRegister()
-         machine.handleEvent(.OnStartRegister)
-         default: break
-         }
          */
+
+        switch(self.formMode) {
+        case .Login:
+            self.setupUIForLogin()
+        case .Register:
+            self.setupUIForRegister()
+        default: break
+        }
+
     }
 
     override func didReceiveMemoryWarning() {
