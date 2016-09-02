@@ -165,7 +165,7 @@ class RegionTableViewController: UITableViewController {
 
                     if let checkedRegionNum = checkedRegions[cityCodeSelected]?.count {
 
-                        for index in (row + 1)...checkedRegionNum {
+                        for index in (row + 1)..<checkedRegionNum {
                             checkedRegions[cityCodeSelected]![index] = false
                             indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
                         }
