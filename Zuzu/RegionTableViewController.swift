@@ -162,12 +162,16 @@ class RegionTableViewController: UITableViewController {
 
                     //Clear other selection
                     var indexPaths = [NSIndexPath]()
-                    for var index = row + 1; index < checkedRegions[cityCodeSelected]?.count; index += 1 {
-                        checkedRegions[cityCodeSelected]![index] = false
-                        indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
+
+                    if let checkedRegionNum = checkedRegions[cityCodeSelected]?.count {
+
+                        for index in (row + 1)...checkedRegionNum {
+                            checkedRegions[cityCodeSelected]![index] = false
+                            indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
+                        }
                     }
 
-                    //in order to update other cell's view
+                    //In order to update other cell's view
                     tableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: UITableViewRowAnimation.None)
 
                 } else { //Click on other region
