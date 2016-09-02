@@ -28,8 +28,6 @@ class BrowserViewController: UIViewController {
     ///The full house detail returned from remote server
     private var houseItemDetail: AnyObject?
 
-    var prevNavBarTitleTextAttributes: [String : AnyObject]?
-
     struct ViewTransConst {
         static let displayHouseUrl: String = "displayHouseUrl"
     }
@@ -425,7 +423,9 @@ class BrowserViewController: UIViewController {
 
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
-            self.navigationController?.navigationBar.titleTextAttributes = self.prevNavBarTitleTextAttributes
+
+            // Reset Navigation Bar
+            self.navigationController?.navigationBar.titleTextAttributes = UINavigationBar.appearance().titleTextAttributes
         }
     }
 
@@ -435,8 +435,6 @@ class BrowserViewController: UIViewController {
         self.initNavigationBarItems()
 
         self.toggleNavigationBarItems()
-
-        self.prevNavBarTitleTextAttributes = self.navigationController?.navigationBar.titleTextAttributes
 
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont.boldSystemFontOfSize(16), NSForegroundColorAttributeName: UIColor.whiteColor()]
 

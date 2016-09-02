@@ -99,13 +99,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().tintColor = UIColor.colorWithRGB(0x1CD4C6)
 
         // Configure Navigation Bar
-        let bgColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        let font = UIFont.boldSystemFontOfSize(21)
-
         UINavigationBar.appearance().titleTextAttributes =
             [NSForegroundColorAttributeName:UIColor.whiteColor(),
-             NSFontAttributeName : font]
-        UINavigationBar.appearance().barTintColor = bgColor
+             NSFontAttributeName : UIFont.boldSystemFontOfSize(21)]
+
+        UINavigationBar.appearance().barTintColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
 
         UINavigationBar.appearance().autoScaleFontSize = true
