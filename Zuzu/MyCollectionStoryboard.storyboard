@@ -97,7 +97,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="我的收藏" id="7PK-Td-XoL">
                         <barButtonItem key="backBarButtonItem" title="我的收藏" id="ubr-4i-7IU"/>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="ih2-pF-Sil" userLabel="Pseudo Anchor">
+                        <barButtonItem key="rightBarButtonItem" id="ih2-pF-Sil" userLabel="Pseudo Anchor">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tuT-Hf-asx" userLabel="Sync Button">
                                 <rect key="frame" x="974" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
