@@ -468,7 +468,7 @@ class BrowserViewController: UIViewController {
         super.viewWillAppear(animated)
 
         ///Google Analytics Tracker
-        self.trackScreen()
+        self.trackScreenWithTitle("View: \(self.viewTitle ?? "BrowserView")")
     }
 
     override func didReceiveMemoryWarning() {
@@ -684,6 +684,11 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         alertView.showInfo("網頁訊息", subTitle: message, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
+                                        action: GAConst.Action.UIActivity.LoadItemPageAlert,
+                                        label: message)
     }
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
