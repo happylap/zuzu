@@ -113,6 +113,8 @@ struct GAConst {
             static let PromptRadarSuggestion = "promptRadarSuggestion"
 
             static let RemovedItemNotice = "removedItemNotice"
+
+            static let LoadItemPageAlert = "LoadItemPageAlert"
         }
 
         struct MyCollection {
