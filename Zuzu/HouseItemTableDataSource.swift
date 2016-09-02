@@ -20,11 +20,11 @@ import Foundation
 import Foundation
 
 /**
-The class is developed in a rush, need to refactor to a more common module
+ The class is developed in a rush, need to refactor to a more common module
 
-1) highly coupled with other modules, can not work as standalone library
-2) It might block UI a little bit when loading data from storage
-*/
+ 1) highly coupled with other modules, can not work as standalone library
+ 2) It might block UI a little bit when loading data from storage
+ */
 
 private let Log = Logger.defaultLogger
 
@@ -75,16 +75,24 @@ public class HouseItemTableDataSource {
     }
 
     var criteria: SearchCriteria?
-    private var loadStartTime: NSDate?
     var loadingDuration: Double?
 
+    var adCellCount = 0
+
+    private var loadStartTime: NSDate?
     private var isLoadingData = false
 
     //Paging Info
     var currentPage: Int {
 
         get {
-            return calculateNumOfPages(cachedData.count)
+            let realItemCount = cachedData.count
+
+            if realItemCount > 0 {
+                return calculateNumOfPages(realItemCount)
+            } else {
+                return 1
+            }
         }
 
     }
@@ -159,7 +167,8 @@ public class HouseItemTableDataSource {
 
     private func loadRemoteData(pageNo: Int) {
         let requester = HouseDataRequestService.getInstance()
-        let start = getStartIndexFromPageNo(pageNo)
+        var start = getStartIndexFromPageNo(pageNo) - self.adCellCount
+        start = (start >= 0) ? start : 0
         var row = Const.pageSize
 
         ///Check if need to add an Ad item
@@ -183,19 +192,29 @@ public class HouseItemTableDataSource {
             if let result = result {
                 self.appendDataForPage(pageNo, data: result)
 
-                /// Add ADs when there is some data
-                if(result.count > 0) {
-                    ///Check if need to add an Ad item
-                    if(self.isDisplayADs) {
-                        if(pageNo % Const.adDisplayPageInterval == 0) {
-                            //Time to add one Ad cell
-                            let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
+                ///Check if need to add an Ad item
+                if(self.isDisplayADs) {
 
-                            let lastIndex = self.cachedData.endIndex - 1
-                            self.cachedData.insert(adItem, atIndex: lastIndex)
-                        }
+                    /// Check where to insert AD
+
+                    var adPlacementIndex: Int?
+
+                    // When there is at least 1 page of data
+                    if(result.count >= row) {
+                        adPlacementIndex = self.cachedData.endIndex - 1
+                    } else {
+                        adPlacementIndex = self.cachedData.endIndex
                     }
 
+                    if(pageNo % Const.adDisplayPageInterval == 0) {
+                        //Time to add one Ad cell
+                        let adItem = HouseItem.Builder(id: "Ad").addTitle("").addPrice(0).addSize(0).build()
+
+                        if let adIndex = adPlacementIndex {
+                            self.cachedData.insert(adItem, atIndex: adIndex)
+                            self.adCellCount = self.adCellCount + 1
+                        }
+                    }
                 }
             }
 
