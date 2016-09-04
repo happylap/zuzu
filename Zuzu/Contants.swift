@@ -105,6 +105,13 @@ struct CriteriaConst {
         static let INDEPENDENT_HOUSE_WITH_GARDEN = 4
     }
 
+    struct Source {
+        static let TYPE_591 = 1
+        static let TYPE_HOUSEFUN = 2
+        static let TYPE_RAKUYA = 3
+        static let TYPE_SYNYI = 4
+    }
+
     struct Bound {
         static let LOWER_ANY = -1
         static let UPPER_ANY = -1

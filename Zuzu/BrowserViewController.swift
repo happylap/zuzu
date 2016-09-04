@@ -51,6 +51,21 @@ class BrowserViewController: UIViewController {
 
     // MARK: - Private Utils
 
+    private func configureAutoScaleNavigationTitle(fontSize: Float) {
+
+        let titleLabel = UILabel()
+        titleLabel.numberOfLines = 1
+        titleLabel.font = UIFont.systemFontOfSize(CGFloat(fontSize))
+        titleLabel.text = self.navigationItem.title
+        titleLabel.textColor = UIColor.whiteColor()
+        titleLabel.backgroundColor = UIColor.clearColor()
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.sizeToFit()
+
+        self.navigationItem.titleView = titleLabel
+
+    }
+
     private func alertItemNotFound() {
 
         let alertView = SCLAlertView()
@@ -317,10 +332,15 @@ class BrowserViewController: UIViewController {
     private func startLoad(sourceLink: String) {
 
         if let url = NSURL(string:sourceLink) {
-            let req = NSURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 30)
+
+            let request = NSMutableURLRequest(URL:url, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 30)
+
+            if(self.houseItem?.source == CriteriaConst.Source.TYPE_591) {
+                request.setValue("https://m.591.com.tw/mobile-list.html?type=rent'", forHTTPHeaderField: "Referer")
+            }
 
             if let webView = self.webView {
-                webView.loadRequest(req)
+                webView.loadRequest(request)
             }
         }
 
@@ -400,6 +420,7 @@ class BrowserViewController: UIViewController {
         self.webView?.removeObserver(self, forKeyPath: "title", context: nil)
     }
 
+
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
 
         if let keyPath = keyPath {
@@ -424,8 +445,6 @@ class BrowserViewController: UIViewController {
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
 
-            // Reset Navigation Bar
-            self.navigationController?.navigationBar.titleTextAttributes = UINavigationBar.appearance().titleTextAttributes
         }
     }
 
@@ -436,7 +455,7 @@ class BrowserViewController: UIViewController {
 
         self.toggleNavigationBarItems()
 
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont.boldSystemFontOfSize(16), NSForegroundColorAttributeName: UIColor.whiteColor()]
+        self.configureAutoScaleNavigationTitle(16)
 
         self.webView?.addObserver(self, forKeyPath:"title", options:.New, context:nil)
 
