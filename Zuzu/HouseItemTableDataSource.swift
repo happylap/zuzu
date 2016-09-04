@@ -119,6 +119,10 @@ public class HouseItemTableDataSource {
 
     //Load some pages for display
     func initData() {
+        //Reset data
+        self.adCellCount = 0
+        self.estimatedTotalResults = 0
+
         //Remove previous data for initial data fetching
         cachedData.removeAll()
 
