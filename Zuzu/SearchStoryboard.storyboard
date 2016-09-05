@@ -1667,10 +1667,11 @@
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="16T-0Q-CKY">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="1500"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="1436"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <connections>
                         <outlet property="pesudoAnchor" destination="0Rp-kS-nkI" id="QdM-jT-DVk"/>
                     </connections>
