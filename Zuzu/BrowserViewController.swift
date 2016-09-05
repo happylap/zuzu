@@ -124,7 +124,8 @@ class BrowserViewController: UIViewController {
 
 
             /// Add constraints to contentView
-            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
+            contentView.addConstraints([
+                xConstraint, yConstraint, leftConstraint, rightConstraint,
                 xImgConstraint, yImgConstraint])
         }
 
