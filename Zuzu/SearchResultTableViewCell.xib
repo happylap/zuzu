@@ -33,7 +33,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ipb-jr-jZB" userLabel="House Link">
-                        <rect key="frame" x="12" y="32.5" width="0.0" height="0.0"/>
+                        <rect key="frame" x="12" y="32.5" width="398" height="0.0"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -245,6 +245,7 @@
                     <constraint firstAttribute="bottomMargin" secondItem="nmL-N8-6QR" secondAttribute="bottom" id="dAU-IF-Km2"/>
                     <constraint firstItem="zzB-16-z6B" firstAttribute="leading" secondItem="Kgs-Ox-hob" secondAttribute="trailing" constant="3" id="fEz-oG-VR4"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Sa0-Cs-laH" secondAttribute="bottom" constant="5" id="g4m-xp-pW3"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Ipb-jr-jZB" secondAttribute="trailing" constant="4" id="hbP-Dg-l6c"/>
                     <constraint firstItem="ttQ-yW-U9H" firstAttribute="leading" secondItem="KFe-03-eKb" secondAttribute="trailing" constant="8" id="kEy-0S-Upg"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Hbn-Ap-XJT" secondAttribute="bottom" priority="999" id="lfV-Xz-rnx"/>
                     <constraint firstItem="nmL-N8-6QR" firstAttribute="leading" secondItem="QwY-Xe-T1B" secondAttribute="leadingMargin" id="lrq-YE-7NR"/>
