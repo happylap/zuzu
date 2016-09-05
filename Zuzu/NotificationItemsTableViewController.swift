@@ -412,6 +412,7 @@ class NotificationItemsTableViewController: UITableViewController {
 
                         let sourceName = houseTypeLabelMaker.fromCodeForField("source", code: houseItem.source)
 
+                        browserVC.delegate = self
                         browserVC.viewTitle = "\(sourceName ?? "") 原始網頁"
                         browserVC.houseItem = houseItem
 
@@ -490,6 +491,24 @@ extension NotificationItemsTableViewController: TableResultsControllerDelegate {
 extension NotificationItemsTableViewController: HouseDetailViewDelegate {
 
     func onHouseItemLoaded(result: Bool) {
+        if (result == true) {
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                if let item = self.resultController.objectAtIndexPath(selectedIndexPath) as? NotificationHouseItem {
+                    if item.isRead == false {
+                        item.isRead = true
+                        self.setItemRead(item)
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+// MARK: - BrowserViewDelegate
+extension NotificationItemsTableViewController: BrowserViewDelegate {
+
+    func onSourcePageLoaded(result: Bool) {
         if (result == true) {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 if let item = self.resultController.objectAtIndexPath(selectedIndexPath) as? NotificationHouseItem {

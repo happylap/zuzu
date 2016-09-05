@@ -12,6 +12,13 @@ import AwesomeCache
 
 private let Log = Logger.defaultLogger
 
+@objc protocol BrowserViewDelegate {
+
+    optional func onSourcePageLoaded(result: Bool)
+
+}
+
+
 class BrowserViewController: UIViewController {
 
     var enableToolBar: Bool = true
@@ -24,6 +31,8 @@ class BrowserViewController: UIViewController {
 
     /// Mode 2: House Item Data
     var houseItem: HouseItem?
+
+    var delegate: BrowserViewDelegate?
 
     ///The full house detail returned from remote server
     private var houseItemDetail: AnyObject?
@@ -121,19 +130,19 @@ class BrowserViewController: UIViewController {
 
     }
 
-    //    private func alertItemNotFound() {
-    //
-    //        let alertView = SCLAlertView()
-    //
-    //        let subTitle = "請您參考其他物件，謝謝！"
-    //
-    //        alertView.showCloseButton = false
-    //
-    //        alertView.addButton("知道了") {
-    //            self.navigationController?.popViewControllerAnimated(true)
-    //        }
-    //        alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
-    //    }
+    private func alertItemNotFound() {
+
+        let alertView = SCLAlertView()
+
+        let subTitle = "請您參考其他物件，謝謝！"
+
+        alertView.showCloseButton = false
+
+        alertView.addButton("知道了") {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
+        alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    }
 
     private func fetchHouseDetail(houseItem: HouseItem) {
 
@@ -165,6 +174,8 @@ class BrowserViewController: UIViewController {
                 if let error = error {
                     Log.debug("Cannot get remote data \(error.localizedDescription)")
 
+                    self.delegate?.onSourcePageLoaded?(false)
+
                     if let alertView = self.networkErrorAlertView {
                         let subTitle = "您目前可能處於飛航模式或是無網路狀態，暫時無法檢視詳細資訊。"
                         alertView.showCloseButton = true
@@ -186,6 +197,7 @@ class BrowserViewController: UIViewController {
                         Log.debug("Something went wrong with the cache")
                     }
                 }
+
                 self.handleHouseDetailResponse(result)
             }
 
@@ -196,10 +208,12 @@ class BrowserViewController: UIViewController {
 
         self.houseItemDetail = result
 
-        if let sourceLink = self.houseItemDetail?.valueForKey("mobile_link") as? String ?? self.houseItem?.mobileLink {
+        self.delegate?.onSourcePageLoaded?(true)
+
+        if let sourceLink =
+            (self.houseItemDetail?.valueForKey("mobile_link") as? String) ?? (self.houseItem?.mobileLink) {
 
             self.toggleNavigationBarItems()
-            self.setupWebView()
 
             self.runOnMainThreadAfter(1.5, block: {
 
@@ -207,6 +221,11 @@ class BrowserViewController: UIViewController {
                 self.startLoad(sourceLink)
 
             })
+
+        } else {
+
+            self.alertItemNotFound()
+
         }
     }
 
@@ -520,17 +539,20 @@ class BrowserViewController: UIViewController {
         super.loadView()
 
         self.webView = WKWebView(frame: CGRect.zero)
+
+        self.setupWebView()
+
         self.title = viewTitle
     }
 
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
 
-//            self.webView?.stopLoading()
-//            self.webView?.UIDelegate = nil
-//            self.webView?.navigationDelegate = nil
-//            self.webView?.removeFromSuperview()
-//            self.webView = nil
+            //            self.webView?.stopLoading()
+            //            self.webView?.UIDelegate = nil
+            //            self.webView?.navigationDelegate = nil
+            //            self.webView?.removeFromSuperview()
+            //            self.webView = nil
 
         }
     }
@@ -546,7 +568,6 @@ class BrowserViewController: UIViewController {
 
         if let sourceLink = self.sourceLink {
 
-            self.setupWebView()
             self.displayWebView()
             self.startLoad(sourceLink)
 
