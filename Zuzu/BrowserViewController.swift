@@ -41,7 +41,11 @@ class BrowserViewController: UIViewController {
     var phoneCallBarButton: UIBarButtonItem?
     var sendMailBarButton: UIBarButtonItem?
 
-    var webView: WKWebView?
+    private var webView: WKWebView?
+
+    private let externalSiteLabel = UILabel() //UILabel for displaying go to external site message
+
+    private let externalSiteImage = UIImageView(image: UIImage(named: "external_site_image")?.imageWithRenderingMode(.AlwaysTemplate))
 
     private var networkErrorAlertView: SCLAlertView? = SCLAlertView()
 
@@ -66,19 +70,70 @@ class BrowserViewController: UIViewController {
 
     }
 
-    private func alertItemNotFound() {
+    private func configureExternalSiteMessage() {
 
-        let alertView = SCLAlertView()
+        if let contentView = self.view {
 
-        let subTitle = "請您參考其他物件，謝謝！"
+            /// UILabel setting
+            externalSiteLabel.translatesAutoresizingMaskIntoConstraints = false
+            externalSiteLabel.textAlignment = NSTextAlignment.Center
+            externalSiteLabel.numberOfLines = -1
+            externalSiteLabel.font = UIFont.systemFontOfSize(14)
+            externalSiteLabel.autoScaleFontSize = true
+            externalSiteLabel.textColor = UIColor.grayColor()
+            externalSiteLabel.text = SystemMessage.INFO.EXTERNAL_SITE_RESULT
+            contentView.addSubview(externalSiteLabel)
 
-        alertView.showCloseButton = false
+            /// UIImage setting
+            externalSiteImage.translatesAutoresizingMaskIntoConstraints = false
+            externalSiteImage.tintColor = UIColor.lightGrayColor()
+            let size = externalSiteImage.intrinsicContentSize()
+            externalSiteImage.frame.size = size
 
-        alertView.addButton("知道了") {
-            self.navigationController?.popViewControllerAnimated(true)
+            contentView.addSubview(externalSiteImage)
+
+            /// Setup constraints for Label
+            let xConstraint = NSLayoutConstraint(item: externalSiteLabel, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xConstraint.priority = UILayoutPriorityRequired
+
+            let yConstraint = NSLayoutConstraint(item: externalSiteLabel, attribute: NSLayoutAttribute.TopMargin, relatedBy: NSLayoutRelation.Equal, toItem: externalSiteImage, attribute: NSLayoutAttribute.BottomMargin, multiplier: 1.0, constant: 22)
+            yConstraint.priority = UILayoutPriorityRequired
+
+            let leftConstraint = NSLayoutConstraint(item: externalSiteLabel, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.LeadingMargin, multiplier: 1.0, constant: 8)
+            leftConstraint.priority = UILayoutPriorityDefaultLow
+
+            let rightConstraint = NSLayoutConstraint(item: externalSiteLabel, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.TrailingMargin, multiplier: 1.0, constant: -8)
+            rightConstraint.priority = UILayoutPriorityDefaultLow
+
+            /// Setup constraints for Image
+
+            let xImgConstraint = NSLayoutConstraint(item: externalSiteImage, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+            xImgConstraint.priority = UILayoutPriorityRequired
+
+            let yImgConstraint = NSLayoutConstraint(item: externalSiteImage, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0)
+            yImgConstraint.priority = UILayoutPriorityRequired
+
+
+            /// Add constraints to contentView
+            contentView.addConstraints([xConstraint, yConstraint, leftConstraint, rightConstraint,
+                xImgConstraint, yImgConstraint])
         }
-        alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+
     }
+
+    //    private func alertItemNotFound() {
+    //
+    //        let alertView = SCLAlertView()
+    //
+    //        let subTitle = "請您參考其他物件，謝謝！"
+    //
+    //        alertView.showCloseButton = false
+    //
+    //        alertView.addButton("知道了") {
+    //            self.navigationController?.popViewControllerAnimated(true)
+    //        }
+    //        alertView.showInfo("此物件已下架", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+    //    }
 
     private func fetchHouseDetail(houseItem: HouseItem) {
 
@@ -130,28 +185,28 @@ class BrowserViewController: UIViewController {
                     } catch _ {
                         Log.debug("Something went wrong with the cache")
                     }
-
-                    self.handleHouseDetailResponse(result)
-
-                } else {
-
-                    self.alertItemNotFound()
-
                 }
+                self.handleHouseDetailResponse(result)
             }
 
         }
     }
 
-    private func handleHouseDetailResponse(result: AnyObject) {
+    private func handleHouseDetailResponse(result: AnyObject?) {
 
         self.houseItemDetail = result
 
-        if let sourceLink = self.houseItemDetail?.valueForKey("mobile_link") as? String {
+        if let sourceLink = self.houseItemDetail?.valueForKey("mobile_link") as? String ?? self.houseItem?.mobileLink {
 
             self.toggleNavigationBarItems()
+            self.setupWebView()
 
-            self.startLoad(sourceLink)
+            self.runOnMainThreadAfter(1.5, block: {
+
+                self.displayWebView()
+                self.startLoad(sourceLink)
+
+            })
         }
     }
 
@@ -329,6 +384,27 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private func setupWebView() {
+
+        self.webView?.addObserver(self, forKeyPath:"title", options:.New, context:nil)
+        self.webView?.UIDelegate = self
+        self.webView?.navigationDelegate = self
+
+    }
+
+    private func displayWebView() {
+
+        if let webView = self.webView {
+            view.addSubview(webView)
+
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            let height = NSLayoutConstraint(item: webView, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 1, constant: 0)
+            let width = NSLayoutConstraint(item: webView, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1, constant: 0)
+            view.addConstraints([height, width])
+        }
+
+    }
+
     private func startLoad(sourceLink: String) {
 
         if let url = NSURL(string:sourceLink) {
@@ -418,6 +494,11 @@ class BrowserViewController: UIViewController {
 
     deinit {
         self.webView?.removeObserver(self, forKeyPath: "title", context: nil)
+        self.webView?.stopLoading()
+        self.webView?.UIDelegate = nil
+        self.webView?.navigationDelegate = nil
+        self.webView?.removeFromSuperview()
+        self.webView = nil
     }
 
 
@@ -445,6 +526,12 @@ class BrowserViewController: UIViewController {
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
 
+//            self.webView?.stopLoading()
+//            self.webView?.UIDelegate = nil
+//            self.webView?.navigationDelegate = nil
+//            self.webView?.removeFromSuperview()
+//            self.webView = nil
+
         }
     }
 
@@ -457,25 +544,21 @@ class BrowserViewController: UIViewController {
 
         self.configureAutoScaleNavigationTitle(16)
 
-        self.webView?.addObserver(self, forKeyPath:"title", options:.New, context:nil)
-
-        view.addSubview(self.webView!)
-
-        /// Stretch the WKWebView to fit the parent
-        webView!.translatesAutoresizingMaskIntoConstraints = false
-        let height = NSLayoutConstraint(item: webView!, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 1, constant: 0)
-        let width = NSLayoutConstraint(item: webView!, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1, constant: 0)
-        view.addConstraints([height, width])
-
-        self.webView?.UIDelegate = self
-        self.webView?.navigationDelegate = self
-
         if let sourceLink = self.sourceLink {
+
+            self.setupWebView()
+            self.displayWebView()
             self.startLoad(sourceLink)
+
         } else {
+
+            self.configureExternalSiteMessage()
+
             ///Get remote data
             if let houseItem = self.houseItem {
-                fetchHouseDetail(houseItem)
+
+                self.fetchHouseDetail(houseItem)
+
             }
         }
     }
