@@ -14,6 +14,8 @@ private let Log = Logger.defaultLogger
 
 @objc protocol BrowserViewDelegate {
 
+    optional func onHouseItemStateChanged()
+
     optional func onSourcePageLoaded(result: Bool)
 
 }
@@ -47,6 +49,7 @@ class BrowserViewController: UIViewController {
     }
 
     @IBOutlet var pesudoAnchor: UIBarButtonItem!
+    var collectItemBarButton: UIBarButtonItem?
     var phoneCallBarButton: UIBarButtonItem?
     var sendMailBarButton: UIBarButtonItem?
 
@@ -350,6 +353,27 @@ class BrowserViewController: UIViewController {
             pesudoAnchor.tintColor = UIColor.whiteColor()
             pesudoAnchor.enabled = false
 
+            /// Collection
+            let collectButton: UIButton = UIButton(type: UIButtonType.Custom)
+
+            if let houseItem = self.houseItem {
+                if(CollectionItemService.sharedInstance.isExist(houseItem.id)) {
+
+                    collectButton.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+
+                } else {
+
+                    collectButton.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+
+                }
+            }
+
+            collectButton.addTarget(self, action: #selector(BrowserViewController.collectButtonTouched(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            collectButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+
+            self.collectItemBarButton = UIBarButtonItem(customView: collectButton)
+            self.collectItemBarButton?.enabled = false
+
             /// Phone
             let phoneCallButton: UIButton = UIButton(type: UIButtonType.Custom)
             phoneCallButton.setImage(UIImage(named: "phone_n")?.imageWithRenderingMode(.AlwaysTemplate), forState: UIControlState.Normal)
@@ -377,6 +401,11 @@ class BrowserViewController: UIViewController {
             if let source = self.houseItem?.source {
                 let displayConfig = TagUtils.getItemDisplayConfig(source)
 
+                /// Add "Collect" button only when detail view is not supported
+                if(!displayConfig.displayDetail) {
+                    barItems.append(collectItemBarButton!)
+                }
+
                 if(displayConfig.displayContact) {
                     barItems.append(sendMailBarButton!)
                     barItems.append(phoneCallBarButton!)
@@ -390,6 +419,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleNavigationBarItems() {
+
+        self.collectItemBarButton?.enabled = true
 
         if let _ = self.houseItemDetail?.valueForKey("mobile_link") as? String {
             pesudoAnchor.enabled = true
@@ -440,6 +471,136 @@ class BrowserViewController: UIViewController {
             }
         }
 
+    }
+
+    private func alertAddingToCollectionSuccess() {
+
+        if(!UserDefaultsUtils.needsMyCollectionPrompt()) {
+            return
+        }
+
+        let alertView = SCLAlertView()
+
+        let subTitle = "成功加入一筆租屋到\"我的收藏\"\n現在去看看收藏項目嗎？"
+
+        alertView.addButton("馬上去看看") {
+            UserDefaultsUtils.disableMyCollectionPrompt()
+
+            NSNotificationCenter.defaultCenter().postNotificationName(SwitchToTabNotification, object: self, userInfo: ["targetTab" : MainTabConstants.COLLECTION_TAB_INDEX])
+        }
+
+        alertView.addButton("不需要") {
+            UserDefaultsUtils.disableMyCollectionPrompt()
+        }
+
+        alertView.showCloseButton = false
+
+        alertView.showTitle("新增到我的收藏", subTitle: subTitle, style: SCLAlertViewStyle.Notice, colorStyle: 0x1CD4C6)
+    }
+
+    private func performCollectionDeletion(houseID: String) {
+
+        CollectionItemService.sharedInstance.deleteItemById(houseID)
+
+        if let barItem = self.collectItemBarButton?.customView as? UIButton {
+            barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+        }
+
+        ///Notify the search result table to refresh the selected row
+        delegate?.onHouseItemStateChanged?()
+
+        ///GA Tracker
+        self.trackEventForCurrentScreen(GAConst.Catrgory.MyCollection,
+                                        action: GAConst.Action.MyCollection.Delete)
+
+    }
+
+// MARK: - UI Event handlers
+
+    func collectButtonTouched(sender: UIButton) {
+        if !AmazonClientManager.sharedInstance.isLoggedIn() {
+            AmazonClientManager.sharedInstance.loginFromView(self) {
+                (task: AWSTask!) -> AnyObject! in
+                return nil
+            }
+            return
+        }
+
+        if let houseItemDetail = self.houseItemDetail,
+            let houseID = houseItemDetail.valueForKey("id") as? String {
+
+            let collectionService = CollectionItemService.sharedInstance
+
+            ///Determine action based on whether the house item is already in "My Collection"
+            if(collectionService.isExist(houseID)) {
+
+                /// Ask for user confirmation if there exists notes for this item
+                if(NoteService.sharedInstance.hasNote(houseID)) {
+
+                    let alertView = SCLAlertView()
+
+                    alertView.addButton("確認移除") {
+
+                        self.performCollectionDeletion(houseID)
+
+                    }
+
+                    alertView.showNotice("是否確認移除", subTitle: "此物件包含您撰寫筆記，將此物件從「我的收藏」中移除會一併將筆記刪除，是否確認？", closeButtonTitle: "暫時不要", colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+
+                    return
+                }
+
+                self.performCollectionDeletion(houseID)
+
+            } else {
+
+                if !CollectionItemService.sharedInstance.canAdd() {
+                    let subTitle = "您目前的收藏筆數已達上限\(CollectionItemService.CollectionItemConstants.MYCOLLECTION_MAX_SIZE)筆。"
+                    SCLAlertView().showInfo("提醒您", subTitle: subTitle, closeButtonTitle: "知道了", duration: 2.0, colorStyle: 0x1CD4C6, colorTextButton: 0xFFFFFF)
+                    return
+                }
+
+                if let barItem = self.collectItemBarButton?.customView as? UIButton {
+                    barItem.setImage(UIImage(named: "heart_pink"), forState: UIControlState.Normal)
+                }
+
+                LoadingSpinner.shared.stop()
+                LoadingSpinner.shared.setImmediateAppear(false)
+                LoadingSpinner.shared.setGraceTime(1.0)
+                LoadingSpinner.shared.setOpacity(0.3)
+                LoadingSpinner.shared.startOnView(self.view)
+                Log.debug("LoadingSpinner startOnView")
+
+                HouseDataRequestService.getInstance().searchById(houseID) { (result, error) -> Void in
+                    LoadingSpinner.shared.stop()
+                    Log.debug("LoadingSpinner stop")
+
+                    if let error = error {
+                        let alertView = SCLAlertView()
+                        alertView.showCloseButton = false
+
+                        alertView.addButton("知道了") {
+                            if let barItem = self.navigationItem.rightBarButtonItems?.first?.customView as? UIButton {
+                                barItem.setImage(UIImage(named: "heart_toolbar_n"), forState: UIControlState.Normal)
+                            }
+                        }
+
+                        let subTitle = "您目前可能處於飛航模式或是無網路狀態，請稍後再試"
+                        alertView.showInfo("網路無法連線", subTitle: subTitle, colorStyle: 0xFFB6C1, colorTextButton: 0xFFFFFF)
+
+                        Log.debug("Cannot get remote data \(error.localizedDescription)")
+                        return
+                    }
+
+                    collectionService.addItem(houseItemDetail)
+                    self.alertAddingToCollectionSuccess()
+
+                    ///Notify the search result table to refresh the slected row
+                    self.delegate?.onHouseItemStateChanged?()
+                }
+            }
+
+        }
     }
 
     func copyLinkButtonTouched(sender: UIButton) {

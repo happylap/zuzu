@@ -1171,6 +1171,7 @@ class SearchResultViewController: UIViewController {
                         let sourceName = houseTypeLabelMaker.fromCodeForField("source", code: houseItem.source)
                         bvc.viewTitle =  "\(sourceName ?? "") 原始網頁"
                         bvc.houseItem = houseItem
+                        bvc.delegate = self
 
                         ///GA Tracker
                         self.trackEventForCurrentScreen(GAConst.Catrgory.UIActivity,
@@ -1506,7 +1507,7 @@ extension SearchResultViewController: FilterTableViewControllerDelegate {
 
 // MARK: - HouseDetailViewDelegate
 // TODO: A better solution. A delegate for doing "my collecion" operations
-extension SearchResultViewController: HouseDetailViewDelegate {
+extension SearchResultViewController: HouseDetailViewDelegate, BrowserViewDelegate {
     func onHouseItemStateChanged() {
         if let visibleCellIndexPath = tableView.indexPathsForVisibleRows {
 
