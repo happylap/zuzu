@@ -16,5 +16,5 @@ class NotificationHouseItem: AbstractHouseItem {
         let string = "NotificationHouseItem: id = \(id)\n title = \(title)\n post_time = \(postTime)"
         return string
     }
-    
+
 }

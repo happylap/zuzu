@@ -10,29 +10,28 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-    
+
     func runOnMainThread(block: () -> Void) {
         if NSThread.isMainThread() {
             block()
-        }
-        else {
+        } else {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 block()
             })
         }
     }
-    
+
     func runOnMainThreadAfter(delaySec: Double, block: () -> Void) {
-        
+
         let delay = delaySec * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-        
+
         dispatch_after(time, dispatch_get_main_queue(), {
             block()
         })
     }
-    
-    func synchronize<T>(lockObj: AnyObject!, closure: ()->T) -> T {
+
+    func synchronize<T>(lockObj: AnyObject!, closure: () -> T) -> T {
         objc_sync_enter(lockObj)
         let retVal: T = closure()
         objc_sync_exit(lockObj)
@@ -46,7 +45,7 @@ extension UIView {
         UIView.animateWithDuration(duration, delay: delay, options: UIViewAnimationOptions.CurveEaseIn, animations: {
             self.alpha = 1.0
             }, completion: completion)  }
-    
+
     func fadeOut(duration: NSTimeInterval = 1.0, delay: NSTimeInterval = 0.0, completion: (Bool) -> Void = {(finished: Bool) -> Void in}) {
         UIView.animateWithDuration(duration, delay: delay, options: UIViewAnimationOptions.CurveEaseIn, animations: {
             self.alpha = 0.0
@@ -58,17 +57,17 @@ extension UIView {
 extension UIColor {
     /**
      Construct a UIColor using an HTML/CSS RGB formatted value and an alpha value
-     
+
      :param: rgbValue RGB value
      :param: alpha color alpha value
-     
+
      :returns: an UIColor instance that represent the required color
      */
-    class func colorWithRGB(rgbValue : UInt, alpha : CGFloat = 1.0) -> UIColor {
+    class func colorWithRGB(rgbValue: UInt, alpha: CGFloat = 1.0) -> UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16) / 255
         let green = CGFloat((rgbValue & 0xFF00) >> 8) / 255
         let blue = CGFloat(rgbValue & 0xFF) / 255
-        
+
         return UIColor(red: red, green: green, blue: blue, alpha: alpha)
     }
 }

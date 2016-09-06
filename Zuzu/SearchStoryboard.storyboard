@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ybg-AC-NMz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ybg-AC-NMz">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -961,6 +961,7 @@
                         <outlet property="tableView" destination="AVs-la-x6f" id="W6l-uj-pjW"/>
                         <segue destination="RI5-UG-EkB" kind="show" identifier="displayHouseDetail" id="HGk-Tx-AhT"/>
                         <segue destination="Q02-Ft-dmr" kind="presentation" identifier="displayDuplicateHouse" modalPresentationStyle="currentContext" id="xK1-uL-WB3"/>
+                        <segue destination="xp8-9U-QeU" kind="show" identifier="displayHouseSource" id="qdg-85-o2O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t8e-H4-Hw1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1095,7 +1096,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AhO-ge-HuG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1123" y="1771"/>
+            <point key="canvasLocation" x="1087" y="1923"/>
         </scene>
         <!--House Detail-->
         <scene sceneID="r06-4y-ETW">
@@ -1184,7 +1185,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="豬豬大台北微搬家—跑多遠、算多少，最划算!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2fn-Gp-ugy" userLabel="detailLabel">
-                                                    <rect key="frame" x="56" y="19.5" width="557" height="17"/>
+                                                    <rect key="frame" x="56" y="19" width="557" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1506,6 +1507,26 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wAS-2h-mwY" userLabel="cacheNotice">
+                                <rect key="frame" x="0.0" y="1350" width="650" height="20"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="l3H-kd-Dzq" userLabel="cacheNoticeLabel">
+                                        <rect key="frame" x="324" y="3" width="3.5" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="autoScaleFontSize" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.80000001190000003" alpha="0.94999999999999996" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="l3H-kd-Dzq" firstAttribute="centerX" secondItem="wAS-2h-mwY" secondAttribute="centerX" id="Dsc-Qt-01X"/>
+                                    <constraint firstItem="l3H-kd-Dzq" firstAttribute="centerY" secondItem="wAS-2h-mwY" secondAttribute="centerY" id="Pwp-JS-Wh2"/>
+                                    <constraint firstAttribute="height" constant="20" id="Yme-v9-3UP"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05l-B1-oJ7" userLabel="Contact Bar View" customClass="HouseDetailContactBarView" customModule="Zuzu" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="1370" width="650" height="85.5"/>
                                 <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -1517,17 +1538,21 @@
                             <constraint firstItem="z6L-pd-X4C" firstAttribute="top" secondItem="RTx-PQ-fjy" secondAttribute="bottom" id="1su-9d-cI1"/>
                             <constraint firstItem="RTx-PQ-fjy" firstAttribute="centerX" secondItem="fc8-tO-VZH" secondAttribute="centerX" id="5qL-ae-DLi"/>
                             <constraint firstItem="RTx-PQ-fjy" firstAttribute="width" secondItem="fc8-tO-VZH" secondAttribute="width" id="Aww-bO-pxW"/>
+                            <constraint firstItem="wAS-2h-mwY" firstAttribute="width" secondItem="05l-B1-oJ7" secondAttribute="width" id="IQx-5b-OdU"/>
                             <constraint firstItem="05l-B1-oJ7" firstAttribute="width" secondItem="fc8-tO-VZH" secondAttribute="width" id="JAD-jq-eUZ"/>
                             <constraint firstItem="RTx-PQ-fjy" firstAttribute="top" secondItem="sr3-gP-XzE" secondAttribute="bottom" id="Tif-yt-baT"/>
+                            <constraint firstItem="wAS-2h-mwY" firstAttribute="centerX" secondItem="05l-B1-oJ7" secondAttribute="centerX" id="ciP-97-mmh"/>
                             <constraint firstItem="05l-B1-oJ7" firstAttribute="centerX" secondItem="fc8-tO-VZH" secondAttribute="centerX" id="ebd-HI-lVR"/>
                             <constraint firstAttribute="width" secondItem="05l-B1-oJ7" secondAttribute="height" multiplier="1500:197" id="gFT-sk-ktN"/>
                             <constraint firstItem="z6L-pd-X4C" firstAttribute="top" secondItem="05l-B1-oJ7" secondAttribute="bottom" id="gPC-ew-FYB"/>
+                            <constraint firstItem="05l-B1-oJ7" firstAttribute="top" secondItem="wAS-2h-mwY" secondAttribute="bottom" id="qpd-ID-ck5"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="maV-fu-tgx"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="650" height="1500"/>
                     <connections>
+                        <outlet property="cacheNoticeLabel" destination="l3H-kd-Dzq" id="xy0-5H-GKs"/>
                         <outlet property="contactBarView" destination="05l-B1-oJ7" id="ceY-82-SRg"/>
                         <outlet property="tableView" destination="RTx-PQ-fjy" id="pP3-Hh-C1c"/>
                         <segue destination="H6B-iW-L9e" kind="show" identifier="displayHouseOnMap" id="zee-Sd-WXc"/>
@@ -1570,7 +1595,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mKA-j6-Knx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2752" y="1803"/>
+            <point key="canvasLocation" x="3808" y="1999"/>
         </scene>
         <!--House Url Popover -->
         <scene sceneID="yrg-vl-0v0">
@@ -1631,21 +1656,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VAa-Ns-oxa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2506" y="2747"/>
+            <point key="canvasLocation" x="2936" y="3173"/>
         </scene>
         <!--House Source-->
         <scene sceneID="KPq-L4-VJt">
             <objects>
-                <viewController storyboardIdentifier="browserView" title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BrowserView" title="House Source" hidesBottomBarWhenPushed="YES" id="xp8-9U-QeU" customClass="BrowserViewController" customModule="Zuzu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="l0b-cs-Yp0"/>
                         <viewControllerLayoutGuide type="bottom" id="f05-vr-atu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="16T-0Q-CKY">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="1500"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="1436"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <connections>
                         <outlet property="pesudoAnchor" destination="0Rp-kS-nkI" id="QdM-jT-DVk"/>
                     </connections>
@@ -1659,7 +1685,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1725" y="4000"/>
+            <point key="canvasLocation" x="2894" y="1664"/>
         </scene>
         <!--Filter Table-->
         <scene sceneID="ZVW-p3-RGh">
@@ -1804,4 +1830,7 @@
         <image name="search item_03" width="30" height="30"/>
         <image name="search item_04" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="qdg-85-o2O"/>
+    </inferredMetricsTieBreakers>
 </document>

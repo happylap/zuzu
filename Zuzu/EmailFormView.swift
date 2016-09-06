@@ -9,34 +9,34 @@ import UIKit
 import SwiftValidator
 
 protocol EmailFormDelegate: class {
-    func onEmailEntered(email:String?)
+    func onEmailEntered(email: String?)
 }
 
 class EmailFormView: UIView {
-    
+
     @IBOutlet var formValidationError: UILabel!
-    
+
     let validator = Validator()
-    
-    var view:UIView!
-    
+
+    var view: UIView!
+
     var delegate: EmailFormDelegate?
-    
-    var formMode:FormMode = .Register
-    
+
+    var formMode: FormMode = .Register
+
     @IBOutlet weak var emailTextField: UITextField! {
-        
+
         didSet {
-            
+
             emailTextField.becomeFirstResponder()
-            
+
             emailTextField.tintColor = UIColor.grayColor()
             emailTextField.addTarget(self, action: #selector(EmailFormView.textFieldDidChange(_:)), forControlEvents: UIControlEvents.TouchDown)
         }
     }
-    
+
     @IBOutlet weak var continueButton: UIButton! {
-        
+
         didSet {
             continueButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             continueButton.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
@@ -45,29 +45,29 @@ class EmailFormView: UIView {
                 UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
             continueButton.tintColor =
                 UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-            
+
             continueButton.addTarget(self, action: #selector(EmailFormView.onContinueButtonTouched(_:)), forControlEvents: UIControlEvents.TouchDown)
-            
+
         }
-        
+
     }
-    
+
     // MARK: - Private Utils
-    
+
     private func setTextFieldErrorStyle(field: UITextField) {
         field.layer.borderColor = UIColor.redColor().CGColor
         field.layer.borderWidth = 1.0
     }
-    
+
     private func setTextFieldNormalStyle(field: UITextField) {
         field.layer.borderColor = UIColor.clearColor().CGColor
         field.layer.borderWidth = 0.0
     }
-    
+
     private func setProcessingStateForButton(button: UIButton) {
-        
+
         button.enabled = false
-        
+
         button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         button.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5)
         button.layer.borderWidth = 2
@@ -75,13 +75,13 @@ class EmailFormView: UIView {
             UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5).CGColor
         button.tintColor =
             UIColor.colorWithRGB(0x1CD4C6, alpha: 0.5)
-        
+
     }
-    
+
     private func setNormalStateForButton(button: UIButton) {
-        
+
         button.enabled = true
-        
+
         button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         button.backgroundColor = UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
         button.layer.borderWidth = 2
@@ -89,33 +89,33 @@ class EmailFormView: UIView {
             UIColor.colorWithRGB(0x1CD4C6, alpha: 1).CGColor
         button.tintColor =
             UIColor.colorWithRGB(0x1CD4C6, alpha: 1)
-        
+
     }
-    
+
     private func loadViewFromNib() -> UIView {
         let bundle = NSBundle(forClass:self.dynamicType)
         let nib = UINib(nibName: "EmailFormView", bundle: bundle)
         let view = nib.instantiateWithOwner(self, options: nil)[0] as! UIView
-        
+
         return view
     }
-    
+
     private func setup() {
         view = loadViewFromNib()
         view.frame = bounds
         view.autoresizingMask = UIViewAutoresizing.FlexibleWidth.union(UIViewAutoresizing.FlexibleHeight)
         self.addSubview(view)
     }
-    
+
     // MARK: - Action Handlers
     func onContinueButtonTouched(sender: UIButton) {
-        
+
         validator.validate(self)
-        
+
     }
-    
+
     func textFieldDidChange(sender: UITextField) {
-        
+
         for (field, error) in validator.errors {
             if(field == sender) {
                 field.layer.borderColor = UIColor.clearColor().CGColor
@@ -123,42 +123,42 @@ class EmailFormView: UIView {
                 error.errorLabel?.hidden = true
             }
         }
-        
+
     }
-    
+
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        
+
         validator.registerField(emailTextField, errorLabel: formValidationError, rules: [RequiredRule(message: "請輸入電子郵件"), EmailRule(message: "電子郵件格式錯誤")])
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
-    
+
 }
 
 extension EmailFormView: ValidationDelegate {
-    
+
     func validationSuccessful() {
-        
+
         self.emailTextField.resignFirstResponder()
-        
+
         self.setProcessingStateForButton(self.continueButton)
-        
+
         self.setTextFieldNormalStyle(self.emailTextField)
-        
+
         delegate?.onEmailEntered(self.emailTextField.text)
-        
+
     }
-    
-    func validationFailed(errors:[UITextField:ValidationError]) {
+
+    func validationFailed(errors: [UITextField:ValidationError]) {
         // turn the fields to red
         for (field, error) in validator.errors {
             self.setTextFieldErrorStyle(field)
@@ -166,5 +166,5 @@ extension EmailFormView: ValidationDelegate {
             error.errorLabel?.hidden = false
         }
     }
-    
+
 }

@@ -22,14 +22,14 @@ class ZuzuUser: NSObject, NSCoding {
     var birthday: NSDate?
     var pictureUrl: String?
     var provider: Provider?
-    
-    
+
+
     override init() {
-        
+
     }
-    
+
     convenience required init?(coder decoder: NSCoder) {
-        
+
         let id = decoder.decodeObjectForKey("id") as? String
         let registerTime = decoder.decodeObjectForKey("registerTime") as? NSDate
         let email = decoder.decodeObjectForKey("email") as? String
@@ -37,7 +37,7 @@ class ZuzuUser: NSObject, NSCoding {
         let gender = decoder.decodeObjectForKey("gender") as? String
         let birthday = decoder.decodeObjectForKey("birthday") as? NSDate
         let pictureUrl = decoder.decodeObjectForKey("pictureUrl") as? String
-        
+
         self.init()
         self.registerTime = registerTime
         self.id = id
@@ -49,9 +49,9 @@ class ZuzuUser: NSObject, NSCoding {
         if let providerRaw = decoder.decodeObjectForKey("provider") as? String {
             self.provider = Provider(rawValue: providerRaw)
         }
-        
+
     }
-    
+
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(id, forKey:"id")
         aCoder.encodeObject(registerTime, forKey:"registerTime")

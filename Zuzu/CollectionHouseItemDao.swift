@@ -9,37 +9,36 @@
 import Foundation
 import CoreData
 
-class CollectionHouseItemDao: AbstractHouseItemDao
-{
+class CollectionHouseItemDao: AbstractHouseItemDao {
     class var sharedInstance: CollectionHouseItemDao {
         struct Singleton {
             static let instance = CollectionHouseItemDao()
         }
-        
+
         return Singleton.instance
     }
-    
+
     // MARK: - AbstractHouseItemDao overriding function
-    
-    override var entityName: String{
+
+    override var entityName: String {
         return EntityTypes.CollectionHouseItem.rawValue
     }
-    
+
     override func add(jsonObj: AnyObject, isCommit: Bool) -> CollectionHouseItem? {
-        if let collectItem = super.add(jsonObj, isCommit: false) as? CollectionHouseItem{
+        if let collectItem = super.add(jsonObj, isCommit: false) as? CollectionHouseItem {
             collectItem.contacted = false
             collectItem.collectTime = NSDate()
-            
+
             if (isCommit == true) {
                 self.commit()
             }
-            
+
             return collectItem
         }
-        
+
         return nil
     }
-    
+
     func getCollectionIdList() -> [String]? {
         var result: [String] = []
         if let allItems = self.getAll() {
@@ -49,7 +48,7 @@ class CollectionHouseItemDao: AbstractHouseItemDao
         }
         return result
     }
-    
+
     func safeDeleteByID(id: String) {
         if self.isExist(id) {
             self.deleteByID(id)

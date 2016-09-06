@@ -14,35 +14,35 @@ import AlamofireImage
 private let Log = Logger.defaultLogger
 
 class MyCollectionDetailViewController: UIViewController {
-    
+
     @IBOutlet weak var houseImg: UIImageView!
     @IBOutlet weak var houseTitle: UILabel!
     @IBOutlet weak var houseAddr: UILabel!
     @IBOutlet weak var housePrice: UILabel!
-    
+
     let placeholderImg = UIImage(named: "house_img")
-    
+
     var indexPath: NSIndexPath!
-    
+
     var houseId: String?
-    
+
     var houseItem: House?
-    
+
     override func viewDidLoad() {
         Log.debug("\(self) viewDidLoad")
         super.viewDidLoad()
-        
+
         if houseItem != nil {
             updateUI()
         }
     }
-    
-    
+
+
     func updateUI() {
         Log.debug("\(self) updateUI")
-        
+
         if let house: House = houseItem {
-            
+
 //            self.houseTitle.text = house.valueForKey("title") as? String
 //            self.housePrice.text = house.valueForKey("price") as? String
 //            self.houseAddr.text = house.valueForKey("addr") as? String
@@ -50,24 +50,24 @@ class MyCollectionDetailViewController: UIViewController {
             self.houseTitle.text = house.title
             self.housePrice.text = house.price.description
             self.houseAddr.text = house.addr
-            
+
             self.houseImg.image = placeholderImg
-            
-            
-            
+
+
+
             if house.img?.count > 0 {
                 if let img = house.img?[0] {
                     let size = self.houseImg.frame.size
-                    
+
                     self.houseImg.af_setImageWithURL(NSURL(string: img)!, placeholderImage: placeholderImg, filter: AspectScaledToFillSizeFilter(size: size), imageTransition: .CrossDissolve(0.2)) { (request, response, result) -> Void in
-                        
+
                         //Log.debug("    <End> Loading Img for Row = [\(self.indexPath.row)], status = \(response?.statusCode)")
-                        
+
                     }
                 }
             }
 
-            
+
         }
     }
 

@@ -10,33 +10,33 @@ import Foundation
 
 private let Log = Logger.defaultLogger
 
-struct StringUtils{
-    
+struct StringUtils {
+
     //Sequence matters. "\\" has to be escaped first. Any other better solution?
-    static let SPECIAL_CHARS:[String] = ["\\", " ","+", "-", "&&", "||", "!", "(", ")", "{", "}", "[", "]", "^", "\"", ",~", "*", "?", ":"]
-    
-    static func escapeForSolrString(queryStr:String) -> String{
-        
+    static let SPECIAL_CHARS: [String] = ["\\", " ", "+", "-", "&&", "||", "!", "(", ")", "{", "}", "[", "]", "^", "\"", ",~", "*", "?", ":"]
+
+    static func escapeForSolrString(queryStr: String) -> String {
+
         var resultStr = queryStr
 
         for char in SPECIAL_CHARS {
-            
+
             if(resultStr.containsString(char)) {
                 let escapedChar = "\\\(char)"
                 Log.debug(escapedChar)
                 resultStr = resultStr.stringByReplacingOccurrencesOfString(char, withString: escapedChar)
             }
         }
-        
+
         return resultStr
-        
-        
+
+
     }
-    
+
     // Get the part of String that matches a pattern
     // http://stackoverflow.com/questions/27067508/how-to-group-search-regular-expressions-using-swift
     static func matchesForRegexInText(regex: String!, text: String!) -> [String] {
-        
+
         do {
             let regex = try NSRegularExpression(pattern: regex, options: [])
             let nsString = text as NSString
@@ -49,6 +49,6 @@ struct StringUtils{
             print("invalid regex: \(error.localizedDescription)")
             return []
         }
-        
+
     }
 }

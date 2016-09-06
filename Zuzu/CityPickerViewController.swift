@@ -15,24 +15,24 @@ protocol CitySelectionViewControllerDelegate: class {
     func onCitySelected(value: Int)
 }
 
-class CityPickerViewController:UIViewController {
-    
+class CityPickerViewController: UIViewController {
+
     static let numberOfComponents = 1
-    
+
     @IBOutlet weak var cityPicker: UIPickerView!
-    
+
     /// @Controller Input Params
     weak var delegate: CitySelectionViewControllerDelegate?
     var allCities = [City]()//Array of Cities
     var regionSelectionState: [City]?
-    
+
     private func configurePricePicker() {
         cityPicker.dataSource = self
         cityPicker.delegate = self
     }
-    
-    private func getFirstSelectedCityIndex() -> Int?{
-        
+
+    private func getFirstSelectedCityIndex() -> Int? {
+
         for (index, city) in allCities.enumerate() {
             if let regionSelectionState = regionSelectionState {
                 if(regionSelectionState.contains(city)) {
@@ -40,14 +40,14 @@ class CityPickerViewController:UIViewController {
                 }
             }
         }
-        
+
         return nil
     }
-    
+
     // MARK: - Notification Selector
-    func onRegionSelectionUpdated(notification:NSNotification) {
+    func onRegionSelectionUpdated(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            
+
             if let cityStatus = userInfo["status"] as? City {
                 if let index = regionSelectionState?.indexOf(cityStatus) {
                     regionSelectionState?.removeAtIndex(index)
@@ -55,57 +55,57 @@ class CityPickerViewController:UIViewController {
                 } else {
                     regionSelectionState?.append(cityStatus)
                 }
-                
+
                 cityPicker.reloadAllComponents()
             }
-            
+
         }
     }
-    
+
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         Log.debug("viewDidLoad: \(self)")
-        
+
         self.configurePricePicker()
-        
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CityPickerViewController.onRegionSelectionUpdated(_:)), name: "regionSelectionChanged", object: nil)
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         Log.debug("viewWillAppear: \(self)")
-        
+
         ///Auto-pick the fisrt city with selected region
         if let index = getFirstSelectedCityIndex() {
             cityPicker.selectRow(index, inComponent: 0, animated: false)
         }
-        
+
         ///Notify the slected city
         let row = cityPicker.selectedRowInComponent(0)
         let selectedCity = allCities[row].code // cityItems[0][row].value
         delegate?.onCitySelected(selectedCity)
     }
-    
+
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         Log.debug("viewDidAppear: \(self)")
     }
-    
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         Log.debug("viewWillDisappear: \(self)")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 }
 
 extension CityPickerViewController: UIPickerViewDataSource {
-    
+
     // MARK: - PickerView DataSource
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return CityPickerViewController.numberOfComponents
@@ -113,19 +113,19 @@ extension CityPickerViewController: UIPickerViewDataSource {
 }
 
 extension CityPickerViewController: UIPickerViewDelegate {
-    
+
     // MARK: - PickerView Delegate
-    
+
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        
+
         let city = allCities[row]
-        
+
         /// Determin part title
-        
-        var partOfTaiwan:String?
-        
+
+        var partOfTaiwan: String?
+
         switch(city.code) {
-            
+
         case 100:
             partOfTaiwan = "北部"
         case 400:
@@ -138,48 +138,48 @@ extension CityPickerViewController: UIPickerViewDelegate {
             partOfTaiwan = ""
         default: break
         }
-        
+
         let pickerView = CustomCityPickerView()
-        
+
         pickerView.partLabel.text = (partOfTaiwan == nil ? "" : partOfTaiwan!)
-        
+
         /// Determin city title
         let cityTitle = city.name
         var selectionStatus = ""
-        
+
         if let regionSelectionState = regionSelectionState {
-            if let index = regionSelectionState.indexOf(city){
+            if let index = regionSelectionState.indexOf(city) {
                 let selectedRegions = regionSelectionState[index].regions
                 let numberOfSelection = selectedRegions.count
-                
+
                 if(numberOfSelection > 0) {
-                    
+
                     if(numberOfSelection == 1
                         && selectedRegions[0] == Region.allRegions) {
-                            
+
                             selectionStatus = "✓\(Region.allRegions.name)"
-                            
+
                     } else {
-                        
+
                         selectionStatus = "✓\(numberOfSelection)"
                     }
                 }
             }
         }
-        
+
         pickerView.cityLabel.text = cityTitle
         pickerView.selectionLabel.text = selectionStatus
-        
+
         return pickerView
     }
-    
+
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return allCities.count
     }
-    
+
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedCity = allCities[row].code
-        
+
         delegate?.onCitySelected(selectedCity)
     }
 }

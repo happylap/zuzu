@@ -12,16 +12,16 @@ struct FeatureOption {
     struct Collection {
         ///The main Collection function
         static let enableMain = true
-        
+
         /// The sub module depending on the main function
         static let enableNote = true
-        
+
         #if DEBUG
             static let enableLogout = true
         #else
             static let enableLogout = false
         #endif
-        
+
     }
 
     struct Radar {
